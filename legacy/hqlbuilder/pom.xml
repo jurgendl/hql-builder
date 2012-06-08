@@ -250,7 +250,7 @@
     	<repository>
 			<id>dr</id>
 			<name>dr</name>
-			<url>scm:svn:http://localhost:8080/scm/svn/hql-builder/maven2</url>
+			<url>scm:svn:https://hql-builder.googlecode.com/svn/maven2</url>
 		</repository>
 	</distributionManagement>
 </project>
