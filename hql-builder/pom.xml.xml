@@ -7,6 +7,9 @@
 	<name>hql-builder</name>
 	<description>hql-builder</description>
 	<url>http://hql-builder.googlecode.com</url>
+	<!--
+		mvn release:branch -DbranchName=hql-builder-<version>
+	-->
 	<properties>
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
@@ -15,7 +18,6 @@
 		<module>hql-builder-common</module>
 		<module>hql-builder-service</module>
 		<module>hql-builder-client</module>
-		<module>hql-builder-all-in-one</module>
 	</modules>
 	<!-- http://maven.apache.org/guides/introduction/introduction-to-profiles.html -->
 	<profiles>
@@ -60,22 +62,20 @@
 		<url>http://code.google.com/p/hql-builder/issues/list</url>
 	</issueManagement>
 	<distributionManagement>
-		<!--
 		<site>
 			<id>hql-builder.googlecode.site</id>
 			<name>hql-builder.googlecode.site</name>
-			<url>scm:svn:https://hql-builder.googlecode.com/svn/site</url>
+			<url>dav:https://hql-builder.googlecode.com/svn/site</url>
 		</site>
-		-->
 		<repository>
 			<id>hql-builder.googlecode.releases</id>
 			<name>hql-builder.googlecode.releases</name>
-			<url>scm:svn:https://hql-builder.googlecode.com/svn/maven2</url>
+			<url>dav:https://hql-builder.googlecode.com/svn/maven2</url>
 		</repository>
 		<snapshotRepository>
 			<id>hql-builder.googlecode.snapshots</id>
 			<name>hql-builder.googlecode.snapshots</name>
-			<url>scm:svn:https://hql-builder.googlecode.com/svn/maven2-snapshots</url>
+			<url>dav:https://hql-builder.googlecode.com/svn/maven2-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<inceptionYear>2012</inceptionYear>
@@ -91,9 +91,9 @@
 	</developers>
 	<contributors />
 	<scm>
-		<connection>scm:svn:http://hql-builder.googlecode.com/svn/trunk/hql-builder</connection>
-		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk/hql-builder</developerConnection>
-		<url>http://hql-builder.googlecode.com/svn/trunk/hql-builder</url>
+		<connection>scm:svn:http://hql-builder.googlecode.com/svn/trunk</connection>
+		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk</developerConnection>
+		<url>http://hql-builder.googlecode.com/svn/trunk</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -102,29 +102,7 @@
 		</repository>
 	</repositories>
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-scm</artifactId>
-				<version>1.0-beta-7</version>
-			</extension>
-			<extension>
-				<groupId>org.apache.maven.scm</groupId>
-				<artifactId>maven-scm-manager-plexus</artifactId>
-				<version>1.0</version>
-			</extension>
-			<extension>
-				<groupId>org.apache.maven.scm</groupId>
-				<artifactId>maven-scm-provider-svnexe</artifactId>
-				<version>1.0</version>
-			</extension>
-		</extensions>	
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
