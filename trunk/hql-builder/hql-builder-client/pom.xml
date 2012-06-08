@@ -9,6 +9,12 @@
 	<artifactId>hql-builder-client</artifactId>
 	<name>hql-builder-client</name>
 	<description>hql-builder-client</description>
+	<repositories>
+		<repository>
+			<id>swing-easy.googlecode</id>
+			<url>http://swing-easy.googlecode.com/svn/maven2</url>
+		</repository>
+	</repositories>	
 	<dependencies>
 		<dependency>
 			<groupId>org.tools</groupId>
