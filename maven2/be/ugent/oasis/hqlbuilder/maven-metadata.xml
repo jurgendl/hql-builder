@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>be.ugent.oasis</groupId>
+  <artifactId>hqlbuilder</artifactId>
+  <version>2.0-FINAL</version>
+  <versioning>
+    <release>2.0-FINAL</release>
+    <versions>
+      <version>2.0-FINAL</version>
+    </versions>
+    <lastUpdated>20120608091236</lastUpdated>
+  </versioning>
+</metadata>
