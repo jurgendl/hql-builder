@@ -29,6 +29,7 @@
 		autowire-candidate="false">
 		<property name="properties">
 			<props>
+				<prop key="hibernate.search.autoregister_listeners">false</prop>
 				<prop key="hibernate.hbm2ddl.auto"></prop>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="show_sql">${hibernate.show_sql}</prop>
@@ -41,8 +42,6 @@
 				<prop key="hibernate.cache.use_structured_entries">true</prop>
 				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
 				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
-				<!-- Geen validatie door Hibernate Validator bij insert (dus ook bij 
-					flush) - we bepalen zelf het gepaste moment! -->
 				<prop key="hibernate.validator.autoregister_listeners">false</prop>
 			</props>
 		</property>
