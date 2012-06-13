@@ -10,6 +10,8 @@
 	<properties>
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+		<version.spring>2.5.6</version.spring>
+		<version.lucene>3.5.0</version.lucene>
 	</properties>
 	<modules>
 		<module>hql-builder-common</module>
@@ -118,7 +120,7 @@
 				<artifactId>maven-scm-provider-svnexe</artifactId>
 				<version>1.0</version>
 			</extension>
-		</extensions>	
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -163,6 +165,7 @@
 			</plugin>
 			 -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>

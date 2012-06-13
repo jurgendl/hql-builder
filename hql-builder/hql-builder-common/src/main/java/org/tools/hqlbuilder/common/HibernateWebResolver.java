@@ -17,6 +17,10 @@ public class HibernateWebResolver {
         return nodes.get(classname).getEdges();
     }
 
+    public ClassNode getNode(String classname) {
+        return nodes.get(classname);
+    }
+
     public class ClassNode extends Node<String, String, Property> {
         protected Class<?> type;
 
@@ -198,5 +202,9 @@ public class HibernateWebResolver {
     @Override
     public String toString() {
         return nodes.toString();
+    }
+
+    public Map<String, ClassNode> getNodes() {
+        return this.nodes;
     }
 }

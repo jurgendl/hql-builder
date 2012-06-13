@@ -27,6 +27,18 @@ public class PathResolver {
         todosCurrentStep.add(sourceTreeNode);
     }
 
+    @SuppressWarnings("unchecked")
+    public List<TreeNode> findPathNoEx() {
+        try {
+            findPath();
+        } catch (Result ex) {
+            return ex.getResolvePath();
+        } catch (End ex) {
+            return Collections.EMPTY_LIST;
+        }
+        throw new IllegalArgumentException();
+    }
+
     public void findPath() throws Result, End {
         while (true) {
             for (TreeNode todoCurrentStep : todosCurrentStep.toArray(new TreeNode[0])) {
@@ -144,6 +156,10 @@ public class PathResolver {
 
         public Result(List<TreeNode> resolvePath) {
             this.resolvePath = resolvePath;
+        }
+
+        public List<TreeNode> getResolvePath() {
+            return this.resolvePath;
         }
     }
 
