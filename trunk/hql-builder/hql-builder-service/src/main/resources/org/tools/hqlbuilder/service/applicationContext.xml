@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+	"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans default-autowire="autodetect">
+
+	<bean id="hqlService" class="org.tools.hqlbuilder.service.HqlServiceImpl"
+		scope="singleton" lazy-init="false">
+		<property name="sessionFactory" ref="sessionFactory"/>
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+	</bean>
+
+	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource" autowire-candidate="false">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean>
+
+	<bean name="lazyConnectionDataSourceProxy"
+		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy"
+		autowire-candidate="false">
+		<property name="targetDataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="hibernateProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean"
+		autowire-candidate="false">
+		<property name="properties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto"></prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.max_fetch_depth">3</prop>
+				<prop key="hibernate.generate_statistics">false</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+				<!-- Geen validatie door Hibernate Validator bij insert (dus ook bij 
+					flush) - we bepalen zelf het gepaste moment! -->
+				<prop key="hibernate.validator.autoregister_listeners">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
+		autowire-candidate="false">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/be/ugent/oasis/hibernate.cfg.xml" />
+		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
+		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
+	</bean>
+
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		scope="singleton" autowire-candidate="false">
+		<property name="locations">
+			<list>
+				<value>classpath:oasis.services.default.properties</value>
+				<value>file:${user.home}/conf/oasis.services.properties</value>
+				<value>classpath:oasis.services.local.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="order" value="1" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+</beans>
