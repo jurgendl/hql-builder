@@ -85,7 +85,7 @@ public class DefaultHqlBuilderHelper {
      */
 
     static public String getHelpUrl() {
-        return null;
+        return "http://code.google.com/p/hql-builder/w/list";
     }
 
     private static Font DEFAULT_FONT;
