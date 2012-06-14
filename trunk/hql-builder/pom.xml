@@ -18,6 +18,7 @@
 		<module>hql-builder-service</module>
 		<module>hql-builder-client</module>
 		<module>hql-builder-all-in-one</module>
+		<module>hql-builder-test</module>
 	</modules>
 	<!-- http://maven.apache.org/guides/introduction/introduction-to-profiles.html -->
 	<profiles>
