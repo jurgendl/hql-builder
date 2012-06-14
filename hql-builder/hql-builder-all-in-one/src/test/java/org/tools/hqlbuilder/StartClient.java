@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder;
 
 import org.tools.hqlbuilder.client.HqlBuilderFrame;
+import org.tools.hqlbuilder.client.HqlServiceClient;
 
 public class StartClient {
     public static void main(String[] args) {
