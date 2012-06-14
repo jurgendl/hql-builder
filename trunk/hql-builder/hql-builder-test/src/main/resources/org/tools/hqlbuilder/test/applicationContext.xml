@@ -3,7 +3,7 @@
 	"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans default-autowire="autodetect">
 
-	<import resource="classpath:org/tools/hqlbuilder/service/properties.xml"/>
+	<import resource="classpath:org/tools/hqlbuilder/test/properties.xml"/>
 
 	<import resource="classpath:org/tools/hqlbuilder/service/applicationContext.xml"/>
 

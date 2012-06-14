@@ -10,31 +10,59 @@
 	<artifactId>hql-builder-test</artifactId>
 	<name>hql-builder-test</name>
 	<description>hql-builder-test</description>
+	<properties>
+		<version.derby>10.8.2.2</version.derby>
+		<version.hibernate>4.1.4.Final</version.hibernate>
+	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${version.hibernate}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.tools</groupId>
-			<artifactId>hql-builder-all-in-one</artifactId>
+			<artifactId>hql-builder-client</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tools</groupId>
+			<artifactId>hql-builder-service</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-validator</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<version>10.8.1.2</version>
+			<version>${version.derby}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbyclient</artifactId>
-			<version>10.8.1.2</version>
+			<version>${version.derby}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbynet</artifactId>
-			<version>10.8.1.2</version>
+			<version>${version.derby}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbytools</artifactId>
-			<version>10.8.1.2</version>
+			<version>${version.derby}</version>
 		</dependency>
 	</dependencies>
 </project>

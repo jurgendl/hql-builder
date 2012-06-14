@@ -32,7 +32,6 @@
 				<prop key="hibernate.search.autoregister_listeners">false</prop>
 				<prop key="hibernate.hbm2ddl.auto"></prop>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
-				<prop key="show_sql">${hibernate.show_sql}</prop>
 				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
 				<prop key="hibernate.cache.use_query_cache">false</prop>
 				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
@@ -51,24 +50,9 @@
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
 		autowire-candidate="false">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:/be/ugent/oasis/hibernate.cfg.xml" />
+		<property name="configLocation" value="classpath:${hibernate.cfg.xml}" />
 		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
-	</bean>
-
-	<bean id="propertyPlaceholderConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		scope="singleton" autowire-candidate="false">
-		<property name="locations">
-			<list>
-				<value>classpath:oasis.services.default.properties</value>
-				<value>file:${user.home}/conf/oasis.services.properties</value>
-				<value>classpath:oasis.services.local.properties</value>
-			</list>
-		</property>
-		<property name="ignoreResourceNotFound" value="true" />
-		<property name="order" value="1" />
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
 </beans>

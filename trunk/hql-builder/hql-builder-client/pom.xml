@@ -24,27 +24,27 @@
 		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout-swing</artifactId>
-			<version>4.2</version>
+			<version>${version.miglayout}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>core-renderer</artifactId>
-			<version>R8pre2</version>
+			<version>${version.xhtmlrenderer}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
 			<artifactId>itext</artifactId>
-			<version>2.0.8</version>
+			<version>${version.itext}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.swingeasy</groupId>
 			<artifactId>swing-easy</artifactId>
-			<version>2.5.5.2</version>
+			<version>${version.swingeasy}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.l2fprod</groupId>
 			<artifactId>l2fprod-common-all</artifactId>
-			<version>7.3</version>
+			<version>${version.l2fprod}</version>
  		</dependency>
 	</dependencies>
 </project>
