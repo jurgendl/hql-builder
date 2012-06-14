@@ -11,7 +11,7 @@
 				<value>classpath:org/tools/hqlbuilder/test/hibernate.properties</value>
 			</list>
 		</property>
-		<property name="localProperties">
+		<property name="properties">
 			<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 				<property name="properties">
 					<props>
