@@ -51,7 +51,7 @@ public class Pojo {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).appendSuper(super.toString()).append("id", id).append("version", version)
+        return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE).appendSuper(super.toString()).append("id", id).append("version", version)
                 .append("value", value).toString();
     }
 
