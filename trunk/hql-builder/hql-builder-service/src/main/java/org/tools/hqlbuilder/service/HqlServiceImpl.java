@@ -41,8 +41,42 @@ public class HqlServiceImpl implements HqlService {
     @Autowired
     private SessionFactory sessionFactory;
 
+    private String modelVersion = "?";
+
+    private String url;
+
+    private String username;
+
+    private Information information;
+
+    private Set<String> keywords;
+
     public HqlServiceImpl() {
         super();
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getModelVersion() {
+        return this.modelVersion;
+    }
+
+    public void setModelVersion(String modelVersion) {
+        this.modelVersion = modelVersion;
     }
 
     public SessionFactory getSessionFactory() {
@@ -102,6 +136,7 @@ public class HqlServiceImpl implements HqlService {
 
         Session session = sessionFactory.openSession();
         QueryImpl createQuery = (QueryImpl) session.createQuery(hql);
+        createQuery.setMaxResults(max);
         int index = 0;
 
         for (QueryParameter value : queryParameters) {
@@ -158,10 +193,6 @@ public class HqlServiceImpl implements HqlService {
                 queryReturnTypeNames);
     }
 
-    protected <T> T get(Object o, String path, Class<T> t) {
-        return t.cast(new ObjectWrapper(o).get(path));
-    }
-
     /**
      * 
      * @see org.tools.hqlbuilder.common.HqlService#getHibernateWebResolver()
@@ -206,30 +237,8 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public String getConnectionInfo() {
-        return username + "@" + url;
+        return username + "@" + url + "@" + getModelVersion();
     }
-
-    private String url;
-
-    private String username;
-
-    public String getUrl() {
-        return this.url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    private Information information;
 
     /**
      * 
@@ -244,23 +253,6 @@ public class HqlServiceImpl implements HqlService {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    protected Information getInformation() {
-        if (information == null) {
-            try {
-                information = new Information(getSessionFactory());
-            } catch (IllegalArgumentException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        return this.information;
     }
 
     /**
@@ -307,17 +299,15 @@ public class HqlServiceImpl implements HqlService {
         session.flush();
     }
 
-    private Set<String> kws;
-
     /**
      * 
      * @see org.tools.hqlbuilder.common.HqlService#getReservedKeywords()
      */
     @Override
     public Set<String> getReservedKeywords() {
-        if (kws == null) {
+        if (keywords == null) {
             try {
-                kws = new HashSet<String>();
+                keywords = new HashSet<String>();
                 // ansi & transact sql keywords
                 BufferedReader in = new BufferedReader(new InputStreamReader(HqlServiceImpl.class.getClassLoader().getResourceAsStream(
                         "reserved_keywords.txt")));
@@ -327,14 +317,14 @@ public class HqlServiceImpl implements HqlService {
                         if (kw.length() < 2) {
                             continue;
                         }
-                        kws.add(kw.trim());
+                        keywords.add(kw.trim());
                     }
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-        return kws;
+        return keywords;
     }
 
     /**
@@ -425,5 +415,26 @@ public class HqlServiceImpl implements HqlService {
 
         List<String> propertyNames = Arrays.asList(persister.getPropertyNames());
         return propertyNames;
+    }
+
+    protected Information getInformation() {
+        if (information == null) {
+            try {
+                information = new Information(getSessionFactory());
+            } catch (IllegalArgumentException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        return this.information;
+    }
+
+    protected <T> T get(Object o, String path, Class<T> t) {
+        return t.cast(new ObjectWrapper(o).get(path));
     }
 }

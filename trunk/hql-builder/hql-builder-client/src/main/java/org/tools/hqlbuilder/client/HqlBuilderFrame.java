@@ -211,9 +211,9 @@ public class HqlBuilderFrame {
 
     private static final String HIBERNATE_DOCUMENTATION = "hibernate documentation";
 
-    private static final String PERSISTENT_ID = "HqlBuilder2";
+    private static final String PERSISTENT_ID = "Hql Builder";
 
-    private static final String NAME = "HqlBuilder v2.0";
+    private static final String NAME = "Hql Builder";
 
     private static final String SYSTEM_TRAY = "system tray";
 
@@ -860,7 +860,7 @@ public class HqlBuilderFrame {
      * 
      * @param args
      */
-    public static void start(@SuppressWarnings("unused") String[] args) {
+    public static void start(@SuppressWarnings("unused") String[] args, HqlService service) {
         try {
             File oldfavs = new File("favorites");
             if (oldfavs.exists()) {
@@ -868,29 +868,7 @@ public class HqlBuilderFrame {
             }
 
             // zet look en feel gelijk aan default voor OS
-            UIUtils.niceLookAndFeel();
-
-            {
-                // inladen configuratie class (class die interface met deze naam implementeert)
-                InputStream helperin = HqlBuilderFrame.class.getClassLoader().getResourceAsStream(SERVICE_NAME);
-
-                if (helperin == null) {
-                    // wanneer niet teruggevonden: vraag om model jar (moet ook config bevatten) of maven assembly (moet ZIP zijn)
-                    loadModelAtRuntime();
-                    helperin = HqlBuilderFrame.class.getClassLoader().getResourceAsStream(SERVICE_NAME);
-                }
-
-                // faalt: exit
-                if (helperin == null) {
-                    System.exit(-1);
-                    return;
-                }
-
-                // nu kunnen we eindelijk de configuratie inlezen
-                byte[] tmp = new byte[helperin.available()];
-                helperin.read(tmp);
-                helperin.close();
-            }
+            UIUtils.systemLookAndFeel();
 
             {
                 // dtd validatie uitschakelen
@@ -905,13 +883,11 @@ public class HqlBuilderFrame {
                 UIUtils.setLongerTooltips();
             }
 
-            // lees properties in
-            Properties properties = new Properties();
-
             // maak frame en start start
             final HqlBuilderFrame hqlBuilder = new HqlBuilderFrame();
+            hqlBuilder.hqlService = service;
             hqlBuilder.startPre();
-            hqlBuilder.start(properties);
+            hqlBuilder.start();
             hqlBuilder.hql.grabFocus();
 
             // log connectie
@@ -1565,7 +1541,7 @@ public class HqlBuilderFrame {
      * 
      * @throws IOException
      */
-    public void start(Properties properties) throws IOException {
+    public void start() throws IOException {
         reloadColor();
 
         hili.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, new float[] { 1.0F }, 0.F));
@@ -1947,14 +1923,14 @@ public class HqlBuilderFrame {
 
         String version = HqlResourceBundle.getMessage("latest");
         try {
-            String url = HqlBuilderFrame.class.getClassLoader().getResource("be/ugent/oasis/model/Parameter.class").toString();
-            version = url.substring(url.indexOf("model-") + "model-".length(), url.indexOf(".jar"));
+            Properties p = new Properties();
+            p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools/hql-builder-client/pom.properties"));
+            version = p.getProperty("version").toString();
         } catch (Exception ex) {
             //
         }
 
-        frame.setTitle(NAME + " - " + properties.getProperty("hibernate.connection.username") + "@"
-                + properties.getProperty("hibernate.connection.url").replaceAll("jdbc:oracle:thin:@", "") + "@" + version);
+        frame.setTitle(NAME + " v " + version + " - " + hqlService.getConnectionInfo());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(new Dimension(1024, 768));
