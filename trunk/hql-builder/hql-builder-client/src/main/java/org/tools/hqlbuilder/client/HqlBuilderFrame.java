@@ -177,7 +177,7 @@ public class HqlBuilderFrame {
 
     private static final String CSV = ".csv";
 
-    private static final String FAVORITES_DIR = ".settings/.favorites";
+    private static final String FAVORITES_DIR = ".favorites";
 
     private static final String FAVORITES_EXT = ".xml";
 
@@ -200,8 +200,6 @@ public class HqlBuilderFrame {
     private static final String MAXIMUM_NUMBER_OF_RESULTS = "maximum number of results";
 
     private static final String EDITABLE_RESULTS = "editable results";
-
-    private static final String SERVICE_NAME = "be.ugent.oasis.tools.hqlbuilder.IDefaultHqlBuilderHelper";
 
     private static final String NEW_PROGRESSION_MARKER = "new progression marker";
 
