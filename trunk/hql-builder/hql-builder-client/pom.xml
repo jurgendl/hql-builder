@@ -42,6 +42,11 @@
 			<version>${version.swingeasy}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${version.poi}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.l2fprod</groupId>
 			<artifactId>l2fprod-common-all</artifactId>
 			<version>${version.l2fprod}</version>

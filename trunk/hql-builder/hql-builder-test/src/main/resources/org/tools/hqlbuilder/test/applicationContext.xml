@@ -7,6 +7,6 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/service/applicationContext.xml"/>
 
-	<bean id="hqlServiceClient" class="org.tools.hqlbuilder.HqlServiceClient" scope="singleton" lazy-init="false"/>
+	<bean id="hqlServiceClient" class="org.tools.hqlbuilder.client.HqlServiceClient" scope="singleton" lazy-init="false"/>
 
 </beans>
