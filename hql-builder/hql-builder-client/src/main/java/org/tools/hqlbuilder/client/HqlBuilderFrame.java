@@ -1770,7 +1770,9 @@ public class HqlBuilderFrame {
                 if (data == null) {
                     propertypanel.add(ClientUtils.getPropertyFrame(new Object(), editableResultsAction.isSelected()), BorderLayout.CENTER);
                 } else {
-                    propertypanel.add(font(ClientUtils.getPropertyFrame(data, editableResultsAction.isSelected()), null), BorderLayout.CENTER);
+                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editableResultsAction.isSelected());
+                    propertyFrame.setHqlService(hqlService);
+                    propertypanel.add(font(propertyFrame, null), BorderLayout.CENTER);
                 }
                 propertypanel.revalidate();
             }
@@ -2919,7 +2921,7 @@ public class HqlBuilderFrame {
         }
         progressbarStart("fetching data");
         Object bean = resultsEDT.getModel().getValueAt(row, col);
-        new ObjectTree(bean, editableResultsAction.isSelected()).setIconImage(frame.getIconImage());
+        new ObjectTree(hqlService, bean, editableResultsAction.isSelected()).setIconImage(frame.getIconImage());
         progressbarStop();
     }
 

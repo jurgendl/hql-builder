@@ -20,9 +20,9 @@ public interface HqlService {
 
     public abstract String getConnectionInfo();
 
-    public abstract void save(Object object);
+    public abstract <T> T save(T object);
 
-    public abstract void delete(Object object);
+    public abstract <T> void delete(T object);
 
     /**
      * 

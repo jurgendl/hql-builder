@@ -32,8 +32,7 @@ public class ClientUtils extends CommonUtils {
      * 
      * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#getPropertyFrame(org.hibernate.SessionFactory, java.lang.Object, boolean)
      */
-
-    static public JComponent getPropertyFrame(Object object, boolean editable) {
+    static public PropertyPanel getPropertyFrame(Object object, boolean editable) {
         return new PropertyPanel(object, editable);
     }
 
