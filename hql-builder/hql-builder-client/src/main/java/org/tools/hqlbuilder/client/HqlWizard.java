@@ -140,7 +140,7 @@ public class HqlWizard {
                     }
 
                 } catch (Stop ex) {
-                    DefaultHqlBuilderHelper.log("DONE");
+                    ClientUtils.log("DONE");
                 }
             }
         });
@@ -311,7 +311,7 @@ public class HqlWizard {
             options[i++] = new Option<ClassNode>(cn.getType().getSimpleName(), cn);
         }
         Arrays.sort(options);
-        initialTarget = DefaultHqlBuilderHelper.showDialog(parent, HqlResourceBundle.getMessage("target class"), options);
+        initialTarget = ClientUtils.showDialog(parent, HqlResourceBundle.getMessage("target class"), options);
         return initialTarget;
     }
 
@@ -330,7 +330,7 @@ public class HqlWizard {
                     ex.printStackTrace();
                 }
             }
-            initialSelected = DefaultHqlBuilderHelper.showDialog(parent, HqlResourceBundle.getMessage("source class"),
+            initialSelected = ClientUtils.showDialog(parent, HqlResourceBundle.getMessage("source class"),
                     options.toArray(new Row[options.size()]));
         }
         return initialSelected;

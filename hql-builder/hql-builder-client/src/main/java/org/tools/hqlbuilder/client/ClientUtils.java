@@ -23,14 +23,10 @@ import org.swingeasy.ListOptionPaneCustomizer;
 import org.swingeasy.MessageType;
 import org.swingeasy.OptionType;
 import org.swingeasy.ResultType;
+import org.tools.hqlbuilder.common.CommonUtils;
 
-/**
- * cfg ea.
- * 
- * @author jdlandsh
- */
-public class DefaultHqlBuilderHelper {
-    private static final Logger logger = Logger.getLogger(DefaultHqlBuilderHelper.class);
+public class ClientUtils extends CommonUtils {
+    private static final Logger logger = Logger.getLogger(ClientUtils.class);
 
     /**
      * 

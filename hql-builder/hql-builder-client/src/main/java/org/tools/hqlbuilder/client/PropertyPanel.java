@@ -74,7 +74,7 @@ public class PropertyPanel extends PropertySheetPanel {
      */
 
     public PropertyPanel(Object bean, final boolean editable) {
-        DefaultHqlBuilderHelper.log(bean);
+        ClientUtils.log(bean);
 
         this.bean = bean;
         BeanInfo beanInfo;
@@ -108,7 +108,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
         for (final Map.Entry<String, PropertyDescriptor> propertyDescriptorEntry : propertyDescriptors.entrySet()) {
             try {
-                DefaultHqlBuilderHelper.log(propertyDescriptorEntry.getKey());
+                ClientUtils.log(propertyDescriptorEntry.getKey());
                 PropertyDescriptor propertyDescriptor = propertyDescriptorEntry.getValue();
                 Method readMethod = propertyDescriptor.getReadMethod();
                 if (readMethod == null) {
@@ -146,7 +146,7 @@ public class PropertyPanel extends PropertySheetPanel {
                                     || Map.class.isAssignableFrom(propertyType)) {
                                 //
                             } else {
-                                DefaultHqlBuilderHelper.log("no editor found for type " + propertyType.getName());
+                                ClientUtils.log("no editor found for type " + propertyType.getName());
                             }
                             property.setEditable(false);
                         } else {
@@ -479,7 +479,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
             try {
                 if (!new EqualsBuilder().append(evt.getOldValue(), evt.getNewValue()).isEquals()) {
-                    DefaultHqlBuilderHelper.log("changing value from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
+                    ClientUtils.log("changing value from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
                     writeMethod.invoke(bean, evt.getNewValue());
                     // if (sessionFactory != null) {
                     // org.hibernate.classic.Session session = sessionFactory.openSession();

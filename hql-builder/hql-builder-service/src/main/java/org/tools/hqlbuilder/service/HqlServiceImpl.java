@@ -1,19 +1,24 @@
 package org.tools.hqlbuilder.service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.zip.ZipEntry;
 
 import org.apache.lucene.queryParser.ParseException;
 import org.hibernate.Session;
@@ -41,7 +46,7 @@ public class HqlServiceImpl implements HqlService {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private String modelVersion = "?";
+    private String modelVersion;
 
     private String url;
 
@@ -72,6 +77,52 @@ public class HqlServiceImpl implements HqlService {
     }
 
     public String getModelVersion() {
+        if (modelVersion == null) {
+            try {
+                Class<?> modelClass = Class.forName(getClasses().iterator().next());
+                URL classLocation = modelClass.getProtectionDomain().getCodeSource().getLocation();
+                if (new File(classLocation.getFile()).isFile()) {
+                    java.util.zip.ZipFile zf = new java.util.zip.ZipFile(new File(classLocation.getFile()));
+                    Enumeration<? extends ZipEntry> enu = zf.entries();
+                    ZipEntry manifest = null;
+                    ZipEntry pomprops = null;
+                    while (enu.hasMoreElements()) {
+                        ZipEntry ze = enu.nextElement();
+                        try {
+                            if (ze.getName().startsWith("META-INF") && ze.getName().endsWith("MANIFEST.MF")) {
+                                manifest = ze;
+                            }
+                            if (ze.getName().startsWith("META-INF") && ze.getName().endsWith("pom.properties")) {
+                                pomprops = ze;
+                            }
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                    if (pomprops != null && modelVersion == null) {
+                        try {
+                            Properties p = new Properties();
+                            p.load(modelClass.getResourceAsStream(pomprops.getName()));
+                            modelVersion = p.get("version").toString();
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                    if (manifest != null && modelVersion == null) {
+                        try {
+                            Properties p = new Properties();
+                            p.load(modelClass.getResourceAsStream(manifest.getName()));
+                            modelVersion = p.get("Implementation-Version").toString();
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                }
+                modelVersion.toString();
+            } catch (Exception ex) {
+                modelVersion = ".";
+            }
+        }
         return this.modelVersion;
     }
 
@@ -128,22 +179,18 @@ public class HqlServiceImpl implements HqlService {
      * 
      * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, int, org.tools.hqlbuilder.common.QueryParameter[])
      */
+    @SuppressWarnings("unchecked")
     @Override
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
-        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
-                (SessionFactoryImplementor) sessionFactory);
-        createQueryTranslator.compile(new HashMap<Object, Object>(), false);
-
+        boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = sessionFactory.openSession();
         QueryImpl createQuery = (QueryImpl) session.createQuery(hql);
-        createQuery.setMaxResults(max);
         int index = 0;
-
         for (QueryParameter value : queryParameters) {
             try {
                 if (value.getName() != null) {
                     if (value.getValue() instanceof Collection) {
-                        @SuppressWarnings({ "rawtypes", "unchecked" })
+                        @SuppressWarnings({ "rawtypes" })
                         Object[] l = new ArrayList((Collection) value.getValue()).toArray();
                         createQuery.setParameterList(value.getName(), l);
                     } else {
@@ -160,37 +207,37 @@ public class HqlServiceImpl implements HqlService {
                 System.out.println(ex); // => whatever
             }
         }
-
+        if (isUpdateStatement) {
+            int size = createQuery.executeUpdate();
+            return new ExecutionResult(null, null, size, null, null, null, null, null);
+        }
+        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
+                (SessionFactoryImplementor) sessionFactory);
+        createQueryTranslator.compile(new HashMap<Object, Object>(), false);
+        createQuery.setMaxResults(max);
         Type[] queryReturnTypes = get(createQueryTranslator, "queryLoader.queryReturnTypes", Type[].class);
         String[] queryReturnAliases = get(createQueryTranslator, "queryLoader.queryReturnAliases", String[].class);
         String[][] scalarColumnNames = get(createQueryTranslator, "queryLoader.scalarColumnNames", String[][].class);
         String[] entityAliases = get(createQueryTranslator, "queryLoader.entityAliases", String[].class);
         Queryable[] entityPersisters = get(createQueryTranslator, "queryLoader.entityPersisters", Queryable[].class);
         String[] sqlAliases = get(createQueryTranslator, "queryLoader.sqlAliases", String[].class);
-
-        @SuppressWarnings({ "unused", "unchecked" })
+        @SuppressWarnings("unused")
         Map<String, String> sqlAliasByEntityAlias = get(createQueryTranslator, "queryLoader.sqlAliasByEntityAlias", Map.class);
-
         Map<String, String> from_aliases = new HashMap<String, String>();
-
         for (int i = 0; i < entityAliases.length; i++) {
             String alias = entityAliases[i];
-
             if (alias != null) {
                 from_aliases.put(alias, entityPersisters[i].getClassMetadata().getEntityName());
             }
         }
-
-        @SuppressWarnings("unchecked")
         List<Object> list = createQuery.list();
-
+        int size = list.size();
         String[] queryReturnTypeNames = new String[queryReturnTypes.length];
         for (int i = 0; i < queryReturnTypes.length; i++) {
             queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getSimpleName();
         }
-
-        return new ExecutionResult(createQueryTranslator.getSQLString(), from_aliases, list, queryReturnAliases, scalarColumnNames, sqlAliases,
-                queryReturnTypeNames);
+        String sql = createQueryTranslator.getSQLString();
+        return new ExecutionResult(sql, from_aliases, size, list, queryReturnAliases, scalarColumnNames, sqlAliases, queryReturnTypeNames);
     }
 
     /**
