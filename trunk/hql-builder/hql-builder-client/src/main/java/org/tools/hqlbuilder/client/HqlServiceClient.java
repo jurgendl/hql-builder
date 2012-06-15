@@ -64,12 +64,12 @@ public class HqlServiceClient implements HqlService {
     }
 
     @Override
-    public void save(Object object) {
-        this.hqlService.save(object);
+    public <T> T save(T object) {
+        return this.hqlService.save(object);
     }
 
     @Override
-    public void delete(Object object) {
+    public <T> void delete(T object) {
         this.hqlService.delete(object);
     }
 

@@ -37,6 +37,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.swingeasy.EDateEditor;
 import org.swingeasy.EDateTimeEditor;
+import org.tools.hqlbuilder.common.HqlService;
 
 import com.l2fprod.common.beans.editor.AbstractPropertyEditor;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -66,6 +67,8 @@ public class PropertyPanel extends PropertySheetPanel {
     private Boolean settingValue = false;
 
     private final SortedMap<String, PropertyDescriptor> propertyDescriptors = new TreeMap<String, PropertyDescriptor>();
+
+    private HqlService hqlService;
 
     /**
      * Creates a new PropertyPanel object.
@@ -214,10 +217,6 @@ public class PropertyPanel extends PropertySheetPanel {
                 }
             }
         });
-
-        // if (session != null) {
-        // session.close();
-        // }
     }
 
     private static class DateEditor extends AbstractPropertyEditor {
@@ -481,13 +480,7 @@ public class PropertyPanel extends PropertySheetPanel {
                 if (!new EqualsBuilder().append(evt.getOldValue(), evt.getNewValue()).isEquals()) {
                     ClientUtils.log("changing value from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
                     writeMethod.invoke(bean, evt.getNewValue());
-                    // if (sessionFactory != null) {
-                    // org.hibernate.classic.Session session = sessionFactory.openSession();
-                    // Transaction tx = session.beginTransaction();
-                    // bean = session.merge(bean);
-                    // tx.commit();
-                    // session.flush();
-                    // }
+                    bean = hqlService.save(bean);
                 }
 
                 EventQueue.invokeLater(new Runnable() {
@@ -511,5 +504,9 @@ public class PropertyPanel extends PropertySheetPanel {
                 settingValue = false;
             }
         }
+    }
+
+    public void setHqlService(HqlService hqlService) {
+        this.hqlService = hqlService;
     }
 }

@@ -5,7 +5,6 @@ import java.beans.PropertyDescriptor;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,6 +16,7 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.swingeasy.ETree;
 import org.swingeasy.ETreeConfig;
 import org.swingeasy.ETreeNode;
+import org.tools.hqlbuilder.common.HqlService;
 
 public class ObjectTree extends JFrame {
     /** serialVersionUID */
@@ -24,7 +24,7 @@ public class ObjectTree extends JFrame {
 
     private final JPanel propertypanel = new JPanel(new BorderLayout());
 
-    public ObjectTree(Object bean, final boolean editable) {
+    public ObjectTree(final HqlService hqlService, Object bean, final boolean editable) {
         bean = initialize(bean);
         TreeNode rootNode = new TreeNode(bean);
         final ETree<Object> tree = new ETree<Object>(new ETreeConfig(), rootNode);
@@ -54,7 +54,8 @@ public class ObjectTree extends JFrame {
                                 //
                             }
                         }
-                        JComponent propertyFrame = ClientUtils.getPropertyFrame(data, editable);
+                        PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editable);
+                        propertyFrame.setHqlService(hqlService);
                         ClientUtils.font(propertyFrame, 12);
                         propertypanel.add(propertyFrame, BorderLayout.CENTER);
                         // }

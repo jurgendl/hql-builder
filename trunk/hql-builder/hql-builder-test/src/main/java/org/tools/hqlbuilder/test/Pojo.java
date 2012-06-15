@@ -11,6 +11,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.annotations.AccessType;
+import org.hibernate.validator.Max;
+import org.hibernate.validator.Min;
 
 @Entity
 @AccessType("field")
@@ -24,6 +26,10 @@ public class Pojo {
     private Integer version;
 
     private String value;
+    
+    @Min(0)
+    @Max(100)
+    private Integer from0To100;
 
     private Long getId() {
         return this.id;
@@ -50,10 +56,10 @@ public class Pojo {
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE).appendSuper(super.toString()).append("id", id).append("version", version)
-                .append("value", value).toString();
-    }
+	public String toString() {
+		return "Pojo [id=" + id + ", version=" + version + ", value=" + value
+				+ ", from0To100=" + from0To100 + "]";
+	}
 
     @Override
     public boolean equals(final Object other) {

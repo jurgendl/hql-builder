@@ -324,23 +324,28 @@ public class HqlServiceImpl implements HqlService {
      * 
      * @see org.tools.hqlbuilder.common.HqlService#save(java.lang.Object)
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public void save(Object object) {
+    public <T> T save(T object) {
         org.hibernate.classic.Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
+        object = (T) session.merge(object);
         session.persist(object);
         tx.commit();
         session.flush();
+        return object;
     }
 
     /**
      * 
      * @see org.tools.hqlbuilder.common.HqlService#delete(java.lang.Object)
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public void delete(Object object) {
+    public <T> void delete(T object) {
         org.hibernate.classic.Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
+        object = (T) session.merge(object);
         session.delete(object);
         tx.commit();
         session.flush();
