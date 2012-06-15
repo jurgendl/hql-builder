@@ -19,11 +19,13 @@ public class ExecutionResult {
 
     private String[] queryReturnTypeNames;
 
+    private int size;
+
     public ExecutionResult() {
         super();
     }
 
-    public ExecutionResult(String sql, Map<String, String> fromAliases, List<Object> results, String[] queryReturnAliases,
+    public ExecutionResult(String sql, Map<String, String> fromAliases, int size, List<Object> results, String[] queryReturnAliases,
             String[][] scalarColumnNames, String[] sqlAliases, String[] queryReturnTypeNames) {
         this.sql = sql;
         this.fromAliases = fromAliases;
@@ -32,6 +34,7 @@ public class ExecutionResult {
         this.scalarColumnNames = scalarColumnNames;
         this.sqlAliases = sqlAliases;
         this.queryReturnTypeNames = queryReturnTypeNames;
+        this.size = size;
     }
 
     public List<Object> getResults() {
@@ -96,5 +99,13 @@ public class ExecutionResult {
                 + Arrays.toString(this.queryReturnAliases) + ", scalarColumnNames=" + Arrays.toString(this.scalarColumnNames) + ", sqlAliases="
                 + Arrays.toString(this.sqlAliases) + ", queryReturnTypeNames=" + Arrays.toString(this.queryReturnTypeNames) + ", results="
                 + this.results + "]";
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

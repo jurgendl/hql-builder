@@ -54,8 +54,8 @@ public class ObjectTree extends JFrame {
                                 //
                             }
                         }
-                        JComponent propertyFrame = DefaultHqlBuilderHelper.getPropertyFrame(data, editable);
-                        DefaultHqlBuilderHelper.font(propertyFrame, 12);
+                        JComponent propertyFrame = ClientUtils.getPropertyFrame(data, editable);
+                        ClientUtils.font(propertyFrame, 12);
                         propertypanel.add(propertyFrame, BorderLayout.CENTER);
                         // }
                     }
@@ -66,7 +66,7 @@ public class ObjectTree extends JFrame {
             }
         });
         split.setDividerLocation(500);
-        DefaultHqlBuilderHelper.font(tree, 12);
+        ClientUtils.font(tree, 12);
         setVisible(true);
     }
 

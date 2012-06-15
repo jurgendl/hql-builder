@@ -475,7 +475,7 @@ public class HqlBuilderFrame {
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
 
-    private final JComponent values = DefaultHqlBuilderHelper.getPropertyFrame(new Object(), false);
+    private final JComponent values = ClientUtils.getPropertyFrame(new Object(), false);
 
     private final Timer timer = new Timer(true);
 
@@ -551,7 +551,7 @@ public class HqlBuilderFrame {
         sql.setText("");
         valueHolders.clear();
         clearResults();
-        propertypanel.add(DefaultHqlBuilderHelper.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
+        propertypanel.add(ClientUtils.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
         propertypanel.revalidate();
         hql_sql_tabs.setForegroundAt(1, Color.gray);
     }
@@ -580,7 +580,7 @@ public class HqlBuilderFrame {
     }
 
     private void log(Object message) {
-        DefaultHqlBuilderHelper.log(message);
+        ClientUtils.log(message);
     }
 
     private void importFromFavorites(QueryFavorite selection) {
@@ -889,7 +889,7 @@ public class HqlBuilderFrame {
             hqlBuilder.hql.grabFocus();
 
             // log connectie
-            DefaultHqlBuilderHelper.log(hqlBuilder.hqlService.getConnectionInfo());
+            ClientUtils.log(hqlBuilder.hqlService.getConnectionInfo());
 
             // wanneer system tray wordt ondersteund, gebruikt deze dan (configureerbaar)
             if (SystemTray.isSupported()) {
@@ -1194,64 +1194,66 @@ public class HqlBuilderFrame {
                 ETableHeaders<List<Object>> headers = null;
 
                 if (rowProcessor == null) {
-                    if (list.size() == 0) {
+                    if (rv.getSize() == 0) {
                         resultsInfo.setText(HqlResourceBundle.getMessage("No results"));
                     } else {
-                        resultsInfo.setText(HqlResourceBundle.getMessage("results in milliseconds", String.valueOf(list.size()),
+                        resultsInfo.setText(HqlResourceBundle.getMessage("results in milliseconds", String.valueOf(rv.getSize()),
                                 String.valueOf(duration)));
                     }
                 }
 
                 List<ETableRecord<List<Object>>> records = new ArrayList<ETableRecord<List<Object>>>();
-                for (Object o : list) {
-                    ETableRecordCollection<Object> record = null;
-                    List<Object> recordItems;
+                if (list != null) {
+                    for (Object o : list) {
+                        ETableRecordCollection<Object> record = null;
+                        List<Object> recordItems;
 
-                    if (o instanceof Object[]) {
-                        recordItems = new ArrayList<Object>(Arrays.asList((Object[]) o));
-                    } else if (o instanceof Collection<?>) {
-                        recordItems = new ArrayList<Object>((Collection<Object>) o);
-                    } else {
-                        recordItems = new ArrayList<Object>(Collections.singleton(o));
-                    }
-
-                    record = new ETableRecordCollection<Object>(recordItems);
-
-                    if (rowProcessor != null) {
-                        rowProcessor.process(record.getBean());
-                        continue;
-                    }
-
-                    if (headers == null) {
-                        headers = new ETableHeaders<List<Object>>();
-
-                        for (int i = 0; i < record.size(); i++) {
-                            boolean script = getScript(i) != null;
-                            if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
-                                try {
-                                    headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>"
-                                            + rv.getScalarColumnNames()[i][0] + (script ? "*" : "") + "<html>");
-                                } catch (Exception ex) {
-                                    log(ex);
-
-                                    try {
-                                        headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>" + rv.getSqlAliases()[i]
-                                                + (script ? "*" : "") + "<html>");
-                                    } catch (Exception ex2) {
-                                        log(ex2);
-                                        headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>" + i
-                                                + (script ? "*" : "") + "<html>");
-                                    }
-                                }
-                            } else {
-                                headers.add("<html>" + rv.getQueryReturnTypeNames()[i] + "<br>" + rv.getQueryReturnAliases()[i] + "<html>");
-                            }
+                        if (o instanceof Object[]) {
+                            recordItems = new ArrayList<Object>(Arrays.asList((Object[]) o));
+                        } else if (o instanceof Collection<?>) {
+                            recordItems = new ArrayList<Object>((Collection<Object>) o);
+                        } else {
+                            recordItems = new ArrayList<Object>(Collections.singleton(o));
                         }
 
-                        resultsEDT.setHeaders(headers);
-                    }
+                        record = new ETableRecordCollection<Object>(recordItems);
 
-                    records.add(record);
+                        if (rowProcessor != null) {
+                            rowProcessor.process(record.getBean());
+                            continue;
+                        }
+
+                        if (headers == null) {
+                            headers = new ETableHeaders<List<Object>>();
+
+                            for (int i = 0; i < record.size(); i++) {
+                                boolean script = getScript(i) != null;
+                                if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
+                                    try {
+                                        headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>"
+                                                + rv.getScalarColumnNames()[i][0] + (script ? "*" : "") + "<html>");
+                                    } catch (Exception ex) {
+                                        log(ex);
+
+                                        try {
+                                            headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>"
+                                                    + rv.getSqlAliases()[i] + (script ? "*" : "") + "<html>");
+                                        } catch (Exception ex2) {
+                                            log(ex2);
+                                            headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>" + i
+                                                    + (script ? "*" : "") + "<html>");
+                                        }
+                                    }
+                                } else {
+                                    headers.add("<html>" + rv.getQueryReturnTypeNames()[i] + "<br>" + rv.getQueryReturnAliases()[i] + "<html>");
+                                }
+                            }
+
+                            resultsEDT.setHeaders(headers);
+                        }
+
+                        records.add(record);
+                    }
                 }
                 resultsEDT.addRecords(records);
 
@@ -1301,6 +1303,10 @@ public class HqlBuilderFrame {
     }
 
     private String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames) {
+        if (sqlString == null) {
+            return "";
+        }
+
         // kolom alias (kan enkel maar wanneer de query al is omgezet, dus de tweede maal dat deze methode wordt opgeroepen-
         if (queryReturnAliases != null) {
             for (int i = 0; i < queryReturnAliases.length; i++) {
@@ -1762,10 +1768,9 @@ public class HqlBuilderFrame {
                 propertypanel.removeAll();
                 Object data = ((row == -1) || (column == -1)) ? null : resultsEDT.getValueAt(row, column);
                 if (data == null) {
-                    propertypanel.add(DefaultHqlBuilderHelper.getPropertyFrame(new Object(), editableResultsAction.isSelected()), BorderLayout.CENTER);
+                    propertypanel.add(ClientUtils.getPropertyFrame(new Object(), editableResultsAction.isSelected()), BorderLayout.CENTER);
                 } else {
-                    propertypanel.add(font(DefaultHqlBuilderHelper.getPropertyFrame(data, editableResultsAction.isSelected()), null),
-                            BorderLayout.CENTER);
+                    propertypanel.add(font(ClientUtils.getPropertyFrame(data, editableResultsAction.isSelected()), null), BorderLayout.CENTER);
                 }
                 propertypanel.revalidate();
             }
@@ -1919,13 +1924,24 @@ public class HqlBuilderFrame {
             menuBar.add(helpmenu);
         }
 
-        String version = HqlResourceBundle.getMessage("latest");
+        String version;
         try {
             Properties p = new Properties();
             p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools/hql-builder-client/pom.properties"));
             version = p.getProperty("version").toString();
         } catch (Exception ex) {
-            //
+            try {
+                version = org.w3c.dom.Node.class.cast(
+                        ClientUtils.getFromXml(new FileInputStream("pom.xml"), "project", "/default:project/default:version/text()")).getNodeValue();
+            } catch (Exception ex2) {
+                try {
+                    version = org.w3c.dom.Node.class.cast(
+                            ClientUtils.getFromXml(new FileInputStream("pom.xml"), "project",
+                                    "/default:project/default:parent/default:version/text()")).getNodeValue();
+                } catch (Exception ex3) {
+                    version = HqlResourceBundle.getMessage("latest");
+                }
+            }
         }
 
         frame.setTitle(NAME + " v " + version + " - " + hqlService.getConnectionInfo());
@@ -2452,7 +2468,7 @@ public class HqlBuilderFrame {
     }
 
     private <T extends JComponent> T font(T comp, Integer size) {
-        return DefaultHqlBuilderHelper.font(comp, size);
+        return ClientUtils.font(comp, size);
     }
 
     protected void start_query() {
@@ -2611,7 +2627,7 @@ public class HqlBuilderFrame {
 
     protected void help() {
         try {
-            Desktop.getDesktop().browse(URI.create(DefaultHqlBuilderHelper.getHelpUrl()));
+            Desktop.getDesktop().browse(URI.create(ClientUtils.getHelpUrl()));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
