@@ -16,6 +16,7 @@
 		</repository>
 	</repositories>	
 	<dependencies>
+		<!-- required -->
 		<dependency>
 			<groupId>org.tools</groupId>
 			<artifactId>hql-builder-common</artifactId>
@@ -27,6 +28,17 @@
 			<version>${version.miglayout}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.swingeasy</groupId>
+			<artifactId>swing-easy</artifactId>
+			<version>${version.swingeasy}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.l2fprod</groupId>
+			<artifactId>l2fprod-common-all</artifactId>
+			<version>${version.l2fprod}</version>
+ 		</dependency>
+ 		<!-- optional -->
+		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>core-renderer</artifactId>
 			<version>${version.xhtmlrenderer}</version>
@@ -37,19 +49,16 @@
 			<version>${version.itext}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.swingeasy</groupId>
-			<artifactId>swing-easy</artifactId>
-			<version>${version.swingeasy}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${version.poi}</version>
 		</dependency>
+		<!-- ??? -->
 		<dependency>
-			<groupId>com.l2fprod</groupId>
-			<artifactId>l2fprod-common-all</artifactId>
-			<version>${version.l2fprod}</version>
- 		</dependency>
+			<groupId>com.toedter</groupId>
+			<artifactId>jcalendar</artifactId>
+			<version>${version.jcalendar}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>
