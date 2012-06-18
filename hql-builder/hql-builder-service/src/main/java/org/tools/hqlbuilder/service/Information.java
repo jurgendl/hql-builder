@@ -34,7 +34,6 @@ import org.hibernate.QueryException;
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.hibernate.type.BagType;
@@ -61,14 +60,13 @@ public class Information {
     private final Directory index;
 
     public Information(SessionFactory sessionFactory) throws IOException, IllegalArgumentException, ClassNotFoundException, IllegalAccessException {
-        @SuppressWarnings("unchecked")
-        Map<String, AbstractEntityPersister> allClassMetadata = sessionFactory.getAllClassMetadata();
+        Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
         index = new RAMDirectory(); // new NIOFSDirectory(new File(".index"));
         IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, analyzer);
         IndexWriter w = new IndexWriter(index, config);
 
-        for (Map.Entry<String, AbstractEntityPersister> i : allClassMetadata.entrySet()) {
+        for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
             if (i.getValue() instanceof JoinedSubclassEntityPersister) {
                 JoinedSubclassEntityPersister p = (JoinedSubclassEntityPersister) i.getValue();
                 create(w, sessionFactory, i.getKey(), p.getClassMetadata());

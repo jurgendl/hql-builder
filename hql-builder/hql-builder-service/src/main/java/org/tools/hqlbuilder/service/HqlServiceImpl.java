@@ -23,12 +23,13 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import org.apache.lucene.queryParser.ParseException;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.engine.NamedQueryDefinition;
 import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.exception.NestableRuntimeException;
+import org.hibernate.hql.ast.QuerySyntaxException;
 import org.hibernate.hql.ast.QueryTranslatorImpl;
 import org.hibernate.impl.QueryImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -190,13 +191,13 @@ public class HqlServiceImpl implements HqlService {
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
         try {
             return innerExecute(hql, max, queryParameters);
-        } catch (org.hibernate.hql.ast.QuerySyntaxException ex) {
+        } catch (QuerySyntaxException ex) {
             ex.printStackTrace();
             String msg = ex.getLocalizedMessage();
             Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
             m.find();
             throw new SyntaxException(msg, m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
-        } catch (NestableRuntimeException ex) {
+        } catch (HibernateException ex) {
             ex.printStackTrace();
             throw new ServiceException(ex.getMessage());
         }
@@ -330,13 +331,12 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> getProperties(String classname) {
-        @SuppressWarnings("unchecked")
-        Map<String, AbstractEntityPersister> allClassMetadata = sessionFactory.getAllClassMetadata();
-        AbstractEntityPersister classMeta = allClassMetadata.get(classname);
+        Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
+        Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
             return null;
         }
-        List<String> propertyNames = new ArrayList<String>(Arrays.asList(classMeta.getPropertyNames()));
+        List<String> propertyNames = new ArrayList<String>(Arrays.asList(AbstractEntityPersister.class.cast(classMeta).getPropertyNames()));
         propertyNames.remove("id");
         propertyNames.remove("version");
         return propertyNames;
@@ -393,7 +393,7 @@ public class HqlServiceImpl implements HqlService {
                 keywords = new HashSet<String>();
                 // ansi & transact sql keywords
                 BufferedReader in = new BufferedReader(new InputStreamReader(HqlServiceImpl.class.getClassLoader().getResourceAsStream(
-                        "reserved_keywords.txt")));
+                        "org/tools/hqlbuilder/service/reserved_keywords.txt")));
                 String line;
                 while ((line = in.readLine()) != null) {
                     for (String kw : line.split(" ")) {
