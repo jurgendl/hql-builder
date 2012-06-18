@@ -11,6 +11,7 @@
 	<name>hql-builder-service</name>
 	<description>hql-builder-service</description>
 	<dependencies>
+		<!-- optional, if you want to use spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
@@ -21,11 +22,7 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.tools</groupId>
-			<artifactId>hql-builder-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- choose the version you are using -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate</artifactId>
@@ -50,6 +47,12 @@
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
 			<version>${version.commons-pool}</version>
+		</dependency>
+		<!-- required -->
+		<dependency>
+			<groupId>org.tools</groupId>
+			<artifactId>hql-builder-common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>

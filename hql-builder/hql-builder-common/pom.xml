@@ -10,6 +10,7 @@
 	<name>hql-builder-common</name>
 	<description>hql-builder-common</description>
 	<dependencies>
+		<!-- if you are using spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
@@ -20,6 +21,13 @@
 			<artifactId>spring-context</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
+		<!-- optional, if you are using Joda objects in your model -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${version.joda}</version>
+		</dependency>
+		<!-- required -->
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
@@ -46,11 +54,6 @@
 			<version>${version.log4j}</version>
 		</dependency>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>${version.joda}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>${version.javassist}</version>
@@ -59,12 +62,6 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${version.commons-beanutils}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.toedter</groupId>
-			<artifactId>jcalendar</artifactId>
-			<version>${version.jcalendar}</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>
