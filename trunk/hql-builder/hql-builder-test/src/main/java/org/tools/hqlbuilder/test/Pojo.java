@@ -13,6 +13,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.annotations.AccessType;
 import org.hibernate.validator.Max;
 import org.hibernate.validator.Min;
+import org.hibernate.validator.Pattern;
+import org.hibernate.validator.Size;
 
 @Entity
 @AccessType("field")
@@ -30,6 +32,9 @@ public class Pojo {
     @Min(0)
     @Max(100)
     private Integer from0To100;
+    
+    @Pattern(regex= "\\d*")
+    private String regexDigits;
 
     private Long getId() {
         return this.id;
@@ -74,4 +79,21 @@ public class Pojo {
     public int hashCode() {
         return new HashCodeBuilder().append(id).toHashCode();
     }
+
+	public Integer getFrom0To100() {
+		return from0To100;
+	}
+
+	public void setFrom0To100(Integer from0To100) {
+		this.from0To100 = from0To100;
+	}
+
+	public String getRegexDigits() {
+		return regexDigits;
+	}
+
+	public void setRegexDigits(String regexDigits) {
+		this.regexDigits = regexDigits;
+	}
+
 }

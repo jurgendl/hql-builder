@@ -5,9 +5,13 @@ import org.tools.hqlbuilder.client.HqlServiceClient;
 
 public class StartClient {
     public static void main(String[] args) {
-        HqlServiceClient hqlServiceClient = (HqlServiceClient) new org.springframework.context.support.ClassPathXmlApplicationContext(
-                "org/tools/hqlbuilder/applicationContext.xml").getBean("hqlServiceClient");
-        HqlBuilderFrame.start(args, hqlServiceClient);
+        try {
+            HqlServiceClient hqlServiceClient = (HqlServiceClient) new org.springframework.context.support.ClassPathXmlApplicationContext(
+                    "org/tools/hqlbuilder/applicationContext.xml").getBean("hqlServiceClient");
+            HqlBuilderFrame.start(args, hqlServiceClient);
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+        }
         // for (Object o : hqlServiceClient.getNamedQueries().entrySet()) {
         // System.out.println(o);
         // }

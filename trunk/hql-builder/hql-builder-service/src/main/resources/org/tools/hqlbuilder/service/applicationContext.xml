@@ -41,7 +41,7 @@
 				<prop key="hibernate.cache.use_structured_entries">true</prop>
 				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
 				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
-				<prop key="hibernate.validator.autoregister_listeners">false</prop>
+				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
 			</props>
 		</property>
 	</bean>

@@ -10,6 +10,7 @@ import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
+import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
 public class HqlServiceClient implements HqlService {
     @Autowired
@@ -64,7 +65,7 @@ public class HqlServiceClient implements HqlService {
     }
 
     @Override
-    public <T> T save(T object) {
+    public <T> T save(T object) throws ValidationException {
         return this.hqlService.save(object);
     }
 
@@ -91,5 +92,15 @@ public class HqlServiceClient implements HqlService {
     @Override
     public List<String> getPropertyNames(Object key, String[] parts) {
         return hqlService.getPropertyNames(key, parts);
+    }
+
+    @Override
+    public ExecutionResult execute(String string, QueryParameter... queryParameters) {
+        return hqlService.execute(string, queryParameters);
+    }
+
+    @Override
+    public ExecutionResult execute(String string, List<QueryParameter> queryParameters) {
+        return hqlService.execute(string, queryParameters);
     }
 }

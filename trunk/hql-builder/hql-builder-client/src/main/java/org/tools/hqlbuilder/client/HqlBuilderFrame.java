@@ -109,7 +109,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.joda.time.LocalDate;
@@ -152,6 +151,7 @@ import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
+import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 
 /**
  * HqlBuilder
@@ -520,6 +520,8 @@ public class HqlBuilderFrame {
     private ETextAreaBorderHighlightPainter hili = new ETextAreaBorderHighlightPainter(getHiliColor());
 
     private ETextAreaBorderHighlightPainter hiko = new ETextAreaBorderHighlightPainter(getHiliColor());
+
+    private ETextAreaBorderHighlightPainter hiwo = new ETextAreaBorderHighlightPainter(Color.RED);
 
     private TrayIcon trayIcon;
 
@@ -1094,7 +1096,7 @@ public class HqlBuilderFrame {
             }
         });
 
-        _query(null);
+        executeQuery(null);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -1139,13 +1141,13 @@ public class HqlBuilderFrame {
 
     private void query(RowProcessor rowProcessor) {
         progressbarStart("quering");
-        _query(rowProcessor);
+        executeQuery(rowProcessor);
         progressbarStop();
         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("done"));
     }
 
     @SuppressWarnings("unchecked")
-    private synchronized void _query(RowProcessor rowProcessor) {
+    private synchronized void executeQuery(RowProcessor rowProcessor) {
         try {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -1157,6 +1159,7 @@ public class HqlBuilderFrame {
             addLast(LAST);
 
             syntaxHiRemove();
+            removeHiliSyntaxException();
 
             // resultsEDT.clear();
 
@@ -1279,7 +1282,35 @@ public class HqlBuilderFrame {
             sql.setText(ex.toString() + getNewline() + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql.getText());
             valueHolders.put(VALUE, ex);
             clearResults();
+
+            if (ex instanceof SyntaxException) {
+                SyntaxException se = SyntaxException.class.cast(ex);
+                hiliSyntaxException(se.getWrong(), se.getLine(), se.getCol());
+            }
         }
+    }
+
+    private void hiliSyntaxException(@SuppressWarnings("unused") String wrong, int line, int col) {
+        String lines[] = this.hql.getText().split("\\r?\\n");
+        int pos = 0;
+        for (int i = 0; i < lines.length; i++) {
+            if (i + 1 == line) {
+                for (int j = 0; j < col - 1; j++) {
+                    pos++;
+                }
+                break;
+            }
+            pos += lines[i].length() + 1;
+        }
+        try {
+            this.hql.addHighlight(pos - 1, pos + 1 + 1, hiwo);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void removeHiliSyntaxException() {
+        this.hql.removeHighlights(hiwo);
     }
 
     private String getScript(int i) {
@@ -1500,42 +1531,60 @@ public class HqlBuilderFrame {
     }
 
     private String getHqlTextEq() {
-        String text = getHqlText();
-        text = text.replaceAll(",", " ");
-
-        while (text.indexOf("  ") != -1) {
-            text = text.replaceAll("  ", " ");
-        }
-
-        text = text.trim();
-
-        return text;
+        // String text = getHqlText();
+        // text = text.replaceAll(",", " ");
+        //
+        // while (text.indexOf("  ") != -1) {
+        // text = text.replaceAll("  ", " ");
+        // }
+        //
+        // text = text.trim();
+        //
+        // return text;
+        return getHqlText();
     }
 
     private String getHqlText() {
-        String text = hql.getText();
-        text = text.replaceAll("\r", getNewline());
-        text = text.replaceAll("\t", " ");
+        // String text = hql.getText();
+        // text = text.replaceAll("\r", getNewline());
+        // text = text.replaceAll("\t", " ");
+        //
+        // StringBuilder sb = new StringBuilder();
+        //
+        // for (String lijn : StringUtils.split(text, getNewline())) {
+        // String trim = lijn.trim();
+        //
+        // if (!trim.startsWith("--") && !trim.startsWith("//")) {
+        // sb.append(trim).append(" ");
+        // }
+        // }
+        //
+        // text = sb.toString();
+        //
+        // while (text.indexOf("  ") != -1) {
+        // text = text.replaceAll("  ", " ");
+        // }
+        //
+        // text = text.trim();
+        //
+        // return text;
 
+        String hqlstring = this.hql.getText();
+        String lines[] = hqlstring.split("\\r?\\n");
         StringBuilder sb = new StringBuilder();
-
-        for (String lijn : StringUtils.split(text, getNewline())) {
-            String trim = lijn.trim();
-
-            if (!trim.startsWith("--") && !trim.startsWith("//")) {
-                sb.append(trim).append(" ");
+        for (String line : lines) {
+            int dash = line.indexOf("--");
+            if (dash != -1) {
+                sb.append(line.substring(0, dash));
+                for (int i = dash; i < line.length(); i++) {
+                    sb.append(" ");
+                }
+            } else {
+                sb.append(line);
             }
+            sb.append("\n");
         }
-
-        text = sb.toString();
-
-        while (text.indexOf("  ") != -1) {
-            text = text.replaceAll("  ", " ");
-        }
-
-        text = text.trim();
-
-        return text;
+        return sb.toString();
     }
 
     /**
