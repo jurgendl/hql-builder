@@ -60,5 +60,10 @@
 			<version>${version.jcalendar}</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${version.joda}</version>
+		</dependency>
 	</dependencies>
 </project>
