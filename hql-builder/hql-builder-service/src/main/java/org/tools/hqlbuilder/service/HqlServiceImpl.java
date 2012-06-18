@@ -18,6 +18,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import org.apache.lucene.queryParser.ParseException;
@@ -26,6 +28,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.engine.NamedQueryDefinition;
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.exception.NestableRuntimeException;
 import org.hibernate.hql.ast.QueryTranslatorImpl;
 import org.hibernate.impl.QueryImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -34,6 +37,7 @@ import org.hibernate.type.CollectionType;
 import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
+import org.hibernate.validator.InvalidValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
@@ -41,6 +45,9 @@ import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.ObjectWrapper;
 import org.tools.hqlbuilder.common.QueryParameter;
+import org.tools.hqlbuilder.common.exceptions.ServiceException;
+import org.tools.hqlbuilder.common.exceptions.SyntaxException;
+import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
 public class HqlServiceImpl implements HqlService {
     @Autowired
@@ -179,9 +186,24 @@ public class HqlServiceImpl implements HqlService {
      * 
      * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, int, org.tools.hqlbuilder.common.QueryParameter[])
      */
-    @SuppressWarnings("unchecked")
     @Override
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
+        try {
+            return innerExecute(hql, max, queryParameters);
+        } catch (org.hibernate.hql.ast.QuerySyntaxException ex) {
+            ex.printStackTrace();
+            String msg = ex.getLocalizedMessage();
+            Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
+            m.find();
+            throw new SyntaxException(msg, m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
+        } catch (NestableRuntimeException ex) {
+            ex.printStackTrace();
+            throw new ServiceException(ex.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public ExecutionResult innerExecute(String hql, int max, QueryParameter... queryParameters) {
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = sessionFactory.openSession();
         QueryImpl createQuery = (QueryImpl) session.createQuery(hql);
@@ -326,14 +348,23 @@ public class HqlServiceImpl implements HqlService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T save(T object) {
-        org.hibernate.classic.Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        object = (T) session.merge(object);
-        session.persist(object);
-        tx.commit();
-        session.flush();
-        return object;
+    public <T> T save(T object) throws ValidationException {
+        try {
+            org.hibernate.classic.Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            object = (T) session.merge(object);
+            session.persist(object);
+            tx.commit();
+            session.flush();
+            return object;
+        } catch (org.hibernate.validator.InvalidStateException ex) {
+            List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
+            for (InvalidValue iv : ex.getInvalidValues()) {
+                ivs.add(new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(iv.getBean(), iv.getBeanClass(), iv.getMessage(),
+                        iv.getPropertyName(), iv.getPropertyPath(), iv.getRootBean(), iv.getValue()));
+            }
+            throw new ValidationException(ex.getMessage(), ivs);
+        }
     }
 
     /**
@@ -488,5 +519,15 @@ public class HqlServiceImpl implements HqlService {
 
     protected <T> T get(Object o, String path, Class<T> t) {
         return t.cast(new ObjectWrapper(o).get(path));
+    }
+
+    @Override
+    public ExecutionResult execute(String hql, List<QueryParameter> queryParameters) {
+        return execute(hql, Integer.MAX_VALUE, queryParameters);
+    }
+
+    @Override
+    public ExecutionResult execute(String hql, QueryParameter... queryParameters) {
+        return execute(hql, Integer.MAX_VALUE, queryParameters);
     }
 }

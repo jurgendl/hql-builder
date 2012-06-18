@@ -38,6 +38,7 @@ import org.joda.time.LocalDateTime;
 import org.swingeasy.EDateEditor;
 import org.swingeasy.EDateTimeEditor;
 import org.tools.hqlbuilder.common.HqlService;
+import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
 import com.l2fprod.common.beans.editor.AbstractPropertyEditor;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -491,6 +492,8 @@ public class PropertyPanel extends PropertySheetPanel {
                                 HqlResourceBundle.getMessage("propertypanel.edit.title"), JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
+            } catch (final ValidationException ex) {
+                System.out.println(ex);
             } catch (final Exception ex) {
                 ex.printStackTrace();
                 EventQueue.invokeLater(new Runnable() {

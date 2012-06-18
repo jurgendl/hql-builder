@@ -5,10 +5,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.tools.hqlbuilder.common.exceptions.ValidationException;
+
 public interface HqlService {
     public abstract SortedSet<String> getClasses();
 
     public abstract String getSqlForHql(String hql);
+
+    public abstract ExecutionResult execute(String string, QueryParameter... queryParameters);
+
+    public abstract ExecutionResult execute(String string, List<QueryParameter> queryParameters);
 
     public abstract ExecutionResult execute(String string, int max, QueryParameter... queryParameters);
 
@@ -20,7 +26,7 @@ public interface HqlService {
 
     public abstract String getConnectionInfo();
 
-    public abstract <T> T save(T object);
+    public abstract <T> T save(T object) throws ValidationException;
 
     public abstract <T> void delete(T object);
 
