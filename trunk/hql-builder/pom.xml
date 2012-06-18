@@ -37,6 +37,8 @@
 		<module>hql-builder-common</module>
 		<module>hql-builder-service</module>
 		<module>hql-builder-client</module>
+		<module>hql-builder-service-test</module>
+		<module>hql-builder-client-test</module>
 		<module>hql-builder-test</module>
 	</modules>
 	<!-- http://maven.apache.org/guides/introduction/introduction-to-profiles.html -->
