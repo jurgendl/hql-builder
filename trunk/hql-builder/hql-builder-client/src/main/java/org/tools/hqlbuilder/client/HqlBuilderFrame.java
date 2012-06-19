@@ -513,11 +513,11 @@ public class HqlBuilderFrame {
 
     private ProgressGlassPane glass = null;
 
-    private ETextAreaBorderHighlightPainter hili = new ETextAreaBorderHighlightPainter(getHiliColor());
+    private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(getHiliColor());
 
-    private ETextAreaBorderHighlightPainter hiko = new ETextAreaBorderHighlightPainter(getHiliColor());
+    private ETextAreaBorderHighlightPainter bracesHighlight = new ETextAreaBorderHighlightPainter(getHiliColor());
 
-    private ETextAreaBorderHighlightPainter hiwo = new ETextAreaBorderHighlightPainter(Color.RED);
+    private ETextAreaBorderHighlightPainter syntaxErrorsHighlight = new ETextAreaBorderHighlightPainter(Color.RED);
 
     private TrayIcon trayIcon;
 
@@ -652,9 +652,6 @@ public class HqlBuilderFrame {
         }
 
         log("scheduleQuery");
-
-        syntaxHiRemove();
-        syntaxHi();
 
         if (delay == null) {
             delay = 1500l;
@@ -1154,8 +1151,7 @@ public class HqlBuilderFrame {
 
             addLast(LAST);
 
-            syntaxHiRemove();
-            removeHiliSyntaxException();
+            hilightSyntax();
 
             // resultsEDT.clear();
 
@@ -1255,8 +1251,6 @@ public class HqlBuilderFrame {
                     }
                 }
                 resultsEDT.addRecords(records);
-
-                syntaxHi();
             } catch (Exception ex) {
                 throw ex;
             }
@@ -1281,12 +1275,14 @@ public class HqlBuilderFrame {
 
             if (ex instanceof SyntaxException) {
                 SyntaxException se = SyntaxException.class.cast(ex);
-                hiliSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
+                hilightSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
             }
         }
     }
 
-    private void hiliSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
+    private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
+        hql.removeHighlights(syntaxErrorsHighlight);
+
         String hqltext = this.hql.getText();
         switch (syntaxExceptionType) {
             case could_not_resolve_property: {
@@ -1304,7 +1300,7 @@ public class HqlBuilderFrame {
                             accept = true;
                         }
                         if (accept) {
-                            this.hql.addHighlight(indexOf, indexOf + wrong.length(), hiwo);
+                            this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
                         }
                         indexOf = hqltext.indexOf(wrong, indexOf + 1);
                     }
@@ -1316,7 +1312,7 @@ public class HqlBuilderFrame {
             case invalid_path: {
                 try {
                     int indexOf = hqltext.indexOf(wrong);
-                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), hiwo);
+                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1335,17 +1331,13 @@ public class HqlBuilderFrame {
                     pos += lines[i].length() + 1;
                 }
                 try {
-                    this.hql.addHighlight(pos - 1, pos + 1 + 1, hiwo);
+                    this.hql.addHighlight(pos - 1, pos + 1 + 1, syntaxErrorsHighlight);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
                 break;
         }
-    }
-
-    private void removeHiliSyntaxException() {
-        this.hql.removeHighlights(hiwo);
     }
 
     private String getScript(int i) {
@@ -1632,7 +1624,7 @@ public class HqlBuilderFrame {
     public void start() throws IOException {
         reloadColor();
 
-        hili.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, new float[] { 1.0F }, 0.F));
+        syntaxHighlight.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, new float[] { 1.0F }, 0.F));
 
         hql.addCaretListener(new CaretListener() {
             @Override
@@ -3021,7 +3013,9 @@ public class HqlBuilderFrame {
         return reservedKeywords;
     }
 
-    private void syntaxHi() {
+    private void hilightSyntax() {
+        this.hql.removeHighlights(syntaxHighlight);
+
         if (!hiliAction.isSelected()) {
             return;
         }
@@ -3047,12 +3041,6 @@ public class HqlBuilderFrame {
             int[] pair1 = iterator.next();
             while (iterator.hasNext()) {
                 int[] pair2 = iterator.next();
-                // System.out.println(hqltext.substring(pair1[0], pair1[1]) + "*");
-                // System.out.println(hqltext.substring(pair2[0], pair2[1]) + "*");
-                // System.out.println(hqltext.charAt(pair1[1]) + "*");
-                // System.out.println(pair1[0] + "," + pair1[1]);
-                // System.out.println(pair2[0] + "," + pair2[1]);
-                // System.out.println();
                 if (pair1[1] + 1 == pair2[0] && (hqltext.charAt(pair1[1]) == ' ' || hqltext.charAt(pair1[1]) == '\t')) {
                     pair1[1] = pair2[1];
                     pos.remove(pair2);
@@ -3062,7 +3050,7 @@ public class HqlBuilderFrame {
             }
             for (int[] p : pos) {
                 try {
-                    this.hql.addHighlight(p[0], p[1], hili);
+                    this.hql.addHighlight(p[0], p[1], syntaxHighlight);
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
@@ -3090,10 +3078,6 @@ public class HqlBuilderFrame {
         }
     }
 
-    private void syntaxHiRemove() {
-        this.hql.removeHighlights(hili);
-    }
-
     private boolean isSeperator(char c) {
         return Character.isWhitespace(c) || c == '\'' || c == '(' || c == ')' || c == ',' || c == '-' || c == '/';
     }
@@ -3102,9 +3086,13 @@ public class HqlBuilderFrame {
         Color color = getHiliColor();
         color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL highlight color"), color);
         hiliColorAction.setValue(color);
-        syntaxHiRemove();
-        hili.setColor(color);
-        hiko.setColor(color);
+
+        this.hql.removeHighlights(syntaxErrorsHighlight);
+        this.hql.removeHighlights(syntaxHighlight);
+        this.hql.removeHighlights(bracesHighlight);
+
+        syntaxHighlight.setColor(color);
+        bracesHighlight.setColor(color);
     }
 
     private Color getHiliColor() {
@@ -3213,8 +3201,8 @@ public class HqlBuilderFrame {
         return position;
     }
 
-    public void hilightBraces(String hqltext) {
-        this.hql.removeHighlights(hiko);
+    private void hilightBraces(String hqltext) {
+        hql.removeHighlights(bracesHighlight);
 
         if (!hiliAction.isSelected()) {
             return;
@@ -3234,8 +3222,8 @@ public class HqlBuilderFrame {
             int match = find(hqltext, caret);
             if (match != -1) {
                 try {
-                    this.hql.addHighlight(caret, caret + 1, hiko);
-                    this.hql.addHighlight(match, match + 1, hiko);
+                    this.hql.addHighlight(caret, caret + 1, bracesHighlight);
+                    this.hql.addHighlight(match, match + 1, bracesHighlight);
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
