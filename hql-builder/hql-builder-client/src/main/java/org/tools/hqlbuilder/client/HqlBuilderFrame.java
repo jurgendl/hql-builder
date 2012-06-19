@@ -152,6 +152,7 @@ import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
+import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionType;
 
 /**
  * HqlBuilder
@@ -488,7 +489,7 @@ public class HqlBuilderFrame {
 
     private final JMenu formatSqlOptionsMenu = new JMenu(HqlResourceBundle.getMessage("format sql options"));
 
-    private HibernateWebResolver meta;
+    private HibernateWebResolver hibernateWebResolver;
 
     private EList<String> insertPropertyHelper;
 
@@ -715,7 +716,7 @@ public class HqlBuilderFrame {
 
             TreeSet<String> options = new TreeSet<String>();
 
-            for (HibernateWebResolver.ClassNode node : meta.getClasses()) {
+            for (HibernateWebResolver.ClassNode node : getHibernateWebResolver().getClasses()) {
                 String clazz = node.getId();
                 String option = clazz.substring(clazz.lastIndexOf('.') + 1) + " (" + clazz.substring(0, clazz.lastIndexOf('.')) + ")";
                 options.add(option);
@@ -1280,27 +1281,66 @@ public class HqlBuilderFrame {
 
             if (ex instanceof SyntaxException) {
                 SyntaxException se = SyntaxException.class.cast(ex);
-                hiliSyntaxException(se.getWrong(), se.getLine(), se.getCol());
+                hiliSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
             }
         }
     }
 
-    private void hiliSyntaxException(@SuppressWarnings("unused") String wrong, int line, int col) {
-        String lines[] = this.hql.getText().split("\\r?\\n");
-        int pos = 0;
-        for (int i = 0; i < lines.length; i++) {
-            if (i + 1 == line) {
-                for (int j = 0; j < col - 1; j++) {
-                    pos++;
+    private void hiliSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
+        String hqltext = this.hql.getText();
+        switch (syntaxExceptionType) {
+            case could_not_resolve_property: {
+                try {
+                    wrong = "." + wrong.split("#")[1];
+                    int indexOf = hqltext.indexOf(wrong);
+                    while (indexOf != -1) {
+                        boolean accept = false;
+                        try {
+                            char nextChar = hqltext.charAt(indexOf + wrong.length() + 1);
+                            if (!(('a' <= nextChar && nextChar <= 'z') || ('A' <= nextChar && nextChar <= 'Z'))) {
+                                accept = true;
+                            }
+                        } catch (StringIndexOutOfBoundsException ex) {
+                            accept = true;
+                        }
+                        if (accept) {
+                            this.hql.addHighlight(indexOf, indexOf + wrong.length(), hiwo);
+                        }
+                        indexOf = hqltext.indexOf(wrong, indexOf + 1);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                break;
             }
-            pos += lines[i].length() + 1;
-        }
-        try {
-            this.hql.addHighlight(pos - 1, pos + 1 + 1, hiwo);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+                break;
+            case invalid_path: {
+                try {
+                    int indexOf = hqltext.indexOf(wrong);
+                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), hiwo);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+                break;
+            case unexpected_token: {
+                String lines[] = hqltext.split("\\r?\\n");
+                int pos = 0;
+                for (int i = 0; i < lines.length; i++) {
+                    if (i + 1 == line) {
+                        for (int j = 0; j < col - 1; j++) {
+                            pos++;
+                        }
+                        break;
+                    }
+                    pos += lines[i].length() + 1;
+                }
+                try {
+                    this.hql.addHighlight(pos - 1, pos + 1 + 1, hiwo);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+                break;
         }
     }
 
@@ -2665,7 +2705,7 @@ public class HqlBuilderFrame {
                     public void query(String query) {
                         hql.setText(query);
                     }
-                }, frame, meta);
+                }, frame, getHibernateWebResolver());
             }
         }).start();
     }
@@ -3225,5 +3265,12 @@ public class HqlBuilderFrame {
         for (QueryParameter p : hqlService.findParameters(getHqlText())) {
             parametersEDT.addRecord(new EListRecord<QueryParameter>(p));
         }
+    }
+
+    private HibernateWebResolver getHibernateWebResolver() {
+        if (hibernateWebResolver == null) {
+            hibernateWebResolver = hqlService.getHibernateWebResolver();
+        }
+        return this.hibernateWebResolver;
     }
 }
