@@ -203,8 +203,6 @@ public class HqlBuilderFrame {
 
     private static final String NEW_PROGRESSION_MARKER = "new progression marker";
 
-    private static final String OFFLINE_DOCUMENTATION = "offline documentation";
-
     private static final String HQL_DOCUMENTATION = "hql documentation";
 
     private static final String HIBERNATE_DOCUMENTATION = "hibernate documentation";
@@ -400,9 +398,6 @@ public class HqlBuilderFrame {
 
     private final HqlBuilderAction helpHqlAction = new HqlBuilderAction(null, this, HQL_DOCUMENTATION, true, HQL_DOCUMENTATION, "help16.png",
             HQL_DOCUMENTATION, HQL_DOCUMENTATION, true, null, null);
-
-    private final HqlBuilderAction helpOfflineAction = new HqlBuilderAction(null, this, OFFLINE_DOCUMENTATION, true, OFFLINE_DOCUMENTATION,
-            "help16.png", OFFLINE_DOCUMENTATION, OFFLINE_DOCUMENTATION, true, null, null);
 
     private final HqlBuilderAction luceneQuerySyntaxAction = new HqlBuilderAction(null, this, LUCENE_QUERY_SYNTAX, true, LUCENE_QUERY_SYNTAX,
             "help16.png", LUCENE_QUERY_SYNTAX, LUCENE_QUERY_SYNTAX, true, null, null);
@@ -1969,7 +1964,6 @@ public class HqlBuilderFrame {
             JMenu helpmenu = new JMenu(HqlResourceBundle.getMessage("help"));
             helpmenu.add(new JMenuItem(helpHibernateAction));
             helpmenu.add(new JMenuItem(helpHqlAction));
-            helpmenu.add(new JMenuItem(helpOfflineAction));
             helpmenu.add(new JMenuItem(luceneQuerySyntaxAction));
             helpmenu.add(new JMenuItem(helpAction));
             menuBar.add(helpmenu);
