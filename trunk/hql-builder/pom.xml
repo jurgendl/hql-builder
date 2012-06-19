@@ -31,7 +31,7 @@
 		<version.commons-beanutils>1.8.3</version.commons-beanutils>
 		<version.commons-dbcp>20030825.184428</version.commons-dbcp>
 		<version.commons-pool>20030825.183949</version.commons-pool>
-		<version.slf4j>1.6.6</version.slf4j>
+		<version.slf4j>1.5.8</version.slf4j>
 	</properties>
 	<modules>
 		<module>hql-builder-common</module>

@@ -24,6 +24,7 @@ import java.util.zip.ZipEntry;
 
 import org.apache.lucene.queryParser.ParseException;
 import org.hibernate.HibernateException;
+import org.hibernate.QueryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -195,8 +196,23 @@ public class HqlServiceImpl implements HqlService {
             ex.printStackTrace();
             String msg = ex.getLocalizedMessage();
             Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
-            m.find();
-            throw new SyntaxException(msg, m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
+            if (m.find()) {
+                throw new SyntaxException(SyntaxException.SyntaxExceptionType.unexpected_token, msg, m.group(1), Integer.parseInt(m.group(2)),
+                        Integer.parseInt(m.group(3)));
+            }
+            m = Pattern.compile("Invalid path: '([^']+)' ").matcher(msg);
+            if (m.find()) {
+                throw new SyntaxException(SyntaxException.SyntaxExceptionType.invalid_path, msg, m.group(1));
+            }
+            throw new ServiceException(ex.getMessage());
+        } catch (QueryException ex) {
+            ex.printStackTrace();
+            String msg = ex.getLocalizedMessage();
+            Matcher m = Pattern.compile("could not resolve property: ([^ ]+) of: ([^ ]+) ").matcher(msg);
+            if (m.find()) {
+                throw new SyntaxException(SyntaxException.SyntaxExceptionType.could_not_resolve_property, msg, m.group(2) + "#" + m.group(1));
+            }
+            throw new ServiceException(ex.getMessage());
         } catch (HibernateException ex) {
             ex.printStackTrace();
             throw new ServiceException(ex.getMessage());
