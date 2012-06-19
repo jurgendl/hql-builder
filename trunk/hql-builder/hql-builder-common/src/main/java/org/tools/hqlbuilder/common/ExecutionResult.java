@@ -1,10 +1,13 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class ExecutionResult {
+public class ExecutionResult implements Serializable {
+    private static final long serialVersionUID = 7646264311502956246L;
+
     private List<Object> results;
 
     private Map<String, String> fromAliases;

@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.test;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,8 +21,10 @@ import org.hibernate.validator.Size;
 @Entity
 @AccessType("field")
 @SuppressWarnings("unused")
-public class Pojo {
-    @Id
+public class Pojo implements Serializable {
+	private static final long serialVersionUID = -589586518891599759L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
