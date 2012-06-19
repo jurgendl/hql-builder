@@ -39,6 +39,7 @@ import org.swingeasy.EDateEditor;
 import org.swingeasy.EDateTimeEditor;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
+import org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue;
 
 import com.l2fprod.common.beans.editor.AbstractPropertyEditor;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
@@ -493,7 +494,17 @@ public class PropertyPanel extends PropertySheetPanel {
                     }
                 });
             } catch (final ValidationException ex) {
-                System.out.println(ex);
+                final StringBuilder sb = new StringBuilder();
+                for (InvalidValue iv : ex.getInvalidValues()) {
+                    sb.append("\u2022 ").append(iv.getPropertyName()).append(" ").append(iv.getMessage()).append("\n");
+                }
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        JOptionPane.showMessageDialog(PropertyPanel.this, HqlResourceBundle.getMessage("propertypanel.edit.error") + ":\n" + sb,
+                                HqlResourceBundle.getMessage("propertypanel.edit.title"), JOptionPane.ERROR_MESSAGE);
+                    }
+                });
             } catch (final Exception ex) {
                 ex.printStackTrace();
                 EventQueue.invokeLater(new Runnable() {
