@@ -40,6 +40,7 @@ import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
 import org.hibernate.validator.InvalidValue;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
@@ -52,6 +53,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
 public class HqlServiceImpl implements HqlService {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceImpl.class);
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -193,7 +196,7 @@ public class HqlServiceImpl implements HqlService {
         try {
             return innerExecute(hql, max, queryParameters);
         } catch (QuerySyntaxException ex) {
-            ex.printStackTrace();
+            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             String msg = ex.getLocalizedMessage();
             Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
             if (m.find()) {
@@ -204,9 +207,13 @@ public class HqlServiceImpl implements HqlService {
             if (m.find()) {
                 throw new SyntaxException(SyntaxException.SyntaxExceptionType.invalid_path, msg, m.group(1));
             }
+            m = Pattern.compile("([^']+) is not mapped ").matcher(msg);
+            if (m.find()) {
+                throw new SyntaxException(SyntaxException.SyntaxExceptionType.not_mapped, msg, m.group(1));
+            }
             throw new ServiceException(ex.getMessage());
         } catch (QueryException ex) {
-            ex.printStackTrace();
+            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             String msg = ex.getLocalizedMessage();
             Matcher m = Pattern.compile("could not resolve property: ([^ ]+) of: ([^ ]+) ").matcher(msg);
             if (m.find()) {
@@ -214,7 +221,7 @@ public class HqlServiceImpl implements HqlService {
             }
             throw new ServiceException(ex.getMessage());
         } catch (HibernateException ex) {
-            ex.printStackTrace();
+            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             throw new ServiceException(ex.getMessage());
         }
     }
@@ -240,10 +247,10 @@ public class HqlServiceImpl implements HqlService {
                 }
             } catch (org.hibernate.QueryParameterException ex) {
                 // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
-                System.out.println(ex); // => whatever
+                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); //$NON-NLS-1$ // => whatever
             } catch (java.lang.IndexOutOfBoundsException ex) {
                 // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
-                System.out.println(ex); // => whatever
+                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); //$NON-NLS-1$ // => whatever
             }
         }
         if (isUpdateStatement) {
@@ -311,7 +318,7 @@ public class HqlServiceImpl implements HqlService {
                     }
                 }
             } catch (IllegalArgumentException ex) {
-                System.err.println(className);
+                logger.error("getHibernateWebResolver() - " + className, ex); //$NON-NLS-1$
             }
         }
         return resolver;
@@ -420,7 +427,7 @@ public class HqlServiceImpl implements HqlService {
                     }
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                logger.error("getReservedKeywords()", ex); //$NON-NLS-1$
             }
         }
         return keywords;
