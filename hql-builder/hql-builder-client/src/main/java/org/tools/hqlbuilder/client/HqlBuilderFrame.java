@@ -1318,6 +1318,15 @@ public class HqlBuilderFrame {
                 }
             }
                 break;
+            case not_mapped: {
+                try {
+                    int indexOf = hqltext.indexOf(wrong);
+                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+                break;
             case unexpected_token: {
                 String lines[] = hqltext.split("\\r?\\n");
                 int pos = 0;
