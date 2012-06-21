@@ -109,10 +109,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
+import org.slf4j.LoggerFactory;
 import org.swingeasy.CustomizableOptionPane;
 import org.swingeasy.DocumentKeyListener;
 import org.swingeasy.EButton;
@@ -160,6 +162,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author jdlandsh
  */
 public class HqlBuilderFrame {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
+
     private static final String LOAD_NAMED_QUERY = "load named query";
 
     private static final String HIBERNATE_PROPERTIES = "hibernate properties";
@@ -686,7 +690,7 @@ public class HqlBuilderFrame {
                             insertPropertyHelp();
                         }
                     } catch (Exception ex) {
-                        ex.printStackTrace(System.out);
+                        logger.error("$MouseAdapter.mouseClicked(MouseEvent)", ex); //$NON-NLS-1$
                     }
                 }
             });
@@ -735,7 +739,7 @@ public class HqlBuilderFrame {
                             insertHelp();
                         }
                     } catch (Exception ex) {
-                        ex.printStackTrace(System.out);
+                        logger.error("$MouseAdapter.mouseClicked(MouseEvent)", ex); //$NON-NLS-1$
                     }
                 }
             });
@@ -931,7 +935,7 @@ public class HqlBuilderFrame {
                 });
             }
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("start(String[], HqlService)", ex); //$NON-NLS-1$
         }
     }
 
@@ -980,7 +984,7 @@ public class HqlBuilderFrame {
                     method.invoke(sysloader, new Object[] { file.toURI().toURL() });
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("loadModelAtRuntime()", ex); //$NON-NLS-1$
                 System.exit(0);
                 return;
             }
@@ -1057,7 +1061,7 @@ public class HqlBuilderFrame {
             try {
                 SystemTray.getSystemTray().add(trayIcon);
             } catch (AWTException ex) {
-                ex.printStackTrace();
+                logger.error("switchVisibility()", ex); //$NON-NLS-1$
             }
         } else {
             SystemTray.getSystemTray().remove(trayIcon);
@@ -1103,7 +1107,7 @@ public class HqlBuilderFrame {
                         resultsUnsafe.setAutoResizeMode(ETable.AUTO_RESIZE_ALL_COLUMNS);
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("$Runnable.run()", ex); //$NON-NLS-1$
                 }
             }
         });
@@ -1151,6 +1155,8 @@ public class HqlBuilderFrame {
 
             addLast(LAST);
 
+            hql.removeHighlights(syntaxErrorsHighlight);
+
             hilightSyntax();
 
             // resultsEDT.clear();
@@ -1172,7 +1178,7 @@ public class HqlBuilderFrame {
                     sql.setText(removeBlanks(makeMultiline(cleanupSql(rv.getSql(), rv.getQueryReturnAliases(), rv.getScalarColumnNames()))));
                     log(sql.getText());
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
                     log(rv.getSql());
                 }
             }
@@ -1267,7 +1273,7 @@ public class HqlBuilderFrame {
                     hql_sql_tabs.setForegroundAt(1, Color.RED);
                 }
             });
-            ex.printStackTrace();
+            logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
             // uiExceptionHandler.show(null, ex, HqlResourceBundle.getMessage("hql error"));
             sql.setText(ex.toString() + getNewline() + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql.getText());
             valueHolders.put(VALUE, ex);
@@ -1305,7 +1311,7 @@ public class HqlBuilderFrame {
                         indexOf = hqltext.indexOf(wrong, indexOf + 1);
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex); //$NON-NLS-1$
                 }
             }
                 break;
@@ -1314,7 +1320,7 @@ public class HqlBuilderFrame {
                     int indexOf = hqltext.indexOf(wrong);
                     this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex); //$NON-NLS-1$
                 }
             }
                 break;
@@ -1323,7 +1329,7 @@ public class HqlBuilderFrame {
                     int indexOf = hqltext.indexOf(wrong);
                     this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex); //$NON-NLS-1$
                 }
             }
                 break;
@@ -1342,7 +1348,7 @@ public class HqlBuilderFrame {
                 try {
                     this.hql.addHighlight(pos - 1, pos + 1 + 1, syntaxErrorsHighlight);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex); //$NON-NLS-1$
                 }
             }
                 break;
@@ -1499,7 +1505,7 @@ public class HqlBuilderFrame {
                     log("/ " + group + " > " + newvalue);
                     sqlString = sqlString.replaceAll("\\Q" + group + "\\E", newvalue);
                 } catch (Exception ex) {
-                    ex.printStackTrace(System.out);
+                    logger.error("cleanupSql(String, String[], String[][])", ex); //$NON-NLS-1$
                 }
             }
         }
@@ -1566,45 +1572,45 @@ public class HqlBuilderFrame {
         return false;
     }
 
+    /**
+     * prevents auto-execution of query when only whitespaces change or comments
+     */
     private String getHqlTextEq() {
-        // String text = getHqlText();
-        // text = text.replaceAll(",", " ");
+        String text = hql.getText();
+        text = text.replaceAll("\r", getNewline());
+        text = text.replaceAll("\t", " ");
+
+        StringBuilder sb = new StringBuilder();
+
+        for (String lijn : StringUtils.split(text, getNewline())) {
+            String trim = lijn.trim();
+
+            if (!trim.startsWith("--")) {
+                sb.append(trim).append(" ");
+            }
+        }
+
+        text = sb.toString();
+
+        while (text.indexOf("  ") != -1) {
+            text = text.replaceAll("  ", " ");
+        }
+
+        text = text.trim();
+
         //
-        // while (text.indexOf("  ") != -1) {
-        // text = text.replaceAll("  ", " ");
-        // }
-        //
-        // text = text.trim();
-        //
-        // return text;
-        return getHqlText();
+        text = text.replaceAll(",", " ");
+
+        while (text.indexOf("  ") != -1) {
+            text = text.replaceAll("  ", " ");
+        }
+
+        text = text.trim();
+
+        return text;
     }
 
     private String getHqlText() {
-        // String text = hql.getText();
-        // text = text.replaceAll("\r", getNewline());
-        // text = text.replaceAll("\t", " ");
-        //
-        // StringBuilder sb = new StringBuilder();
-        //
-        // for (String lijn : StringUtils.split(text, getNewline())) {
-        // String trim = lijn.trim();
-        //
-        // if (!trim.startsWith("--") && !trim.startsWith("//")) {
-        // sb.append(trim).append(" ");
-        // }
-        // }
-        //
-        // text = sb.toString();
-        //
-        // while (text.indexOf("  ") != -1) {
-        // text = text.replaceAll("  ", " ");
-        // }
-        //
-        // text = text.trim();
-        //
-        // return text;
-
         String hqlstring = this.hql.getText();
         String lines[] = hqlstring.split("\\r?\\n");
         StringBuilder sb = new StringBuilder();
@@ -1716,7 +1722,7 @@ public class HqlBuilderFrame {
                         }
                         searchresultsEDTSafe.addRecords(EList.convert(results));
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        logger.error("$ELabeledTextFieldButtonComponent.doAction()", ex); //$NON-NLS-1$
                     }
                 }
             };
@@ -2255,7 +2261,7 @@ public class HqlBuilderFrame {
                             }
                             valueHolders.put("#", c);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            logger.error("$RowProcessor.process(List<Object>)", ex); //$NON-NLS-1$
                         }
                     }
                 });
@@ -2263,7 +2269,7 @@ public class HqlBuilderFrame {
                 br.flush();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("export_dataset_to_csv_file()", ex); //$NON-NLS-1$
         } finally {
             try {
                 fout.close();
@@ -2293,7 +2299,7 @@ public class HqlBuilderFrame {
 
             clipboard.setContents(new StringSelection(sb.toString()), getClipboardOwner());
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("export_table_data_to_clipboard()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2319,7 +2325,7 @@ public class HqlBuilderFrame {
         try {
             hql.setText(format(hql.getText()));
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("format()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2330,7 +2336,7 @@ public class HqlBuilderFrame {
             String string = hql.getDocument().getText(Math.min(start, end), Math.max(start, end) - Math.min(start, end));
             clipboard.setContents(new StringSelection(string), getClipboardOwner());
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("copy()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2346,7 +2352,7 @@ public class HqlBuilderFrame {
             hql.setText(string);
             scheduleQuery(null, false);
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("paste()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2364,7 +2370,7 @@ public class HqlBuilderFrame {
             hql.setText(sb.toString());
             scheduleQuery(0l, false);
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("import__paste_hql_as_java_from_clipboard()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2586,7 +2592,7 @@ public class HqlBuilderFrame {
 
             clipboard.setContents(new StringSelection(sb.toString()), getClipboardOwner());
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            logger.error("export__copy_hql_as_java_to_clipboard()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2715,7 +2721,7 @@ public class HqlBuilderFrame {
         try {
             Desktop.getDesktop().browse(URI.create(ClientUtils.getHelpUrl()));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("help()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2723,7 +2729,7 @@ public class HqlBuilderFrame {
         try {
             Desktop.getDesktop().browse(URI.create("http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/"));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("hibernate_documentation()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2731,7 +2737,7 @@ public class HqlBuilderFrame {
         try {
             Desktop.getDesktop().browse(URI.create("http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/queryhql.html"));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("hql_documentation()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2755,7 +2761,7 @@ public class HqlBuilderFrame {
             }
             Desktop.getDesktop().open(hibernate_doc_offline);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("offline_documentation()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2815,7 +2821,7 @@ public class HqlBuilderFrame {
                 x = Eval.x(x, script);
                 resultsEDT.setValueAt(x, row, selectedCol);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("execute_script_on_column()", ex); //$NON-NLS-1$
                 error = true;
             }
         }
@@ -3061,7 +3067,7 @@ public class HqlBuilderFrame {
                 try {
                     this.hql.addHighlight(p[0], p[1], syntaxHighlight);
                 } catch (BadLocationException ex) {
-                    ex.printStackTrace();
+                    logger.error("hilightSyntax()", ex); //$NON-NLS-1$
                 }
             }
         }
@@ -3144,7 +3150,7 @@ public class HqlBuilderFrame {
         try {
             Desktop.getDesktop().browse(URI.create("http://lucene.apache.org/core/old_versioned_docs/versions/3_5_0/queryparsersyntax.html"));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Lucene_query_syntax()", ex); //$NON-NLS-1$
         }
     }
 
@@ -3234,7 +3240,7 @@ public class HqlBuilderFrame {
                     this.hql.addHighlight(caret, caret + 1, bracesHighlight);
                     this.hql.addHighlight(match, match + 1, bracesHighlight);
                 } catch (BadLocationException ex) {
-                    ex.printStackTrace();
+                    logger.error("hilightBraces(String)", ex); //$NON-NLS-1$
                 }
             }
         } catch (Exception ex) {
