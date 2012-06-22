@@ -938,6 +938,7 @@ public class HqlBuilderFrame {
         }
     }
 
+    @SuppressWarnings("unused")
     private static void loadModelAtRuntime() {
         JFrame dummy = new JFrame();
         dummy.setIconImage(new ImageIcon(HqlBuilderFrame.class.getClassLoader().getResource("bricks-icon.png")).getImage());

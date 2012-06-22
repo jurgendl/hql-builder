@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
  * 
  * @author jdlandsh
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public final class ObjectWrapper {
     /** {@link Object}.class */
     private static final Class<Object> OBJECT_CLASS = Object.class;
@@ -640,9 +640,6 @@ public final class ObjectWrapper {
      * ClassCache
      */
     private static final class ClassCache {
-        /** serialVersionUID */
-        private static final long serialVersionUID = -1953977552009338340L;
-
         /** type */
         private final Class type;
 
