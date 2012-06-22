@@ -48,11 +48,6 @@
 			<artifactId>itext</artifactId>
 			<version>${version.itext}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>${version.poi}</version>
-		</dependency>
 		<!-- ??? -->
 		<dependency>
 			<groupId>com.toedter</groupId>
