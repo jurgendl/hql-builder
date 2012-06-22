@@ -5,9 +5,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
                                http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<bean id="propertyPlaceholderConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		scope="singleton" autowire-candidate="false">
+	<import resource="classpath:org/tools/hqlbuilder/client/applicationContext.xml" />
+
+	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope="singleton" autowire-candidate="false">
 		<property name="locations">
 			<list>
 				<value>classpath:org/tools/hqlbuilder/client/hqlwebclient.properties</value>
@@ -15,14 +15,4 @@
 		</property>
 	</bean>
 
-	<bean id="hqlWebServiceClientProxy"
-		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-		<property name="serviceUrl">
-			<value>${url}</value>
-		</property>
-		<property name="serviceInterface">
-			<value>org.tools.hqlbuilder.common.HqlWebService</value>
-		</property>
-	</bean>
-
-</beans>  
+</bean>

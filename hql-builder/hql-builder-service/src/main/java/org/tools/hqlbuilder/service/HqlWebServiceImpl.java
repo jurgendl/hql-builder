@@ -8,7 +8,6 @@ import java.util.SortedSet;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
-import org.tools.hqlbuilder.common.HqlWebService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 

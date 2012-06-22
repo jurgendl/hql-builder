@@ -41,7 +41,6 @@ import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
 import org.hibernate.validator.InvalidValue;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
@@ -55,7 +54,6 @@ import org.tools.hqlbuilder.common.exceptions.ValidationException;
 public class HqlServiceImpl implements HqlService {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceImpl.class);
 
-    @Autowired
     private SessionFactory sessionFactory;
 
     private String modelVersion;
@@ -132,7 +130,7 @@ public class HqlServiceImpl implements HqlService {
                 }
                 modelVersion.toString();
             } catch (Exception ex) {
-                modelVersion = ".";
+                modelVersion = "?";
             }
         }
         return this.modelVersion;

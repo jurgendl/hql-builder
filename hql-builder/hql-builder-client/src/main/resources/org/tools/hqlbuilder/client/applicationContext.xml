@@ -5,16 +5,14 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
                                http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<bean id="httpHqlbuilderService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter" p:service-ref="hqlWebService">
-		<property name="serviceInterface"><value>org.tools.hqlbuilder.service.HqlWebService</value></property>
+	<bean id="hqlWebServiceClientProxy" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl"><value>${url}</value></property>
+		<property name="serviceInterface"><value>org.tools.hqlbuilder.common.HqlService</value></property>
 	</bean>
 
-	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="mappings">
-			<props>
-				<prop key="hqlbuilder">httpHqlbuilderService</prop>
-			</props>
-		</property>
+	<bean id="hqlServiceClient" class="org.tools.hqlbuilder.client.HqlServiceClientImpl" scope="singleton" lazy-init="false">
+		<property name="hqlService" ref="hqlWebServiceClientProxy"/>
+		<property name="serviceUrl"><value>${url}</value></property>
 	</bean>
 
 </beans>

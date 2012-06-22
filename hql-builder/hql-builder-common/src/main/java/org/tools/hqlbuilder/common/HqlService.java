@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -7,7 +8,7 @@ import java.util.SortedSet;
 
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
-public interface HqlService {
+public interface HqlService extends Serializable {
     public abstract SortedSet<String> getClasses();
 
     public abstract String getSqlForHql(String hql);
@@ -31,7 +32,6 @@ public interface HqlService {
     public abstract <T> void delete(T object);
 
     /**
-     * 
      * JDOC
      * 
      * @param text
