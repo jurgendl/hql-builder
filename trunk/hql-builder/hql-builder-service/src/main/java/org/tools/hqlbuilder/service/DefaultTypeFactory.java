@@ -20,7 +20,7 @@ import org.hibernate.type.AdaptedImmutableType;
 import org.hibernate.type.DbTimestampType;
 import org.hibernate.type.Type;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 public class DefaultTypeFactory {
     private static final Map BASIC_TYPES;
 

@@ -52,6 +52,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
 public class HqlServiceImpl implements HqlService {
+    private static final long serialVersionUID = 3856142589306194609L;
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceImpl.class);
 
     private SessionFactory sessionFactory;
