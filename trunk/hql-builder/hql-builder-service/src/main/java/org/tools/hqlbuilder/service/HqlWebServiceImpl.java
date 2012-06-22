@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.test;
+package org.tools.hqlbuilder.service;
 
 import java.util.List;
 import java.util.Map;

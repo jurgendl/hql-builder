@@ -9,7 +9,7 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/service/applicationContext.xml" />
 
-	<bean id="hqlWebService" class="org.tools.hqlbuilder.test.HqlWebServiceImpl">
+	<bean id="hqlWebService" class="org.tools.hqlbuilder.service.HqlWebServiceImpl">
 		<property name="hqlService" ref="hqlService" />
 	</bean>
 
