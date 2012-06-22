@@ -2036,7 +2036,8 @@ public class HqlBuilderFrame {
             }
         }
 
-        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo() + " - " + hqlService.getServiceUrl());
+        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo()
+                + (hqlService.getServiceUrl() == null ? "" : " - " + hqlService.getServiceUrl()));
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(new Dimension(1024, 768));
