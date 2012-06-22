@@ -7,7 +7,7 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/client/applicationContext.xml" />
 
-	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope="singleton" autowire-candidate="false">
+	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope="singleton">
 		<property name="locations">
 			<list>
 				<value>classpath:org/tools/hqlbuilder/client/hqlwebclient.properties</value>
@@ -15,4 +15,4 @@
 		</property>
 	</bean>
 
-</bean>
+</beans>

@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
 	"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
-<beans default-autowire="autodetect">
+<beans>
 
-	<bean id="hqlService" class="org.tools.hqlbuilder.service.HqlServiceImpl"
-		scope="singleton" lazy-init="false">
+	<bean id="hqlService" class="org.tools.hqlbuilder.service.HqlServiceImpl" scope="singleton" lazy-init="false">
 		<property name="sessionFactory" ref="sessionFactory"/>
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
 	</bean>
 
-	<bean id="dataSource" destroy-method="close"
-		class="org.apache.commons.dbcp.BasicDataSource" autowire-candidate="false">
+	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
 	</bean>
 
-	<bean name="lazyConnectionDataSourceProxy"
-		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy"
-		autowire-candidate="false">
+	<bean name="lazyConnectionDataSourceProxy" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
 		<property name="targetDataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="hibernateProperties"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean"
-		autowire-candidate="false">
+	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="properties">
 			<props>
 				<prop key="hibernate.search.autoregister_listeners">false</prop>
@@ -46,9 +40,7 @@
 		</property>
 	</bean>
 
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"
-		autowire-candidate="false">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:${hibernate.cfg.xml}" />
 		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />

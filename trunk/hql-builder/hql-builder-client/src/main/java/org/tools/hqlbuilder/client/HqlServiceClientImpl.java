@@ -12,6 +12,8 @@ import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
 public class HqlServiceClientImpl implements HqlServiceClient {
+    private static final long serialVersionUID = 5659734722245348813L;
+
     private HqlService hqlService;
 
     private String serviceUrl;
