@@ -53,6 +53,9 @@
 	<logger name="org.hibernate.engine.StatefulPersistenceContext.ProxyWarnLog">
 		<level value="off" />
 	</logger>
+	<logger name="org.hibernate.LazyInitializationException">
+		<level value="off" />
+	</logger>
 	<root>
 		<appender-ref ref="CONSOLE" />
 		<!-- <appender-ref ref="CLIENT" /> -->

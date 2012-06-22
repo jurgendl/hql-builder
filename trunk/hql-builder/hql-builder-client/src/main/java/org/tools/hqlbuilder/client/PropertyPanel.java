@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.client;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -29,14 +30,17 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.hibernate.Hibernate;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.swingeasy.EDateEditor;
 import org.swingeasy.EDateTimeEditor;
+import org.swingeasy.ObjectWrapper;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue;
@@ -45,7 +49,10 @@ import com.l2fprod.common.beans.editor.AbstractPropertyEditor;
 import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 import com.l2fprod.common.propertysheet.DefaultProperty;
 import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
+import com.l2fprod.common.propertysheet.PropertyRendererRegistry;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
+import com.l2fprod.common.propertysheet.PropertySheetTable;
+import com.l2fprod.common.propertysheet.PropertySheetTableModel;
 import com.l2fprod.common.propertysheet.PropertySheetTableModel.Item;
 import com.l2fprod.common.swing.LookAndFeelTweaks;
 import com.l2fprod.common.util.converter.NumberConverters;
@@ -60,7 +67,8 @@ import com.l2fprod.common.util.converter.NumberConverters;
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PropertyPanel extends PropertySheetPanel {
-    /** serialVersionUID */
+    private static final String LAZY = "*LAZY*";
+
     private static final long serialVersionUID = -5568670775272022905L;
 
     private Object bean;
@@ -79,6 +87,32 @@ public class PropertyPanel extends PropertySheetPanel {
      */
 
     public PropertyPanel(Object bean, final boolean editable) {
+        super(new PropertySheetTable() {
+            private static final long serialVersionUID = 5578802576173787006L;
+
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Object value;
+                try {
+                    value = getValueAt(row, column);
+                    if (!isInitialized(value)) {
+                        value = LAZY;
+                    } else {
+                        String.valueOf(value);
+                    }
+                } catch (org.hibernate.LazyInitializationException ex) {
+                    value = LAZY;
+                }
+                boolean isSelected = isCellSelected(row, column);
+                Component component = renderer.getTableCellRendererComponent(this, value, isSelected, false, row, column);
+                PropertySheetTableModel.Item item = getSheetModel().getPropertySheetElement(row);
+                if (item.isProperty()) {
+                    component.setEnabled(item.getProperty().isEditable());
+                }
+                return component;
+            }
+        });
+
         ClientUtils.log(bean);
 
         this.bean = bean;
@@ -92,7 +126,15 @@ public class PropertyPanel extends PropertySheetPanel {
                     Method readMethod = propertyDescriptor.getReadMethod();
                     if (readMethod != null) {
                         try {
-                            String.valueOf(readMethod.invoke(bean));
+                            Object value = readMethod.invoke(bean);
+                            if (!isInitialized(value)) {
+                                throw new NullPointerException();
+                            }
+                            try {
+                                String.valueOf(value);
+                            } catch (Exception ex) {
+                                //
+                            }
                         } catch (Exception ex) {
                             //
                         }
@@ -102,6 +144,24 @@ public class PropertyPanel extends PropertySheetPanel {
                 throw new RuntimeException(ex);
             }
         }
+
+        @SuppressWarnings("unused")
+        PropertyRendererRegistry propertyRendererRegistry = PropertyRendererRegistry.class.cast(getRendererFactory());
+        // for (Object entry : new ObjectWrapper(propertyRendererRegistry).get("typeToRenderer", Map.class).entrySet()) {
+        // Map.Entry mapEntry = (Map.Entry) entry;
+        // final TableCellRenderer renderer = (TableCellRenderer) mapEntry.getValue();
+        // Class type = (Class) mapEntry.getKey();
+        // propertyRendererRegistry.registerRenderer(type, new TableCellRenderer() {
+        // @Override
+        // public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        // try {
+        // return renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        // } catch (org.hibernate.LazyInitializationException ex) {
+        // return renderer.getTableCellRendererComponent(table, LAZY, isSelected, hasFocus, row, column);
+        // }
+        // }
+        // });
+        // }
 
         PropertyEditorRegistry propertyEditorRegistry = PropertyEditorRegistry.class.cast(getEditorFactory());
         propertyEditorRegistry.registerEditor(Date.class, new DateEditor());
@@ -134,7 +194,15 @@ public class PropertyPanel extends PropertySheetPanel {
                 property.setName(propertyName);
                 property.setDisplayName(propertyDisplayName);
                 property.setType(propertyType);
-                property.setValue(value);
+                if (!isInitialized(value)) {
+                    value = LAZY;
+                } else {
+                    try {
+                        property.setValue(value);
+                    } catch (org.hibernate.LazyInitializationException ex) {
+                        property.setValue(LAZY);
+                    }
+                }
                 property.setCategory(HqlResourceBundle.getMessage("read-only"));
                 property.setShortDescription(HqlResourceBundle.getMessage("read-only"));
                 property.setEditable(false);
@@ -166,7 +234,6 @@ public class PropertyPanel extends PropertySheetPanel {
                 addProperty(property);
             } catch (Exception ex) {
                 System.err.println(propertyDescriptorEntry.getKey());
-                ex.printStackTrace();
             }
         }
 
@@ -522,5 +589,15 @@ public class PropertyPanel extends PropertySheetPanel {
 
     public void setHqlService(HqlService hqlService) {
         this.hqlService = hqlService;
+    }
+
+    private static boolean isInitialized(Object object) {
+        if (object == null) {
+            return true;
+        }
+        if (object.getClass().getName().startsWith("java.util.Collections$Unmodifiable")) {
+            object = new ObjectWrapper(object).get("c");
+        }
+        return Hibernate.isInitialized(object);
     }
 }
