@@ -151,7 +151,6 @@ import org.swingeasy.UIUtils;
 import org.tools.hqlbuilder.client.HqlWizard.HqlWizardListener;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
-import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionType;
@@ -525,7 +524,7 @@ public class HqlBuilderFrame {
 
     private TrayIcon trayIcon;
 
-    private HqlService hqlService;
+    private HqlServiceClient hqlService;
 
     private Map<String, String> namedQueries = new HashMap<String, String>();
 
@@ -857,7 +856,7 @@ public class HqlBuilderFrame {
      * 
      * @param args
      */
-    public static void start(@SuppressWarnings("unused") String[] args, HqlService service) {
+    public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClient service) {
         try {
             File oldfavs = new File("favorites");
             if (oldfavs.exists()) {
