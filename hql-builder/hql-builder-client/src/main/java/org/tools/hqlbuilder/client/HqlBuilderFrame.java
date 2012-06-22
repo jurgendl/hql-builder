@@ -211,9 +211,9 @@ public class HqlBuilderFrame {
 
     private static final String HIBERNATE_DOCUMENTATION = "hibernate documentation";
 
-    private static final String PERSISTENT_ID = "Hql Builder";
+    private static final String PERSISTENT_ID = "HQL Builder";
 
-    private static final String NAME = "Hql Builder";
+    private static final String NAME = "HQL Builder";
 
     private static final String SYSTEM_TRAY = "system tray";
 
@@ -2036,7 +2036,7 @@ public class HqlBuilderFrame {
             }
         }
 
-        frame.setTitle(NAME + " v " + version + " - " + hqlService.getConnectionInfo());
+        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo() + " - " + hqlService.getServiceUrl());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(new Dimension(1024, 768));
