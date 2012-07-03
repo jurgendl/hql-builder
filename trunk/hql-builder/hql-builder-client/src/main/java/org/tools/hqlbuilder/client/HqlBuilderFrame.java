@@ -663,7 +663,11 @@ public class HqlBuilderFrame {
         schedule(delay, new Runnable() {
             @Override
             public void run() {
-                query(equalsCheck);
+                try {
+                    query(equalsCheck);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
