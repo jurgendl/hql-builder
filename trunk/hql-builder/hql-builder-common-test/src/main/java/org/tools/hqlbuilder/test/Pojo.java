@@ -1,22 +1,28 @@
 package org.tools.hqlbuilder.test;
 
 import java.io.Serializable;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Version;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.annotations.AccessType;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Max;
 import org.hibernate.validator.Min;
 import org.hibernate.validator.Pattern;
-import org.hibernate.validator.Size;
 
 @Entity
 @AccessType("field")
@@ -39,6 +45,12 @@ public class Pojo implements Serializable {
     
     @Pattern(regex= "\\d*")
     private String regexDigits;
+    
+    @ElementCollection(fetch=FetchType.LAZY)
+    @JoinTable(name="plainSet", joinColumns={@JoinColumn(name="plainSetId")})
+    @Column(name="plainSet", nullable=false)
+    @Sort(type=SortType.NATURAL)
+    private SortedSet<String> plainSet = new TreeSet<String>();
 
     private Long getId() {
         return this.id;
@@ -66,22 +78,23 @@ public class Pojo implements Serializable {
 
     @Override
 	public String toString() {
-		return "Pojo [id=" + id + ", version=" + version + ", value=" + value
-				+ ", from0To100=" + from0To100 + "]";
+		return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value=" + getValue()
+				+ ", from0To100=" + getFrom0To100() + "]";
 	}
 
     @Override
     public boolean equals(final Object other) {
+    	if(getId()==null)return false;
         if (!(other instanceof Pojo)) {
             return false;
         }
         Pojo castOther = (Pojo) other;
-        return new EqualsBuilder().append(id, castOther.id).isEquals();
+        return new EqualsBuilder().append(getId(), castOther.getId()).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).toHashCode();
+        return new HashCodeBuilder().append(getId()).toHashCode();
     }
 
 	public Integer getFrom0To100() {
@@ -100,4 +113,11 @@ public class Pojo implements Serializable {
 		this.regexDigits = regexDigits;
 	}
 
+	public SortedSet<String> getPlainSet() {
+		return plainSet;
+	}
+
+	public void setPlainSet(SortedSet<String> plainSet) {
+		this.plainSet = plainSet;
+	}
 }
