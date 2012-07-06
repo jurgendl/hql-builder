@@ -124,7 +124,7 @@ public class HqlServiceImpl implements HqlService {
                         try {
                             Properties p = new Properties();
                             p.load(modelClass.getResourceAsStream(manifest.getName()));
-                            modelVersion = p.get("Implementation-Version").toString();
+                            modelVersion = p.get("Implementation-Version:").toString();
                         } catch (Exception ex) {
                             //
                         }
@@ -556,13 +556,82 @@ public class HqlServiceImpl implements HqlService {
         return t.cast(new ObjectWrapper(o).get(path));
     }
 
+    /**
+     * 
+     * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, java.util.List)
+     */
     @Override
     public ExecutionResult execute(String hql, List<QueryParameter> queryParameters) {
         return execute(hql, Integer.MAX_VALUE, queryParameters);
     }
 
+    /**
+     * 
+     * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, org.tools.hqlbuilder.common.QueryParameter[])
+     */
     @Override
     public ExecutionResult execute(String hql, QueryParameter... queryParameters) {
         return execute(hql, Integer.MAX_VALUE, queryParameters);
+    }
+
+    private String project;
+
+    /**
+     * 
+     * @see org.tools.hqlbuilder.common.HqlService#getProject()
+     */
+    @Override
+    public String getProject() {
+        if (project == null) {
+            try {
+                Class<?> modelClass = Class.forName(getClasses().iterator().next());
+                URL classLocation = modelClass.getProtectionDomain().getCodeSource().getLocation();
+                if (new File(classLocation.getFile()).isFile()) {
+                    java.util.zip.ZipFile zf = new java.util.zip.ZipFile(new File(classLocation.getFile()));
+                    Enumeration<? extends ZipEntry> enu = zf.entries();
+                    ZipEntry manifest = null;
+                    ZipEntry pomprops = null;
+                    while (enu.hasMoreElements()) {
+                        ZipEntry ze = enu.nextElement();
+                        try {
+                            if (ze.getName().startsWith("META-INF") && ze.getName().endsWith("MANIFEST.MF")) {
+                                manifest = ze;
+                            }
+                            if (ze.getName().startsWith("META-INF") && ze.getName().endsWith("pom.properties")) {
+                                pomprops = ze;
+                            }
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                    if (pomprops != null && project == null) {
+                        try {
+                            Properties p = new Properties();
+                            p.load(modelClass.getResourceAsStream(pomprops.getName()));
+                            project = p.get("artifactId").toString();
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                    if (manifest != null && project == null) {
+                        try {
+                            Properties p = new Properties();
+                            p.load(modelClass.getResourceAsStream(manifest.getName()));
+                            project = p.get("Implementation-Title:").toString();
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                }
+                project.toString();
+            } catch (Exception ex) {
+                project = "unknown";
+            }
+        }
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
     }
 }

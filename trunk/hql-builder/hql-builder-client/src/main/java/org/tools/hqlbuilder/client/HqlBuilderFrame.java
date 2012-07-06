@@ -182,7 +182,11 @@ public class HqlBuilderFrame {
 
     private static final String CSV = ".csv";
 
-    private static final String FAVORITES_DIR = ".favorites";
+    private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
+
+    private static final File PROGRAM_DIR = new File(USER_HOME_DIR, "hqlbuilder");
+
+    private static final File FAVORITES_DIR = new File(PROGRAM_DIR, "favorites");
 
     private static final String FAVORITES_EXT = ".xml";
 
@@ -863,9 +867,11 @@ public class HqlBuilderFrame {
      */
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClient service) {
         try {
-            File oldfavs = new File("favorites");
-            if (oldfavs.exists()) {
-                oldfavs.renameTo(new File(FAVORITES_DIR));
+            if (!PROGRAM_DIR.exists()) {
+                PROGRAM_DIR.mkdirs();
+            }
+            if (!FAVORITES_DIR.exists()) {
+                FAVORITES_DIR.mkdirs();
             }
 
             // zet look en feel gelijk aan default voor OS
@@ -2048,7 +2054,7 @@ public class HqlBuilderFrame {
             }
         }
 
-        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo()
+        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo() + " - " + hqlService.getProject()
                 + (hqlService.getServiceUrl() == null ? "" : " - " + hqlService.getServiceUrl()));
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
@@ -2909,7 +2915,8 @@ public class HqlBuilderFrame {
             favorites.remove(favorites.indexOf(favorite));
         }
         favorites.add(favorite);
-        File xmlhistory = new File(FAVORITES_DIR, name + FAVORITES_EXT);
+        File favoritesForProject = new File(FAVORITES_DIR, hqlService.getProject());
+        File xmlhistory = new File(favoritesForProject, name + FAVORITES_EXT);
         if (!xmlhistory.getParentFile().exists()) {
             xmlhistory.getParentFile().mkdirs();
         }
@@ -2920,7 +2927,11 @@ public class HqlBuilderFrame {
     }
 
     private void loadFavorites() {
-        File[] xmls = new File(FAVORITES_DIR).listFiles(new FilenameFilter() {
+        File favoritesForProject = new File(FAVORITES_DIR, hqlService.getProject());
+        if (!favoritesForProject.exists()) {
+            favoritesForProject.mkdir();
+        }
+        File[] xmls = favoritesForProject.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return name.endsWith(FAVORITES_EXT);

@@ -9,6 +9,7 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
+		<property name="project" value="${project}" />
 	</bean>
 
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
