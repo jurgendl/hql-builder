@@ -115,4 +115,9 @@ public class HqlServiceClientImpl implements HqlServiceClient {
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
+
+    @Override
+    public String getProject() {
+        return this.hqlService.getProject();
+    }
 }

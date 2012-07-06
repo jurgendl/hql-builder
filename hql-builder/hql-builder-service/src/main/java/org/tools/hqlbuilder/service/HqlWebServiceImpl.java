@@ -20,6 +20,14 @@ public class HqlWebServiceImpl implements HqlWebService {
         super();
     }
 
+    public HqlService getHqlService() {
+        return this.hqlService;
+    }
+
+    public void setHqlService(HqlService hqlService) {
+        this.hqlService = hqlService;
+    }
+
     @Override
     public SortedSet<String> getClasses() {
         return this.hqlService.getClasses();
@@ -100,11 +108,8 @@ public class HqlWebServiceImpl implements HqlWebService {
         return this.hqlService.getPropertyNames(key, parts);
     }
 
-    public HqlService getHqlService() {
-        return this.hqlService;
-    }
-
-    public void setHqlService(HqlService hqlService) {
-        this.hqlService = hqlService;
+    @Override
+    public String getProject() {
+        return this.hqlService.getProject();
     }
 }

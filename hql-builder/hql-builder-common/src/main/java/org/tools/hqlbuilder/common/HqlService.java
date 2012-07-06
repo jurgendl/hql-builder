@@ -27,6 +27,8 @@ public interface HqlService extends Serializable {
 
     public abstract String getConnectionInfo();
 
+    public abstract String getProject();
+
     public abstract <T> T save(T object) throws ValidationException;
 
     public abstract <T> void delete(T object);
