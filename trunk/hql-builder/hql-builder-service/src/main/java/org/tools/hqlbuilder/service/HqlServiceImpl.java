@@ -193,8 +193,9 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
+        ExecutionResult result = new ExecutionResult();
         try {
-            return innerExecute(hql, max, queryParameters);
+            return innerExecute(result, hql, max, queryParameters);
         } catch (QuerySyntaxException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             String msg = ex.getLocalizedMessage();
@@ -211,7 +212,7 @@ public class HqlServiceImpl implements HqlService {
             if (m.find()) {
                 throw new SyntaxException(SyntaxException.SyntaxExceptionType.not_mapped, msg, m.group(1));
             }
-            throw new ServiceException(ex.getMessage());
+            throw new ServiceException(ex.getMessage(), result);
         } catch (QueryException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             String msg = ex.getLocalizedMessage();
@@ -219,15 +220,19 @@ public class HqlServiceImpl implements HqlService {
             if (m.find()) {
                 throw new SyntaxException(SyntaxException.SyntaxExceptionType.could_not_resolve_property, msg, m.group(2) + "#" + m.group(1));
             }
-            throw new ServiceException(ex.getMessage());
+            throw new ServiceException(ex.getMessage(), result);
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
-            throw new ServiceException(ex.getMessage());
+            throw new ServiceException(ex.getMessage(), result);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public ExecutionResult innerExecute(String hql, int max, QueryParameter... queryParameters) {
+    public ExecutionResult innerExecute(ExecutionResult result, String hql, int max, QueryParameter... queryParameters) {
+        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
+                (SessionFactoryImplementor) sessionFactory);
+        String sql = createQueryTranslator.getSQLString();
+        result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = sessionFactory.openSession();
         QueryImpl createQuery = (QueryImpl) session.createQuery(hql);
@@ -254,22 +259,24 @@ public class HqlServiceImpl implements HqlService {
             }
         }
         if (isUpdateStatement) {
-            int size = createQuery.executeUpdate();
-            return new ExecutionResult(null, null, size, null, null, null, null, null);
+            result.setSize(createQuery.executeUpdate());
+            return result;
         }
-        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
-                (SessionFactoryImplementor) sessionFactory);
         createQueryTranslator.compile(new HashMap<Object, Object>(), false);
         createQuery.setMaxResults(max);
         Type[] queryReturnTypes = get(createQueryTranslator, "queryLoader.queryReturnTypes", Type[].class);
         String[] queryReturnAliases = get(createQueryTranslator, "queryLoader.queryReturnAliases", String[].class);
+        result.setQueryReturnAliases(queryReturnAliases);
         String[][] scalarColumnNames = get(createQueryTranslator, "queryLoader.scalarColumnNames", String[][].class);
+        result.setScalarColumnNames(scalarColumnNames);
         String[] entityAliases = get(createQueryTranslator, "queryLoader.entityAliases", String[].class);
         Queryable[] entityPersisters = get(createQueryTranslator, "queryLoader.entityPersisters", Queryable[].class);
         String[] sqlAliases = get(createQueryTranslator, "queryLoader.sqlAliases", String[].class);
+        result.setSqlAliases(sqlAliases);
         @SuppressWarnings("unused")
         Map<String, String> sqlAliasByEntityAlias = get(createQueryTranslator, "queryLoader.sqlAliasByEntityAlias", Map.class);
         Map<String, String> from_aliases = new HashMap<String, String>();
+        result.setFromAliases(from_aliases);
         for (int i = 0; i < entityAliases.length; i++) {
             String alias = entityAliases[i];
             if (alias != null) {
@@ -277,13 +284,14 @@ public class HqlServiceImpl implements HqlService {
             }
         }
         List<Object> list = createQuery.list();
-        int size = list.size();
+        result.setResults(list);
+        result.setSize(list.size());
         String[] queryReturnTypeNames = new String[queryReturnTypes.length];
         for (int i = 0; i < queryReturnTypes.length; i++) {
             queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getSimpleName();
         }
-        String sql = createQueryTranslator.getSQLString();
-        return new ExecutionResult(sql, from_aliases, size, list, queryReturnAliases, scalarColumnNames, sqlAliases, queryReturnTypeNames);
+        result.setQueryReturnTypeNames(queryReturnTypeNames);
+        return result;
     }
 
     /**
@@ -314,7 +322,11 @@ public class HqlServiceImpl implements HqlService {
                         if ("org.hibernate.type.EnumType".equals(subClassName)) {
                             continue;
                         }
-                        node.addPath(propertyNames, resolver.getOrCreateNode(subClassName)).setCollection(true);
+                        try {
+                            node.addPath(propertyNames, resolver.getOrCreateNode(subClassName)).setCollection(true);
+                        } catch (IllegalArgumentException ex) {
+                            logger.warn("not a mapped class, ignoring: " + className + "." + subClassName);
+                        }
                     }
                 }
             } catch (IllegalArgumentException ex) {
