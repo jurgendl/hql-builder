@@ -37,6 +37,7 @@
 				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
 				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
 				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 			</props>
 		</property>
 	</bean>
