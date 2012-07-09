@@ -30,6 +30,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.engine.NamedQueryDefinition;
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.hql.ast.QuerySyntaxException;
 import org.hibernate.hql.ast.QueryTranslatorImpl;
 import org.hibernate.impl.QueryImpl;
@@ -48,6 +49,7 @@ import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.ObjectWrapper;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
+import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
@@ -221,6 +223,8 @@ public class HqlServiceImpl implements HqlService {
                 throw new SyntaxException(SyntaxException.SyntaxExceptionType.could_not_resolve_property, msg, m.group(2) + "#" + m.group(1));
             }
             throw new ServiceException(ex.getMessage(), result);
+        } catch (SQLGrammarException ex) {
+            throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             throw new ServiceException(ex.getMessage(), result);

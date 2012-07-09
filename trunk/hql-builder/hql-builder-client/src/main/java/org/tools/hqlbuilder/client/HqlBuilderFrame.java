@@ -153,6 +153,7 @@ import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
+import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionType;
 
@@ -1285,15 +1286,22 @@ public class HqlBuilderFrame {
                 }
             });
             logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
-            // uiExceptionHandler.show(null, ex, HqlResourceBundle.getMessage("hql error"));
             String sql_tmp = sql.getText();
+            String exceptionString = ex.toString();
             if (ex instanceof ServiceException) {
                 ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
                 if (partialResult != null && partialResult.getSql() != null) {
                     sql_tmp = partialResult.getSql();
                 }
             }
-            sql.setText(ex.toString() + getNewline() + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp);
+            if (ex instanceof SqlException) {
+                SqlException sqlException = SqlException.class.cast(ex);
+                if (sqlException.getSql() != null) {
+                    sql_tmp = sqlException.getSql();
+                }
+                exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
+            }
+            sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp);
             valueHolders.put(VALUE, ex);
             clearResults();
 
