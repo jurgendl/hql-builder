@@ -267,6 +267,14 @@ public class HqlServiceImpl implements HqlService {
             return result;
         }
         createQueryTranslator.compile(new HashMap<Object, Object>(), false);
+        if (sql == null) {
+            sql = createQueryTranslator.getSQLString();
+            if (sql == null) {
+                String tmp = new ObjectWrapper(createQueryTranslator).get("queryLoader").toString();
+                sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
+            }
+            result.setSql(sql);
+        }
         createQuery.setMaxResults(max);
         Type[] queryReturnTypes = get(createQueryTranslator, "queryLoader.queryReturnTypes", Type[].class);
         String[] queryReturnAliases = get(createQueryTranslator, "queryLoader.queryReturnAliases", String[].class);
