@@ -16,6 +16,7 @@
 				<property name="properties">
 					<props>
 						<prop key="hibernate.cfg.xml">org/tools/hqlbuilder/test/hibernate.cfg.xml</prop>
+						<prop key="project">HqlBuilderTestProject</prop>
 					</props>
 				</property>
 			</bean>
