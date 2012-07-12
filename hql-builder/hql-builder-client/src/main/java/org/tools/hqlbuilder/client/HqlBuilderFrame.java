@@ -1324,7 +1324,7 @@ public class HqlBuilderFrame {
                     while (indexOf != -1) {
                         boolean accept = false;
                         try {
-                            char nextChar = hqltext.charAt(indexOf + wrong.length() + 1);
+                            char nextChar = hqltext.charAt(indexOf + wrong.length());
                             if (!(('a' <= nextChar && nextChar <= 'z') || ('A' <= nextChar && nextChar <= 'Z'))) {
                                 accept = true;
                             }
