@@ -337,7 +337,7 @@ public class HqlServiceImpl implements HqlService {
                         try {
                             node.addPath(propertyNames, resolver.getOrCreateNode(subClassName)).setCollection(true);
                         } catch (IllegalArgumentException ex) {
-                            logger.warn("not a mapped class, ignoring: " + className + "." + subClassName);
+                            logger.warn("not a mapped class, ignoring: " + className + "#" + propertyNames + " [collection of " + subClassName + "]");
                         }
                     }
                 }
