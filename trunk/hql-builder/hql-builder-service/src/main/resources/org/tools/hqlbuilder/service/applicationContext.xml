@@ -39,6 +39,14 @@
 				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
 				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.c3p0.max_size">2</prop>
+				<prop key="hibernate.c3p0.min_size">2</prop>
+				<prop key="hibernate.c3p0.timeout">5000</prop>
+				<prop key="hibernate.c3p0.max_statements">100</prop>
+				<prop key="hibernate.c3p0.idle_test_period">3000</prop>
+				<prop key="hibernate.c3p0.acquire_increment">2</prop>
+				<prop key="hibernate.c3p0.validate">false</prop>
+				<prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
 			</props>
 		</property>
 	</bean>
