@@ -655,6 +655,8 @@ public class HqlBuilderFrame {
         timer.schedule(task, 750);
     }
 
+    private int scheduleId = 0;
+
     private void scheduleQuery(Long delay, final boolean equalsCheck) {
         if (hql.getText().trim().length() < 5) {
             return;
@@ -670,7 +672,10 @@ public class HqlBuilderFrame {
             @Override
             public void run() {
                 try {
+                    scheduleId++;
+                    System.out.println("executing scheduled query - start - " + scheduleId);
                     query(equalsCheck);
+                    System.out.println("executing scheduled query - end   - " + scheduleId);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1174,8 +1179,9 @@ public class HqlBuilderFrame {
             // resultsEDT.clear();
 
             String hqlGetText = getHqlText();
-            ExecutionResult rv = hqlService.execute(hqlGetText, rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue()
-                    : Integer.MAX_VALUE, EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[0]));
+            int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
+            ExecutionResult rv = hqlService.execute(hqlGetText, maxresults,
+                    EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[0]));
 
             log(rv.getSql());
             if (formatSqlAction.isSelected()) {
@@ -2581,7 +2587,9 @@ public class HqlBuilderFrame {
 
     private void scheduleCancel() {
         if (scheduledFuture != null) {
-            log("force stop: " + scheduledFuture.cancel(true));
+            boolean cancel = scheduledFuture.cancel(true);
+            System.out.println("forced canceling query: " + cancel);
+            log("force stop: " + cancel);
             progressbarStop();
         }
     }
