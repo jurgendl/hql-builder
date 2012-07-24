@@ -21,7 +21,7 @@ public class HqlBuilder {
                 e.printStackTrace();
             }
         } else {
-            // System.out.println(results);
+            System.out.println(results.size());
         }
         HqlBuilderFrame.start(args, hqlServiceClient);
     }
