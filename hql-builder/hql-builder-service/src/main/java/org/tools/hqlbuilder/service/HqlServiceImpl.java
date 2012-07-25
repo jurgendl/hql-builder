@@ -646,4 +646,25 @@ public class HqlServiceImpl implements HqlService {
     public void setProject(String project) {
         this.project = project;
     }
+
+    private Properties hibernateProperties;
+
+    /**
+     * 
+     * @see org.tools.hqlbuilder.common.HqlService#log()
+     */
+    @Override
+    public void log() {
+        for (Object key : new TreeSet<Object>(hibernateProperties.keySet())) {
+            System.out.println(key + "=" + hibernateProperties.get(key));
+        }
+    }
+
+    public Properties getHibernateProperties() {
+        return this.hibernateProperties;
+    }
+
+    public void setHibernateProperties(Properties hibernateProperties) {
+        this.hibernateProperties = hibernateProperties;
+    }
 }
