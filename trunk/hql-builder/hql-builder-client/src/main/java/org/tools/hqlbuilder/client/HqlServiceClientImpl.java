@@ -120,4 +120,9 @@ public class HqlServiceClientImpl implements HqlServiceClient {
     public String getProject() {
         return this.hqlService.getProject();
     }
+
+    @Override
+    public void log() {
+        this.hqlService.log();
+    }
 }

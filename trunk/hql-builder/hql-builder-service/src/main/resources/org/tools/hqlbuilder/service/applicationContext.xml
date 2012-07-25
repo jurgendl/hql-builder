@@ -10,6 +10,7 @@
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
 		<property name="project" value="${project}" />
+		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 	</bean>
 
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">

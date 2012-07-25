@@ -112,4 +112,9 @@ public class HqlWebServiceImpl implements HqlWebService {
     public String getProject() {
         return this.hqlService.getProject();
     }
+
+    @Override
+    public void log() {
+        this.hqlService.log();
+    }
 }
