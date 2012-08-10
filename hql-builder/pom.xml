@@ -121,12 +121,6 @@
 		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk/hql-builder</developerConnection>
 		<url>http://hql-builder.googlecode.com/svn/trunk/hql-builder</url>
 	</scm>
-	<repositories>
-		<repository>
-			<id>hql-builder.googlecode</id>
-			<url>http://hql-builder.googlecode.com/svn/maven2</url>
-		</repository>
-	</repositories>
 	<build>
 		<extensions>
 			<extension>
@@ -294,4 +288,15 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	<repositories>
+		<repository>
+			<id>swing-easy.googlecode.releases</id>
+			<url>http://swing-easy.googlecode.com/svn/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+	</repositories>	
 </project>
