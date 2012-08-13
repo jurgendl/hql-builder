@@ -20,6 +20,7 @@
 			<groupId>org.tools</groupId>
 			<artifactId>hql-builder-service-test</artifactId>
 			<version>${project.version}</version>
+			<type>war</type>
 		</dependency>
 	</dependencies>
 	<build>
