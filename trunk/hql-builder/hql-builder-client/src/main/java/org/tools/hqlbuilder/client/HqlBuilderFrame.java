@@ -2231,23 +2231,29 @@ public class HqlBuilderFrame {
     }
 
     protected void exit() {
-        log("exit(0)");
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(frame, HqlResourceBundle.getMessage("exit_confirmation"), "",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+            log("exit(0)");
 
-        // KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor(keyboardKeyEventProcessor);
+            // KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor(keyboardKeyEventProcessor);
 
-        for (Runnable runnable : scheduler.shutdownNow()) {
-            log(runnable);
+            for (Runnable runnable : scheduler.shutdownNow()) {
+                log(runnable);
+            }
+
+            log("scheduler.shutdown=" + scheduler.isShutdown());
+            log("scheduler.terminated=" + scheduler.isTerminated());
+
+            System.exit(0);
         }
-
-        log("scheduler.shutdown=" + scheduler.isShutdown());
-        log("scheduler.terminated=" + scheduler.isTerminated());
-
-        System.exit(0);
     }
 
     protected void force_exit() {
-        log("exit(-1)");
-        System.exit(-1);
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(frame, HqlResourceBundle.getMessage("force_exit_confirmation"), "",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+            log("exit(-1)");
+            System.exit(-1);
+        }
     }
 
     @SuppressWarnings("null")
