@@ -336,13 +336,13 @@ public class PropertyPanel extends PropertySheetPanel {
         @Override
         public Object getValue() {
             Date date = EDateEditor.class.cast(editor).getDate();
-            LocalDate localDate = date == null ? null : new LocalDate(date.getTime());
+            LocalDate localDate = date == null || date.getTime() == 0 ? null : new LocalDate(date.getTime());
             return localDate;
         }
 
         @Override
         public void setValue(Object value) {
-            Date date = value == null ? null : LocalDate.class.cast(value).toDateMidnight().toDate();
+            Date date = value == null ? new Date(0) : LocalDate.class.cast(value).toDateMidnight().toDate();
             EDateEditor.class.cast(editor).setDate(date);
         }
     }
