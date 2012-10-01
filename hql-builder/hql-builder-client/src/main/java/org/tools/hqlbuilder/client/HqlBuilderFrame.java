@@ -1942,6 +1942,7 @@ public class HqlBuilderFrame {
 
         // KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(keyboardKeyEventProcessor);
 
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -2070,7 +2071,6 @@ public class HqlBuilderFrame {
 
         frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo() + " - " + hqlService.getProject()
                 + (hqlService.getServiceUrl() == null ? "" : " - " + hqlService.getServiceUrl()));
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(new Dimension(1024, 768));
         frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
