@@ -51,9 +51,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1216,8 +1218,10 @@ public class HqlBuilderFrame {
                     if (rv.getSize() == 0) {
                         resultsInfo.setText(HqlResourceBundle.getMessage("No results"));
                     } else {
-                        resultsInfo.setText(HqlResourceBundle.getMessage("results in milliseconds", String.valueOf(rv.getSize()),
-                                String.valueOf(duration)));
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        df.setRoundingMode(RoundingMode.HALF_UP);
+                        String d = df.format(duration / 100.0);
+                        resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
                     }
                 }
 
