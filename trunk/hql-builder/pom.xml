@@ -16,4 +16,23 @@
 		<module>hql-builder-client-test</module>
 		<module>hql-builder-test</module>
 	</modules>
+	<distributionManagement>
+		<!--
+		<site>
+			<id>hql-builder.googlecode.site</id>
+			<name>hql-builder.googlecode.site</name>
+			<url>scm:svn:https://hql-builder.googlecode.com/svn/site</url>
+		</site>
+		-->
+		<repository>
+			<id>hql-builder.googlecode.releases</id>
+			<name>hql-builder.googlecode.releases</name>
+			<url>scm:svn:https://hql-builder.googlecode.com/svn/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>hql-builder.googlecode.snapshots</id>
+			<name>hql-builder.googlecode.snapshots</name>
+			<url>scm:svn:https://hql-builder.googlecode.com/svn/maven2-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>	
 </project>
