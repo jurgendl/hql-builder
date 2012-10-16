@@ -24,7 +24,7 @@ public class ObjectTree extends JFrame {
 
     private final JPanel propertypanel = new JPanel(new BorderLayout());
 
-    public ObjectTree(final HqlService hqlService, Object bean, final boolean editable) {
+    public ObjectTree(final HqlBuilderFrame frame, final HqlService hqlService, Object bean, final boolean editable) {
         bean = initialize(bean);
         TreeNode rootNode = new TreeNode(bean);
         final ETree<Object> tree = new ETree<Object>(new ETreeConfig(), rootNode);
@@ -56,7 +56,7 @@ public class ObjectTree extends JFrame {
                         }
                         PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editable);
                         propertyFrame.setHqlService(hqlService);
-                        ClientUtils.font(propertyFrame, 12);
+                        frame.font(propertyFrame, 12);
                         propertypanel.add(propertyFrame, BorderLayout.CENTER);
                         // }
                     }
@@ -67,7 +67,7 @@ public class ObjectTree extends JFrame {
             }
         });
         split.setDividerLocation(500);
-        ClientUtils.font(tree, 12);
+        frame.font(tree, 12);
         setVisible(true);
     }
 

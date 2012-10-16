@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.tools</groupId>
-		<artifactId>hql-builder</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<artifactId>hql-builder-parent</artifactId>
+		<version>0.0.2-SNAPSHOT</version>
+		<relativePath>../hql-builder-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>hql-builder-service</artifactId>
 	<name>hql-builder-service</name>

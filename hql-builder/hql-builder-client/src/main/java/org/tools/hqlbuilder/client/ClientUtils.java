@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -101,18 +100,8 @@ public class ClientUtils extends CommonUtils {
         }
     }
 
-    /**
-     * 
-     * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#font(javax.swing.JComponent, java.lang.Integer)
-     */
-    static public <T extends JComponent> T font(T comp, Integer size) {
-        if (size != null) {
-            comp.setFont(DEFAULT_FONT.deriveFont((float) size));
-        } else {
-            comp.setFont(DEFAULT_FONT);
-        }
-
-        return comp;
+    public static Font getDefaultFont() {
+        return DEFAULT_FONT;
     }
 
     /**
