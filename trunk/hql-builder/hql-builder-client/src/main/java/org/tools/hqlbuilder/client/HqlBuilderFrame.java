@@ -122,6 +122,7 @@ import org.swingeasy.DocumentKeyListener;
 import org.swingeasy.EButton;
 import org.swingeasy.ECheckBox;
 import org.swingeasy.EComponentPopupMenu;
+import org.swingeasy.EFontChooser;
 import org.swingeasy.ELabel;
 import org.swingeasy.ELabeledTextFieldButtonComponent;
 import org.swingeasy.EList;
@@ -165,6 +166,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author jdlandsh
  */
 public class HqlBuilderFrame {
+    private static final String FONT = "font";
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
     private static final String LOAD_NAMED_QUERY = "load named query";
@@ -294,108 +297,83 @@ public class HqlBuilderFrame {
 
     private final JTabbedPane hql_sql_tabs = new JTabbedPane();
 
-    private final ELabel resultsInfo = font(new ELabel(""), null);
+    private final ELabel resultsInfo;
 
     private final JPanel propertypanel = new JPanel(new BorderLayout());
 
-    private final ETextField parameterBuilder = font(new ETextField(new ETextFieldConfig()), 12);
+    private final ETextField parameterBuilder;
 
-    private final ETextField parameterName = font(new ETextField(new ETextFieldConfig()), 12);
+    private final ETextField parameterName;
 
-    private final ETextField parameterValue = font(new ETextField(new ETextFieldConfig(false)), 12);
+    private final ETextField parameterValue;
 
-    private final ETextArea hql = font(new ETextArea(new ETextAreaConfig()), 12);
+    private final ETextArea hql;
 
-    private final ETextArea sql = font(new ETextArea(new ETextAreaConfig(false)), 12);
-
-    // not EDT safe
-    private final EList<QueryParameter> parametersUnsafe = font(new EList<QueryParameter>(new EListConfig()), null);
-
-    // EDT safe
-    private final EList<QueryParameter> parametersEDT = parametersUnsafe.stsi();
+    private final ETextArea sql;
 
     // not EDT safe
-    private final ETable<List<Object>> resultsUnsafe = font(new ETable<List<Object>>(new ETableConfig(true)), null);
+    private final EList<QueryParameter> parametersUnsafe;
 
     // EDT safe
-    private final ETable<List<Object>> resultsEDT = resultsUnsafe.stsi();
+    private final EList<QueryParameter> parametersEDT;
+
+    // not EDT safe
+    private final ETable<List<Object>> resultsUnsafe;
+
+    // EDT safe
+    private final ETable<List<Object>> resultsEDT;
 
     // results
 
-    private final HqlBuilderAction hibernatePropertiesAction = new HqlBuilderAction(resultsUnsafe, this, HIBERNATE_PROPERTIES, true,
-            HIBERNATE_PROPERTIES, "page_white_stack.png", HIBERNATE_PROPERTIES, HIBERNATE_PROPERTIES, true, null, "shift alt F8");
+    private final HqlBuilderAction hibernatePropertiesAction;
 
-    private final HqlBuilderAction objectTreeAction = new HqlBuilderAction(resultsUnsafe, this, OBJECT_TREE, true, OBJECT_TREE,
-            "application_side_tree.png", OBJECT_TREE, OBJECT_TREE, true, null, "shift alt F9");
+    private final HqlBuilderAction objectTreeAction;
 
-    private final HqlBuilderAction deleteObjectAction = new HqlBuilderAction(resultsUnsafe, this, DELETE_OBJECT, true, DELETE_OBJECT,
-            "bin_empty.png", DELETE_OBJECT, DELETE_OBJECT, true, null, "shift alt F10");
+    private final HqlBuilderAction deleteObjectAction;
 
-    private final HqlBuilderAction copyCellAction = new HqlBuilderAction(resultsUnsafe, this, COPY_SELECTED_CELL, true, COPY_SELECTED_CELL,
-            "cell_layout.png", COPY_SELECTED_CELL, COPY_SELECTED_CELL, true, null, "shift alt F11");
+    private final HqlBuilderAction copyCellAction;
 
-    private final HqlBuilderAction executeScriptOnColumnAction = new HqlBuilderAction(resultsUnsafe, this, EXECUTE_SCRIPT_ON_COLUMN, true,
-            EXECUTE_SCRIPT_ON_COLUMN, "groovy.png", EXECUTE_SCRIPT_ON_COLUMN, EXECUTE_SCRIPT_ON_COLUMN, true, null, "shift alt F12");
+    private final HqlBuilderAction executeScriptOnColumnAction;
 
     // parameters
 
-    private final HqlBuilderAction downAction = new HqlBuilderAction(parametersUnsafe, this, DOWN, true, DOWN, "bullet_arrow_down.png", DOWN, DOWN,
-            false, null, null);
+    private final HqlBuilderAction downAction;
 
-    private final HqlBuilderAction removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, "bin_empty.png", REMOVE, REMOVE,
-            false, null, null);
+    private final HqlBuilderAction removeAction;
 
-    private final HqlBuilderAction saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null,
-            null);
+    private final HqlBuilderAction saveAction;
 
-    private final HqlBuilderAction upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null,
-            null);
+    private final HqlBuilderAction upAction;
 
     // hql
 
-    private final HqlBuilderAction wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null,
-            "alt F1");
+    private final HqlBuilderAction wizardAction;
 
-    private final HqlBuilderAction clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, 'r',
-            "alt F2");
+    private final HqlBuilderAction clearAction;
 
-    private final HqlBuilderAction findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, "book_next.png",
-            FIND_PARAMETERS, FIND_PARAMETERS, true, null, "alt F3");
+    private final HqlBuilderAction findParametersAction;
 
-    private final HqlBuilderAction favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES,
-            true, 'h', "alt F4");
+    private final HqlBuilderAction favoritesAction;
 
-    private final HqlBuilderAction addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES,
-            "database_save.png", ADD_TO_FAVORITES, ADD_TO_FAVORITES, true, null, "alt F5");
+    private final HqlBuilderAction addToFavoritesAction;
 
-    private final HqlBuilderAction startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png",
-            START_QUERY, START_QUERY, true, 'q', "alt F6");
+    private final HqlBuilderAction startQueryAction;
 
-    private final HqlBuilderAction pauseQueryAction = new HqlBuilderAction(hql, this, PAUSE_QUERY, true, PAUSE_QUERY, "control_pause_blue.png",
-            PAUSE_QUERY, PAUSE_QUERY, false, 'u', "alt F7");
+    private final HqlBuilderAction pauseQueryAction;
 
-    private final HqlBuilderAction stopQueryAction = new HqlBuilderAction(hql, this, STOP_QUERY, true, STOP_QUERY, "control_stop_blue.png",
-            STOP_QUERY, STOP_QUERY, true, 's', "alt F8");
+    private final HqlBuilderAction stopQueryAction;
 
-    private final HqlBuilderAction formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT,
-            true, 'o', "alt F9");
+    private final HqlBuilderAction formatAction;
 
-    private final HqlBuilderAction namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "cog.png",
-            LOAD_NAMED_QUERY, LOAD_NAMED_QUERY, true, null, "alt F10");
+    private final HqlBuilderAction namedQueryAction;
 
-    private final HqlBuilderAction clipboardExportAction = new HqlBuilderAction(hql, this, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true,
-            EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, "sc_arrowshapes.striped-right-arrow.png", EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD,
-            EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, 'e', "alt F11");
+    private final HqlBuilderAction clipboardExportAction;
 
-    private final HqlBuilderAction clipboardImportAction = new HqlBuilderAction(hql, this, IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true,
-            IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, "sc_arrowshapes.striped-left-arrow.png", IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
-            IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, 'i', "alt F12");
+    private final HqlBuilderAction clipboardImportAction;
 
-    private final HqlBuilderAction helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, null, HELP_INSERT, HELP_INSERT,
-            true, 'i', "ctrl shift Space");
+    private final HqlBuilderAction helpInsertAction;
 
-    private final HqlBuilderAction remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE,
-            REMARK_TOGGLE, true, 'r', "ctrl shift Colon");
+    private final HqlBuilderAction remarkToggleAction;
 
     // existing
 
@@ -435,6 +413,8 @@ public class HqlBuilderFrame {
     private final HqlBuilderAction maximumNumberOfResultsAction = new HqlBuilderAction(null, this, MAXIMUM_NUMBER_OF_RESULTS, true,
             MAXIMUM_NUMBER_OF_RESULTS, null, MAXIMUM_NUMBER_OF_RESULTS, MAXIMUM_NUMBER_OF_RESULTS, true, null, null, PERSISTENT_ID, Integer.class,
             100);
+
+    private HqlBuilderAction fontAction;
 
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, SYSTEM_TRAY, null, SYSTEM_TRAY, SYSTEM_TRAY, true,
             null, null, PERSISTENT_ID);
@@ -478,7 +458,7 @@ public class HqlBuilderFrame {
         };
     };
 
-    private final ELabel maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
+    private final ELabel maxResults;
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
 
@@ -537,7 +517,59 @@ public class HqlBuilderFrame {
     private Map<String, String> namedQueries = new HashMap<String, String>();
 
     private HqlBuilderFrame() {
-        super();
+        fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
+                ClientUtils.getDefaultFont());
+        resultsInfo = font(new ELabel(""), null);
+        parameterBuilder = font(new ETextField(new ETextFieldConfig()), 12);
+        parameterName = font(new ETextField(new ETextFieldConfig()), 12);
+        parameterValue = font(new ETextField(new ETextFieldConfig(false)), 12);
+        hql = font(new ETextArea(new ETextAreaConfig()), 12);
+        sql = font(new ETextArea(new ETextAreaConfig(false)), 12);
+        maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
+        parametersUnsafe = font(new EList<QueryParameter>(new EListConfig()), null);
+        parametersEDT = parametersUnsafe.stsi();
+        resultsUnsafe = font(new ETable<List<Object>>(new ETableConfig(true)), null);
+        resultsEDT = resultsUnsafe.stsi();
+        hibernatePropertiesAction = new HqlBuilderAction(resultsUnsafe, this, HIBERNATE_PROPERTIES, true, HIBERNATE_PROPERTIES,
+                "page_white_stack.png", HIBERNATE_PROPERTIES, HIBERNATE_PROPERTIES, true, null, "shift alt F8");
+        objectTreeAction = new HqlBuilderAction(resultsUnsafe, this, OBJECT_TREE, true, OBJECT_TREE, "application_side_tree.png", OBJECT_TREE,
+                OBJECT_TREE, true, null, "shift alt F9");
+        deleteObjectAction = new HqlBuilderAction(resultsUnsafe, this, DELETE_OBJECT, true, DELETE_OBJECT, "bin_empty.png", DELETE_OBJECT,
+                DELETE_OBJECT, true, null, "shift alt F10");
+        copyCellAction = new HqlBuilderAction(resultsUnsafe, this, COPY_SELECTED_CELL, true, COPY_SELECTED_CELL, "cell_layout.png",
+                COPY_SELECTED_CELL, COPY_SELECTED_CELL, true, null, "shift alt F11");
+        executeScriptOnColumnAction = new HqlBuilderAction(resultsUnsafe, this, EXECUTE_SCRIPT_ON_COLUMN, true, EXECUTE_SCRIPT_ON_COLUMN,
+                "groovy.png", EXECUTE_SCRIPT_ON_COLUMN, EXECUTE_SCRIPT_ON_COLUMN, true, null, "shift alt F12");
+        downAction = new HqlBuilderAction(parametersUnsafe, this, DOWN, true, DOWN, "bullet_arrow_down.png", DOWN, DOWN, false, null, null);
+        removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, "bin_empty.png", REMOVE, REMOVE, false, null, null);
+        saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null, null);
+        upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
+        wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
+        clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, 'r', "alt F2");
+        findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, "book_next.png", FIND_PARAMETERS,
+                FIND_PARAMETERS, true, null, "alt F3");
+        favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES, true, 'h', "alt F4");
+        addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "database_save.png", ADD_TO_FAVORITES,
+                ADD_TO_FAVORITES, true, null, "alt F5");
+        startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
+                'q', "alt F6");
+        pauseQueryAction = new HqlBuilderAction(hql, this, PAUSE_QUERY, true, PAUSE_QUERY, "control_pause_blue.png", PAUSE_QUERY, PAUSE_QUERY, false,
+                'u', "alt F7");
+        stopQueryAction = new HqlBuilderAction(hql, this, STOP_QUERY, true, STOP_QUERY, "control_stop_blue.png", STOP_QUERY, STOP_QUERY, true, 's',
+                "alt F8");
+        formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, 'o', "alt F9");
+        namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "cog.png", LOAD_NAMED_QUERY, LOAD_NAMED_QUERY,
+                true, null, "alt F10");
+        clipboardExportAction = new HqlBuilderAction(hql, this, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD,
+                "sc_arrowshapes.striped-right-arrow.png", EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, 'e',
+                "alt F11");
+        clipboardImportAction = new HqlBuilderAction(hql, this, IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true,
+                IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, "sc_arrowshapes.striped-left-arrow.png", IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
+                IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, 'i', "alt F12");
+        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, null, HELP_INSERT, HELP_INSERT, true, 'i',
+                "ctrl shift Space");
+        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, 'r',
+                "ctrl shift Colon");
     }
 
     protected void down() {
@@ -2008,6 +2040,7 @@ public class HqlBuilderFrame {
                 addmi.add(new JMenuItem(hiliColorAction));
                 addmi.add(new JCheckBoxMenuItem(resizeColumnsAction));
                 addmi.add(maximumNumberOfResultsAction);
+                addmi.add(fontAction);
                 addmi.add(new JCheckBoxMenuItem(alwaysOnTopAction));
                 addmi.add(new JCheckBoxMenuItem(newProgressAction));
                 addmi.add(new JCheckBoxMenuItem(editableResultsAction));
@@ -2604,8 +2637,13 @@ public class HqlBuilderFrame {
         }
     }
 
-    private <T extends JComponent> T font(T comp, Integer size) {
-        return ClientUtils.font(comp, size);
+    public <T extends JComponent> T font(T comp, Integer size) {
+        Font f = getFont();
+        if (size != null && f.getSize() != size) {
+            f = f.deriveFont((float) size);
+        }
+        comp.setFont(f);
+        return comp;
     }
 
     protected void start_query() {
@@ -2904,6 +2942,18 @@ public class HqlBuilderFrame {
         }
     }
 
+    protected void font() {
+        Font font = EFontChooser.showDialog(null, getFont().getFamily());
+        if (font == null) {
+            return;
+        }
+        fontAction.setValue(font);
+    }
+
+    public Font getFont() {
+        return (Font) fontAction.getValue();
+    }
+
     @SuppressWarnings("unchecked")
     protected <T> T get(Object o, String path, @SuppressWarnings("unused") Class<T> t) {
         return (T) new ObjectWrapper(o).get(path);
@@ -3061,7 +3111,7 @@ public class HqlBuilderFrame {
         }
         progressbarStart("fetching data");
         Object bean = resultsEDT.getModel().getValueAt(row, col);
-        new ObjectTree(hqlService, bean, editableResultsAction.isSelected()).setIconImage(frame.getIconImage());
+        new ObjectTree(this, hqlService, bean, editableResultsAction.isSelected()).setIconImage(frame.getIconImage());
         progressbarStop();
     }
 

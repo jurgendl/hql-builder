@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.client;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -84,6 +85,13 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         if (type == null || Color.class.equals(type)) {
             int i = persister.getInt(id, Integer.MIN_VALUE);
             actualValue = i == Integer.MIN_VALUE ? null : (T) new Color(i);
+        } else if (type == null || Font.class.equals(type)) {
+            Font defaultFont = (Font) defaultValue;
+            String family = persister.get(id + ".name", defaultFont.getFamily());
+            int size = persister.getInt(id + ".size", defaultFont.getSize());
+            int style = persister.getInt(id + ".style", defaultFont.getStyle());
+            Font font = new Font(family, style, size);
+            actualValue = (T) font;
         } else if (type == null || Boolean.class.equals(type)) {
             actualValue = (T) (Boolean) persister.getBoolean(id, Boolean.class.cast(defaultValue));
         } else if (String.class.equals(type)) {
@@ -113,6 +121,11 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         System.out.println("persistent: " + id + ": save=" + newValue);
         if (type == null || Color.class.equals(type)) {
             persister.putInt(id, newValue == null ? Integer.MIN_VALUE : Color.class.cast(newValue).getRGB());
+        } else if (type == null || Font.class.equals(type)) {
+            Font font = (Font) newValue;
+            persister.put(id + ".name", font.getFamily());
+            persister.putInt(id + ".size", font.getSize());
+            persister.putInt(id + ".style", font.getStyle());
         } else if (type == null || Boolean.class.equals(type)) {
             persister.putBoolean(id, Boolean.class.cast(newValue));
         } else if (String.class.equals(type)) {
