@@ -11,11 +11,25 @@
 		<module>hql-builder-common</module>
 		<module>hql-builder-service</module>
 		<module>hql-builder-client</module>
-		<module>hql-builder-common-test</module>
-		<module>hql-builder-service-test</module>
-		<module>hql-builder-client-test</module>
-		<module>hql-builder-test</module>
 	</modules>
+	<profiles>
+		<profile>
+			<id>inc-test-modules</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>hql-builder-parent</module>
+				<module>hql-builder-common</module>
+				<module>hql-builder-service</module>
+				<module>hql-builder-client</module>
+				<module>hql-builder-common-test</module>
+				<module>hql-builder-service-test</module>
+				<module>hql-builder-client-test</module>
+				<module>hql-builder-test</module>
+			</modules>
+		</profile>
+	</profiles>
 	<distributionManagement>
 		<!--
 		<site>
