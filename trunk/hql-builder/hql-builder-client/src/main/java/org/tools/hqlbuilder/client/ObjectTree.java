@@ -56,7 +56,7 @@ public class ObjectTree extends JFrame {
                         }
                         PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editable);
                         propertyFrame.setHqlService(hqlService);
-                        frame.font(propertyFrame, 12);
+                        frame.font(propertyFrame, null);
                         propertypanel.add(propertyFrame, BorderLayout.CENTER);
                         // }
                     }
@@ -67,7 +67,7 @@ public class ObjectTree extends JFrame {
             }
         });
         split.setDividerLocation(500);
-        frame.font(tree, 12);
+        frame.font(tree, null);
         setVisible(true);
     }
 

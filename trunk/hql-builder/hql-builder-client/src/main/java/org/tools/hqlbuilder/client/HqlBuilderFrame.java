@@ -520,11 +520,11 @@ public class HqlBuilderFrame {
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
                 ClientUtils.getDefaultFont());
         resultsInfo = font(new ELabel(""), null);
-        parameterBuilder = font(new ETextField(new ETextFieldConfig()), 12);
-        parameterName = font(new ETextField(new ETextFieldConfig()), 12);
-        parameterValue = font(new ETextField(new ETextFieldConfig(false)), 12);
-        hql = font(new ETextArea(new ETextAreaConfig()), 12);
-        sql = font(new ETextArea(new ETextAreaConfig(false)), 12);
+        parameterBuilder = font(new ETextField(new ETextFieldConfig()), null);
+        parameterName = font(new ETextField(new ETextFieldConfig()), null);
+        parameterValue = font(new ETextField(new ETextFieldConfig(false)), null);
+        hql = font(new ETextArea(new ETextAreaConfig()), null);
+        sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
         parametersUnsafe = font(new EList<QueryParameter>(new EListConfig()), null);
         parametersEDT = parametersUnsafe.stsi();
@@ -2640,7 +2640,7 @@ public class HqlBuilderFrame {
     public <T extends JComponent> T font(T comp, Integer size) {
         Font f = getFont();
         if (size != null && f.getSize() != size) {
-            f = f.deriveFont((float) size);
+            f = f.deriveFont(f.getSize() + (float) size);
         }
         comp.setFont(f);
         return comp;
