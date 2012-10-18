@@ -10,7 +10,6 @@
 	<name>hql-builder-client</name>
 	<description>hql-builder-client</description>
 	<dependencies>
-		<!-- required -->
 		<dependency>
 			<groupId>org.tools</groupId>
 			<artifactId>hql-builder-common</artifactId>
