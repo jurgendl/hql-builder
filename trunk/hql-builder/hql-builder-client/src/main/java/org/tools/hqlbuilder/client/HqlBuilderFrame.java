@@ -524,6 +524,7 @@ public class HqlBuilderFrame {
         parameterName = font(new ETextField(new ETextFieldConfig()), null);
         parameterValue = font(new ETextField(new ETextFieldConfig(false)), null);
         hql = font(new ETextArea(new ETextAreaConfig()), null);
+        EComponentPopupMenu.debug(hql);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
         parametersUnsafe = font(new EList<QueryParameter>(new EListConfig()), null);
