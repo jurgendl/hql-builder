@@ -65,4 +65,18 @@
 			</releases>
 		</repository>
 	</repositories>	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assemblies/bin-with-dependencies.xml</descriptor>
+					</descriptors>
+					<tarLongFileMode>gnu</tarLongFileMode>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
