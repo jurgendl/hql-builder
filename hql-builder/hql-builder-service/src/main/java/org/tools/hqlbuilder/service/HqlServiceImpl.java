@@ -300,7 +300,7 @@ public class HqlServiceImpl implements HqlService {
         result.setSize(list.size());
         String[] queryReturnTypeNames = new String[queryReturnTypes.length];
         for (int i = 0; i < queryReturnTypes.length; i++) {
-            queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getSimpleName();
+            queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getName();
         }
         result.setQueryReturnTypeNames(queryReturnTypeNames);
         return result;

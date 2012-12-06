@@ -1284,24 +1284,33 @@ public class HqlBuilderFrame {
 
                             for (int i = 0; i < record.size(); i++) {
                                 boolean script = getScript(i) != null;
+                                Class<?> type;
+                                String name;
+                                try {
+                                    name = rv.getQueryReturnTypeNames()[i];
+                                    type = Class.forName(rv.getQueryReturnTypeNames()[i]);
+                                    name = type.getSimpleName();
+                                } catch (Exception ex) {
+                                    type = Object.class;
+                                    name = "";
+                                }
                                 if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
                                     try {
-                                        headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>"
-                                                + rv.getScalarColumnNames()[i][0] + (script ? "*" : "") + "<html>");
+                                        headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getScalarColumnNames()[i][0]
+                                                + (script ? "*" : "") + "<html>", type);
                                     } catch (Exception ex) {
                                         log(ex);
 
                                         try {
-                                            headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>"
-                                                    + rv.getSqlAliases()[i] + (script ? "*" : "") + "<html>");
+                                            headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getSqlAliases()[i] + (script ? "*" : "")
+                                                    + "<html>", type);
                                         } catch (Exception ex2) {
                                             log(ex2);
-                                            headers.add("<html>" + (script ? "*" : "") + rv.getQueryReturnTypeNames()[i] + "<br>" + i
-                                                    + (script ? "*" : "") + "<html>");
+                                            headers.add("<html>" + (script ? "*" : "") + name + "<br>" + i + (script ? "*" : "") + "<html>", type);
                                         }
                                     }
                                 } else {
-                                    headers.add("<html>" + rv.getQueryReturnTypeNames()[i] + "<br>" + rv.getQueryReturnAliases()[i] + "<html>");
+                                    headers.add("<html>" + name + "<br>" + rv.getQueryReturnAliases()[i] + "<html>", type);
                                 }
                             }
 
