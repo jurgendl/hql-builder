@@ -663,7 +663,6 @@ public class HqlBuilderFrame {
         task = new TimerTask() {
             @Override
             public void run() {
-
                 try {
                     Object returns = GroovyCompiler.eval(text);
                     valueHolders.put(VALUE, returns);

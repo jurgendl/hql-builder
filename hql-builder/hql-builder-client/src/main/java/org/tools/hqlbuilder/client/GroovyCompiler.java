@@ -50,7 +50,11 @@ public class GroovyCompiler {
             throw new RuntimeException("initialization exception");
         }
 
-        return groovyengine.eval(imports + code);
+        try {
+            return groovyengine.eval(imports + code);
+        } catch (Exception ex) {
+            return groovyengine.eval("'" + code + "'");
+        }
     }
 
     /**
