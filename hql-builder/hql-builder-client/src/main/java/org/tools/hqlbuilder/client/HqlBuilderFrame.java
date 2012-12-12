@@ -27,7 +27,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -1865,9 +1864,9 @@ public class HqlBuilderFrame {
             framepanel.add(normalContentPane, BorderLayout.CENTER);
         }
 
-        parameterBuilder.addKeyListener(new KeyAdapter() {
+        parameterBuilder.addDocumentKeyListener(new DocumentKeyListener() {
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void update(Type type, DocumentEvent e) {
                 // extra help enkel in geval van groovy
                 String text = parameterBuilder.getText();
 
