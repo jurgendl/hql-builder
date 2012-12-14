@@ -567,9 +567,9 @@ public class HqlBuilderFrame {
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, "sc_arrowshapes.striped-left-arrow.png", IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, 'i', "alt F12");
         helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, null, HELP_INSERT, HELP_INSERT, true, 'i',
-                "ctrl shift Space");
+                "ctrl shift SPACE");
         remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, 'r',
-                "ctrl shift Colon");
+                "ctrl shift SLASH");
     }
 
     protected void down() {
