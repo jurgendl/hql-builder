@@ -26,12 +26,16 @@ public class ObjectTree extends JFrame {
 
     public ObjectTree(final HqlBuilderFrame frame, final HqlService hqlService, Object bean, final boolean editable) {
         bean = initialize(bean);
-        TreeNode rootNode = new TreeNode(null, bean);
+        TreeNode rootNode = new TreeNode("", bean);
         final ETree<Object> tree = new ETree<Object>(new ETreeConfig(), rootNode);
         tree.setEditable(false);
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree), propertypanel);
         getContentPane().add(split, BorderLayout.CENTER);
-        setTitle(String.valueOf(bean));
+        try {
+            setTitle(getClassname(bean) + " " + bean);
+        } catch (Exception ex) {
+            setTitle(getClassname(bean));
+        }
         setSize(1024, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -84,24 +88,14 @@ public class ObjectTree extends JFrame {
             super(bean);
             this.name = name;
             this.bean = bean;
-            String classname = bean.getClass().getSimpleName();
-            if (classname.contains("$$Enhancer")) {
-                classname = classname.substring(0, classname.indexOf("$$Enhancer"));
-            }
+            String classname = getClassname(bean);
+            String valueString = "?";
             try {
-                if (name != null) {
-                    toString = classname + " " + name + " " + bean;
-                } else {
-                    toString = classname + " " + bean;
-                }
+                valueString = "" + bean;
             } catch (Exception ex) {
-                ex.printStackTrace();
-                if (name != null) {
-                    toString = classname + " " + name + " ?";
-                } else {
-                    toString = classname + " ?";
-                }
+                //
             }
+            toString = classname + " " + name + " = " + valueString;
         }
 
         /**
@@ -172,5 +166,13 @@ public class ObjectTree extends JFrame {
         // }
         // Hibernate.initialize(o);
         return o;
+    }
+
+    public String getClassname(Object bean) {
+        String classname = bean.getClass().getSimpleName();
+        if (classname.contains("$$Enhancer")) {
+            classname = classname.substring(0, classname.indexOf("$$Enhancer"));
+        }
+        return classname;
     }
 }
