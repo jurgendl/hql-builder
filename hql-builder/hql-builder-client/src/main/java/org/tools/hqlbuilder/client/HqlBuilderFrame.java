@@ -139,7 +139,7 @@ import org.swingeasy.ETextAreaConfig;
 import org.swingeasy.ETextAreaFillHighlightPainter;
 import org.swingeasy.ETextField;
 import org.swingeasy.ETextFieldConfig;
-import org.swingeasy.EToggleToolBarButton;
+import org.swingeasy.EToggleButton;
 import org.swingeasy.EToolBarButtonCustomizer;
 import org.swingeasy.EventHelper;
 import org.swingeasy.EventModifier;
@@ -545,30 +545,30 @@ public class HqlBuilderFrame {
         saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null, null);
         upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
         wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
-        clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, 'r', "alt F2");
+        clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, null, "alt F2");
         findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, "book_next.png", FIND_PARAMETERS,
                 FIND_PARAMETERS, true, null, "alt F3");
-        favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES, true, 'h', "alt F4");
+        favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES, true, null, "alt F4");
         addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "database_save.png", ADD_TO_FAVORITES,
                 ADD_TO_FAVORITES, true, null, "alt F5");
         startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
-                'q', "alt F6");
+                null, "alt F6");
         pauseQueryAction = new HqlBuilderAction(hql, this, PAUSE_QUERY, true, PAUSE_QUERY, "control_pause_blue.png", PAUSE_QUERY, PAUSE_QUERY, false,
-                'u', "alt F7");
-        stopQueryAction = new HqlBuilderAction(hql, this, STOP_QUERY, true, STOP_QUERY, "control_stop_blue.png", STOP_QUERY, STOP_QUERY, true, 's',
+                null, "alt F7");
+        stopQueryAction = new HqlBuilderAction(hql, this, STOP_QUERY, true, STOP_QUERY, "control_stop_blue.png", STOP_QUERY, STOP_QUERY, true, null,
                 "alt F8");
-        formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, 'o', "alt F9");
+        formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, null, "alt F9");
         namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "cog.png", LOAD_NAMED_QUERY, LOAD_NAMED_QUERY,
                 true, null, "alt F10");
         clipboardExportAction = new HqlBuilderAction(hql, this, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD,
-                "sc_arrowshapes.striped-right-arrow.png", EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, 'e',
+                "sc_arrowshapes.striped-right-arrow.png", EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, null,
                 "alt F11");
         clipboardImportAction = new HqlBuilderAction(hql, this, IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, "sc_arrowshapes.striped-left-arrow.png", IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
-                IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, 'i', "alt F12");
-        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, null, HELP_INSERT, HELP_INSERT, true, 'i',
+                IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, null, "alt F12");
+        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, null, HELP_INSERT, HELP_INSERT, true, null,
                 "ctrl shift SPACE");
-        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, 'r',
+        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, null,
                 "ctrl shift SLASH");
     }
 
@@ -2006,7 +2006,7 @@ public class HqlBuilderFrame {
             hqltools.add(new EButton(etbc, favoritesAction));
             hqltools.add(new EButton(etbc, addToFavoritesAction));
             hqltools.add(new EButton(etbc, startQueryAction));
-            hqltools.add(new EToggleToolBarButton(etbc, pauseQueryAction));
+            hqltools.add(new EToggleButton(etbc, pauseQueryAction));
             hqltools.add(new EButton(etbc, stopQueryAction));
             hqltools.add(new EButton(etbc, formatAction));
             hqltools.add(new EButton(etbc, namedQueryAction));
@@ -2510,6 +2510,7 @@ public class HqlBuilderFrame {
     }
 
     protected void stop_query() {
+        System.out.println("stop_query");
         scheduleCancel();
     }
 
@@ -2655,6 +2656,7 @@ public class HqlBuilderFrame {
     }
 
     protected void start_query() {
+        System.out.println("start_query");
         if (pauseQueryAction.isSelected()) {
             pauseQueryAction.setSelected(false);
         }
@@ -2662,6 +2664,7 @@ public class HqlBuilderFrame {
     }
 
     protected void pause_query() {
+        System.out.println("pause_query");
         if (!pauseQueryAction.isSelected()) {
             scheduleQuery(0l, false);
         }
