@@ -224,6 +224,7 @@ public class HqlServiceImpl implements HqlService {
             }
             throw new ServiceException(ex.getMessage(), result);
         } catch (SQLGrammarException ex) {
+            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
@@ -236,6 +237,7 @@ public class HqlServiceImpl implements HqlService {
         QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
                 (SessionFactoryImplementor) sessionFactory);
         String sql = createQueryTranslator.getSQLString();
+        System.out.println(sql);
         result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = sessionFactory.openSession();
@@ -273,6 +275,7 @@ public class HqlServiceImpl implements HqlService {
                 String tmp = new ObjectWrapper(createQueryTranslator).get("queryLoader").toString();
                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
             }
+            System.out.println(sql);
             result.setSql(sql);
         }
         createQuery.setMaxResults(max);
