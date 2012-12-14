@@ -26,7 +26,7 @@ public class ObjectTree extends JFrame {
 
     public ObjectTree(final HqlBuilderFrame frame, final HqlService hqlService, Object bean, final boolean editable) {
         bean = initialize(bean);
-        TreeNode rootNode = new TreeNode(bean);
+        TreeNode rootNode = new TreeNode(null, bean);
         final ETree<Object> tree = new ETree<Object>(new ETreeConfig(), rootNode);
         tree.setEditable(false);
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree), propertypanel);
@@ -80,27 +80,28 @@ public class ObjectTree extends JFrame {
 
         private String toString;
 
-        private TreeNode(Object bean) {
+        private TreeNode(String name, Object bean) {
             super(bean);
+            this.name = name;
             this.bean = bean;
             String classname = bean.getClass().getSimpleName();
+            if (classname.contains("$$Enhancer")) {
+                classname = classname.substring(0, classname.indexOf("$$Enhancer"));
+            }
             try {
-                toString = classname + ":" + bean;
+                if (name != null) {
+                    toString = classname + " " + name + " " + bean;
+                } else {
+                    toString = classname + " " + bean;
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 if (name != null) {
-                    toString = classname + "." + name + "?";
+                    toString = classname + " " + name + " ?";
                 } else {
-                    toString = classname + "?";
+                    toString = classname + " ?";
                 }
             }
-        }
-
-        private TreeNode(String name, Object bean) {
-            super(name);
-            this.bean = bean;
-            this.name = name;
-            toString = "[" + name;
         }
 
         /**
@@ -130,23 +131,26 @@ public class ObjectTree extends JFrame {
             try {
                 PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
                 Object _bean = initialize(bean);
-                if (name != null) {
-                    for (Object sub : Collection.class.cast(propertyUtilsBean.getProperty(_bean, name))) {
-                        sub = initialize(sub);
-                        list.add(new TreeNode(sub));
+                if (_bean instanceof Collection) {
+                    int idx = 0;
+                    for (Object it : Collection.class.cast(_bean)) {
+                        it = initialize(it);
+                        list.add(new TreeNode(name + "[" + (idx++) + "]", it));
                     }
                 } else {
                     for (PropertyDescriptor descriptor : propertyUtilsBean.getPropertyDescriptors(_bean)) {
                         try {
                             Object _name = descriptor.getName();
+                            if (_name.equals("class")) {
+                                continue;
+                            }
                             Object _value = propertyUtilsBean.getProperty(_bean, _name.toString());
                             if (_value != null) {
                                 if (_value instanceof Collection) {
                                     list.add(new TreeNode(_name.toString(), _bean));
                                 } else /* if (hqlBuilderHelper.accept(_value.getClass())) */{
                                     _value = initialize(_value);
-                                    TreeNode e = new TreeNode(_value);
-                                    list.add(e);
+                                    list.add(new TreeNode(_name.toString(), _value));
                                 }
                             }
                         } catch (Exception ex) {
