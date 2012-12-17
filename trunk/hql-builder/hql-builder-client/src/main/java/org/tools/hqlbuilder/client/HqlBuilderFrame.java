@@ -266,8 +266,6 @@ public class HqlBuilderFrame {
 
     private static final String FORMAT = "format";
 
-    private static final String STOP_QUERY = "stop query";
-
     private static final String START_QUERY = "start query";
 
     private static final String FROM_ALIASES = "from_aliases";
@@ -350,8 +348,6 @@ public class HqlBuilderFrame {
     private final HqlBuilderAction addToFavoritesAction;
 
     private final HqlBuilderAction startQueryAction;
-
-    private final HqlBuilderAction stopQueryAction;
 
     private final HqlBuilderAction formatAction;
 
@@ -540,10 +536,9 @@ public class HqlBuilderFrame {
         addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "database_save.png", ADD_TO_FAVORITES,
                 ADD_TO_FAVORITES, true, null, "alt F5");
         startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
-                null, "alt F6");
+                null, "alt ENTER");
         // alt F7 not taken
-        stopQueryAction = new HqlBuilderAction(hql, this, STOP_QUERY, true, STOP_QUERY, "control_stop_blue.png", STOP_QUERY, STOP_QUERY, true, null,
-                "alt F8");
+        // alt F8 not taken
         formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, null, "alt F9");
         namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "cog.png", LOAD_NAMED_QUERY, LOAD_NAMED_QUERY,
                 true, null, "alt F10");
@@ -557,8 +552,6 @@ public class HqlBuilderFrame {
                 "ctrl shift SPACE");
         remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, null,
                 "ctrl shift SLASH");
-
-        stopQueryAction.setEnabled(false);
     }
 
     protected void down() {
@@ -1903,13 +1896,12 @@ public class HqlBuilderFrame {
         EToolBarButtonCustomizer etbc = new EToolBarButtonCustomizer();
         {
             JToolBar hqltools = new JToolBar();
+            hqltools.add(new EButton(etbc, startQueryAction));
             hqltools.add(new EButton(etbc, wizardAction));
             hqltools.add(new EButton(etbc, clearAction));
             hqltools.add(new EButton(etbc, findParametersAction));
             hqltools.add(new EButton(etbc, favoritesAction));
             hqltools.add(new EButton(etbc, addToFavoritesAction));
-            hqltools.add(new EButton(etbc, startQueryAction));
-            hqltools.add(new EButton(etbc, stopQueryAction));
             hqltools.add(new EButton(etbc, formatAction));
             hqltools.add(new EButton(etbc, namedQueryAction));
             hqltools.add(new EButton(etbc, clipboardExportAction));
@@ -1965,13 +1957,12 @@ public class HqlBuilderFrame {
         }
         {
             JMenu hqlmenu = new JMenu("HQL");
+            hqlmenu.add(new JMenuItem(startQueryAction));
             hqlmenu.add(new JMenuItem(wizardAction));
             hqlmenu.add(new JMenuItem(clearAction));
             hqlmenu.add(new JMenuItem(findParametersAction));
             hqlmenu.add(new JMenuItem(favoritesAction));
             hqlmenu.add(new JMenuItem(addToFavoritesAction));
-            hqlmenu.add(new JMenuItem(startQueryAction));
-            hqlmenu.add(new JMenuItem(stopQueryAction));
             hqlmenu.add(new JMenuItem(formatAction));
             hqlmenu.add(new JMenuItem(namedQueryAction));
             hqlmenu.add(new JMenuItem(clipboardExportAction));
@@ -2127,13 +2118,12 @@ public class HqlBuilderFrame {
     private void createHqlPopupMenu() {
         JPopupMenu hqlpopupmenu = hql.getComponentPopupMenu();
         hqlpopupmenu.addSeparator();
+        hqlpopupmenu.add(new JMenuItem(startQueryAction));
         hqlpopupmenu.add(new JMenuItem(wizardAction));
         hqlpopupmenu.add(new JMenuItem(clearAction));
         hqlpopupmenu.add(new JMenuItem(findParametersAction));
         hqlpopupmenu.add(new JMenuItem(favoritesAction));
         hqlpopupmenu.add(new JMenuItem(addToFavoritesAction));
-        hqlpopupmenu.add(new JMenuItem(startQueryAction));
-        hqlpopupmenu.add(new JMenuItem(stopQueryAction));
         hqlpopupmenu.add(new JMenuItem(formatAction));
         hqlpopupmenu.add(new JMenuItem(namedQueryAction));
         hqlpopupmenu.add(new JMenuItem(clipboardExportAction));
