@@ -26,6 +26,8 @@ public class ExecutionResult implements Serializable {
 
     private long duration;
 
+    private long overhead;
+
     public ExecutionResult() {
         super();
     }
@@ -120,5 +122,13 @@ public class ExecutionResult implements Serializable {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public long getOverhead() {
+        return this.overhead;
+    }
+
+    public void setOverhead(long overhead) {
+        this.overhead = overhead;
     }
 }

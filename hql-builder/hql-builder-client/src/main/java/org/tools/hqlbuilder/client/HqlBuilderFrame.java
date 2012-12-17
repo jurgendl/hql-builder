@@ -1299,7 +1299,9 @@ public class HqlBuilderFrame {
             String d = df.format(rv.getDuration() / 1000.0);
             resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
         }
-        System.out.println("overhead (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
+        System.out.println("duration (ms): " + rv.getDuration());
+        System.out.println("overhead-server (ms): " + rv.getOverhead());
+        System.out.println("overhead-client (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
     };
 
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
