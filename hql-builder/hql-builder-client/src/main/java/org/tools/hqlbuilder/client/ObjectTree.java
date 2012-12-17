@@ -18,6 +18,9 @@ import org.swingeasy.ETreeConfig;
 import org.swingeasy.ETreeNode;
 import org.tools.hqlbuilder.common.HqlService;
 
+/**
+ * @author Jurgen
+ */
 public class ObjectTree extends JFrame {
     /** serialVersionUID */
     private static final long serialVersionUID = 3880395325775694814L;

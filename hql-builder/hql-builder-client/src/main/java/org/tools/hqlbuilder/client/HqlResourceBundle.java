@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.swingeasy.system.SystemSettings;
 
+/**
+ * @author Jurgen
+ */
 public class HqlResourceBundle {
     private static PropertyResourceBundle singleton;
 

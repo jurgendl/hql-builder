@@ -23,8 +23,10 @@ import org.swingeasy.ETableHeaders;
 import org.swingeasy.ETableRecord;
 import org.swingeasy.ETableRecordBean;
 
+/**
+ * @author Jurgen
+ */
 public class FavoritesDialog extends JDialog {
-    /** serialVersionUID */
     private static final long serialVersionUID = -1905240688562741597L;
 
     private QueryFavorite selection = null;

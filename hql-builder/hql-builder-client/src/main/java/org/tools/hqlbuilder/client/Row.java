@@ -6,8 +6,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+/**
+ * @author Jurgen
+ */
 public class Row implements Comparable<Row> {
-
     public Row(String path) {
         this.path = path;
     }

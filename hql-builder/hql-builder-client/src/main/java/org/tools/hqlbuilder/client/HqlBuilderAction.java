@@ -8,8 +8,10 @@ import javax.swing.JComponent;
 import org.swingeasy.HasParentComponent;
 import org.swingeasy.MethodInvoker;
 
+/**
+ * @author Jurgen
+ */
 public class HqlBuilderAction extends Action implements HasParentComponent {
-    /** serialVersionUID */
     private static final long serialVersionUID = -5268997556066400577L;
 
     private Object source;

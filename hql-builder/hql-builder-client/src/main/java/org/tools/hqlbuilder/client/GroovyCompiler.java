@@ -4,9 +4,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 /**
- * GroovyCompiler
- * 
- * @author jdlandsh
+ * @author Jurgen
  */
 public class GroovyCompiler {
     /** jsengine */

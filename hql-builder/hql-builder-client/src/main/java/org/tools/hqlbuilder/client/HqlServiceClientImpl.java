@@ -3,6 +3,9 @@ package org.tools.hqlbuilder.client;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
 
+/**
+ * @author Jurgen
+ */
 public class HqlServiceClientImpl extends DelegatingHqlService implements HqlServiceClient {
     private static final long serialVersionUID = 5659734722245348813L;
 

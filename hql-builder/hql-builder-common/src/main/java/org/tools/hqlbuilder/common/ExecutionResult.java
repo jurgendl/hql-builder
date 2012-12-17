@@ -24,6 +24,8 @@ public class ExecutionResult implements Serializable {
 
     private int size;
 
+    private long duration;
+
     public ExecutionResult() {
         super();
     }
@@ -110,5 +112,13 @@ public class ExecutionResult implements Serializable {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public long getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 }
