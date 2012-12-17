@@ -40,6 +40,9 @@ import org.tools.hqlbuilder.client.PathResolver.TreeNode;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 
+/**
+ * @author Jurgen
+ */
 public class HqlWizard {
     protected static class Stop extends RuntimeException {
         private static final long serialVersionUID = -8660143360351472707L;
@@ -330,8 +333,7 @@ public class HqlWizard {
                     ex.printStackTrace();
                 }
             }
-            initialSelected = ClientUtils.showDialog(parent, HqlResourceBundle.getMessage("source class"),
-                    options.toArray(new Row[options.size()]));
+            initialSelected = ClientUtils.showDialog(parent, HqlResourceBundle.getMessage("source class"), options.toArray(new Row[options.size()]));
         }
         return initialSelected;
     }

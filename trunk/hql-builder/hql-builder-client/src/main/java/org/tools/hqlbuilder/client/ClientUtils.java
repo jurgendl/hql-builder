@@ -24,6 +24,9 @@ import org.swingeasy.OptionType;
 import org.swingeasy.ResultType;
 import org.tools.hqlbuilder.common.CommonUtils;
 
+/**
+ * @author Jurgen
+ */
 public class ClientUtils extends CommonUtils {
     private static final Logger logger = Logger.getLogger(ClientUtils.class);
 

@@ -11,8 +11,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
+/**
+ * @author Jurgen
+ */
 public abstract class Action extends AbstractAction implements PropertyChangeListener {
-    /** serialVersionUID */
     private static final long serialVersionUID = 7743926766652503512L;
 
     private transient Preferences persister;

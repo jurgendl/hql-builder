@@ -34,7 +34,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -70,11 +69,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -99,6 +93,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
@@ -139,7 +134,6 @@ import org.swingeasy.ETextAreaConfig;
 import org.swingeasy.ETextAreaFillHighlightPainter;
 import org.swingeasy.ETextField;
 import org.swingeasy.ETextFieldConfig;
-import org.swingeasy.EToggleButton;
 import org.swingeasy.EToolBarButtonCustomizer;
 import org.swingeasy.EventHelper;
 import org.swingeasy.EventModifier;
@@ -160,14 +154,14 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionType;
 
 /**
- * HqlBuilder
- * 
- * @author jdlandsh
+ * @author Jurgen
  */
 public class HqlBuilderFrame {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
+
     private static final String FONT = "font";
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
+    private static final String PARAMETER_COMPILE_DELAY = "parameter compile delay";
 
     private static final String LOAD_NAMED_QUERY = "load named query";
 
@@ -179,6 +173,7 @@ public class HqlBuilderFrame {
 
     private static final String HIGHLIGHT_COLOR = "highlight color";
 
+    /** do not remove */
     ca.odell.glazedlists.swing.EventSelectionModel<?> wtf;
 
     private static final String HIGHLIGHT_SYNTAX = "highlight syntax";
@@ -275,8 +270,6 @@ public class HqlBuilderFrame {
 
     private static final String START_QUERY = "start query";
 
-    private static final String PAUSE_QUERY = "pause query";
-
     private static final String FROM_ALIASES = "from_aliases";
 
     private static final String SELECTED = "selected";
@@ -358,8 +351,6 @@ public class HqlBuilderFrame {
 
     private final HqlBuilderAction startQueryAction;
 
-    private final HqlBuilderAction pauseQueryAction;
-
     private final HqlBuilderAction stopQueryAction;
 
     private final HqlBuilderAction formatAction;
@@ -412,6 +403,9 @@ public class HqlBuilderFrame {
     private final HqlBuilderAction maximumNumberOfResultsAction = new HqlBuilderAction(null, this, MAXIMUM_NUMBER_OF_RESULTS, true,
             MAXIMUM_NUMBER_OF_RESULTS, null, MAXIMUM_NUMBER_OF_RESULTS, MAXIMUM_NUMBER_OF_RESULTS, true, null, null, PERSISTENT_ID, Integer.class,
             100);
+
+    private final HqlBuilderAction parameterCompileDelayAction = new HqlBuilderAction(null, this, PARAMETER_COMPILE_DELAY, true,
+            PARAMETER_COMPILE_DELAY, null, PARAMETER_COMPILE_DELAY, PARAMETER_COMPILE_DELAY, true, null, null, PERSISTENT_ID, Integer.class, 100);
 
     private HqlBuilderAction fontAction;
 
@@ -473,8 +467,6 @@ public class HqlBuilderFrame {
 
     private final JPanel normalContentPane = new JPanel(new BorderLayout());
 
-    private boolean test = false;
-
     private final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
     private final JMenu formatSqlOptionsMenu = new JMenu(HqlResourceBundle.getMessage("format sql options"));
@@ -485,13 +477,9 @@ public class HqlBuilderFrame {
 
     private JPopupMenu insertClassHelper;
 
-    private ScheduledExecutorService scheduler;
-
     private EList<String> insertHelperList;
 
     private JPopupMenu insertHelper;
-
-    private ScheduledFuture<Object> scheduledFuture;
 
     private TimerTask task;
 
@@ -513,7 +501,7 @@ public class HqlBuilderFrame {
 
     private HqlServiceClient hqlService;
 
-    private Map<String, String> namedQueries = new HashMap<String, String>();
+    private final Map<String, String> namedQueries = new HashMap<String, String>();
 
     private HqlBuilderFrame() {
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
@@ -553,8 +541,7 @@ public class HqlBuilderFrame {
                 ADD_TO_FAVORITES, true, null, "alt F5");
         startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
                 null, "alt F6");
-        pauseQueryAction = new HqlBuilderAction(hql, this, PAUSE_QUERY, true, PAUSE_QUERY, "control_pause_blue.png", PAUSE_QUERY, PAUSE_QUERY, false,
-                null, "alt F7");
+        // alt F7 not taken
         stopQueryAction = new HqlBuilderAction(hql, this, STOP_QUERY, true, STOP_QUERY, "control_stop_blue.png", STOP_QUERY, STOP_QUERY, true, null,
                 "alt F8");
         formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, null, "alt F9");
@@ -570,6 +557,8 @@ public class HqlBuilderFrame {
                 "ctrl shift SPACE");
         remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, null,
                 "ctrl shift SLASH");
+
+        stopQueryAction.setEnabled(false);
     }
 
     protected void down() {
@@ -581,8 +570,6 @@ public class HqlBuilderFrame {
     }
 
     protected void clear() {
-        scheduleCancel();
-
         resultsInfo.setText("");
         parametersEDT.removeAllRecords();
         parameterBuilder.setText("");
@@ -627,7 +614,6 @@ public class HqlBuilderFrame {
     private void importFromFavorites(QueryFavorite selection) {
         clear();
         importFromFavoritesNoQ(selection);
-        scheduleQuery(0l, false);
     }
 
     private void importFromFavoritesNoQ(QueryFavorite selection) {
@@ -669,14 +655,12 @@ public class HqlBuilderFrame {
                     log(ex2);
                     valueHolders.put(VALUE, null);
                 }
-
-                parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), "groovy").toString());
-
                 log("compiled: " + valueHolders.get(VALUE));
 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), "groovy").toString());
                         progressbar.setIndeterminate(false);
                         progressbar.setString("");
                         log("progress: null");
@@ -685,35 +669,8 @@ public class HqlBuilderFrame {
             }
         };
 
-        timer.schedule(task, 750);
-    }
-
-    private int scheduleId = 0;
-
-    private void scheduleQuery(Long delay, final boolean equalsCheck) {
-        if (hql.getText().trim().length() < 5) {
-            return;
-        }
-
-        log("scheduleQuery");
-
-        if (delay == null) {
-            delay = 1500l;
-        }
-
-        schedule(delay, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    scheduleId++;
-                    System.out.println("executing scheduled query - start - " + scheduleId);
-                    query(equalsCheck);
-                    System.out.println("executing scheduled query - end   - " + scheduleId);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        Object delay = parameterCompileDelayAction.getValue();
+        timer.schedule(task, delay == null ? 500 : (Integer) delay);
     }
 
     private JPopupMenu getInsertHelperProperties() {
@@ -1118,51 +1075,8 @@ public class HqlBuilderFrame {
         }
     }
 
-    public static interface RowProcessor {
-        void process(List<Object> lijn);
-    }
-
     private synchronized void query(boolean equalsCheck) {
-        if (pauseQueryAction.isSelected()) {
-            return;
-        }
-
-        if (equalsCheck && !checkHqlChanged()) {
-            log("query did not change");
-            return;
-        }
-
-        progressbarStart("quering");
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                sql.setText("");
-                resultsInfo.setText("");
-                clearResults();
-            }
-        });
-
-        executeQuery(null);
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    resultsUnsafe.setAutoResizeMode(ETable.AUTO_RESIZE_OFF);
-                    for (int i = 0; i < resultsEDT.getColumnCount(); i++) {
-                        resultsUnsafe.packColumn(i, 2);
-                    }
-                    if (resizeColumnsAction.isSelected()) {
-                        resultsUnsafe.setAutoResizeMode(ETable.AUTO_RESIZE_ALL_COLUMNS);
-                    }
-                } catch (Exception ex) {
-                    logger.error("$Runnable.run()", ex); //$NON-NLS-1$
-                }
-            }
-        });
-
-        progressbarStop();
+        executeQuery(equalsCheck, null);
     }
 
     private void progressbarStop() {
@@ -1188,179 +1102,205 @@ public class HqlBuilderFrame {
 
     private void query(RowProcessor rowProcessor) {
         progressbarStart("quering");
-        executeQuery(rowProcessor);
+        executeQuery(false, rowProcessor);
         progressbarStop();
         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("done"));
     }
 
-    @SuppressWarnings("unchecked")
-    private synchronized void executeQuery(RowProcessor rowProcessor) {
-        try {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    hql_sql_tabs.setForegroundAt(1, Color.gray);
-                }
-            });
+    private synchronized void executeQuery(boolean equalsCheck, final RowProcessor rowProcessor) {
+        final long start = System.currentTimeMillis();
 
-            addLast(LAST);
+        if (!startQueryAction.isEnabled()) {
+            return;
+        }
 
-            hql.removeHighlights(syntaxErrorsHighlight);
+        if (equalsCheck && !checkHqlChanged()) {
+            log("query did not change");
+            return;
+        }
 
-            hilightSyntax();
+        preQuery();
 
-            // resultsEDT.clear();
+        final String hqlGetText = getHqlText();
+        final int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
 
-            String hqlGetText = getHqlText();
-            int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
-            ExecutionResult rv = hqlService.execute(hqlGetText, maxresults,
-                    EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[0]));
-
-            log(rv.getSql());
-            if (formatSqlAction.isSelected()) {
-                sql.setText(cleanupSql(rv.getSql(), null, null));
-            } else {
-                sql.setText(rv.getSql());
+        SwingWorker<ExecutionResult, Void> sw = new SwingWorker<ExecutionResult, Void>() {
+            @Override
+            protected ExecutionResult doInBackground() throws Exception {
+                return doQuery(hqlGetText, maxresults);
             }
-            log(sql.getText());
 
-            if (formatSqlAction.isSelected()) {
+            @Override
+            protected void done() {
                 try {
-                    sql.setText(removeBlanks(makeMultiline(cleanupSql(rv.getSql(), rv.getQueryReturnAliases(), rv.getScalarColumnNames()))));
-                    log(sql.getText());
+                    afterQuery(start, get(), rowProcessor);
                 } catch (Exception ex) {
-                    logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
-                    log(rv.getSql());
+                    afterQuery(ex);
+                } finally {
+                    startQueryAction.setEnabled(true);
+                    progressbarStop();
                 }
             }
+        };
 
-            valueHolders.put(FROM_ALIASES, rv.getFromAliases());
+        sw.execute();
+    }
 
-            try {
-                long start = System.currentTimeMillis();
+    private void preQuery() {
+        startQueryAction.setEnabled(false);
+        progressbarStart("quering");
+        sql.setText("");
+        resultsInfo.setText("");
+        clearResults();
+        hql_sql_tabs.setForegroundAt(1, Color.gray);
+        try {
+            addLast(LAST);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        hql.removeHighlights(syntaxErrorsHighlight);
+        hilightSyntax();
+    }
 
-                List<?> list = rv.getResults();
+    private ExecutionResult doQuery(String hqlGetText, int maxresults) {
+        return hqlService.execute(hqlGetText, maxresults, EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[0]));
+    }
 
-                long duration = (System.currentTimeMillis() - start);
-
-                ETableHeaders<List<Object>> headers = null;
-
-                if (rowProcessor == null) {
-                    if (rv.getSize() == 0) {
-                        resultsInfo.setText(HqlResourceBundle.getMessage("No results"));
-                    } else {
-                        DecimalFormat df = new DecimalFormat("#.##");
-                        df.setRoundingMode(RoundingMode.HALF_UP);
-                        String d = df.format(duration / 100.0);
-                        resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
-                    }
-                }
-
-                List<ETableRecord<List<Object>>> records = new ArrayList<ETableRecord<List<Object>>>();
-                if (list != null) {
-                    for (Object o : list) {
-                        ETableRecordCollection<Object> record = null;
-                        List<Object> recordItems;
-
-                        if (o instanceof Object[]) {
-                            recordItems = new ArrayList<Object>(Arrays.asList((Object[]) o));
-                        } else if (o instanceof Collection<?>) {
-                            recordItems = new ArrayList<Object>((Collection<Object>) o);
-                        } else {
-                            recordItems = new ArrayList<Object>(Collections.singleton(o));
-                        }
-
-                        record = new ETableRecordCollection<Object>(recordItems);
-
-                        if (rowProcessor != null) {
-                            rowProcessor.process(record.getBean());
-                            continue;
-                        }
-
-                        if (headers == null) {
-                            headers = new ETableHeaders<List<Object>>();
-
-                            for (int i = 0; i < record.size(); i++) {
-                                boolean script = getScript(i) != null;
-                                Class<?> type;
-                                String name;
-                                try {
-                                    name = rv.getQueryReturnTypeNames()[i];
-                                    type = Class.forName(rv.getQueryReturnTypeNames()[i]);
-                                    name = type.getSimpleName();
-                                } catch (Exception ex) {
-                                    type = Object.class;
-                                    name = "";
-                                }
-                                if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
-                                    try {
-                                        headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getScalarColumnNames()[i][0]
-                                                + (script ? "*" : "") + "<html>", type);
-                                    } catch (Exception ex) {
-                                        log(ex);
-
-                                        try {
-                                            headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getSqlAliases()[i] + (script ? "*" : "")
-                                                    + "<html>", type);
-                                        } catch (Exception ex2) {
-                                            log(ex2);
-                                            headers.add("<html>" + (script ? "*" : "") + name + "<br>" + i + (script ? "*" : "") + "<html>", type);
-                                        }
-                                    }
-                                } else {
-                                    headers.add("<html>" + name + "<br>" + rv.getQueryReturnAliases()[i] + "<html>", type);
-                                }
-                            }
-
-                            resultsEDT.setHeaders(headers);
-                        }
-
-                        records.add(record);
-                    }
-                }
-                resultsEDT.addRecords(records);
-            } catch (Exception ex) {
-                throw ex;
-            }
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    hql_sql_tabs.setForegroundAt(1, Color.GREEN);
-                }
-            });
-        } catch (Exception ex) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    hql_sql_tabs.setForegroundAt(1, Color.RED);
-                }
-            });
-            logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
-            String sql_tmp = sql.getText();
-            String exceptionString = ex.toString();
-            if (ex instanceof ServiceException) {
-                ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
-                if (partialResult != null && partialResult.getSql() != null) {
-                    sql_tmp = partialResult.getSql();
-                }
-            }
-            if (ex instanceof SqlException) {
-                SqlException sqlException = SqlException.class.cast(ex);
-                if (sqlException.getSql() != null) {
-                    sql_tmp = sqlException.getSql();
-                }
-                exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
-            }
-            sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp);
-            valueHolders.put(VALUE, ex);
-            clearResults();
-
-            if (ex instanceof SyntaxException) {
-                SyntaxException se = SyntaxException.class.cast(ex);
-                hilightSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
+    private void afterQuery(Exception ex) {
+        hql_sql_tabs.setForegroundAt(1, Color.RED);
+        logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
+        String sql_tmp = sql.getText();
+        String exceptionString = ex.toString();
+        if (ex instanceof ServiceException) {
+            ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
+            if (partialResult != null && partialResult.getSql() != null) {
+                sql_tmp = partialResult.getSql();
             }
         }
+        if (ex instanceof SqlException) {
+            SqlException sqlException = SqlException.class.cast(ex);
+            if (sqlException.getSql() != null) {
+                sql_tmp = sqlException.getSql();
+            }
+            exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
+        }
+        sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp);
+        valueHolders.put(VALUE, ex);
+        clearResults();
+        if (ex instanceof SyntaxException) {
+            SyntaxException se = SyntaxException.class.cast(ex);
+            hilightSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
+        }
     }
+
+    private void afterQuery(long start, ExecutionResult rv, RowProcessor rowProcessor) throws Exception {
+        log(rv.getSql());
+        if (formatSqlAction.isSelected()) {
+            sql.setText(cleanupSql(rv.getSql(), null, null));
+        } else {
+            sql.setText(rv.getSql());
+        }
+        log(sql.getText());
+
+        if (formatSqlAction.isSelected()) {
+            try {
+                sql.setText(removeBlanks(makeMultiline(cleanupSql(rv.getSql(), rv.getQueryReturnAliases(), rv.getScalarColumnNames()))));
+                log(sql.getText());
+            } catch (Exception ex) {
+                logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
+                log(rv.getSql());
+            }
+        }
+
+        valueHolders.put(FROM_ALIASES, rv.getFromAliases());
+
+        List<?> list = rv.getResults();
+        ETableHeaders<List<Object>> headers = null;
+
+        List<ETableRecord<List<Object>>> records = new ArrayList<ETableRecord<List<Object>>>();
+        if (list != null) {
+            for (Object o : list) {
+                ETableRecordCollection<Object> record = null;
+                List<Object> recordItems;
+
+                if (o instanceof Object[]) {
+                    recordItems = new ArrayList<Object>(Arrays.asList((Object[]) o));
+                } else if (o instanceof Collection<?>) {
+                    @SuppressWarnings("unchecked")
+                    Collection<Object> o2 = (Collection<Object>) o;
+                    recordItems = new ArrayList<Object>(o2);
+                } else {
+                    recordItems = new ArrayList<Object>(Collections.singleton(o));
+                }
+
+                record = new ETableRecordCollection<Object>(recordItems);
+
+                if (rowProcessor != null) {
+                    rowProcessor.process(record.getBean());
+                    continue;
+                }
+
+                if (headers == null) {
+                    headers = new ETableHeaders<List<Object>>();
+
+                    for (int i = 0; i < record.size(); i++) {
+                        boolean script = getScript(i) != null;
+                        Class<?> type;
+                        String name;
+                        try {
+                            name = rv.getQueryReturnTypeNames()[i];
+                            type = Class.forName(rv.getQueryReturnTypeNames()[i]);
+                            name = type.getSimpleName();
+                        } catch (Exception ex) {
+                            type = Object.class;
+                            name = "";
+                        }
+                        if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
+                            try {
+                                headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getScalarColumnNames()[i][0] + (script ? "*" : "")
+                                        + "<html>", type);
+                            } catch (Exception ex) {
+                                log(ex);
+
+                                try {
+                                    headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getSqlAliases()[i] + (script ? "*" : "")
+                                            + "<html>", type);
+                                } catch (Exception ex2) {
+                                    log(ex2);
+                                    headers.add("<html>" + (script ? "*" : "") + name + "<br>" + i + (script ? "*" : "") + "<html>", type);
+                                }
+                            }
+                        } else {
+                            headers.add("<html>" + name + "<br>" + rv.getQueryReturnAliases()[i] + "<html>", type);
+                        }
+                    }
+
+                    resultsEDT.setHeaders(headers);
+                }
+
+                records.add(record);
+            }
+        }
+        resultsEDT.addRecords(records);
+        hql_sql_tabs.setForegroundAt(1, Color.GREEN);
+
+        resultsUnsafe.setAutoResizeMode(ETable.AUTO_RESIZE_OFF);
+        for (int i = 0; i < resultsEDT.getColumnCount(); i++) {
+            resultsUnsafe.packColumn(i, 2);
+        }
+        if (resizeColumnsAction.isSelected()) {
+            resultsUnsafe.setAutoResizeMode(ETable.AUTO_RESIZE_ALL_COLUMNS);
+        }
+        if (rv.getSize() == 0) {
+            resultsInfo.setText(HqlResourceBundle.getMessage("No results"));
+        } else {
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            String d = df.format(rv.getDuration() / 1000.0);
+            resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
+        }
+        System.out.println("overhead (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
+    };
 
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
         hql.removeHighlights(syntaxErrorsHighlight);
@@ -1857,12 +1797,8 @@ public class HqlBuilderFrame {
         resultBottomPanel.add(ab2, BorderLayout.WEST);
         resultBottomPanel.add(progressbar, BorderLayout.CENTER);
 
-        if (test) {
-            // TO DO
-        } else {
-            switch_layout();
-            framepanel.add(normalContentPane, BorderLayout.CENTER);
-        }
+        switch_layout();
+        framepanel.add(normalContentPane, BorderLayout.CENTER);
 
         parameterBuilder.addDocumentKeyListener(new DocumentKeyListener() {
             @Override
@@ -1892,11 +1828,7 @@ public class HqlBuilderFrame {
         hql.addDocumentKeyListener(new DocumentKeyListener() {
             @Override
             public void update(Type type, DocumentEvent e) {
-                try {
-                    scheduleQuery(null, true);
-                } catch (Exception ex) {
-                    log(ex);
-                }
+                //
             }
 
             @Override
@@ -1954,37 +1886,6 @@ public class HqlBuilderFrame {
                 parameterSelected();
             }
         });
-        // FIXME
-        // DefaultListModel.class.cast(parameters.getModel()).addListDataListener(new ListDataListener() {
-        // @Override
-        // public void intervalRemoved(ListDataEvent e) {
-        // try {
-        // query();
-        // } catch (Exception ex) {
-        // ex.printStackTrace(System.out);
-        // }
-        // }
-        //
-        // @Override
-        // public void intervalAdded(ListDataEvent e) {
-        // try {
-        // query();
-        // } catch (Exception ex) {
-        // ex.printStackTrace(System.out);
-        // }
-        // }
-        //
-        // @Override
-        // public void contentsChanged(ListDataEvent e) {
-        // try {
-        // query();
-        // } catch (Exception ex) {
-        // ex.printStackTrace(System.out);
-        // }
-        // }
-        // });
-
-        // KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(keyboardKeyEventProcessor);
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -2006,7 +1907,6 @@ public class HqlBuilderFrame {
             hqltools.add(new EButton(etbc, favoritesAction));
             hqltools.add(new EButton(etbc, addToFavoritesAction));
             hqltools.add(new EButton(etbc, startQueryAction));
-            hqltools.add(new EToggleButton(etbc, pauseQueryAction));
             hqltools.add(new EButton(etbc, stopQueryAction));
             hqltools.add(new EButton(etbc, formatAction));
             hqltools.add(new EButton(etbc, namedQueryAction));
@@ -2048,6 +1948,7 @@ public class HqlBuilderFrame {
                 addmi.add(new JMenuItem(hiliColorAction));
                 addmi.add(new JCheckBoxMenuItem(resizeColumnsAction));
                 addmi.add(maximumNumberOfResultsAction);
+                addmi.add(parameterCompileDelayAction);
                 addmi.add(fontAction);
                 addmi.add(new JCheckBoxMenuItem(alwaysOnTopAction));
                 addmi.add(new JCheckBoxMenuItem(newProgressAction));
@@ -2068,7 +1969,6 @@ public class HqlBuilderFrame {
             hqlmenu.add(new JMenuItem(favoritesAction));
             hqlmenu.add(new JMenuItem(addToFavoritesAction));
             hqlmenu.add(new JMenuItem(startQueryAction));
-            hqlmenu.add(new JCheckBoxMenuItem(pauseQueryAction));
             hqlmenu.add(new JMenuItem(stopQueryAction));
             hqlmenu.add(new JMenuItem(formatAction));
             hqlmenu.add(new JMenuItem(namedQueryAction));
@@ -2125,16 +2025,6 @@ public class HqlBuilderFrame {
     }
 
     protected void startPre() {
-        scheduler = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
-            @Override
-            public Thread newThread(final Runnable r) {
-                Thread thread = Executors.defaultThreadFactory().newThread(r);
-                thread.setDaemon(true);
-
-                return thread;
-            }
-        });
-
         valueHolders.addPropertyChangeListener(FROM_ALIASES, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -2147,10 +2037,6 @@ public class HqlBuilderFrame {
 
     @SuppressWarnings("cast")
     private void layout(Dimension size) {
-        if (test) {
-            return;
-        }
-
         if (frame.getSize().height == 0) {
             size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
             Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(
@@ -2179,11 +2065,6 @@ public class HqlBuilderFrame {
     }
 
     protected void switch_layout() {
-        if (test) {
-            // TO DO
-            return;
-        }
-
         log("change layout");
 
         normalContentPane.setVisible(false);
@@ -2237,10 +2118,6 @@ public class HqlBuilderFrame {
         normalContentPane.setVisible(true);
     }
 
-    protected void immediateQuery() {
-        scheduleQuery(null, false);
-    }
-
     private void createSqlPopupMenu() {
         // EComponentPopupMenu.installPopupMenu((ReadableComponent) new TextComponentWritableComponent(sql));
     }
@@ -2254,7 +2131,6 @@ public class HqlBuilderFrame {
         hqlpopupmenu.add(new JMenuItem(favoritesAction));
         hqlpopupmenu.add(new JMenuItem(addToFavoritesAction));
         hqlpopupmenu.add(new JMenuItem(startQueryAction));
-        hqlpopupmenu.add(new JCheckBoxMenuItem(pauseQueryAction));
         hqlpopupmenu.add(new JMenuItem(stopQueryAction));
         hqlpopupmenu.add(new JMenuItem(formatAction));
         hqlpopupmenu.add(new JMenuItem(namedQueryAction));
@@ -2279,16 +2155,6 @@ public class HqlBuilderFrame {
         if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(frame, HqlResourceBundle.getMessage("exit_confirmation"), "",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
             log("exit(0)");
-
-            // KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor(keyboardKeyEventProcessor);
-
-            for (Runnable runnable : scheduler.shutdownNow()) {
-                log(runnable);
-            }
-
-            log("scheduler.shutdown=" + scheduler.isShutdown());
-            log("scheduler.terminated=" + scheduler.isTerminated());
-
             System.exit(0);
         }
     }
@@ -2434,7 +2300,6 @@ public class HqlBuilderFrame {
             string = hql.getDocument().getText(0, Math.min(start, end)) + string
                     + hql.getDocument().getText(Math.max(start, end), hql.getDocument().getLength() - Math.max(start, end));
             hql.setText(string);
-            scheduleQuery(null, false);
         } catch (Exception ex) {
             logger.error("paste()", ex); //$NON-NLS-1$
         }
@@ -2452,7 +2317,6 @@ public class HqlBuilderFrame {
                 sb.append(line.trim()).append(getNewline());
             }
             hql.setText(sb.toString());
-            scheduleQuery(0l, false);
         } catch (Exception ex) {
             logger.error("import__paste_hql_as_java_from_clipboard()", ex); //$NON-NLS-1$
         }
@@ -2510,8 +2374,7 @@ public class HqlBuilderFrame {
     }
 
     protected void stop_query() {
-        System.out.println("stop_query");
-        scheduleCancel();
+        // TODO
     }
 
     private void parameterSelected() {
@@ -2625,27 +2488,6 @@ public class HqlBuilderFrame {
         map.put(COL, col_);
     }
 
-    /**
-     * schedule a job
-     * 
-     * @param delay delay in milliseconds
-     * @param job0 {@link Runnable}
-     */
-    @SuppressWarnings("unchecked")
-    private void schedule(long delay, Runnable job0) {
-        scheduleCancel();
-        scheduledFuture = (ScheduledFuture<Object>) scheduler.schedule(job0, delay, TimeUnit.MILLISECONDS);
-    }
-
-    private void scheduleCancel() {
-        if (scheduledFuture != null) {
-            boolean cancel = scheduledFuture.cancel(true);
-            System.out.println("forced canceling query: " + cancel);
-            log("force stop: " + cancel);
-            progressbarStop();
-        }
-    }
-
     public <T extends JComponent> T font(T comp, Integer size) {
         Font f = getFont();
         if (size != null && f.getSize() != size) {
@@ -2656,18 +2498,17 @@ public class HqlBuilderFrame {
     }
 
     protected void start_query() {
-        System.out.println("start_query");
-        if (pauseQueryAction.isSelected()) {
-            pauseQueryAction.setSelected(false);
+        System.out.println("start query");
+        try {
+            query(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        scheduleQuery(0l, false);
+        System.out.println("end query");
     }
 
     protected void pause_query() {
         System.out.println("pause_query");
-        if (!pauseQueryAction.isSelected()) {
-            scheduleQuery(0l, false);
-        }
     }
 
     protected void export__copy_hql_as_java_to_clipboard() {
@@ -2687,113 +2528,6 @@ public class HqlBuilderFrame {
             clipboard.setContents(new StringSelection(sb.toString()), getClipboardOwner());
         } catch (Exception ex) {
             logger.error("export__copy_hql_as_java_to_clipboard()", ex); //$NON-NLS-1$
-        }
-    }
-
-    /**
-     * TableSelectionListener
-     */
-    private interface TableSelectionListener {
-        /**
-         * row selection veranderd
-         * 
-         * @param row
-         */
-        public void rowChanged(int row);
-
-        /**
-         * column selection veranderd
-         * 
-         * @param column
-         */
-        public void columnChanged(int column);
-
-        /**
-         * cell selection veranderd
-         * 
-         * @param row
-         * @param column
-         */
-        public void cellChanged(int row, int column);
-    }
-
-    /**
-     * intern object
-     * 
-     * @author jdlandsh
-     */
-    protected static class ValueHolders extends HashMap<String, Object> {
-        /** serialVersionUID */
-        private static final long serialVersionUID = -7668322252952289124L;
-
-        /** propertyChangeSupport */
-        private final PropertyChangeSupport propertyChangeSupport;
-
-        /**
-         * Creates a new ValueHolders object.
-         */
-        public ValueHolders() {
-            propertyChangeSupport = new PropertyChangeSupport(this);
-        }
-
-        /**
-         * 
-         * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
-         */
-        @Override
-        public Object put(String key, Object newValue) {
-            Object oldValue = super.get(key);
-            propertyChangeSupport.firePropertyChange(key, oldValue, newValue);
-
-            return super.put(key, newValue);
-        }
-
-        /**
-         * 
-         * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.beans.PropertyChangeListener)
-         */
-        public void addPropertyChangeListener(PropertyChangeListener listener) {
-            this.propertyChangeSupport.addPropertyChangeListener(listener);
-        }
-
-        /**
-         * 
-         * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.lang.String, java.beans.PropertyChangeListener)
-         */
-        public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-            this.propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-        }
-
-        /**
-         * 
-         * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
-         */
-        public PropertyChangeListener[] getPropertyChangeListeners() {
-            return this.propertyChangeSupport.getPropertyChangeListeners();
-        }
-
-        /**
-         * 
-         * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
-         */
-        public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
-            return this.propertyChangeSupport.getPropertyChangeListeners(propertyName);
-        }
-
-        /**
-         * 
-         * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.beans.PropertyChangeListener)
-         */
-        public void removePropertyChangeListener(PropertyChangeListener listener) {
-            this.propertyChangeSupport.removePropertyChangeListener(listener);
-        }
-
-        /**
-         * 
-         * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.lang.String, java.beans.PropertyChangeListener)
-         */
-        public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-            this.propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
         }
     }
 
@@ -2972,7 +2706,6 @@ public class HqlBuilderFrame {
 
     protected void format_sql() {
         formatSqlOptionsMenu.setEnabled(formatSqlAction.isSelected());
-        immediateQuery();
     }
 
     protected void add_to_favorites() {
@@ -3078,10 +2811,8 @@ public class HqlBuilderFrame {
     protected void help_insert() {
         try {
             log("help insert");
-
             helpInsert();
-
-            scheduleQuery(null, false);
+            // scheduleQuery(null, false);
         } catch (Exception ex) {
             log(ex);
         }
@@ -3097,7 +2828,7 @@ public class HqlBuilderFrame {
         hqltext = remarkToggle(hqltext, selectionStart, selectionEnd);
         hql.setText(hqltext);
 
-        scheduleQuery(null, false);
+        // scheduleQuery(null, false);
     }
 
     private String hqlChanged = null;
@@ -3386,5 +3117,13 @@ public class HqlBuilderFrame {
             hibernateWebResolver = hqlService.getHibernateWebResolver();
         }
         return this.hibernateWebResolver;
+    }
+
+    protected void parameter_compile_delay() {
+        Object newValue = JOptionPane.showInputDialog(frame, HqlResourceBundle.getMessage(PARAMETER_COMPILE_DELAY),
+                String.valueOf(parameterCompileDelayAction.getValue()));
+        if (newValue != null) {
+            parameterCompileDelayAction.setValue(Integer.parseInt(String.valueOf(newValue)));
+        }
     }
 }

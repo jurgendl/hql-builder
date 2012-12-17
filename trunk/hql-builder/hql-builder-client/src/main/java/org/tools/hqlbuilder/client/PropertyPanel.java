@@ -63,7 +63,7 @@ import com.l2fprod.common.util.converter.NumberConverters;
  * -) commons-lang<br>
  * -) jcalendar<br>
  * 
- * @author jdlandsh
+ * @author Jurgen
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PropertyPanel extends PropertySheetPanel {

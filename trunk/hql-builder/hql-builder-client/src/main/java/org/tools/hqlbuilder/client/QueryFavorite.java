@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.tools.hqlbuilder.common.QueryParameter;
 
 /**
- * @author jdlandsh
+ * @author Jurgen
  */
 public class QueryFavorite implements Serializable {
     /** serialVersionUID */

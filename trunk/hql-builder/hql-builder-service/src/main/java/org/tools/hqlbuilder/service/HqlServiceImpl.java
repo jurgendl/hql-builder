@@ -195,6 +195,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
+        System.out.println("start query");
         ExecutionResult result = new ExecutionResult();
         try {
             return innerExecute(result, hql, max, queryParameters);
@@ -229,11 +230,14 @@ public class HqlServiceImpl implements HqlService {
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             throw new ServiceException(ex.getMessage(), result);
+        } finally {
+            System.out.println("end query");
         }
     }
 
     @SuppressWarnings("unchecked")
-    public ExecutionResult innerExecute(ExecutionResult result, String hql, int max, QueryParameter... queryParameters) {
+    protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, QueryParameter... queryParameters) {
+        long start = System.currentTimeMillis();
         QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
                 (SessionFactoryImplementor) sessionFactory);
         String sql = createQueryTranslator.getSQLString();
@@ -306,6 +310,8 @@ public class HqlServiceImpl implements HqlService {
             queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getName();
         }
         result.setQueryReturnTypeNames(queryReturnTypeNames);
+        long duration = (System.currentTimeMillis() - start);
+        result.setDuration(duration);
         return result;
     }
 

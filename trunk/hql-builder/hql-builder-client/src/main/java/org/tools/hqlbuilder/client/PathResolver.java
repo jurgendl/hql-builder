@@ -9,6 +9,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HibernateWebResolver.Property;
 
+/**
+ * @author Jurgen
+ */
 public class PathResolver {
     final ArrayList<TreeNode> all = new ArrayList<TreeNode>();
 
