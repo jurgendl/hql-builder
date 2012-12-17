@@ -33,6 +33,7 @@ import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.hql.ast.QuerySyntaxException;
 import org.hibernate.hql.ast.QueryTranslatorImpl;
+import org.hibernate.impl.AbstractQueryImpl;
 import org.hibernate.impl.QueryImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
@@ -245,7 +246,7 @@ public class HqlServiceImpl implements HqlService {
         result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = sessionFactory.openSession();
-        QueryImpl createQuery = (QueryImpl) session.createQuery(hql);
+        AbstractQueryImpl createQuery = (AbstractQueryImpl) session.createQuery(hql);
         int index = 0;
         for (QueryParameter value : queryParameters) {
             try {
@@ -302,7 +303,9 @@ public class HqlServiceImpl implements HqlService {
                 from_aliases.put(alias, entityPersisters[i].getClassMetadata().getEntityName());
             }
         }
+        long _start = System.currentTimeMillis();
         List<Object> list = createQuery.list();
+        long _end = System.currentTimeMillis();
         result.setResults(list);
         result.setSize(list.size());
         String[] queryReturnTypeNames = new String[queryReturnTypes.length];
@@ -311,7 +314,8 @@ public class HqlServiceImpl implements HqlService {
         }
         result.setQueryReturnTypeNames(queryReturnTypeNames);
         long duration = (System.currentTimeMillis() - start);
-        result.setDuration(duration);
+        result.setDuration(_end - _start);
+        result.setOverhead(duration - result.getDuration());
         return result;
     }
 
