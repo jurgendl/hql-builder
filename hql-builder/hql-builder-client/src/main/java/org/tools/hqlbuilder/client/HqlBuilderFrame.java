@@ -152,131 +152,17 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
 /**
  * @author Jurgen
  */
-public class HqlBuilderFrame {
+public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
-
-    private static final String SET_NULL = "set null";
-
-    private static final String TO_TEXT = "to text";
-
-    private static final String IMPORT_PARAMETERS = "import parameters";
-
-    private static final String FONT = "font";
-
-    private static final String LOAD_NAMED_QUERY = "load named query";
-
-    private static final String HIBERNATE_PROPERTIES = "hibernate properties";
-
-    private static final String LUCENE_QUERY_SYNTAX = "Lucene query syntax";
-
-    private static final String SEARCH_COLOR = "search color";
-
-    private static final String HIGHLIGHT_COLOR = "highlight color";
 
     /** do not remove */
     ca.odell.glazedlists.swing.EventSelectionModel<?> wtf;
-
-    private static final String HIGHLIGHT_SYNTAX = "highlight syntax";
-
-    private static final String RESIZE_COLUMNS = "resize columns";
-
-    private static final String CSV = ".csv";
 
     private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
 
     private static final File PROGRAM_DIR = new File(USER_HOME_DIR, "hqlbuilder");
 
     private static final File FAVORITES_DIR = new File(PROGRAM_DIR, "favorites");
-
-    private static final String FAVORITES_EXT = ".xml";
-
-    private static final String LAST = "LAST";
-
-    private static final String OBJECT_TREE = "object tree";
-
-    private static final String NEWLINE = "\n";
-
-    private static final String HELP_INSERT = "help-insert";
-
-    private static final String REMARK_TOGGLE = "remark-toggle";
-
-    private static final String ADD_TO_FAVORITES = "add to favorites";
-
-    private static final String FAVORITES = "favorites";
-
-    private static final String FIND_PARAMETERS = "find parameters";
-
-    private static final String MAXIMUM_NUMBER_OF_RESULTS = "maximum number of results";
-
-    private static final String EDITABLE_RESULTS = "editable results";
-
-    private static final String HQL_DOCUMENTATION = "hql documentation";
-
-    private static final String HIBERNATE_DOCUMENTATION = "hibernate documentation";
-
-    private static final String PERSISTENT_ID = "HQL Builder";
-
-    private static final String NAME = "HQL Builder";
-
-    private static final String SYSTEM_TRAY = "system tray";
-
-    private static final String ALWAYS_ON_TOP = "always on top";
-
-    private static final String EXECUTE_SCRIPT_ON_COLUMN = "execute script on column";
-
-    private static final String DELETE_OBJECT = "delete object";
-
-    private static final String COPY_SELECTED_CELL = "copy selected cell";
-
-    private static final String HELP = "help";
-
-    private static final String WIZARD = "wizard";
-
-    private static final String UP = "up";
-
-    private static final String SAVE = "save";
-
-    private static final String REMOVE = "remove";
-
-    private static final String DOWN = "down";
-
-    private static final String IMMEDIATE_QUERY = "immediateQuery";
-
-    private static final String FORMAT_SQL = "format sql";
-
-    private static final String REPLACE_PROPERTIES = "replace properties";
-
-    private static final String FORMAT_LINES = "format lines";
-
-    private static final String REMOVE_ADO_JOINS = "remove ADO joins";
-
-    private static final String SWITCH_LAYOUT = "switch layout";
-
-    private static final String FORCE_EXIT = "force exit";
-
-    private static final String CLEAR = "clear";
-
-    private static final String EXIT = "exit";
-
-    private static final String IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD = "import: paste hql as java from clipboard";
-
-    private static final String EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD = "export: copy hql as java to clipboard";
-
-    private static final String FORMAT = "format";
-
-    private static final String START_QUERY = "start query";
-
-    private static final String FROM_ALIASES = "from_aliases";
-
-    private static final String SELECTED = "selected";
-
-    private static final String VALUE = "value";
-
-    private static final String SCRIPT = "script";
-
-    private static final String COL = "col";
-
-    private static final String ROW = "row";
 
     @SuppressWarnings("unused")
     private org.swingeasy.UIExceptionHandler uiExceptionHandler = org.swingeasy.UIExceptionHandler.getInstance();
