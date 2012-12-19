@@ -66,8 +66,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,7 +90,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -122,7 +119,6 @@ import org.swingeasy.ELabeledTextFieldButtonComponent;
 import org.swingeasy.EList;
 import org.swingeasy.EListConfig;
 import org.swingeasy.EListRecord;
-import org.swingeasy.EProgressBar;
 import org.swingeasy.ETable;
 import org.swingeasy.ETableConfig;
 import org.swingeasy.ETableHeaders;
@@ -159,15 +155,13 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
 public class HqlBuilderFrame {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
-    private static final String DEFAULT_COMPILE_TYPE = "groovy";
+    private static final String SET_NULL = "set null";
 
     private static final String TO_TEXT = "to text";
 
     private static final String IMPORT_PARAMETERS = "import parameters";
 
     private static final String FONT = "font";
-
-    private static final String PARAMETER_COMPILE_DELAY = "parameter compile delay";
 
     private static final String LOAD_NAMED_QUERY = "load named query";
 
@@ -215,8 +209,6 @@ public class HqlBuilderFrame {
     private static final String MAXIMUM_NUMBER_OF_RESULTS = "maximum number of results";
 
     private static final String EDITABLE_RESULTS = "editable results";
-
-    private static final String NEW_PROGRESSION_MARKER = "new progression marker";
 
     private static final String HQL_DOCUMENTATION = "hql documentation";
 
@@ -291,6 +283,8 @@ public class HqlBuilderFrame {
 
     private final JFrame frame = new JFrame();
 
+    private final JPanel hql_sql_tabs_panel = new JPanel(new BorderLayout());
+
     private final JTabbedPane hql_sql_tabs = new JTabbedPane();
 
     private final ELabel resultsInfo;
@@ -338,6 +332,8 @@ public class HqlBuilderFrame {
     private final HqlBuilderAction removeAction;
 
     private final HqlBuilderAction saveAction;
+
+    private final HqlBuilderAction setNullAction;
 
     private final HqlBuilderAction toTextAction;
 
@@ -410,9 +406,6 @@ public class HqlBuilderFrame {
             MAXIMUM_NUMBER_OF_RESULTS, null, MAXIMUM_NUMBER_OF_RESULTS, MAXIMUM_NUMBER_OF_RESULTS, true, null, null, PERSISTENT_ID, Integer.class,
             100);
 
-    private final HqlBuilderAction parameterCompileDelayAction = new HqlBuilderAction(null, this, PARAMETER_COMPILE_DELAY, true,
-            PARAMETER_COMPILE_DELAY, null, PARAMETER_COMPILE_DELAY, PARAMETER_COMPILE_DELAY, true, null, null, PERSISTENT_ID, Integer.class, 100);
-
     private HqlBuilderAction fontAction;
 
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, SYSTEM_TRAY, null, SYSTEM_TRAY, SYSTEM_TRAY, true,
@@ -433,37 +426,14 @@ public class HqlBuilderFrame {
     private final HqlBuilderAction editableResultsAction = new HqlBuilderAction(null, this, null, true, EDITABLE_RESULTS, null, EDITABLE_RESULTS,
             EDITABLE_RESULTS, false, null, null, PERSISTENT_ID);
 
-    private final HqlBuilderAction newProgressAction = new HqlBuilderAction(null, this, null, true, NEW_PROGRESSION_MARKER, null,
-            NEW_PROGRESSION_MARKER, NEW_PROGRESSION_MARKER, false, null, null, PERSISTENT_ID);
-
     private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, "layout_content.png",
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
-
-    private final EProgressBar progressbar = new EProgressBar() {
-        private static final long serialVersionUID = -1377265196757589394L;
-
-        private boolean init = false;
-
-        {
-            init = true;
-        }
-
-        @Override
-        public void setIndeterminate(boolean newValue) {
-            super.setIndeterminate(newValue);
-            if (init) {
-                setGlassVisible(newValue);
-            }
-        };
-    };
 
     private final ELabel maxResults;
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
 
     private final JComponent values = ClientUtils.getPropertyFrame(new Object(), false);
-
-    private final Timer timer = new Timer(true);
 
     private final ValueHolders valueHolders = new ValueHolders();
 
@@ -488,8 +458,6 @@ public class HqlBuilderFrame {
     private EList<String> insertHelperList;
 
     private JPopupMenu insertHelper;
-
-    private TimerTask task;
 
     private JSplitPane split0;
 
@@ -541,23 +509,24 @@ public class HqlBuilderFrame {
         downAction = new HqlBuilderAction(parametersUnsafe, this, DOWN, true, DOWN, "bullet_arrow_down.png", DOWN, DOWN, false, null, null);
         removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, "bin_empty.png", REMOVE, REMOVE, false, null, null);
         saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null, null);
+        setNullAction = new HqlBuilderAction(parametersUnsafe, this, SET_NULL, true, SET_NULL, "page (2).png", SET_NULL, SET_NULL, false, null, null);
         toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, "font.png", TO_TEXT, TO_TEXT, false, null, null);
         upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
-        importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, "arrow_divide.png",
+        importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, "cog.png",
                 IMPORT_PARAMETERS, IMPORT_PARAMETERS, false, null, null);
         wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
         clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, null, "alt F2");
         findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, "book_next.png", FIND_PARAMETERS,
                 FIND_PARAMETERS, true, null, "alt F3");
         favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES, true, null, "alt F4");
-        addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "database_save.png", ADD_TO_FAVORITES,
+        addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "favbadd16.png", ADD_TO_FAVORITES,
                 ADD_TO_FAVORITES, true, null, "alt F5");
         // alt F6 not taken
         // alt F7 not taken
         // alt F8 not taken
         formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, null, "alt F9");
-        namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "cog.png", LOAD_NAMED_QUERY, LOAD_NAMED_QUERY,
-                true, null, "alt F10");
+        namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "package_go.png", LOAD_NAMED_QUERY,
+                LOAD_NAMED_QUERY, true, null, "alt F10");
         clipboardExportAction = new HqlBuilderAction(hql, this, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD,
                 "sc_arrowshapes.striped-right-arrow.png", EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, null,
                 "alt F11");
@@ -638,50 +607,22 @@ public class HqlBuilderFrame {
     }
 
     private void compile(final String text) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                progressbar.setIndeterminate(true);
-                log("progress: compiling");
-                progressbar.setString("compiling");
-            }
-        });
-
         log("compiling");
 
         valueHolders.put(VALUE, null);
         parameterValue.setText("");
 
-        if (task != null) {
-            task.cancel();
+        try {
+            Object returns = GroovyCompiler.eval(text);
+            valueHolders.put(VALUE, returns);
+        } catch (Exception ex2) {
+            log(ex2);
+            valueHolders.put(VALUE, null);
         }
+        log("compiled: " + valueHolders.get(VALUE));
 
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    Object returns = GroovyCompiler.eval(text);
-                    valueHolders.put(VALUE, returns);
-                } catch (Exception ex2) {
-                    log(ex2);
-                    valueHolders.put(VALUE, null);
-                }
-                log("compiled: " + valueHolders.get(VALUE));
+        parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), null).toString());
 
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), DEFAULT_COMPILE_TYPE).toString());
-                        progressbar.setIndeterminate(false);
-                        progressbar.setString("");
-                        log("progress: null");
-                    }
-                });
-            }
-        };
-
-        Object delay = parameterCompileDelayAction.getValue();
-        timer.schedule(task, delay == null ? 100 : (Integer) delay);
     }
 
     private JPopupMenu getInsertHelperProperties() {
@@ -1091,28 +1032,17 @@ public class HqlBuilderFrame {
     }
 
     private void progressbarStop() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                progressbar.setIndeterminate(false);
-                progressbar.setString("");
-            }
-        });
+        glass.setMessage(null);
+        setGlassVisible(false);
     }
 
     private void progressbarStart(final String text) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                progressbar.setIndeterminate(true);
-                progressbar.setString(HqlResourceBundle.getMessage(text));
-                log("progress: " + text);
-            }
-        });
+        glass.setMessage(text);
+        setGlassVisible(true);
     }
 
     private void query(RowProcessor rowProcessor) {
-        progressbarStart("quering");
+        progressbarStart(HqlResourceBundle.getMessage("quering"));
         executeQuery(false, rowProcessor);
         progressbarStop();
         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("done"));
@@ -1159,7 +1089,7 @@ public class HqlBuilderFrame {
 
     private void preQuery() {
         startQueryAction.setEnabled(false);
-        progressbarStart("quering");
+        progressbarStart(HqlResourceBundle.getMessage("quering"));
         sql.setText("");
         resultsInfo.setText("");
         clearResults();
@@ -1691,18 +1621,11 @@ public class HqlBuilderFrame {
         resultPanel.add(jspResults, BorderLayout.CENTER);
         resultsUnsafe.addRowHeader(jspResults, 3);
 
-        JPanel resultBottomPanel = new JPanel(new BorderLayout());
-        resultPanel.add(resultBottomPanel, BorderLayout.SOUTH);
         resultPanel.setBorder(BorderFactory.createTitledBorder(HqlResourceBundle.getMessage("results")));
 
         parameterspanel.setBorder(BorderFactory.createTitledBorder(HqlResourceBundle.getMessage("parameters")));
 
         propertypanel.setBorder(BorderFactory.createTitledBorder(HqlResourceBundle.getMessage("properties")));
-
-        progressbar.setMinimumSize(new Dimension(400, 20));
-        progressbar.setPreferredSize(new Dimension(400, 20));
-        progressbar.setStringPainted(true);
-        progressbar.setString("");
 
         hql_sql_tabs.addTab("HQL", new JScrollPane(hql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
         hql_sql_tabs.addTab("SQL", new JScrollPane(sql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
@@ -1775,6 +1698,8 @@ public class HqlBuilderFrame {
         Dimension bd = new Dimension(24, 24);
         EButton saveButton = new EButton(new EToolBarButtonCustomizer(bd), saveAction);
         saveButton.setText("");
+        EButton setNullButton = new EButton(new EToolBarButtonCustomizer(bd), setNullAction);
+        setNullButton.setText("");
         EButton toTextButton = new EButton(new EToolBarButtonCustomizer(bd), toTextAction);
         toTextButton.setText("");
         EButton removeButton = new EButton(new EToolBarButtonCustomizer(bd), removeAction);
@@ -1795,7 +1720,8 @@ public class HqlBuilderFrame {
         parameterspanel.add(toTextButton, "");
 
         parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("compiled") + ": "));
-        parameterspanel.add(parameterValue, "grow, wrap");
+        parameterspanel.add(parameterValue, "grow");
+        parameterspanel.add(setNullButton, "");
 
         parameterspanel.add(new JScrollPane(parametersUnsafe), "spanx 2, spany 3, growx, growy");
         parameterspanel.add(upButton, "bottom, shrinky");
@@ -1813,11 +1739,10 @@ public class HqlBuilderFrame {
         resultsInfo.setMinimumSize(new Dimension(300, 22));
         resultsInfo.setPreferredSize(new Dimension(300, 22));
 
-        JPanel ab2 = new JPanel(new BorderLayout());
-        ab2.add(resultsInfo, BorderLayout.CENTER);
-        ab2.add(maxResults, BorderLayout.EAST);
-        resultBottomPanel.add(ab2, BorderLayout.WEST);
-        resultBottomPanel.add(progressbar, BorderLayout.CENTER);
+        JPanel resultsStatusPanel = new JPanel(new FlowLayout());
+        resultsStatusPanel.add(resultsInfo);
+        resultsStatusPanel.add(maxResults);
+        resultPanel.add(resultsStatusPanel, BorderLayout.SOUTH);
 
         switch_layout();
         framepanel.add(normalContentPane, BorderLayout.CENTER);
@@ -1909,6 +1834,8 @@ public class HqlBuilderFrame {
             }
         });
 
+        hql_sql_tabs_panel.add(hql_sql_tabs, BorderLayout.CENTER);
+
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -1917,12 +1844,9 @@ public class HqlBuilderFrame {
             }
         });
 
-        JPanel toolbars = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        framepanel.add(toolbars, BorderLayout.NORTH);
-
         EToolBarButtonCustomizer etbc = new EToolBarButtonCustomizer();
         {
-            JToolBar hqltools = new JToolBar();
+            JToolBar hqltools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
             hqltools.add(new EButton(etbc, startQueryAction));
             hqltools.add(new EButton(etbc, wizardAction));
             hqltools.add(new EButton(etbc, clearAction));
@@ -1933,16 +1857,16 @@ public class HqlBuilderFrame {
             hqltools.add(new EButton(etbc, namedQueryAction));
             hqltools.add(new EButton(etbc, clipboardExportAction));
             hqltools.add(new EButton(etbc, clipboardImportAction));
-            toolbars.add(hqltools);
+            hql_sql_tabs_panel.add(hqltools, BorderLayout.WEST);
         }
         {
-            JToolBar resultstools = new JToolBar();
+            JToolBar resultstools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
             resultstools.add(new EButton(etbc, hibernatePropertiesAction));
             resultstools.add(new EButton(etbc, objectTreeAction));
             resultstools.add(new EButton(etbc, deleteObjectAction));
             resultstools.add(new EButton(etbc, copyCellAction));
             resultstools.add(new EButton(etbc, executeScriptOnColumnAction));
-            toolbars.add(resultstools);
+            resultPanel.add(resultstools, BorderLayout.WEST);
         }
 
         JMenuBar menuBar = new JMenuBar();
@@ -1969,10 +1893,8 @@ public class HqlBuilderFrame {
                 addmi.add(new JMenuItem(hiliColorAction));
                 addmi.add(new JCheckBoxMenuItem(resizeColumnsAction));
                 addmi.add(maximumNumberOfResultsAction);
-                addmi.add(parameterCompileDelayAction);
                 addmi.add(fontAction);
                 addmi.add(new JCheckBoxMenuItem(alwaysOnTopAction));
-                addmi.add(new JCheckBoxMenuItem(newProgressAction));
                 addmi.add(new JCheckBoxMenuItem(editableResultsAction));
                 addmi.add(new JMenuItem(searchColorAction));
                 if (SystemTray.isSupported()) {
@@ -2105,7 +2027,7 @@ public class HqlBuilderFrame {
             split0.setLeftComponent(split1);
             split1.setRightComponent(split2);
 
-            split1.setLeftComponent(hql_sql_tabs);
+            split1.setLeftComponent(hql_sql_tabs_panel);
             split2.setLeftComponent(parameterspanel);
             split2.setRightComponent(propertypanel);
             split0.setRightComponent(resultPanel);
@@ -2125,7 +2047,7 @@ public class HqlBuilderFrame {
             split0.setLeftComponent(split1);
             split0.setRightComponent(split2);
 
-            split1.setLeftComponent(hql_sql_tabs);
+            split1.setLeftComponent(hql_sql_tabs_panel);
             split1.setRightComponent(parameterspanel);
             split2.setLeftComponent(resultPanel);
             split2.setRightComponent(propertypanel);
@@ -2407,37 +2329,44 @@ public class HqlBuilderFrame {
     }
 
     private static List<QueryParameter> convertStringMap(String map) {
-        map = map.substring(1, map.length() - 1);
-        List<String> parts = new ArrayList<String>();
-        String splitted = null;
-        for (String part : map.split(",")) {
-            part = part.trim();
-            if (part.contains("[")) {
-                splitted = part;
-            } else if (splitted == null) {
-                parts.add(part);
-            } else {
-                splitted = splitted + "," + part;
-                if (part.contains("]")) {
-                    parts.add(splitted);
-                    splitted = null;
+        map = map.trim();
+        if (map.startsWith("[") && map.startsWith("]")) {
+            // TODO
+        }
+        if (map.startsWith("{") && map.startsWith("}")) {
+            map = map.substring(1, map.length() - 1);
+            List<String> parts = new ArrayList<String>();
+            String splitted = null;
+            for (String part : map.split(",")) {
+                part = part.trim();
+                if (part.contains("[")) {
+                    splitted = part;
+                } else if (splitted == null) {
+                    parts.add(part);
+                } else {
+                    splitted = splitted + "," + part;
+                    if (part.contains("]")) {
+                        parts.add(splitted);
+                        splitted = null;
+                    }
                 }
             }
-        }
-        List<QueryParameter> qps = new ArrayList<QueryParameter>();
-        for (String el : parts) {
-            try {
-                System.out.println(el);
-                String[] p = el.split("=");
-                Object val = GroovyCompiler.eval(p[1]);
-                System.out.println(p[0] + "=" + val.getClass() + "=" + val);
-                QueryParameter qp = new QueryParameter(p[1], p[0], val, DEFAULT_COMPILE_TYPE);
-                qps.add(qp);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            List<QueryParameter> qps = new ArrayList<QueryParameter>();
+            for (String el : parts) {
+                try {
+                    System.out.println(el);
+                    String[] p = el.split("=");
+                    Object val = GroovyCompiler.eval(p[1]);
+                    System.out.println(p[0] + "=" + val.getClass() + "=" + val);
+                    QueryParameter qp = new QueryParameter(p[1], p[0], val, null);
+                    qps.add(qp);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
+            return qps;
         }
-        return qps;
+        return new ArrayList<QueryParameter>();
     }
 
     protected void import_parameters() {
@@ -2446,14 +2375,18 @@ public class HqlBuilderFrame {
 
         for (QueryParameter qp : convertStringMap(m)) {
             boolean exists = false;
-            for (EListRecord<QueryParameter> rec : parametersEDT.getRecords()) {
-                if (rec.get().getName().equals(qp.getName())) {
-                    rec.get().setName(qp.getName());
-                    rec.get().setText(qp.getText());
-                    rec.get().setType(qp.getType());
-                    rec.get().setValue(qp.getValue());
-                    exists = true;
-                    break;
+            if (qp.getName() == null) {
+                // just add at bottom in order
+            } else {
+                for (EListRecord<QueryParameter> rec : parametersEDT.getRecords()) {
+                    if (rec.get().getName().equals(qp.getName())) {
+                        rec.get().setName(qp.getName());
+                        rec.get().setText(qp.getText());
+                        rec.get().setType(qp.getType());
+                        rec.get().setValue(qp.getValue());
+                        exists = true;
+                        break;
+                    }
                 }
             }
             if (!exists) {
@@ -2463,6 +2396,9 @@ public class HqlBuilderFrame {
     }
 
     protected void to_text() {
+        if (parameterBuilder.getText().startsWith("'") && parameterBuilder.getText().endsWith("'")) {
+            return;
+        }
         parameterBuilder.setText("'" + parameterBuilder.getText() + "'");
         save();
     }
@@ -2485,15 +2421,9 @@ public class HqlBuilderFrame {
         selected.setText(text);
         selected.setName(name);
         selected.setValue(value);
-        selected.setType(DEFAULT_COMPILE_TYPE);
+        selected.setType(null);
 
-        parameterValue.setText("");
-        parameterBuilder.setText("");
-        parameterName.setText("");
-        valueHolders.put(SELECTED, null);
-        valueHolders.put(VALUE, null);
-
-        parametersEDT.clearSelection();
+        parametersEDT.repaint();
     }
 
     private void addTableSelectionListener(final ETable<?> table, final TableSelectionListener listener) {
@@ -2729,7 +2659,7 @@ public class HqlBuilderFrame {
     }
 
     private void setGlassVisible(boolean v) {
-        if (glass != null && newProgressAction.isSelected()) {
+        if (glass != null) {
             glass.setVisible(v);
         }
     }
@@ -3175,11 +3105,12 @@ public class HqlBuilderFrame {
         return this.hibernateWebResolver;
     }
 
-    protected void parameter_compile_delay() {
-        Object newValue = JOptionPane.showInputDialog(frame, HqlResourceBundle.getMessage(PARAMETER_COMPILE_DELAY),
-                String.valueOf(parameterCompileDelayAction.getValue()));
-        if (newValue != null) {
-            parameterCompileDelayAction.setValue(Integer.parseInt(String.valueOf(newValue)));
+    protected void set_null() {
+        EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
+        if (selected == null) {
+            return;
         }
+        parameterBuilder.setText("");
+        save();
     }
 }
