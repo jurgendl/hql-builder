@@ -159,6 +159,12 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
 public class HqlBuilderFrame {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
+    private static final String DEFAULT_COMPILE_TYPE = "groovy";
+
+    private static final String TO_TEXT = "to text";
+
+    private static final String IMPORT_PARAMETERS = "import parameters";
+
     private static final String FONT = "font";
 
     private static final String PARAMETER_COMPILE_DELAY = "parameter compile delay";
@@ -333,7 +339,11 @@ public class HqlBuilderFrame {
 
     private final HqlBuilderAction saveAction;
 
+    private final HqlBuilderAction toTextAction;
+
     private final HqlBuilderAction upAction;
+
+    private final HqlBuilderAction importParametersAction;
 
     // hql
 
@@ -459,7 +469,9 @@ public class HqlBuilderFrame {
 
     private final JPanel resultPanel = new JPanel(new BorderLayout());
 
-    private final JPanel parameterspanel = new JPanel(new MigLayout("wrap 3", "[]rel[grow]rel[]", "[][][][shrink][shrink][shrink][grow]"));
+    private final JPanel parameterspanel = new JPanel(new MigLayout("wrap 3", "[]rel[grow]rel[]", "[][][][shrink][shrink][shrink][shrink][grow]"));
+
+    private final ETextField importParametersFromTextF = new ETextField(new ETextFieldConfig());
 
     private final JPanel normalContentPane = new JPanel(new BorderLayout());
 
@@ -500,8 +512,10 @@ public class HqlBuilderFrame {
     private final Map<String, String> namedQueries = new HashMap<String, String>();
 
     private HqlBuilderFrame() {
+        // needs to be first to init font
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
                 ClientUtils.getDefaultFont());
+
         resultsInfo = font(new ELabel(""), null);
         parameterBuilder = font(new ETextField(new ETextFieldConfig()), null);
         parameterName = font(new ETextField(new ETextFieldConfig()), null);
@@ -527,7 +541,10 @@ public class HqlBuilderFrame {
         downAction = new HqlBuilderAction(parametersUnsafe, this, DOWN, true, DOWN, "bullet_arrow_down.png", DOWN, DOWN, false, null, null);
         removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, "bin_empty.png", REMOVE, REMOVE, false, null, null);
         saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null, null);
+        toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, "font.png", TO_TEXT, TO_TEXT, false, null, null);
         upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
+        importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, "arrow_divide.png",
+                IMPORT_PARAMETERS, IMPORT_PARAMETERS, false, null, null);
         wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
         clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, null, "alt F2");
         findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, "book_next.png", FIND_PARAMETERS,
@@ -535,8 +552,7 @@ public class HqlBuilderFrame {
         favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES, true, null, "alt F4");
         addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "database_save.png", ADD_TO_FAVORITES,
                 ADD_TO_FAVORITES, true, null, "alt F5");
-        startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
-                null, "alt ENTER");
+        // alt F6 not taken
         // alt F7 not taken
         // alt F8 not taken
         formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, null, "alt F9");
@@ -552,6 +568,8 @@ public class HqlBuilderFrame {
                 "ctrl shift SPACE");
         remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, null,
                 "ctrl shift SLASH");
+        startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
+                null, "ctrl ENTER");
     }
 
     protected void down() {
@@ -653,7 +671,7 @@ public class HqlBuilderFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), "groovy").toString());
+                        parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), DEFAULT_COMPILE_TYPE).toString());
                         progressbar.setIndeterminate(false);
                         progressbar.setString("");
                         log("progress: null");
@@ -663,7 +681,7 @@ public class HqlBuilderFrame {
         };
 
         Object delay = parameterCompileDelayAction.getValue();
-        timer.schedule(task, delay == null ? 500 : (Integer) delay);
+        timer.schedule(task, delay == null ? 100 : (Integer) delay);
     }
 
     private JPopupMenu getInsertHelperProperties() {
@@ -1757,29 +1775,38 @@ public class HqlBuilderFrame {
         Dimension bd = new Dimension(24, 24);
         EButton saveButton = new EButton(new EToolBarButtonCustomizer(bd), saveAction);
         saveButton.setText("");
+        EButton toTextButton = new EButton(new EToolBarButtonCustomizer(bd), toTextAction);
+        toTextButton.setText("");
         EButton removeButton = new EButton(new EToolBarButtonCustomizer(bd), removeAction);
         removeButton.setText("");
         EButton upButton = new EButton(new EToolBarButtonCustomizer(bd), upAction);
         upButton.setText("");
         EButton downButton = new EButton(new EToolBarButtonCustomizer(bd), downAction);
         downButton.setText("");
+        EButton importParametersFromTextBtn = new EButton(new EToolBarButtonCustomizer(bd), importParametersAction);
+        importParametersFromTextBtn.setText("");
 
         parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("name") + ": "));
         parameterspanel.add(parameterName, "grow");
-        parameterspanel.add(saveButton, "spany 2");
+        parameterspanel.add(saveButton, "");
 
         parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("value") + ": "));
         parameterspanel.add(parameterBuilder, "grow");
+        parameterspanel.add(toTextButton, "");
 
         parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("compiled") + ": "));
-        parameterspanel.add(parameterValue, "grow");
-        parameterspanel.add(new ELabel());
+        parameterspanel.add(parameterValue, "grow, wrap");
 
-        parameterspanel.add(new JScrollPane(parametersUnsafe), "spanx 2, spany 4, growx, growy");
+        parameterspanel.add(new JScrollPane(parametersUnsafe), "spanx 2, spany 3, growx, growy");
         parameterspanel.add(upButton, "bottom, shrinky");
         parameterspanel.add(removeButton, "shrinky");
-        parameterspanel.add(downButton, "top, shrinky");
-        parameterspanel.add(new ELabel(), "growy");
+        parameterspanel.add(downButton, "top, shrinky, wrap");
+
+        parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("import parameters") + ": "), "growx, shrinky");
+        parameterspanel.add(importParametersFromTextF, "growx, shrinky");
+        parameterspanel.add(importParametersFromTextBtn, "growx, shrinky");
+
+        parameterspanel.add(new ELabel(), "growy, growx, spanx 3"); // filler
 
         maxResults.setMinimumSize(new Dimension(80, 22));
         maxResults.setPreferredSize(new Dimension(80, 22));
@@ -2211,7 +2238,7 @@ public class HqlBuilderFrame {
                 br.flush();
             }
         } catch (Exception ex) {
-            logger.error("export_dataset_to_csv_file()", ex); //$NON-NLS-1$
+            logger.error("export data", ex); //$NON-NLS-1$
         } finally {
             try {
                 fout.close();
@@ -2241,27 +2268,9 @@ public class HqlBuilderFrame {
 
             clipboard.setContents(new StringSelection(sb.toString()), getClipboardOwner());
         } catch (Exception ex) {
-            logger.error("export_table_data_to_clipboard()", ex); //$NON-NLS-1$
+            logger.error("export data", ex); //$NON-NLS-1$
         }
     }
-
-    // private boolean keyboardKeyEvent(KeyEvent e) throws Exception {
-    // if ((insertHelperList == e.getSource()) && (e.getKeyCode() == KeyEvent.VK_ENTER) && (KeyEvent.KEY_RELEASED == e.getID())) {
-    // String clazz = String.class.cast(insertHelperList.getSelectedValue());
-    // hql.getDocument().insertString(hql.getCaretPosition(), Class.forName(clazz).getSimpleName(), null);
-    // insertHelper.setVisible(false);
-    //
-    // return true;
-    // } else if ((insertPropertyHelper == e.getSource()) && (e.getKeyCode() == KeyEvent.VK_ENTER) && (KeyEvent.KEY_RELEASED == e.getID())) {
-    // String prop = String.class.cast(insertPropertyHelper.getSelectedValue());
-    // hql.getDocument().insertString(hql.getCaretPosition(), prop, null);
-    // insertClassHelper.setVisible(false);
-    //
-    // return true;
-    // }
-    //
-    // return false;
-    // }
 
     protected void format() {
         try {
@@ -2310,7 +2319,7 @@ public class HqlBuilderFrame {
             }
             hql.setText(sb.toString());
         } catch (Exception ex) {
-            logger.error("import__paste_hql_as_java_from_clipboard()", ex); //$NON-NLS-1$
+            logger.error("import hql", ex); //$NON-NLS-1$
         }
     }
 
@@ -2365,10 +2374,6 @@ public class HqlBuilderFrame {
         return replaceAll;
     }
 
-    protected void stop_query() {
-        // TODO
-    }
-
     private void parameterSelected() {
         EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
 
@@ -2401,6 +2406,67 @@ public class HqlBuilderFrame {
         valueHolders.put(SCRIPT, null);
     }
 
+    private static List<QueryParameter> convertStringMap(String map) {
+        map = map.substring(1, map.length() - 1);
+        List<String> parts = new ArrayList<String>();
+        String splitted = null;
+        for (String part : map.split(",")) {
+            part = part.trim();
+            if (part.contains("[")) {
+                splitted = part;
+            } else if (splitted == null) {
+                parts.add(part);
+            } else {
+                splitted = splitted + "," + part;
+                if (part.contains("]")) {
+                    parts.add(splitted);
+                    splitted = null;
+                }
+            }
+        }
+        List<QueryParameter> qps = new ArrayList<QueryParameter>();
+        for (String el : parts) {
+            try {
+                System.out.println(el);
+                String[] p = el.split("=");
+                Object val = GroovyCompiler.eval(p[1]);
+                System.out.println(p[0] + "=" + val.getClass() + "=" + val);
+                QueryParameter qp = new QueryParameter(p[1], p[0], val, DEFAULT_COMPILE_TYPE);
+                qps.add(qp);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return qps;
+    }
+
+    protected void import_parameters() {
+        String m = importParametersFromTextF.getText();
+        importParametersFromTextF.setText("");
+
+        for (QueryParameter qp : convertStringMap(m)) {
+            boolean exists = false;
+            for (EListRecord<QueryParameter> rec : parametersEDT.getRecords()) {
+                if (rec.get().getName().equals(qp.getName())) {
+                    rec.get().setName(qp.getName());
+                    rec.get().setText(qp.getText());
+                    rec.get().setType(qp.getType());
+                    rec.get().setValue(qp.getValue());
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                parametersEDT.addRecord(new EListRecord<QueryParameter>(qp));
+            }
+        }
+    }
+
+    protected void to_text() {
+        parameterBuilder.setText("'" + parameterBuilder.getText() + "'");
+        save();
+    }
+
     protected void save() {
         String text = parameterBuilder.getText();
         String name = (parameterName.getText().length() > 0) ? parameterName.getText() : null;
@@ -2416,12 +2482,10 @@ public class HqlBuilderFrame {
             selected = selectedRecord.get();
         }
 
-        String type = "groovy";
-
         selected.setText(text);
         selected.setName(name);
         selected.setValue(value);
-        selected.setType(type);
+        selected.setType(DEFAULT_COMPILE_TYPE);
 
         parameterValue.setText("");
         parameterBuilder.setText("");
