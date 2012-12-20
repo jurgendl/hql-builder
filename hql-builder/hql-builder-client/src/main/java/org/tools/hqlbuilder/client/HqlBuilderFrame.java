@@ -2214,81 +2214,61 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         valueHolders.put(SCRIPT, null);
     }
 
-    private static List<QueryParameter> convertStringMap(String map) {
+    private static List<QueryParameter> convertParameterString(String map) {
         map = map.trim();
         if (map.startsWith("[") && map.startsWith("]")) {
             map = map.substring(1, map.length() - 1);
-            List<String> parts = new ArrayList<String>();
-            String splitted = null;
-            for (String part : map.split(",")) {
-                part = part.trim();
-                if (part.contains("[")) {
-                    splitted = part;
-                } else if (splitted == null) {
-                    parts.add(part);
-                } else {
-                    splitted = splitted + "," + part;
-                    if (part.contains("]")) {
-                        parts.add(splitted);
-                        splitted = null;
-                    }
-                }
-            }
-            List<QueryParameter> qps = new ArrayList<QueryParameter>();
-            for (String el : parts) {
-                try {
-                    el = el.trim();
-                    System.out.println(el);
-                    Object val = GroovyCompiler.eval(el);
-                    System.out.println(val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(el, null, val, null);
-                    qps.add(qp);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            return qps;
         } else if (map.startsWith("{") && map.startsWith("}")) {
             map = map.substring(1, map.length() - 1);
-            List<String> parts = new ArrayList<String>();
-            String splitted = null;
-            for (String part : map.split(",")) {
-                part = part.trim();
-                if (part.contains("[")) {
-                    splitted = part;
-                } else if (splitted == null) {
-                    parts.add(part);
-                } else {
-                    splitted = splitted + "," + part;
-                    if (part.contains("]")) {
-                        parts.add(splitted);
-                        splitted = null;
-                    }
+        } else {
+            return new ArrayList<QueryParameter>();
+        }
+        map = map.substring(1, map.length() - 1);
+        List<String> parts = new ArrayList<String>();
+        String splitted = null;
+        for (String part : map.split(",")) {
+            part = part.trim();
+            if (part.contains("[")) {
+                splitted = part;
+            } else if (splitted == null) {
+                parts.add(part);
+            } else {
+                splitted = splitted + "," + part;
+                if (part.contains("]")) {
+                    parts.add(splitted);
+                    splitted = null;
                 }
             }
-            List<QueryParameter> qps = new ArrayList<QueryParameter>();
-            for (String el : parts) {
-                try {
-                    System.out.println(el);
+        }
+        List<QueryParameter> qps = new ArrayList<QueryParameter>();
+        for (String el : parts) {
+            el = el.trim();
+            try {
+                System.out.println(el);
+                if (el.contains("=")) {
                     String[] p = el.split("=");
                     Object val = GroovyCompiler.eval(p[1]);
                     System.out.println(p[0] + "=" + val.getClass() + "=" + val);
                     QueryParameter qp = new QueryParameter(p[1], p[0], val, null);
                     qps.add(qp);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } else {
+                    Object val = GroovyCompiler.eval(el);
+                    System.out.println(val.getClass() + "=" + val);
+                    QueryParameter qp = new QueryParameter(el, null, val, null);
+                    qps.add(qp);
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            return qps;
         }
-        return new ArrayList<QueryParameter>();
+        return qps;
     }
 
     protected void import_parameters() {
         String m = importParametersFromTextF.getText();
         importParametersFromTextF.setText("");
 
-        for (QueryParameter qp : convertStringMap(m)) {
+        for (QueryParameter qp : convertParameterString(m)) {
             boolean exists = false;
             if (qp.getName() == null) {
                 // just add at bottom in order
