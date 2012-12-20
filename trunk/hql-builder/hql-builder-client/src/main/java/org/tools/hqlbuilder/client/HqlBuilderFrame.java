@@ -2217,9 +2217,38 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private static List<QueryParameter> convertStringMap(String map) {
         map = map.trim();
         if (map.startsWith("[") && map.startsWith("]")) {
-            // TODO
-        }
-        if (map.startsWith("{") && map.startsWith("}")) {
+            map = map.substring(1, map.length() - 1);
+            List<String> parts = new ArrayList<String>();
+            String splitted = null;
+            for (String part : map.split(",")) {
+                part = part.trim();
+                if (part.contains("[")) {
+                    splitted = part;
+                } else if (splitted == null) {
+                    parts.add(part);
+                } else {
+                    splitted = splitted + "," + part;
+                    if (part.contains("]")) {
+                        parts.add(splitted);
+                        splitted = null;
+                    }
+                }
+            }
+            List<QueryParameter> qps = new ArrayList<QueryParameter>();
+            for (String el : parts) {
+                try {
+                    el = el.trim();
+                    System.out.println(el);
+                    Object val = GroovyCompiler.eval(el);
+                    System.out.println(val.getClass() + "=" + val);
+                    QueryParameter qp = new QueryParameter(el, null, val, null);
+                    qps.add(qp);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return qps;
+        } else if (map.startsWith("{") && map.startsWith("}")) {
             map = map.substring(1, map.length() - 1);
             List<String> parts = new ArrayList<String>();
             String splitted = null;
