@@ -2216,12 +2216,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private static List<QueryParameter> convertParameterString(String map) {
         map = map.trim();
-        if (map.startsWith("[") && map.startsWith("]")) {
-            map = map.substring(1, map.length() - 1);
-        } else if (map.startsWith("{") && map.startsWith("}")) {
+        if (map.startsWith("[") && map.endsWith("]")) {
             map = map.substring(1, map.length() - 1);
         } else {
-            return new ArrayList<QueryParameter>();
+            if (map.startsWith("{") && map.endsWith("}")) {
+                map = map.substring(1, map.length() - 1);
+            } else {
+                return new ArrayList<QueryParameter>();
+            }
         }
         map = map.substring(1, map.length() - 1);
         List<String> parts = new ArrayList<String>();
