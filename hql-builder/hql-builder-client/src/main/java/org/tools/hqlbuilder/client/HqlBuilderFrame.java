@@ -2225,7 +2225,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 return new ArrayList<QueryParameter>();
             }
         }
-        map = map.substring(1, map.length() - 1);
         List<String> parts = new ArrayList<String>();
         String splitted = null;
         for (String part : map.split(",")) {
