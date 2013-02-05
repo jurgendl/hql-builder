@@ -97,6 +97,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.miginfocom.swing.MigLayout;
@@ -993,10 +994,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return hqlService.execute(hqlGetText, maxresults, EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[0]));
     }
 
-    private void afterQuery(Exception ex) {
+    private void afterQuery(Throwable ex) {
         hql_sql_tabs.setForegroundAt(1, Color.RED);
         logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
         String sql_tmp = sql.getText();
+        if (ex instanceof java.util.concurrent.ExecutionException) {
+            ex = ex.getCause();
+        }
         String exceptionString = ex.toString();
         if (ex instanceof ServiceException) {
             ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
@@ -1421,7 +1425,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      * prevents auto-execution of query when only whitespaces change or comments
      */
     private String getHqlTextEq() {
-        String text = hql.getText();
+        Caret caret = hql.getCaret();
+        String text;
+        int p1 = caret.getDot();
+        int p2 = caret.getMark();
+        if (p1 != p2) {
+            if (p1 > p2) {
+                int tmp = p2;
+                p2 = p1;
+                p1 = tmp;
+            }
+            text = hql.getText().substring(p1, p2);
+        } else {
+            text = hql.getText();
+        }
         text = text.replaceAll("\r", getNewline());
         text = text.replaceAll("\t", " ");
 
@@ -1456,7 +1473,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private String getHqlText() {
-        String hqlstring = this.hql.getText();
+        Caret caret = hql.getCaret();
+        String hqlstring;
+        int p1 = caret.getDot();
+        int p2 = caret.getMark();
+        if (p1 != p2) {
+            if (p1 > p2) {
+                int tmp = p2;
+                p2 = p1;
+                p1 = tmp;
+            }
+            hqlstring = hql.getText().substring(p1, p2);
+        } else {
+            hqlstring = hql.getText();
+        }
         String lines[] = hqlstring.split("\\r?\\n");
         StringBuilder sb = new StringBuilder();
         for (String line : lines) {
@@ -2083,6 +2113,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void format() {
         try {
             hql.setText(format(hql.getText()));
+            hql.setCaret(0);
         } catch (Exception ex) {
             logger.error("format()", ex); //$NON-NLS-1$
         }

@@ -46,4 +46,11 @@ public class SyntaxException extends ServiceException {
     public SyntaxExceptionType getType() {
         return this.type;
     }
+
+    @Override
+    public String toString() {
+        String s = getClass().getName();
+        String message = getLocalizedMessage();
+        return (message != null) ? (s + ":\n" + message) : s;
+    }
 }
