@@ -2655,6 +2655,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         hqltext = remarkToggle(hqltext, selectionStart, selectionEnd);
         hql.setText(hqltext);
+        hql.setCaret(Math.min(selectionStart, selectionEnd));
     }
 
     protected void object_tree() {
