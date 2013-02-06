@@ -45,7 +45,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
@@ -103,9 +102,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.LoggerFactory;
@@ -201,7 +198,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final ETable<List<Object>> resultsEDT;
 
     // results
-
+    //
     private final HqlBuilderAction hibernatePropertiesAction;
 
     private final HqlBuilderAction objectTreeAction;
@@ -213,7 +210,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction executeScriptOnColumnAction;
 
     // parameters
-
+    //
     private final HqlBuilderAction downAction;
 
     private final HqlBuilderAction removeAction;
@@ -229,7 +226,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction importParametersAction;
 
     // hql
-
+    //
     private final HqlBuilderAction wizardAction;
 
     private final HqlBuilderAction clearAction;
@@ -255,13 +252,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction remarkToggleAction;
 
     // existing
-
+    //
     private final HqlBuilderAction helpAction = new HqlBuilderAction(null, this, HELP, true, HELP, "help16.png", HELP, HELP, true, 'h', "F1");
 
     private final HqlBuilderAction exitAction = new HqlBuilderAction(null, this, EXIT, true, EXIT, "sc_quit.png", EXIT, EXIT, true, 'x', "alt X");
 
     // not accelerated
-
+    //
     private final HqlBuilderAction helpHibernateAction = new HqlBuilderAction(null, this, HIBERNATE_DOCUMENTATION, true, HIBERNATE_DOCUMENTATION,
             "help16.png", HIBERNATE_DOCUMENTATION, HIBERNATE_DOCUMENTATION, true, null, null);
 
@@ -316,6 +313,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, "layout_content.png",
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
 
+    //
+
     private final ELabel maxResults;
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
@@ -354,9 +353,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private ProgressGlassPane glass = null;
 
-    private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(getHiliColor());
+    private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(getHighlightColor());
 
-    private ETextAreaBorderHighlightPainter bracesHighlight = new ETextAreaBorderHighlightPainter(getHiliColor());
+    private ETextAreaBorderHighlightPainter bracesHighlight = new ETextAreaBorderHighlightPainter(getHighlightColor());
 
     private ETextAreaBorderHighlightPainter syntaxErrorsHighlight = new ETextAreaBorderHighlightPainter(Color.RED);
 
@@ -697,8 +696,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     /**
      * start app
-     * 
-     * @param args
      */
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClient service) {
         try {
@@ -724,6 +721,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 // tooltip cfg: sneller en langer tonen
                 UIUtils.setLongerTooltips();
             }
+
+            Eval.me("new Integer(0)"); // warm up Groovy
 
             // maak frame en start start
             final HqlBuilderFrame hqlBuilder = new HqlBuilderFrame();
@@ -914,8 +913,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
-    private synchronized void query(boolean equalsCheck) {
-        executeQuery(equalsCheck, null);
+    private synchronized void query() {
+        executeQuery(null);
     }
 
     private void progressbarStop() {
@@ -930,20 +929,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private void query(RowProcessor rowProcessor) {
         progressbarStart(HqlResourceBundle.getMessage("quering"));
-        executeQuery(false, rowProcessor);
+        executeQuery(rowProcessor);
         progressbarStop();
         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("done"));
     }
 
-    private synchronized void executeQuery(boolean equalsCheck, final RowProcessor rowProcessor) {
+    private synchronized void executeQuery(final RowProcessor rowProcessor) {
         final long start = System.currentTimeMillis();
 
         if (!startQueryAction.isEnabled()) {
-            return;
-        }
-
-        if (equalsCheck && !checkHqlChanged()) {
-            log("query did not change");
             return;
         }
 
@@ -1421,57 +1415,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return false;
     }
 
-    /**
-     * prevents auto-execution of query when only whitespaces change or comments
-     */
-    private String getHqlTextEq() {
-        Caret caret = hql.getCaret();
-        String text;
-        int p1 = caret.getDot();
-        int p2 = caret.getMark();
-        if (p1 != p2) {
-            if (p1 > p2) {
-                int tmp = p2;
-                p2 = p1;
-                p1 = tmp;
-            }
-            text = hql.getText().substring(p1, p2);
-        } else {
-            text = hql.getText();
-        }
-        text = text.replaceAll("\r", getNewline());
-        text = text.replaceAll("\t", " ");
-
-        StringBuilder sb = new StringBuilder();
-
-        for (String lijn : StringUtils.split(text, getNewline())) {
-            String trim = lijn.trim();
-
-            if (!trim.startsWith("--")) {
-                sb.append(trim).append(" ");
-            }
-        }
-
-        text = sb.toString();
-
-        while (text.indexOf("  ") != -1) {
-            text = text.replaceAll("  ", " ");
-        }
-
-        text = text.trim();
-
-        //
-        text = text.replaceAll(",", " ");
-
-        while (text.indexOf("  ") != -1) {
-            text = text.replaceAll("  ", " ");
-        }
-
-        text = text.trim();
-
-        return text;
-    }
-
     private String getHqlText() {
         Caret caret = hql.getCaret();
         String hqlstring;
@@ -1506,10 +1449,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     /**
      * start
-     * 
-     * @param properties
-     * 
-     * @throws IOException
      */
     public void start() throws IOException {
         reloadColor();
@@ -2413,7 +2352,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void start_query() {
         System.out.println("start query");
         try {
-            query(false);
+            query();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2479,30 +2418,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             Desktop.getDesktop().browse(URI.create("http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/queryhql.html"));
         } catch (Exception ex) {
             logger.error("hql_documentation()", ex); //$NON-NLS-1$
-        }
-    }
-
-    protected void offline_documentation() {
-        try {
-            File hibernate_doc_offline_dir = new File(File.createTempFile("prefix", "suffix").getParentFile(), "hibernate_doc_offline");
-            if (!hibernate_doc_offline_dir.exists()) {
-                hibernate_doc_offline_dir.mkdir();
-            }
-            File hibernate_doc_offline = new File(hibernate_doc_offline_dir, "hibernate_reference.pdf");
-            if (!hibernate_doc_offline.exists()) {
-                InputStream in = HqlBuilderFrame.class.getClassLoader().getResource("hibernate_reference.pdf").openStream();
-                OutputStream fout = new FileOutputStream(hibernate_doc_offline);
-                byte[] buffer = new byte[1024 * 8];
-                int read;
-                while ((read = in.read(buffer)) != -1) {
-                    fout.write(buffer, 0, read);
-                }
-                in.close();
-                fout.close();
-            }
-            Desktop.getDesktop().open(hibernate_doc_offline);
-        } catch (Exception ex) {
-            logger.error("offline_documentation()", ex); //$NON-NLS-1$
         }
     }
 
@@ -2740,17 +2655,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         hqltext = remarkToggle(hqltext, selectionStart, selectionEnd);
         hql.setText(hqltext);
-
-        // scheduleQuery(null, false);
-    }
-
-    private String hqlChanged = null;
-
-    private boolean checkHqlChanged() {
-        String newtext = getHqlTextEq();
-        boolean changed = !new EqualsBuilder().append(hqlChanged, newtext).isEquals();
-        hqlChanged = newtext;
-        return changed;
     }
 
     protected void object_tree() {
@@ -2853,7 +2757,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void highlight_color() {
-        Color color = getHiliColor();
+        Color color = getHighlightColor();
         color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL highlight color"), color);
         hiliColorAction.setValue(color);
 
@@ -2865,7 +2769,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         bracesHighlight.setColor(color);
     }
 
-    private Color getHiliColor() {
+    private Color getHighlightColor() {
         return hiliColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) hiliColorAction.getValue();
     }
 
