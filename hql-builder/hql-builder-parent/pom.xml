@@ -22,7 +22,7 @@
 		<version.joda>1.6</version.joda>
 		<version.miglayout>4.2</version.miglayout>
 		<version.itext>2.0.8</version.itext>
-		<version.swingeasy>2.5.6.0</version.swingeasy>
+		<version.swingeasy>2.5.6.1</version.swingeasy>
 		<version.l2fprod>7.3</version.l2fprod>
 		<version.poi>3.8</version.poi>
 		<version.xhtmlrenderer>R8pre2</version.xhtmlrenderer>
