@@ -949,6 +949,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         final String hqlGetText = getHqlText();
         if (hqlGetText.trim().length() < 10) {
+            postQuery();
             return;
         }
         final int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
@@ -966,13 +967,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 } catch (Exception ex) {
                     afterQuery(ex);
                 } finally {
-                    startQueryAction.setEnabled(true);
-                    progressbarStop();
+                    postQuery();
                 }
             }
         };
 
         sw.execute();
+    }
+
+    private void postQuery() {
+        startQueryAction.setEnabled(true);
+        progressbarStop();
     }
 
     private void preQuery() {
