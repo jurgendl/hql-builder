@@ -251,6 +251,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction remarkToggleAction;
 
+    private final HqlBuilderAction deleteInvertedSelectionAction;
+
     // existing
     //
     private final HqlBuilderAction helpAction = new HqlBuilderAction(null, this, HELP, true, HELP, "help16.png", HELP, HELP, true, 'h', "F1");
@@ -419,12 +421,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         clipboardImportAction = new HqlBuilderAction(hql, this, IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, "sc_arrowshapes.striped-left-arrow.png", IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, null, "alt F12");
-        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, null, HELP_INSERT, HELP_INSERT, true, null,
+        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, "attach.png", HELP_INSERT, HELP_INSERT, true, null,
                 "ctrl shift SPACE");
-        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, null, REMARK_TOGGLE, REMARK_TOGGLE, true, null,
-                "ctrl shift SLASH");
+        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, "text_indent.png", REMARK_TOGGLE, REMARK_TOGGLE,
+                true, null, "ctrl shift SLASH");
         startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
                 null, "ctrl ENTER");
+        deleteInvertedSelectionAction = new HqlBuilderAction(hql, this, DELETE_INVERTED_SELECTION, true, DELETE_INVERTED_SELECTION,
+                "table_row_delete.png", DELETE_INVERTED_SELECTION, DELETE_INVERTED_SELECTION, true, null, "ctrl DELETE");
     }
 
     protected void down() {
@@ -944,6 +948,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         preQuery();
 
         final String hqlGetText = getHqlText();
+        if (hqlGetText.trim().length() < 10) {
+            return;
+        }
         final int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
 
         SwingWorker<ExecutionResult, Void> sw = new SwingWorker<ExecutionResult, Void>() {
@@ -1712,6 +1719,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             hqltools.add(new EButton(etbc, namedQueryAction));
             hqltools.add(new EButton(etbc, clipboardExportAction));
             hqltools.add(new EButton(etbc, clipboardImportAction));
+            hqltools.add(new EButton(etbc, helpInsertAction));
+            hqltools.add(new EButton(etbc, remarkToggleAction));
+            hqltools.add(new EButton(etbc, deleteInvertedSelectionAction));
             hql_sql_tabs_panel.add(hqltools, BorderLayout.WEST);
         }
         {
@@ -1932,9 +1942,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         hqlpopupmenu.add(new JMenuItem(namedQueryAction));
         hqlpopupmenu.add(new JMenuItem(clipboardExportAction));
         hqlpopupmenu.add(new JMenuItem(clipboardImportAction));
-        hqlpopupmenu.addSeparator();
         hqlpopupmenu.add(new JMenuItem(helpInsertAction));
         hqlpopupmenu.add(new JMenuItem(remarkToggleAction));
+        hqlpopupmenu.add(new JMenuItem(deleteInvertedSelectionAction));
     }
 
     private void createResultsPopupMenu() {
@@ -2944,5 +2954,22 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
         parameterBuilder.setText("");
         save();
+    }
+
+    protected void delete_inverted_selection() {
+        Caret caret = hql.getCaret();
+        int p1 = caret.getDot();
+        int p2 = caret.getMark();
+        System.out.println(p1 + "/" + p2);
+        if (p1 == p2) {
+            return;
+        }
+        if (p1 > p2) {
+            int tmp = p1;
+            p1 = p2;
+            p2 = tmp;
+        }
+        hql.setText(hql.getText().substring(p1, p2));
+        hql.setCaret(0);
     }
 }
