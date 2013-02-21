@@ -1143,9 +1143,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
         hql.removeHighlights(syntaxErrorsHighlight);
-
         String hqltext = this.hql.getText();
         switch (syntaxExceptionType) {
+            case unable_to_resolve_path: {
+                try {
+                    int indexOf = hqltext.indexOf(wrong);
+                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
+                } catch (Exception ex) {
+                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex); //$NON-NLS-1$
+                }
+            }
+                break;
             case could_not_resolve_property: {
                 try {
                     wrong = "." + wrong.split("#")[1];
