@@ -4,7 +4,7 @@ public class SyntaxException extends ServiceException {
     private static final long serialVersionUID = -3751758369552573295L;
 
     public static enum SyntaxExceptionType {
-        unexpected_token, invalid_path, could_not_resolve_property, not_mapped;
+        unexpected_token, invalid_path, could_not_resolve_property, not_mapped, unable_to_resolve_path;
     }
 
     private final int line;

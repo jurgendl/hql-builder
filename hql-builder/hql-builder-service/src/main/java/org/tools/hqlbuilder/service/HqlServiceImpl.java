@@ -224,6 +224,10 @@ public class HqlServiceImpl implements HqlService {
             if (m.find()) {
                 throw new SyntaxException(SyntaxException.SyntaxExceptionType.could_not_resolve_property, msg, m.group(2) + "#" + m.group(1));
             }
+            m = Pattern.compile("Unable to resolve path \\[([^]]+)\\]").matcher(msg);
+            if (m.find()) {
+                throw new SyntaxException(SyntaxException.SyntaxExceptionType.unable_to_resolve_path, msg, m.group(1));
+            }
             throw new ServiceException(ex.getMessage(), result);
         } catch (SQLGrammarException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
