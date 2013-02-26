@@ -948,10 +948,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         preQuery();
 
         final String hqlGetText = getHqlText();
-        if (hqlGetText.trim().length() < 10) {
-            postQuery();
-            return;
-        }
+
         final int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
 
         SwingWorker<ExecutionResult, Void> sw = new SwingWorker<ExecutionResult, Void>() {
