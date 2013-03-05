@@ -34,8 +34,6 @@ public interface HqlBuilderFrameConstants {
 
     public static final String OBJECT_TREE = "object tree";
 
-    public static final String NEWLINE = "\n";
-
     public static final String HELP_INSERT = "help-insert";
 
     public static final String REMARK_TOGGLE = "remark-toggle";

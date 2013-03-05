@@ -58,8 +58,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -91,7 +89,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
@@ -622,8 +619,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         insertPropertyHelper.grabFocus();
     }
 
-    protected static String getNewline() {
-        return NEWLINE;
+    protected String getNewline() {
+        return hqlService.getNewline();
     }
 
     private void helpInsert() {
@@ -1030,7 +1027,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         if (formatSqlAction.isSelected()) {
             try {
-                sql.setText(removeBlanks(makeMultiline(cleanupSql(rv.getSql(), rv.getQueryReturnAliases(), rv.getScalarColumnNames()))));
+                sql.setText(hqlService.removeBlanks(hqlService.makeMultiline(cleanupSql(rv.getSql(), rv.getQueryReturnAliases(),
+                        rv.getScalarColumnNames()))));
                 log(sql.getText());
             } catch (Exception ex) {
                 logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
@@ -1207,212 +1205,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
-    private String removeBlanks(String string) {
-        string = string.trim();
-        while (string.indexOf("  ") != -1) {
-            string = string.replaceAll("  ", " ");
-        }
-        while (string.indexOf(getNewline() + getNewline()) != -1) {
-            string = string.replaceAll("\\Q" + getNewline() + getNewline() + "\\E", getNewline());
-        }
-        return string.trim();
-    }
-
     private String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames) {
-        if (sqlString == null) {
-            return "";
-        }
-
-        // kolom alias (kan enkel maar wanneer de query al is omgezet, dus de tweede maal dat deze methode wordt opgeroepen-
-        if (queryReturnAliases != null) {
-            for (int i = 0; i < queryReturnAliases.length; i++) {
-                String queryReturnAlias = queryReturnAliases[i];
-                try {
-                    String scalarColumnName = scalarColumnNames[i][0];
-                    try {
-                        // nummers worden vervangen door 'kolom${nummer}' want nummer alleen wordt niet aanvaard
-                        Long.parseLong(queryReturnAlias);
-                        String newAlias = queryReturnAlias.replace('.', ' ').replace('(', ' ').replace(')', ' ').trim().replace(' ', '_');
-                        log(": " + scalarColumnName + " >> " + queryReturnAlias + " >> " + newAlias);
-                        sqlString = sqlString.replace(scalarColumnName, newAlias);
-                    } catch (NumberFormatException ex) {
-                        log(": " + scalarColumnName + " >> " + queryReturnAlias);
-                        sqlString = sqlString.replace(scalarColumnName, queryReturnAlias);
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    //
-                }
-            }
-        }
-
-        // maakt replacers aan
-        HashMap<String, String> replacers = new HashMap<String, String>();
-
-        // vervang tabel_?_?_ door tabelnamen in "from ..." en "... join ..."
-        // vervang AcademischDomeinObject door ADOx
-        {
-            String prefix = "((from)|(join)|(,))";
-            String joinfromgroup = "( ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+))";
-            Matcher matcher = Pattern.compile(prefix + joinfromgroup, Pattern.CASE_INSENSITIVE).matcher(sqlString);
-            int startpos = 0;
-
-            while (matcher.find(startpos)) {
-                String replacing = matcher.group(7);
-
-                if ("when".equals(replacing)) {
-                    startpos++;
-                    continue;
-                }
-
-                String replaceBy = matcher.group(6);
-
-                if (replaceBy.contains("AcademischDomeinObject")) {
-                    log("-> " + replaceBy + " >> " + replaceBy.replace("AcademischDomeinObject", "ADOx"));
-                    replaceBy = replaceBy.replace("AcademischDomeinObject", "ADOx");
-                }
-
-                int existing = CollectionUtils.cardinality(replaceBy, replacers.values());
-
-                if (existing > 0) {
-                    log("-> " + replaceBy + " >> " + replaceBy + (existing + 1));
-                    replaceBy = replaceBy + (existing + 1);
-                }
-
-                log("- " + replacing + " >> " + replaceBy);
-                replacers.put(replacing, replaceBy);
-
-                startpos = matcher.end();
-            }
-        }
-
-        // vervang (1) door (2) om geen dubbels te hebben
-        // (1) tabel_?_?_=tabelnaamY EN tabel_?_=tabelnaamX
-        // (2) tabel_?_?_=tabelnaamX_tabelnaamY EN tabel_?_=tabelnaamX
-        List<String> ADOx = new ArrayList<String>();
-
-        for (Map.Entry<String, String> replacer : replacers.entrySet()) {
-            for (Map.Entry<String, String> replacerOther : replacers.entrySet()) {
-                if (!replacer.getKey().equals(replacerOther.getKey()) && replacer.getKey().startsWith(replacerOther.getKey())) {
-                    String newvalue = replacerOther.getValue() + "_" + replacer.getValue();
-
-                    // oracle heeft 30 len limiet
-                    if (newvalue.length() > 30) {
-                        newvalue = newvalue.substring(0, 30);
-                    }
-
-                    log("* " + replacer + " EN " + replacerOther + " >> " + replacer.getValue() + "=" + newvalue);
-                    replacer.setValue(newvalue);
-                    ADOx.add(newvalue);
-                }
-            }
-        }
-
-        // sorteer replacers op langste eerst
-        List<String> keys = new ArrayList<String>(replacers.keySet());
-        Collections.sort(keys, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.length() < o2.length()) {
-                    return 1;
-                } else if (o1.length() > o2.length()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-
-        // vervang nu replacers
-        for (String key : keys) {
-            String value = replacers.get(key);
-            log("+ " + key + " > " + value);
-            sqlString = sqlString.replaceAll(key, value);
-        }
-
-        // vervang kolomnamen
-        if (replacePropertiesAction.isSelected()) {
-            Matcher matcher = Pattern.compile("(( )([^ ]+)( as )([a-zA-Z0-9_]+))", Pattern.CASE_INSENSITIVE).matcher(sqlString);
-
-            while (matcher.find()) {
-                String newvalue = matcher.group(3).replace('.', ' ').replace('(', ' ').replace(')', ' ').trim().replace(' ', '_');
-
-                // oracle heeft 30 len limiet
-                if (newvalue.length() > 30) {
-                    newvalue = newvalue.substring(0, 30);
-                }
-
-                newvalue = " " + matcher.group(3) + " as " + newvalue;
-                String group = matcher.group();
-
-                try {
-                    log("/ " + group + " > " + newvalue);
-                    sqlString = sqlString.replaceAll("\\Q" + group + "\\E", newvalue);
-                } catch (Exception ex) {
-                    logger.error("cleanupSql(String, String[], String[][])", ex); //$NON-NLS-1$
-                }
-            }
-        }
-
-        log(sqlString);
-
-        if (formatLinesAction.isSelected()) {
-            sqlString = makeMultiline(sqlString);
-        }
-
-        sqlString = removeBlanks(sqlString);
-
-        @SuppressWarnings("unused")
-        String[] sqlStringParts = sqlString.split(getNewline());
-
-        String[] lines = sqlString.split(getNewline());
-
-        if (removeADOJoinsAction.isSelected()) {
-            for (int i = 0; i < lines.length; i++) {
-                String line = lines[i];
-
-                if (line.contains("ADOx")) {
-                    boolean keep = keep(ADOx, lines, i, line);
-
-                    // zal verwijderd worden
-                    if (!keep) {
-                        lines[i] = null;
-                    }
-                }
-            }
-        }
-
-        StringBuilder anew = new StringBuilder();
-
-        for (int i = 0; i < lines.length; i++) {
-            if (lines[i] != null) {
-                anew.append(lines[i].replaceAll("ADOx", "ADO")).append(getNewline());
-            }
-        }
-
-        sqlString = anew.toString();
-
-        log(sqlString);
-
-        return sqlString;
-    }
-
-    private boolean keep(List<String> ADOx, String[] lines, int i, String line) {
-        if (!line.contains("ADOx")) {
-            return true;
-        }
-        for (String ADOxEl : ADOx) {
-            if (line.contains(ADOxEl)) {
-                for (int j = 0; j < lines.length; j++) {
-                    if (i != j) {
-                        if (lines[j] != null && lines[j].contains(ADOxEl)) {
-                            // deze mag niet vervangen worden
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+        return hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, replacePropertiesAction.isSelected(),
+                formatLinesAction.isSelected(), removeADOJoinsAction.isSelected());
     }
 
     private String getHqlText() {
@@ -2096,54 +1891,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private String format(String text) {
-        return makeMultiline(removeBlanks(text.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')));
-    }
-
-    private String makeMultiline(String string) {
-        string = lineformat1replace(string, "right outer join");
-        string = lineformat1replace(string, "left outer join");
-        string = lineformat1replace(string, "inner join");
-        string = lineformat1replace(string, "from");
-        string = lineformat1replace(string, "where");
-        string = lineformat1replace(string, "having");
-        string = lineformat1replace(string, "and");
-        string = lineformat1replace(string, "or");
-        string = lineformat1replace(string, "group by");
-        string = lineformat1replace(string, "order by");
-
-        if (string.startsWith("select ")) {
-            string = "select " + getNewline() + string.substring("select ".length());
-        }
-
-        String split = "from ";
-
-        String[] parts = string.split(split);
-
-        StringBuilder sb = new StringBuilder(parts[0].replaceAll(", ", "," + getNewline())).append(split);
-
-        for (int i = 1; i < parts.length; i++) {
-            sb.append(parts[i]);
-
-            if (i < parts.length - 1) {
-                sb.append(split);
-            }
-        }
-
-        String result = sb.toString();
-
-        if (result.trim().equals("from")) {
-            return string;
-        }
-
-        return sb.toString();
-    }
-
-    private String lineformat1replace(String string, String splitter) {
-        Matcher matcher = Pattern.compile(" " + splitter + " ", Pattern.CASE_INSENSITIVE).matcher(string);
-        String CTE = "AAAAAAAAAAA"; // wordt zeker niet gebruikt, wordt later vervangen
-        String replaceAll = matcher.replaceAll(" " + getNewline() + CTE + " ").replaceAll(CTE, splitter);
-
-        return replaceAll;
+        return hqlService.makeMultiline(hqlService.removeBlanks(text.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')));
     }
 
     private void parameterSelected() {
