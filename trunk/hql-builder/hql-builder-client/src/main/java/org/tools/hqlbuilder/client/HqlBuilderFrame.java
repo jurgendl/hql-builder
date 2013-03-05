@@ -373,8 +373,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private HqlServiceClient hqlService;
 
-    private final Map<String, String> namedQueries = new HashMap<String, String>();
-
     private HqlBuilderFrame() {
         // needs to be first to init font
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
@@ -2905,6 +2903,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void load_named_query() {
+        final Map<String, String> namedQueries = hqlService.getNamedQueries();
         final EList<String> list = new EList<String>(new EListConfig());
         list.addRecords(EList.convert(new TreeSet<String>(namedQueries.keySet())));
         JPanel container = new JPanel(new BorderLayout());
