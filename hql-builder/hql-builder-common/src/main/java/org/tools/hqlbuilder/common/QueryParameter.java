@@ -177,4 +177,8 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
     public int compareTo(QueryParameter o) {
         return 0;
     }
+
+    public void clear() {
+        setValue(null);
+    }
 }
