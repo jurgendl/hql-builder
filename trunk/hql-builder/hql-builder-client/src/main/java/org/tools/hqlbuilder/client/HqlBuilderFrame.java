@@ -2195,7 +2195,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void remove() {
-        parametersEDT.removeSelectedRecords();
+        if (parametersEDT.getSelectedRecords().size() == 0) {
+            parametersEDT.removeAllRecords();
+        } else {
+            parametersEDT.removeSelectedRecords();
+        }
         parameterValue.setText("");
         parameterBuilder.setText("");
         parameterName.setText("");
