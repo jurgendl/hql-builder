@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.client;
 
-import static org.swingeasy.system.SystemSettings.getTmpdir;
 import groovy.util.Eval;
 
 import java.awt.AWTException;
@@ -34,8 +33,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,11 +42,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Method;
 import java.math.RoundingMode;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +60,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -789,111 +781,110 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
-    @SuppressWarnings("unused")
-    private static void loadModelAtRuntime() {
-        JFrame dummy = new JFrame();
-        dummy.setIconImage(new ImageIcon(HqlBuilderFrame.class.getClassLoader().getResource("bricks-icon.png")).getImage());
-        JFileChooser fc = new JFileChooser(new File("."));
-        fc.setDialogTitle(HqlResourceBundle.getMessage("open model & hibernate configuration"));
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        fc.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                return f.isDirectory() || f.getName().endsWith(".zip") || f.getName().endsWith(".jar");
-            }
-
-            @Override
-            public String getDescription() {
-                return HqlResourceBundle.getMessage("single model & hibernate config jar / maven assembly zip");
-            }
-        });
-        int returnVal = fc.showOpenDialog(dummy);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            try {
-                File file = fc.getSelectedFile();
-
-                URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-                Class<?> sysclass = URLClassLoader.class;
-                Method method = sysclass.getDeclaredMethod("addURL", URL.class);
-                method.setAccessible(true);
-
-                if (file.getName().endsWith("zip")) {
-                    File target = new File(getTmpdir(), file.getName());
-                    unzip(target, file);
-                    String[] list = target.list(new FilenameFilter() {
-                        @Override
-                        public boolean accept(File dir, String name) {
-                            return name.endsWith("jar");
-                        }
-                    });
-                    if (list != null) {
-                        for (String element : list) {
-                            method.invoke(sysloader, new Object[] { new File(target, element).toURI().toURL() });
-                        }
-                    }
-                } else {
-                    method.invoke(sysloader, new Object[] { file.toURI().toURL() });
-                }
-            } catch (Exception ex) {
-                logger.error("loadModelAtRuntime()", ex); //$NON-NLS-1$
-                System.exit(0);
-                return;
-            }
-        } else {
-            System.exit(-1);
-            return;
-        }
-    }
-
-    private static void unzip(File dir, File zipFile) {
-        FileInputStream fis;
-        ZipInputStream zis = null;
-        try {
-            fis = new FileInputStream(zipFile);
-            zis = new ZipInputStream(new BufferedInputStream(fis));
-            BufferedOutputStream dest = null;
-
-            ZipEntry entry;
-
-            while ((entry = zis.getNextEntry()) != null) {
-                int count;
-                byte[] data = new byte[1024 * 8];
-                String extractFileLocation = dir + "/" + entry.getName();
-
-                // maak alle tussenliggende directories aan
-                if (extractFileLocation.lastIndexOf('/') != -1) {
-                    File file = new File(extractFileLocation.substring(0, extractFileLocation.lastIndexOf('/')));
-
-                    if (!file.exists()) {
-                        file.mkdirs();
-                    }
-                }
-
-                // write the files to the disk
-                FileOutputStream fos = new FileOutputStream(dir + "/" + entry.getName());
-                dest = new BufferedOutputStream(fos, 1024 * 8);
-
-                try {
-                    while ((count = zis.read(data, 0, 1024 * 8)) != -1) {
-                        dest.write(data, 0, count);
-                    }
-                } finally {
-                    dest.close();
-                }
-            }
-
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        } finally {
-            if (zis != null) {
-                try {
-                    zis.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
+    // private static void loadModelAtRuntime() {
+    // JFrame dummy = new JFrame();
+    // dummy.setIconImage(new ImageIcon(HqlBuilderFrame.class.getClassLoader().getResource("bricks-icon.png")).getImage());
+    // JFileChooser fc = new JFileChooser(new File("."));
+    // fc.setDialogTitle(HqlResourceBundle.getMessage("open model & hibernate configuration"));
+    // fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    // fc.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+    // @Override
+    // public boolean accept(File f) {
+    // return f.isDirectory() || f.getName().endsWith(".zip") || f.getName().endsWith(".jar");
+    // }
+    //
+    // @Override
+    // public String getDescription() {
+    // return HqlResourceBundle.getMessage("single model & hibernate config jar / maven assembly zip");
+    // }
+    // });
+    // int returnVal = fc.showOpenDialog(dummy);
+    // if (returnVal == JFileChooser.APPROVE_OPTION) {
+    // try {
+    // File file = fc.getSelectedFile();
+    //
+    // URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+    // Class<?> sysclass = URLClassLoader.class;
+    // Method method = sysclass.getDeclaredMethod("addURL", URL.class);
+    // method.setAccessible(true);
+    //
+    // if (file.getName().endsWith("zip")) {
+    // File target = new File(getTmpdir(), file.getName());
+    // unzip(target, file);
+    // String[] list = target.list(new FilenameFilter() {
+    // @Override
+    // public boolean accept(File dir, String name) {
+    // return name.endsWith("jar");
+    // }
+    // });
+    // if (list != null) {
+    // for (String element : list) {
+    // method.invoke(sysloader, new Object[] { new File(target, element).toURI().toURL() });
+    // }
+    // }
+    // } else {
+    // method.invoke(sysloader, new Object[] { file.toURI().toURL() });
+    // }
+    // } catch (Exception ex) {
+    //                logger.error("loadModelAtRuntime()", ex); //$NON-NLS-1$
+    // System.exit(0);
+    // return;
+    // }
+    // } else {
+    // System.exit(-1);
+    // return;
+    // }
+    // }
+    //
+    // private static void unzip(File dir, File zipFile) {
+    // FileInputStream fis;
+    // ZipInputStream zis = null;
+    // try {
+    // fis = new FileInputStream(zipFile);
+    // zis = new ZipInputStream(new BufferedInputStream(fis));
+    // BufferedOutputStream dest = null;
+    //
+    // ZipEntry entry;
+    //
+    // while ((entry = zis.getNextEntry()) != null) {
+    // int count;
+    // byte[] data = new byte[1024 * 8];
+    // String extractFileLocation = dir + "/" + entry.getName();
+    //
+    // // maak alle tussenliggende directories aan
+    // if (extractFileLocation.lastIndexOf('/') != -1) {
+    // File file = new File(extractFileLocation.substring(0, extractFileLocation.lastIndexOf('/')));
+    //
+    // if (!file.exists()) {
+    // file.mkdirs();
+    // }
+    // }
+    //
+    // // write the files to the disk
+    // FileOutputStream fos = new FileOutputStream(dir + "/" + entry.getName());
+    // dest = new BufferedOutputStream(fos, 1024 * 8);
+    //
+    // try {
+    // while ((count = zis.read(data, 0, 1024 * 8)) != -1) {
+    // dest.write(data, 0, count);
+    // }
+    // } finally {
+    // dest.close();
+    // }
+    // }
+    //
+    // } catch (Exception ex) {
+    // throw new RuntimeException(ex);
+    // } finally {
+    // if (zis != null) {
+    // try {
+    // zis.close();
+    // } catch (IOException e) {
+    // throw new RuntimeException(e);
+    // }
+    // }
+    // }
+    // }
 
     private void switchVisibility() {
         if (!SystemTray.isSupported()) {
