@@ -325,7 +325,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private Map<String, String> aliases = new HashMap<String, String>();
 
     /** selected query parameter */
-    private QueryParameter valueHolder = new QueryParameter();
+    private QueryParameter selectedQueryParameter = new QueryParameter();
 
     /** scripts being executed on column */
     private Map<Integer, String> scripts = new HashMap<Integer, String>();
@@ -454,7 +454,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         parameterValue.setText("");
         hql.setText("");
         sql.setText("");
-        valueHolder.clear();
+        selectedQueryParameter.clear();
         scripts.clear();
         clearResults();
         propertypanel.add(ClientUtils.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
@@ -507,14 +507,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private void compile(final String text) {
         log("compiling");
-        valueHolder.setValue(null);
+        selectedQueryParameter.setValue(null);
         try {
-            valueHolder.setValue(GroovyCompiler.eval(text));
+            selectedQueryParameter.setValue(GroovyCompiler.eval(text));
         } catch (Exception ex2) {
             log(ex2);
         }
-        log("compiled: " + valueHolder);
-        parameterValue.setText(valueHolder.toString());
+        log("compiled: " + selectedQueryParameter);
+        parameterValue.setText(selectedQueryParameter.toString());
     }
 
     private JPopupMenu getInsertHelperProperties() {
@@ -2159,17 +2159,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
 
         if (selected == null) {
-            valueHolder.clear();
+            selectedQueryParameter.clear();
             parameterValue.setText("");
             parameterBuilder.setText("");
             parameterName.setText("");
             return;
         }
 
-        valueHolder = parametersEDT.getSelectedRecord().get();
-        parameterValue.setText(valueHolder.toString());
-        parameterName.setText((valueHolder.getName() == null) ? "" : valueHolder.getName());
-        parameterBuilder.setText(valueHolder.getText());
+        selectedQueryParameter = parametersEDT.getSelectedRecord().get();
+        parameterValue.setText(selectedQueryParameter.toString());
+        parameterName.setText((selectedQueryParameter.getName() == null) ? "" : selectedQueryParameter.getName());
+        parameterBuilder.setText(selectedQueryParameter.getText());
     }
 
     protected void remove() {
@@ -2178,7 +2178,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         } else {
             parametersEDT.removeSelectedRecords();
         }
-        valueHolder.clear();
+        selectedQueryParameter.clear();
         parameterValue.setText("");
         parameterBuilder.setText("");
         parameterName.setText("");
@@ -2272,7 +2272,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void save() {
         String text = parameterBuilder.getText();
         String name = (parameterName.getText().length() > 0) ? parameterName.getText() : null;
-        Object value = valueHolder.getValue();
+        Object value = selectedQueryParameter.getValue();
 
         EListRecord<QueryParameter> selectedRecord = parametersEDT.getSelectedRecord();
         QueryParameter selected;
