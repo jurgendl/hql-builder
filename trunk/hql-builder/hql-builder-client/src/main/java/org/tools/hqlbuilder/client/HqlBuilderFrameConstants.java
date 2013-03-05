@@ -106,14 +106,6 @@ public interface HqlBuilderFrameConstants {
 
     public static final String START_QUERY = "start query";
 
-    public static final String FROM_ALIASES = "from_aliases";
-
-    public static final String SELECTED = "selected";
-
-    public static final String VALUE = "value";
-
-    public static final String SCRIPT = "script";
-
     public static final String COL = "col";
 
     public static final String ROW = "row";

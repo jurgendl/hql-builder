@@ -32,8 +32,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -323,7 +321,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final JComponent values = ClientUtils.getPropertyFrame(new Object(), false);
 
-    private final ValueHolders valueHolders = new ValueHolders();
+    /** aliases query */
+    private Map<String, String> aliases = new HashMap<String, String>();
+
+    /** selected query parameter */
+    private QueryParameter valueHolder = new QueryParameter();
+
+    /** scripts being executed on column */
+    private Map<Integer, String> scripts = new HashMap<Integer, String>();
+
+    /** record count query */
+    private int recordCount = 0;
 
     private final JPanel resultPanel = new JPanel(new BorderLayout());
 
@@ -440,6 +448,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void clear() {
+        aliases.clear();
         resultsInfo.setText("");
         parametersEDT.removeAllRecords();
         parameterBuilder.setText("");
@@ -447,7 +456,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         parameterValue.setText("");
         hql.setText("");
         sql.setText("");
-        valueHolders.clear();
+        valueHolder.clear();
+        scripts.clear();
         clearResults();
         propertypanel.add(ClientUtils.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
         propertypanel.revalidate();
@@ -455,6 +465,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void clearResults() {
+        recordCount = 0;
         resultsEDT.setHeaders(new ETableHeaders<List<Object>>());
         resultsEDT.removeAllRecords();
     }
@@ -498,21 +509,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private void compile(final String text) {
         log("compiling");
-
-        valueHolders.put(VALUE, null);
-        parameterValue.setText("");
-
+        valueHolder.setValue(null);
         try {
-            Object returns = GroovyCompiler.eval(text);
-            valueHolders.put(VALUE, returns);
+            valueHolder.setValue(GroovyCompiler.eval(text));
         } catch (Exception ex2) {
             log(ex2);
-            valueHolders.put(VALUE, null);
         }
-        log("compiled: " + valueHolders.get(VALUE));
-
-        parameterValue.setText(new QueryParameter(null, null, valueHolders.get(VALUE), null).toString());
-
+        log("compiled: " + valueHolder);
+        parameterValue.setText(valueHolder.toString());
     }
 
     private JPopupMenu getInsertHelperProperties() {
@@ -610,7 +614,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         int pos = Math.max(0, Math.max(before.lastIndexOf(getNewline()), before.lastIndexOf(' ')));
         before = before.substring(pos + 1, before.length() - 1);
         String[] parts = before.split("\\Q.\\E");
-        Object key = Map.class.cast(valueHolders.get(FROM_ALIASES)).get(parts[0]);
+        Object key = aliases.get(parts[0]);
 
         List<String> propertyNames = hqlService.getPropertyNames(key, parts);
 
@@ -1019,7 +1023,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
         }
         sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp);
-        valueHolders.put(VALUE, ex);
         clearResults();
         if (ex instanceof SyntaxException) {
             SyntaxException se = SyntaxException.class.cast(ex);
@@ -1046,7 +1049,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
 
-        valueHolders.put(FROM_ALIASES, rv.getFromAliases());
+        aliases = rv.getFromAliases();
 
         List<?> list = rv.getResults();
         ETableHeaders<List<Object>> headers = null;
@@ -1078,7 +1081,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     headers = new ETableHeaders<List<Object>>();
 
                     for (int i = 0; i < record.size(); i++) {
-                        boolean script = getScript(i) != null;
+                        boolean script = scripts.get(i) != null;
                         Class<?> type;
                         String name;
                         try {
@@ -1213,15 +1216,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
                 break;
         }
-    }
-
-    private String getScript(int i) {
-        @SuppressWarnings("unchecked")
-        Map<Integer, String> scripts = (Map<Integer, String>) valueHolders.get(SCRIPT);
-        if (scripts == null) {
-            return null;
-        }
-        return scripts.get(i);
     }
 
     private String removeBlanks(String string) {
@@ -1842,13 +1836,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void startPre() {
-        valueHolders.addPropertyChangeListener(FROM_ALIASES, new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                log(">>> " + evt.getNewValue());
-            }
-        });
-
         loadFavorites();
     }
 
@@ -1996,7 +1983,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
                 fout = new FileOutputStream(new File(absolutePath));
                 final BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fout));
-                valueHolders.put("#", 0);
+                recordCount = 0;
                 query(new RowProcessor() {
                     @Override
                     public void process(List<Object> lijn) {
@@ -2020,18 +2007,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                                 }
                             }
                             br.write(getNewline());
-                            Integer c = (Integer) valueHolders.get("#");
-                            c++;
-                            if (c != 0 && c % 100 == 0) {
-                                log(c + " records");
+                            recordCount++;
+                            if (recordCount != 0 && recordCount % 100 == 0) {
+                                log(recordCount + " records");
                             }
-                            valueHolders.put("#", c);
                         } catch (Exception ex) {
                             logger.error("$RowProcessor.process(List<Object>)", ex); //$NON-NLS-1$
                         }
                     }
                 });
-                log(valueHolders.get("#") + " records");
+                log(recordCount + " records");
                 br.flush();
             }
         } catch (Exception ex) {
@@ -2176,22 +2161,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
 
         if (selected == null) {
+            valueHolder.clear();
             parameterValue.setText("");
             parameterBuilder.setText("");
             parameterName.setText("");
-            valueHolders.put(SELECTED, null);
-            valueHolders.put(VALUE, null);
-
             return;
         }
 
-        QueryParameter param = parametersEDT.getSelectedRecord().get();
-
-        parameterValue.setText(param.toString());
-        parameterName.setText((param.getName() == null) ? "" : param.getName());
-        parameterBuilder.setText(param.getText());
-        valueHolders.put(SELECTED, param);
-        valueHolders.put(VALUE, param.getValue());
+        valueHolder = parametersEDT.getSelectedRecord().get();
+        parameterValue.setText(valueHolder.toString());
+        parameterName.setText((valueHolder.getName() == null) ? "" : valueHolder.getName());
+        parameterBuilder.setText(valueHolder.getText());
     }
 
     protected void remove() {
@@ -2200,12 +2180,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         } else {
             parametersEDT.removeSelectedRecords();
         }
+        valueHolder.clear();
         parameterValue.setText("");
         parameterBuilder.setText("");
         parameterName.setText("");
-        valueHolders.put(SELECTED, null);
-        valueHolders.put(VALUE, null);
-        valueHolders.put(SCRIPT, null);
     }
 
     private static List<QueryParameter> convertParameterString(String map) {
@@ -2296,7 +2274,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void save() {
         String text = parameterBuilder.getText();
         String name = (parameterName.getText().length() > 0) ? parameterName.getText() : null;
-        Object value = valueHolders.get(VALUE);
+        Object value = valueHolder.getValue();
 
         EListRecord<QueryParameter> selectedRecord = parametersEDT.getSelectedRecord();
         QueryParameter selected;
@@ -2477,12 +2455,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (selectedCol == -1) {
             JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("no column selected"), "", JOptionPane.WARNING_MESSAGE);
             return;
-        }
-        @SuppressWarnings("unchecked")
-        Map<Integer, String> scripts = (Map<Integer, String>) valueHolders.get(SCRIPT);
-        if (scripts == null) {
-            scripts = new HashMap<Integer, String>();
-            valueHolders.put(SCRIPT, scripts);
         }
         String script = scripts.get(selectedCol);
         script = JOptionPane.showInputDialog(frame, HqlResourceBundle.getMessage("groovy_cell"), script != null ? script : "");
