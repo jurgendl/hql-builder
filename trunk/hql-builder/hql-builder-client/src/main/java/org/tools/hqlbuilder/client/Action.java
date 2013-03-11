@@ -66,8 +66,8 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         setEnabled(enabled);
         description = shortDescription;
         if (type != null && !Boolean.class.equals(type)) {
-            setShortDescription(description + ": " + value);
-            setLongDescription(longDescription + ": " + value);
+            setShortDescription(description + ": " + (value == null ? "-" : value));
+            setLongDescription(longDescription + ": " + (value == null ? "-" : value));
         } else {
             setShortDescription(description);
             setLongDescription(longDescription);
@@ -154,8 +154,8 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
 
     public void setValue(Object value) {
         save(value);
-        setShortDescription(description + ": " + value);
-        setLongDescription(description + ": " + value);
+        setShortDescription(description + ": " + (value == null ? "-" : value));
+        setLongDescription(description + ": " + (value == null ? "-" : value));
     }
 
     public Boolean isSelected() {
