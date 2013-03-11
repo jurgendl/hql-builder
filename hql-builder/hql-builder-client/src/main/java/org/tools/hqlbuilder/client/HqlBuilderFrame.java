@@ -210,6 +210,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction upAction;
 
+    private final HqlBuilderAction addParameterAction;
+
     private final HqlBuilderAction importParametersAction;
 
     // hql
@@ -362,6 +364,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private HqlServiceClient hqlService;
 
+    private boolean ingoreParameterListSelectionListener = false;
+
     private HqlBuilderFrame() {
         // needs to be first to init font
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
@@ -395,6 +399,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         setNullAction = new HqlBuilderAction(parametersUnsafe, this, SET_NULL, true, SET_NULL, "page (2).png", SET_NULL, SET_NULL, false, null, null);
         toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, "font.png", TO_TEXT, TO_TEXT, false, null, null);
         upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
+        addParameterAction = new HqlBuilderAction(parametersUnsafe, this, ADD_PARAMETER, true, ADD_PARAMETER, "add.png", ADD_PARAMETER,
+                ADD_PARAMETER, false, null, null);
         importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, "cog.png",
                 IMPORT_PARAMETERS, IMPORT_PARAMETERS, false, null, null);
         wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
@@ -438,17 +444,21 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         aliases.clear();
         resultsInfo.setText("");
         parametersEDT.removeAllRecords();
-        parameterBuilder.setText("");
-        parameterName.setText("");
-        parameterValue.setText("");
+        clearParameter();
         hql.setText("");
         sql.setText("");
-        selectedQueryParameter.clear();
         scripts.clear();
         clearResults();
         propertypanel.add(ClientUtils.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
         propertypanel.revalidate();
         hql_sql_tabs.setForegroundAt(1, Color.gray);
+    }
+
+    private void clearParameter() {
+        selectedQueryParameter = new QueryParameter();
+        parameterBuilder.setText("");
+        parameterName.setText("");
+        parameterValue.setText("");
     }
 
     private void clearResults() {
@@ -1356,6 +1366,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         removeButton.setText("");
         EButton upButton = new EButton(new EToolBarButtonCustomizer(bd), upAction);
         upButton.setText("");
+        EButton addParameterButton = new EButton(new EToolBarButtonCustomizer(bd), addParameterAction);
+        addParameterButton.setText("");
         EButton downButton = new EButton(new EToolBarButtonCustomizer(bd), downAction);
         downButton.setText("");
         EButton importParametersFromTextBtn = new EButton(new EToolBarButtonCustomizer(bd), importParametersAction);
@@ -1373,8 +1385,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         parameterspanel.add(parameterValue, "grow");
         parameterspanel.add(setNullButton, "");
 
-        parameterspanel.add(new JScrollPane(parametersUnsafe), "spanx 2, spany 3, growx, growy");
-        parameterspanel.add(upButton, "bottom, shrinky");
+        parameterspanel.add(new JScrollPane(parametersUnsafe), "spanx 2, spany 4, growx, growy");
+        parameterspanel.add(addParameterButton, "bottom, shrinky");
+        parameterspanel.add(upButton, "shrinky");
         parameterspanel.add(removeButton, "shrinky");
         parameterspanel.add(downButton, "top, shrinky, wrap");
 
@@ -1479,7 +1492,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (e.getValueIsAdjusting()) {
                     return;
                 }
-
                 parameterSelected();
             }
         });
@@ -1894,35 +1906,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return hqlService.makeMultiline(hqlService.removeBlanks(text.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')));
     }
 
-    private void parameterSelected() {
-        EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
-
-        if (selected == null) {
-            selectedQueryParameter.clear();
-            parameterValue.setText("");
-            parameterBuilder.setText("");
-            parameterName.setText("");
-            return;
-        }
-
-        selectedQueryParameter = parametersEDT.getSelectedRecord().get();
-        parameterValue.setText(selectedQueryParameter.toString());
-        parameterName.setText((selectedQueryParameter.getName() == null) ? "" : selectedQueryParameter.getName());
-        parameterBuilder.setText(selectedQueryParameter.getText());
-    }
-
-    protected void remove() {
-        if (parametersEDT.getSelectedRecords().size() == 0) {
-            parametersEDT.removeAllRecords();
-        } else {
-            parametersEDT.removeSelectedRecords();
-        }
-        selectedQueryParameter.clear();
-        parameterValue.setText("");
-        parameterBuilder.setText("");
-        parameterName.setText("");
-    }
-
     private static List<QueryParameter> convertParameterString(String map) {
         map = map.trim();
         if (map.startsWith("[") && map.endsWith("]")) {
@@ -1959,12 +1942,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     String[] p = el.split("=");
                     Object val = GroovyCompiler.eval(p[1]);
                     System.out.println(p[0] + "=" + val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(p[1], p[0], val, null);
+                    QueryParameter qp = new QueryParameter(p[1], p[0], val);
                     qps.add(qp);
                 } else {
                     Object val = GroovyCompiler.eval(el);
                     System.out.println(val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(el, null, val, null);
+                    QueryParameter qp = new QueryParameter(el, null, val);
                     qps.add(qp);
                 }
             } catch (Exception ex) {
@@ -1987,7 +1970,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     if (rec.get().getName().equals(qp.getName())) {
                         rec.get().setName(qp.getName());
                         rec.get().setText(qp.getText());
-                        rec.get().setType(qp.getType());
                         rec.get().setValue(qp.getValue());
                         exists = true;
                         break;
@@ -2006,29 +1988,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
         parameterBuilder.setText("'" + parameterBuilder.getText() + "'");
         save();
-    }
-
-    protected void save() {
-        String text = parameterBuilder.getText();
-        String name = (parameterName.getText().length() > 0) ? parameterName.getText() : null;
-        Object value = selectedQueryParameter.getValue();
-
-        EListRecord<QueryParameter> selectedRecord = parametersEDT.getSelectedRecord();
-        QueryParameter selected;
-
-        if (selectedRecord == null) {
-            selected = new QueryParameter();
-            parametersEDT.addRecord(new EListRecord<QueryParameter>(selected));
-        } else {
-            selected = selectedRecord.get();
-        }
-
-        selected.setText(text);
-        selected.setName(name);
-        selected.setValue(value);
-        selected.setType(null);
-
-        parametersEDT.repaint();
     }
 
     private void addTableSelectionListener(final ETable<?> table, final TableSelectionListener listener) {
@@ -2671,15 +2630,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return this.hibernateWebResolver;
     }
 
-    protected void set_null() {
-        EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
-        if (selected == null) {
-            return;
-        }
-        parameterBuilder.setText("");
-        save();
-    }
-
     protected void delete_inverted_selection() {
         Caret caret = hql.getCaret();
         int p1 = caret.getDot();
@@ -2695,5 +2645,81 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
         hql.setText(hql.getText().substring(p1, p2));
         hql.setCaret(0);
+    }
+
+    protected void add_parameter() {
+        ingoreParameterListSelectionListener = true;
+
+        parametersEDT.clearSelection();
+        clearParameter();
+
+        ingoreParameterListSelectionListener = false;
+    }
+
+    protected void remove() {
+        ingoreParameterListSelectionListener = true;
+
+        if (parametersEDT.getSelectedRecords().size() == 0) {
+            parametersEDT.removeAllRecords();
+        } else {
+            parametersEDT.removeSelectedRecords();
+        }
+        clearParameter();
+
+        ingoreParameterListSelectionListener = false;
+    }
+
+    protected void save() {
+        ingoreParameterListSelectionListener = true;
+
+        String text = parameterBuilder.getText();
+        String name = (parameterName.getText().length() > 0) ? parameterName.getText() : null;
+        Object value = selectedQueryParameter.getValue();
+
+        boolean contains = false;
+        for (EListRecord<QueryParameter> record : parametersEDT.getRecords()) {
+            if (record.get().equals(selectedQueryParameter)) {
+                contains = true;
+                break;
+            }
+        }
+        if (!contains) {
+            EListRecord<QueryParameter> record = new EListRecord<QueryParameter>(selectedQueryParameter);
+            parametersEDT.addRecord(record);
+            parametersEDT.setSelectedRecord(record);
+        }
+
+        selectedQueryParameter.setText(text);
+        selectedQueryParameter.setName(name);
+        selectedQueryParameter.setValue(value);
+
+        ingoreParameterListSelectionListener = false;
+    }
+
+    private void parameterSelected() {
+        if (ingoreParameterListSelectionListener) {
+            return;
+        }
+
+        EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
+
+        if (selected == null) {
+            clearParameter();
+            return;
+        }
+
+        selectedQueryParameter = parametersEDT.getSelectedRecord().get();
+        parameterValue.setText(selectedQueryParameter.toString());
+        parameterName.setText((selectedQueryParameter.getName() == null) ? "" : selectedQueryParameter.getName());
+        parameterBuilder.setText(selectedQueryParameter.getText());
+    }
+
+    protected void set_null() {
+        EListRecord<QueryParameter> selected = parametersEDT.getSelectedRecord();
+        if (selected == null) {
+            return;
+        }
+        parameterBuilder.setText("");
+        save();
     }
 }
