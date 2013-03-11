@@ -286,6 +286,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, SYSTEM_TRAY, null, SYSTEM_TRAY, SYSTEM_TRAY, true,
             null, null, PERSISTENT_ID);
 
+    private final HqlBuilderAction canExecuteSelectionAction = new HqlBuilderAction(null, this, null, true, CAN_EXECUTE_SELECTION, null,
+            CAN_EXECUTE_SELECTION, CAN_EXECUTE_SELECTION, true, null, null, PERSISTENT_ID);
+
     private final HqlBuilderAction hiliAction = new HqlBuilderAction(null, this, null, true, HIGHLIGHT_SYNTAX, null, HIGHLIGHT_SYNTAX,
             HIGHLIGHT_SYNTAX, false, null, null, PERSISTENT_ID);
 
@@ -1223,15 +1226,19 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private String getHqlText() {
         Caret caret = hql.getCaret();
         String hqlstring;
-        int p1 = caret.getDot();
-        int p2 = caret.getMark();
-        if (p1 != p2) {
-            if (p1 > p2) {
-                int tmp = p2;
-                p2 = p1;
-                p1 = tmp;
+        if (canExecuteSelectionAction.isSelected()) {
+            int p1 = caret.getDot();
+            int p2 = caret.getMark();
+            if (p1 != p2) {
+                if (p1 > p2) {
+                    int tmp = p2;
+                    p2 = p1;
+                    p1 = tmp;
+                }
+                hqlstring = hql.getText().substring(p1, p2);
+            } else {
+                hqlstring = hql.getText();
             }
-            hqlstring = hql.getText().substring(p1, p2);
         } else {
             hqlstring = hql.getText();
         }
@@ -1554,6 +1561,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("additional settings"));
+                addmi.add(new JCheckBoxMenuItem(canExecuteSelectionAction));
                 addmi.add(new JCheckBoxMenuItem(hiliAction));
                 addmi.add(new JMenuItem(hiliColorAction));
                 addmi.add(new JCheckBoxMenuItem(resizeColumnsAction));

@@ -100,4 +100,14 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
     public void clear() {
         setValue(null);
     }
+
+    @Deprecated
+    final public String getType() {
+        return null;
+    }
+
+    @Deprecated
+    final public void setType(@SuppressWarnings("unused") String type) {
+        //
+    }
 }
