@@ -109,4 +109,6 @@ public interface HqlBuilderFrameConstants {
     public static final String ROW = "row";
 
     public static final String DELETE_INVERTED_SELECTION = "delete inverted selection";
+
+    public static final String ADD_PARAMETER = "add parameter";
 }

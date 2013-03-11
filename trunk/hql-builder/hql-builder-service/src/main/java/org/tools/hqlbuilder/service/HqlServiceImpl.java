@@ -509,7 +509,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(null, param, simpleName, "groovy");
+                QueryParameter p = new QueryParameter(null, param, simpleName);
                 parameters.add(p);
             }
             for (int i = 1; i <= pminof.getOrdinalParameterCount(); i++) {
@@ -519,7 +519,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(null, null, i + ":" + simpleName, "groovy");
+                QueryParameter p = new QueryParameter(null, null, i + ":" + simpleName);
                 parameters.add(p);
             }
         } finally {
