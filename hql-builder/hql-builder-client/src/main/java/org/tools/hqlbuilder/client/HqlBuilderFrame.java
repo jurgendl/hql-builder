@@ -2702,6 +2702,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         selectedQueryParameter.setValue(value);
 
         ingoreParameterListSelectionListener = false;
+
+        parametersEDT.repaint();
     }
 
     private void parameterSelected() {
