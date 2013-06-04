@@ -20,7 +20,12 @@ public class HqlBuilder {
                     e.printStackTrace();
                 }
             }
-            HqlBuilderFrame.start(arguments, hqlServiceClient);
+            HqlBuilderFrame.start(arguments, new HqlServiceClientLoader() {
+                @Override
+                public HqlServiceClient getHqlServiceClient() {
+                    return hqlServiceClient;
+                }
+            });
         } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "No connection to host");
