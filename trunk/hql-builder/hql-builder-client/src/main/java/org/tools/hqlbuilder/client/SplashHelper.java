@@ -1,0 +1,113 @@
+package org.tools.hqlbuilder.client;
+
+import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.prefs.Preferences;
+
+import javax.imageio.ImageIO;
+
+public class SplashHelper {
+    private static Splash splash;
+
+    private static Window window;
+
+    private static int step = 0;
+
+    private static String[] stepInfo = {
+            "Loading service ...",
+            "Checking filesystem ...",
+            "Setting up Groovy ...",
+            "Creating SWING components ...",
+            "Pre step ...",
+            "Starting ...",
+            "" };
+
+    private static StringBuilder splashtimessb;
+
+    private static long splashtimest;
+
+    private static long splashtimesc;
+
+    private static long[] splashtimesd;
+
+    private static long time = 0;
+
+    private static Preferences cfgp;
+
+    private static boolean stopped = false;
+
+    public static void setup() throws IOException {
+        BufferedImage logo = ImageIO.read(ClassLoader.getSystemClassLoader().getResourceAsStream("hql-builder-logo.png"));
+        splash = new Splash(logo);
+        window = splash.showSplash();
+        window.setAlwaysOnTop(true);
+        splashtimessb = new StringBuilder();
+        splashtimesc = 0;
+        splash.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                stopped = true;
+                window.dispose();
+            }
+        });
+    }
+
+    public static void step() {
+        if (stopped) {
+            return;
+        }
+
+        if (step > 0) {
+            splashtimessb.append(System.currentTimeMillis() - time);
+            if (step < splashtimesd.length) {
+                splashtimessb.append(",");
+            }
+        }
+
+        time = System.currentTimeMillis();
+        splash.setText(stepInfo[step]);
+        splash.setProgress((float) splashtimesc / splashtimest);
+
+        if (step > 0 && step < splashtimesd.length) {
+            splashtimesc += splashtimesd[step];
+        }
+
+        step++;
+    }
+
+    public static void end() {
+        stopped = true;
+        window.dispose();
+
+        if (stopped) {
+            return;
+        }
+
+        cfgp.put("splashtimes", splashtimessb.toString());
+    }
+
+    public static void update(String connectionInfo) {
+        if (stopped) {
+            return;
+        }
+
+        String key = connectionInfo.replaceAll("jdbc:oracle:thin", "").replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ")
+                .replaceAll("/", " ").trim();
+        cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
+        splashtimest = 0;
+        String splashtimes = cfgp.get("splashtimes", "1,1,1,1,1,1");
+        String[] sptp = splashtimes.split(",");
+        splashtimesd = new long[sptp.length];
+        int i = 0;
+        for (String p : sptp) {
+            splashtimesd[i] = Long.parseLong(p);
+            splashtimest += splashtimesd[i];
+            i++;
+        }
+
+        splashtimesc += splashtimesd[0];
+    }
+}
