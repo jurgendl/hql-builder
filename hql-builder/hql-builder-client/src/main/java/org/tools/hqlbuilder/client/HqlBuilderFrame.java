@@ -19,7 +19,6 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -32,7 +31,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedWriter;
@@ -61,7 +59,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -710,17 +707,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClientLoader serviceLoader) {
         try {
-            BufferedImage logo = ImageIO.read(ClassLoader.getSystemClassLoader().getResourceAsStream("hql-builder-logo.png"));
-            Splash splash = new Splash(logo);
-            Window window = splash.showSplash();
-
-            splash.setText("Loading context ...");
-            splash.setProgress((0f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.setup();
+            SplashHelper.step();
 
             HqlServiceClient service = serviceLoader.getHqlServiceClient();
 
-            splash.setText("Checking filesystem ...");
-            splash.setProgress((21.7f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.update(service.getConnectionInfo());
+            SplashHelper.step();
 
             if (!PROGRAM_DIR.exists()) {
                 PROGRAM_DIR.mkdirs();
@@ -732,8 +725,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             // zet look en feel gelijk aan default voor OS
             UIUtils.systemLookAndFeel();
 
-            splash.setText("Setting up Groovy ...");
-            splash.setProgress((21.7f + 0.127f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.step();
 
             {
                 // dtd validatie uitschakelen
@@ -750,20 +742,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             Eval.me("new Integer(0)"); // warm up Groovy
 
-            splash.setText("Creating SWING components ...");
-            splash.setProgress((21.7f + 0.127f + 1.2f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.step();
 
             // maak frame en start start
             final HqlBuilderFrame hqlBuilder = new HqlBuilderFrame();
             hqlBuilder.hqlService = service;
 
-            splash.setText("Pre step ...");
-            splash.setProgress((21.7f + 0.127f + 1.2f + 1.8f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.step();
 
             hqlBuilder.startPre();
 
-            splash.setText("Starting ...");
-            splash.setProgress((21.7f + 0.127f + 1.2f + 1.8f + 0.2f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.step();
 
             hqlBuilder.start();
 
@@ -772,8 +761,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             // log connectie
             ClientUtils.log(hqlBuilder.hqlService.getConnectionInfo());
 
-            splash.setText("");
-            splash.setProgress((21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f) / (21.7f + 0.127f + 1.2f + 1.8f + 0.2f + 0.4f));
+            SplashHelper.step();
+            SplashHelper.end();
 
             // wanneer system tray wordt ondersteund, gebruikt deze dan (configureerbaar)
             if (SystemTray.isSupported()) {
@@ -819,8 +808,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     }
                 });
             }
-
-            window.dispose();
         } catch (Exception ex) {
             logger.error("start(String[], HqlService)", ex); //$NON-NLS-1$
         }
