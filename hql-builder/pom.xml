@@ -78,9 +78,9 @@
 	</developers>
 	<contributors />
 	<scm>
-		<connection>scm:svn:http://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0</connection>
-		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0</developerConnection>
-		<url>http://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0</url>
+		<connection>scm:svn:http://hql-builder.googlecode.com/svn/trunk</connection>
+		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk</developerConnection>
+		<url>http://hql-builder.googlecode.com/svn/trunk</url>
 	</scm>
 	<repositories>
 		<repository>
