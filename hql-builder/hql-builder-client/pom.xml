@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.tools</groupId>
 		<artifactId>hql-builder-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 		<relativePath>../hql-builder-parent/pom.xml</relativePath>
 	</parent>	
 	<artifactId>hql-builder-client</artifactId>
