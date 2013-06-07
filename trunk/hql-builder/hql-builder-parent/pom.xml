@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tools</groupId>
 	<artifactId>hql-builder-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>hql-builder-parent</name>
 	<description>hql-builder-parent</description>
@@ -108,9 +108,9 @@
 	</developers>
 	<contributors />
 	<scm>
-		<connection>scm:svn:http://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0/hql-builder</connection>
-		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0/hql-builder</developerConnection>
-		<url>http://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0/hql-builder</url>
+		<connection>scm:svn:http://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0</connection>
+		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0</developerConnection>
+		<url>http://hql-builder.googlecode.com/svn/tags/hql-builder-modules-1.0.0</url>
 	</scm>
 	<build>
 		<extensions>
