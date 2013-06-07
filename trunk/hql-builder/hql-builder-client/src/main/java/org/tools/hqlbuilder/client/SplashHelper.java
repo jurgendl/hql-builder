@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.client;
 
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -46,6 +49,9 @@ public class SplashHelper {
         System.out.println(ClassLoader.getSystemClassLoader().getResource("/hql-builder-logo.png"));
         BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
         splash = new Splash(logo);
+        splash.setTextLocation(new Point(500, 83));
+        splash.setProgressBarLocation(new Rectangle(290, 75, 200, 10));
+        splash.setColor(Color.white);
         window = splash.showSplash();
         window.setAlwaysOnTop(true);
         splashtimessb = new StringBuilder();
