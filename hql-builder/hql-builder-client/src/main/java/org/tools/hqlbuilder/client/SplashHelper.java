@@ -19,9 +19,9 @@ public class SplashHelper {
     private static String[] stepInfo = {
             "Loading service ...",
             "Checking filesystem ...",
-            "Setting up Groovy ...",
-            "Creating SWING components ...",
-            "Pre step ...",
+            "Setting up Groovy scripting ...",
+            "Creating GUI ...",
+            "Loading favorites ...",
             "Starting ...",
             "" };
 
@@ -40,7 +40,11 @@ public class SplashHelper {
     private static boolean stopped = false;
 
     public static void setup() throws IOException {
-        BufferedImage logo = ImageIO.read(ClassLoader.getSystemClassLoader().getResourceAsStream("hql-builder-logo.png"));
+        System.out.println(SplashHelper.class.getClassLoader().getResource("hql-builder-logo.png"));
+        System.out.println(SplashHelper.class.getClassLoader().getResource("/hql-builder-logo.png"));
+        System.out.println(ClassLoader.getSystemClassLoader().getResource("hql-builder-logo.png"));
+        System.out.println(ClassLoader.getSystemClassLoader().getResource("/hql-builder-logo.png"));
+        BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
         splash = new Splash(logo);
         window = splash.showSplash();
         window.setAlwaysOnTop(true);
