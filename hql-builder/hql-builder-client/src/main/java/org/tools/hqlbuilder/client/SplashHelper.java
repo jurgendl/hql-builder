@@ -43,10 +43,6 @@ public class SplashHelper {
     private static boolean stopped = false;
 
     public static void setup() throws IOException {
-        System.out.println(SplashHelper.class.getClassLoader().getResource("hql-builder-logo.png"));
-        System.out.println(SplashHelper.class.getClassLoader().getResource("/hql-builder-logo.png"));
-        System.out.println(ClassLoader.getSystemClassLoader().getResource("hql-builder-logo.png"));
-        System.out.println(ClassLoader.getSystemClassLoader().getResource("/hql-builder-logo.png"));
         BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
         splash = new Splash(logo);
         splash.setTextLocation(new Point(500, 83));
