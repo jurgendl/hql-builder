@@ -54,12 +54,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -125,6 +128,7 @@ import org.swingeasy.OptionType;
 import org.swingeasy.ProgressGlassPane;
 import org.swingeasy.ResultType;
 import org.swingeasy.UIUtils;
+import org.swingeasy.system.SystemSettings;
 import org.tools.hqlbuilder.client.HqlWizard.HqlWizardListener;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
@@ -138,10 +142,14 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
+    private static final String PERSISTENT_LOCALE = "locale";
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
     /** do not remove */
     ca.odell.glazedlists.swing.EventSelectionModel<?> wtf;
+
+    private static Preferences preferences;
 
     private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
 
@@ -707,10 +715,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClientLoader serviceLoader) {
         try {
+            preferences = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID);
+
             SplashHelper.setup();
             SplashHelper.step();
 
+            // problem in "all in one" setup
+            // sending 'wrong' locale to Oracle gives exception
+            // Oracle will now give English exceptions
+            SystemSettings.setCurrentLocale(Locale.UK);
             HqlServiceClient service = serviceLoader.getHqlServiceClient();
+
+            // now load users locale
+            String lang = preferences.get(PERSISTENT_LOCALE, SystemSettings.getCurrentLocale().getLanguage());
+            SystemSettings.setCurrentLocale(new Locale(lang));
 
             SplashHelper.update(service.getConnectionInfo());
             SplashHelper.step();
@@ -1580,6 +1598,31 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 formatSqlOptionsMenu.add(new JCheckBoxMenuItem(removeADOJoinsAction));
                 formatSqlOptionsMenu.add(new JCheckBoxMenuItem(formatLinesAction));
                 formatSqlOptionsMenu.add(new JCheckBoxMenuItem(replacePropertiesAction));
+            }
+            {
+                JMenu addmi = new JMenu(HqlResourceBundle.getMessage("language"));
+                ButtonGroup lanGroup = new ButtonGroup();
+                final Locale[] locales = { Locale.UK, new Locale("nl") };
+
+                for (Locale locale : locales) {
+                    final Locale loc = locale;
+                    JCheckBoxMenuItem lanMenu = new JCheckBoxMenuItem(locale.getDisplayLanguage(locale));
+                    addmi.add(lanMenu);
+                    lanGroup.add(lanMenu);
+                    if (locale.equals(locales[0]) || locale.getLanguage().equals(SystemSettings.getCurrentLocale().getLanguage())) {
+                        lanMenu.setSelected(true);
+                    }
+                    lanMenu.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            preferences.put(PERSISTENT_LOCALE, loc.getLanguage());
+                            JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("change visible after restart"), "",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    });
+                }
+
+                settingsMenu.add(addmi);
             }
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("additional settings"));
