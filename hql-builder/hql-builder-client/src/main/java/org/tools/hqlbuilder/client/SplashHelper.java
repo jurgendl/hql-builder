@@ -45,7 +45,7 @@ public class SplashHelper {
     public static void setup() throws IOException {
         BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
         splash = new Splash(logo);
-        splash.setTextLocation(new Point(500, 87));
+        splash.setTextLocation(new Point(500, 88));
         splash.setProgressBarLocation(new Rectangle(294, 82, 200, 6));
         splash.setColor(Color.white);
         window = splash.showSplash();
