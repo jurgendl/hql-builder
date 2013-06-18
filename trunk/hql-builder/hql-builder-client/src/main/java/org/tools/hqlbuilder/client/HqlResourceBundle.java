@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.client;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
@@ -9,20 +11,24 @@ import org.swingeasy.system.SystemSettings;
 /**
  * @author Jurgen
  */
-public class HqlResourceBundle {
+public class HqlResourceBundle implements PropertyChangeListener {
     private static PropertyResourceBundle singleton;
 
     private static Set<String> missing = new HashSet<String>();
 
     private HqlResourceBundle() {
-        //
+        SystemSettings.getSingleton().addPropertyChangeListener(SystemSettings.LOCALE, this);
     }
 
     public static PropertyResourceBundle getSingleton() {
         if (singleton == null) {
-            singleton = (PropertyResourceBundle) PropertyResourceBundle.getBundle("HqlResourceBundle", SystemSettings.getCurrentLocale());
+            loadResources();
         }
         return singleton;
+    }
+
+    private static void loadResources() {
+        singleton = (PropertyResourceBundle) PropertyResourceBundle.getBundle("HqlResourceBundle", SystemSettings.getCurrentLocale());
     }
 
     public static String getMessage(String key, Object... params) {
@@ -48,5 +54,13 @@ public class HqlResourceBundle {
             missing.add(key);
             return key;
         }
+    }
+
+    /**
+     * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        loadResources();
     }
 }
