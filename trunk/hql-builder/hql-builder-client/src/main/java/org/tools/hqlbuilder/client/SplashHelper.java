@@ -20,12 +20,12 @@ public class SplashHelper {
     private static int step = 0;
 
     private static String[] stepInfo = {
-            "Loading service ...",
-            "Checking filesystem ...",
-            "Setting up Groovy scripting ...",
-            "Creating GUI ...",
-            "Loading favorites ...",
-            "Starting ...",
+            "Loading service",
+            "Checking filesystem",
+            "Setting up Groovy scripting",
+            "Creating GUI",
+            "Loading favorites",
+            "Starting",
             "" };
 
     private static StringBuilder splashtimessb;
@@ -74,7 +74,7 @@ public class SplashHelper {
         }
 
         time = System.currentTimeMillis();
-        splash.setText(stepInfo[step]);
+        splash.setText(HqlResourceBundle.getMessage(stepInfo[step]) + " ...");
         splash.setProgress((float) splashtimesc / splashtimest);
 
         if (step > 0 && step < splashtimesd.length) {

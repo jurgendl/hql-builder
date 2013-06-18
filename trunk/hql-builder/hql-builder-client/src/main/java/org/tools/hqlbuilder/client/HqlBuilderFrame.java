@@ -44,6 +44,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.net.URI;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,6 +93,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
@@ -142,6 +144,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
+    private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+
     private static final String PERSISTENT_LOCALE = "locale";
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
@@ -716,6 +720,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClientLoader serviceLoader) {
         try {
             preferences = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID);
+            String lang = preferences.get(PERSISTENT_LOCALE, SystemSettings.getCurrentLocale().getLanguage());
+            SystemSettings.setCurrentLocale(new Locale(lang));
 
             SplashHelper.setup();
             SplashHelper.step();
@@ -725,9 +731,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             // Oracle will now give English exceptions
             SystemSettings.setCurrentLocale(Locale.UK);
             HqlServiceClient service = serviceLoader.getHqlServiceClient();
-
             // now load users locale
-            String lang = preferences.get(PERSISTENT_LOCALE, SystemSettings.getCurrentLocale().getLanguage());
             SystemSettings.setCurrentLocale(new Locale(lang));
 
             SplashHelper.update(service.getConnectionInfo());
@@ -1602,20 +1606,46 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("language"));
                 ButtonGroup lanGroup = new ButtonGroup();
-                final Locale[] locales = { Locale.UK, new Locale("nl") };
+
+                List<Locale> locales = new ArrayList<Locale>();
+
+                for (Locale locale : Locale.getAvailableLocales()) {
+                    URL bundle = HqlBuilderFrame.class.getClassLoader().getResource("HqlResourceBundle_" + locale + ".properties");
+                    System.out.println(locale + ">" + bundle);
+                    if (null != bundle) {
+                        locales.add(locale);
+                    }
+                }
+
+                locales.remove(DEFAULT_LOCALE);
+
+                Collections.sort(locales, new Comparator<Locale>() {
+                    @Override
+                    public int compare(Locale o1, Locale o2) {
+                        return new CompareToBuilder().append(o1.getDisplayLanguage(o1), o2.getDisplayLanguage(o2))
+                                .append(o1.getDisplayCountry(o1), o2.getDisplayCountry(o2)).toComparison();
+                    }
+                });
+
+                locales.add(0, DEFAULT_LOCALE);
 
                 for (Locale locale : locales) {
                     final Locale loc = locale;
-                    JCheckBoxMenuItem lanMenu = new JCheckBoxMenuItem(locale.getDisplayLanguage(locale));
+                    String title = locale.getDisplayLanguage(locale);
+                    if (StringUtils.isNotBlank(locale.getCountry())) {
+                        title += ", " + locale.getDisplayCountry(locale);
+                    }
+                    JCheckBoxMenuItem lanMenu = new JCheckBoxMenuItem(title);
                     addmi.add(lanMenu);
                     lanGroup.add(lanMenu);
-                    if (locale.equals(locales[0]) || locale.getLanguage().equals(SystemSettings.getCurrentLocale().getLanguage())) {
+                    if (locale.equals(DEFAULT_LOCALE) || locale.getLanguage().equals(SystemSettings.getCurrentLocale().getLanguage())) {
                         lanMenu.setSelected(true);
                     }
                     lanMenu.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            preferences.put(PERSISTENT_LOCALE, loc.getLanguage());
+                            // SystemSettings.setCurrentLocale(loc);
+                            preferences.put(PERSISTENT_LOCALE, loc.toString());
                             JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("change visible after restart"), "",
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
