@@ -1671,6 +1671,40 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
                 settingsMenu.add(addmi);
             }
+            {
+                settingsMenu.addSeparator();
+            }
+            {
+                JMenuItem resetMi = new JMenuItem(HqlResourceBundle.getMessage("reset settings"));
+                resetMi.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        fontAction.setWarnRestart(false);
+
+                        maximumNumberOfResultsAction.setValue(100);
+                        fontAction.setValue(ClientUtils.getDefaultFont());
+                        searchColorAction.setValue(null);
+                        hiliColorAction.setValue(null);
+                        removeJoinsAction.setSelected(true);
+                        formatLinesAction.setSelected(true);
+                        replacePropertiesAction.setSelected(true);
+                        resizeColumnsAction.setSelected(true);
+                        formatSqlAction.setSelected(true);
+                        systrayAction.setSelected(true);
+                        canExecuteSelectionAction.setSelected(true);
+                        hiliAction.setSelected(false);
+                        alwaysOnTopAction.setSelected(false);
+                        editableResultsAction.setSelected(false);
+                        switchLayoutAction.setSelected(true);
+
+                        fontAction.setWarnRestart(true);
+
+                        JOptionPane.showMessageDialog(null, HqlResourceBundle.getMessage("change visible after restart"), "",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                });
+                settingsMenu.add(resetMi);
+            }
             menuBar.add(settingsMenu);
         }
         {

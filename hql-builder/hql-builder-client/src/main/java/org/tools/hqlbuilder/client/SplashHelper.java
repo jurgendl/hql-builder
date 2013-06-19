@@ -46,7 +46,7 @@ public class SplashHelper {
         BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
         splash = new Splash(logo);
         splash.setTextLocation(new Point(500, 88));
-        splash.setProgressBarLocation(new Rectangle(294, 82, 200, 6));
+        splash.setProgressBarLocation(new Rectangle(294, 82, 200, 4));
         splash.setColor(Color.white);
         window = splash.showSplash();
         window.setAlwaysOnTop(true);
