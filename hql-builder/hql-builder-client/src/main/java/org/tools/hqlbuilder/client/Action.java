@@ -2,13 +2,16 @@ package org.tools.hqlbuilder.client;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.prefs.Preferences;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -64,7 +67,10 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         }
         super.putValue(SELECTED_KEY, selected);
 
-        setIcon(icon);
+        if (!Color.class.equals(type)) {
+            setIcon(icon);
+        }
+
         setName(name);
         setEnabled(enabled);
         description = shortDescription;
@@ -87,17 +93,20 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
             return defaultValue;
         }
         T actualValue;
-        if (type == null || Color.class.equals(type)) {
+        if (Color.class.equals(type)) {
             int i = persister.getInt(id, Integer.MIN_VALUE);
             actualValue = i == Integer.MIN_VALUE ? null : (T) new Color(i);
-        } else if (type == null || Font.class.equals(type)) {
+            if (actualValue != null) {
+                setColorIcon(new Color(i));
+            }
+        } else if (Font.class.equals(type)) {
             Font defaultFont = (Font) defaultValue;
             String family = persister.get(id + ".name", defaultFont.getFamily());
             int size = persister.getInt(id + ".size", defaultFont.getSize());
             int style = persister.getInt(id + ".style", defaultFont.getStyle());
             Font font = new Font(family, style, size);
             actualValue = (T) font;
-        } else if (type == null || Boolean.class.equals(type)) {
+        } else if (Boolean.class.equals(type)) {
             actualValue = (T) (Boolean) persister.getBoolean(id, Boolean.class.cast(defaultValue));
         } else if (String.class.equals(type)) {
             actualValue = (T) persister.get(id, String.class.cast(defaultValue));
@@ -118,20 +127,29 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         return actualValue;
     }
 
+    protected void setColorIcon(Color c) {
+        BufferedImage bi = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = bi.createGraphics();
+        g2.setColor(c);
+        g2.fillRect(0, 0, 16, 16);
+        setIcon(new ImageIcon(bi));
+    }
+
     protected void save(Object newValue) {
         this.value = newValue;
         if (persister == null) {
             return;
         }
         System.out.println("persistent: " + id + ": save=" + newValue);
-        if (type == null || Color.class.equals(type)) {
+        if (Color.class.equals(type)) {
+            setColorIcon((Color) newValue);
             persister.putInt(id, newValue == null ? Integer.MIN_VALUE : Color.class.cast(newValue).getRGB());
-        } else if (type == null || Font.class.equals(type)) {
+        } else if (Font.class.equals(type)) {
             Font font = (Font) newValue;
             persister.put(id + ".name", font.getFamily());
             persister.putInt(id + ".size", font.getSize());
             persister.putInt(id + ".style", font.getStyle());
-        } else if (type == null || Boolean.class.equals(type)) {
+        } else if (Boolean.class.equals(type)) {
             persister.putBoolean(id, Boolean.class.cast(newValue));
         } else if (String.class.equals(type)) {
             persister.put(id, String.class.cast(newValue));
