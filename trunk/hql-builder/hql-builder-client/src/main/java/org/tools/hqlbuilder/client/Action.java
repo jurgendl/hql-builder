@@ -9,6 +9,7 @@ import java.util.prefs.Preferences;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 /**
@@ -24,6 +25,8 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     private Object value;
 
     private String description;
+
+    private boolean warnRestart = false;
 
     public Action(String id, boolean enabled, String name, Icon icon, String shortDescription, String longDescription, Boolean selected,
             Character mnemonic, String accelerator) {
@@ -144,6 +147,10 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
             persister.putByteArray(id, byte[].class.cast(newValue));
         } else {
             throw new IllegalArgumentException(String.valueOf(type));
+        }
+
+        if (warnRestart) {
+            JOptionPane.showMessageDialog(null, HqlResourceBundle.getMessage("change visible after restart"), "", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -277,5 +284,13 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
 
     public String getId() {
         return this.id;
+    }
+
+    public boolean isWarnRestart() {
+        return this.warnRestart;
+    }
+
+    public void setWarnRestart(boolean warnRestart) {
+        this.warnRestart = warnRestart;
     }
 }
