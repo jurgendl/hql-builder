@@ -31,6 +31,8 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
 
     private boolean warnRestart = false;
 
+    private final String id;
+
     public Action(String id, boolean enabled, String name, Icon icon, String shortDescription, String longDescription, Boolean selected,
             Character mnemonic, String accelerator) {
         this(id, enabled, name, icon, shortDescription, longDescription, selected, mnemonic, accelerator, false, null, null, null);
@@ -46,10 +48,9 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         this(id, enabled, name, icon, shortDescription, longDescription, selected, mnemonic, accelerator, true, parentId, type, defaultValue);
     }
 
-    private final String id;
-
     public <T> Action(String id, boolean enabled, String name, Icon icon, String shortDescription, String longDescription, Boolean selected,
             Character mnemonic, String accelerator, boolean persist, String parentId, Class<T> type, T defaultValue) {
+        System.out.println(id + " " + value);
         this.id = id;
         if (persist) {
             if (id == null || "null".equals(id)) {
@@ -123,8 +124,10 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     protected void setColorIcon(Color c) {
         BufferedImage bi = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = bi.createGraphics();
-        g2.setColor(c);
+        g2.setColor(Color.black);
         g2.fillRect(0, 0, 16, 16);
+        g2.setColor(c);
+        g2.fillRect(1, 1, 14, 14);
         setIcon(new ImageIcon(bi));
     }
 
@@ -276,8 +279,6 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
             if (index == -1) {
                 name = name + " (" + mnemonic + ")";
                 index = name.toLowerCase().indexOf(Character.toLowerCase(mnemonic));
-                // System.err.println("mnemonic not found: " + mnemonic + " in " + name);
-                // mnemonic = null;
             }
         }
 
