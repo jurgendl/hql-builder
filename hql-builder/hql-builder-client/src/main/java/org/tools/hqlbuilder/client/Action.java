@@ -74,16 +74,9 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         setName(name);
         setEnabled(enabled);
         description = shortDescription;
-        if (type != null && !Boolean.class.equals(type)) {
-            setShortDescription(description + ": " + (value == null ? "-" : value));
-            setLongDescription(longDescription + ": " + (value == null ? "-" : value));
-        } else {
-            setShortDescription(description);
-            setLongDescription(longDescription);
-        }
+        setDescriptions(value);
         setMnemonic(mnemonic);
         setAccelerator(accelerator);
-
         addPropertyChangeListener(this);
     }
 
@@ -179,8 +172,26 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
 
     public void setValue(Object value) {
         save(value);
-        setShortDescription(description + ": " + (value == null ? "-" : value));
-        setLongDescription(description + ": " + (value == null ? "-" : value));
+        setDescriptions(value);
+    }
+
+    protected void setDescriptions(Object value) {
+        if (Color.class.equals(type) || Boolean.class.equals(type)) {
+            setShortDescription(description);
+            setLongDescription(description);
+            return;
+        }
+        if (value == null) {
+            setShortDescription(description + ": -");
+            setLongDescription(description + ": -");
+            return;
+        }
+        if (Font.class.equals(type)) {
+            Font f = (Font) value;
+            value = f.getFontName() + " " + f.getSize();
+        }
+        setShortDescription(description + ": " + value);
+        setLongDescription(description + ": " + value);
     }
 
     public Boolean isSelected() {
