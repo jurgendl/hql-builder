@@ -385,6 +385,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         // needs to be first to init font
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
                 ClientUtils.getDefaultFont());
+        fontAction.setWarnRestart(true);
 
         resultsInfo = font(new ELabel(""), null);
         parameterBuilder = font(new ETextField(new ETextFieldConfig()), null);
