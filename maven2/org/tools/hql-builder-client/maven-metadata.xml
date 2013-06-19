@@ -4,10 +4,11 @@
   <artifactId>hql-builder-client</artifactId>
   <version>1.0.0</version>
   <versioning>
-    <release>1.0.0</release>
+    <release>1.0.1</release>
     <versions>
       <version>1.0.0</version>
+      <version>1.0.1</version>
     </versions>
-    <lastUpdated>20130607132052</lastUpdated>
+    <lastUpdated>20130619135614</lastUpdated>
   </versioning>
 </metadata>
