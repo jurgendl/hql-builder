@@ -274,8 +274,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction forceExitAction = new HqlBuilderAction(null, this, FORCE_EXIT, true, FORCE_EXIT, "exit.png", FORCE_EXIT,
             FORCE_EXIT, true, 't', null);
 
-    private final HqlBuilderAction removeADOJoinsAction = new HqlBuilderAction(null, this, IMMEDIATE_QUERY, true, REMOVE_ADO_JOINS, null,
-            REMOVE_ADO_JOINS, REMOVE_ADO_JOINS, true, null, null, PERSISTENT_ID);
+    private final HqlBuilderAction removeJoinsAction = new HqlBuilderAction(null, this, IMMEDIATE_QUERY, true, REMOVE_JOINS, null, REMOVE_JOINS,
+            REMOVE_JOINS, true, null, null, PERSISTENT_ID);
 
     private final HqlBuilderAction formatLinesAction = new HqlBuilderAction(null, this, IMMEDIATE_QUERY, true, FORMAT_LINES, null, FORMAT_LINES,
             FORMAT_LINES, true, null, null, PERSISTENT_ID);
@@ -290,8 +290,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             true, null, null, PERSISTENT_ID);
 
     private final HqlBuilderAction maximumNumberOfResultsAction = new HqlBuilderAction(null, this, MAXIMUM_NUMBER_OF_RESULTS, true,
-            MAXIMUM_NUMBER_OF_RESULTS, null, MAXIMUM_NUMBER_OF_RESULTS, MAXIMUM_NUMBER_OF_RESULTS, true, null, null, PERSISTENT_ID, Integer.class,
-            100);
+            MAXIMUM_NUMBER_OF_RESULTS, "scr.png", MAXIMUM_NUMBER_OF_RESULTS, MAXIMUM_NUMBER_OF_RESULTS, true, null, null, PERSISTENT_ID,
+            Integer.class, 100);
 
     private HqlBuilderAction fontAction;
 
@@ -383,7 +383,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private HqlBuilderFrame() {
         // needs to be first to init font
-        fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, null, FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
+        fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, "font.png", FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
                 ClientUtils.getDefaultFont());
         fontAction.setWarnRestart(true);
 
@@ -413,7 +413,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, "bin_empty.png", REMOVE, REMOVE, false, null, null);
         saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null, null);
         setNullAction = new HqlBuilderAction(parametersUnsafe, this, SET_NULL, true, SET_NULL, "page (2).png", SET_NULL, SET_NULL, false, null, null);
-        toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, "font.png", TO_TEXT, TO_TEXT, false, null, null);
+        toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, "textfield.png", TO_TEXT, TO_TEXT, false, null, null);
         upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
         addParameterAction = new HqlBuilderAction(parametersUnsafe, this, ADD_PARAMETER, true, ADD_PARAMETER, "add.png", ADD_PARAMETER,
                 ADD_PARAMETER, false, null, null);
@@ -1265,7 +1265,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames) {
         return hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, replacePropertiesAction.isSelected(),
-                formatLinesAction.isSelected(), removeADOJoinsAction.isSelected());
+                formatLinesAction.isSelected(), removeJoinsAction.isSelected());
     }
 
     private String getHqlText() {
@@ -1600,7 +1600,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             {
                 settingsMenu.add(new JCheckBoxMenuItem(formatSqlAction));
                 settingsMenu.add(formatSqlOptionsMenu);
-                formatSqlOptionsMenu.add(new JCheckBoxMenuItem(removeADOJoinsAction));
+                formatSqlOptionsMenu.add(new JCheckBoxMenuItem(removeJoinsAction));
                 formatSqlOptionsMenu.add(new JCheckBoxMenuItem(formatLinesAction));
                 formatSqlOptionsMenu.add(new JCheckBoxMenuItem(replacePropertiesAction));
             }

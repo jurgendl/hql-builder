@@ -86,7 +86,7 @@ public interface HqlBuilderFrameConstants {
 
     public static final String FORMAT_LINES = "format lines";
 
-    public static final String REMOVE_ADO_JOINS = "remove ADO joins";
+    public static final String REMOVE_JOINS = "remove joins";
 
     public static final String SWITCH_LAYOUT = "switch layout";
 
