@@ -87,11 +87,6 @@ public class SplashHelper {
     public static void end() {
         stopped = true;
         window.dispose();
-
-        if (stopped) {
-            return;
-        }
-
         cfgp.put("splashtimes", splashtimessb.toString());
     }
 
