@@ -179,6 +179,11 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     protected void setDescriptions(Object value) {
+        if (type == null) {
+            setShortDescription(description);
+            setLongDescription(description);
+            return;
+        }
         if (Color.class.equals(type) || Boolean.class.equals(type)) {
             setShortDescription(description);
             setLongDescription(description);
