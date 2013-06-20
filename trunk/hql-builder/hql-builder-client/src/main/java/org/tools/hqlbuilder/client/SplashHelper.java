@@ -62,10 +62,6 @@ public class SplashHelper {
     }
 
     public static void step() {
-        if (stopped) {
-            return;
-        }
-
         if (step > 0) {
             splashtimessb.append(System.currentTimeMillis() - time);
             if (step < splashtimesd.length) {
@@ -74,8 +70,11 @@ public class SplashHelper {
         }
 
         time = System.currentTimeMillis();
-        splash.setText(HqlResourceBundle.getMessage(stepInfo[step]) + " ...");
-        splash.setProgress((float) splashtimesc / splashtimest);
+
+        if (!stopped) {
+            splash.setText(HqlResourceBundle.getMessage(stepInfo[step]) + " ...");
+            splash.setProgress((float) splashtimesc / splashtimest);
+        }
 
         if (step > 0 && step < splashtimesd.length) {
             splashtimesc += splashtimesd[step];
@@ -91,10 +90,6 @@ public class SplashHelper {
     }
 
     public static void update(String connectionInfo) {
-        if (stopped) {
-            return;
-        }
-
         String key = connectionInfo.replaceAll("jdbc:oracle:thin", "").replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ")
                 .replaceAll("/", " ").trim();
         cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
