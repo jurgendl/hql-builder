@@ -37,7 +37,7 @@ public class Splash extends JComponent {
 
     private int H = 10; // height
 
-    private boolean frame = true;
+    private boolean frame = false;
 
     public Splash(BufferedImage logo) {
         this.logo = logo;
