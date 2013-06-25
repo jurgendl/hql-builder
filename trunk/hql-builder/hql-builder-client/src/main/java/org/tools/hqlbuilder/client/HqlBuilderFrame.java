@@ -2777,7 +2777,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         Caret caret = hql.getCaret();
         int p1 = caret.getDot();
         int p2 = caret.getMark();
-        System.out.println(p1 + "/" + p2);
+        // System.out.println(p1 + "/" + p2);
         if (p1 == p2) {
             return;
         }
