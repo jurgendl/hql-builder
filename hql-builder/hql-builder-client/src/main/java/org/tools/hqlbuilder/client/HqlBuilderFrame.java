@@ -2444,26 +2444,30 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void delete_object() {
-        if (!editableResultsAction.isSelected()) {
-            JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("results not editable"), "", JOptionPane.WARNING_MESSAGE);
-            return;
+        try {
+            if (!editableResultsAction.isSelected()) {
+                JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("results not editable"), "", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int col = resultsEDT.getSelectedColumn();
+            if (col == -1) {
+                JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("no column selected"), "", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int row = resultsEDT.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("no row selected"), "", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            Object bean = resultsEDT.getModel().getValueAt(row, col);
+            hqlService.delete(bean);
+            resultsEDT.getModel().setValueAt(null, row, col);
+            propertypanel.removeAll();
+            propertypanel.revalidate();
+            propertypanel.repaint();
+        } catch (Exception ex) {
+            log(ex);
         }
-        int col = resultsEDT.getSelectedColumn();
-        if (col == -1) {
-            JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("no column selected"), "", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int row = resultsEDT.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("no row selected"), "", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        Object bean = resultsEDT.getModel().getValueAt(row, col);
-        hqlService.delete(bean);
-        resultsEDT.getModel().setValueAt(null, row, col);
-        propertypanel.removeAll();
-        propertypanel.revalidate();
-        propertypanel.repaint();
     }
 
     protected void help_insert() {
