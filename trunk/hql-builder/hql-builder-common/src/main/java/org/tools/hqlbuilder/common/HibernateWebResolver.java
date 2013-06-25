@@ -1,12 +1,15 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HibernateWebResolver {
+public class HibernateWebResolver implements Serializable {
+    private static final long serialVersionUID = 756239472693625438L;
+
     protected Map<String, ClassNode> nodes = new HashMap<String, ClassNode>();
 
     public List<ClassNode> getClasses() {
@@ -22,6 +25,8 @@ public class HibernateWebResolver {
     }
 
     public class ClassNode extends Node<String, String, Property> {
+        private static final long serialVersionUID = 3105646728435394121L;
+
         protected Class<?> type;
 
         public ClassNode(String id) {
@@ -50,6 +55,8 @@ public class HibernateWebResolver {
     }
 
     public class Property extends Edge<String, String, Property> {
+        private static final long serialVersionUID = -7935969067739133609L;
+
         protected boolean collection;
 
         public Property(String id) {
@@ -74,7 +81,9 @@ public class HibernateWebResolver {
         return node;
     }
 
-    public static class Edge<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> {
+    public static class Edge<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> implements Serializable {
+        private static final long serialVersionUID = 8936945680611529186L;
+
         protected final EdgeId id;
 
         protected Node<NodeId, EdgeId, EdgeImpl> target;
@@ -136,7 +145,9 @@ public class HibernateWebResolver {
         }
     }
 
-    public static abstract class Node<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> {
+    public static abstract class Node<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> implements Serializable {
+        private static final long serialVersionUID = -422807599223330528L;
+
         protected final NodeId id;
 
         protected final List<EdgeImpl> edges = new ArrayList<EdgeImpl>();
