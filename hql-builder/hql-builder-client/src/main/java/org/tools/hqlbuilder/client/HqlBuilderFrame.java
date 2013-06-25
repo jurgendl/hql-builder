@@ -590,9 +590,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 list.addRecord(new EListRecord<String>(option));
             }
 
-            insertHelper.setPreferredSize(new Dimension(500, 200));
-            insertHelper.setSize(new Dimension(500, 200));
-            insertHelper.setMinimumSize(new Dimension(500, 200));
+            Dimension size = new Dimension(500, 200);
+            insertHelper.setPreferredSize(size);
+            insertHelper.setSize(size);
+            insertHelper.setMinimumSize(size);
 
             insertHelperList.addMouseListener(new MouseAdapter() {
                 @Override
