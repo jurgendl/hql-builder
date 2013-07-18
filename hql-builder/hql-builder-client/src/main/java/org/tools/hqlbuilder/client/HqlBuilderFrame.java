@@ -1700,7 +1700,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                         fontAction.setWarnRestart(true);
 
-                        JOptionPane.showMessageDialog(null, HqlResourceBundle.getMessage("change visible after restart"), "",
+                        JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("change visible after restart"), "",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
@@ -1953,6 +1953,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 });
                 log(recordCount + " records");
                 br.flush();
+                br.close();
             }
         } catch (Exception ex) {
             logger.error("export data", ex); //$NON-NLS-1$
@@ -2347,7 +2348,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void font() {
-        Font font = EFontChooser.showDialog(null, getFont().getFamily());
+        Font font = EFontChooser.showDialog((JComponent) frame.getContentPane(), getFont().getFamily());
         if (font == null) {
             return;
         }
@@ -2375,7 +2376,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     return;
                 }
             }
-            String name = JOptionPane.showInputDialog(frame, HqlResourceBundle.getMessage("add to favorites"),
+            String name = JOptionPane.showInputDialog(frame.getContentPane(), HqlResourceBundle.getMessage("add to favorites"),
                     HqlResourceBundle.getMessage("favorite name"));
             addLast(name);
         } catch (Exception ex) {
@@ -2611,12 +2612,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private Color chooseColor() {
         Color color = getSearchColor();
-        color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose search highlight color"), color);
+        color = JColorChooser.showDialog(frame, HqlResourceBundle.getMessage("Choose search highlight color"), color);
         return color;
     }
 
     protected void search_color() {
-        searchColorAction.setValue(applyColor(chooseColor()));
+        Color chooseColor = chooseColor();
+        if(chooseColor!=null)
+		searchColorAction.setValue(applyColor(chooseColor));
     }
 
     private Color applyColor(Color color) {
