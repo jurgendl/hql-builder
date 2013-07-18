@@ -289,5 +289,14 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</releases>
 		</repository>
+		<repository>
+			<id>hql-builder.googlecode.releases</id>
+			<url>https://hql-builder.googlecode.com/svn/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
 	</repositories>
 </project>
