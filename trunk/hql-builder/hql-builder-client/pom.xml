@@ -30,18 +30,6 @@
 			<artifactId>l2fprod-common-all</artifactId>
 			<version>${version.l2fprod}</version>
  		</dependency>
- 		<!-- optional -->
-		<dependency>
-			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>core-renderer</artifactId>
-			<version>${version.xhtmlrenderer}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.lowagie</groupId>
-			<artifactId>itext</artifactId>
-			<version>${version.itext}</version>
-		</dependency>
-		<!-- ??? -->
 		<dependency>
 			<groupId>com.toedter</groupId>
 			<artifactId>jcalendar</artifactId>
