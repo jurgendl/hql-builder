@@ -1,1 +1,2 @@
-"java" -cp . DownloadDependencies
+@"java" -cp . DownloadDependencies
+@pause
