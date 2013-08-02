@@ -1,3 +1,9 @@
+0.0 sources
+===========
+
+I recommend checking out the sources with Subversion and using Maven to handle dependencies
+sources are included in directory sources
+
 1.0 dependencies
 ================
 
@@ -6,6 +12,7 @@ you can use other versions than the ones below, for example use a more recent ve
 
 run download-dependencies.bat found in directory libraries,
 it will download all dependencies to the directory libraries\dependencies
+
 
 1.1 service dependencies
 ------------------------
@@ -76,6 +83,7 @@ jta version 1.1
 glazedlists_java15 version 1.9.0
 hibernate-commons-annotations version 3.2.0.Final
 javassist version 3.18.0-GA
+
 
 2.0 HQL Builder v1.0.2
 ======================
