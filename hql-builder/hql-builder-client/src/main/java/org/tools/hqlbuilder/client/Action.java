@@ -179,7 +179,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     protected void setDescriptions(Object value) {
-        if (type == null) {
+        if (type == null || persister == null) {
             setShortDescription(description);
             setLongDescription(description);
             return;
