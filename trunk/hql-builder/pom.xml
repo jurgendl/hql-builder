@@ -41,6 +41,7 @@
 				<module>hql-builder-full</module>
 				<module>hql-builder-common-test</module>
 				<module>hql-builder-service-test</module>
+				<module>hql-builder-service-war-test</module>
 				<module>hql-builder-client-test</module>
 				<module>hql-builder-test</module>
 			</modules>
