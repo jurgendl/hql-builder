@@ -150,9 +150,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
-    /** do not remove */
-    ca.odell.glazedlists.swing.EventSelectionModel<?> wtf;
-
     private static Preferences preferences;
 
     private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
@@ -2618,8 +2615,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void search_color() {
         Color chooseColor = chooseColor();
-        if(chooseColor!=null)
-		searchColorAction.setValue(applyColor(chooseColor));
+        if (chooseColor != null) {
+            searchColorAction.setValue(applyColor(chooseColor));
+        }
     }
 
     private Color applyColor(Color color) {
