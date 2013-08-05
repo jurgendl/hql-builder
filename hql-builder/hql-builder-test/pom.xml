@@ -21,11 +21,6 @@
 			<artifactId>hql-builder-service-test</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>3.8</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
