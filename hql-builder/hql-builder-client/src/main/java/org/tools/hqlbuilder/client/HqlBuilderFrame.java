@@ -7,6 +7,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -31,20 +32,26 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +69,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.prefs.Preferences;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -69,8 +77,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -132,6 +142,7 @@ import org.swingeasy.ResultType;
 import org.swingeasy.UIUtils;
 import org.swingeasy.system.SystemSettings;
 import org.tools.hqlbuilder.client.HqlWizard.HqlWizardListener;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
@@ -144,6 +155,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
+    private static String version;
+
     private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 
     private static final String PERSISTENT_LOCALE = "locale";
@@ -251,14 +264,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction deleteInvertedSelectionAction;
 
-    // existing
+    // actions
     //
     private final HqlBuilderAction helpAction = new HqlBuilderAction(null, this, HELP, true, HELP, "help16.png", HELP, HELP, true, 'h', "F1");
 
     private final HqlBuilderAction exitAction = new HqlBuilderAction(null, this, EXIT, true, EXIT, "sc_quit.png", EXIT, EXIT, true, 'x', "alt X");
 
-    // not accelerated
-    //
+    private final HqlBuilderAction aboutAction = new HqlBuilderAction(null, this, ABOUT, true, ABOUT, "bricks-icon.png", ABOUT, ABOUT, true, null,
+            null);
+
     private final HqlBuilderAction helpHibernateAction = new HqlBuilderAction(null, this, HIBERNATE_DOCUMENTATION, true, HIBERNATE_DOCUMENTATION,
             "help16.png", HIBERNATE_DOCUMENTATION, HIBERNATE_DOCUMENTATION, true, null, null);
 
@@ -317,7 +331,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
 
     //
-
     private final ELabel maxResults;
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
@@ -1734,10 +1747,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             helpmenu.add(new JMenuItem(helpHqlAction));
             helpmenu.add(new JMenuItem(luceneQuerySyntaxAction));
             helpmenu.add(new JMenuItem(helpAction));
+            helpmenu.add(new JMenuItem(aboutAction));
             menuBar.add(helpmenu);
         }
 
-        String version;
         try {
             Properties p = new Properties();
             p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools/hql-builder-client/pom.properties"));
@@ -2867,5 +2880,77 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
         parameterBuilder.setText("");
         save();
+    }
+
+    protected void about() {
+        try {
+            String latest = "?";
+
+            try {
+                String u = getText("http://hql-builder.googlecode.com/svn/maven2/org/tools/hql-builder-client/maven-metadata.xml");
+                org.w3c.dom.Text o = (org.w3c.dom.Text) CommonUtils.getFromXml(new ByteArrayInputStream(u.getBytes()), "metadata",
+                        "/metadata/versioning/release/text()");
+                latest = o.getData();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
+            boolean upToDate = "?".equals(latest) || version.compareTo(latest) >= 0;
+            JLabel vl = new JLabel(HqlResourceBundle.getMessage("versioning", version, latest,
+                    HqlResourceBundle.getMessage(String.valueOf(upToDate), false)));
+
+            JLabel vlu = null;
+            if (!upToDate) {
+                vlu = new JLabel("<html><a href=\"" + downloadLatestURI + "\">" + HqlResourceBundle.getMessage("download latest") + "</a></html>");
+                vlu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                vlu.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        try {
+                            Desktop.getDesktop().browse(new URI(downloadLatestURI));
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        } catch (URISyntaxException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            JDialog d = new JDialog(frame, HqlResourceBundle.getMessage("about"), true);
+            JPanel cp = new JPanel(new MigLayout("debug"));
+            d.getContentPane().add(cp, BorderLayout.CENTER);
+
+            cp.add(new JLabel(new ImageIcon(logo)), BorderLayout.NORTH);
+            cp.add(vl);
+            if (vlu != null) {
+                cp.add(vlu, BorderLayout.SOUTH);
+            }
+
+            d.pack();
+            d.setResizable(false);
+            d.setLocationRelativeTo(frame);
+            d.setVisible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static String getText(String url) throws Exception {
+        URL website = new URL(url);
+        URLConnection connection = website.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+
+        return response.toString();
     }
 }

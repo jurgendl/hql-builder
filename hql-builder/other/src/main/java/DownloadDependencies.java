@@ -9,7 +9,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class DownloadDependencies {
 	public static void main(String[] args) {

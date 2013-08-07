@@ -35,7 +35,15 @@ public class HqlResourceBundle implements PropertyChangeListener {
         return String.format(getMessage(key), params);
     }
 
+    public static String getMessage(String key, boolean ucase, Object... params) {
+        return String.format(getMessage(key), ucase, params);
+    }
+
     public static String getMessage(String key) {
+        return getMessage(key, true);
+    }
+
+    public static String getMessage(String key, boolean ucase) {
         String key2 = key.replace(' ', '_').replace(':', '_').replace('&', '_').replace('/', '_');
         if (missing.contains(key2)) {
             return key;
@@ -48,7 +56,11 @@ public class HqlResourceBundle implements PropertyChangeListener {
                 string = getMessage(string);
             }
 
-            return Character.toUpperCase(string.charAt(0)) + string.substring(1);
+            if (ucase) {
+                return Character.toUpperCase(string.charAt(0)) + string.substring(1);
+            }
+
+            return string;
         } catch (Exception ex) {
             System.out.println(key2 + "=" + key);
             missing.add(key);

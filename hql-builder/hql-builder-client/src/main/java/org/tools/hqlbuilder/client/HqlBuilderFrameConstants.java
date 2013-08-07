@@ -4,6 +4,10 @@ package org.tools.hqlbuilder.client;
  * @author Jurgen
  */
 public interface HqlBuilderFrameConstants {
+    public static final String downloadLatestURI = "http://code.google.com/p/hql-builder/downloads/list";
+
+    public static final String ABOUT = "about";
+
     public static final String SET_NULL = "set null";
 
     public static final String TO_TEXT = "to text";
