@@ -12,6 +12,8 @@ import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 
+import org.swingeasy.UIUtils;
+
 public class SplashHelper {
     private static Splash splash;
 
@@ -55,8 +57,7 @@ public class SplashHelper {
         splash.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                stopped = true;
-                window.dispose();
+                _end();
             }
         });
     }
@@ -84,9 +85,21 @@ public class SplashHelper {
     }
 
     public static void end() {
-        stopped = true;
-        window.dispose();
         cfgp.put("splashtimes", splashtimessb.toString());
+        _end();
+    }
+
+    protected static void _end() {
+        stopped = true;
+        try {
+            for (int i = 0; i < 100; i++) {
+                UIUtils.translucent(window, Math.max(0f, Math.min(1f, (100 - i) / 100f)));
+                Thread.sleep(10);
+            }
+        } catch (Exception ex) {
+            //
+        }
+        window.dispose();
     }
 
     public static void update(String connectionInfo) {
