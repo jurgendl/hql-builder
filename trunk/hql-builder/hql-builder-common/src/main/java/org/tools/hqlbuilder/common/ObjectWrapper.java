@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 /**
  * ObjectWrapper
  * 
- * @author jdlandsh
+ * @author Jurgen
  */
 @SuppressWarnings("rawtypes")
 public final class ObjectWrapper {

@@ -34,7 +34,7 @@
 				<version>2.9</version>
 				<configuration>
 					<wtpContextName>hqlbuilder</wtpContextName>
-					<wtpversion>2.0</wtpversion>
+					<wtpversion>2.5</wtpversion>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>false</downloadJavadocs>
 					<forceRecheck>true</forceRecheck>

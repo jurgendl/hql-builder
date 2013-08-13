@@ -32,6 +32,7 @@ public class DownloadDependencies {
 					r.add(line);
 					System.out.println("repository: " + line);
 				}
+				br.close();
 			}
 			List<String> d = new ArrayList<String>();
 			{
@@ -53,6 +54,7 @@ public class DownloadDependencies {
 						d.add(line.substring("[INFO]".length()).trim());
 					}
 				}
+				br.close();
 			}
 			File out = new File("dependencies");
 			out.mkdir();
