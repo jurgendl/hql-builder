@@ -1,6 +1,10 @@
 @echo off
+
+set MAVEN_OPTS=-Xms64m -Xmx1024m -Xss2048k -Xmn32m -XX:PermSize=64m -XX:MaxPermSize=256m
+
 :start
 cls
+echo %~dp0
 echo ------------------
 echo u. svn update
 echo i. install (no tests)
@@ -77,7 +81,7 @@ goto start
 
 :lclean
 cls
-call mvn -e clean -o
+call mvn -e clean
 pause
 goto start
 
