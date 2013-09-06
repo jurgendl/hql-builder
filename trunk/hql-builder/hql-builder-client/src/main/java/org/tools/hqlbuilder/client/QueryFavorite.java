@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.QueryParameter;
 
 /**
@@ -100,7 +101,7 @@ public class QueryFavorite implements Serializable {
 
     public String getHqlPreview() {
         if (hqlPreview == null) {
-            hqlPreview = full.replaceAll("\\s", " ").replaceAll("  ", " ").replaceAll("  ", " ");
+            hqlPreview = CommonUtils.removeUnnecessaryWhiteSpaces(full);
         }
         return this.hqlPreview;
     }
