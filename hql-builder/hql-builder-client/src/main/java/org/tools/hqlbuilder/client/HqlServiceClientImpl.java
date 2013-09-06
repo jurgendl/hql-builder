@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
 
@@ -292,21 +293,13 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
     @Override
     public String removeBlanks(String string) {
-        string = string.trim();
-        while (string.indexOf("  ") != -1) {
-            string = string.replaceAll("  ", " ");
-        }
-        while (string.indexOf(getNewline() + getNewline()) != -1) {
-            string = string.replaceAll("\\Q" + getNewline() + getNewline() + "\\E", getNewline());
-        }
-        return string.trim();
+        return CommonUtils.removeUnnecessaryWhiteSpaces(string);
     }
 
     private String lineformat1replace(String string, String splitter) {
         Matcher matcher = Pattern.compile(" " + splitter + " ", Pattern.CASE_INSENSITIVE).matcher(string);
-        String CTE = "AAAAAAAAAAA"; // wordt zeker niet gebruikt, wordt later vervangen
+        String CTE = "AAAAAAAAAAA";
         String replaceAll = matcher.replaceAll(" " + getNewline() + CTE + " ").replaceAll(CTE, splitter);
-
         return replaceAll;
     }
 
