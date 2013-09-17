@@ -112,6 +112,7 @@ import org.swingeasy.CustomizableOptionPane;
 import org.swingeasy.DocumentKeyListener;
 import org.swingeasy.EButton;
 import org.swingeasy.ECheckBox;
+import org.swingeasy.ECheckBoxConfig;
 import org.swingeasy.EComponentPopupMenu;
 import org.swingeasy.EFontChooser;
 import org.swingeasy.ELabel;
@@ -1356,8 +1357,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         {
             EList<String> searchresults = new EList<String>(new EListConfig().setSortable(false));
             final EList<String> searchresultsEDTSafe = searchresults.stsi();
-            final ECheckBox searchClass = new ECheckBox("class", true);
-            final ECheckBox searchField = new ECheckBox("field", true);
+            final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
+            final ECheckBox searchField = new ECheckBox(new ECheckBoxConfig("field", true));
             ELabeledTextFieldButtonComponent searchinput = new ELabeledTextFieldButtonComponent() {
                 private static final long serialVersionUID = 6519657911421417572L;
 
