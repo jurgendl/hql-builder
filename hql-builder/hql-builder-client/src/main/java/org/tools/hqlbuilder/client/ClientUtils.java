@@ -58,7 +58,7 @@ public class ClientUtils extends CommonUtils {
         list.getFiltercomponent().setBorder(BorderFactory.createEmptyBorder(borderw, borderw, borderw, borderw));
 
         for (V option : options) {
-            list.addRecord(new EListRecord<V>(option));
+            list.stsi().addRecord(new EListRecord<V>(option));
         }
 
         ResultType returnValue = CustomizableOptionPane.showCustomDialog(parent, container, title, MessageType.QUESTION, OptionType.OK_CANCEL, null,
