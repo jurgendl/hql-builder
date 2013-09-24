@@ -1152,20 +1152,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
                             try {
                                 headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getScalarColumnNames()[i][0] + (script ? "*" : "")
-                                        + "<html>", type);
+                                        + "</html>", type);
                             } catch (Exception ex) {
                                 log(ex);
 
                                 try {
                                     headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getSqlAliases()[i] + (script ? "*" : "")
-                                            + "<html>", type);
+                                            + "</html>", type);
                                 } catch (Exception ex2) {
                                     log(ex2);
-                                    headers.add("<html>" + (script ? "*" : "") + name + "<br>" + i + (script ? "*" : "") + "<html>", type);
+                                    headers.add("<html>" + (script ? "*" : "") + name + "<br>" + i + (script ? "*" : "") + "</html>", type);
                                 }
                             }
                         } else {
-                            headers.add("<html>" + name + "<br>" + rv.getQueryReturnAliases()[i] + "<html>", type);
+                            headers.add("<html>" + name + "<br>" + rv.getQueryReturnAliases()[i] + "</html>", type);
                         }
                     }
 
