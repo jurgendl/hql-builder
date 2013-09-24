@@ -1149,23 +1149,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                             type = Object.class;
                             name = "";
                         }
+                        // String br = "<br>";
+                        // String html = "<html>";
+                        // String _html = "</html>";
+                        String br = " ";
+                        String html = "";
+                        String _html = "";
                         if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
                             try {
-                                headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getScalarColumnNames()[i][0] + (script ? "*" : "")
-                                        + "</html>", type);
+                                headers.add(html + (script ? "*" : "") + name + br + rv.getScalarColumnNames()[i][0] + (script ? "*" : "") + _html,
+                                        type);
                             } catch (Exception ex) {
                                 log(ex);
 
                                 try {
-                                    headers.add("<html>" + (script ? "*" : "") + name + "<br>" + rv.getSqlAliases()[i] + (script ? "*" : "")
-                                            + "</html>", type);
+                                    headers.add(html + (script ? "*" : "") + name + br + rv.getSqlAliases()[i] + (script ? "*" : "") + _html, type);
                                 } catch (Exception ex2) {
                                     log(ex2);
-                                    headers.add("<html>" + (script ? "*" : "") + name + "<br>" + i + (script ? "*" : "") + "</html>", type);
+                                    headers.add(html + (script ? "*" : "") + name + br + i + (script ? "*" : "") + _html, type);
                                 }
                             }
                         } else {
-                            headers.add("<html>" + name + "<br>" + rv.getQueryReturnAliases()[i] + "</html>", type);
+                            headers.add(html + name + br + rv.getQueryReturnAliases()[i] + _html, type);
                         }
                     }
 
