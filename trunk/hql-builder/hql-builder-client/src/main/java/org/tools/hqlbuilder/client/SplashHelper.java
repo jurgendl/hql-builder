@@ -57,7 +57,7 @@ public class SplashHelper {
         splash.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                _end();
+                _end(1);
             }
         });
     }
@@ -86,14 +86,15 @@ public class SplashHelper {
 
     public static void end() {
         cfgp.put("splashtimes", splashtimessb.toString());
-        _end();
+        _end(100);
     }
 
-    protected static void _end() {
+    protected static void _end(int max) {
         stopped = true;
         try {
-            for (int i = 0; i < 100; i++) {
-                UIUtils.translucent(window, Math.max(0f, Math.min(1f, (100 - i) / 100f)));
+            float fmax = max;
+            for (int i = 0; i < max; i++) {
+                UIUtils.translucent(window, Math.max(0f, Math.min(1f, (max - i) / fmax)));
                 Thread.sleep(10);
             }
         } catch (Exception ex) {
@@ -103,6 +104,7 @@ public class SplashHelper {
     }
 
     public static void update(String connectionInfo) {
+        // TODO other connection types
         String key = connectionInfo.replaceAll("jdbc:oracle:thin", "").replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ")
                 .replaceAll("/", " ").trim();
         cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
