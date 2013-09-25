@@ -10,6 +10,7 @@ import java.beans.Introspector;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -98,7 +99,7 @@ public class PropertyPanel extends PropertySheetPanel {
                     if (!isInitialized(value)) {
                         value = LAZY;
                     } else {
-                        String.valueOf(value);
+                        System.out.println("initializing " + String.valueOf(value));
                     }
                 } catch (org.hibernate.LazyInitializationException ex) {
                     value = LAZY;
@@ -232,8 +233,15 @@ public class PropertyPanel extends PropertySheetPanel {
                 }
 
                 addProperty(property);
-            } catch (Exception ex) {
+            } catch (RuntimeException ex) {
                 System.err.println(propertyDescriptorEntry.getKey());
+                System.err.println(ex);
+            } catch (IllegalAccessException ex) {
+                System.err.println(propertyDescriptorEntry.getKey());
+                System.err.println(ex);
+            } catch (InvocationTargetException ex) {
+                System.err.println(propertyDescriptorEntry.getKey());
+                System.err.println(ex);
             }
         }
 
