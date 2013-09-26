@@ -3,6 +3,11 @@ package org.tools.hqlbuilder.client;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.tools.hqlbuilder.common.CommonUtils;
@@ -11,25 +16,24 @@ import org.tools.hqlbuilder.common.QueryParameter;
 /**
  * @author Jurgen
  */
+@XmlRootElement(name = "favorite")
 public class QueryFavorite implements Serializable {
-    /** serialVersionUID */
     private static final long serialVersionUID = -5587946688272447640L;
 
-    /** info */
     private transient String toString;
 
-    /** info */
     private String full;
 
-    /** info */
+    @XmlAttribute(required = true)
     private String name;
 
-    /** info */
+    @XmlElementWrapper
+    @XmlElement(name = "parameter")
     private QueryParameter[] parameters;
 
-    private String hqlPreview = null;
+    private transient String hqlPreview = null;
 
-    private String parametersPreview = null;
+    private transient String parametersPreview = null;
 
     public QueryFavorite() {
         super();

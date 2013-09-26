@@ -33,8 +33,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -99,6 +97,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.miginfocom.swing.MigLayout;
@@ -2412,14 +2414,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
         favorites.add(favorite);
         File favoritesForProject = new File(FAVORITES_DIR, hqlService.getProject());
-        File xmlhistory = new File(favoritesForProject, name + FAVORITES_EXT);
-        if (!xmlhistory.getParentFile().exists()) {
-            xmlhistory.getParentFile().mkdirs();
+        File xmlhistory = new File(favoritesForProject, FAVORITE_PREFIX + name + FAVORITES_EXT);
+        if (!favoritesForProject.exists()) {
+            favoritesForProject.mkdirs();
         }
         FileOutputStream os = new FileOutputStream(xmlhistory);
-        XMLEncoder enc = new XMLEncoder(os);
-        enc.writeObject(favorite);
-        enc.close();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(QueryFavorite.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(favorite, os);
+            os.close();
+        } catch (JAXBException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void loadFavorites() {
@@ -2436,23 +2444,41 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (xmls == null) {
             return;
         }
-        for (File xml : xmls) {
-            FileInputStream is;
-            try {
-                is = new FileInputStream(xml);
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
+        FavConvert.convert(xmls);
+        xmls = favoritesForProject.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.startsWith(FAVORITE_PREFIX) && name.endsWith(FAVORITES_EXT);
             }
-            XMLDecoder dec = new XMLDecoder(is);
-            QueryFavorite favorite = (QueryFavorite) dec.readObject();
-            if (favorites.contains(favorite)) {
-                favorites.remove(favorites.indexOf(favorite));
+        });
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(QueryFavorite.class);
+            for (File xml : xmls) {
+                FileInputStream is;
+                try {
+                    is = new FileInputStream(xml);
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                    QueryFavorite favorite = (QueryFavorite) jaxbUnmarshaller.unmarshal(is);
+                    is.close();
+                    if (favorites.contains(favorite)) {
+                        favorites.remove(favorites.indexOf(favorite));
+                    }
+                    favorites.add(favorite);
+                    if (xml.getName().equals(FAVORITE_PREFIX + LAST + FAVORITES_EXT)) {
+                        importFromFavoritesNoQ(favorite);
+                    }
+                } catch (JAXBException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
-            favorites.add(favorite);
-            dec.close();
-            if (xml.getName().equals(LAST + FAVORITES_EXT)) {
-                importFromFavoritesNoQ(favorite);
-            }
+        } catch (JAXBException ex) {
+            ex.printStackTrace();
         }
     }
 
