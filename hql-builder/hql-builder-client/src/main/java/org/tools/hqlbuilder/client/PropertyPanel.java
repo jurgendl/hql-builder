@@ -99,7 +99,7 @@ public class PropertyPanel extends PropertySheetPanel {
                     if (!isInitialized(value)) {
                         value = LAZY;
                     } else {
-                        System.out.println("initializing " + String.valueOf(value));
+                        String.valueOf(value);
                     }
                 } catch (org.hibernate.LazyInitializationException ex) {
                     value = LAZY;

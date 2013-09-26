@@ -2,13 +2,19 @@ package org.tools.hqlbuilder.common;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "parameter")
 public class QueryParameter implements Serializable, Comparable<QueryParameter> {
     private static final long serialVersionUID = 2308140856360992628L;
 
     private transient Object value;
 
+    @XmlAttribute
     private String name;
 
+    @XmlAttribute(name = "value", required = true)
     private String text;
 
     private transient String toString;
