@@ -66,6 +66,16 @@ public class SplashHelper {
         });
     }
 
+    public static void progress() {
+        if (splashtimesd == null) {
+            return;
+        }
+        // long current = Math.min(System.currentTimeMillis() - time, splashtimesc + splashtimesd[step]);
+        // System.out.println(System.currentTimeMillis() + "-" + time + "//" + splashtimesc + "+" + splashtimesd[step] + "//"
+        // + (System.currentTimeMillis() - time) + "//" + (splashtimesc + splashtimesd[step]) + "==" + current);
+        // splash.setProgress((float) current / splashtimest);
+    }
+
     public static void step() {
         if (step > 0) {
             splashtimessb.append(System.currentTimeMillis() - time);
