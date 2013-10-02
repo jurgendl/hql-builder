@@ -741,6 +741,26 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             SplashHelper.setup();
             SplashHelper.step();
 
+            Thread tt = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (true) {
+                            SplashHelper.progress();
+                            try {
+                                Thread.sleep(200l);
+                            } catch (InterruptedException ex) {
+                                //
+                            }
+                        }
+                    } catch (RuntimeException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            tt.setDaemon(true);
+            tt.start();
+
             // problem in "all in one" setup
             // sending 'wrong' locale to Oracle gives exception
             // Oracle will now give English exceptions
