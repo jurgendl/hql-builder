@@ -41,7 +41,6 @@ import org.hibernate.type.CollectionType;
 import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
-import org.hibernate.validator.InvalidValue;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
@@ -413,22 +412,23 @@ public class HqlServiceImpl implements HqlService {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T save(T object) throws ValidationException {
-        try {
-            org.hibernate.classic.Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
-            object = (T) session.merge(object);
-            session.persist(object);
-            tx.commit();
-            session.flush();
-            return object;
-        } catch (org.hibernate.validator.InvalidStateException ex) {
-            List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
-            for (InvalidValue iv : ex.getInvalidValues()) {
-                ivs.add(new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(iv.getBean(), iv.getBeanClass(), iv.getMessage(),
-                        iv.getPropertyName(), iv.getPropertyPath(), iv.getRootBean(), iv.getValue()));
-            }
-            throw new ValidationException(ex.getMessage(), ivs);
-        }
+        // try {
+        org.hibernate.classic.Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        object = (T) session.merge(object);
+        session.persist(object);
+        tx.commit();
+        session.flush();
+        return object;
+        // } catch (org.hibernate.validator.InvalidStateException ex) {
+        // List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new
+        // ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
+        // for (org.hibernate.validator.InvalidValue iv : ex.getInvalidValues()) {
+        // ivs.add(new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(iv.getBean(), iv.getBeanClass(), iv.getMessage(),
+        // iv.getPropertyName(), iv.getPropertyPath(), iv.getRootBean(), iv.getValue()));
+        // }
+        // throw new ValidationException(ex.getMessage(), ivs);
+        // }
     }
 
     /**
