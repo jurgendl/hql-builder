@@ -1101,6 +1101,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
         }
         sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp);
+        sql.setCaret(0);
         clearResults();
         if (ex instanceof SyntaxException) {
             SyntaxException se = SyntaxException.class.cast(ex);
