@@ -87,7 +87,7 @@ public class Pojo implements Serializable {
 	@Override
 	public String toString() {
 		return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value="
-				+ getValue() + ", from0To100=" + getFrom0To100()
+				+ getValue() + ", from0To100=" + getFrom0To100() + ", regexDigits=" + getRegexDigits()
 				+ ", embedded=" + getEmbedded() + "]";
 	}
 

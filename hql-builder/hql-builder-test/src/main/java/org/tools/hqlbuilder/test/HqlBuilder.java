@@ -23,12 +23,13 @@ public class HqlBuilder {
         List<Object> results = hqlServiceClient.execute("from Pojo", Integer.MAX_VALUE).getResults();
         if (results.size() == 0) {
             Pojo object = new Pojo();
+            object.setValue("value");
+            object.getPlainSet().add("element 1");
+            object.getPlainSet().add("element 2");
+            object.setRegexDigits("123");
             try {
                 object.setFrom0To100(150);
                 object.getEmbedded().setFrom100(50);
-                object.setValue("value");
-                object.getPlainSet().add("element 1");
-                object.getPlainSet().add("element 2");
                 hqlServiceClient.save(object);
             } catch (org.tools.hqlbuilder.common.exceptions.ValidationException e) {
                 for (InvalidValue iv : e.getInvalidValues()) {
