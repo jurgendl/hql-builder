@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,8 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Version;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -31,71 +34,79 @@ public class Pojo implements Serializable {
 	private static final long serialVersionUID = -589586518891599759L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @Version
-    private Integer version;
+	@Version
+	private Integer version;
 
-    private String value;
-    
-    @Min(0)
-    @Max(100)
-    private Integer from0To100;
-    
-    @Pattern(regexp= "\\d*")
-    private String regexDigits;
-    
-    @ElementCollection(fetch=FetchType.LAZY)
-    @JoinTable(name="plainSet", joinColumns={@JoinColumn(name="plainSetId")})
-    @Column(name="plainSet", nullable=false)
-    @Sort(type=SortType.NATURAL)
-    private SortedSet<String> plainSet = new TreeSet<String>();
+	private String value;
 
-    private Long getId() {
-        return this.id;
-    }
+	@Embedded
+    @NotNull
+    @Valid
+	private EmbedPojo embedded = new EmbedPojo();
 
-    private void setId(Long id) {
-        this.id = id;
-    }
+	@Min(0)
+	@Max(100)
+	private Integer from0To100;
 
-    private Integer getVersion() {
-        return this.version;
-    }
+	@Pattern(regexp = "\\d*")
+	private String regexDigits;
 
-    private void setVersion(Integer version) {
-        this.version = version;
-    }
+	@ElementCollection(fetch = FetchType.LAZY)
+	@JoinTable(name = "plainSet", joinColumns = { @JoinColumn(name = "plainSetId") })
+	@Column(name = "plainSet", nullable = false)
+	@Sort(type = SortType.NATURAL)
+	private SortedSet<String> plainSet = new TreeSet<String>();
 
-    public String getValue() {
-        return this.value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @Override
-	public String toString() {
-		return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value=" + getValue()
-				+ ", from0To100=" + getFrom0To100() + "]";
+	private Long getId() {
+		return this.id;
 	}
 
-    @Override
-    public boolean equals(final Object other) {
-    	if(getId()==null)return false;
-        if (!(other instanceof Pojo)) {
-            return false;
-        }
-        Pojo castOther = (Pojo) other;
-        return new EqualsBuilder().append(getId(), castOther.getId()).isEquals();
-    }
+	private void setId(Long id) {
+		this.id = id;
+	}
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(getId()).toHashCode();
-    }
+	private Integer getVersion() {
+		return this.version;
+	}
+
+	private void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public String getValue() {
+		return this.value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value="
+				+ getValue() + ", from0To100=" + getFrom0To100()
+				+ ", embedded=" + getEmbedded() + "]";
+	}
+
+	@Override
+	public boolean equals(final Object other) {
+		if (getId() == null)
+			return false;
+		if (!(other instanceof Pojo)) {
+			return false;
+		}
+		Pojo castOther = (Pojo) other;
+		return new EqualsBuilder().append(getId(), castOther.getId())
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(getId()).toHashCode();
+	}
 
 	public Integer getFrom0To100() {
 		return from0To100;
@@ -119,5 +130,13 @@ public class Pojo implements Serializable {
 
 	public void setPlainSet(SortedSet<String> plainSet) {
 		this.plainSet = plainSet;
+	}
+
+	public EmbedPojo getEmbedded() {
+		return embedded;
+	}
+
+	public void setEmbedded(EmbedPojo embedded) {
+		this.embedded = embedded;
 	}
 }

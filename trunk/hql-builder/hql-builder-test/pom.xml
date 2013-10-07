@@ -21,6 +21,11 @@
 			<artifactId>hql-builder-service-test</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
