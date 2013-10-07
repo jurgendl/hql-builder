@@ -717,7 +717,6 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public void createScript() {
         SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
-        export.setOutputFile("filename");
         export.setDelimiter(";");
         export.setFormat(true);
         export.setHaltOnError(false);
