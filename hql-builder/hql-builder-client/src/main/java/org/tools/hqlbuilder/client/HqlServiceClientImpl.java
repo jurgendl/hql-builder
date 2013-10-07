@@ -267,8 +267,8 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         // (?i) : case insensitive
         // *+ : zero or more, possessive
         // $1 : replace with value of first group
-        string = string.replaceAll("(?i)(ASC)[ ]*+,[ ]*+", "$1," + getNewline());
-        string = string.replaceAll("(?i)(DESC)[ ]*+,[ ]*+", "$1," + getNewline());
+        string = string.replaceAll(" (?i)(ASC)[ ]*+,[ ]*+", " $1," + getNewline());
+        string = string.replaceAll(" (?i)(DESC)[ ]*+,[ ]*+", " $1," + getNewline());
 
         if (string.startsWith("select ")) {
             string = "select " + getNewline() + string.substring("select ".length());
