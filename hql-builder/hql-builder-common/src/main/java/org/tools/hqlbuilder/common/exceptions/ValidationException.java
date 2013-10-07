@@ -71,8 +71,8 @@ public class ValidationException extends ServiceException {
 
         @Override
         public String toString() {
-            return "InvalidValue [message=" + this.message + ", value=" + this.value + ", propertyName=" + this.propertyName + ", beanClass="
-                    + this.beanClass + ", bean=" + this.bean + ", rootBean=" + this.rootBean + ", propertyPath=" + this.propertyPath + "]";
+            return "InvalidValue [beanClass=" + this.beanClass + ", propertyName=" + this.propertyName + ", propertyPath=" + this.propertyPath
+                    + ", message=" + this.message + ", value=" + this.value + ", bean=" + this.bean + ", rootBean=" + this.rootBean + "]";
         }
     }
 
