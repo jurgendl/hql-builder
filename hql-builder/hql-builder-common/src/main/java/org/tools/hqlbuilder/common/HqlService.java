@@ -51,4 +51,6 @@ public interface HqlService extends Serializable {
     public abstract List<String> getPropertyNames(Object key, String[] parts);
 
     public abstract void log();
+
+    public abstract void createScript();
 }

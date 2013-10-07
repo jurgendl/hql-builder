@@ -101,4 +101,9 @@ public abstract class DelegatingHqlService implements HqlService {
     public void log() {
         getDelegate().log();
     }
+
+    @Override
+    public void createScript() {
+        getDelegate().createScript();
+    }
 }

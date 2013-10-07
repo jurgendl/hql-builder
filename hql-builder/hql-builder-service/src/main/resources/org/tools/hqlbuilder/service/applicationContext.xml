@@ -11,6 +11,7 @@
 		<property name="username" value="${hibernate.connection.username}" />
 		<property name="project" value="${project}" />
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
+		<property name="configurationBean" ref="configurationBean"/>
 	</bean>
 
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
@@ -57,6 +58,9 @@
 		<property name="configLocation" value="classpath:${hibernate.cfg.xml}" />
 		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
+	</bean>
+
+	<bean id="configurationBean" class="org.tools.hqlbuilder.service.ConfigurationBean" scope="singleton">
 	</bean>
 
 </beans>

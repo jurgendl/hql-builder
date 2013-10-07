@@ -41,6 +41,7 @@ import org.hibernate.impl.AbstractQueryImpl;
 import org.hibernate.impl.QueryImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
@@ -73,6 +74,8 @@ public class HqlServiceImpl implements HqlService {
     private Information information;
 
     private Set<String> keywords;
+
+    private ConfigurationBean configurationBean;
 
     public HqlServiceImpl() {
         super();
@@ -709,5 +712,23 @@ public class HqlServiceImpl implements HqlService {
 
     public void setHibernateProperties(Properties hibernateProperties) {
         this.hibernateProperties = hibernateProperties;
+    }
+
+    @Override
+    public void createScript() {
+        SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
+        export.setOutputFile("filename");
+        export.setDelimiter(";");
+        export.setFormat(true);
+        export.setHaltOnError(false);
+        export.execute(true, false, false, true);
+    }
+
+    public ConfigurationBean getConfigurationBean() {
+        return this.configurationBean;
+    }
+
+    public void setConfigurationBean(ConfigurationBean configurationBean) {
+        this.configurationBean = configurationBean;
     }
 }
