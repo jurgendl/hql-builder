@@ -20,6 +20,7 @@ public class HqlBuilder {
         }
         final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) new org.springframework.context.support.ClassPathXmlApplicationContext(
                 "org/tools/hqlbuilder/test/applicationContext.xml").getBean("hqlServiceClient");
+        hqlServiceClient.createScript();
         List<Object> results = hqlServiceClient.execute("from Pojo", Integer.MAX_VALUE).getResults();
         if (results.size() == 0) {
             Pojo object = new Pojo();
@@ -35,6 +36,7 @@ public class HqlBuilder {
                 for (InvalidValue iv : e.getInvalidValues()) {
                     System.out.println(iv);
                 }
+                object.setSuperNotNull("superNotNull");
                 object.setFrom0To100(50);
                 object.getEmbedded().setFrom100(150);
                 hqlServiceClient.save(object);

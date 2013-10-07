@@ -30,7 +30,7 @@ import org.hibernate.annotations.SortType;
 @Entity
 @AccessType("field")
 @SuppressWarnings("unused")
-public class Pojo implements Serializable {
+public class Pojo extends PojoSuper implements Serializable {
 	private static final long serialVersionUID = -589586518891599759L;
 
 	@Id
