@@ -1120,8 +1120,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         if (formatSqlAction.isSelected()) {
             try {
-                sql.setText(hqlService.removeBlanks(hqlService.makeMultiline(cleanupSql(rv.getSql(), rv.getQueryReturnAliases(),
-                        rv.getScalarColumnNames()))));
+                sql.setText(/* hqlService.removeBlanks(hqlService.makeMultiline( */cleanupSql(rv.getSql(), rv.getQueryReturnAliases(),
+                        rv.getScalarColumnNames()));
                 log(sql.getText());
             } catch (Exception ex) {
                 logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
