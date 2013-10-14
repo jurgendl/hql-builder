@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,9 +21,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
-
-import javax.validation.Path;
-import javax.validation.Path.Node;
 
 import org.apache.lucene.queryParser.ParseException;
 import org.hibernate.HibernateException;
@@ -419,45 +415,48 @@ public class HqlServiceImpl implements HqlService {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T save(T object) throws ValidationException {
-        try {
-            org.hibernate.classic.Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
-            object = (T) session.merge(object);
-            session.persist(object);
-            tx.commit();
-            session.flush();
-            return object;
-            // } catch (org.hibernate.validator.InvalidStateException ex) {
-            // List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new
-            // ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
-            // for (org.hibernate.validator.InvalidValue iv : ex.getInvalidValues()) {
-            // ivs.add(new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(iv.getBean(), iv.getBeanClass(), iv.getMessage(),
-            // iv.getPropertyName(), iv.getPropertyPath(), iv.getRootBean(), iv.getValue()));
-            // }
-            // throw new ValidationException(ex.getMessage(), ivs);
-            // }
-        } catch (javax.validation.ConstraintViolationException ex) {
-            List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
-            for (javax.validation.ConstraintViolation<?> iv : ex.getConstraintViolations()) {
-                Object bean = iv.getLeafBean();
-                Class<?> beanClass = iv.getRootBeanClass();
-                String message = iv.getMessage();
-                Path path = iv.getPropertyPath();
-                Iterator<Node> it = path.iterator();
-                Path.Node node = it.next();
-                while (it.hasNext()) {
-                    node = it.next();
-                }
-                String propertyName = String.valueOf(node);
-                String propertyPath = String.valueOf(path);
-                Object rootBean = iv.getRootBean();
-                Object value = iv.getInvalidValue();
-                org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue tmp = new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(
-                        bean, beanClass, message, propertyName, propertyPath, rootBean, value);
-                ivs.add(tmp);
-            }
-            throw new ValidationException(ex.getMessage(), ivs);
-        }
+        // try {
+        org.hibernate.classic.Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        object = (T) session.merge(object);
+        session.persist(object);
+        tx.commit();
+        session.flush();
+        return object;
+        // } catch (org.hibernate.validator.InvalidStateException ex) {
+        // List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new
+        // ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
+        // for (org.hibernate.validator.InvalidValue iv : ex.getInvalidValues()) {
+        // ivs.add(new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(iv.getBean(), iv.getBeanClass(), iv.getMessage(),
+        // iv.getPropertyName(), iv.getPropertyPath(), iv.getRootBean(), iv.getValue()));
+        // }
+        // throw new ValidationException(ex.getMessage(), ivs);
+        // }
+        //
+        // } catch (javax.validation.ConstraintViolationException ex) {
+        // List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new
+        // ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
+        // for (javax.validation.ConstraintViolation<?> iv : ex.getConstraintViolations()) {
+        // Object bean = iv.getLeafBean();
+        // Class<?> beanClass = iv.getRootBeanClass();
+        // String message = iv.getMessage();
+        // Path path = iv.getPropertyPath();
+        // Iterator<Node> it = path.iterator();
+        // Path.Node node = it.next();
+        // while (it.hasNext()) {
+        // node = it.next();
+        // }
+        // String propertyName = String.valueOf(node);
+        // String propertyPath = String.valueOf(path);
+        // Object rootBean = iv.getRootBean();
+        // Object value = iv.getInvalidValue();
+        // org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue tmp = new
+        // org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(
+        // bean, beanClass, message, propertyName, propertyPath, rootBean, value);
+        // ivs.add(tmp);
+        // }
+        // throw new ValidationException(ex.getMessage(), ivs);
+        // }
     }
 
     /**

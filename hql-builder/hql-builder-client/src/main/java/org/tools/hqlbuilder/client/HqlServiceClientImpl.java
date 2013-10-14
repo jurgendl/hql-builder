@@ -245,7 +245,11 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
         log(sqlString);
 
-        sqlString = new org.hibernate.jdbc.util.BasicFormatterImpl().format(sqlString);
+        try {
+            sqlString = new org.hibernate.jdbc.util.BasicFormatterImpl().format(sqlString);
+        } catch (Throwable ex) {
+            //
+        }
 
         log(sqlString);
 
