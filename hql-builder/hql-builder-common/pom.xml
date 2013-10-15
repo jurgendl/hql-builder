@@ -5,7 +5,7 @@
 		<artifactId>hql-builder-parent</artifactId>
 		<version>1.0.4-SNAPSHOT</version>
 		<relativePath>../hql-builder-parent/pom.xml</relativePath>
-	</parent>	
+	</parent>
 	<artifactId>hql-builder-common</artifactId>
 	<name>hql-builder-common</name>
 	<description>hql-builder-common</description>
