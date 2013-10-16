@@ -9,4 +9,37 @@
 	<artifactId>hibernate-4.1</artifactId>
 	<name>hibernate-4.1</name>
 	<description>hibernate-4.1</description>
+	<properties>
+		<hibernate.version>4.1.12.Final</hibernate.version>
+		<hibernate-annotations.version>4.0.1.Final</hibernate-annotations.version>
+		<hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
+		<hibernate-validator.version>5.0.1.Final</hibernate-validator.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>${hibernate-annotations.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>${hibernate-jpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
+	</dependencies>
 </project>
