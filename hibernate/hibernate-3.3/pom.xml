@@ -9,6 +9,7 @@
 	<artifactId>hibernate-3.3</artifactId>
 	<name>hibernate-3.3</name>
 	<description>hibernate-3.3</description>
+	<packaging>pom</packaging>
 	<properties>
 		<hibernate.version>3.3.1.GA</hibernate.version>
 		<hibernate-annotations.version>3.1.0.GA</hibernate-annotations.version>
