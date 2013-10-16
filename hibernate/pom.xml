@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tools.hql-builder.hibernate</groupId>
 	<artifactId>parent</artifactId>
-	<version>1.0</version>
+	<version>final</version>
 	<name>hql-builder-hibernate-parent</name>
 	<description>hql-builder-hibernate-parent</description>
 	<packaging>pom</packaging>

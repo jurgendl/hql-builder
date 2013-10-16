@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.tools.hql-builder.hibernate</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0</version>
+		<version>final</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>hibernate-4.0</artifactId>
@@ -22,12 +22,7 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.common</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
 			<version>${hibernate-annotations.version}</version>
 		</dependency>
