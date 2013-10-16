@@ -9,4 +9,37 @@
 	<artifactId>hibernate-3.3</artifactId>
 	<name>hibernate-3.3</name>
 	<description>hibernate-3.3</description>
+	<properties>
+		<hibernate.version>3.3.2.GA</hibernate.version>
+		<hibernate-annotations.version>3.1.0.GA</hibernate-annotations.version>
+		<hibernate-jpa.version>1.0</hibernate-jpa.version>
+		<hibernate-validator.version>3.1.0.GA</hibernate-validator.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>${hibernate-annotations.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>${hibernate-jpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
+	</dependencies>
 </project>
