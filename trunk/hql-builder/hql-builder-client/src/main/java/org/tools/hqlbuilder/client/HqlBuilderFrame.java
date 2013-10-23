@@ -113,6 +113,7 @@ import org.slf4j.LoggerFactory;
 import org.swingeasy.CustomizableOptionPane;
 import org.swingeasy.DocumentKeyListener;
 import org.swingeasy.EButton;
+import org.swingeasy.EButtonConfig;
 import org.swingeasy.ECheckBox;
 import org.swingeasy.ECheckBoxConfig;
 import org.swingeasy.EComponentPopupMenu;
@@ -138,6 +139,7 @@ import org.swingeasy.EventHelper;
 import org.swingeasy.EventModifier;
 import org.swingeasy.ListOptionPaneCustomizer;
 import org.swingeasy.MessageType;
+import org.swingeasy.MouseDoubleClickAction;
 import org.swingeasy.ObjectWrapper;
 import org.swingeasy.OptionType;
 import org.swingeasy.ProgressGlassPane;
@@ -408,6 +410,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         EComponentPopupMenu.debug(hql);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
+        new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
         parametersUnsafe = font(new EList<QueryParameter>(new EListConfig()), null);
         parametersEDT = parametersUnsafe.stsi();
         resultsUnsafe = font(new ETable<List<Object>>(new ETableConfig(true)), null);
@@ -1448,21 +1451,21 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         hql_sql_tabs.setForegroundAt(1, Color.gray);
 
         Dimension bd = new Dimension(24, 24);
-        EButton saveButton = new EButton(new EToolBarButtonCustomizer(bd), saveAction);
+        EButton saveButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), saveAction));
         saveButton.setText("");
-        EButton setNullButton = new EButton(new EToolBarButtonCustomizer(bd), setNullAction);
+        EButton setNullButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), setNullAction));
         setNullButton.setText("");
-        EButton toTextButton = new EButton(new EToolBarButtonCustomizer(bd), toTextAction);
+        EButton toTextButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), toTextAction));
         toTextButton.setText("");
-        EButton removeButton = new EButton(new EToolBarButtonCustomizer(bd), removeAction);
+        EButton removeButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), removeAction));
         removeButton.setText("");
-        EButton upButton = new EButton(new EToolBarButtonCustomizer(bd), upAction);
+        EButton upButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), upAction));
         upButton.setText("");
-        EButton addParameterButton = new EButton(new EToolBarButtonCustomizer(bd), addParameterAction);
+        EButton addParameterButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), addParameterAction));
         addParameterButton.setText("");
-        EButton downButton = new EButton(new EToolBarButtonCustomizer(bd), downAction);
+        EButton downButton = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), downAction));
         downButton.setText("");
-        EButton importParametersFromTextBtn = new EButton(new EToolBarButtonCustomizer(bd), importParametersAction);
+        EButton importParametersFromTextBtn = new EButton(new EButtonConfig(new EToolBarButtonCustomizer(bd), importParametersAction));
         importParametersFromTextBtn.setText("");
 
         parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("name") + ": "));
@@ -1601,28 +1604,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         EToolBarButtonCustomizer etbc = new EToolBarButtonCustomizer();
         {
             JToolBar hqltools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
-            hqltools.add(new EButton(etbc, startQueryAction));
-            hqltools.add(new EButton(etbc, wizardAction));
-            hqltools.add(new EButton(etbc, clearAction));
-            hqltools.add(new EButton(etbc, findParametersAction));
-            hqltools.add(new EButton(etbc, favoritesAction));
-            hqltools.add(new EButton(etbc, addToFavoritesAction));
-            hqltools.add(new EButton(etbc, formatAction));
-            hqltools.add(new EButton(etbc, namedQueryAction));
-            hqltools.add(new EButton(etbc, clipboardExportAction));
-            hqltools.add(new EButton(etbc, clipboardImportAction));
-            hqltools.add(new EButton(etbc, helpInsertAction));
-            hqltools.add(new EButton(etbc, remarkToggleAction));
-            hqltools.add(new EButton(etbc, deleteInvertedSelectionAction));
+            hqltools.add(new EButton(new EButtonConfig(etbc, startQueryAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, wizardAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, clearAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, findParametersAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, favoritesAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, addToFavoritesAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, formatAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, namedQueryAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, clipboardExportAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, clipboardImportAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, helpInsertAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, remarkToggleAction)));
+            hqltools.add(new EButton(new EButtonConfig(etbc, deleteInvertedSelectionAction)));
             hql_sql_tabs_panel.add(hqltools, BorderLayout.WEST);
         }
         {
             JToolBar resultstools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
-            resultstools.add(new EButton(etbc, hibernatePropertiesAction));
-            resultstools.add(new EButton(etbc, objectTreeAction));
-            resultstools.add(new EButton(etbc, deleteObjectAction));
-            resultstools.add(new EButton(etbc, copyCellAction));
-            resultstools.add(new EButton(etbc, executeScriptOnColumnAction));
+            resultstools.add(new EButton(new EButtonConfig(etbc, hibernatePropertiesAction)));
+            resultstools.add(new EButton(new EButtonConfig(etbc, objectTreeAction)));
+            resultstools.add(new EButton(new EButtonConfig(etbc, deleteObjectAction)));
+            resultstools.add(new EButton(new EButtonConfig(etbc, copyCellAction)));
+            resultstools.add(new EButton(new EButtonConfig(etbc, executeScriptOnColumnAction)));
             resultPanel.add(resultstools, BorderLayout.WEST);
         }
 
