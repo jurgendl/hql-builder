@@ -520,6 +520,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         if (selection.getParameters() != null) {
             for (QueryParameter p : selection.getParameters()) {
+                p.afterInit();
                 parametersEDT.addRecord(new EListRecord<QueryParameter>(p));
             }
         }

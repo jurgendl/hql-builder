@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 @XmlRootElement(name = "parameter")
 public class QueryParameter implements Serializable, Comparable<QueryParameter> {
     private static final long serialVersionUID = 2308140856360992628L;
@@ -56,7 +58,7 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
      */
     @Override
     public String toString() {
-        return toString;
+        return StringUtils.isBlank(toString) ? "?" : toString;
     }
 
     public Object getValue() {
