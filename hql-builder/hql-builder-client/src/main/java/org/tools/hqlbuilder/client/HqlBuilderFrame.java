@@ -159,21 +159,11 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
-    private static String version;
-
-    private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-
-    private static final String PERSISTENT_LOCALE = "locale";
-
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
-    private static Preferences preferences;
+    private String version;
 
-    private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
-
-    private static final File PROGRAM_DIR = new File(USER_HOME_DIR, "hqlbuilder");
-
-    private static final File FAVORITES_DIR = new File(PROGRAM_DIR, "favorites");
+    private Preferences preferences;
 
     @SuppressWarnings("unused")
     private org.swingeasy.UIExceptionHandler uiExceptionHandler = org.swingeasy.UIExceptionHandler.getInstance();
@@ -736,7 +726,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClientLoader serviceLoader) {
         try {
-            preferences = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID);
+            Preferences preferences = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID);
             String lang = preferences.get(PERSISTENT_LOCALE, SystemSettings.getCurrentLocale().getLanguage());
             SystemSettings.setCurrentLocale(new Locale(lang));
 
@@ -805,6 +795,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             // maak frame en start start
             final HqlBuilderFrame hqlBuilder = new HqlBuilderFrame();
+            hqlBuilder.preferences = preferences;
             hqlBuilder.hqlService = service;
 
             SplashHelper.step();
@@ -2942,7 +2933,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String latest = "?";
 
             try {
-                String u = getText("http://hql-builder.googlecode.com/svn/maven2/org/tools/hql-builder-client/maven-metadata.xml");
+                String u = getText(PROJECT_META);
                 org.w3c.dom.Text o = (org.w3c.dom.Text) CommonUtils.getFromXml(new ByteArrayInputStream(u.getBytes()), "metadata",
                         "/metadata/versioning/release/text()");
                 latest = o.getData();
