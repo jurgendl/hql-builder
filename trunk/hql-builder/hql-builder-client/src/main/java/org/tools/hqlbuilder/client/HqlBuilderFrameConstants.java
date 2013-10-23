@@ -1,9 +1,24 @@
 package org.tools.hqlbuilder.client;
 
+import java.io.File;
+import java.util.Locale;
+
 /**
  * @author Jurgen
  */
 public interface HqlBuilderFrameConstants {
+    public static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
+
+    public static final File PROGRAM_DIR = new File(USER_HOME_DIR, "hqlbuilder");
+
+    public static final File FAVORITES_DIR = new File(PROGRAM_DIR, "favorites");
+
+    public static final String PROJECT_META = "http://hql-builder.googlecode.com/svn/maven2/org/tools/hql-builder/hql-builder-client/maven-metadata.xml";
+
+    public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+
+    public static final String PERSISTENT_LOCALE = "locale";
+
     public static final String FAVORITE_PREFIX = "favorite.";
 
     public static final String downloadLatestURI = "http://code.google.com/p/hql-builder/downloads/list";
