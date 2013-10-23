@@ -7,7 +7,6 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -32,7 +31,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -47,7 +45,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
@@ -68,6 +65,7 @@ import java.util.TreeSet;
 import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -135,6 +133,7 @@ import org.swingeasy.ETextAreaFillHighlightPainter;
 import org.swingeasy.ETextField;
 import org.swingeasy.ETextFieldConfig;
 import org.swingeasy.EToolBarButtonCustomizer;
+import org.swingeasy.EURILabel;
 import org.swingeasy.EventHelper;
 import org.swingeasy.EventModifier;
 import org.swingeasy.ListOptionPaneCustomizer;
@@ -2951,41 +2950,36 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 ex.printStackTrace();
             }
 
-            BufferedImage logo = ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png"));
+            final JDialog d = new JDialog(frame, HqlResourceBundle.getMessage("about"), true);
+            JPanel cp = new JPanel(new MigLayout("insets 0 0 0 0", "10[]", "5[]5[]5[]5"));
+            Container contentPane = d.getContentPane();
+            contentPane.setLayout(new BorderLayout(0, 0));
+            contentPane.add(cp);
+
             boolean upToDate = "?".equals(latest) || version.compareTo(latest) >= 0;
-            JLabel vl = new JLabel(HqlResourceBundle.getMessage("versioning", version, latest,
-                    HqlResourceBundle.getMessage(String.valueOf(upToDate), false)));
 
-            JLabel vlu = null;
-            if (!upToDate) {
-                vlu = new JLabel("<html><a href=\"" + downloadLatestURI + "\">" + HqlResourceBundle.getMessage("download latest") + "</a></html>");
-                vlu.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                vlu.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        try {
-                            Desktop.getDesktop().browse(new URI(downloadLatestURI));
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        } catch (URISyntaxException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-            }
+            cp.add(new JLabel(new ImageIcon(ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png")))),
+                    "dock north");
+            cp.add(font(
+                    new ELabel(HqlResourceBundle.getMessage("versioning", version, latest,
+                            HqlResourceBundle.getMessage(String.valueOf(upToDate), false))), 14), "wrap");
+            // if (!upToDate) {
+            cp.add(font(new EURILabel(URI.create(downloadLatestURI), HqlResourceBundle.getMessage("download latest")), 14), "wrap");
+            // }
 
-            JDialog d = new JDialog(frame, HqlResourceBundle.getMessage("about"), true);
-            JPanel cp = new JPanel(new MigLayout("debug"));
-            d.getContentPane().add(cp, BorderLayout.CENTER);
+            AbstractAction ok = new AbstractAction("Ok") {
+                private static final long serialVersionUID = -8251984652275658858L;
 
-            cp.add(new JLabel(new ImageIcon(logo)), BorderLayout.NORTH);
-            cp.add(vl);
-            if (vlu != null) {
-                cp.add(vlu, BorderLayout.SOUTH);
-            }
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    d.dispose();
+                }
+            };
 
-            d.pack();
+            cp.add(new EButton(new EButtonConfig(ok)), "align center");
+
             d.setResizable(false);
+            d.pack();
             d.setLocationRelativeTo(frame);
             d.setVisible(true);
         } catch (Exception ex) {
