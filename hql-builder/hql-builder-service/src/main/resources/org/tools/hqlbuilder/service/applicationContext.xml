@@ -14,15 +14,11 @@
 		<property name="configurationBean" ref="configurationBean"/>
 	</bean>
 
-	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
-	</bean>
-
-	<bean name="lazyConnectionDataSourceProxy" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
-		<property name="targetDataSource" ref="dataSource" />
 	</bean>
 
 	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -41,14 +37,7 @@
 				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
 				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-				<prop key="hibernate.c3p0.max_size">2</prop>
-				<prop key="hibernate.c3p0.min_size">2</prop>
-				<prop key="hibernate.c3p0.timeout">5000</prop>
-				<prop key="hibernate.c3p0.max_statements">100</prop>
-				<prop key="hibernate.c3p0.idle_test_period">3000</prop>
-				<prop key="hibernate.c3p0.acquire_increment">2</prop>
-				<prop key="hibernate.c3p0.validate">false</prop>
-				<prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>
+				<prop key="hibernate.connection.pool_size">1</prop>
 			</props>
 		</property>
 	</bean>
