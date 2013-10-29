@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,6 +37,7 @@ import org.hibernate.hql.ast.QuerySyntaxException;
 import org.hibernate.hql.ast.QueryTranslatorImpl;
 import org.hibernate.impl.AbstractQueryImpl;
 import org.hibernate.impl.QueryImpl;
+import org.hibernate.jdbc.Work;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
@@ -73,6 +76,8 @@ public class HqlServiceImpl implements HqlService {
 
     private ConfigurationBean configurationBean;
 
+    private String hibernateVersions;
+
     public HqlServiceImpl() {
         super();
     }
@@ -91,6 +96,38 @@ public class HqlServiceImpl implements HqlService {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public String getHibernateInfo() {
+        if (hibernateVersions == null) {
+            String[] deps = {
+                    "org.hibernate:hibernate",
+                    "org.hibernate:hibernate-core",
+                    "org.hibernate:hibernate-annotations",
+                    "org.hibernate:hibernate-commons-annotations",
+                    "org.hibernate.commons:hibernate-commons-annotations",
+                    "org.hibernate:hibernate-validator",
+                    "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" };
+            StringBuilder sb = new StringBuilder();
+            for (String dep : deps) {
+                try {
+                    String[] dp = dep.split(":");
+                    Properties p = new Properties();
+                    p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/" + dp[0] + "/" + dp[1] + "/pom.properties"));
+                    String v = p.getProperty("version").toString();
+                    sb.append(dp[1]).append(": ").append(v).append("<br>");
+                } catch (Exception ex) {
+                    //
+                }
+            }
+            hibernateVersions = sb.toString();
+            if (hibernateVersions.length() > 2) {
+                hibernateVersions = hibernateVersions.substring(0, hibernateVersions.length() - 4);
+            }
+            hibernateVersions = "<html>" + hibernateVersions + "</html>";
+        }
+        return hibernateVersions;
     }
 
     public String getModelVersion() {
@@ -728,5 +765,20 @@ public class HqlServiceImpl implements HqlService {
 
     public void setConfigurationBean(ConfigurationBean configurationBean) {
         this.configurationBean = configurationBean;
+    }
+
+    @Override
+    public void sql(final String... sql) {
+        Work work = new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                for (String s : sql) {
+                    logger.info(s);
+                    connection.prepareCall(s).execute();
+                }
+
+            }
+        };
+        sessionFactory.openSession().doWork(work);
     }
 }

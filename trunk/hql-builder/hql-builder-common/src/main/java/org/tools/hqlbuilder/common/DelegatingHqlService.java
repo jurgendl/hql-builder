@@ -106,4 +106,14 @@ public abstract class DelegatingHqlService implements HqlService {
     public void createScript() {
         getDelegate().createScript();
     }
+
+    @Override
+    public void sql(String... sql) {
+        getDelegate().sql(sql);
+    }
+
+    @Override
+    public String getHibernateInfo() {
+        return getDelegate().getHibernateInfo();
+    }
 }
