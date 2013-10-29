@@ -13,7 +13,6 @@ import org.hibernate.annotations.AccessType;
 @Entity
 @AccessType("field")
 public class Rel1 extends Parent {
-
     @OneToOne
     private Pojo pojo;
 
