@@ -68,8 +68,9 @@ public class HqlBuilder {
                 t2 = hqlServiceClient.save(t2);
             }
 
+            Rel1 r1;
             {
-                Rel1 r1 = new Rel1();
+                r1 = new Rel1();
                 r1.setPojo(object);
                 r1 = hqlServiceClient.save(r1);
 
@@ -86,6 +87,12 @@ public class HqlBuilder {
                 t2.setLang(nl);
                 t2.setRel1(r1);
                 t2 = hqlServiceClient.save(t2);
+            }
+
+            {
+                Rel0 r0 = new Rel0();
+                r0.setRel1(r1);
+                r0 = hqlServiceClient.save(r0);
             }
         } else {
             System.out.println(results.size());
