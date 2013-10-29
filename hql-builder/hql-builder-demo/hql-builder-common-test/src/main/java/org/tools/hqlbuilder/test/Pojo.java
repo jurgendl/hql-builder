@@ -34,124 +34,87 @@ import org.hibernate.annotations.SortType;
 @AccessType("field")
 @SuppressWarnings("unused")
 public class Pojo extends PojoSuper implements Serializable {
-	private static final long serialVersionUID = -589586518891599759L;
+    private static final long serialVersionUID = -589586518891599759L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    private String value;
 
-	@Version
-	private Integer version;
+    @Embedded
+    @NotNull
+    @Valid
+    private EmbedPojo embedded = new EmbedPojo();
 
-	private String value;
+    @Min(0)
+    @Max(100)
+    private Integer from0To100;
 
-	@Embedded
-	@NotNull
-	@Valid
-	private EmbedPojo embedded = new EmbedPojo();
+    @Pattern(regexp = "\\d*")
+    private String regexDigits;
 
-	@Min(0)
-	@Max(100)
-	private Integer from0To100;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinTable(name = "plainSet", joinColumns = { @JoinColumn(name = "plainSetId") })
+    @Column(name = "plainSet", nullable = false)
+    @Sort(type = SortType.NATURAL)
+    private SortedSet<String> plainSet = new TreeSet<String>();
 
-	@Pattern(regexp = "\\d*")
-	private String regexDigits;
+    public String getValue() {
+        return this.value;
+    }
 
-	@ElementCollection(fetch = FetchType.LAZY)
-	@JoinTable(name = "plainSet", joinColumns = { @JoinColumn(name = "plainSetId") })
-	@Column(name = "plainSet", nullable = false)
-	@Sort(type = SortType.NATURAL)
-	private SortedSet<String> plainSet = new TreeSet<String>();
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	// @OneToMany(mappedBy="pojo")
-	// private List<Rel1> rel1s = new ArrayList<Rel1>();
+    @Override
+    public String toString() {
+        return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value=" + getValue() + ", from0To100=" + getFrom0To100() + ", regexDigits="
+                + getRegexDigits() + ", embedded=" + getEmbedded() + "]";
+    }
 
-	private Long getId() {
-		return this.id;
-	}
+    @Override
+    public boolean equals(final Object other) {
+        if (getId() == null)
+            return false;
+        if (!(other instanceof Pojo)) {
+            return false;
+        }
+        Pojo castOther = (Pojo) other;
+        return new EqualsBuilder().append(getId(), castOther.getId()).isEquals();
+    }
 
-	private void setId(Long id) {
-		this.id = id;
-	}
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(getId()).toHashCode();
+    }
 
-	private Integer getVersion() {
-		return this.version;
-	}
+    public Integer getFrom0To100() {
+        return from0To100;
+    }
 
-	private void setVersion(Integer version) {
-		this.version = version;
-	}
+    public void setFrom0To100(Integer from0To100) {
+        this.from0To100 = from0To100;
+    }
 
-	public String getValue() {
-		return this.value;
-	}
+    public String getRegexDigits() {
+        return regexDigits;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setRegexDigits(String regexDigits) {
+        this.regexDigits = regexDigits;
+    }
 
-	@Override
-	public String toString() {
-		return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value="
-				+ getValue() + ", from0To100=" + getFrom0To100()
-				+ ", regexDigits=" + getRegexDigits() + ", embedded="
-				+ getEmbedded() + "]";
-	}
+    public SortedSet<String> getPlainSet() {
+        return plainSet;
+    }
 
-	@Override
-	public boolean equals(final Object other) {
-		if (getId() == null)
-			return false;
-		if (!(other instanceof Pojo)) {
-			return false;
-		}
-		Pojo castOther = (Pojo) other;
-		return new EqualsBuilder().append(getId(), castOther.getId())
-				.isEquals();
-	}
+    public void setPlainSet(SortedSet<String> plainSet) {
+        this.plainSet = plainSet;
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(getId()).toHashCode();
-	}
+    public EmbedPojo getEmbedded() {
+        return embedded;
+    }
 
-	public Integer getFrom0To100() {
-		return from0To100;
-	}
-
-	public void setFrom0To100(Integer from0To100) {
-		this.from0To100 = from0To100;
-	}
-
-	public String getRegexDigits() {
-		return regexDigits;
-	}
-
-	public void setRegexDigits(String regexDigits) {
-		this.regexDigits = regexDigits;
-	}
-
-	public SortedSet<String> getPlainSet() {
-		return plainSet;
-	}
-
-	public void setPlainSet(SortedSet<String> plainSet) {
-		this.plainSet = plainSet;
-	}
-
-	public EmbedPojo getEmbedded() {
-		return embedded;
-	}
-
-	public void setEmbedded(EmbedPojo embedded) {
-		this.embedded = embedded;
-	}
-
-	// public List<Rel1> getRel1s() {
-	// return rel1s;
-	// }
-	//
-	// public void setRel1s(List<Rel1> rel1s) {
-	// this.rel1s = rel1s;
-	// }
+    public void setEmbedded(EmbedPojo embedded) {
+        this.embedded = embedded;
+    }
 }
