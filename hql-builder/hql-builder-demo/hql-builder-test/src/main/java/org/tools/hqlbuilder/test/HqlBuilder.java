@@ -39,7 +39,7 @@ public class HqlBuilder {
             object.setSuperNotNull("superNotNull");
             object.setFrom0To100(50);
             object.getEmbedded().setFrom100(150);
-            hqlServiceClient.save(object);
+            object = hqlServiceClient.save(object);
             // }
 
             Lang en = new Lang();
@@ -70,6 +70,7 @@ public class HqlBuilder {
 
             {
                 Rel1 r1 = new Rel1();
+                r1.setPojo(object);
                 r1 = hqlServiceClient.save(r1);
 
                 r2.setRel1(r1);
