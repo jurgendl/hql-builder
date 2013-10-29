@@ -62,6 +62,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutionException;
 import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
@@ -1040,6 +1041,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             protected void done() {
                 try {
                     afterQuery(start, get(), rowProcessor);
+                } catch (ExecutionException ex) {
+                    afterQuery(ex.getCause());
                 } catch (Exception ex) {
                     afterQuery(ex);
                 } finally {
