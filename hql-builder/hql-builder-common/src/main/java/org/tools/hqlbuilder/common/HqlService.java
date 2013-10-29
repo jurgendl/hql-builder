@@ -53,4 +53,8 @@ public interface HqlService extends Serializable {
     public abstract void log();
 
     public abstract void createScript();
+
+    public abstract void sql(String... sql);
+
+    public abstract String getHibernateInfo();
 }

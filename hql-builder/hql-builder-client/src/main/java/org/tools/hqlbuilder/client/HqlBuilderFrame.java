@@ -267,6 +267,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction aboutAction = new HqlBuilderAction(null, this, ABOUT, true, ABOUT, "bricks-icon.png", ABOUT, ABOUT, true, null,
             null);
 
+    private final HqlBuilderAction versionsAction = new HqlBuilderAction(null, this, VERSIONS, true, VERSIONS, "bricks-icon.png", VERSIONS, VERSIONS,
+            true, null, null);
+
     private final HqlBuilderAction helpHibernateAction = new HqlBuilderAction(null, this, HIBERNATE_DOCUMENTATION, true, HIBERNATE_DOCUMENTATION,
             "help16.png", HIBERNATE_DOCUMENTATION, HIBERNATE_DOCUMENTATION, true, null, null);
 
@@ -1770,6 +1773,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             helpmenu.add(new JMenuItem(helpHqlAction));
             helpmenu.add(new JMenuItem(luceneQuerySyntaxAction));
             helpmenu.add(new JMenuItem(helpAction));
+            helpmenu.add(new JMenuItem(versionsAction));
             helpmenu.add(new JMenuItem(aboutAction));
             menuBar.add(helpmenu);
         }
@@ -2932,14 +2936,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void about() {
         try {
             String latest = "?";
-
+            String u = "?";
             try {
-                String u = getText(PROJECT_META);
+                u = getText(PROJECT_META);
                 org.w3c.dom.Text o = (org.w3c.dom.Text) CommonUtils.getFromXml(new ByteArrayInputStream(u.getBytes()), "metadata",
                         "/metadata/versioning/release/text()");
                 latest = o.getData();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("" + ex);
             }
 
             final JDialog d = new JDialog(frame, HqlResourceBundle.getMessage("about"), true);
@@ -2994,5 +2998,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         in.close();
 
         return response.toString();
+    }
+
+    protected void versions() {
+        JOptionPane.showMessageDialog(frame,
+                font(new ELabel(HqlResourceBundle.getMessage("versions.description", hqlService.getHibernateInfo())), 14),
+                HqlResourceBundle.getMessage("versions.title"), JOptionPane.INFORMATION_MESSAGE);
     }
 }

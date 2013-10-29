@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.test;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -43,8 +46,8 @@ public class Pojo extends PojoSuper implements Serializable {
 	private String value;
 
 	@Embedded
-    @NotNull
-    @Valid
+	@NotNull
+	@Valid
 	private EmbedPojo embedded = new EmbedPojo();
 
 	@Min(0)
@@ -59,6 +62,9 @@ public class Pojo extends PojoSuper implements Serializable {
 	@Column(name = "plainSet", nullable = false)
 	@Sort(type = SortType.NATURAL)
 	private SortedSet<String> plainSet = new TreeSet<String>();
+
+	// @OneToMany(mappedBy="pojo")
+	// private List<Rel1> rel1s = new ArrayList<Rel1>();
 
 	private Long getId() {
 		return this.id;
@@ -87,8 +93,9 @@ public class Pojo extends PojoSuper implements Serializable {
 	@Override
 	public String toString() {
 		return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value="
-				+ getValue() + ", from0To100=" + getFrom0To100() + ", regexDigits=" + getRegexDigits()
-				+ ", embedded=" + getEmbedded() + "]";
+				+ getValue() + ", from0To100=" + getFrom0To100()
+				+ ", regexDigits=" + getRegexDigits() + ", embedded="
+				+ getEmbedded() + "]";
 	}
 
 	@Override
@@ -139,4 +146,12 @@ public class Pojo extends PojoSuper implements Serializable {
 	public void setEmbedded(EmbedPojo embedded) {
 		this.embedded = embedded;
 	}
+
+	// public List<Rel1> getRel1s() {
+	// return rel1s;
+	// }
+	//
+	// public void setRel1s(List<Rel1> rel1s) {
+	// this.rel1s = rel1s;
+	// }
 }

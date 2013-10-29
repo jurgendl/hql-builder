@@ -134,4 +134,6 @@ public interface HqlBuilderFrameConstants {
     public static final String ADD_PARAMETER = "add parameter";
 
     public static final String CAN_EXECUTE_SELECTION = "can execute selection";
+
+    public static final String VERSIONS = "versions";
 }
