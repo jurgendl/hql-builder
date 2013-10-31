@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +35,6 @@ import org.hibernate.hql.ast.QuerySyntaxException;
 import org.hibernate.hql.ast.QueryTranslatorImpl;
 import org.hibernate.impl.AbstractQueryImpl;
 import org.hibernate.impl.QueryImpl;
-import org.hibernate.jdbc.Work;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
@@ -769,16 +766,16 @@ public class HqlServiceImpl implements HqlService {
 
     @Override
     public void sql(final String... sql) {
-        Work work = new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                for (String s : sql) {
-                    logger.info(s);
-                    connection.prepareCall(s).execute();
-                }
-
-            }
-        };
-        sessionFactory.openSession().doWork(work);
+        // org.hibernate.jdbc.Work work = new org.hibernate.jdbc.Work() {
+        // @Override
+        // public void execute(Connection connection) throws SQLException {
+        // for (String s : sql) {
+        // logger.info(s);
+        // connection.prepareCall(s).execute();
+        // }
+        //
+        // }
+        // };
+        // sessionFactory.openSession().doWork(work);
     }
 }
