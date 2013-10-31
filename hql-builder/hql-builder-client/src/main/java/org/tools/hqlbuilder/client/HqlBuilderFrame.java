@@ -115,6 +115,7 @@ import org.swingeasy.EButton;
 import org.swingeasy.EButtonConfig;
 import org.swingeasy.ECheckBox;
 import org.swingeasy.ECheckBoxConfig;
+import org.swingeasy.EComponentGradientRenderer;
 import org.swingeasy.EComponentPopupMenu;
 import org.swingeasy.EFontChooser;
 import org.swingeasy.ELabel;
@@ -391,6 +392,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private boolean ingoreParameterListSelectionListener = false;
 
+    private EComponentGradientRenderer backgroundRenderer = new EComponentGradientRenderer(EComponentGradientRenderer.GradientOrientation.VERTICAL,
+            Color.white, new Color(212, 212, 212));
+
     private HqlBuilderFrame() {
         // needs to be first to init font
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, "font.png", FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
@@ -406,7 +410,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
         new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
-        parametersUnsafe = font(new EList<QueryParameter>(new EListConfig()), null);
+        parametersUnsafe = font(new EList<QueryParameter>(new EListConfig().setBackgroundRenderer(backgroundRenderer)), null);
         parametersEDT = parametersUnsafe.stsi();
         resultsUnsafe = font(new ETable<List<Object>>(new ETableConfig(true)), null);
         resultsEDT = resultsUnsafe.stsi();
@@ -1385,7 +1389,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         hql_sql_tabs.addTab("SQL", new JScrollPane(sql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
 
         {
-            EList<String> searchresults = new EList<String>(new EListConfig().setSortable(false));
+            EList<String> searchresults = new EList<String>(new EListConfig().setBackgroundRenderer(backgroundRenderer).setSortable(false));
             final EList<String> searchresultsEDTSafe = searchresults.stsi();
             final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
             final ECheckBox searchField = new ECheckBox(new ECheckBoxConfig("field", true));
