@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,6 +22,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
+
+import javax.sql.DataSource;
 
 import org.apache.lucene.queryParser.ParseException;
 import org.hibernate.HibernateException;
@@ -53,27 +56,54 @@ import org.tools.hqlbuilder.common.exceptions.ServiceException;
 import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
+import org.tools.hqlbuilder.common.interfaces.ValidationExceptionConverter;
 
 public class HqlServiceImpl implements HqlService {
     private static final long serialVersionUID = 3856142589306194609L;
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceImpl.class);
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceImpl.class);
 
-    private SessionFactory sessionFactory;
+    protected static final String SQL_ALIAS_BY_ENTITY_ALIAS = "sqlAliasByEntityAlias";
 
-    private String modelVersion;
+    protected static final String SQL_ALIASES = "sqlAliases";
 
-    private String url;
+    protected static final String ENTITY_PERSISTERS = "entityPersisters";
 
-    private String username;
+    protected static final String ENTITY_ALIASES = "entityAliases";
 
-    private Information information;
+    protected static final String SCALAR_COLUMN_NAMES = "scalarColumnNames";
 
-    private Set<String> keywords;
+    protected static final String QUERY_RETURN_ALIASES = "queryReturnAliases";
 
-    private ConfigurationBean configurationBean;
+    protected static final String QUERY_RETURN_TYPES = "queryReturnTypes";
 
-    private String hibernateVersions;
+    protected static final String DOT = ".";
+
+    protected static final String QUERY_LOADER = "queryLoader";
+
+    protected static final String QUERY_IDENTIFIER = "queryIdentifier";
+
+    protected SessionFactory sessionFactory;
+
+    protected String modelVersion;
+
+    protected String url;
+
+    protected String username;
+
+    protected Information information;
+
+    protected Set<String> keywords;
+
+    protected ConfigurationBean configurationBean;
+
+    protected String hibernateVersions;
+
+    protected String project;
+
+    protected Properties hibernateProperties;
+
+    protected DataSource dataSource;
 
     public HqlServiceImpl() {
         super();
@@ -95,6 +125,9 @@ public class HqlServiceImpl implements HqlService {
         this.username = username;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.common.HqlService#getHibernateInfo()
+     */
     @Override
     public String getHibernateInfo() {
         if (hibernateVersions == null) {
@@ -190,7 +223,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getClasses()
      */
     @Override
@@ -206,19 +238,17 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getSqlForHql(java.lang.String)
      */
     @Override
     public String getSqlForHql(String hql) {
-        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
+        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(),
                 (SessionFactoryImplementor) sessionFactory);
         createQueryTranslator.compile(new HashMap<Object, Object>(), false);
         return createQueryTranslator.getSQLString();
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, int, java.util.List)
      */
     @Override
@@ -227,7 +257,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, int, org.tools.hqlbuilder.common.QueryParameter[])
      */
     @Override
@@ -279,7 +308,7 @@ public class HqlServiceImpl implements HqlService {
     @SuppressWarnings("unchecked")
     protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, QueryParameter... queryParameters) {
         long start = System.currentTimeMillis();
-        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl("queryIdentifier", hql, new HashMap<Object, Object>(),
+        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(),
                 (SessionFactoryImplementor) sessionFactory);
         String sql = createQueryTranslator.getSQLString();
         System.out.println(sql);
@@ -317,24 +346,24 @@ public class HqlServiceImpl implements HqlService {
         if (sql == null) {
             sql = createQueryTranslator.getSQLString();
             if (sql == null) {
-                String tmp = new ObjectWrapper(createQueryTranslator).get("queryLoader").toString();
+                String tmp = new ObjectWrapper(createQueryTranslator).get(QUERY_LOADER).toString();
                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
             }
-            System.out.println(sql);
+            logger.debug(sql);
             result.setSql(sql);
         }
         createQuery.setMaxResults(max);
-        Type[] queryReturnTypes = get(createQueryTranslator, "queryLoader.queryReturnTypes", Type[].class);
-        String[] queryReturnAliases = get(createQueryTranslator, "queryLoader.queryReturnAliases", String[].class);
+        Type[] queryReturnTypes = get(createQueryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_TYPES, Type[].class);
+        String[] queryReturnAliases = get(createQueryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_ALIASES, String[].class);
         result.setQueryReturnAliases(queryReturnAliases);
-        String[][] scalarColumnNames = get(createQueryTranslator, "queryLoader.scalarColumnNames", String[][].class);
+        String[][] scalarColumnNames = get(createQueryTranslator, QUERY_LOADER + DOT + SCALAR_COLUMN_NAMES, String[][].class);
         result.setScalarColumnNames(scalarColumnNames);
-        String[] entityAliases = get(createQueryTranslator, "queryLoader.entityAliases", String[].class);
-        Queryable[] entityPersisters = get(createQueryTranslator, "queryLoader.entityPersisters", Queryable[].class);
-        String[] sqlAliases = get(createQueryTranslator, "queryLoader.sqlAliases", String[].class);
+        String[] entityAliases = get(createQueryTranslator, QUERY_LOADER + DOT + ENTITY_ALIASES, String[].class);
+        Queryable[] entityPersisters = get(createQueryTranslator, QUERY_LOADER + DOT + ENTITY_PERSISTERS, Queryable[].class);
+        String[] sqlAliases = get(createQueryTranslator, QUERY_LOADER + DOT + SQL_ALIASES, String[].class);
         result.setSqlAliases(sqlAliases);
         @SuppressWarnings("unused")
-        Map<String, String> sqlAliasByEntityAlias = get(createQueryTranslator, "queryLoader.sqlAliasByEntityAlias", Map.class);
+        Map<String, String> sqlAliasByEntityAlias = get(createQueryTranslator, QUERY_LOADER + DOT + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
         Map<String, String> from_aliases = new HashMap<String, String>();
         result.setFromAliases(from_aliases);
         for (int i = 0; i < entityAliases.length; i++) {
@@ -343,9 +372,9 @@ public class HqlServiceImpl implements HqlService {
                 from_aliases.put(alias, entityPersisters[i].getClassMetadata().getEntityName());
             }
         }
-        long _start = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         List<Object> list = createQuery.list();
-        long _end = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         result.setResults(list);
         result.setSize(list.size());
         String[] queryReturnTypeNames = new String[queryReturnTypes.length];
@@ -353,14 +382,13 @@ public class HqlServiceImpl implements HqlService {
             queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getName();
         }
         result.setQueryReturnTypeNames(queryReturnTypeNames);
-        long duration = (System.currentTimeMillis() - start);
-        result.setDuration(_end - _start);
+        long duration = System.currentTimeMillis() - start;
+        result.setDuration(endTime - startTime);
         result.setOverhead(duration - result.getDuration());
         return result;
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getHibernateWebResolver()
      */
     @Override
@@ -402,7 +430,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getConnectionInfo()
      */
     @Override
@@ -411,7 +438,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#search(java.lang.String, java.lang.String)
      */
     @Override
@@ -426,7 +452,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getProperties(java.lang.String)
      */
     @Override
@@ -443,58 +468,43 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#save(java.lang.Object)
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T save(T object) throws ValidationException {
-        // try {
-        org.hibernate.classic.Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        object = (T) session.merge(object);
-        session.persist(object);
-        tx.commit();
-        session.flush();
-        return object;
-        // } catch (org.hibernate.validator.InvalidStateException ex) {
-        // List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new
-        // ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
-        // for (org.hibernate.validator.InvalidValue iv : ex.getInvalidValues()) {
-        // ivs.add(new org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(iv.getBean(), iv.getBeanClass(), iv.getMessage(),
-        // iv.getPropertyName(), iv.getPropertyPath(), iv.getRootBean(), iv.getValue()));
-        // }
-        // throw new ValidationException(ex.getMessage(), ivs);
-        // }
-        //
-        // } catch (javax.validation.ConstraintViolationException ex) {
-        // List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new
-        // ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
-        // for (javax.validation.ConstraintViolation<?> iv : ex.getConstraintViolations()) {
-        // Object bean = iv.getLeafBean();
-        // Class<?> beanClass = iv.getRootBeanClass();
-        // String message = iv.getMessage();
-        // Path path = iv.getPropertyPath();
-        // Iterator<Node> it = path.iterator();
-        // Path.Node node = it.next();
-        // while (it.hasNext()) {
-        // node = it.next();
-        // }
-        // String propertyName = String.valueOf(node);
-        // String propertyPath = String.valueOf(path);
-        // Object rootBean = iv.getRootBean();
-        // Object value = iv.getInvalidValue();
-        // org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue tmp = new
-        // org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue(
-        // bean, beanClass, message, propertyName, propertyPath, rootBean, value);
-        // ivs.add(tmp);
-        // }
-        // throw new ValidationException(ex.getMessage(), ivs);
-        // }
+        try {
+            org.hibernate.classic.Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            object = (T) session.merge(object);
+            session.persist(object);
+            tx.commit();
+            session.flush();
+            return object;
+        } catch (RuntimeException ex) {
+            if ("org.hibernate.validator.InvalidStateException".equals(ex.getClass().getName())) {
+                try {
+                    ValidationExceptionConverter vc = (ValidationExceptionConverter) Class.forName(
+                            "org.tools.hqlbuilder.common.validation.HibernateValidationConverter").newInstance();
+                    throw vc.convert(ex);
+                } catch (Exception ex2) {
+                    throw ex;
+                }
+            } else if ("javax.validation.ConstraintViolationException".equals(ex.getClass().getName())) {
+                try {
+                    ValidationExceptionConverter vc = (ValidationExceptionConverter) Class.forName(
+                            "org.tools.hqlbuilder.common.validation.JavaxValidationConverter").newInstance();
+                    throw vc.convert(ex);
+                } catch (Exception ex2) {
+                    throw ex;
+                }
+            } else {
+                throw ex;
+            }
+        }
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#delete(java.lang.Object)
      */
     @SuppressWarnings("unchecked")
@@ -509,7 +519,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getReservedKeywords()
      */
     @Override
@@ -537,7 +546,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getNamedQueries()
      */
     @Override
@@ -552,7 +560,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#findParameters(java.lang.String)
      */
     @Override
@@ -591,7 +598,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getPropertyNames(java.lang.Object, java.lang.String[])
      */
     @Override
@@ -648,7 +654,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, java.util.List)
      */
     @Override
@@ -657,7 +662,6 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, org.tools.hqlbuilder.common.QueryParameter[])
      */
     @Override
@@ -665,10 +669,7 @@ public class HqlServiceImpl implements HqlService {
         return execute(hql, Integer.MAX_VALUE, queryParameters);
     }
 
-    private String project;
-
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#getProject()
      */
     @Override
@@ -726,10 +727,7 @@ public class HqlServiceImpl implements HqlService {
         this.project = project;
     }
 
-    private Properties hibernateProperties;
-
     /**
-     * 
      * @see org.tools.hqlbuilder.common.HqlService#log()
      */
     @Override
@@ -747,6 +745,9 @@ public class HqlServiceImpl implements HqlService {
         this.hibernateProperties = hibernateProperties;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.common.HqlService#createScript()
+     */
     @Override
     public void createScript() {
         SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
@@ -764,18 +765,25 @@ public class HqlServiceImpl implements HqlService {
         this.configurationBean = configurationBean;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.common.HqlService#sql(java.lang.String[])
+     */
     @Override
     public void sql(final String... sql) {
-        // org.hibernate.jdbc.Work work = new org.hibernate.jdbc.Work() {
-        // @Override
-        // public void execute(Connection connection) throws SQLException {
-        // for (String s : sql) {
-        // logger.info(s);
-        // connection.prepareCall(s).execute();
-        // }
-        //
-        // }
-        // };
-        // sessionFactory.openSession().doWork(work);
+        for (String s : sql) {
+            try {
+                dataSource.getConnection().prepareStatement(s).execute();
+            } catch (SQLException ex) {
+                throw new ServiceException(ex.getMessage());
+            }
+        }
+    }
+
+    public DataSource getDataSource() {
+        return this.dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

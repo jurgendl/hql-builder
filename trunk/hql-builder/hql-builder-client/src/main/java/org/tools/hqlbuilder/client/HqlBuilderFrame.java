@@ -1082,7 +1082,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private ExecutionResult doQuery(String hqlGetText, int maxresults) {
-        return hqlService.execute(hqlGetText, maxresults, EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[0]));
+        return hqlService.execute(hqlGetText, maxresults,
+                EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[parametersEDT.getRecordCount()]));
     }
 
     private void afterQuery(Throwable ex) {
