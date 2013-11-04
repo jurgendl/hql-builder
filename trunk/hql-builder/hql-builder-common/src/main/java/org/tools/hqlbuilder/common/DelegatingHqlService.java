@@ -103,8 +103,8 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
-    public void createScript() {
-        getDelegate().createScript();
+    public String createScript() {
+        return getDelegate().createScript();
     }
 
     @Override

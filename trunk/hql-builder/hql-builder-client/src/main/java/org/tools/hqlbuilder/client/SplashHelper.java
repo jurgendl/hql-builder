@@ -99,7 +99,9 @@ public class SplashHelper {
     }
 
     public static void end() {
-        cfgp.put("splashtimes", splashtimessb.toString());
+        if (cfgp != null) {
+            cfgp.put("splashtimes", splashtimessb.toString());
+        }
         _end(100);
     }
 

@@ -870,6 +870,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 });
             }
         } catch (Exception ex) {
+            SplashHelper.end();
+            JOptionPane.showMessageDialog(null, "" + ex, "Fatal Exception", JOptionPane.ERROR_MESSAGE);
             logger.error("start(String[], HqlService)", ex); //$NON-NLS-1$
         }
     }
