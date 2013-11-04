@@ -3,7 +3,7 @@ package org.tools.hqlbuilder.common.exceptions;
 import java.io.Serializable;
 import java.util.List;
 
-public class ValidationException extends ServiceException {
+public class ValidationException extends RuntimeException {
     private static final long serialVersionUID = 6238718287643857217L;
 
     private final List<InvalidValue> invalidValues;

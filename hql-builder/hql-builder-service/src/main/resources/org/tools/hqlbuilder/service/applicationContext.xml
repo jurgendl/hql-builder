@@ -12,6 +12,7 @@
 		<property name="project" value="${project}" />
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 		<property name="configurationBean" ref="configurationBean"/>
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
