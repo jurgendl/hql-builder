@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.swingeasy.MethodInvoker;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
@@ -246,7 +247,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         log(sqlString);
 
         try {
-            sqlString = new org.hibernate.jdbc.util.BasicFormatterImpl().format(sqlString);
+            sqlString = (String) MethodInvoker.invoke(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", sqlString);
         } catch (Throwable ex) {
             //
         }

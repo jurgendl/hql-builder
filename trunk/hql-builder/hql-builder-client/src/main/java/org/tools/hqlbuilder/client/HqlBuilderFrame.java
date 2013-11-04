@@ -1089,7 +1089,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void afterQuery(Throwable ex) {
         hql_sql_tabs.setForegroundAt(1, Color.RED);
         logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
-        String sql_tmp = sql.getText();
+        String sqlString = sql.getText();
         if (ex instanceof java.util.concurrent.ExecutionException) {
             ex = ex.getCause();
         }
@@ -1097,17 +1097,19 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (ex instanceof ServiceException) {
             ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
             if (partialResult != null && partialResult.getSql() != null) {
-                sql_tmp = partialResult.getSql();
+                sqlString = partialResult.getSql();
             }
         }
         if (ex instanceof SqlException) {
             SqlException sqlException = SqlException.class.cast(ex);
             if (sqlException.getSql() != null) {
-                sql_tmp = sqlException.getSql();
+                sqlString = sqlException.getSql();
             }
             exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
         }
-        sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sql_tmp + getNewline());
+        sqlString = cleanupSql(sqlString);
+        sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sqlString + getNewline()
+                + getNewline());
         sql.setCaret(0);
         clearResults();
         if (ex instanceof SyntaxException) {
@@ -1117,24 +1119,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void afterQuery(long start, ExecutionResult rv, RowProcessor rowProcessor) throws Exception {
-        log(rv.getSql());
-        if (formatSqlAction.isSelected()) {
-            sql.setText(cleanupSql(rv.getSql(), null, null));
-        } else {
-            sql.setText(rv.getSql());
-        }
-        log(sql.getText());
-
-        if (formatSqlAction.isSelected()) {
-            try {
-                sql.setText(/* hqlService.removeBlanks(hqlService.makeMultiline( */cleanupSql(rv.getSql(), rv.getQueryReturnAliases(),
-                        rv.getScalarColumnNames()));
-                log(sql.getText());
-            } catch (Exception ex) {
-                logger.error("executeQuery(RowProcessor)", ex); //$NON-NLS-1$
-                log(rv.getSql());
-            }
-        }
+        sql.setText(cleanupSql(rv));
 
         aliases = rv.getFromAliases();
 
@@ -1231,7 +1216,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         System.out.println("duration (ms): " + rv.getDuration());
         System.out.println("overhead-server (ms): " + rv.getOverhead());
         System.out.println("overhead-client (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
-    };
+    }
+
+    private String cleanupSql(ExecutionResult rv) {
+        String sqlString = rv.getSql();
+        String[] queryReturnAliases = rv.getQueryReturnAliases();
+        String[][] scalarColumnNames = rv.getScalarColumnNames();
+        return cleanupSql(sqlString, queryReturnAliases, scalarColumnNames);
+    }
+
+    private String cleanupSql(String sqlString) {
+        return cleanupSql(sqlString, null, null);
+    }
+
+    private String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames) {
+        log(sqlString);
+        if (formatSqlAction.isSelected()) {
+            sqlString = hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, replacePropertiesAction.isSelected(),
+                    formatLinesAction.isSelected(), removeJoinsAction.isSelected());
+        }
+        log(sqlString);
+        return sqlString;
+    }
 
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
         hql.removeHighlights(syntaxErrorsHighlight);
@@ -1308,11 +1314,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
                 break;
         }
-    }
-
-    private String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames) {
-        return hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, replacePropertiesAction.isSelected(),
-                formatLinesAction.isSelected(), removeJoinsAction.isSelected());
     }
 
     private String getHqlText() {
