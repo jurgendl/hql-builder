@@ -1107,7 +1107,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
         }
-        sqlString = cleanupSql(sqlString);
+        sqlString = formatSql(sqlString);
         sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sqlString + getNewline()
                 + getNewline());
         sql.setCaret(0);
@@ -1119,7 +1119,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void afterQuery(long start, ExecutionResult rv, RowProcessor rowProcessor) throws Exception {
-        sql.setText(cleanupSql(rv));
+        sql.setText(formatSql(rv));
 
         aliases = rv.getFromAliases();
 
@@ -1218,22 +1218,25 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         System.out.println("overhead-client (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
     }
 
-    private String cleanupSql(ExecutionResult rv) {
+    private String formatSql(ExecutionResult rv) {
         String sqlString = rv.getSql();
         String[] queryReturnAliases = rv.getQueryReturnAliases();
         String[][] scalarColumnNames = rv.getScalarColumnNames();
-        return cleanupSql(sqlString, queryReturnAliases, scalarColumnNames);
+        boolean doFormat = formatLinesAction.isSelected();
+        boolean doRemoveJoins = removeJoinsAction.isSelected();
+        boolean doReplaceProperties = replacePropertiesAction.isSelected();
+        return formatSql(sqlString, queryReturnAliases, scalarColumnNames, doFormat, doRemoveJoins, doReplaceProperties);
     }
 
-    private String cleanupSql(String sqlString) {
-        return cleanupSql(sqlString, null, null);
+    private String formatSql(String sqlString) {
+        return formatSql(sqlString, null, null, false, false, false);
     }
 
-    private String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames) {
+    private String formatSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames, boolean doFormat, boolean doRemoveJoins,
+            boolean doReplaceProperties) {
         log(sqlString);
         if (formatSqlAction.isSelected()) {
-            sqlString = hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, replacePropertiesAction.isSelected(),
-                    formatLinesAction.isSelected(), removeJoinsAction.isSelected());
+            sqlString = hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, doReplaceProperties, doFormat, doRemoveJoins);
         }
         log(sqlString);
         return sqlString;
@@ -2048,6 +2051,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
+    private String format(String text) {
+        return hqlService.makeMultiline(hqlService.removeBlanks(text.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')));
+    }
+
     protected void copy() {
         try {
             int start = hql.getCaret().getDot();
@@ -2089,10 +2096,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         } catch (Exception ex) {
             logger.error("import hql", ex); //$NON-NLS-1$
         }
-    }
-
-    private String format(String text) {
-        return hqlService.makeMultiline(hqlService.removeBlanks(text.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')));
     }
 
     private static List<QueryParameter> convertParameterString(String map) {
