@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -46,6 +47,7 @@ import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
@@ -749,12 +751,19 @@ public class HqlServiceImpl implements HqlService {
      * @see org.tools.hqlbuilder.common.HqlService#createScript()
      */
     @Override
-    public void createScript() {
+    public String createScript() {
         SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
         export.setDelimiter(";");
         export.setFormat(true);
         export.setHaltOnError(false);
-        export.execute(true, false, false, true);
+        try {
+            File tmp = File.createTempFile("create", "sql");
+            export.setOutputFile(tmp.getAbsolutePath());
+            export.execute(true, false, false, true);
+            return new String(CommonUtils.read(new FileInputStream(tmp)));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public ConfigurationBean getConfigurationBean() {

@@ -52,7 +52,7 @@ public interface HqlService extends Serializable {
 
     public abstract void log();
 
-    public abstract void createScript();
+    public abstract String createScript();
 
     public abstract void sql(String... sql);
 

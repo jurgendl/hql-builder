@@ -174,4 +174,13 @@ public class CommonUtils {
         }
         return false;
     }
+
+    public static byte[] read(InputStream in) throws IOException {
+        byte[] tmp = new byte[in.available()];
+        if (in.read(tmp) != tmp.length) {
+            throw new IOException("not fully read");
+        }
+        in.close();
+        return tmp;
+    }
 }
