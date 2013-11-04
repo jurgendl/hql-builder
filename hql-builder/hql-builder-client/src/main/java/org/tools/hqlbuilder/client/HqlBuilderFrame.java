@@ -105,6 +105,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
@@ -737,6 +738,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClientLoader serviceLoader) {
         try {
+            // zet look en feel gelijk aan default voor OS
+            UIUtils.systemLookAndFeel();
+
             Preferences preferences = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID);
             String lang = preferences.get(PERSISTENT_LOCALE, SystemSettings.getCurrentLocale().getLanguage());
             SystemSettings.setCurrentLocale(new Locale(lang));
@@ -781,9 +785,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             if (!FAVORITES_DIR.exists()) {
                 FAVORITES_DIR.mkdirs();
             }
-
-            // zet look en feel gelijk aan default voor OS
-            UIUtils.systemLookAndFeel();
 
             SplashHelper.step();
 
@@ -871,7 +872,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         } catch (Exception ex) {
             SplashHelper.end();
-            JOptionPane.showMessageDialog(null, "" + ex, "Fatal Exception", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
             logger.error("start(String[], HqlService)", ex); //$NON-NLS-1$
         }
     }
