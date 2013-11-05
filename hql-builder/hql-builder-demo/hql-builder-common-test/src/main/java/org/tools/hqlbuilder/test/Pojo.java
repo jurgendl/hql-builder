@@ -5,6 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +15,6 @@ import javax.persistence.JoinTable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.AccessType;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 
@@ -37,7 +37,8 @@ public class Pojo extends PojoSuper implements Serializable {
     // @Pattern(regexp = "\\d*")
     private String regexDigits;
 
-    @CollectionOfElements(fetch = FetchType.LAZY)
+    // @CollectionOfElements(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.LAZY)
     @JoinTable(name = "plainSet", joinColumns = { @JoinColumn(name = "plainSetId") })
     @Column(name = "plainSet", nullable = false)
     @Sort(type = SortType.NATURAL)

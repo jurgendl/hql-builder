@@ -127,5 +127,4 @@ public class DefaultTypeFactory {
     public static Type basic(String name) {
         return (Type) BASIC_TYPES.get(name);
     }
-
 }
