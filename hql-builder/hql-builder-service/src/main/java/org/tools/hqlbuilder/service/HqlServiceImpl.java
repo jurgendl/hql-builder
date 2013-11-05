@@ -135,7 +135,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public Map<String, String> getHibernateInfo() {
-        if (hibernateVersions == null && true) {
+        if (hibernateVersions == null) {
             hibernateVersions = new LinkedHashMap<String, String>();
             {
                 String[][] deps = {
@@ -493,7 +493,6 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> getProperties(String classname) {
-        @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
         Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
