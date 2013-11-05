@@ -1,7 +1,8 @@
 package org.tools.hqlbuilder.test;
 
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.NotNull;
 
 @MappedSuperclass
 public class PojoSuper extends Parent {

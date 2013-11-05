@@ -1,38 +1,30 @@
 package org.tools.hqlbuilder.test;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Version;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.AccessType;
+import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
+import org.hibernate.validator.Max;
+import org.hibernate.validator.Min;
+import org.hibernate.validator.NotNull;
+import org.hibernate.validator.Pattern;
+import org.hibernate.validator.Valid;
 
 @Entity
 @AccessType("field")
-@SuppressWarnings("unused")
 public class Pojo extends PojoSuper implements Serializable {
     private static final long serialVersionUID = -589586518891599759L;
 
@@ -47,10 +39,10 @@ public class Pojo extends PojoSuper implements Serializable {
     @Max(100)
     private Integer from0To100;
 
-    @Pattern(regexp = "\\d*")
+    @Pattern(regex = "\\d*")
     private String regexDigits;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionOfElements(fetch = FetchType.LAZY)
     @JoinTable(name = "plainSet", joinColumns = { @JoinColumn(name = "plainSetId") })
     @Column(name = "plainSet", nullable = false)
     @Sort(type = SortType.NATURAL)
@@ -72,8 +64,9 @@ public class Pojo extends PojoSuper implements Serializable {
 
     @Override
     public boolean equals(final Object other) {
-        if (getId() == null)
+        if (getId() == null) {
             return false;
+        }
         if (!(other instanceof Pojo)) {
             return false;
         }
