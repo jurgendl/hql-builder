@@ -83,5 +83,10 @@
 			<artifactId>commons-collections</artifactId>
 			<version>${version.commons-collections}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>${version.javassist}</version>
+		</dependency>
 	</dependencies>
 </project>
