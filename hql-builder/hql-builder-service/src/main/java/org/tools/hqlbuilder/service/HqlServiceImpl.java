@@ -798,6 +798,9 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public String createScript() {
+        if (configurationBean == null || configurationBean.getConfiguration() == null) {
+            return null;
+        }
         try {
             SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
             export.setDelimiter(";");
