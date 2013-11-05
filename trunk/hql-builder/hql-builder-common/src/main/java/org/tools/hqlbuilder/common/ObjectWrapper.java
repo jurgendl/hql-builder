@@ -152,7 +152,7 @@ public final class ObjectWrapper {
             }
         }
 
-        throw new RuntimeException(field);
+        throw new RuntimeException(ow.getBean() + "." + field);
     }
 
     /**
