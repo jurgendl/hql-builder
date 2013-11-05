@@ -446,17 +446,7 @@ public class HqlServiceImpl implements HqlService {
                         node.addPath(propertyNames, resolver.getOrCreateNode(subClassName));
                     } else if (propertyType instanceof CollectionType) {
                         CollectionType collectionType = CollectionType.class.cast(propertyType);
-
-                        org.springframework.beans.factory.config.MethodInvokingFactoryBean mi = new org.springframework.beans.factory.config.MethodInvokingFactoryBean();
-                        mi.setTargetObject(collectionType);
-                        mi.setTargetMethod("getElementType");
-                        mi.setArguments(new Object[] { sessionFactory });
-                        Type elementType;
-                        try {
-                            elementType = (Type) mi.getObject();// bagtype.getElementType((SessionFactoryImplementor) sessionFactory);
-                        } catch (Exception ex2) {
-                            throw new RuntimeException(ex2);
-                        }
+                        Type elementType = call(collectionType, "getElementType", Type.class, sessionFactory);
                         String subClassName = elementType.getName();
                         if ("org.hibernate.type.EnumType".equals(subClassName)) {
                             continue;
