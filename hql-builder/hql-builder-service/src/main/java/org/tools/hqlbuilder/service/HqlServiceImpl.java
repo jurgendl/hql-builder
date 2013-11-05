@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -101,7 +102,7 @@ public class HqlServiceImpl implements HqlService {
 
     protected ConfigurationBean configurationBean;
 
-    protected String hibernateVersions;
+    protected LinkedHashMap<String, String> hibernateVersions;
 
     protected String project;
 
@@ -133,42 +134,39 @@ public class HqlServiceImpl implements HqlService {
      * @see org.tools.hqlbuilder.common.HqlService#getHibernateInfo()
      */
     @Override
-    public String getHibernateInfo() {
+    public Map<String, String> getHibernateInfo() {
         if (hibernateVersions == null && true) {
-            String[][] deps1 = {
-                    { "Hibernate", "org.hibernate:hibernate" },
-                    { "Hibernate", "org.hibernate:hibernate-core" },
-                    { "Annotations", "org.hibernate:hibernate-annotations" },
-                    { "Annotations", "org.hibernate:hibernate-commons-annotations" },
-                    { "Annotations", "org.hibernate.commons:hibernate-commons-annotations" },
-                    { "Validator", "org.hibernate:hibernate-validator" },
-                    { "JPA", "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" } };
-            String[][] deps2 = {
-                    { "Hibernate", "org.hibernate.Hibernate" },
-                    { "Annotations", "org.hibernate.AnnotationException" },
-                    { "Validator", "org.hibernate.validator.InvalidStateException" } };
-            StringBuilder sb = new StringBuilder();
-            for (String[] dep : deps1) {
-                try {
-                    String v = readMavenVersion(dep[1]).toString();
-                    sb.append(dep[0]).append(": ").append(v).append("<br>");
-                } catch (Exception ex) {
-                    //
+            hibernateVersions = new LinkedHashMap<String, String>();
+            {
+                String[][] deps = {
+                        { "Hibernate", "org.hibernate.Hibernate" },
+                        { "Annotations", "org.hibernate.AnnotationException" },
+                        { "Validator", "org.hibernate.validator.InvalidStateException" } };
+                for (String[] dep : deps) {
+                    try {
+                        hibernateVersions.put(dep[0], readManifestVersion(dep[1]).toString());
+                    } catch (Exception ex) {
+                        //
+                    }
                 }
             }
-            for (String[] dep : deps2) {
-                try {
-                    String v = readManifestVersion(dep[1]).toString();
-                    sb.append(dep[0]).append(": ").append(v).append("<br>");
-                } catch (Exception ex) {
-                    //
+            {
+                String[][] deps = {
+                        { "Hibernate", "org.hibernate:hibernate" },
+                        { "Hibernate", "org.hibernate:hibernate-core" },
+                        { "Annotations", "org.hibernate:hibernate-annotations" },
+                        { "Annotations", "org.hibernate:hibernate-commons-annotations" },
+                        { "Annotations", "org.hibernate.commons:hibernate-commons-annotations" },
+                        { "Validator", "org.hibernate:hibernate-validator" },
+                        { "JPA", "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" } };
+                for (String[] dep : deps) {
+                    try {
+                        hibernateVersions.put(dep[0], readMavenVersion(dep[1]).toString());
+                    } catch (Exception ex) {
+                        //
+                    }
                 }
             }
-            hibernateVersions = sb.toString();
-            if (hibernateVersions.length() > 2) {
-                hibernateVersions = hibernateVersions.substring(0, hibernateVersions.length() - 4);
-            }
-            hibernateVersions = "<html>" + hibernateVersions + "</html>";
         }
         return hibernateVersions;
     }

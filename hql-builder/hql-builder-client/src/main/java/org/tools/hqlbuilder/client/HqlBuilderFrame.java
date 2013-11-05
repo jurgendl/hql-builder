@@ -3019,8 +3019,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void versions() {
-        JOptionPane.showMessageDialog(frame,
-                font(new ELabel(HqlResourceBundle.getMessage("versions.description", hqlService.getHibernateInfo())), 14),
+        StringBuilder sb = new StringBuilder("<html>");
+        for (Map.Entry<String, String> hibernateInfo : hqlService.getHibernateInfo().entrySet()) {
+            sb.append(hibernateInfo.getKey()).append(": ").append(hibernateInfo.getValue()).append("<br>");
+        }
+        sb.append("</html>");
+        JOptionPane.showMessageDialog(frame, font(new ELabel(HqlResourceBundle.getMessage("versions.description", sb.toString())), 14),
                 HqlResourceBundle.getMessage("versions.title"), JOptionPane.INFORMATION_MESSAGE);
     }
 }

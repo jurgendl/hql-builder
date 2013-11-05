@@ -113,7 +113,7 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
-    public String getHibernateInfo() {
+    public Map<String, String> getHibernateInfo() {
         return getDelegate().getHibernateInfo();
     }
 }
