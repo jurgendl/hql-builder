@@ -42,9 +42,7 @@
 
 	<bean id="sessionFactory" class="org.tools.hqlbuilder.service.LocalSessionFactoryBeanPlus4">
 		<property name="dataSource" ref="dataSource" />
-		<!-- <property name="configLocation" value="classpath:${hibernate.cfg.xml}" />
-		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" /> -->
-		<property name="packagesToScan" value="org.tools.hqlbuilder.test" />
+		<property name="configLocation" value="classpath:${hibernate.cfg.xml}" />
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 	</bean>
 
