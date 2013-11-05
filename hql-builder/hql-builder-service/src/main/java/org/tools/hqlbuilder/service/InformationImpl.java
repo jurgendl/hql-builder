@@ -54,29 +54,11 @@ public class InformationImpl extends Information {
                     if (propertyType instanceof BagType) {
                         BagType bagtype = (BagType) propertyType;
                         try {
-                            org.springframework.beans.factory.config.MethodInvokingFactoryBean mi = new org.springframework.beans.factory.config.MethodInvokingFactoryBean();
-                            mi.setTargetObject(bagtype);
-                            mi.setTargetMethod("getAssociatedEntityName");
-                            mi.setArguments(new Object[] { sessionFactory });
-                            String assoc;
-                            try {
-                                assoc = (String) mi.getObject();// bagtype.getAssociatedEntityName((SessionFactoryImplementor) sessionFactory);
-                            } catch (Exception ex) {
-                                throw new RuntimeException(ex);
-                            }
+                            String assoc = HqlServiceImpl.call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
                             fsb.append(transformClassName(assoc));
                         } catch (MappingException ex) {
                             try {
-                                org.springframework.beans.factory.config.MethodInvokingFactoryBean mi = new org.springframework.beans.factory.config.MethodInvokingFactoryBean();
-                                mi.setTargetObject(bagtype);
-                                mi.setTargetMethod("getElementType");
-                                mi.setArguments(new Object[] { sessionFactory });
-                                Type elementType;
-                                try {
-                                    elementType = (Type) mi.getObject();// bagtype.getElementType((SessionFactoryImplementor) sessionFactory);
-                                } catch (Exception ex2) {
-                                    throw new RuntimeException(ex2);
-                                }
+                                Type elementType = HqlServiceImpl.call(bagtype, "getElementType", Type.class, sessionFactory);
                                 if (elementType instanceof CustomType) {
                                     CustomType ct = (CustomType) elementType;
                                     if ("org.hibernate.type.EnumType".equals(ct.getName())) {
