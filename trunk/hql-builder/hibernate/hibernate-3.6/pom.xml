@@ -9,7 +9,6 @@
 	<artifactId>hibernate-3.6</artifactId>
 	<name>hibernate-3.6</name>
 	<description>hibernate-3.6</description>
-	<packaging>pom</packaging>
 	<properties>
 		<hibernate.version>3.6.10.Final</hibernate.version>
 		<hibernate-annotations.version>3.2.0.Final</hibernate-annotations.version>
