@@ -1,11 +1,9 @@
 package org.tools.hqlbuilder.test;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.Min;
 
 @Embeddable
 public class EmbedPojo {
-    @Min(100)
     private Integer from100;
 
     public Integer getFrom100() {

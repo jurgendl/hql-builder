@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.AccessType;
 
@@ -19,7 +18,6 @@ public class Rel2Trans extends Parent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LangId")
-    @NotNull
     private Lang lang;
 
     public Lang getLang() {
