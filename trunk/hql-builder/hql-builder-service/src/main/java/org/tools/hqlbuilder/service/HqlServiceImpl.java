@@ -37,7 +37,6 @@ import org.hibernate.QueryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.engine.query.ParameterMetadata;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
@@ -47,6 +46,7 @@ import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
@@ -614,22 +614,25 @@ public class HqlServiceImpl implements HqlService {
         Session session = sessionFactory.openSession();
         try {
             Query createQuery = session.createQuery(hql);
-            ParameterMetadata pminof = get(createQuery, "parameterMetadata", ParameterMetadata.class);
+            Object pminof = get(createQuery, "parameterMetadata", Object.class/* ParameterMetadata */);
 
             for (String param : createQuery.getNamedParameters()) {
                 String simpleName = "?";
                 try {
-                    simpleName = pminof.getNamedParameterExpectedType(param).getReturnedClass().getSimpleName();
+                    // simpleName = pminof.getNamedParameterExpectedType(param).getReturnedClass().getSimpleName();
+                    simpleName = call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
                 QueryParameter p = new QueryParameter(null, param, simpleName);
                 parameters.add(p);
             }
-            for (int i = 1; i <= pminof.getOrdinalParameterCount(); i++) {
+            Integer mi = call(pminof, "getOrdinalParameterCount", Integer.class);
+            for (int i = 1; i <= mi; i++) {
                 String simpleName = "?";
                 try {
-                    simpleName = pminof.getOrdinalParameterExpectedType(i).getReturnedClass().getSimpleName();
+                    simpleName = call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
+                    // simpleName = pminof.getOrdinalParameterExpectedType(i).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
@@ -837,5 +840,25 @@ public class HqlServiceImpl implements HqlService {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
+        logger.debug(String.valueOf(object));
+        logger.debug(methodName);
+        logger.debug(Arrays.toString(params));
+        MethodInvokingFactoryBean mi = new MethodInvokingFactoryBean();
+        mi.setTargetObject(object);
+        mi.setTargetMethod(methodName);
+        mi.setArguments(params);
+        try {
+            mi.afterPropertiesSet();
+            T value = type.cast(mi.getObject());
+            logger.debug(String.valueOf(value));
+            return value;
+        } catch (Exception ex) {
+            logger.error(ex.getClass().getName());
+            logger.error(String.valueOf(ex));
+            throw new RuntimeException(ex);
+        }
     }
 }
