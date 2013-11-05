@@ -23,7 +23,6 @@
 		<version.commons-beanutils>1.8.3</version.commons-beanutils>
 		<version.commons-dbcp>20030825.184428</version.commons-dbcp>
 		<version.commons-pool>20030825.183949</version.commons-pool>
-		<version.slf4j>1.7.5</version.slf4j>
 		<version.javassist>3.18.1-GA</version.javassist>
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>

@@ -15,8 +15,19 @@
 		<hibernate-annotations.version>4.0.1.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
 		<hibernate-validator.version>4.2.0.Final</hibernate-validator.version>
+		<version.slf4j>1.7.5</version.slf4j>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.tools.hql-builder</groupId>
 			<artifactId>hql-builder-interfaces</artifactId>
