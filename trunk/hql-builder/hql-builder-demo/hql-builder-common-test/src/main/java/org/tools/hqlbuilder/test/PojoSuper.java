@@ -1,11 +1,9 @@
 package org.tools.hqlbuilder.test;
 
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public class PojoSuper extends Parent {
-    @NotNull
     private String superNotNull;
 
     public String getSuperNotNull() {
