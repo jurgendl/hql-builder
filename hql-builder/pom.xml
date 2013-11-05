@@ -8,7 +8,7 @@
 	<description>hql-builder-parent</description>
 	<url>http://hql-builder.googlecode.com</url>
 	<properties>
-		<version.hibernate>3.6</version.hibernate>
+		<version.hibernate>4.2</version.hibernate>
 		<version.spring>3.2.4.RELEASE</version.spring>
 		<version.swingeasy>3.0.0.0</version.swingeasy>
 		<version.lucene>3.6.2</version.lucene>
@@ -24,6 +24,7 @@
 		<version.commons-dbcp>20030825.184428</version.commons-dbcp>
 		<version.commons-pool>20030825.183949</version.commons-pool>
 		<version.javassist>3.18.1-GA</version.javassist>
+		<version.ehcache>2.4.7</version.ehcache>
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 	</properties>

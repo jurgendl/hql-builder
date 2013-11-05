@@ -299,7 +299,7 @@ public class HqlServiceImpl implements HqlService {
         try {
             return innerExecute(result, hql, max, queryParameters);
         } catch (QueryException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
+            logger.error("execute(String, int, QueryParameter)", ex);
             String msg = ex.getLocalizedMessage();
             Matcher m = Pattern.compile("could not resolve property: ([^ ]+) of: ([^ ]+) ").matcher(msg);
             if (m.find()) {
@@ -311,14 +311,14 @@ public class HqlServiceImpl implements HqlService {
             }
             throw new ServiceException(ex.getMessage(), result);
         } catch (SQLGrammarException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
+            logger.error("execute(String, int, QueryParameter)", ex);
             throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
+            logger.error("execute(String, int, QueryParameter)", ex);
             throw new ServiceException(ex.getMessage(), result);
         } catch (Exception ex) {
             if (ex.getClass().getSimpleName().equals("QuerySyntaxException")) {
-                logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
+                logger.error("execute(String, int, QueryParameter)", ex);
                 String msg = ex.getLocalizedMessage();
                 Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
                 if (m.find()) {
@@ -367,10 +367,10 @@ public class HqlServiceImpl implements HqlService {
                 }
             } catch (org.hibernate.QueryParameterException ex) {
                 // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
-                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); //$NON-NLS-1$ // => whatever
+                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
             } catch (java.lang.IndexOutOfBoundsException ex) {
                 // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
-                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); //$NON-NLS-1$ // => whatever
+                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
             }
         }
         if (isUpdateStatement) {
@@ -469,7 +469,7 @@ public class HqlServiceImpl implements HqlService {
                     }
                 }
             } catch (IllegalArgumentException ex) {
-                logger.error("getHibernateWebResolver() - " + className, ex); //$NON-NLS-1$
+                logger.error("getHibernateWebResolver() - " + className, ex);
             }
         }
         return resolver;
@@ -585,7 +585,7 @@ public class HqlServiceImpl implements HqlService {
                     }
                 }
             } catch (IOException ex) {
-                logger.error("getReservedKeywords()", ex); //$NON-NLS-1$
+                logger.error("getReservedKeywords()", ex);
             }
         }
         return keywords;
@@ -798,17 +798,24 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public String createScript() {
-        SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
-        export.setDelimiter(";");
-        export.setFormat(true);
-        export.setHaltOnError(false);
         try {
-            File tmp = File.createTempFile("create", "sql");
-            export.setOutputFile(tmp.getAbsolutePath());
-            export.execute(true, false, false, true);
-            return new String(CommonUtils.read(new FileInputStream(tmp)));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
+            export.setDelimiter(";");
+            export.setFormat(true);
+            export.setHaltOnError(false);
+            try {
+                File tmp = File.createTempFile("create", "sql");
+                export.setOutputFile(tmp.getAbsolutePath());
+                export.execute(true, false, false, true);
+                return new String(CommonUtils.read(new FileInputStream(tmp)));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (RuntimeException ex) {
+            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.createScript()");
+            logger.error(ex.getClass().getName());
+            logger.error(String.valueOf(ex));
+            return null;
         }
     }
 
@@ -856,6 +863,7 @@ public class HqlServiceImpl implements HqlService {
             logger.debug(String.valueOf(value));
             return value;
         } catch (Exception ex) {
+            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
             logger.error(ex.getClass().getName());
             logger.error(String.valueOf(ex));
             throw new RuntimeException(ex);

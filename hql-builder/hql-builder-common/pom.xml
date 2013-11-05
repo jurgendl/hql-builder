@@ -55,5 +55,10 @@
 			<artifactId>javassist</artifactId>
 			<version>${version.javassist}</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>${version.ehcache}</version>
+		</dependency>
 	</dependencies>
 </project>
