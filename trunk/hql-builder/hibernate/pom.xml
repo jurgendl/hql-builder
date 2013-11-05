@@ -1,48 +1,29 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.tools.hql-builder</groupId>
-	<artifactId>hql-builder-parent</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<parent>
+		<groupId>org.tools.hql-builder</groupId>
+		<artifactId>hql-builder-parent</artifactId>
+		<version>1.0.4-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<groupId>org.tools.hql-builder.hibernate</groupId>
+	<artifactId>parent</artifactId>
+	<name>hql-builder-hibernate-parent</name>
+	<description>hql-builder-hibernate-parent</description>
 	<packaging>pom</packaging>
-	<name>hql-builder-parent</name>
-	<description>hql-builder-parent</description>
-	<url>http://hql-builder.googlecode.com</url>
 	<properties>
-		<version.spring>2.5.6.SEC03</version.spring>
-		<version.lucene>3.6.2</version.lucene>
-		<version.hibernate>3.2</version.hibernate>
-		<version.groovy>2.1.5</version.groovy>
-		<version.groovyengine>20080808</version.groovyengine>
-		<version.log4j>1.2.17</version.log4j>
-		<version.jcalendar>1.4</version.jcalendar>
-		<version.joda>1.6</version.joda>
-		<version.swingeasy>3.0.0.0-SNAPSHOT</version.swingeasy>
-		<version.l2fprod>7.3</version.l2fprod>
-		<version.commons-lang>2.6</version.commons-lang>
-		<version.commons-collections>3.2.1</version.commons-collections>
-		<version.commons-beanutils>1.8.3</version.commons-beanutils>
-		<version.commons-dbcp>20030825.184428</version.commons-dbcp>
-		<version.commons-pool>20030825.183949</version.commons-pool>
-		<version.slf4j>1.7.5</version.slf4j>
-		<version.javassist>3.18.1-GA</version.javassist>
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 	</properties>
 	<modules>
-		<module>hql-builder-interfaces</module>
-		<module>hibernate</module>
-		<module>hql-builder-common</module>
-		<module>hql-builder-service</module>
-		<module>hql-builder-client</module>
-		<module>hql-builder-full</module>
+		<module>hibernate-3.2</module>
+		<module>hibernate-3.3</module>
+		<module>hibernate-3.5</module>
+		<module>hibernate-3.6</module>
+		<module>hibernate-4.0</module>
+		<module>hibernate-4.1</module>
+		<module>hibernate-4.2</module>
 	</modules>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.4</version>
-		</dependency>
-	</dependencies>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License v2.1</name>
@@ -53,48 +34,6 @@
 		<system>Google</system>
 		<url>http://code.google.com/p/hql-builder/issues/list</url>
 	</issueManagement>	
-	<!-- http://maven.apache.org/guides/introduction/introduction-to-profiles.html -->
-	<profiles>
-		<profile>
-			<!-- 
-				"mvn clean package -P nodebuginfo"
-				wil create an optimized (without debugging info) jar: hql-builder-nodebug-{version}.jar
-				
-				"mvn clean package"
-				wil create a jar without debugging info: hql-builder-{version}.jar
-			 -->
-			<id>nodebuginfo</id>
-			<build>
-				<finalName>${artifactId}-nodebuginfo-${version}</finalName>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>2.5.1</version>
-						<configuration>
-							<fork>true</fork>
-							<source>${targetJdk}</source>
-							<target>${targetJdk}</target>
-							<optimize>true</optimize>
-							<verbose>false</verbose>
-							<encoding>${project.build.sourceEncoding}</encoding>
-							<debug>false</debug> 
-							<debuglevel>none</debuglevel><!-- lines, vars, and source or none -->
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>inc-test-modules</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<modules>
-				<module>hql-builder-demo</module>
-			</modules>
-		</profile>
-	</profiles>
 	<distributionManagement>
 		<!--
 		<site>
@@ -154,7 +93,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
 				<configuration>
 					<fork>true</fork>
 					<source>${targetJdk}</source>
@@ -174,7 +112,7 @@
 					<locales>en</locales>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.3</version>
@@ -182,12 +120,11 @@
 					<testFailureIgnore>true</testFailureIgnore>
 					<argLine>-Xms128m -Xmx128m</argLine>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
-					<skip>true</skip>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>false</downloadJavadocs>
 					<forceRecheck>true</forceRecheck>
@@ -222,14 +159,14 @@
 			<plugin>
 				<artifactId>maven-clover-plugin</artifactId>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
