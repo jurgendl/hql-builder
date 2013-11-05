@@ -20,11 +20,12 @@ echo y. update, deploy
 echo s. generate sources
 echo m. assembly
 echo t. status
+echo v. set versions
 echo j. update java_home to latest (Windows)
 echo a. update maven_home to maven3_home
 echo q. quit
 echo ------------------
-CHOICE /N /C:uieocdrysmtjaq
+CHOICE /N /C:uieocdrysmtvjaq
 set nr=%ERRORLEVEL%
 IF %nr% EQU 1 goto lsvnup
 IF %nr% EQU 2 goto llocinstall
@@ -37,9 +38,10 @@ IF %nr% EQU 8 goto ldeploy
 IF %nr% EQU 9 goto lgen
 IF %nr% EQU 10 goto lass
 IF %nr% EQU 11 goto lstatus
-IF %nr% EQU 12 goto ljavahome
-IF %nr% EQU 13 goto lmavenhome
-IF %nr% EQU 14 goto lquit
+IF %nr% EQU 12 goto lversions
+IF %nr% EQU 13 goto ljavahome
+IF %nr% EQU 14 goto lmavenhome
+IF %nr% EQU 15 goto lquit
 goto start
 
 :lmavenhome
@@ -127,6 +129,11 @@ goto start
 :lass
 cls
 call mvn -o -Dmaven.tomcat.skip=true -e package assembly:assembly %*
+pause
+
+:lversions
+cls
+call mvn -o -Dmaven.tomcat.skip=true -e versions:set %*
 pause
 
 :lquit
