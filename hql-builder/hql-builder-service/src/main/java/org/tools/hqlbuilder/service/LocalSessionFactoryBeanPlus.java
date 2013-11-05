@@ -43,7 +43,7 @@ public class LocalSessionFactoryBeanPlus extends org.springframework.orm.hiberna
     protected void afterSessionFactoryCreation() throws Exception {
         super.afterSessionFactoryCreation();
         for (String configurationBeanName : applicationContext.getBeanNamesForType(ConfigurationBean.class)) {
-            ConfigurationBean configurationBean = (ConfigurationBean) applicationContext.getBean(configurationBeanName, ConfigurationBean.class);
+            ConfigurationBean configurationBean = applicationContext.getBean(configurationBeanName, ConfigurationBean.class);
             configurationBean.setConfiguration(getConfiguration());
         }
     }
