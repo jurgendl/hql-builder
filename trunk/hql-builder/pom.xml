@@ -8,15 +8,15 @@
 	<description>hql-builder-parent</description>
 	<url>http://hql-builder.googlecode.com</url>
 	<properties>
-		<version.spring>3.2.4.RELEASE</version.spring>
-		<version.lucene>3.6.2</version.lucene>
 		<version.hibernate>3.6</version.hibernate>
+		<version.spring>3.2.4.RELEASE</version.spring>
+		<version.swingeasy>3.0.0.0</version.swingeasy>
+		<version.lucene>3.6.2</version.lucene>
 		<version.groovy>2.1.5</version.groovy>
 		<version.groovyengine>20080808</version.groovyengine>
 		<version.log4j>1.2.17</version.log4j>
 		<version.jcalendar>1.4</version.jcalendar>
 		<version.joda>1.6</version.joda>
-		<version.swingeasy>3.0.0.0-SNAPSHOT</version.swingeasy>
 		<version.l2fprod>7.3</version.l2fprod>
 		<version.commons-lang>2.6</version.commons-lang>
 		<version.commons-collections>3.2.1</version.commons-collections>
