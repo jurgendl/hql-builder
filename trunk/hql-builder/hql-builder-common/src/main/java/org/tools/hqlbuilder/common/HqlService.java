@@ -56,5 +56,5 @@ public interface HqlService extends Serializable {
 
     public abstract void sql(String... sql);
 
-    public abstract String getHibernateInfo();
+    public abstract Map<String, String> getHibernateInfo();
 }

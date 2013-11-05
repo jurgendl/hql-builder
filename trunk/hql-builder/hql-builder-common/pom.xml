@@ -12,7 +12,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.tools.hql-builder.hibernate</groupId>
-			<artifactId>hibernate-3.2</artifactId>
+			<artifactId>hibernate-${version.hibernate}</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
