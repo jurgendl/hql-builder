@@ -10,7 +10,7 @@
 	<properties>
 		<version.spring>2.5.6</version.spring><!--3.2.4.RELEASE-->
 		<version.lucene>3.6.0</version.lucene>
-		<version.hibernate>3.6</version.hibernate>
+		<version.hibernate>3.2</version.hibernate>
 		<version.groovy>2.1.5</version.groovy>
 		<version.groovyengine>20080808</version.groovyengine>
 		<version.log4j>1.2.17</version.log4j>

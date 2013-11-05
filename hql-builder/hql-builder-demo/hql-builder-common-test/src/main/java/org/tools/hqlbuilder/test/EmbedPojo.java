@@ -1,7 +1,8 @@
 package org.tools.hqlbuilder.test;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.Min;
+
+import org.hibernate.validator.Min;
 
 @Embeddable
 public class EmbedPojo {
