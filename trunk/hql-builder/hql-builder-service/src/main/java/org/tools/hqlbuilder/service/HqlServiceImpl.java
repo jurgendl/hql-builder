@@ -26,22 +26,19 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.sql.DataSource;
 
 import org.apache.lucene.queryParser.ParseException;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.QueryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.engine.NamedQueryDefinition;
-import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.engine.query.ParameterMetadata;
 import org.hibernate.exception.SQLGrammarException;
-import org.hibernate.hql.ast.QuerySyntaxException;
-import org.hibernate.hql.ast.QueryTranslatorImpl;
-import org.hibernate.impl.AbstractQueryImpl;
-import org.hibernate.impl.QueryImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
@@ -203,7 +200,7 @@ public class HqlServiceImpl implements HqlService {
                 Class<?> modelClass = Class.forName(getClasses().iterator().next());
                 URL classLocation = modelClass.getProtectionDomain().getCodeSource().getLocation();
                 if (new File(classLocation.getFile()).isFile()) {
-                    java.util.zip.ZipFile zf = new java.util.zip.ZipFile(new File(classLocation.getFile()));
+                    ZipFile zf = new ZipFile(new File(classLocation.getFile()));
                     Enumeration<? extends ZipEntry> enu = zf.entries();
                     ZipEntry manifest = null;
                     ZipEntry pomprops = null;
@@ -279,8 +276,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public String getSqlForHql(String hql) {
-        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(),
-                (SessionFactoryImplementor) sessionFactory);
+        QueryTranslator createQueryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         createQueryTranslator.compile(new HashMap<Object, Object>(), false);
         return createQueryTranslator.getSQLString();
     }
@@ -298,27 +294,10 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
-        System.out.println("start query");
+        logger.debug("start query");
         ExecutionResult result = new ExecutionResult();
         try {
             return innerExecute(result, hql, max, queryParameters);
-        } catch (QuerySyntaxException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
-            String msg = ex.getLocalizedMessage();
-            Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
-            if (m.find()) {
-                throw new SyntaxException(SyntaxException.SyntaxExceptionType.unexpected_token, msg, m.group(1), Integer.parseInt(m.group(2)),
-                        Integer.parseInt(m.group(3)));
-            }
-            m = Pattern.compile("Invalid path: '([^']+)' ").matcher(msg);
-            if (m.find()) {
-                throw new SyntaxException(SyntaxException.SyntaxExceptionType.invalid_path, msg, m.group(1));
-            }
-            m = Pattern.compile("([^']+) is not mapped ").matcher(msg);
-            if (m.find()) {
-                throw new SyntaxException(SyntaxException.SyntaxExceptionType.not_mapped, msg, m.group(1));
-            }
-            throw new ServiceException(ex.getMessage(), result);
         } catch (QueryException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             String msg = ex.getLocalizedMessage();
@@ -337,22 +316,41 @@ public class HqlServiceImpl implements HqlService {
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
             throw new ServiceException(ex.getMessage(), result);
+        } catch (Exception ex) {
+            if (ex.getClass().getSimpleName().equals("QuerySyntaxException")) {
+                logger.error("execute(String, int, QueryParameter)", ex); //$NON-NLS-1$
+                String msg = ex.getLocalizedMessage();
+                Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
+                if (m.find()) {
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.unexpected_token, msg, m.group(1), Integer.parseInt(m.group(2)),
+                            Integer.parseInt(m.group(3)));
+                }
+                m = Pattern.compile("Invalid path: '([^']+)' ").matcher(msg);
+                if (m.find()) {
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.invalid_path, msg, m.group(1));
+                }
+                m = Pattern.compile("([^']+) is not mapped ").matcher(msg);
+                if (m.find()) {
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.not_mapped, msg, m.group(1));
+                }
+                throw new ServiceException(ex.getMessage(), result);
+            }
+            throw new RuntimeException(ex);
         } finally {
-            System.out.println("end query");
+            logger.debug("end query");
         }
     }
 
     @SuppressWarnings("unchecked")
     protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, QueryParameter... queryParameters) {
         long start = System.currentTimeMillis();
-        QueryTranslatorImpl createQueryTranslator = new QueryTranslatorImpl(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(),
-                (SessionFactoryImplementor) sessionFactory);
-        String sql = createQueryTranslator.getSQLString();
-        System.out.println(sql);
+        QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
+        String sql = queryTranslator.getSQLString();
+        logger.debug(sql);
         result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = sessionFactory.openSession();
-        AbstractQueryImpl createQuery = (AbstractQueryImpl) session.createQuery(hql);
+        org.hibernate.Query createQuery = session.createQuery(hql);
         int index = 0;
         for (QueryParameter value : queryParameters) {
             try {
@@ -379,28 +377,28 @@ public class HqlServiceImpl implements HqlService {
             result.setSize(createQuery.executeUpdate());
             return result;
         }
-        createQueryTranslator.compile(new HashMap<Object, Object>(), false);
+        queryTranslator.compile(new HashMap<Object, Object>(), false);
         if (sql == null) {
-            sql = createQueryTranslator.getSQLString();
+            sql = queryTranslator.getSQLString();
             if (sql == null) {
-                String tmp = new ObjectWrapper(createQueryTranslator).get(QUERY_LOADER).toString();
+                String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
             }
             logger.debug(sql);
             result.setSql(sql);
         }
         createQuery.setMaxResults(max);
-        Type[] queryReturnTypes = get(createQueryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_TYPES, Type[].class);
-        String[] queryReturnAliases = get(createQueryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_ALIASES, String[].class);
+        Type[] queryReturnTypes = get(queryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_TYPES, Type[].class);
+        String[] queryReturnAliases = get(queryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_ALIASES, String[].class);
         result.setQueryReturnAliases(queryReturnAliases);
-        String[][] scalarColumnNames = get(createQueryTranslator, QUERY_LOADER + DOT + SCALAR_COLUMN_NAMES, String[][].class);
+        String[][] scalarColumnNames = get(queryTranslator, QUERY_LOADER + DOT + SCALAR_COLUMN_NAMES, String[][].class);
         result.setScalarColumnNames(scalarColumnNames);
-        String[] entityAliases = get(createQueryTranslator, QUERY_LOADER + DOT + ENTITY_ALIASES, String[].class);
-        Queryable[] entityPersisters = get(createQueryTranslator, QUERY_LOADER + DOT + ENTITY_PERSISTERS, Queryable[].class);
-        String[] sqlAliases = get(createQueryTranslator, QUERY_LOADER + DOT + SQL_ALIASES, String[].class);
+        String[] entityAliases = get(queryTranslator, QUERY_LOADER + DOT + ENTITY_ALIASES, String[].class);
+        Queryable[] entityPersisters = get(queryTranslator, QUERY_LOADER + DOT + ENTITY_PERSISTERS, Queryable[].class);
+        String[] sqlAliases = get(queryTranslator, QUERY_LOADER + DOT + SQL_ALIASES, String[].class);
         result.setSqlAliases(sqlAliases);
         @SuppressWarnings("unused")
-        Map<String, String> sqlAliasByEntityAlias = get(createQueryTranslator, QUERY_LOADER + DOT + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
+        Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QUERY_LOADER + DOT + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
         Map<String, String> from_aliases = new HashMap<String, String>();
         result.setFromAliases(from_aliases);
         for (int i = 0; i < entityAliases.length; i++) {
@@ -448,7 +446,18 @@ public class HqlServiceImpl implements HqlService {
                         node.addPath(propertyNames, resolver.getOrCreateNode(subClassName));
                     } else if (propertyType instanceof CollectionType) {
                         CollectionType collectionType = CollectionType.class.cast(propertyType);
-                        String subClassName = collectionType.getElementType((SessionFactoryImplementor) sessionFactory).getName();
+
+                        org.springframework.beans.factory.config.MethodInvokingFactoryBean mi = new org.springframework.beans.factory.config.MethodInvokingFactoryBean();
+                        mi.setTargetObject(collectionType);
+                        mi.setTargetMethod("getElementType");
+                        mi.setArguments(new Object[] { sessionFactory });
+                        Type elementType;
+                        try {
+                            elementType = (Type) mi.getObject();// bagtype.getElementType((SessionFactoryImplementor) sessionFactory);
+                        } catch (Exception ex2) {
+                            throw new RuntimeException(ex2);
+                        }
+                        String subClassName = elementType.getName();
                         if ("org.hibernate.type.EnumType".equals(subClassName)) {
                             continue;
                         }
@@ -511,7 +520,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public <T> T save(T object) throws ValidationException {
         try {
-            org.hibernate.classic.Session session = sessionFactory.openSession();
+            org.hibernate.Session session = sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
             object = (T) session.merge(object);
             session.persist(object);
@@ -547,7 +556,7 @@ public class HqlServiceImpl implements HqlService {
     @SuppressWarnings("unchecked")
     @Override
     public <T> void delete(T object) {
-        org.hibernate.classic.Session session = sessionFactory.openSession();
+        org.hibernate.Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         object = (T) session.merge(object);
         session.delete(object);
@@ -589,9 +598,9 @@ public class HqlServiceImpl implements HqlService {
     public Map<String, String> getNamedQueries() {
         Map<String, String> namedQueriesRv = new HashMap<String, String>();
         @SuppressWarnings("unchecked")
-        Map<String, NamedQueryDefinition> namedQueries = get(getSessionFactory(), "namedQueries", Map.class);
-        for (Map.Entry<String, NamedQueryDefinition> entry : namedQueries.entrySet()) {
-            namedQueriesRv.put(entry.getKey(), entry.getValue().getQueryString());
+        Map<String, Object/* NamedQueryDefinition */> namedQueries = get(getSessionFactory(), "namedQueries", Map.class);
+        for (Map.Entry<String, Object/* NamedQueryDefinition */> entry : namedQueries.entrySet()) {
+            namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
         }
         return namedQueriesRv;
     }
@@ -604,9 +613,8 @@ public class HqlServiceImpl implements HqlService {
         List<QueryParameter> parameters = new ArrayList<QueryParameter>();
         Session session = sessionFactory.openSession();
         try {
-            QueryImpl createQuery = (QueryImpl) session.createQuery(hql);
-            org.hibernate.engine.query.ParameterMetadata pminof = get(createQuery, "parameterMetadata",
-                    org.hibernate.engine.query.ParameterMetadata.class);
+            Query createQuery = session.createQuery(hql);
+            ParameterMetadata pminof = get(createQuery, "parameterMetadata", ParameterMetadata.class);
 
             for (String param : createQuery.getNamedParameters()) {
                 String simpleName = "?";
@@ -672,7 +680,7 @@ public class HqlServiceImpl implements HqlService {
     protected Information getInformation() {
         if (information == null) {
             try {
-                information = new Information(getSessionFactory());
+                information = new InformationImpl(getSessionFactory());
             } catch (IllegalArgumentException ex) {
                 throw new RuntimeException(ex);
             } catch (IOException ex) {
@@ -716,7 +724,7 @@ public class HqlServiceImpl implements HqlService {
                 Class<?> modelClass = Class.forName(getClasses().iterator().next());
                 URL classLocation = modelClass.getProtectionDomain().getCodeSource().getLocation();
                 if (new File(classLocation.getFile()).isFile()) {
-                    java.util.zip.ZipFile zf = new java.util.zip.ZipFile(new File(classLocation.getFile()));
+                    ZipFile zf = new ZipFile(new File(classLocation.getFile()));
                     Enumeration<? extends ZipEntry> enu = zf.entries();
                     ZipEntry manifest = null;
                     ZipEntry pomprops = null;
@@ -770,7 +778,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public void log() {
         for (Object key : new TreeSet<Object>(hibernateProperties.keySet())) {
-            System.out.println(key + "=" + hibernateProperties.get(key));
+            logger.debug(key + "=" + hibernateProperties.get(key));
         }
     }
 
