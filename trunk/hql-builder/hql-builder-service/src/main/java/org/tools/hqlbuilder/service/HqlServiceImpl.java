@@ -20,6 +20,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -132,23 +134,32 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public String getHibernateInfo() {
-        if (hibernateVersions == null) {
-            String[] deps = {
-                    "org.hibernate:hibernate",
-                    "org.hibernate:hibernate-core",
-                    "org.hibernate:hibernate-annotations",
-                    "org.hibernate:hibernate-commons-annotations",
-                    "org.hibernate.commons:hibernate-commons-annotations",
-                    "org.hibernate:hibernate-validator",
-                    "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" };
+        if (hibernateVersions == null && true) {
+            String[][] deps1 = {
+                    { "Hibernate", "org.hibernate:hibernate" },
+                    { "Hibernate", "org.hibernate:hibernate-core" },
+                    { "Annotations", "org.hibernate:hibernate-annotations" },
+                    { "Annotations", "org.hibernate:hibernate-commons-annotations" },
+                    { "Annotations", "org.hibernate.commons:hibernate-commons-annotations" },
+                    { "Validator", "org.hibernate:hibernate-validator" },
+                    { "JPA", "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" } };
+            String[][] deps2 = {
+                    { "Hibernate", "org.hibernate.Hibernate" },
+                    { "Annotations", "org.hibernate.AnnotationException" },
+                    { "Validator", "org.hibernate.validator.InvalidStateException" } };
             StringBuilder sb = new StringBuilder();
-            for (String dep : deps) {
+            for (String[] dep : deps1) {
                 try {
-                    String[] dp = dep.split(":");
-                    Properties p = new Properties();
-                    p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/" + dp[0] + "/" + dp[1] + "/pom.properties"));
-                    String v = p.getProperty("version").toString();
-                    sb.append(dp[1]).append(": ").append(v).append("<br>");
+                    String v = readMavenVersion(dep[1]).toString();
+                    sb.append(dep[0]).append(": ").append(v).append("<br>");
+                } catch (Exception ex) {
+                    //
+                }
+            }
+            for (String[] dep : deps2) {
+                try {
+                    String v = readManifestVersion(dep[1]).toString();
+                    sb.append(dep[0]).append(": ").append(v).append("<br>");
                 } catch (Exception ex) {
                     //
                 }
@@ -160,6 +171,32 @@ public class HqlServiceImpl implements HqlService {
             hibernateVersions = "<html>" + hibernateVersions + "</html>";
         }
         return hibernateVersions;
+    }
+
+    private String readMavenVersion(String pack) throws Exception {
+        String[] dp = pack.split(":");
+        Properties p = new Properties();
+        p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/" + dp[0] + "/" + dp[1] + "/pom.properties"));
+        String value = p.getProperty("version").toString();
+        return value.toString();
+    }
+
+    private String readManifestVersion(String cn) throws Exception {
+        Class<?> clazz = Class.forName(cn);
+        String className = clazz.getSimpleName() + ".class";
+        String classPath = clazz.getResource(className).toString();
+        if (!classPath.startsWith("jar")) {
+            // Class not from JAR
+            return null;
+        }
+        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+        Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+        Attributes attr = manifest.getMainAttributes();
+        String value = attr.getValue("Version");
+        if (value == null) {
+            value = attr.getValue("Implementation-Version");
+        }
+        return value.toString();
     }
 
     public String getModelVersion() {
@@ -458,6 +495,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> getProperties(String classname) {
+        @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
         Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
