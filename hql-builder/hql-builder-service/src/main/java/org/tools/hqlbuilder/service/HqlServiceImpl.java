@@ -388,17 +388,18 @@ public class HqlServiceImpl implements HqlService {
             result.setSql(sql);
         }
         createQuery.setMaxResults(max);
-        Type[] queryReturnTypes = get(queryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_TYPES, Type[].class);
-        String[] queryReturnAliases = get(queryTranslator, QUERY_LOADER + DOT + QUERY_RETURN_ALIASES, String[].class);
+        String QLD = QUERY_LOADER + DOT;
+        Type[] queryReturnTypes = get(queryTranslator, QLD + QUERY_RETURN_TYPES, Type[].class);
+        String[] queryReturnAliases = get(queryTranslator, QLD + QUERY_RETURN_ALIASES, String[].class);
         result.setQueryReturnAliases(queryReturnAliases);
-        String[][] scalarColumnNames = get(queryTranslator, QUERY_LOADER + DOT + SCALAR_COLUMN_NAMES, String[][].class);
+        String[][] scalarColumnNames = get(queryTranslator, QLD + SCALAR_COLUMN_NAMES, String[][].class);
         result.setScalarColumnNames(scalarColumnNames);
-        String[] entityAliases = get(queryTranslator, QUERY_LOADER + DOT + ENTITY_ALIASES, String[].class);
-        Queryable[] entityPersisters = get(queryTranslator, QUERY_LOADER + DOT + ENTITY_PERSISTERS, Queryable[].class);
-        String[] sqlAliases = get(queryTranslator, QUERY_LOADER + DOT + SQL_ALIASES, String[].class);
+        String[] entityAliases = get(queryTranslator, QLD + ENTITY_ALIASES, String[].class);
+        Queryable[] entityPersisters = get(queryTranslator, QLD + ENTITY_PERSISTERS, Queryable[].class);
+        String[] sqlAliases = get(queryTranslator, QLD + SQL_ALIASES, String[].class);
         result.setSqlAliases(sqlAliases);
         @SuppressWarnings("unused")
-        Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QUERY_LOADER + DOT + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
+        Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
         Map<String, String> from_aliases = new HashMap<String, String>();
         result.setFromAliases(from_aliases);
         for (int i = 0; i < entityAliases.length; i++) {
