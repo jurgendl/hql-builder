@@ -10,6 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -17,11 +22,6 @@ import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
-import org.hibernate.validator.Max;
-import org.hibernate.validator.Min;
-import org.hibernate.validator.NotNull;
-import org.hibernate.validator.Pattern;
-import org.hibernate.validator.Valid;
 
 @Entity
 @AccessType("field")
@@ -39,7 +39,7 @@ public class Pojo extends PojoSuper implements Serializable {
     @Max(100)
     private Integer from0To100;
 
-    @Pattern(regex = "\\d*")
+    @Pattern(regexp = "\\d*")
     private String regexDigits;
 
     @CollectionOfElements(fetch = FetchType.LAZY)
