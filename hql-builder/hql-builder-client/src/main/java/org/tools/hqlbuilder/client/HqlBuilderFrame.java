@@ -1033,7 +1033,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             @Override
             protected void done() {
                 try {
-                    afterQuery(start, get(), rowProcessor);
+                    ExecutionResult rv = get();
+                    afterQuery(start, rv, rowProcessor);
                 } catch (ExecutionException ex) {
                     afterQuery(ex.getCause());
                 } catch (Exception ex) {
