@@ -71,7 +71,7 @@ public class SplashHelper {
             return;
         }
         // long current = Math.min(System.currentTimeMillis() - time, splashtimesc + splashtimesd[step]);
-        // System.out.println(System.currentTimeMillis() + "-" + time + "//" + splashtimesc + "+" + splashtimesd[step] + "//"
+        // logger.debug(System.currentTimeMillis() + "-" + time + "//" + splashtimesc + "+" + splashtimesd[step] + "//"
         // + (System.currentTimeMillis() - time) + "//" + (splashtimesc + splashtimesd[step]) + "==" + current);
         // splash.setProgress((float) current / splashtimest);
     }

@@ -15,11 +15,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Jurgen
  */
 public abstract class Action extends AbstractAction implements PropertyChangeListener {
     private static final long serialVersionUID = 7743926766652503512L;
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Action.class);
 
     private transient Preferences persister;
 
@@ -51,13 +55,13 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     public <T> Action(String id, boolean enabled, String name, Icon icon, String shortDescription,
             @SuppressWarnings("unused") String longDescription, Boolean selected, Character mnemonic, String accelerator, boolean persist,
             String parentId, Class<T> type, T defaultValue) {
-        System.out.println(id + " " + value);
+        logger.debug(id + " " + value);
         this.id = id;
         if (persist) {
             if (id == null || "null".equals(id)) {
                 throw new NullPointerException();
             }
-            System.out.println("persistent: " + id);
+            logger.debug("persistent: " + id);
             this.persister = Preferences.userRoot().node(parentId);
             if (Boolean.class.equals(type)) {
                 this.type = Boolean.class;
@@ -118,7 +122,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         } else {
             throw new IllegalArgumentException(String.valueOf(type));
         }
-        System.out.println("persistent: " + id + ": load=" + actualValue);
+        logger.debug("persistent: " + id + ": load=" + actualValue);
         return actualValue;
     }
 
@@ -137,7 +141,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         if (persister == null) {
             return;
         }
-        System.out.println("persistent: " + id + ": save=" + newValue);
+        logger.debug("persistent: " + id + ": save=" + newValue);
         if (Color.class.equals(type)) {
             setColorIcon((Color) newValue);
             persister.putInt(id, newValue == null ? Integer.MIN_VALUE : Color.class.cast(newValue).getRGB());
