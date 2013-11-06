@@ -47,7 +47,7 @@ public class Pojo extends PojoSuper implements Serializable {
     private SortedSet<String> plainSet = new TreeSet<String>();
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate date = new LocalDate();
+    private LocalDate creation = new LocalDate();
 
     public String getValue() {
         return this.value;
@@ -60,7 +60,7 @@ public class Pojo extends PojoSuper implements Serializable {
     @Override
     public String toString() {
         return "Pojo [id=" + getId() + ", version=" + getVersion() + ", value=" + getValue() + ", from0To100=" + getFrom0To100() + ", regexDigits="
-                + getRegexDigits() + ", embedded=" + getEmbedded() + "]";
+                + getRegexDigits() + ", embedded=" + getEmbedded() + ", creation=" + getCreation() + "]";
     }
 
     @Override
@@ -112,11 +112,11 @@ public class Pojo extends PojoSuper implements Serializable {
         this.embedded = embedded;
     }
 
-    public LocalDate getDate() {
-        return this.date;
+    public LocalDate getCreation() {
+        return this.creation;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreation(LocalDate creation) {
+        this.creation = creation;
     }
 }

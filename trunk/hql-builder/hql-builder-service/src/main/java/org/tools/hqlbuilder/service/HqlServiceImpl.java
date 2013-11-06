@@ -828,6 +828,7 @@ public class HqlServiceImpl implements HqlService {
     public void sql(final String... sql) {
         for (String s : sql) {
             try {
+                logger.debug(s);
                 dataSource.getConnection().prepareStatement(s).execute();
             } catch (SQLException ex) {
                 throw new ServiceException(ex.getMessage());
