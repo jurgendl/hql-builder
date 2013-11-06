@@ -34,6 +34,7 @@ public class FavConvert {
                 XMLDecoder dec = new XMLDecoder(is);
                 favorite = (QueryFavorite) dec.readObject();
                 is.close();
+                dec.close();
             }
             File file;
             {
