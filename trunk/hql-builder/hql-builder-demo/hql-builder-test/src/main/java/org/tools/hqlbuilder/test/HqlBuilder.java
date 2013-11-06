@@ -19,7 +19,6 @@ public class HqlBuilder {
         }
         final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) new org.springframework.context.support.ClassPathXmlApplicationContext(
                 "org/tools/hqlbuilder/test/applicationContext-4.xml").getBean("hqlServiceClient");
-        hqlServiceClient.sql("ALTER SESSION SET NLS_LANGUAGE = English");
         hqlServiceClient.createScript();
         List<Object> results = hqlServiceClient.execute("from Pojo", Integer.MAX_VALUE).getResults();
         if (results.size() == 0) {
