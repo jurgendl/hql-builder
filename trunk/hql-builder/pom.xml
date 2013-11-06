@@ -16,7 +16,7 @@
 		<version.groovyengine>20080808</version.groovyengine>
 		<version.log4j>1.2.17</version.log4j>
 		<version.jcalendar>1.4</version.jcalendar>
-		<version.joda>1.6</version.joda>
+		<version.joda>2.3</version.joda>
 		<version.l2fprod>7.3</version.l2fprod>
 		<version.commons-lang>2.6</version.commons-lang>
 		<version.commons-collections>3.2.1</version.commons-collections>

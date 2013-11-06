@@ -17,6 +17,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDate;
 
 @Entity
 @AccessType("field")
@@ -43,6 +45,9 @@ public class Pojo extends PojoSuper implements Serializable {
     @Column(name = "plainSet", nullable = false)
     @Sort(type = SortType.NATURAL)
     private SortedSet<String> plainSet = new TreeSet<String>();
+
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate date = new LocalDate();
 
     public String getValue() {
         return this.value;
@@ -105,5 +110,13 @@ public class Pojo extends PojoSuper implements Serializable {
 
     public void setEmbedded(EmbedPojo embedded) {
         this.embedded = embedded;
+    }
+
+    public LocalDate getDate() {
+        return this.date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
