@@ -25,6 +25,11 @@
 			<artifactId>spring-aop</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${version.joda}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
