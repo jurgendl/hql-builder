@@ -107,6 +107,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.LoggerFactory;
@@ -855,7 +856,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 });
             }
         } catch (Exception ex) {
-            logger.error("start(String[], HqlService)", ex);
+            logger.error("start(String[], HqlService)", ExceptionUtils.getFullStackTrace(ex));
             JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
             SplashHelper.end();
         }
