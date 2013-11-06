@@ -51,7 +51,6 @@ import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HqlService;
-import org.tools.hqlbuilder.common.MethodInvoker;
 import org.tools.hqlbuilder.common.ObjectWrapper;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
@@ -447,7 +446,7 @@ public class HqlServiceImpl implements HqlService {
                         node.addPath(propertyNames, resolver.getOrCreateNode(subClassName));
                     } else if (propertyType instanceof CollectionType) {
                         CollectionType collectionType = CollectionType.class.cast(propertyType);
-                        Type elementType = MethodInvoker.call(collectionType, "getElementType", Type.class, sessionFactory);
+                        Type elementType = CommonUtils.call(collectionType, "getElementType", Type.class, sessionFactory);
                         String subClassName = elementType.getName();
                         if ("org.hibernate.type.EnumType".equals(subClassName)) {
                             continue;
@@ -611,18 +610,18 @@ public class HqlServiceImpl implements HqlService {
                 String simpleName = "?";
                 try {
                     // simpleName = pminof.getNamedParameterExpectedType(param).getReturnedClass().getSimpleName();
-                    simpleName = MethodInvoker.call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
+                    simpleName = CommonUtils.call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
                 QueryParameter p = new QueryParameter(null, param, simpleName);
                 parameters.add(p);
             }
-            Integer mi = MethodInvoker.call(pminof, "getOrdinalParameterCount", Integer.class);
+            Integer mi = CommonUtils.call(pminof, "getOrdinalParameterCount", Integer.class);
             for (int i = 1; i <= mi; i++) {
                 String simpleName = "?";
                 try {
-                    simpleName = MethodInvoker.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
+                    simpleName = CommonUtils.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
                     // simpleName = pminof.getOrdinalParameterExpectedType(i).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //

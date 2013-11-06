@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -23,6 +26,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class CommonUtils {
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+
     /** getFromXml(mainpom.getAbsolutePath(), "/ns1:project/ns1:modules/ns1:module/text()"); */
     public static Object getFromXml(InputStream xmlFile, String base, String string) {
         try {
@@ -182,5 +187,30 @@ public class CommonUtils {
         }
         in.close();
         return tmp;
+    }
+
+    public static void call(Object object, String methodName) {
+        call(object, methodName, Void.TYPE);
+    }
+
+    public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
+        logger.debug(String.valueOf(object));
+        logger.debug(methodName);
+        logger.debug(Arrays.toString(params));
+        MethodInvokingFactoryBean mi = new MethodInvokingFactoryBean();
+        mi.setTargetObject(object);
+        mi.setTargetMethod(methodName);
+        mi.setArguments(params);
+        try {
+            mi.afterPropertiesSet();
+            T value = type.cast(mi.getObject());
+            logger.debug(String.valueOf(value));
+            return value;
+        } catch (Exception ex) {
+            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
+            logger.error(ex.getClass().getName());
+            logger.error(String.valueOf(ex));
+            throw new RuntimeException(ex);
+        }
     }
 }
