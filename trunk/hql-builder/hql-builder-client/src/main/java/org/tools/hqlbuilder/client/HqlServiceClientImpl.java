@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.LoggerFactory;
 import org.swingeasy.MethodInvoker;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
@@ -19,6 +20,8 @@ import org.tools.hqlbuilder.common.HqlService;
  * @author Jurgen
  */
 public class HqlServiceClientImpl extends DelegatingHqlService implements HqlServiceClient {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceClientImpl.class);
+
     private static final long serialVersionUID = 5659734722245348813L;
 
     public static final String NEWLINE = "\n";
@@ -355,28 +358,28 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         String q = "select Table0_.Id as Id4_0_ from Table Table0_ inner join SuperTable SuperTable0_1_ on Table0_.Id=SuperTable0_1_.Id inner join OtherTable OtherTable1_ on Table0_.OtherTableId=OtherTable1_.Id inner join SuperTable SuperTable1_1_ on OtherTable1_.Id=SuperTable1_1_.Id inner join ParentTable ParentTable3_1_ on ParentTable3_1_.Id=OtherTable1_.Id";
         HqlServiceClientImpl sq = new HqlServiceClientImpl();
         sq.setHqlReplacers(new HashMap<String, String>(Collections.singletonMap("SuperTable", "STx")));
-        System.out.println(q);
+        logger.debug(q);
         String qq;
         {
-            System.out.println("==================================");
+            logger.debug("==================================");
             qq = sq.cleanupSql(q, null, null, false, true, false);
-            System.out.println(qq);
+            logger.debug(qq);
         }
         {
-            System.out.println("==================================");
+            logger.debug("==================================");
             qq = sq.cleanupSql(q, null, null, true, true, false);
-            System.out.println(qq);
+            logger.debug(qq);
         }
         {
-            System.out.println("==================================");
+            logger.debug("==================================");
             qq = sq.cleanupSql(q, null, null, true, true, true);
-            System.out.println(qq);
+            logger.debug(qq);
         }
         sq.getHqlReplacers().put("ParentTable", "PTx");
         {
-            System.out.println("==================================");
+            logger.debug("==================================");
             qq = sq.cleanupSql(q, null, null, true, true, false);
-            System.out.println(qq);
+            logger.debug(qq);
         }
     }
 }

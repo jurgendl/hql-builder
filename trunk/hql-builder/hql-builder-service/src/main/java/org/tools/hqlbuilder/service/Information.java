@@ -32,8 +32,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
+import org.slf4j.LoggerFactory;
 
 public abstract class Information {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Information.class);
+
     public static final Version LUCENE_VERSION = Version.LUCENE_35;
 
     public static final String FIELD = "field";
@@ -99,13 +102,12 @@ public abstract class Information {
 
         List<String> results = new ArrayList<String>();
 
-        System.out.println("Found " + hits.length + " hits.");
+        logger.debug("Found " + hits.length + " hits.");
         for (int i = 0; i < hits.length; ++i) {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
-            System.out.println((i + 1) + ". " + d.get(NAME));
-            System.out.println(d.getFieldable(DATA).stringValue());
-            System.out.println();
+            logger.debug((i + 1) + ". " + d.get(NAME));
+            logger.debug(d.getFieldable(DATA).stringValue());
             results.add(d.get(NAME));
         }
 

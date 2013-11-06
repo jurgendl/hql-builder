@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.client.HqlBuilderFrame;
 import org.tools.hqlbuilder.client.HqlServiceClient;
 import org.tools.hqlbuilder.client.HqlServiceClientImpl;
 import org.tools.hqlbuilder.client.HqlServiceClientLoader;
 
 public class HqlBuilder {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
+
     public static void main(String[] args) {
         try {
             FileUtils.deleteDirectory(new File("DerbyTestDb"));
@@ -33,7 +36,7 @@ public class HqlBuilder {
             // hqlServiceClient.save(object);
             // } catch (org.tools.hqlbuilder.common.exceptions.ValidationException e) {
             // for (InvalidValue iv : e.getInvalidValues()) {
-            // System.out.println(iv);
+            // logger.debug(iv);
             // }
             object.setSuperNotNull("superNotNull");
             object.setFrom0To100(50);
@@ -44,12 +47,12 @@ public class HqlBuilder {
             Lang en = new Lang();
             en.setCode("en");
             en = hqlServiceClient.save(en);
-            System.out.println("en=" + en.getId());
+            logger.info("en=" + en.getId());
 
             Lang nl = new Lang();
             nl.setCode("nl");
             nl = hqlServiceClient.save(nl);
-            System.out.println("nl=" + nl.getId());
+            logger.info("nl=" + nl.getId());
 
             Rel2 r2;
             {
@@ -94,7 +97,7 @@ public class HqlBuilder {
                 r0 = hqlServiceClient.save(r0);
             }
         } else {
-            System.out.println(results.size());
+            logger.debug(String.valueOf(results.size()));
         }
         HqlBuilderFrame.start(args, new HqlServiceClientLoader() {
             @Override

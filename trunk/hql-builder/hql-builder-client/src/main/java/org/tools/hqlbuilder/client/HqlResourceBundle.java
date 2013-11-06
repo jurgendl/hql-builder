@@ -6,12 +6,15 @@ import java.util.HashSet;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
 
+import org.slf4j.LoggerFactory;
 import org.swingeasy.system.SystemSettings;
 
 /**
  * @author Jurgen
  */
 public class HqlResourceBundle implements PropertyChangeListener {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlResourceBundle.class);
+
     private static PropertyResourceBundle singleton;
 
     private static Set<String> missing = new HashSet<String>();
@@ -62,7 +65,7 @@ public class HqlResourceBundle implements PropertyChangeListener {
 
             return string;
         } catch (Exception ex) {
-            System.out.println(key2 + "=" + key);
+            logger.error(key2 + "=" + key);
             missing.add(key);
             return key;
         }

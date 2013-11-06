@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HibernateWebResolver.Property;
 
@@ -13,6 +14,8 @@ import org.tools.hqlbuilder.common.HibernateWebResolver.Property;
  * @author Jurgen
  */
 public class PathResolver {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(PathResolver.class);
+
     final ArrayList<TreeNode> all = new ArrayList<TreeNode>();
 
     TreeNode sourceTreeNode;
@@ -116,9 +119,9 @@ public class PathResolver {
             if (!init) {
                 for (Property sub : value.getEdges()) {
                     try {
-                        System.out.println(sub);
+                        logger.debug(String.valueOf(sub));
                         TreeNode c = new TreeNode(sub, exclude, targetNode, this, ClassNode.class.cast(sub.getTarget()));
-                        System.out.println(c);
+                        logger.debug(String.valueOf(c));
                         exclude.add(c);
                     } catch (Exclude ex) {
                         //

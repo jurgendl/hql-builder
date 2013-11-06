@@ -1200,9 +1200,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String d = df.format(rv.getDuration() / 1000.0);
             resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
         }
-        System.out.println("duration (ms): " + rv.getDuration());
-        System.out.println("overhead-server (ms): " + rv.getOverhead());
-        System.out.println("overhead-client (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
+        logger.debug("duration (ms): " + rv.getDuration());
+        logger.debug("overhead-server (ms): " + rv.getOverhead());
+        logger.debug("overhead-client (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
     }
 
     private String formatSql(ExecutionResult rv) {
@@ -1651,7 +1651,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                 for (Locale locale : Locale.getAvailableLocales()) {
                     URL bundle = HqlBuilderFrame.class.getClassLoader().getResource("HqlResourceBundle_" + locale + ".properties");
-                    System.out.println(locale + ">" + bundle);
+                    logger.debug(locale + ">" + bundle);
                     if (null != bundle) {
                         locales.add(locale);
                     }
@@ -2116,16 +2116,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         for (String el : parts) {
             el = el.trim();
             try {
-                System.out.println(el);
+                logger.debug(el);
                 if (el.contains("=")) {
                     String[] p = el.split("=");
                     Object val = GroovyCompiler.eval(p[1]);
-                    System.out.println(p[0] + "=" + val.getClass() + "=" + val);
+                    logger.debug(p[0] + "=" + val.getClass() + "=" + val);
                     QueryParameter qp = new QueryParameter(p[1], p[0], val);
                     qps.add(qp);
                 } else {
                     Object val = GroovyCompiler.eval(el);
-                    System.out.println(val.getClass() + "=" + val);
+                    logger.debug(val.getClass() + "=" + val);
                     QueryParameter qp = new QueryParameter(el, null, val);
                     qps.add(qp);
                 }
@@ -2227,17 +2227,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void start_query() {
-        System.out.println("start query");
+        logger.debug("start query");
         try {
             query();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("end query");
+        logger.debug("end query");
     }
 
     protected void pause_query() {
-        System.out.println("pause_query");
+        logger.debug("pause_query");
     }
 
     protected void export__copy_hql_as_java_to_clipboard() {
@@ -2844,7 +2844,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         Caret caret = hql.getCaret();
         int p1 = caret.getDot();
         int p2 = caret.getMark();
-        // System.out.println(p1 + "/" + p2);
+        // logger.debug(p1 + "/" + p2);
         if (p1 == p2) {
             return;
         }
