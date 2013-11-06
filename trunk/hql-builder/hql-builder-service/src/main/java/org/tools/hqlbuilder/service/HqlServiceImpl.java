@@ -234,6 +234,7 @@ public class HqlServiceImpl implements HqlService {
                             //
                         }
                     }
+                    zf.close();
                 }
                 modelVersion.toString();
             } catch (Exception ex) {
@@ -756,6 +757,7 @@ public class HqlServiceImpl implements HqlService {
                             //
                         }
                     }
+                    zf.close();
                 }
                 project.toString();
             } catch (Exception ex) {
