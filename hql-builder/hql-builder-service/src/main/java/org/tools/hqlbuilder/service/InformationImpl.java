@@ -14,7 +14,7 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.BagType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.Type;
-import org.tools.hqlbuilder.common.MethodInvoker;
+import org.tools.hqlbuilder.common.CommonUtils;
 
 public class InformationImpl extends Information {
     public InformationImpl(SessionFactory sessionFactory) throws IOException, IllegalArgumentException, ClassNotFoundException,
@@ -55,11 +55,11 @@ public class InformationImpl extends Information {
                     if (propertyType instanceof BagType) {
                         BagType bagtype = (BagType) propertyType;
                         try {
-                            String assoc = MethodInvoker.call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
+                            String assoc = CommonUtils.call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
                             fsb.append(transformClassName(assoc));
                         } catch (MappingException ex) {
                             try {
-                                Type elementType = MethodInvoker.call(bagtype, "getElementType", Type.class, sessionFactory);
+                                Type elementType = CommonUtils.call(bagtype, "getElementType", Type.class, sessionFactory);
                                 if (elementType instanceof CustomType) {
                                     CustomType ct = (CustomType) elementType;
                                     if ("org.hibernate.type.EnumType".equals(ct.getName())) {

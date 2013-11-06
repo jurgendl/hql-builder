@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
-import org.tools.hqlbuilder.common.MethodInvoker;
 
 /**
  * @author Jurgen
@@ -263,14 +262,14 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         log(sqlString);
 
         try {
-            sqlString = MethodInvoker.call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class,
-                    sqlString);
+            sqlString = CommonUtils
+                    .call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class, sqlString);
         } catch (Throwable ex) {
             logger.warn(String.valueOf(ex));
         }
 
         try {
-            sqlString = MethodInvoker.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
+            sqlString = CommonUtils.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
                     String.class, sqlString);
         } catch (Throwable ex) {
             logger.warn(String.valueOf(ex));

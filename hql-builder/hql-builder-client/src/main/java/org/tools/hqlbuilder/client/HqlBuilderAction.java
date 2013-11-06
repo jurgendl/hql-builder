@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import org.swingeasy.HasParentComponent;
-import org.tools.hqlbuilder.common.MethodInvoker;
+import org.tools.hqlbuilder.common.CommonUtils;
 
 /**
  * @author Jurgen
@@ -64,7 +64,7 @@ public class HqlBuilderAction extends Action implements HasParentComponent {
     public void actionPerformed(ActionEvent e) {
         if (source != null && method != null) {
             try {
-                MethodInvoker.call(source, method);
+                CommonUtils.call(source, method);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
