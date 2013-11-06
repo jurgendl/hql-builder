@@ -10,6 +10,7 @@ import org.tools.hqlbuilder.client.HqlBuilderFrame;
 import org.tools.hqlbuilder.client.HqlServiceClient;
 import org.tools.hqlbuilder.client.HqlServiceClientImpl;
 import org.tools.hqlbuilder.client.HqlServiceClientLoader;
+import org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue;
 
 public class HqlBuilder {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
@@ -30,19 +31,19 @@ public class HqlBuilder {
             object.getPlainSet().add("element 1");
             object.getPlainSet().add("element 2");
             object.setRegexDigits("123");
-            // try {
-            // object.setFrom0To100(150);
-            // object.getEmbedded().setFrom100(50);
-            // hqlServiceClient.save(object);
-            // } catch (org.tools.hqlbuilder.common.exceptions.ValidationException e) {
-            // for (InvalidValue iv : e.getInvalidValues()) {
-            // logger.debug(iv);
-            // }
-            object.setSuperNotNull("superNotNull");
-            object.setFrom0To100(50);
-            object.getEmbedded().setFrom100(150);
-            object = hqlServiceClient.save(object);
-            // }
+            try {
+                object.setFrom0To100(150);
+                object.getEmbedded().setFrom100(50);
+                hqlServiceClient.save(object);
+            } catch (org.tools.hqlbuilder.common.exceptions.ValidationException e) {
+                for (InvalidValue iv : e.getInvalidValues()) {
+                    logger.debug(String.valueOf(iv));
+                }
+                object.setSuperNotNull("superNotNull");
+                object.setFrom0To100(50);
+                object.getEmbedded().setFrom100(150);
+                object = hqlServiceClient.save(object);
+            }
 
             Lang en = new Lang();
             en.setCode("en");
