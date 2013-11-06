@@ -33,7 +33,6 @@
 		<module>hql-builder-service</module>
 		<module>hql-builder-client</module>
 		<module>hql-builder-full</module>
-		<module>hql-builder-demo</module>
 	</modules>
 	<dependencies>
 		<dependency>
