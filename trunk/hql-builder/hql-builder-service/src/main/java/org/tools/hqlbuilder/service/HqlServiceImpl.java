@@ -523,6 +523,8 @@ public class HqlServiceImpl implements HqlService {
                     ValidationExceptionConverter vc = (ValidationExceptionConverter) Class.forName(
                             "org.tools.hqlbuilder.common.validation.HibernateValidationConverter").newInstance();
                     throw vc.convert(ex);
+                } catch (ValidationException ex2) {
+                    throw ex2;
                 } catch (Exception ex2) {
                     throw ex;
                 }
@@ -531,6 +533,8 @@ public class HqlServiceImpl implements HqlService {
                     ValidationExceptionConverter vc = (ValidationExceptionConverter) Class.forName(
                             "org.tools.hqlbuilder.common.validation.JavaxValidationConverter").newInstance();
                     throw vc.convert(ex);
+                } catch (ValidationException ex2) {
+                    throw ex2;
                 } catch (Exception ex2) {
                     throw ex;
                 }

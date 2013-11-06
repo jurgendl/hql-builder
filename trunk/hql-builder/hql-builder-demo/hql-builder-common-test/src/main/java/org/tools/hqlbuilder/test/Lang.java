@@ -7,7 +7,6 @@ import org.hibernate.annotations.AccessType;
 @Entity
 @AccessType("field")
 public class Lang extends Parent {
-
     private String code;
 
     public String getCode() {
