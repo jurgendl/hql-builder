@@ -350,7 +350,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
         @Override
         public void setValue(Object value) {
-            Date date = value == null ? new Date(0) : LocalDate.class.cast(value).toDateMidnight().toDate();
+            Date date = value == null ? new Date(0) : LocalDate.class.cast(value).toDateTimeAtStartOfDay().toDate();
             EDateEditor.class.cast(editor).setDate(date);
         }
     }
