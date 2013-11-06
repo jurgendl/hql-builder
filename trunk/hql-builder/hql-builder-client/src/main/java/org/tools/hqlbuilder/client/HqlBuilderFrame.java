@@ -170,9 +170,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private Preferences preferences;
 
-    @SuppressWarnings("unused")
-    private org.swingeasy.UIExceptionHandler uiExceptionHandler = org.swingeasy.UIExceptionHandler.getInstance();
-
     private final JFrame frame = new JFrame();
 
     private final JPanel hql_sql_tabs_panel = new JPanel(new BorderLayout());
@@ -193,20 +190,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final ETextArea sql;
 
-    // not EDT safe
     private final EList<QueryParameter> parametersUnsafe;
 
-    // EDT safe
     private final EList<QueryParameter> parametersEDT;
 
-    // not EDT safe
     private final ETable<List<Object>> resultsUnsafe;
 
-    // EDT safe
     private final ETable<List<Object>> resultsEDT;
 
-    // results
-    //
     private final HqlBuilderAction hibernatePropertiesAction;
 
     private final HqlBuilderAction objectTreeAction;
@@ -217,8 +208,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction executeScriptOnColumnAction;
 
-    // parameters
-    //
     private final HqlBuilderAction downAction;
 
     private final HqlBuilderAction removeAction;
@@ -235,8 +224,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction importParametersAction;
 
-    // hql
-    //
     private final HqlBuilderAction wizardAction;
 
     private final HqlBuilderAction clearAction;
@@ -263,8 +250,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction deleteInvertedSelectionAction;
 
-    // actions
-    //
     private final HqlBuilderAction helpAction = new HqlBuilderAction(null, this, HELP, true, HELP, "help16.png", HELP, HELP, true, 'h', "F1");
 
     private final HqlBuilderAction exitAction = new HqlBuilderAction(null, this, EXIT, true, EXIT, "sc_quit.png", EXIT, EXIT, true, 'x', "alt X");
@@ -332,7 +317,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, "layout_content.png",
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
 
-    //
     private final ELabel maxResults;
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
