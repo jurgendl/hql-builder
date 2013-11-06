@@ -46,12 +46,12 @@ import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HqlService;
+import org.tools.hqlbuilder.common.MethodInvoker;
 import org.tools.hqlbuilder.common.ObjectWrapper;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
@@ -447,7 +447,7 @@ public class HqlServiceImpl implements HqlService {
                         node.addPath(propertyNames, resolver.getOrCreateNode(subClassName));
                     } else if (propertyType instanceof CollectionType) {
                         CollectionType collectionType = CollectionType.class.cast(propertyType);
-                        Type elementType = call(collectionType, "getElementType", Type.class, sessionFactory);
+                        Type elementType = MethodInvoker.call(collectionType, "getElementType", Type.class, sessionFactory);
                         String subClassName = elementType.getName();
                         if ("org.hibernate.type.EnumType".equals(subClassName)) {
                             continue;
@@ -611,18 +611,18 @@ public class HqlServiceImpl implements HqlService {
                 String simpleName = "?";
                 try {
                     // simpleName = pminof.getNamedParameterExpectedType(param).getReturnedClass().getSimpleName();
-                    simpleName = call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
+                    simpleName = MethodInvoker.call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
                 QueryParameter p = new QueryParameter(null, param, simpleName);
                 parameters.add(p);
             }
-            Integer mi = call(pminof, "getOrdinalParameterCount", Integer.class);
+            Integer mi = MethodInvoker.call(pminof, "getOrdinalParameterCount", Integer.class);
             for (int i = 1; i <= mi; i++) {
                 String simpleName = "?";
                 try {
-                    simpleName = call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
+                    simpleName = MethodInvoker.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
                     // simpleName = pminof.getOrdinalParameterExpectedType(i).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
@@ -842,26 +842,5 @@ public class HqlServiceImpl implements HqlService {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
-        logger.debug(String.valueOf(object));
-        logger.debug(methodName);
-        logger.debug(Arrays.toString(params));
-        MethodInvokingFactoryBean mi = new MethodInvokingFactoryBean();
-        mi.setTargetObject(object);
-        mi.setTargetMethod(methodName);
-        mi.setArguments(params);
-        try {
-            mi.afterPropertiesSet();
-            T value = type.cast(mi.getObject());
-            logger.debug(String.valueOf(value));
-            return value;
-        } catch (Exception ex) {
-            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
-            logger.error(ex.getClass().getName());
-            logger.error(String.valueOf(ex));
-            throw new RuntimeException(ex);
-        }
     }
 }

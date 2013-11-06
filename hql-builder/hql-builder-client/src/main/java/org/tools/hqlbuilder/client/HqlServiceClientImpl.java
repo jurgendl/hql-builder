@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.LoggerFactory;
-import org.swingeasy.MethodInvoker;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
+import org.tools.hqlbuilder.common.MethodInvoker;
 
 /**
  * @author Jurgen
@@ -53,21 +53,34 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         this.hqlService = hqlService;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#getServiceUrl()
+     */
     @Override
     public String getServiceUrl() {
         return this.serviceUrl;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#setServiceUrl(java.lang.String)
+     */
     @Override
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.common.DelegatingHqlService#getDelegate()
+     */
     @Override
     public HqlService getDelegate() {
         return hqlService;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#cleanupSql(java.lang.String, java.lang.String[], java.lang.String[][], boolean, boolean,
+     *      boolean)
+     */
     @Override
     public String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames, boolean replaceProperties,
             boolean formatLines, boolean removeReplacers) {
@@ -250,9 +263,17 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         log(sqlString);
 
         try {
-            sqlString = (String) MethodInvoker.invoke(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", sqlString);
+            sqlString = MethodInvoker.call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class,
+                    sqlString);
         } catch (Throwable ex) {
-            //
+            logger.warn(String.valueOf(ex));
+        }
+
+        try {
+            sqlString = MethodInvoker.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
+                    String.class, sqlString);
+        } catch (Throwable ex) {
+            logger.warn(String.valueOf(ex));
         }
 
         log(sqlString);
@@ -260,16 +281,25 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         return sqlString;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#log(java.lang.Object)
+     */
     @Override
     public void log(Object message) {
         ClientUtils.log(message);
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#getNewline()
+     */
     @Override
     public String getNewline() {
         return NEWLINE;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#makeMultiline(java.lang.String)
+     */
     @Override
     public String makeMultiline(String string) {
         for (String kw : keywordGroups) {
@@ -310,6 +340,9 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         return tmp;
     }
 
+    /**
+     * @see org.tools.hqlbuilder.client.HqlServiceClient#removeBlanks(java.lang.String)
+     */
     @Override
     public String removeBlanks(String string) {
         return CommonUtils.removeUnnecessaryWhiteSpaces(string);
