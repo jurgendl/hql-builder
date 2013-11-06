@@ -14,8 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.swingeasy.CustomizableOptionPane;
 import org.swingeasy.EList;
 import org.swingeasy.EListConfig;
@@ -30,8 +28,6 @@ import org.tools.hqlbuilder.common.CommonUtils;
  * @author Jurgen
  */
 public class ClientUtils extends CommonUtils {
-    private static final Logger logger = LoggerFactory.getLogger(ClientUtils.class);
-
     /**
      * 
      * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#getPropertyFrame(org.hibernate.SessionFactory, java.lang.Object, boolean)
