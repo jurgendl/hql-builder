@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.tools.hql-builder</groupId>
 		<artifactId>hql-builder-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>org.tools.hql-builder.hibernate</groupId>
@@ -66,9 +66,9 @@
 	</developers>
 	<contributors />
 	<scm>
-		<connection>scm:svn:http://hql-builder.googlecode.com/svn/tags/hql-builder-parent-2.0.0</connection>
-		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/tags/hql-builder-parent-2.0.0</developerConnection>
-		<url>http://hql-builder.googlecode.com/svn/tags/hql-builder-parent-2.0.0</url>
+		<connection>scm:svn:http://hql-builder.googlecode.com/svn/trunk</connection>
+		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk</developerConnection>
+		<url>http://hql-builder.googlecode.com/svn/trunk</url>
 	</scm>
 	<repositories>
 		<repository>
