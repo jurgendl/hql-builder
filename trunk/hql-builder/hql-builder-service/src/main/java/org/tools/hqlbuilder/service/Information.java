@@ -56,6 +56,7 @@ public abstract class Information {
     protected final Directory index;
 
     public Information(SessionFactory sessionFactory) throws IOException, IllegalArgumentException, ClassNotFoundException, IllegalAccessException {
+        @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
         index = new RAMDirectory(); // new NIOFSDirectory(new File(".index"));
