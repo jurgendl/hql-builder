@@ -78,7 +78,7 @@ goto start
 
 :llocinstall
 cls
-call mvn -Dmaven.tomcat.skip=true -e install -DskipTests=true -DupdateReleaseInfo=true %*
+call mvn -Dmaven.tomcat.skip=true -e source:jar install -DskipTests=true -DupdateReleaseInfo=true %*
 pause
 goto start
 

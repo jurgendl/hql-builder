@@ -1,9 +1,11 @@
 package org.tools.hqlbuilder.client;
 
+import java.util.Properties;
+
 import javax.swing.JOptionPane;
 
+import org.hibernate.Hibernate;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.test.Pojo;
@@ -12,7 +14,18 @@ public class HqlBuilder {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
 
     public static void main(final String[] arguments) {
-        final ApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
+        String v = "3";
+        try {
+            Properties properties = new Properties();
+            properties.load(Hibernate.class.getResourceAsStream("META-INF/MANIFEST.MF"));
+            String iv = properties.getProperty("Implementation-Version");
+            if (iv.startsWith("4")) {
+                v = "4";
+            }
+        } catch (Throwable ex) {
+            //
+        }
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
         final HqlServiceClient hqlServiceClient = (HqlServiceClient) context.getBean("hqlServiceClient");
         try {
             logger.debug(hqlServiceClient.getConnectionInfo());

@@ -349,8 +349,8 @@ public class HqlServiceImpl implements HqlService {
         logger.debug(sql);
         result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
-        Session session = sessionFactory.openSession();
-        org.hibernate.Query createQuery = session.createQuery(hql);
+        Session session = newSession();
+        Query createQuery = session.createQuery(hql);
         int index = 0;
         for (QueryParameter value : queryParameters) {
             try {
@@ -493,6 +493,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> getProperties(String classname) {
+        @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
         Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
@@ -511,7 +512,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public <T> T save(T object) throws ValidationException {
         try {
-            org.hibernate.Session session = sessionFactory.openSession();
+            Session session = newSession();
             Transaction tx = session.beginTransaction();
             object = (T) session.merge(object);
             session.persist(object);
@@ -545,13 +546,19 @@ public class HqlServiceImpl implements HqlService {
         }
     }
 
+    private Session newSession() {
+        Object sessionObject = sessionFactory.openSession();
+        Session session = Session.class.cast(sessionObject);
+        return session;
+    }
+
     /**
      * @see org.tools.hqlbuilder.common.HqlService#delete(java.lang.Object)
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> void delete(T object) {
-        org.hibernate.Session session = sessionFactory.openSession();
+        Session session = newSession();
         Transaction tx = session.beginTransaction();
         object = (T) session.merge(object);
         session.delete(object);
@@ -606,7 +613,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public List<QueryParameter> findParameters(String hql) {
         List<QueryParameter> parameters = new ArrayList<QueryParameter>();
-        Session session = sessionFactory.openSession();
+        Session session = newSession();
         try {
             Query createQuery = session.createQuery(hql);
             Object pminof = get(createQuery, "parameterMetadata", Object.class/* ParameterMetadata */);

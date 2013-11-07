@@ -11,6 +11,11 @@
 	<artifactId>hql-builder-demo</artifactId>
 	<name>hql-builder-demo</name>
 	<description>hql-builder-demo</description>
+	<properties>
+		<version.hibernate>3.3</version.hibernate>
+		<targetJdk>1.6</targetJdk>
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+	</properties>
 	<modules>
 		<module>hql-builder-common-test</module>
 		<module>hql-builder-client-test</module>
