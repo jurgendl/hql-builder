@@ -11,6 +11,13 @@
 	<description>hql-builder-client</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.tools.hql-builder.hibernate</groupId>
+			<artifactId>hibernate-${version.hibernate}</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-common</artifactId>
 			<version>${project.version}</version>
