@@ -856,7 +856,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 });
             }
         } catch (Exception ex) {
-            logger.error("start(String[], HqlService)", ExceptionUtils.getFullStackTrace(ex));
+            logger.error("start(String[], HqlService)");
+            logger.error("{}", ExceptionUtils.getFullStackTrace(ex));
             SplashHelper.end();
             JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
         }
