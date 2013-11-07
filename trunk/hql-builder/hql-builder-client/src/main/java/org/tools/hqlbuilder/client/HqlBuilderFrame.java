@@ -857,8 +857,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         } catch (Exception ex) {
             logger.error("start(String[], HqlService)", ExceptionUtils.getFullStackTrace(ex));
-            JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
             SplashHelper.end();
+            JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -1832,15 +1832,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (switchLayoutAction.isSelected()) {
             // hql_sql_tabs .... parameterspanel .... propertypanel
             // resultPanel
-            split0.setDividerLocation((int) ((double) h * 1.0 / 3.0));
-            split1.setDividerLocation((int) ((double) w * 1.0 / 3.0));
-            split2.setDividerLocation((int) ((double) w * 1.0 / 3.0));
+            split0.setDividerLocation((int) (h * 1.0 / 3.0));
+            split1.setDividerLocation((int) (w * 1.0 / 3.0));
+            split2.setDividerLocation((int) (w * 1.0 / 3.0));
         } else {
             // hql_sql_tabs .... parameterspanel
             // resultPanel ..... propertypanel
-            split0.setDividerLocation((int) ((double) h * 1.0 / 3.0));
-            split1.setDividerLocation((int) ((double) w * 2.0 / 3.0));
-            split2.setDividerLocation((int) ((double) w * 2.0 / 3.0));
+            split0.setDividerLocation((int) (h * 1.0 / 3.0));
+            split1.setDividerLocation((int) (w * 2.0 / 3.0));
+            split2.setDividerLocation((int) (w * 2.0 / 3.0));
         }
     }
 
