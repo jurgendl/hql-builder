@@ -3,16 +3,15 @@ package org.tools.hqlbuilder.test;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tools.hqlbuilder.client.HqlBuilderFrame;
 import org.tools.hqlbuilder.client.HqlServiceClient;
 import org.tools.hqlbuilder.client.HqlServiceClientImpl;
 import org.tools.hqlbuilder.client.HqlServiceClientLoader;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue;
 
 public class HqlBuilder {
@@ -31,15 +30,21 @@ public class HqlBuilder {
             }
             String v = "3";
             try {
-                Properties properties = new Properties();
-                properties.load(Hibernate.class.getResourceAsStream("META-INF/MANIFEST.MF"));
-                String iv = properties.getProperty("Implementation-Version");
-                if (iv.startsWith("4")) {
+                String hibv = CommonUtils.readManifestVersion("org.hibernate.Hibernate");
+                if (hibv == null) {
+                    hibv = CommonUtils.readMavenVersion("org.hibernate:hibernate");
+                }
+                if (hibv == null) {
+                    hibv = CommonUtils.readMavenVersion("org.hibernate:hibernate-core");
+                }
+                logger.info(hibv);
+                if (hibv.startsWith("4")) {
                     v = "4";
                 }
             } catch (Throwable ex) {
-                //
+                ex.printStackTrace(System.out);
             }
+            logger.info("Hibernate " + v + "x");
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
             final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
             hqlServiceClient.createScript();
