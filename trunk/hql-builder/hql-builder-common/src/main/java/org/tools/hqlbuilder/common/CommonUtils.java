@@ -2,11 +2,15 @@ package org.tools.hqlbuilder.common;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -212,5 +216,42 @@ public class CommonUtils {
             logger.error(String.valueOf(ex));
             throw new RuntimeException(ex);
         }
+    }
+
+    public static String readMavenVersion(String pack) throws Exception {
+        String[] dp = pack.split(":");
+        Properties p = new Properties();
+        String name = "META-INF/maven/" + dp[0] + "/" + dp[1] + "/pom.properties";
+        InputStream resourceAsStream = CommonUtils.class.getClassLoader().getResourceAsStream(name);
+        if (resourceAsStream == null) {
+            return null;
+        }
+        p.load(resourceAsStream);
+        String value = p.getProperty("version");
+        if (value == null) {
+            return null;
+        }
+        return value;
+    }
+
+    public static String readManifestVersion(String cn) throws Exception {
+        Class<?> clazz = Class.forName(cn);
+        String className = clazz.getSimpleName() + ".class";
+        String classPath = clazz.getResource(className).toString();
+        if (!classPath.startsWith("jar")) {
+            // Class not from JAR
+            return null;
+        }
+        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+        Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+        Attributes attr = manifest.getMainAttributes();
+        String value = attr.getValue("Version");
+        if (value == null) {
+            value = attr.getValue("Implementation-Version");
+        }
+        if (value == null) {
+            return null;
+        }
+        return value;
     }
 }

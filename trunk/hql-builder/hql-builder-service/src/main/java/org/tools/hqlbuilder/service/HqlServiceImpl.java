@@ -21,8 +21,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -140,7 +138,7 @@ public class HqlServiceImpl implements HqlService {
                         { "Validator", "org.hibernate.validator.InvalidStateException" } };
                 for (String[] dep : deps) {
                     try {
-                        hibernateVersions.put(dep[0], readManifestVersion(dep[1]).toString());
+                        hibernateVersions.put(dep[0], CommonUtils.readManifestVersion(dep[1]).toString());
                     } catch (Exception ex) {
                         //
                     }
@@ -157,7 +155,7 @@ public class HqlServiceImpl implements HqlService {
                         { "JPA", "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" } };
                 for (String[] dep : deps) {
                     try {
-                        hibernateVersions.put(dep[0], readMavenVersion(dep[1]).toString());
+                        hibernateVersions.put(dep[0], CommonUtils.readMavenVersion(dep[1]).toString());
                     } catch (Exception ex) {
                         //
                     }
@@ -165,32 +163,6 @@ public class HqlServiceImpl implements HqlService {
             }
         }
         return hibernateVersions;
-    }
-
-    private String readMavenVersion(String pack) throws Exception {
-        String[] dp = pack.split(":");
-        Properties p = new Properties();
-        p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/" + dp[0] + "/" + dp[1] + "/pom.properties"));
-        String value = p.getProperty("version").toString();
-        return value.toString();
-    }
-
-    private String readManifestVersion(String cn) throws Exception {
-        Class<?> clazz = Class.forName(cn);
-        String className = clazz.getSimpleName() + ".class";
-        String classPath = clazz.getResource(className).toString();
-        if (!classPath.startsWith("jar")) {
-            // Class not from JAR
-            return null;
-        }
-        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
-        Manifest manifest = new Manifest(new URL(manifestPath).openStream());
-        Attributes attr = manifest.getMainAttributes();
-        String value = attr.getValue("Version");
-        if (value == null) {
-            value = attr.getValue("Implementation-Version");
-        }
-        return value.toString();
     }
 
     public String getModelVersion() {
@@ -547,9 +519,7 @@ public class HqlServiceImpl implements HqlService {
     }
 
     private Session newSession() {
-        Object sessionObject = sessionFactory.openSession();
-        Session session = Session.class.cast(sessionObject);
-        return session;
+        return HibernateUtils.newSession(sessionFactory);
     }
 
     /**

@@ -1,12 +1,10 @@
 package org.tools.hqlbuilder.client;
 
-import java.util.Properties;
-
 import javax.swing.JOptionPane;
 
-import org.hibernate.Hibernate;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.test.Pojo;
 
@@ -16,17 +14,23 @@ public class HqlBuilder {
     public static void main(final String[] arguments) {
         String v = "3";
         try {
-            Properties properties = new Properties();
-            properties.load(Hibernate.class.getResourceAsStream("META-INF/MANIFEST.MF"));
-            String iv = properties.getProperty("Implementation-Version");
-            if (iv.startsWith("4")) {
+            String hibv = CommonUtils.readManifestVersion("org.hibernate.Hibernate");
+            if (hibv == null) {
+                hibv = CommonUtils.readMavenVersion("org.hibernate:hibernate");
+            }
+            if (hibv == null) {
+                hibv = CommonUtils.readMavenVersion("org.hibernate:hibernate-core");
+            }
+            logger.info(hibv);
+            if (hibv.startsWith("4")) {
                 v = "4";
             }
         } catch (Throwable ex) {
-            //
+            ex.printStackTrace(System.out);
         }
+        logger.info("Hibernate " + v + "x");
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
-        final HqlServiceClient hqlServiceClient = (HqlServiceClient) context.getBean("hqlServiceClient");
+        final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
         try {
             logger.debug(hqlServiceClient.getConnectionInfo());
             if (hqlServiceClient.execute("from Pojo", Integer.MAX_VALUE).getResults().size() == 0) {
