@@ -47,10 +47,11 @@ public class SyntaxException extends ServiceException {
         return this.type;
     }
 
+    /**
+     * @see java.lang.Throwable#toString()
+     */
     @Override
     public String toString() {
-        String s = getClass().getName();
-        String message = getLocalizedMessage();
-        return (message != null) ? (s + ":\n" + message) : s;
+        return super.toString() + " :: " + type + " :: " + wrong + " :: " + line + "," + col;
     }
 }
