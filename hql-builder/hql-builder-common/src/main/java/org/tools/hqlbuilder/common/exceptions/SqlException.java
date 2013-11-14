@@ -31,6 +31,14 @@ public class SqlException extends ServiceException {
         this.exception = exception;
     }
 
+    /**
+     * @see java.lang.Throwable#toString()
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " :: " + sql + " :: " + state + " :: " + exception;
+    }
+
     public String getSql() {
         return this.sql;
     }
