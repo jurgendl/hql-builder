@@ -68,7 +68,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>2.5.1</version>
+						<version>3.1</version>
 						<configuration>
 							<fork>true</fork>
 							<source>${targetJdk}</source>
@@ -152,7 +152,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>3.1</version>
 				<configuration>
 					<fork>true</fork>
 					<source>${targetJdk}</source>
@@ -235,6 +235,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.0</version>
 				<configuration>
 					<multipleLineComments>true</multipleLineComments>
 					<sourceDirectory>
@@ -259,6 +260,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
 					<linkXref>true</linkXref>
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
@@ -268,10 +270,24 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.6.1</version>
+				<configuration>
+					<links>
+						<link>http://docs.oracle.com/javase/7/docs/api/</link>
+					</links>
+					<linksource>true</linksource>
+					<source>${targetJdk}</source>
+					<splitindex>true</splitindex>
+					<use>true</use>
+					<verbose>false</verbose>
+					<version>true</version>
+					<detectLinks>true</detectLinks>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
