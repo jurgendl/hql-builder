@@ -10,8 +10,8 @@
 	<name>hibernate-4.2</name>
 	<description>hibernate-4.2</description>
 	<properties>
-		<hibernate.version>4.2.6.Final</hibernate.version>
-		<hibernate-annotations.version>4.0.2.Final</hibernate-annotations.version>
+		<hibernate.version>4.2.8.Final</hibernate.version>
+		<hibernate-annotations.version>4.0.4.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
 		<hibernate-validator.version>5.0.1.Final</hibernate-validator.version>
 		<version.slf4j>1.7.5</version.slf4j>
