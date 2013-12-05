@@ -772,6 +772,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public String createScript() {
         if (configurationBean == null || configurationBean.getConfiguration() == null) {
+            logger.error("configuration not set");
             return null;
         }
         try {

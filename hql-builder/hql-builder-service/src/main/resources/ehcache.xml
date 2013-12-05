@@ -11,7 +11,7 @@
         properties="hostName=localhost, socketTimeoutMillis=2000" />
 
     <defaultCache maxElementsInMemory="10000" eternal="false"
-        timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
+        timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="false"
         maxElementsOnDisk="10000000" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
 
