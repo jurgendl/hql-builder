@@ -32,6 +32,18 @@ import org.xml.sax.SAXException;
 public class CommonUtils {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
+    public static void find(Class<?> c) {
+        try {
+            java.util.Enumeration<?> r = c.getClassLoader().getResources(c.getName().replace('.', '/') + ".class");
+            while (r.hasMoreElements()) {
+                Object url = r.nextElement();
+                System.out.println(url);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     /** getFromXml(mainpom.getAbsolutePath(), "/ns1:project/ns1:modules/ns1:module/text()"); */
     public static Object getFromXml(InputStream xmlFile, String base, String string) {
         try {
