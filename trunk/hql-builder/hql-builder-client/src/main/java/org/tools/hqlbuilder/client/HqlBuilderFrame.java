@@ -1816,7 +1816,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         loadFavorites();
     }
 
-    @SuppressWarnings("cast")
     private void layout(Dimension size) {
         if (frame.getSize().height == 0) {
             size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
