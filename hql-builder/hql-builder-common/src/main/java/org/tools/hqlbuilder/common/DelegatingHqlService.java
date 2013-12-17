@@ -116,4 +116,19 @@ public abstract class DelegatingHqlService implements HqlService {
     public Map<String, String> getHibernateInfo() {
         return getDelegate().getHibernateInfo();
     }
+
+    @Override
+    public String getHibernateHelpURL() {
+        return getDelegate().getHibernateHelpURL();
+    }
+
+    @Override
+    public String getHqlHelpURL() {
+        return getDelegate().getHqlHelpURL();
+    }
+
+    @Override
+    public String getLuceneHelpURL() {
+        return getDelegate().getLuceneHelpURL();
+    }
 }

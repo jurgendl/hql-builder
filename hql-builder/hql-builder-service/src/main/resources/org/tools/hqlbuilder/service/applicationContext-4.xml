@@ -61,6 +61,9 @@
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 		<property name="configurationBean" ref="configurationBean"/>
 		<property name="dataSource" ref="dataSource"/>
+		<property name="luceneHelpURL" ref="${lucene.url}"/>
+		<property name="hqlHelpURL" ref="${hql.url}"/>
+		<property name="hibernateHelpURL" ref="${hibernate.url}"/>
 	</bean>
 
 </beans>

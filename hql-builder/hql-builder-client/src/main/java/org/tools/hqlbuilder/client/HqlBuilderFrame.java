@@ -2286,7 +2286,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void hibernate_documentation() {
         try {
-            Desktop.getDesktop().browse(URI.create("http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/"));
+            Desktop.getDesktop().browse(URI.create(hqlService.getHibernateHelpURL()));
         } catch (Exception ex) {
             logger.error("hibernate_documentation()", ex);
         }
@@ -2294,7 +2294,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void hql_documentation() {
         try {
-            Desktop.getDesktop().browse(URI.create("http://docs.jboss.org/hibernate/core/3.6/reference/en-US/html/queryhql.html"));
+            Desktop.getDesktop().browse(URI.create(hqlService.getHqlHelpURL()));
         } catch (Exception ex) {
             logger.error("hql_documentation()", ex);
         }
@@ -2712,7 +2712,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void Lucene_query_syntax() {
         try {
-            Desktop.getDesktop().browse(URI.create("http://lucene.apache.org/core/old_versioned_docs/versions/3_5_0/queryparsersyntax.html"));
+            Desktop.getDesktop().browse(URI.create(hqlService.getLuceneHelpURL()));
         } catch (Exception ex) {
             logger.error("Lucene_query_syntax()", ex);
         }

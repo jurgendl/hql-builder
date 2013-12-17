@@ -104,6 +104,12 @@ public class HqlServiceImpl implements HqlService {
 
     protected DataSource dataSource;
 
+    protected String luceneHelpURL;
+
+    protected String hqlHelpURL;
+
+    protected String hibernateHelpURL;
+
     public HqlServiceImpl() {
         super();
     }
@@ -825,5 +831,41 @@ public class HqlServiceImpl implements HqlService {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.common.HqlService#getHibernateHelpURL()
+     */
+    @Override
+    public String getHibernateHelpURL() {
+        return hibernateHelpURL;
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.common.HqlService#getHqlHelpURL()
+     */
+    @Override
+    public String getHqlHelpURL() {
+        return hqlHelpURL;
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.common.HqlService#getLuceneHelpURL()
+     */
+    @Override
+    public String getLuceneHelpURL() {
+        return luceneHelpURL;
+    }
+
+    public void setLuceneHelpURL(String luceneHelpURL) {
+        this.luceneHelpURL = luceneHelpURL;
+    }
+
+    public void setHqlHelpURL(String hqlHelpURL) {
+        this.hqlHelpURL = hqlHelpURL;
+    }
+
+    public void setHibernateHelpURL(String hibernateHelpURL) {
+        this.hibernateHelpURL = hibernateHelpURL;
     }
 }

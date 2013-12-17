@@ -12,6 +12,17 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope="singleton">
+		<property name="locations">
+			<list>
+				<value>classpath:org/tools/hqlbuilder/common/commonconfig.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="order" value="1" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
 	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" scope="singleton" lazy-init="false">
 		<property name="properties">
 			<props>
@@ -62,6 +73,9 @@
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 		<property name="configurationBean" ref="configurationBean"/>
 		<property name="dataSource" ref="dataSource"/>
+		<property name="luceneHelpURL" ref="${lucene.url}"/>
+		<property name="hqlHelpURL" ref="${hql.url}"/>
+		<property name="hibernateHelpURL" ref="${hibernate.url}"/>
 	</bean>
 
 </beans>
