@@ -414,4 +414,19 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             logger.debug(qq);
         }
     }
+
+    @Override
+    public String getHibernateHelpURL() {
+        return this.hqlService.getHibernateHelpURL();
+    }
+
+    @Override
+    public String getHqlHelpURL() {
+        return this.hqlService.getHqlHelpURL();
+    }
+
+    @Override
+    public String getLuceneHelpURL() {
+        return this.hqlService.getLuceneHelpURL();
+    }
 }

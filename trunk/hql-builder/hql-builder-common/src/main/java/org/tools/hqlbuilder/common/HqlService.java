@@ -57,4 +57,10 @@ public interface HqlService extends Serializable {
     public abstract void sql(String... sql);
 
     public abstract Map<String, String> getHibernateInfo();
+
+    public abstract String getHibernateHelpURL();
+
+    public abstract String getHqlHelpURL();
+
+    public abstract String getLuceneHelpURL();
 }
