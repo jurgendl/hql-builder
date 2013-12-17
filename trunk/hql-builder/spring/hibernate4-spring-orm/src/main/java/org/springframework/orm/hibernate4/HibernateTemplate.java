@@ -78,7 +78,17 @@ public class HibernateTemplate implements HibernateOperations {
 
     private <T> T doExecute(final org.springframework.orm.hibernate3.HibernateCallback<T> action) throws DataAccessException {
         Assert.notNull(action, "Callback object must not be null");
-        Session session = sessionFactory.getCurrentSession();
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+        } catch (org.hibernate.HibernateException ex) {
+            // org.hibernate.HibernateException: No Session found for current thread
+            if ("No Session found for current thread".equals(ex.getMessage())) {
+                session = sessionFactory.openSession();
+            } else {
+                throw ex;
+            }
+        }
         try {
             T result = action.doInHibernate(session);
             return result;
@@ -631,7 +641,7 @@ public class HibernateTemplate implements HibernateOperations {
         });
     }
 
-    private void checkWriteOperationAllowed(Session session) {
+    private void checkWriteOperationAllowed(@SuppressWarnings("unused") Session session) {
         // TODO
     }
 
@@ -1189,6 +1199,7 @@ public class HibernateTemplate implements HibernateOperations {
             throw new IllegalArgumentException("Length of paramNames array must match length of values array");
         }
         return executeWithNativeSession(new HibernateCallback<List<?>>() {
+            @SuppressWarnings("null")
             @Override
             public List<?> doInHibernate(Session session) throws HibernateException {
                 Query queryObject = session.createQuery(queryString);
@@ -1342,6 +1353,7 @@ public class HibernateTemplate implements HibernateOperations {
             throw new IllegalArgumentException("Length of paramNames array must match length of values array");
         }
         return executeWithNativeSession(new HibernateCallback<List<?>>() {
+            @SuppressWarnings("null")
             @Override
             public List<?> doInHibernate(Session session) throws HibernateException {
                 Query queryObject = session.getNamedQuery(queryName);
