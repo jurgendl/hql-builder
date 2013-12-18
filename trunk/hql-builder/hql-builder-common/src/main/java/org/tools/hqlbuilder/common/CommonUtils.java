@@ -1,8 +1,10 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,6 +40,22 @@ public class CommonUtils {
             while (r.hasMoreElements()) {
                 Object url = r.nextElement();
                 System.out.println(url);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void findcp(String c) {
+        try {
+            ClassLoader parent = ClassLoader.getSystemClassLoader().getParent();
+            for (String p : System.getProperty("java.class.path").split(System.getProperty("path.separator"))) {
+                try {
+                    File f = new File(p);
+                    System.out.println(p + "\n\t" + new URLClassLoader(new URL[] { f.toURI().toURL() }, parent).loadClass(c).getName());
+                } catch (Throwable ex) {
+                    System.out.println(p);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
