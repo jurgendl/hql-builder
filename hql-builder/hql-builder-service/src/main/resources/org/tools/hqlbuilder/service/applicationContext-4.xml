@@ -12,6 +12,10 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
+	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:org/tools/hqlbuilder/common/commonconfig.properties"/>
+	</bean>
+
 	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" scope="singleton" lazy-init="false">
 		<property name="properties">
 			<props>
@@ -61,9 +65,7 @@
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 		<property name="configurationBean" ref="configurationBean"/>
 		<property name="dataSource" ref="dataSource"/>
-		<property name="luceneHelpURL" value="${lucene.url}"/>
-		<property name="hqlHelpURL" value="${hql.url}"/>
-		<property name="hibernateHelpURL" value="${hibernate.url}"/>
+		<property name="properties" ref="properties"/>
 	</bean>
 
 </beans>
