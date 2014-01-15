@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -24,13 +25,16 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
@@ -146,8 +150,6 @@ public class PropertyPanel extends PropertySheetPanel {
             }
         }
 
-        @SuppressWarnings("unused")
-        PropertyRendererRegistry propertyRendererRegistry = PropertyRendererRegistry.class.cast(getRendererFactory());
         // for (Object entry : new ObjectWrapper(propertyRendererRegistry).get("typeToRenderer", Map.class).entrySet()) {
         // Map.Entry mapEntry = (Map.Entry) entry;
         // final TableCellRenderer renderer = (TableCellRenderer) mapEntry.getValue();
@@ -163,6 +165,14 @@ public class PropertyPanel extends PropertySheetPanel {
         // }
         // });
         // }
+
+        PropertyRendererRegistry propertyRendererRegistry = PropertyRendererRegistry.class.cast(getRendererFactory());
+        propertyRendererRegistry.registerRenderer(Date.class, new DateEditor());
+        propertyRendererRegistry.registerRenderer(Timestamp.class, new TimestampEditor());
+        propertyRendererRegistry.registerRenderer(LocalDate.class, new LocalDateEditor());
+        propertyRendererRegistry.registerRenderer(LocalDateTime.class, new LocalDateTimeEditor());
+        propertyRendererRegistry.registerRenderer(BigInteger.class, new BigIntegerEditor());
+        propertyRendererRegistry.registerRenderer(BigDecimal.class, new BigDecimalEditor());
 
         PropertyEditorRegistry propertyEditorRegistry = PropertyEditorRegistry.class.cast(getEditorFactory());
         propertyEditorRegistry.registerEditor(Date.class, new DateEditor());
@@ -186,6 +196,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
                 if (java.lang.Enum.class.equals(propertyType.getSuperclass()) && propertyEditorRegistry.getEditor(propertyType) == null) {
                     propertyEditorRegistry.registerEditor(propertyType, new EnumEditor(EnumSet.allOf((Class<? extends Enum>) propertyType)));
+                    propertyRendererRegistry.registerRenderer(propertyType, new EnumEditor(EnumSet.allOf((Class<? extends Enum>) propertyType)));
                 }
 
                 String propertyName = propertyDescriptor.getName();
@@ -296,7 +307,7 @@ public class PropertyPanel extends PropertySheetPanel {
         });
     }
 
-    private static class DateEditor extends AbstractPropertyEditor {
+    private static class DateEditor extends AbstractPropertyEditor implements TableCellRenderer {
         public DateEditor() {
             editor = new EDateEditor();
             EDateEditor.class.cast(editor).setShowLabel(false);
@@ -313,9 +324,19 @@ public class PropertyPanel extends PropertySheetPanel {
             Date date = value == null ? null : Date.class.cast(value);
             EDateEditor.class.cast(editor).setDate(date);
         }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value != null) {
+                EDateEditor.class.cast(editor).getFormatter().format((Date) value);
+            }
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
-    private static class TimestampEditor extends AbstractPropertyEditor {
+    private static class TimestampEditor extends AbstractPropertyEditor implements TableCellRenderer {
         public TimestampEditor() {
             editor = new EDateTimeEditor();
             EDateTimeEditor.class.cast(editor).setShowLabel(false);
@@ -333,9 +354,19 @@ public class PropertyPanel extends PropertySheetPanel {
             Date date = value == null ? null : new Date(Timestamp.class.cast(value).getTime());
             EDateTimeEditor.class.cast(editor).setDate(date);
         }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value != null) {
+                EDateTimeEditor.class.cast(editor).getFormatter().format((Date) value);
+            }
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
-    private static class LocalDateEditor extends AbstractPropertyEditor {
+    private static class LocalDateEditor extends AbstractPropertyEditor implements TableCellRenderer {
         public LocalDateEditor() {
             editor = new EDateEditor();
             EDateEditor.class.cast(editor).setShowLabel(false);
@@ -353,9 +384,16 @@ public class PropertyPanel extends PropertySheetPanel {
             Date date = value == null ? new Date(0) : LocalDate.class.cast(value).toDateTimeAtStartOfDay().toDate();
             EDateEditor.class.cast(editor).setDate(date);
         }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
-    private static class LocalDateTimeEditor extends AbstractPropertyEditor {
+    private static class LocalDateTimeEditor extends AbstractPropertyEditor implements TableCellRenderer {
         public LocalDateTimeEditor() {
             editor = new EDateTimeEditor();
             EDateTimeEditor.class.cast(editor).setShowLabel(false);
@@ -373,12 +411,21 @@ public class PropertyPanel extends PropertySheetPanel {
             Date date = value == null ? null : LocalDateTime.class.cast(value).toDateTime().toDate();
             EDateTimeEditor.class.cast(editor).setDate(date);
         }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
-    private static class BigIntegerEditor extends AbstractPropertyEditor {
+    private static class BigIntegerEditor extends AbstractPropertyEditor implements TableCellRenderer {
         private final Class type;
 
         private Object lastGoodValue;
+
+        private NumberFormat format;
 
         public BigIntegerEditor() {
             @SuppressWarnings("hiding")
@@ -393,7 +440,7 @@ public class PropertyPanel extends PropertySheetPanel {
             ((JFormattedTextField) editor).setBorder(LookAndFeelTweaks.EMPTY_BORDER);
 
             // use a custom formatter to have numbers with up to 64 decimals
-            NumberFormat format = NumberConverters.getDefaultFormat();
+            format = NumberConverters.getDefaultFormat();
 
             ((JFormattedTextField) editor).setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(format)));
         }
@@ -451,12 +498,24 @@ public class PropertyPanel extends PropertySheetPanel {
                 throw new RuntimeException(e);
             }
         }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value != null) {
+                value = format.format(value);
+            }
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
-    private static class BigDecimalEditor extends AbstractPropertyEditor {
+    private static class BigDecimalEditor extends AbstractPropertyEditor implements TableCellRenderer {
         private final Class type;
 
         private Object lastGoodValue;
+
+        private NumberFormat format;
 
         public BigDecimalEditor() {
             @SuppressWarnings("hiding")
@@ -471,7 +530,7 @@ public class PropertyPanel extends PropertySheetPanel {
             ((JFormattedTextField) editor).setBorder(LookAndFeelTweaks.EMPTY_BORDER);
 
             // use a custom formatter to have numbers with up to 64 decimals
-            NumberFormat format = NumberConverters.getDefaultFormat();
+            format = NumberConverters.getDefaultFormat();
 
             ((JFormattedTextField) editor).setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(format)));
         }
@@ -529,16 +588,50 @@ public class PropertyPanel extends PropertySheetPanel {
                 throw new RuntimeException(e);
             }
         }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value != null) {
+                value = format.format(value);
+            }
+
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
     }
 
-    private static class EnumEditor extends ComboBoxPropertyEditor {
+    private static class EnumEditor extends ComboBoxPropertyEditor implements TableCellRenderer {
         public EnumEditor(EnumSet etoptions) {
-            Object[] options = new Object[etoptions.size()];
+            Object[] options = new Object[etoptions.size() + 1];
+            int i = 1;
             Iterator iterator = etoptions.iterator();
-            for (int i = 0; i < options.length; i++) {
-                options[i] = iterator.next();
+            while (iterator.hasNext()) {
+                options[i++] = iterator.next();
             }
+            System.out.println(Arrays.asList(options));
             setAvailableValues(options);
+            ((JComboBox) super.editor).setRenderer(new Renderer() {
+                private static final long serialVersionUID = 4777310242425067779L;
+
+                @Override
+                public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                    if (value == null) {
+                        value = "";
+                    }
+                    return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                }
+            });
+        }
+
+        private DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value == null) {
+                value = "";
+            }
+            return dtcr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
 
