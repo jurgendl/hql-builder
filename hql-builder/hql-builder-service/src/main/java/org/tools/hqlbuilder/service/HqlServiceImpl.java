@@ -271,6 +271,26 @@ public class HqlServiceImpl implements HqlService {
         logger.debug("start query");
         ExecutionResult result = new ExecutionResult();
         try {
+            if (hql.contains("$$")) {
+                result = null;
+                Class<?> c = Object.class;
+                for (QueryParameter qp : queryParameters) {
+                    if ("$$".equals(qp.getName())) {
+                        c = Class.forName(qp.getValue().toString());
+                    }
+                }
+                for (ClassNode cn : getHibernateWebResolver().getClasses()) {
+                    if (c.isAssignableFrom(cn.getType())) {
+                        ExecutionResult it = execute(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), max, queryParameters);
+                        if (result == null) {
+                            result = it;
+                        } else {
+                            result.getResults().addAll(it.getResults());
+                        }
+                    }
+                }
+                return result;
+            }
             return innerExecute(result, hql, max, queryParameters);
         } catch (QueryException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
