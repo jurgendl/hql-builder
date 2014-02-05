@@ -28,7 +28,7 @@
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
-		<module>annotations</module>
+		<!--<module>annotations</module>-->
 		<module>hibernate</module>
 		<module>spring</module>
 		<module>hql-builder-common</module>
