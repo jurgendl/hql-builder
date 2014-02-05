@@ -1,0 +1,174 @@
+Info
+
+ favorieten worden opgeslaan in de subdirectory "favorites" in xml vorm
+ 
+ instellingen worden opgeslaan in de Java preferences (maw in de registry op Windows)
+ 
+ logging wordt weg geschreven naar console en file "hqlbuilder.log"
+ 
+verborgen mogelijkheden
+
+ rechtsklik voor context menu waar mogelijk (zie info daar voor sneltoetsen): op hql input
+
+ dubbelklikken werkt op hql list in "hql history" scherm
+
+ klikken op progressbar stopt query
+
+ Ctrl+Shift+/ zet of verwijdert remark ('--') tags over geselecteerd deel
+
+hql input
+
+ * persistent history
+
+ bij afsluiten worden alle gelukt queries incl. parameters bewaart; bij opstarten worden deze weer ingeladen; je kan aan de history via de "history" knop beneden of door op Crtl+Z/Y (undo/redo) te drukken wanneer het hqlveld focus heeft; hou Ctrl ingedrukt en druk meerdere malen op Z/Y om te "scrollen", want wanneer je Ctrl los laadt wordt de query incl parameters uitgevoerd en dus een nieuw element in de history gestoken
+
+ * hql naar javacode export
+
+ druk op de knop onderaan om code te genereren dat rechtstreeks in javacode te copy/pasten valt (wordt in clipboard bewaart) in de zin van: hql = "multi-line-hql";
+
+ * comments in hql
+
+ gebruik "// ..." (java style) of "-- ..." (sql style) voor comments te zetten; wordt overgenomen bij "hql naar javacode export"; "/* ... */" en "/* ... */" wordt niet ondersteund
+
+parameter waarden
+
+ * default geimporteerde packages en hoeven dus geen fully qualified names behalve in javascript
+
++----------------------------------------------------------------+
+java.text
+java.sql
+java.math
+java.util
+java.util.regex
+org.joda.time
+org.apache.commons.lang
+org.apache.commons.lang.builder
++----------------------------------------------------------------+
+
+ * javascript
+
+ LocalDate
+
++----------------------------------------------------------------+
+new LocalDate(2009,9,21)
++----------------------------------------------------------------+
+
+ Status
+
++----------------------------------------------------------------+
+java.lang.Enum.valueOf(java.lang.Class.forName("be.ugent.oasis.model.Status"),"GOEDGEKEURD")
++----------------------------------------------------------------+
+
+ Long, bv id
+
++----------------------------------------------------------------+
+java.lang.Long.valueOf("1234567890")
++----------------------------------------------------------------+
+
+ String
+
++----------------------------------------------------------------+
+'text'
++----------------------------------------------------------------+
+
+ * java
+
+ LocalDate
+
++----------------------------------------------------------------+
+new LocalDate(2009,9,21)
++----------------------------------------------------------------+
+
+ Status (hier dus wel de fully qualified name)
+
++----------------------------------------------------------------+
+be.ugent.oasis.model.Status.GOEDGEKEURD
++----------------------------------------------------------------+
+
+ Long, bv id
+
++----------------------------------------------------------------+
+1234567890l
++----------------------------------------------------------------+
+
+ string
+
++----------------------------------------------------------------+
+"text"
++----------------------------------------------------------------+
+
+
+ * groovy
+
+ gelijkaardig met java compiler maar sneller
+
+ http://groovy.codehaus.org/Documentation
+
+
+ LocalDate
+
++----------------------------------------------------------------+
+new LocalDate(2009,9,21)
++----------------------------------------------------------------+
+
+ Status (hier dus wel de fully qualified name)
+
++----------------------------------------------------------------+
+be.ugent.oasis.model.Status.GOEDGEKEURD
++----------------------------------------------------------------+
+
+ string
+
++----------------------------------------------------------------+
+"text"
++----------------------------------------------------------------+
+
+ string alternatief
+
++----------------------------------------------------------------+
+'text'
++----------------------------------------------------------------+
+
+ string verkorte vorm
+
++----------------------------------------------------------------+
+text
++----------------------------------------------------------------+
+
+ Long: let op de kleine letter l(ima) op het einde // PS de l is niet verplicht: cijfers worden by default als long aanzien, indien je een integer wil (voormalig default) moet je i achteraan toevoegen
+
++----------------------------------------------------------------+
+123456789l
++----------------------------------------------------------------+
+
+ ArrayList van Integers
+
++----------------------------------------------------------------+
+[1,2,3]
++----------------------------------------------------------------+
+
+ ArrayList van Longs
+
++----------------------------------------------------------------+
+[1l,2l,3l]
++----------------------------------------------------------------+
+
+ ArrayList van Strings
+
++----------------------------------------------------------------+
+["1","2","3"]
++----------------------------------------------------------------+
+
+uitvoeren
+
+ * druk op een toets in het hql veld of verwijder/voeg toe/pas aan een parameter; doorloop de history (Ctrl+Z/Y) of selecteer een history via de "history" knop
+
+ * het uitvoeren gebeurt op de achtergrond maar kan voorlopig nog niet gestopt worden; er is een delay (momenteel 1 seconde) vooraleer de query wordt uitgevoerd zolang je aan het type bent
+
+ * het aantal resultaten is nu configureerbaar en default 100 zodat de databank niet wordt leeg getrokken
+
+ * een query stoppen doe je door op de progressbar te klikken (om het even hoeveel en welke knop)
+
+TODO
+
+ de parameters worden niet door Ctrl+Z/Y noch door import via "history" scherm opgehaald
