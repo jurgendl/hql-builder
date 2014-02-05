@@ -1380,7 +1380,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         propertypanel.setBorder(BorderFactory.createTitledBorder(HqlResourceBundle.getMessage("properties")));
 
-        hql_sql_tabs.addTab("HQL", new JScrollPane(hql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
+        JScrollPane hqlsp = new JScrollPane(hql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        hql.withLineNumbers(hqlsp);
+        font(hql, 0);
+        hql_sql_tabs.addTab("HQL", hqlsp);
         hql_sql_tabs.addTab("SQL", new JScrollPane(sql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
 
         {

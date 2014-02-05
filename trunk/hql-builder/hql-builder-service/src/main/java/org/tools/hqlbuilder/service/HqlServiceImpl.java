@@ -309,7 +309,7 @@ public class HqlServiceImpl implements HqlService {
             throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
-            throw new ServiceException(ex.getMessage(), result);
+            throw new ServiceException(concat(ex), result);
         } catch (Exception ex) {
             if (ex.getClass().getSimpleName().equals("QuerySyntaxException")) {
                 logger.error("execute(String, int, QueryParameter)", ex);
@@ -333,6 +333,20 @@ public class HqlServiceImpl implements HqlService {
         } finally {
             logger.debug("end query");
         }
+    }
+
+    private String concat(Exception ex) {
+        StringBuilder sb = new StringBuilder();
+        Throwable t = ex;
+        do {
+            sb.append("\n").append(t.getClass().getName()).append(" ").append(t.getMessage());
+            if (t.getCause() != null && t.getCause().equals(t)) {
+                t = null;
+            } else {
+                t = t.getCause();
+            }
+        } while (t != null);
+        return sb.toString();
     }
 
     @SuppressWarnings("unchecked")
