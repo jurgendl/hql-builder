@@ -10,7 +10,7 @@
 	<properties>
 		<version.hibernate>3.2</version.hibernate>
 		<version.spring>3.2.4.RELEASE</version.spring>
-		<version.swingeasy>3.0.0.1</version.swingeasy>
+		<version.swingeasy>3.0.0.2</version.swingeasy>
 		<version.lucene>3.6.2</version.lucene>
 		<version.groovy>2.1.5</version.groovy>
 		<version.groovyengine>20080808</version.groovyengine>
@@ -28,6 +28,7 @@
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
+		<module>annotations</module>
 		<module>hibernate</module>
 		<module>spring</module>
 		<module>hql-builder-common</module>

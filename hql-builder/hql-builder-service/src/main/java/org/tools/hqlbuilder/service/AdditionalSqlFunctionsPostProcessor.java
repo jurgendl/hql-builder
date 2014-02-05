@@ -20,8 +20,11 @@ public class AdditionalSqlFunctionsPostProcessor implements ConfigurationPostPro
     public void postProcessConfiguration(Configuration config) {
         for (Map.Entry<String, String> simpleSqlFunction : standardSQLFunctions.entrySet()) {
             String name = simpleSqlFunction.getKey();
-            Type type = getTypes().get(simpleSqlFunction.getValue());
-            config.addSqlFunction(name.toLowerCase(), new StandardSQLFunction(name, type));
+            String type = simpleSqlFunction.getValue();
+            if (type == null || "null".equals(type)) {
+                type = "object";
+            }
+            config.addSqlFunction(name.toLowerCase(), new StandardSQLFunction(name, getTypes().get(simpleSqlFunction.getValue())));
         }
     }
 
