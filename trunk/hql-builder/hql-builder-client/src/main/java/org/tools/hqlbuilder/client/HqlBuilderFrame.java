@@ -1239,14 +1239,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         String hqltext = this.hql.getText();
         ArrayList<Integer> poss = new ArrayList<Integer>();
         switch (syntaxExceptionType) {
-            case illegal_attempt_to_dereference_collection:
+            case illegal_attempt_to_dereference_collection: {
                 wrong = wrong.substring(Math.max(0, 1 + Math.max(wrong.lastIndexOf('.'), wrong.lastIndexOf('{')))).replace('#', '.');
                 poss.add(hqltext.indexOf(wrong));
                 break;
-            case unable_to_resolve_path:
+            }
+            case unable_to_resolve_path: {
                 poss.add(hqltext.indexOf(wrong));
                 break;
-            case could_not_resolve_property:
+            }
+            case could_not_resolve_property: {
                 wrong = "." + wrong.split("#")[1];
                 int indexOf = hqltext.indexOf(wrong);
                 while (indexOf != -1) {
@@ -1265,13 +1267,24 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     indexOf = hqltext.indexOf(wrong, indexOf + 1);
                 }
                 break;
-            case invalid_path:
-                poss.add(hqltext.indexOf(wrong));
+            }
+            case invalid_path: {
+                int pos = hqltext.indexOf(wrong);
+                while (pos != -1) {
+                    poss.add(pos);
+                    pos = hqltext.indexOf(wrong, pos + 1);
+                }
                 break;
-            case not_mapped:
-                poss.add(hqltext.indexOf(wrong));
+            }
+            case not_mapped: {
+                int pos = hqltext.indexOf(wrong);
+                while (pos != -1) {
+                    poss.add(pos);
+                    pos = hqltext.indexOf(wrong, pos + 1);
+                }
                 break;
-            case unexpected_token:
+            }
+            case unexpected_token: {
                 Caret caret = hql.getCaret();
                 int mark = Math.min(caret.getDot(), caret.getMark());
                 int lnskip = hqltext.substring(0, mark).split("\\r?\\n").length - 1;
@@ -1283,10 +1296,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 pos += col - 1;
                 poss.add(pos);
                 break;
+            }
         }
-        for (Integer pos : poss) {
+        for (int i = 0; i < poss.size(); i++) {
+            int pos = poss.get(i);
             try {
-                this.hql.setCaret(pos);
+                if (i == 0) {
+                    this.hql.setCaret(pos);
+                }
                 this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight);
             } catch (Exception ex) {
                 logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
