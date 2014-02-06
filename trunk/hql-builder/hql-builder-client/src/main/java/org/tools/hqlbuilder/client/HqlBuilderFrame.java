@@ -1241,20 +1241,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         switch (syntaxExceptionType) {
             case illegal_attempt_to_dereference_collection: {
                 wrong = wrong.substring(Math.max(0, 1 + Math.max(wrong.lastIndexOf('.'), wrong.lastIndexOf('{')))).replace('#', '.');
-                poss.add(hqltext.indexOf(wrong));
+                int pos = hqltext.indexOf(wrong);
+                while (pos != -1) {
+                    poss.add(pos);
+                    pos = hqltext.indexOf(wrong, pos + 1);
+                }
                 break;
             }
             case unable_to_resolve_path: {
-                poss.add(hqltext.indexOf(wrong));
+                int pos = hqltext.indexOf(wrong);
+                while (pos != -1) {
+                    poss.add(pos);
+                    pos = hqltext.indexOf(wrong, pos + 1);
+                }
                 break;
             }
             case could_not_resolve_property: {
                 wrong = "." + wrong.split("#")[1];
-                int indexOf = hqltext.indexOf(wrong);
-                while (indexOf != -1) {
+                int pos = hqltext.indexOf(wrong);
+                while (pos != -1) {
                     boolean accept = false;
                     try {
-                        char nextChar = hqltext.charAt(indexOf + wrong.length());
+                        char nextChar = hqltext.charAt(pos + wrong.length());
                         if (!(('a' <= nextChar && nextChar <= 'z') || ('A' <= nextChar && nextChar <= 'Z'))) {
                             accept = true;
                         }
@@ -1262,9 +1270,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         accept = true;
                     }
                     if (accept) {
-                        poss.add(indexOf);
+                        poss.add(pos);
                     }
-                    indexOf = hqltext.indexOf(wrong, indexOf + 1);
+                    pos = hqltext.indexOf(wrong, pos + 1);
                 }
                 break;
             }
