@@ -1237,16 +1237,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
         hql.removeHighlights(syntaxErrorsHighlight);
         String hqltext = this.hql.getText();
-        int pos = hqltext.indexOf(wrong);
+        ArrayList<Integer> poss = new ArrayList<Integer>();
         switch (syntaxExceptionType) {
             case illegal_attempt_to_dereference_collection:
                 wrong = wrong.substring(Math.max(0, 1 + Math.max(wrong.lastIndexOf('.'), wrong.lastIndexOf('{')))).replace('#', '.');
-                pos = hqltext.indexOf(wrong);
+                poss.add(hqltext.indexOf(wrong));
                 break;
             case unable_to_resolve_path:
-                //
+                poss.add(hqltext.indexOf(wrong));
                 break;
-            case could_not_resolve_property: {
+            case could_not_resolve_property:
                 wrong = "." + wrong.split("#")[1];
                 int indexOf = hqltext.indexOf(wrong);
                 while (indexOf != -1) {
@@ -1260,34 +1260,31 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         accept = true;
                     }
                     if (accept) {
-                        pos = indexOf;
+                        poss.add(indexOf);
                     }
                     indexOf = hqltext.indexOf(wrong, indexOf + 1);
                 }
                 break;
-            }
             case invalid_path:
-                //
+                poss.add(hqltext.indexOf(wrong));
                 break;
             case not_mapped:
-                //
+                poss.add(hqltext.indexOf(wrong));
                 break;
-            case unexpected_token: {
+            case unexpected_token:
                 Caret caret = hql.getCaret();
                 int mark = Math.min(caret.getDot(), caret.getMark());
                 int lnskip = hqltext.substring(0, mark).split("\\r?\\n").length - 1;
                 String[] lines = hqltext.split("\\r?\\n");
-                pos = 0;
+                int pos = 0;
                 for (int i = 0; i < lnskip + line - 1; i++) {
                     pos += lines[i].length() + 1;
                 }
                 pos += col - 1;
-                break;
-            }
-            default:
+                poss.add(pos);
                 break;
         }
-        if (pos != -1) {
+        for (Integer pos : poss) {
             try {
                 this.hql.setCaret(pos);
                 this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight);
