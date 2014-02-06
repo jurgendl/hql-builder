@@ -327,6 +327,18 @@ public class HqlServiceImpl implements HqlService {
                 }
             }
 
+            {
+                // illegal attempt to dereference collection [{synthetic-alias}{non-qualified-property-ref}afstudeerRichtingI18N] with element
+                // property
+                // reference [naam]
+                Matcher m = Pattern.compile(
+                        "illegal attempt to dereference collection \\[([^\\]]+)\\] with element property reference \\[([^\\]]+)\\]").matcher(msg);
+                if (m.find()) {
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.illegal_attempt_to_dereference_collection, msg, m.group(1) + "#"
+                            + m.group(2));
+                }
+            }
+
             throw new ServiceException(ex.getMessage(), result);
         } catch (SQLGrammarException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
@@ -335,7 +347,7 @@ public class HqlServiceImpl implements HqlService {
             logger.error("execute(String, int, QueryParameter)", ex);
             throw new ServiceException(concat(ex), result);
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new ServiceException(concat(ex), result);
         } finally {
             logger.debug("end query");
         }
