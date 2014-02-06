@@ -1080,23 +1080,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (ex instanceof java.util.concurrent.ExecutionException) {
             ex = ex.getCause();
         }
-        String exceptionString = ex.toString();
+        String exceptionString = "";
         if (ex instanceof ServiceException) {
+            exceptionString = ex.getMessage();
             ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
             if (partialResult != null && partialResult.getSql() != null) {
                 sqlString = partialResult.getSql();
             }
-        }
-        if (ex instanceof SqlException) {
+        } else if (ex instanceof SqlException) {
             SqlException sqlException = SqlException.class.cast(ex);
             if (sqlException.getSql() != null) {
                 sqlString = sqlException.getSql();
             }
             exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
+        } else {
+            exceptionString = ex.toString();
         }
         sqlString = formatSql(sqlString);
-        sql.setText(exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sqlString + getNewline()
-                + getNewline());
+        if (StringUtils.isNotBlank(sqlString)) {
+            exceptionString = exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sqlString
+                    + getNewline() + getNewline();
+        }
+        sql.setText(exceptionString.trim());
         sql.setCaret(0);
         clearResults();
         if (ex instanceof SyntaxException) {
@@ -1234,6 +1239,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         String hqltext = this.hql.getText();
         int pos = hqltext.indexOf(wrong);
         switch (syntaxExceptionType) {
+            case illegal_attempt_to_dereference_collection:
+                wrong = wrong.substring(Math.max(0, 1 + Math.max(wrong.lastIndexOf('.'), wrong.lastIndexOf('{')))).replace('#', '.');
+                pos = hqltext.indexOf(wrong);
+                break;
             case unable_to_resolve_path:
                 //
                 break;
@@ -1275,6 +1284,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 pos += col - 1;
                 break;
             }
+            default:
+                break;
         }
         if (pos != -1) {
             try {
