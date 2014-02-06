@@ -297,9 +297,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, SYSTEM_TRAY, null, SYSTEM_TRAY, SYSTEM_TRAY, true,
             null, null, PERSISTENT_ID);
 
-    private final HqlBuilderAction canExecuteSelectionAction = new HqlBuilderAction(null, this, null, true, CAN_EXECUTE_SELECTION, null,
-            CAN_EXECUTE_SELECTION, CAN_EXECUTE_SELECTION, true, null, null, PERSISTENT_ID);
-
     private final HqlBuilderAction hiliAction = new HqlBuilderAction(null, this, null, true, HIGHLIGHT_SYNTAX, null, HIGHLIGHT_SYNTAX,
             HIGHLIGHT_SYNTAX, false, null, null, PERSISTENT_ID);
 
@@ -1235,99 +1232,89 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
         hql.removeHighlights(syntaxErrorsHighlight);
         String hqltext = this.hql.getText();
+        int pos = hqltext.indexOf(wrong);
         switch (syntaxExceptionType) {
-            case unable_to_resolve_path: {
-                try {
-                    int indexOf = hqltext.indexOf(wrong);
-                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
-                } catch (Exception ex) {
-                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
-                }
-            }
+            case unable_to_resolve_path:
+                //
                 break;
             case could_not_resolve_property: {
-                try {
-                    wrong = "." + wrong.split("#")[1];
-                    int indexOf = hqltext.indexOf(wrong);
-                    while (indexOf != -1) {
-                        boolean accept = false;
-                        try {
-                            char nextChar = hqltext.charAt(indexOf + wrong.length());
-                            if (!(('a' <= nextChar && nextChar <= 'z') || ('A' <= nextChar && nextChar <= 'Z'))) {
-                                accept = true;
-                            }
-                        } catch (StringIndexOutOfBoundsException ex) {
+                wrong = "." + wrong.split("#")[1];
+                int indexOf = hqltext.indexOf(wrong);
+                while (indexOf != -1) {
+                    boolean accept = false;
+                    try {
+                        char nextChar = hqltext.charAt(indexOf + wrong.length());
+                        if (!(('a' <= nextChar && nextChar <= 'z') || ('A' <= nextChar && nextChar <= 'Z'))) {
                             accept = true;
                         }
-                        if (accept) {
-                            this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
-                        }
-                        indexOf = hqltext.indexOf(wrong, indexOf + 1);
+                    } catch (StringIndexOutOfBoundsException ex) {
+                        accept = true;
                     }
-                } catch (Exception ex) {
-                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
+                    if (accept) {
+                        pos = indexOf;
+                    }
+                    indexOf = hqltext.indexOf(wrong, indexOf + 1);
                 }
-            }
                 break;
-            case invalid_path: {
-                try {
-                    int indexOf = hqltext.indexOf(wrong);
-                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
-                } catch (Exception ex) {
-                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
-                }
             }
+            case invalid_path:
+                //
                 break;
-            case not_mapped: {
-                try {
-                    int indexOf = hqltext.indexOf(wrong);
-                    this.hql.addHighlight(indexOf, indexOf + wrong.length(), syntaxErrorsHighlight);
-                } catch (Exception ex) {
-                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
-                }
-            }
+            case not_mapped:
+                //
                 break;
             case unexpected_token: {
-                String lines[] = hqltext.split("\\r?\\n");
-                int pos = 0;
-                for (int i = 0; i < lines.length; i++) {
-                    if (i + 1 == line) {
-                        for (int j = 0; j < col - 1; j++) {
-                            pos++;
-                        }
-                        break;
-                    }
+                Caret caret = hql.getCaret();
+                int mark = Math.min(caret.getDot(), caret.getMark());
+                int lnskip = hqltext.substring(0, mark).split("\\r?\\n").length - 1;
+                String[] lines = hqltext.split("\\r?\\n");
+                pos = 0;
+                for (int i = 0; i < lnskip + line - 1; i++) {
                     pos += lines[i].length() + 1;
                 }
-                try {
-                    this.hql.addHighlight(pos - 1, pos + 1 + 1, syntaxErrorsHighlight);
-                } catch (Exception ex) {
-                    logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
-                }
-            }
+                pos += col - 1;
                 break;
+            }
+        }
+        if (pos != -1) {
+            try {
+                this.hql.setCaret(pos);
+                this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight);
+            } catch (Exception ex) {
+                logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
+            }
         }
     }
 
     private String getHqlText() {
         Caret caret = hql.getCaret();
         String hqlstring;
-        if (canExecuteSelectionAction.isSelected()) {
-            int p1 = caret.getDot();
-            int p2 = caret.getMark();
-            if (p1 != p2) {
-                if (p1 > p2) {
-                    int tmp = p2;
-                    p2 = p1;
-                    p1 = tmp;
-                }
-                hqlstring = hql.getText().substring(p1, p2);
-            } else {
-                hqlstring = hql.getText();
+        int p1 = caret.getDot();
+        int p2 = caret.getMark();
+        if (p1 != p2) {
+            if (p1 > p2) {
+                int tmp = p2;
+                p2 = p1;
+                p1 = tmp;
             }
+            hqlstring = hql.getText().substring(p1, p2);
         } else {
             hqlstring = hql.getText();
+            int p3 = hqlstring.substring(0, p1).lastIndexOf(";");
+            if (p3 == -1 || p3 > p1) {
+                p3 = 0;
+            } else {
+                p3++;
+            }
+            int p4 = hqlstring.indexOf(";", p1);
+            if (p4 == -1) {
+                p4 = hqlstring.length();
+            }
+            hql.setSelectionStart(p3);
+            hql.setSelectionEnd(p4);
+            hqlstring = hqlstring.substring(p3, p4);
         }
+
         String lines[] = hqlstring.split("\\r?\\n");
         StringBuilder sb = new StringBuilder();
         for (String line : lines) {
@@ -1381,7 +1368,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         propertypanel.setBorder(BorderFactory.createTitledBorder(HqlResourceBundle.getMessage("properties")));
 
         JScrollPane hqlsp = new JScrollPane(hql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        hql.withLineNumbers(hqlsp);
+        hql.withLineNumbers(hqlsp).setCurrentLineForeground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
         font(hql, 0);
         hql_sql_tabs.addTab("HQL", hqlsp);
         hql_sql_tabs.addTab("SQL", new JScrollPane(sql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
@@ -1702,7 +1689,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("additional settings"));
-                addmi.add(new JCheckBoxMenuItem(canExecuteSelectionAction));
                 addmi.add(new JCheckBoxMenuItem(hiliAction));
                 addmi.add(new JMenuItem(hiliColorAction));
                 addmi.add(new JCheckBoxMenuItem(resizeColumnsAction));
@@ -1736,7 +1722,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         resizeColumnsAction.setSelected(true);
                         formatSqlAction.setSelected(true);
                         systrayAction.setSelected(true);
-                        canExecuteSelectionAction.setSelected(true);
                         hiliAction.setSelected(false);
                         alwaysOnTopAction.setSelected(false);
                         editableResultsAction.setSelected(false);
@@ -2849,7 +2834,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         Caret caret = hql.getCaret();
         int p1 = caret.getDot();
         int p2 = caret.getMark();
-        // logger.debug(p1 + "/" + p2);
         if (p1 == p2) {
             return;
         }

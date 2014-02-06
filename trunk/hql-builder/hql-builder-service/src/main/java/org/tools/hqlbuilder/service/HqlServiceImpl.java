@@ -295,25 +295,8 @@ public class HqlServiceImpl implements HqlService {
         } catch (QueryException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
             String msg = ex.getLocalizedMessage();
-            Matcher m = Pattern.compile("could not resolve property: ([^ ]+) of: ([^ ]+) ").matcher(msg);
-            if (m.find()) {
-                throw new SyntaxException(SyntaxException.SyntaxExceptionType.could_not_resolve_property, msg, m.group(2) + "#" + m.group(1));
-            }
-            m = Pattern.compile("Unable to resolve path \\[([^]]+)\\]").matcher(msg);
-            if (m.find()) {
-                throw new SyntaxException(SyntaxException.SyntaxExceptionType.unable_to_resolve_path, msg, m.group(1));
-            }
-            throw new ServiceException(ex.getMessage(), result);
-        } catch (SQLGrammarException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex);
-            throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
-        } catch (HibernateException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex);
-            throw new ServiceException(concat(ex), result);
-        } catch (Exception ex) {
+
             if (ex.getClass().getSimpleName().equals("QuerySyntaxException")) {
-                logger.error("execute(String, int, QueryParameter)", ex);
-                String msg = ex.getLocalizedMessage();
                 Matcher m = Pattern.compile("unexpected token: ([^ ]+) near line (\\d+), column (\\d+) ").matcher(msg);
                 if (m.find()) {
                     throw new SyntaxException(SyntaxException.SyntaxExceptionType.unexpected_token, msg, m.group(1), Integer.parseInt(m.group(2)),
@@ -329,6 +312,29 @@ public class HqlServiceImpl implements HqlService {
                 }
                 throw new ServiceException(ex.getMessage(), result);
             }
+
+            {
+                Matcher m = Pattern.compile("could not resolve property: ([^ ]+) of: ([^ ]+) ").matcher(msg);
+                if (m.find()) {
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.could_not_resolve_property, msg, m.group(2) + "#" + m.group(1));
+                }
+            }
+
+            {
+                Matcher m = Pattern.compile("Unable to resolve path \\[([^]]+)\\]").matcher(msg);
+                if (m.find()) {
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.unable_to_resolve_path, msg, m.group(1));
+                }
+            }
+
+            throw new ServiceException(ex.getMessage(), result);
+        } catch (SQLGrammarException ex) {
+            logger.error("execute(String, int, QueryParameter)", ex);
+            throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
+        } catch (HibernateException ex) {
+            logger.error("execute(String, int, QueryParameter)", ex);
+            throw new ServiceException(concat(ex), result);
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         } finally {
             logger.debug("end query");
