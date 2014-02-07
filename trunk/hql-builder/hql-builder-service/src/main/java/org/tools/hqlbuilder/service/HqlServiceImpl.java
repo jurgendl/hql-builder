@@ -339,10 +339,10 @@ public class HqlServiceImpl implements HqlService {
                 }
             }
 
-            throw new ServiceException(ex.getMessage(), result);
+            throw new ServiceException(concat(ex), result);
         } catch (SQLGrammarException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
-            throw new SqlException(ex.getMessage(), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
+            throw new SqlException(concat(ex), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
             throw new ServiceException(concat(ex), result);
