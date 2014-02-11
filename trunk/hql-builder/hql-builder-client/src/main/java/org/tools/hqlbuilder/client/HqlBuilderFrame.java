@@ -64,6 +64,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -1017,9 +1019,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             return;
         }
 
-        preQuery();
-
         final String hqlGetText = getHqlText();
+
+        if (StringUtils.isBlank(hqlGetText)) {
+            return;
+        }
+
+        preQuery();
 
         final int maxresults = rowProcessor == null ? (Integer) maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
 
@@ -1331,6 +1337,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 p1 = tmp;
             }
             hqlstring = hql.getText().substring(p1, p2);
+            // remove trailing ;
+            Matcher m = Pattern.compile("([^;]++);\\s++$").matcher(hqlstring);
+            if (m.find()) {
+                hqlstring = m.group(1);
+            }
         } else {
             hqlstring = hql.getText();
             int p3 = hqlstring.substring(0, p1).lastIndexOf(";");
@@ -1342,6 +1353,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             int p4 = hqlstring.indexOf(";", p1);
             if (p4 == -1) {
                 p4 = hqlstring.length();
+                if (StringUtils.isBlank(hqlstring.substring(p3, p4))) {
+                    p4 = p3 - 1;
+                    p3 = hqlstring.substring(0, p4).lastIndexOf(";");
+                    if (p3 == -1) {
+                        p3 = 0;
+                    }
+                }
             }
             hql.setSelectionStart(p3);
             hql.setSelectionEnd(p4);
@@ -1362,7 +1380,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             sb.append("\n");
         }
-        return sb.toString();
+        hqlstring = sb.toString();
+        return hqlstring;
     }
 
     /**
