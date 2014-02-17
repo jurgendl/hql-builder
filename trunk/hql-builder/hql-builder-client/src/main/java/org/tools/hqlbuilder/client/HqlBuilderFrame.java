@@ -91,6 +91,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.event.CaretEvent;
@@ -303,11 +304,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, SYSTEM_TRAY, null, SYSTEM_TRAY, SYSTEM_TRAY, true,
             null, null, PERSISTENT_ID);
 
-    private final HqlBuilderAction hiliAction = new HqlBuilderAction(null, this, null, true, HIGHLIGHT_SYNTAX, null, HIGHLIGHT_SYNTAX,
-            HIGHLIGHT_SYNTAX, false, null, null, PERSISTENT_ID);
+    private final HqlBuilderAction highlightSyntaxAction = new HqlBuilderAction(null, this, null, true, HIGHLIGHT_SYNTAX, null, HIGHLIGHT_SYNTAX,
+            HIGHLIGHT_SYNTAX, true, null, null, PERSISTENT_ID);
 
-    private final HqlBuilderAction hiliColorAction = new HqlBuilderAction(null, this, HIGHLIGHT_COLOR, true, HIGHLIGHT_COLOR, null, HIGHLIGHT_COLOR,
-            HIGHLIGHT_COLOR, false, null, null, PERSISTENT_ID, Color.class, null);
+    private final HqlBuilderAction highlightColorAction = new HqlBuilderAction(null, this, HIGHLIGHT_COLOR, true, HIGHLIGHT_COLOR, null,
+            HIGHLIGHT_COLOR, HIGHLIGHT_COLOR, false, null, null, PERSISTENT_ID, Color.class, null);
 
     private final HqlBuilderAction searchColorAction = new HqlBuilderAction(null, this, SEARCH_COLOR, true, SEARCH_COLOR, null, SEARCH_COLOR,
             SEARCH_COLOR, false, null, null, PERSISTENT_ID, Color.class, null);
@@ -1387,8 +1388,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     }
                 }
             }
+            final Point viewPosition = hqlsp.getViewport().getViewPosition();
             hql.setSelectionStart(p3);
             hql.setSelectionEnd(p4);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    hqlsp.getViewport().setViewPosition(viewPosition);
+                }
+            });
             hqlstring = hqlstring.substring(p3, p4);
         }
 
@@ -1767,8 +1775,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("additional settings"));
-                addmi.add(new JCheckBoxMenuItem(hiliAction));
-                addmi.add(new JMenuItem(hiliColorAction));
+                addmi.add(new JCheckBoxMenuItem(highlightSyntaxAction));
+                addmi.add(new JMenuItem(highlightColorAction));
                 addmi.add(new JCheckBoxMenuItem(resizeColumnsAction));
                 addmi.add(maximumNumberOfResultsAction);
                 addmi.add(fontAction);
@@ -1793,14 +1801,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         maximumNumberOfResultsAction.setValue(100);
                         fontAction.setValue(ClientUtils.getDefaultFont());
                         searchColorAction.setValue(null);
-                        hiliColorAction.setValue(null);
+                        highlightColorAction.setValue(null);
                         removeJoinsAction.setSelected(true);
                         formatLinesAction.setSelected(true);
                         replacePropertiesAction.setSelected(true);
                         resizeColumnsAction.setSelected(true);
                         formatSqlAction.setSelected(true);
                         systrayAction.setSelected(true);
-                        hiliAction.setSelected(false);
+                        highlightSyntaxAction.setSelected(false);
                         alwaysOnTopAction.setSelected(false);
                         editableResultsAction.setSelected(false);
                         switchLayoutAction.setSelected(true);
@@ -2658,7 +2666,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void hilightSyntax() {
         this.hql.removeHighlights(syntaxHighlight);
 
-        if (!hiliAction.isSelected()) {
+        if (!highlightSyntaxAction.isSelected()) {
             return;
         }
 
@@ -2727,7 +2735,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void highlight_color() {
         Color color = getHighlightColor();
         color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL highlight color"), color);
-        hiliColorAction.setValue(color);
+        highlightColorAction.setValue(color);
 
         this.hql.removeHighlights(syntaxErrorsHighlight);
         this.hql.removeHighlights(syntaxHighlight);
@@ -2738,7 +2746,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private Color getHighlightColor() {
-        return hiliColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) hiliColorAction.getValue();
+        return highlightColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) highlightColorAction.getValue();
     }
 
     private Color chooseColor() {
@@ -2849,7 +2857,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void hilightBraces(String hqltext) {
         hql.removeHighlights(bracesHighlight);
 
-        if (!hiliAction.isSelected()) {
+        if (!highlightSyntaxAction.isSelected()) {
             return;
         }
 
