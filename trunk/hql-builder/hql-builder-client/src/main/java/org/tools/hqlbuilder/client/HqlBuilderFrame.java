@@ -1764,6 +1764,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     if (StringUtils.isNotBlank(locale.getCountry())) {
                         title += ", " + locale.getDisplayCountry(locale);
                     }
+                    title += " (" + locale.toString() + ")";
                     JCheckBoxMenuItem lanMenu = new JCheckBoxMenuItem(title);
                     addmi.add(lanMenu);
                     lanGroup.add(lanMenu);
