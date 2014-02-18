@@ -308,10 +308,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             HIGHLIGHT_SYNTAX, true, null, null, PERSISTENT_ID);
 
     private final HqlBuilderAction highlightColorAction = new HqlBuilderAction(null, this, HIGHLIGHT_COLOR, true, HIGHLIGHT_COLOR, null,
-            HIGHLIGHT_COLOR, HIGHLIGHT_COLOR, false, null, null, PERSISTENT_ID, Color.class, null);
+            HIGHLIGHT_COLOR, HIGHLIGHT_COLOR, false, null, null, PERSISTENT_ID, Color.class, new Color(0, 0, 255));
 
     private final HqlBuilderAction searchColorAction = new HqlBuilderAction(null, this, SEARCH_COLOR, true, SEARCH_COLOR, null, SEARCH_COLOR,
-            SEARCH_COLOR, false, null, null, PERSISTENT_ID, Color.class, null);
+            SEARCH_COLOR, false, null, null, PERSISTENT_ID, Color.class, new Color(245, 225, 145));
 
     private final HqlBuilderAction alwaysOnTopAction = new HqlBuilderAction(null, this, ALWAYS_ON_TOP, true, ALWAYS_ON_TOP, null, ALWAYS_ON_TOP,
             ALWAYS_ON_TOP, false, null, null, PERSISTENT_ID);
@@ -321,6 +321,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, "layout_content.png",
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
+
+    private final HqlBuilderAction addEndBraceAction = new HqlBuilderAction(null, this, null, true, ADD_END_BRACE, null, ADD_END_BRACE,
+            ADD_END_BRACE, true, null, null, PERSISTENT_ID);
 
     private final ELabel maxResults;
 
@@ -416,7 +419,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }, null);
         ToolTipManager.sharedInstance().registerComponent(hql);
-        EComponentPopupMenu.debug(hql);
+        // EComponentPopupMenu.debug(hql);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
         new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
@@ -1622,6 +1625,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     remark_toggle();
                     return;
                 }
+
+                if (addEndBraceAction.isSelected() && EventHelper.keyEvent(e, '(') && e.getModifiers() == 0) {
+                    int pos = hql.getCaretPosition();
+                    hql.setText(hql.getText().substring(0, pos) + ')' + hql.getText().substring(pos));
+                    hql.setCaretPosition(pos);
+                    return;
+                }
             }
         });
 
@@ -1786,6 +1796,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (SystemTray.isSupported()) {
                     addmi.add(new JCheckBoxMenuItem(systrayAction));
                 }
+                addmi.add(new JCheckBoxMenuItem(addEndBraceAction));
                 settingsMenu.add(addmi);
             }
             {
@@ -1800,19 +1811,19 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                         maximumNumberOfResultsAction.setValue(100);
                         fontAction.setValue(ClientUtils.getDefaultFont());
-                        searchColorAction.setValue(null);
-                        highlightColorAction.setValue(null);
+                        searchColorAction.setValue(new Color(245, 225, 145));
+                        highlightColorAction.setValue(new Color(0, 0, 255));
                         removeJoinsAction.setSelected(true);
                         formatLinesAction.setSelected(true);
                         replacePropertiesAction.setSelected(true);
                         resizeColumnsAction.setSelected(true);
                         formatSqlAction.setSelected(true);
                         systrayAction.setSelected(true);
-                        highlightSyntaxAction.setSelected(false);
+                        highlightSyntaxAction.setSelected(true);
                         alwaysOnTopAction.setSelected(false);
                         editableResultsAction.setSelected(false);
                         switchLayoutAction.setSelected(true);
-
+                        addEndBraceAction.setSelected(true);
                         fontAction.setWarnRestart(true);
 
                         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("change visible after restart"), "",
