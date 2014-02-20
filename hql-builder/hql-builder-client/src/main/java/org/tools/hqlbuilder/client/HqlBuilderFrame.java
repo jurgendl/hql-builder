@@ -93,7 +93,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.ToolTipManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
@@ -398,27 +397,29 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         parameterBuilder = font(new ETextField(new ETextFieldConfig()), null);
         parameterName = font(new ETextField(new ETextFieldConfig()), null);
         parameterValue = font(new ETextField(new ETextFieldConfig(false)), null);
-        hql = font(new ETextArea(new ETextAreaConfig()) {
-            private static final long serialVersionUID = 5778951450821178464L;
-
-            @Override
-            public Point getToolTipLocation(MouseEvent event) {
-                Point p1 = hql.getLocationOnScreen();
-                Point p2 = resultsUnsafe.getLocationOnScreen();
-                return new Point(p2.x - p1.x, p2.y - p1.y);
-            }
-
-            @Override
-            public String getToolTipText() {
-                String ttt = super.getToolTipText();
-                if (StringUtils.isBlank(ttt)) {
-                    return ttt;
-                }
-                return "<html><p width=\"" + split1.getDividerLocation() + "px\">"
-                        + ttt.replaceAll("\r\n", "<br/>").replaceAll("\n", "<br/>").replaceAll("\n", "<br/>") + "</p></html>";
-            }
-        }, null);
-        ToolTipManager.sharedInstance().registerComponent(hql);
+        hql = font(new ETextArea(new ETextAreaConfig())
+        // {
+        // private static final long serialVersionUID = 5778951450821178464L;
+        //
+        // @Override
+        // public Point getToolTipLocation(MouseEvent event) {
+        // Point p1 = hql.getLocationOnScreen();
+        // Point p2 = resultsUnsafe.getLocationOnScreen();
+        // return new Point(p2.x - p1.x, p2.y - p1.y);
+        // }
+        //
+        // @Override
+        // public String getToolTipText() {
+        // String ttt = super.getToolTipText();
+        // if (StringUtils.isBlank(ttt)) {
+        // return ttt;
+        // }
+        // return "<html><p width=\"" + split1.getDividerLocation() + "px\">"
+        // + ttt.replaceAll("\r\n", "<br/>").replaceAll("\n", "<br/>").replaceAll("\n", "<br/>") + "</p></html>";
+        // }
+        // }
+                , null);
+        // ToolTipManager.sharedInstance().registerComponent(hql);
         // EComponentPopupMenu.debug(hql);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
@@ -1131,7 +1132,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         } else {
             exceptionString = ex.toString();
         }
-        hql.setToolTipText(exceptionString.trim());
+        // hql.setToolTipText(exceptionString.trim());
         sqlString = formatSql(sqlString);
         if (StringUtils.isNotBlank(sqlString)) {
             exceptionString = exceptionString + getNewline() + "-----------------------------" + getNewline() + getNewline() + sqlString
