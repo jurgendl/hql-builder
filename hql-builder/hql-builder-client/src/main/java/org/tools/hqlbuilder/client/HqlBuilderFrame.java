@@ -100,6 +100,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.Highlight;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -387,6 +389,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private EComponentGradientRenderer backgroundRenderer = new EComponentGradientRenderer(EComponentGradientRenderer.GradientOrientation.VERTICAL,
             Color.white, new Color(212, 212, 212));
 
+    private final List<Highlighter.Highlight> errorLocs = new ArrayList<Highlighter.Highlight>();
+
+    private String errorString;
+
     private HqlBuilderFrame() {
         // needs to be first to init font
         fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, "font.png", FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
@@ -397,30 +403,21 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         parameterBuilder = font(new ETextField(new ETextFieldConfig()), null);
         parameterName = font(new ETextField(new ETextFieldConfig()), null);
         parameterValue = font(new ETextField(new ETextFieldConfig(false)), null);
-        hql = font(new ETextArea(new ETextAreaConfig())
-        // {
-        // private static final long serialVersionUID = 5778951450821178464L;
-        //
-        // @Override
-        // public Point getToolTipLocation(MouseEvent event) {
-        // Point p1 = hql.getLocationOnScreen();
-        // Point p2 = resultsUnsafe.getLocationOnScreen();
-        // return new Point(p2.x - p1.x, p2.y - p1.y);
-        // }
-        //
-        // @Override
-        // public String getToolTipText() {
-        // String ttt = super.getToolTipText();
-        // if (StringUtils.isBlank(ttt)) {
-        // return ttt;
-        // }
-        // return "<html><p width=\"" + split1.getDividerLocation() + "px\">"
-        // + ttt.replaceAll("\r\n", "<br/>").replaceAll("\n", "<br/>").replaceAll("\n", "<br/>") + "</p></html>";
-        // }
-        // }
-                , null);
-        // ToolTipManager.sharedInstance().registerComponent(hql);
-        // EComponentPopupMenu.debug(hql);
+        hql = font(new ETextArea(new ETextAreaConfig().setTooltips(true)) {
+            private static final long serialVersionUID = 5778951450821178464L;
+
+            @Override
+            public String getToolTipText(MouseEvent event) {
+                int offs = viewToModel(event.getPoint());
+                for (Highlight hl : errorLocs) {
+                    if (hl.getStartOffset() <= offs && offs <= hl.getEndOffset()) {
+                        // <p width=800>
+                        return "<html><p>" + errorString + "</p><html>";
+                    }
+                }
+                return null;
+            }
+        }, null);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
         new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
@@ -1090,6 +1087,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void preQuery() {
         startQueryAction.setEnabled(false);
         progressbarStart(HqlResourceBundle.getMessage("quering"));
+        errorLocs.clear();
+        errorString = null;
         sql.setText("");
         resultsInfo.setText("");
         clearResults();
@@ -1100,7 +1099,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             ex.printStackTrace();
         }
         hql.removeHighlights(syntaxErrorsHighlight);
-        hql.setToolTipText(null);
         hilightSyntax();
     }
 
@@ -1143,6 +1141,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         clearResults();
         if (ex instanceof SyntaxException) {
             SyntaxException se = SyntaxException.class.cast(ex);
+            errorString = se.getMessage();
+            int p = errorString.indexOf("[");
+            if (p != -1) {
+                errorString = errorString.substring(0, p - 1);
+            }
             hilightSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
         }
     }
@@ -1349,7 +1352,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (i == 0) {
                     this.hql.setCaret(pos);
                 }
-                this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight);
+                errorLocs.add(this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight));
             } catch (Exception ex) {
                 logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
             }
