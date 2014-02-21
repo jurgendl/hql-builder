@@ -408,12 +408,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             @Override
             public String getToolTipText(MouseEvent event) {
-                int offs = viewToModel(event.getPoint());
-                for (Highlight hl : errorLocs) {
-                    if (hl.getStartOffset() <= offs && offs <= hl.getEndOffset()) {
-                        // <p width=800>
-                        return "<html><p>" + errorString + "</p><html>";
+                if (StringUtils.isNotBlank(errorString)) {
+                    int offs = viewToModel(event.getPoint());
+                    for (Highlight hl : errorLocs) {
+                        if (hl.getStartOffset() <= offs && offs <= hl.getEndOffset()) {
+                            if (errorString.length() > 100) {
+                                return "<html><p width=800>" + errorString + "</p><html>";
+                            }
+                            return "<html><p>" + errorString + "</p><html>";
+                        }
                     }
+                    if (errorString.length() > 100) {
+                        return "<html><p width=800>" + errorString + "</p><html>";
+                    }
+                    return "<html><p>" + errorString + "</p><html>";
                 }
                 return null;
             }
@@ -493,6 +501,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         clearResults();
         propertypanel.add(ClientUtils.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
         propertypanel.revalidate();
+        hql_sql_tabs.setForegroundAt(0, Color.gray);
         hql_sql_tabs.setForegroundAt(1, Color.gray);
     }
 
@@ -1092,6 +1101,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         sql.setText("");
         resultsInfo.setText("");
         clearResults();
+        hql_sql_tabs.setForegroundAt(0, Color.gray);
         hql_sql_tabs.setForegroundAt(1, Color.gray);
         try {
             addLast(LAST);
@@ -1108,6 +1118,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void afterQuery(Throwable ex) {
+        hql_sql_tabs.setForegroundAt(0, Color.RED);
         hql_sql_tabs.setForegroundAt(1, Color.RED);
         logger.error("executeQuery(RowProcessor)", ex);
         String sqlString = sql.getText();
@@ -1117,17 +1128,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         String exceptionString = "";
         if (ex instanceof ServiceException) {
             exceptionString = ex.getMessage();
+            errorString = ex.getMessage();
             ExecutionResult partialResult = ServiceException.class.cast(ex).getPartialResult();
             if (partialResult != null && partialResult.getSql() != null) {
                 sqlString = partialResult.getSql();
             }
         } else if (ex instanceof SqlException) {
+            errorString = ex.getMessage();
             SqlException sqlException = SqlException.class.cast(ex);
             if (sqlException.getSql() != null) {
                 sqlString = sqlException.getSql();
             }
             exceptionString += getNewline() + sqlException.getState() + " - " + sqlException.getException();
         } else {
+            errorString = ex.getMessage();
             exceptionString = ex.toString();
         }
         // hql.setToolTipText(exceptionString.trim());
@@ -1228,6 +1242,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
         resultsEDT.addRecords(records);
+        hql_sql_tabs.setForegroundAt(0, Color.GREEN);
         hql_sql_tabs.setForegroundAt(1, Color.GREEN);
 
         resultsUnsafe.setAutoResizeMode(ETable.AUTO_RESIZE_OFF);
@@ -1529,6 +1544,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             hql_sql_tabs.addTab(HqlResourceBundle.getMessage("Lucene search"), infopanel);
         }
 
+        hql_sql_tabs.setForegroundAt(0, Color.gray);
         hql_sql_tabs.setForegroundAt(1, Color.gray);
 
         Dimension bd = new Dimension(24, 24);
