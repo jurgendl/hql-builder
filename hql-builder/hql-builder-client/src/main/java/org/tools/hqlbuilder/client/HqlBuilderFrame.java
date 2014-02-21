@@ -1381,7 +1381,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (i == 0) {
                     this.hql.setCaret(pos);
                 }
-                errorLocs.add(this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight));
+                List<Highlight> before = Arrays.asList(this.hql.getHighlighter().getHighlights());
+                this.hql.addHighlight(pos, pos + wrong.length(), syntaxErrorsHighlight);
+                List<Highlight> after = new ArrayList<Highlighter.Highlight>(Arrays.asList(this.hql.getHighlighter().getHighlights()));
+                after.removeAll(before);
+                errorLocs.addAll(after);
             } catch (Exception ex) {
                 logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
             }
