@@ -93,6 +93,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.ToolTipManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
@@ -438,6 +439,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 return null;
             }
         }, null);
+        ToolTipManager.sharedInstance().registerComponent(hql);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
         maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
         new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
