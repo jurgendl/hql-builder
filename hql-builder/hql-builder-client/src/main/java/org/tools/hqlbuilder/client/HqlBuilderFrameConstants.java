@@ -138,4 +138,8 @@ public interface HqlBuilderFrameConstants {
     public static final String VERSIONS = "versions";
 
     public static final String ADD_END_BRACE = "add end brace";
+
+    public static final String SHOW_ERROR_TOOLTIP = "show error tooltip";
+
+    public static final String SELECT_HQL_BEING_EXECUTED = "select hql being executed";
 }

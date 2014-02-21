@@ -326,6 +326,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction addEndBraceAction = new HqlBuilderAction(null, this, null, true, ADD_END_BRACE, null, ADD_END_BRACE,
             ADD_END_BRACE, true, null, null, PERSISTENT_ID);
 
+    private final HqlBuilderAction addShowErrorTooltip = new HqlBuilderAction(null, this, null, true, SHOW_ERROR_TOOLTIP, null, SHOW_ERROR_TOOLTIP,
+            SHOW_ERROR_TOOLTIP, true, null, null, PERSISTENT_ID);
+
+    private final HqlBuilderAction addSelectExecutedHql = new HqlBuilderAction(null, this, null, true, SELECT_HQL_BEING_EXECUTED, null,
+            SELECT_HQL_BEING_EXECUTED, SELECT_HQL_BEING_EXECUTED, true, null, null, PERSISTENT_ID);
+
     private final ELabel maxResults;
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
@@ -408,20 +414,26 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             @Override
             public String getToolTipText(MouseEvent event) {
-                if (StringUtils.isNotBlank(errorString)) {
-                    int offs = viewToModel(event.getPoint());
-                    for (Highlight hl : errorLocs) {
-                        if (hl.getStartOffset() <= offs && offs <= hl.getEndOffset()) {
+                if (addShowErrorTooltip.isSelected()) {
+                    if (StringUtils.isNotBlank(errorString)) {
+                        int offs = viewToModel(event.getPoint());
+                        boolean showTT = false;
+                        if (errorLocs.size() > 0) {
+                            for (Highlight hl : errorLocs) {
+                                if (hl.getStartOffset() <= offs && offs <= hl.getEndOffset()) {
+                                    showTT = true;
+                                }
+                            }
+                        } else {
+                            showTT = true;
+                        }
+                        if (showTT) {
                             if (errorString.length() > 100) {
                                 return "<html><p width=800>" + errorString + "</p><html>";
                             }
                             return "<html><p>" + errorString + "</p><html>";
                         }
                     }
-                    if (errorString.length() > 100) {
-                        return "<html><p width=800>" + errorString + "</p><html>";
-                    }
-                    return "<html><p>" + errorString + "</p><html>";
                 }
                 return null;
             }
@@ -1411,8 +1423,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
             }
             final Point viewPosition = hqlsp.getViewport().getViewPosition();
-            hql.setSelectionStart(p3);
-            hql.setSelectionEnd(p4);
+            if (addSelectExecutedHql.isSelected()) {
+                hql.setSelectionStart(p3);
+                hql.setSelectionEnd(p4);
+            }
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -1818,6 +1832,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     addmi.add(new JCheckBoxMenuItem(systrayAction));
                 }
                 addmi.add(new JCheckBoxMenuItem(addEndBraceAction));
+                addmi.add(new JCheckBoxMenuItem(addShowErrorTooltip));
+                addmi.add(new JCheckBoxMenuItem(addSelectExecutedHql));
                 settingsMenu.add(addmi);
             }
             {
@@ -1845,6 +1861,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         editableResultsAction.setSelected(false);
                         switchLayoutAction.setSelected(true);
                         addEndBraceAction.setSelected(true);
+                        addShowErrorTooltip.setSelected(true);
+                        addSelectExecutedHql.setSelected(true);
                         fontAction.setWarnRestart(true);
 
                         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("change visible after restart"), "",
