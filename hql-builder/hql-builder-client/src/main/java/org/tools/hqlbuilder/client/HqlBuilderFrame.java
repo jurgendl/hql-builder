@@ -17,6 +17,7 @@ import java.awt.Insets;
 import java.awt.MenuItem;
 import java.awt.Point;
 import java.awt.PopupMenu;
+import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
@@ -418,22 +419,33 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (addShowErrorTooltip.isSelected()) {
                     if (StringUtils.isNotBlank(errorString)) {
                         int offs = viewToModel(event.getPoint());
-                        boolean showTT = false;
+                        try {
+                            Rectangle modelToView = modelToView(offs);
+                            if (Math.abs(event.getPoint().x - modelToView.x) > 17) {
+                                return null;
+                            }
+                            if (Math.abs(event.getPoint().y - modelToView.y) > 17) {
+                                return null;
+                            }
+                        } catch (BadLocationException ex) {
+                            //
+                        }
+                        boolean showTT = true;
                         if (errorLocs.size() > 0) {
+                            showTT = false;
                             for (Highlight hl : errorLocs) {
                                 if (hl.getStartOffset() <= offs && offs <= hl.getEndOffset()) {
                                     showTT = true;
                                 }
                             }
-                        } else {
-                            showTT = true;
                         }
-                        if (showTT) {
-                            if (errorString.length() > 100) {
-                                return "<html><p width=800>" + errorString + "</p><html>";
-                            }
-                            return "<html><p>" + errorString + "</p><html>";
+                        if (!showTT) {
+                            return null;
                         }
+                        if (errorString.length() > 100) {
+                            return "<html><p width=800>" + errorString + "</p><html>";
+                        }
+                        return "<html><p>" + errorString + "</p><html>";
                     }
                 }
                 return null;
