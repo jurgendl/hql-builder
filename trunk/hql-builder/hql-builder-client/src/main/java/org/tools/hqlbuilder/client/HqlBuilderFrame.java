@@ -319,8 +319,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction alwaysOnTopAction = new HqlBuilderAction(null, this, ALWAYS_ON_TOP, true, ALWAYS_ON_TOP, null, ALWAYS_ON_TOP,
             ALWAYS_ON_TOP, false, null, null, PERSISTENT_ID);
 
-    private final HqlBuilderAction editableResultsAction = new HqlBuilderAction(null, this, null, true, EDITABLE_RESULTS, null, EDITABLE_RESULTS,
-            EDITABLE_RESULTS, false, null, null, PERSISTENT_ID);
+    private final HqlBuilderAction editableResultsAction;
 
     private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, "layout_content.png",
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
@@ -506,6 +505,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 null, "ctrl ENTER");
         deleteInvertedSelectionAction = new HqlBuilderAction(hql, this, DELETE_INVERTED_SELECTION, true, DELETE_INVERTED_SELECTION,
                 "table_row_delete.png", DELETE_INVERTED_SELECTION, DELETE_INVERTED_SELECTION, true, null, "ctrl DELETE");
+
+        // other
+        editableResultsAction = new HqlBuilderAction(null, this, EDITABLE_RESULTS, true, EDITABLE_RESULTS, null, EDITABLE_RESULTS, EDITABLE_RESULTS,
+                false, null, null, PERSISTENT_ID);
+        editable_results();
     }
 
     protected void down() {
@@ -3153,5 +3157,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         sb.append("</html>");
         JOptionPane.showMessageDialog(frame, font(new ELabel(HqlResourceBundle.getMessage("versions.description", sb.toString())), 14),
                 HqlResourceBundle.getMessage("versions.title"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    protected void editable_results() {
+        deleteObjectAction.setEnabled(editableResultsAction.isSelected());
     }
 }
