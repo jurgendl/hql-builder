@@ -1887,6 +1887,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         addSelectExecutedHql.setSelected(true);
                         fontAction.setWarnRestart(true);
 
+                        editable_results();
+
                         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("change visible after restart"), "",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
