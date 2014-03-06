@@ -25,6 +25,7 @@
 		<version.ehcache>2.4.7</version.ehcache>
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
