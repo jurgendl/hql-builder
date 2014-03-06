@@ -240,6 +240,11 @@ public class CommonUtils {
             T value = type.cast(mi.getObject());
             logger.debug(String.valueOf(value));
             return value;
+        } catch (RuntimeException ex) {
+            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
+            logger.error(ex.getClass().getName());
+            logger.error(String.valueOf(ex));
+            throw ex;
         } catch (Exception ex) {
             logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
             logger.error(ex.getClass().getName());
