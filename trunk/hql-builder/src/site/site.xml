@@ -1,5 +1,6 @@
 <!-- https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html -->
 <!-- maven.apache.org/skins/maven-fluido-skin/ -->
+<!-- http://andriusvelykis.github.io/reflow-maven-skin/ -->
 <project name="HQL Builder">
   <skin>
     <groupId>org.apache.maven.skins</groupId>
