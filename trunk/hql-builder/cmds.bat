@@ -133,7 +133,7 @@ pause
 
 :lversions
 cls
-call mvn -o -Dmaven.tomcat.skip=true -e versions:set %*
+call mvn -Dmaven.tomcat.skip=true -e versions:set %*
 pause
 
 :lquit
