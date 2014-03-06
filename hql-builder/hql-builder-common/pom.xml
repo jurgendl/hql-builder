@@ -38,11 +38,6 @@
 			<version>${version.groovy}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.script</groupId>
-			<artifactId>groovy-engine</artifactId>
-			<version>${version.groovyengine}</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commons-lang}</version>

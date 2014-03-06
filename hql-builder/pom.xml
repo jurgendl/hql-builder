@@ -13,7 +13,6 @@
 		<version.swingeasy>3.0.0.2</version.swingeasy>
 		<version.lucene>3.6.2</version.lucene>
 		<version.groovy>2.1.5</version.groovy>
-		<version.groovyengine>20080808</version.groovyengine>
 		<version.log4j>1.2.17</version.log4j>
 		<version.jcalendar>1.4</version.jcalendar>
 		<version.joda>2.3</version.joda>
