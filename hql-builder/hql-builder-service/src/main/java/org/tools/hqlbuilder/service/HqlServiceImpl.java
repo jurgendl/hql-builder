@@ -10,14 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -55,7 +59,6 @@ import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.common.interfaces.Information;
-import org.tools.hqlbuilder.common.interfaces.InformationUnavailable;
 import org.tools.hqlbuilder.common.interfaces.ValidationExceptionConverter;
 
 public class HqlServiceImpl implements HqlService {
@@ -703,11 +706,23 @@ public class HqlServiceImpl implements HqlService {
     protected Information getInformation() {
         if (information == null) {
             try {
-                information = (Information) Class.forName("org.tools.hqlbuilder.service.InformationImpl").newInstance();
+                List<Information> infos = new ArrayList<Information>();
+                ServiceLoader<Information> sl = ServiceLoader.load(Information.class);
+                Iterator<Information> sli = sl.iterator();
+                while (sli.hasNext()) {
+                    Information next = sli.next();
+                    infos.add(next);
+                }
+                Collections.sort(infos, new Comparator<Information>() {
+                    @Override
+                    public int compare(Information o1, Information o2) {
+                        return o1.getOrder() - o2.getOrder();
+                    }
+                });
+                information = infos.get(0);
                 information.init(getConnectionInfo(), getSessionFactory());
-            } catch (final Exception ex) {
-                logger.error("" + ex);
-                information = new InformationUnavailable("" + ex);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
         return this.information;

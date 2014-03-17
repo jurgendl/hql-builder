@@ -22,6 +22,11 @@ public class InformationImpl extends LuceneInformation {
     }
 
     @Override
+    public int getOrder() {
+        return 0;
+    }
+
+    @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException {
