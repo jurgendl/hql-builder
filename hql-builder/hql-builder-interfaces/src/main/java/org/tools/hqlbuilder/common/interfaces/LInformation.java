@@ -6,5 +6,6 @@ import java.util.List;
 public interface LInformation {
     List<String> search(String text, String typeName) throws IOException;
 
-    void setSessionFactory(Object sessionFactory) throws IOException, IllegalArgumentException, ClassNotFoundException, IllegalAccessException;
+    void setSessionFactory(String id, Object sessionFactory) throws IOException, IllegalArgumentException, ClassNotFoundException,
+            IllegalAccessException;
 }
