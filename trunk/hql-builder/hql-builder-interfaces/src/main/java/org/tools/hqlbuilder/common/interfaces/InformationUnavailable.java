@@ -4,19 +4,22 @@ import java.io.IOException;
 import java.util.List;
 
 public class InformationUnavailable implements Information {
-    protected final String message;
-
-    public InformationUnavailable(String message) {
-        this.message = message;
+    public InformationUnavailable() {
+        super();
     }
 
     @Override
     public List<String> search(String text, String typeName, int hitsPerPage) {
-        throw new UnsupportedOperationException(message);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void init(String id, Object sf) throws IOException, UnsupportedOperationException {
-        throw new UnsupportedOperationException(message);
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getOrder() {
+        return 99;
     }
 }
