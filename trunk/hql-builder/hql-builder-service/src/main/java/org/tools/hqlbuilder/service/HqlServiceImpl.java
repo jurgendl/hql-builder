@@ -708,7 +708,7 @@ public class HqlServiceImpl implements HqlService {
         if (information == null) {
             try {
                 information = (LInformation) Class.forName("org.tools.hqlbuilder.service.InformationImpl").newInstance();
-                information.setSessionFactory(getSessionFactory());
+                information.setSessionFactory(getConnectionInfo(), getSessionFactory());
             } catch (IllegalArgumentException ex) {
                 throw new RuntimeException(ex);
             } catch (IOException ex) {

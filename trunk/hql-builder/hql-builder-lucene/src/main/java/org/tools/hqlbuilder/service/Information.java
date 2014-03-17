@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -24,6 +25,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.hibernate.SessionFactory;
@@ -48,6 +50,8 @@ public abstract class Information implements LInformation {
 
     public static final String NAME = "name";
 
+    private boolean persistent = false;
+
     protected final Analyzer analyzer = new StandardAnalyzer(LUCENE_VERSION);
 
     protected Directory index;
@@ -57,14 +61,17 @@ public abstract class Information implements LInformation {
     }
 
     @Override
-    public void setSessionFactory(Object sessionFactory0) throws IOException, IllegalArgumentException, ClassNotFoundException,
-            IllegalAccessException {
-        SessionFactory sessionFactory = (SessionFactory) sessionFactory0;
+    public void setSessionFactory(String id, Object sf) throws IOException, IllegalArgumentException, ClassNotFoundException, IllegalAccessException {
+        SessionFactory sessionFactory = (SessionFactory) sf;
 
         @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
-        index = new RAMDirectory(); // new NIOFSDirectory(new File(".index"));
+        if (persistent) {
+            index = new NIOFSDirectory(new File(id.replaceAll("[^A-Za-z0-9]", "") + ".index"));
+        } else {
+            index = new RAMDirectory();
+        }
         IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, analyzer);
         IndexWriter w = new IndexWriter(index, config);
 

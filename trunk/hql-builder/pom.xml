@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 
-		<version.hibernate>3.2</version.hibernate>
+		<version.hibernate>4.3</version.hibernate>
 		<version.spring>3.2.4.RELEASE</version.spring>
 		<version.swingeasy>3.0.0.2</version.swingeasy>
 		<version.lucene>4.7.0</version.lucene>
