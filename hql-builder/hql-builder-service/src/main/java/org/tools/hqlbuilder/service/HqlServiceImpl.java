@@ -28,7 +28,6 @@ import java.util.zip.ZipFile;
 
 import javax.sql.DataSource;
 
-import org.apache.lucene.queryParser.ParseException;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.QueryException;
@@ -55,6 +54,7 @@ import org.tools.hqlbuilder.common.exceptions.ServiceException;
 import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
+import org.tools.hqlbuilder.common.interfaces.LInformation;
 import org.tools.hqlbuilder.common.interfaces.ValidationExceptionConverter;
 
 public class HqlServiceImpl implements HqlService {
@@ -90,7 +90,7 @@ public class HqlServiceImpl implements HqlService {
 
     protected String username;
 
-    protected Information information;
+    protected LInformation information;
 
     protected Set<String> keywords;
 
@@ -507,8 +507,6 @@ public class HqlServiceImpl implements HqlService {
     public List<String> search(String text, String typeName) {
         try {
             return getInformation().search(text, typeName);
-        } catch (ParseException ex) {
-            throw new RuntimeException(ex);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -706,10 +704,11 @@ public class HqlServiceImpl implements HqlService {
         return propertyNames;
     }
 
-    protected Information getInformation() {
+    protected LInformation getInformation() {
         if (information == null) {
             try {
-                information = new InformationImpl(getSessionFactory());
+                information = (LInformation) Class.forName("org.tools.hqlbuilder.service.InformationImpl").newInstance();
+                information.setSessionFactory(getSessionFactory());
             } catch (IllegalArgumentException ex) {
                 throw new RuntimeException(ex);
             } catch (IOException ex) {
@@ -717,6 +716,8 @@ public class HqlServiceImpl implements HqlService {
             } catch (ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (InstantiationException ex) {
                 throw new RuntimeException(ex);
             }
         }
