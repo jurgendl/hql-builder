@@ -95,11 +95,13 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Highlighter;
@@ -406,6 +408,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 ClientUtils.getDefaultFont());
         fontAction.setWarnRestart(true);
 
+        UIManager.put("ToolTip.font", new FontUIResource(getFont()));
         resultsInfo = font(new ELabel(""), null);
         parameterBuilder = font(new ETextField(new ETextFieldConfig()), null);
         parameterName = font(new ETextField(new ETextFieldConfig()), null);
@@ -452,7 +455,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }, null);
         ToolTipManager.sharedInstance().registerComponent(hql);
         sql = font(new ETextArea(new ETextAreaConfig(false)), null);
-        maxResults = font(new ELabel(" / " + maximumNumberOfResultsAction.getValue()), null);
+        maxResults = font(new ELabel(""), null, Font.BOLD);
+        setMaxResults(Integer.parseInt("" + maximumNumberOfResultsAction.getValue()));
         new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
         parametersUnsafe = font(new EList<QueryParameter>(new EListConfig().setBackgroundRenderer(backgroundRenderer)), null);
         parametersEDT = parametersUnsafe.stsi();
@@ -2367,13 +2371,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         map.put(COL, col_);
     }
 
-    public <T extends JComponent> T font(T comp, Integer size) {
+    public <T extends JComponent> T font(T comp, Integer size, Integer style) {
         Font f = getFont();
         if (size != null && f.getSize() != size) {
             f = f.deriveFont(f.getSize() + (float) size);
         }
+        if (style != null) {
+            f = f.deriveFont(style);
+        }
         comp.setFont(f);
         return comp;
+    }
+
+    public <T extends JComponent> T font(T comp, Integer size) {
+        return font(comp, size, null);
     }
 
     protected void start_query() {
@@ -2531,9 +2542,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         Object newValue = JOptionPane.showInputDialog(frame, HqlResourceBundle.getMessage(MAXIMUM_NUMBER_OF_RESULTS),
                 String.valueOf(maximumNumberOfResultsAction.getValue()));
         if (newValue != null) {
-            maximumNumberOfResultsAction.setValue(Integer.parseInt(String.valueOf(newValue)));
-            maxResults.setText(" / " + newValue);
+            int max = Integer.parseInt(String.valueOf(newValue));
+            maximumNumberOfResultsAction.setValue(max);
+            setMaxResults(max);
         }
+    }
+
+    public void setMaxResults(int newValue) {
+        maxResults.setText(" / " + newValue);
+        maxResults.setForeground(newValue > 500 ? Color.RED : Color.BLACK);
     }
 
     protected void font() {
