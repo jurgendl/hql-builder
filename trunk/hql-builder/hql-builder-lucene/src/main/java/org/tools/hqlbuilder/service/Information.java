@@ -9,15 +9,13 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -33,11 +31,12 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.interfaces.LInformation;
 
-public abstract class Information {
+public abstract class Information implements LInformation {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Information.class);
 
-    public static final Version LUCENE_VERSION = Version.LUCENE_35;
+    public static final Version LUCENE_VERSION = Version.LUCENE_47;
 
     public static final String FIELD = "field";
 
@@ -49,13 +48,19 @@ public abstract class Information {
 
     public static final String NAME = "name";
 
-    protected static final Store STORE_DATA = Field.Store.YES;
-
     protected final Analyzer analyzer = new StandardAnalyzer(LUCENE_VERSION);
 
-    protected final Directory index;
+    protected Directory index;
 
-    public Information(SessionFactory sessionFactory) throws IOException, IllegalArgumentException, ClassNotFoundException, IllegalAccessException {
+    public Information() {
+        super();
+    }
+
+    @Override
+    public void setSessionFactory(Object sessionFactory0) throws IOException, IllegalArgumentException, ClassNotFoundException,
+            IllegalAccessException {
+        SessionFactory sessionFactory = (SessionFactory) sessionFactory0;
+
         @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
@@ -83,20 +88,25 @@ public abstract class Information {
     protected abstract void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException;
 
-    public List<String> search(String text, String typeName) throws ParseException, IOException {
+    @Override
+    public List<String> search(String text, String typeName) throws IOException {
         Query q;
-        if (typeName != null) {
-            BooleanQuery bq = new BooleanQuery();
-            Query query = new QueryParser(LUCENE_VERSION, DATA, analyzer).parse(text);
-            bq.add(query, BooleanClause.Occur.MUST);
-            bq.add(new TermQuery(new Term(TYPE, typeName)), BooleanClause.Occur.MUST);
-            q = bq;
-        } else {
-            q = new QueryParser(LUCENE_VERSION, DATA, analyzer).parse(text);
+        try {
+            if (typeName != null) {
+                BooleanQuery bq = new BooleanQuery();
+                Query query = new QueryParser(LUCENE_VERSION, DATA, analyzer).parse(text);
+                bq.add(query, BooleanClause.Occur.MUST);
+                bq.add(new TermQuery(new Term(TYPE, typeName)), BooleanClause.Occur.MUST);
+                q = bq;
+            } else {
+                q = new QueryParser(LUCENE_VERSION, DATA, analyzer).parse(text);
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e.getMessage());
         }
 
         int hitsPerPage = 200;
-        IndexSearcher searcher = new IndexSearcher(IndexReader.open(index));
+        IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(index));
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
         searcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -108,11 +118,9 @@ public abstract class Information {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
             logger.debug((i + 1) + ". " + d.get(NAME));
-            logger.debug(d.getFieldable(DATA).stringValue());
+            logger.debug(d.getField(DATA).stringValue());
             results.add(d.get(NAME));
         }
-
-        searcher.close();
 
         return results;
     }
