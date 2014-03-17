@@ -304,6 +304,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             MAXIMUM_NUMBER_OF_RESULTS, "scr.png", MAXIMUM_NUMBER_OF_RESULTS, MAXIMUM_NUMBER_OF_RESULTS, true, null, null, PERSISTENT_ID,
             Integer.class, 100);
 
+    private final HqlBuilderAction maximumNumberOfSearchResultsAction = new HqlBuilderAction(null, this, MAXIMUM_NUMBER_OF_SEARCH_RESULTS, true,
+            MAXIMUM_NUMBER_OF_SEARCH_RESULTS, "scr.png", MAXIMUM_NUMBER_OF_SEARCH_RESULTS, MAXIMUM_NUMBER_OF_SEARCH_RESULTS, true, null, null,
+            PERSISTENT_ID, Integer.class, 2000);
+
     private HqlBuilderAction fontAction;
 
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, SYSTEM_TRAY, null, SYSTEM_TRAY, SYSTEM_TRAY, true,
@@ -623,7 +627,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                             insertPropertyHelp();
                         }
                     } catch (Exception ex) {
-                        logger.error("$MouseAdapter.mouseClicked(MouseEvent)", ex);
+                        log(ex);
                     }
                 }
             });
@@ -673,7 +677,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                             insertHelp();
                         }
                     } catch (Exception ex) {
-                        logger.error("$MouseAdapter.mouseClicked(MouseEvent)", ex);
+                        log(ex);
                     }
                 }
             });
@@ -1053,7 +1057,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             try {
                 SystemTray.getSystemTray().add(trayIcon);
             } catch (AWTException ex) {
-                logger.error("switchVisibility()", ex);
+                log(ex);
             }
         } else {
             SystemTray.getSystemTray().remove(trayIcon);
@@ -1140,7 +1144,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             addLast(LAST);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log(ex);
         }
         hql.removeHighlights(syntaxErrorsHighlight);
         hilightSyntax();
@@ -1556,14 +1560,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         List<String> results;
                         if (searchClass.isSelected() != searchField.isSelected()) {
                             if (searchClass.isSelected()) {
-                                results = hqlService.search(getInput().getText(), "class");
+                                results = hqlService.search(getInput().getText(), "class", (Integer) maximumNumberOfSearchResultsAction.getValue());
                             } else {
-                                results = hqlService.search(getInput().getText(), "field");
+                                results = hqlService.search(getInput().getText(), "field", (Integer) maximumNumberOfSearchResultsAction.getValue());
                             }
                         } else {
-                            results = hqlService.search(getInput().getText(), null);
+                            results = hqlService.search(getInput().getText(), null, (Integer) maximumNumberOfSearchResultsAction.getValue());
                         }
                         searchresultsEDTSafe.addRecords(EList.convert(results));
+                    } catch (UnsupportedOperationException ex) {
+                        JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("lucene.unavailable"), "", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
                         logger.error("$ELabeledTextFieldButtonComponent.doAction()", ex);
                     }
@@ -1860,6 +1866,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 addmi.add(new JCheckBoxMenuItem(addEndBraceAction));
                 addmi.add(new JCheckBoxMenuItem(addShowErrorTooltip));
                 addmi.add(new JCheckBoxMenuItem(addSelectExecutedHql));
+                addmi.add(maximumNumberOfSearchResultsAction);
                 settingsMenu.add(addmi);
             }
             {
@@ -1873,6 +1880,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         fontAction.setWarnRestart(false);
 
                         maximumNumberOfResultsAction.setValue(100);
+                        maximumNumberOfSearchResultsAction.setValue(2000);
                         fontAction.setValue(ClientUtils.getDefaultFont());
                         searchColorAction.setValue(new Color(245, 225, 145));
                         highlightColorAction.setValue(new Color(0, 0, 255));
@@ -2392,7 +2400,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             query();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log(ex);
         }
         logger.debug("end query");
     }
@@ -2548,6 +2556,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
+    protected void maximum_number_of_search_results() {
+        Object newValue = JOptionPane.showInputDialog(frame, HqlResourceBundle.getMessage(MAXIMUM_NUMBER_OF_SEARCH_RESULTS),
+                String.valueOf(maximumNumberOfSearchResultsAction.getValue()));
+        if (newValue != null) {
+            int max = Integer.parseInt(String.valueOf(newValue));
+            maximumNumberOfSearchResultsAction.setValue(max);
+            setMaxResults(max);
+        }
+    }
+
     public void setMaxResults(int newValue) {
         maxResults.setText(" / " + newValue);
         maxResults.setForeground(newValue > 500 ? Color.RED : Color.BLACK);
@@ -2614,7 +2632,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             jaxbMarshaller.marshal(favorite, os);
             os.close();
         } catch (JAXBException ex) {
-            ex.printStackTrace();
+            log(ex);
         }
     }
 
@@ -2660,13 +2678,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         importFromFavoritesNoQ(favorite);
                     }
                 } catch (JAXBException ex) {
-                    ex.printStackTrace();
+                    log(ex);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    log(ex);
                 }
             }
         } catch (JAXBException ex) {
-            ex.printStackTrace();
+            log(ex);
         }
     }
 
@@ -2792,8 +2810,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             for (int[] p : pos) {
                 try {
                     this.hql.addHighlight(p[0], p[1], syntaxHighlight);
-                } catch (BadLocationException ex) {
-                    logger.error("hilightSyntax()", ex);
+                } catch (Throwable ex) {
+                    log(ex);
                 }
             }
         }
@@ -3147,7 +3165,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             d.setLocationRelativeTo(frame);
             d.setVisible(true);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log(ex);
         }
     }
 

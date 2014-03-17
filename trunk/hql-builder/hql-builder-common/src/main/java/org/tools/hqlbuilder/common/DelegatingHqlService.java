@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,8 +74,8 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
-    public List<String> search(String text, String typeName) {
-        return getDelegate().search(text, typeName);
+    public List<String> search(String text, String typeName, int hitsPerPage) throws UnsupportedOperationException, IOException {
+        return getDelegate().search(text, typeName, hitsPerPage);
     }
 
     @Override

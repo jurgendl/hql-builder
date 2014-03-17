@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.hibernate.MappingException;
@@ -17,7 +16,7 @@ import org.hibernate.type.CustomType;
 import org.hibernate.type.Type;
 import org.tools.hqlbuilder.common.CommonUtils;
 
-public class InformationImpl extends Information {
+public class InformationImpl extends LuceneInformation {
     public InformationImpl() {
         super();
     }
@@ -27,8 +26,8 @@ public class InformationImpl extends Information {
     protected void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException {
         Document doc = new Document();
-        doc.add(new StringField(NAME, classname, Store.YES));
-        doc.add(new StringField(TYPE, CLASS, Store.YES));
+        doc.add(new TextField(NAME, classname, STORE));
+        doc.add(new TextField(TYPE, CLASS, STORE));
         StringBuilder csb = new StringBuilder();
         Class<?> c = Class.forName(classname);
         while (c != null && !c.equals(Object.class)) {
@@ -113,9 +112,9 @@ public class InformationImpl extends Information {
 
                 fsb.append("\n");
 
-                fdoc.add(new StringField(NAME, classname + "#" + f.getName(), Store.YES));
-                fdoc.add(new StringField(TYPE, FIELD, Store.YES));
-                fdoc.add(new StringField(DATA, fsb.toString().trim(), Store.YES));
+                fdoc.add(new TextField(NAME, classname + "#" + f.getName(), STORE));
+                fdoc.add(new TextField(TYPE, FIELD, STORE));
+                fdoc.add(new TextField(DATA, fsb.toString().trim(), STORE));
                 writer.addDocument(fdoc);
 
                 csb.append(fsb.toString());
@@ -125,7 +124,7 @@ public class InformationImpl extends Information {
             csb.append("\n");
         }
 
-        doc.add(new StringField(DATA, csb.toString().trim(), Store.YES));
+        doc.add(new TextField(DATA, csb.toString().trim(), STORE));
         writer.addDocument(doc);
     }
 }

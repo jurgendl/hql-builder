@@ -10,13 +10,14 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -33,12 +34,14 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.slf4j.LoggerFactory;
-import org.tools.hqlbuilder.common.interfaces.LInformation;
+import org.tools.hqlbuilder.common.interfaces.Information;
 
-public abstract class Information implements LInformation {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Information.class);
+public abstract class LuceneInformation implements Information {
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
-    public static final Version LUCENE_VERSION = Version.LUCENE_47;
+    protected static final Version LUCENE_VERSION = Version.LUCENE_47;
+
+    protected static final Store STORE = Store.YES;
 
     public static final String FIELD = "field";
 
@@ -50,41 +53,49 @@ public abstract class Information implements LInformation {
 
     public static final String NAME = "name";
 
-    private boolean persistent = false;
+    protected boolean persistent = false;
 
     protected final Analyzer analyzer = new StandardAnalyzer(LUCENE_VERSION);
 
     protected Directory index;
 
-    public Information() {
+    public LuceneInformation() {
         super();
     }
 
     @Override
-    public void setSessionFactory(String id, Object sf) throws IOException, IllegalArgumentException, ClassNotFoundException, IllegalAccessException {
+    public void init(String id, Object sf) throws IOException, UnsupportedOperationException {
         SessionFactory sessionFactory = (SessionFactory) sf;
 
-        @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
         if (persistent) {
-            index = new NIOFSDirectory(new File(id.replaceAll("[^A-Za-z0-9]", "") + ".index"));
+            index = new NIOFSDirectory(new File(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LUCENE_VERSION + "/"
+                    + id.replaceAll("[^A-Za-z0-9]", "")));
         } else {
             index = new RAMDirectory();
         }
         IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, analyzer);
         IndexWriter w = new IndexWriter(index, config);
 
-        for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
-            if (i.getValue() instanceof JoinedSubclassEntityPersister) {
-                JoinedSubclassEntityPersister p = (JoinedSubclassEntityPersister) i.getValue();
-                create(w, sessionFactory, i.getKey(), p.getClassMetadata());
-            } else if (i.getValue() instanceof SingleTableEntityPersister) {
-                SingleTableEntityPersister p = (SingleTableEntityPersister) i.getValue();
-                create(w, sessionFactory, i.getKey(), p.getClassMetadata());
-            } else {
-                throw new UnsupportedOperationException(i.getValue().getClass().getName());
+        try {
+            for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
+                if (i.getValue() instanceof JoinedSubclassEntityPersister) {
+                    JoinedSubclassEntityPersister p = (JoinedSubclassEntityPersister) i.getValue();
+                    create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+                } else if (i.getValue() instanceof SingleTableEntityPersister) {
+                    SingleTableEntityPersister p = (SingleTableEntityPersister) i.getValue();
+                    create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+                } else {
+                    throw new UnsupportedOperationException(i.getValue().getClass().getName());
+                }
             }
+        } catch (IllegalArgumentException ex) {
+            throw new IOException(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            throw new IOException(ex.getMessage());
+        } catch (IllegalAccessException ex) {
+            throw new IOException(ex.getMessage());
         }
 
         w.close();
@@ -96,37 +107,39 @@ public abstract class Information implements LInformation {
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException;
 
     @Override
-    public List<String> search(String text, String typeName) throws IOException {
+    public List<String> search(String text, String typeName, int hitsPerPage) {
         Query q;
         try {
             if (typeName != null) {
                 BooleanQuery bq = new BooleanQuery();
-                Query query = new QueryParser(LUCENE_VERSION, DATA, analyzer).parse(text);
+                Query query = new StandardQueryParser(analyzer).parse(text, DATA);
                 bq.add(query, BooleanClause.Occur.MUST);
                 bq.add(new TermQuery(new Term(TYPE, typeName)), BooleanClause.Occur.MUST);
                 q = bq;
             } else {
-                q = new QueryParser(LUCENE_VERSION, DATA, analyzer).parse(text);
+                q = new StandardQueryParser(analyzer).parse(text, DATA);
             }
-        } catch (ParseException e) {
+        } catch (QueryNodeException e) {
             throw new RuntimeException(e.getMessage());
         }
 
-        int hitsPerPage = 200;
-        IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(index));
-        TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
-        searcher.search(q, collector);
-        ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
         List<String> results = new ArrayList<String>();
+        try {
+            IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(index));
+            TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+            searcher.search(q, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-        logger.debug("Found " + hits.length + " hits.");
-        for (int i = 0; i < hits.length; ++i) {
-            int docId = hits[i].doc;
-            Document d = searcher.doc(docId);
-            logger.debug((i + 1) + ". " + d.get(NAME));
-            logger.debug(d.getField(DATA).stringValue());
-            results.add(d.get(NAME));
+            logger.info("Found " + hits.length + " hits.");
+            for (int i = 0; i < hits.length; ++i) {
+                int docId = hits[i].doc;
+                Document d = searcher.doc(docId);
+                logger.debug((i + 1) + ". " + d.get(NAME));
+                logger.debug(d.getField(DATA).stringValue());
+                results.add(d.get(NAME));
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
 
         return results;
@@ -166,5 +179,13 @@ public abstract class Information implements LInformation {
 
     public boolean isReady() {
         return ready;
+    }
+
+    public boolean isPersistent() {
+        return this.persistent;
+    }
+
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
     }
 }
