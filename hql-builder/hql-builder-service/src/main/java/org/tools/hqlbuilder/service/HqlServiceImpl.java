@@ -54,7 +54,8 @@ import org.tools.hqlbuilder.common.exceptions.ServiceException;
 import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
-import org.tools.hqlbuilder.common.interfaces.LInformation;
+import org.tools.hqlbuilder.common.interfaces.Information;
+import org.tools.hqlbuilder.common.interfaces.InformationUnavailable;
 import org.tools.hqlbuilder.common.interfaces.ValidationExceptionConverter;
 
 public class HqlServiceImpl implements HqlService {
@@ -90,7 +91,7 @@ public class HqlServiceImpl implements HqlService {
 
     protected String username;
 
-    protected LInformation information;
+    protected Information information;
 
     protected Set<String> keywords;
 
@@ -501,15 +502,11 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * @see org.tools.hqlbuilder.common.HqlService#search(java.lang.String, java.lang.String)
+     * @see org.tools.hqlbuilder.common.HqlService#search(java.lang.String, java.lang.String, int)
      */
     @Override
-    public List<String> search(String text, String typeName) {
-        try {
-            return getInformation().search(text, typeName);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    public List<String> search(String text, String typeName, int hitsPerPage) {
+        return getInformation().search(text, typeName, hitsPerPage);
     }
 
     /**
@@ -517,7 +514,6 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> getProperties(String classname) {
-        @SuppressWarnings("unchecked")
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
         Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
@@ -704,21 +700,14 @@ public class HqlServiceImpl implements HqlService {
         return propertyNames;
     }
 
-    protected LInformation getInformation() {
+    protected Information getInformation() {
         if (information == null) {
             try {
-                information = (LInformation) Class.forName("org.tools.hqlbuilder.service.InformationImpl").newInstance();
-                information.setSessionFactory(getConnectionInfo(), getSessionFactory());
-            } catch (IllegalArgumentException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            } catch (InstantiationException ex) {
-                throw new RuntimeException(ex);
+                information = (Information) Class.forName("org.tools.hqlbuilder.service.InformationImpl").newInstance();
+                information.init(getConnectionInfo(), getSessionFactory());
+            } catch (final Exception ex) {
+                logger.error("" + ex);
+                information = new InformationUnavailable("" + ex);
             }
         }
         return this.information;

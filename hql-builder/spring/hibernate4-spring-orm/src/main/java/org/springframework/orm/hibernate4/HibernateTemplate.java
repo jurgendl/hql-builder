@@ -641,7 +641,7 @@ public class HibernateTemplate implements HibernateOperations {
         });
     }
 
-    private void checkWriteOperationAllowed(@SuppressWarnings("unused") Session session) {
+    private void checkWriteOperationAllowed(Session session) {
         // TODO
     }
 
@@ -1199,7 +1199,6 @@ public class HibernateTemplate implements HibernateOperations {
             throw new IllegalArgumentException("Length of paramNames array must match length of values array");
         }
         return executeWithNativeSession(new HibernateCallback<List<?>>() {
-            @SuppressWarnings("null")
             @Override
             public List<?> doInHibernate(Session session) throws HibernateException {
                 Query queryObject = session.createQuery(queryString);
@@ -1353,7 +1352,6 @@ public class HibernateTemplate implements HibernateOperations {
             throw new IllegalArgumentException("Length of paramNames array must match length of values array");
         }
         return executeWithNativeSession(new HibernateCallback<List<?>>() {
-            @SuppressWarnings("null")
             @Override
             public List<?> doInHibernate(Session session) throws HibernateException {
                 Query queryObject = session.getNamedQuery(queryName);

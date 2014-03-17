@@ -67,6 +67,8 @@ public interface HqlBuilderFrameConstants {
 
     public static final String MAXIMUM_NUMBER_OF_RESULTS = "maximum number of results";
 
+    public static final String MAXIMUM_NUMBER_OF_SEARCH_RESULTS = "maximum number of search results";
+
     public static final String EDITABLE_RESULTS = "editable results";
 
     public static final String HQL_DOCUMENTATION = "hql documentation";

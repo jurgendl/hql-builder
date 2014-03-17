@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -33,14 +34,7 @@ public interface HqlService extends Serializable {
 
     public abstract <T> void delete(T object);
 
-    /**
-     * JDOC
-     * 
-     * @param text
-     * @param typeName "class" or "field"
-     * @return
-     */
-    public abstract List<String> search(String text, String typeName);
+    public abstract List<String> search(String text, String typeName, int hitsPerPage) throws UnsupportedOperationException, IOException;
 
     public abstract Set<String> getReservedKeywords();
 
