@@ -14,7 +14,7 @@
 
 		<version.hibernate>4.2</version.hibernate>
 		<version.spring>3.2.4.RELEASE</version.spring>
-		<version.swingeasy>3.0.0.2</version.swingeasy>
+		<version.swingeasy>3.0.0.3-SNAPSHOT</version.swingeasy>
 		<version.lucene>4.7.0</version.lucene>
 		<version.groovy>2.1.5</version.groovy>
 		<version.log4j>1.2.17</version.log4j>
