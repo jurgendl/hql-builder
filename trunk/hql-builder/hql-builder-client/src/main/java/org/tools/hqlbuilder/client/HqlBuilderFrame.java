@@ -1585,8 +1585,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             JPanel infopanel = new JPanel(new BorderLayout());
             infopanel.add(searchActions, BorderLayout.NORTH);
-            infopanel.add(new JScrollPane(searchresults, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS),
-                    BorderLayout.CENTER);
+            infopanel.add(searchresults.addRowHeader(new JScrollPane(searchresults, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)), BorderLayout.CENTER);
             hql_sql_tabs.addTab(HqlResourceBundle.getMessage("Lucene search"), infopanel);
         }
 
@@ -1624,7 +1624,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         parameterspanel.add(parameterValue, "grow");
         parameterspanel.add(setNullButton, "");
 
-        parameterspanel.add(new JScrollPane(parametersUnsafe), "spanx 2, spany 4, growx, growy");
+        parameterspanel.add(parametersUnsafe.addRowHeader(new JScrollPane(parametersUnsafe)), "spanx 2, spany 4, growx, growy");
         parameterspanel.add(addParameterButton, "bottom, shrinky");
         parameterspanel.add(upButton, "shrinky");
         parameterspanel.add(removeButton, "shrinky");
