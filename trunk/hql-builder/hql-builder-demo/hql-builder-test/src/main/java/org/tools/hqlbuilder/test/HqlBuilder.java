@@ -45,6 +45,7 @@ public class HqlBuilder {
                 ex.printStackTrace(System.out);
             }
             logger.info("Hibernate " + v + "x");
+            @SuppressWarnings("resource")
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
             final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
             hqlServiceClient.createScript();

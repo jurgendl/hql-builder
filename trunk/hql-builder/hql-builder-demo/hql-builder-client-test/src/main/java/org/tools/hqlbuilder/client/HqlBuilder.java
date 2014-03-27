@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.swingeasy.UIUtils;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.test.Pojo;
@@ -12,6 +13,7 @@ public class HqlBuilder {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
 
     public static void main(final String[] arguments) {
+        UIUtils.systemLookAndFeel();
         String v = "3";
         try {
             String hibv = CommonUtils.readManifestVersion("org.hibernate.Hibernate");
@@ -29,7 +31,8 @@ public class HqlBuilder {
             ex.printStackTrace(System.out);
         }
         logger.info("Hibernate " + v + "x");
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
+        @SuppressWarnings("resource")
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
         final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
         try {
             logger.debug(hqlServiceClient.getConnectionInfo());

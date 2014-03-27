@@ -1,9 +1,13 @@
 package org.tools.hqlbuilder.test;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class EmbedPojo {
+public class EmbedPojo implements Serializable {
+    private static final long serialVersionUID = 4889605655281951604L;
+
     private Integer from100;
 
     public Integer getFrom100() {

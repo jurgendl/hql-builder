@@ -52,7 +52,9 @@ public class CommonUtils {
             for (String p : System.getProperty("java.class.path").split(System.getProperty("path.separator"))) {
                 try {
                     File f = new File(p);
-                    System.out.println(p + "\n\t" + new URLClassLoader(new URL[] { f.toURI().toURL() }, parent).loadClass(c).getName());
+                    URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { f.toURI().toURL() }, parent);
+                    System.out.println(p + "\n\t" + urlClassLoader.loadClass(c).getName());
+                    urlClassLoader.close();
                 } catch (Throwable ex) {
                     System.out.println(p);
                 }
