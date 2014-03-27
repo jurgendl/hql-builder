@@ -12,13 +12,33 @@
 	<description>hql-builder-full</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.tools.hql-builder.spring</groupId>
+			<artifactId>hibernate4-spring-orm</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tools.hql-builder.hibernate</groupId>
+			<artifactId>hibernate-4.2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>hql-builder-client</artifactId>
+			<artifactId>hql-builder-lucene</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>hql-builder-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>hql-builder-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
