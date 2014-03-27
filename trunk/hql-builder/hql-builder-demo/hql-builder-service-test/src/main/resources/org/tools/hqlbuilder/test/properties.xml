@@ -20,10 +20,15 @@
 				<property name="properties">
 					<props>
 						<prop key="hibernate.cfg.xml">org/tools/hqlbuilder/test/hibernate.cfg.xml</prop>
+						<prop key="project">Test</prop>
+						<prop key="hibernate.validator.autoregister_listeners">true</prop>
 					</props>
 				</property>
 			</bean>
 		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="order" value="1" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
 </beans>
