@@ -16,8 +16,4 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/service/applicationContext-4.xml" />
 
-	<bean id="hqlWebService" class="org.tools.hqlbuilder.service.HqlWebServiceImpl">
-		<property name="hqlService" ref="hqlService" />
-	</bean>
-
 </beans>

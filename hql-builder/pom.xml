@@ -29,12 +29,13 @@
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
-		<!--<module>annotations</module>-->
+		<module>hql-builder-annotations</module>
 		<module>hibernate</module>
 		<module>spring</module>
 		<module>hql-builder-common</module>
 		<module>hql-builder-lucene</module>
 		<module>hql-builder-service</module>
+		<module>hql-builder-webservice</module>
 		<module>hql-builder-client</module>
 		<module>hql-builder-full</module>
 	</modules>

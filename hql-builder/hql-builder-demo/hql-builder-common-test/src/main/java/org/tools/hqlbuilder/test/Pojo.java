@@ -6,11 +6,14 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.AccessType;
 
+@XmlRootElement
 @Entity
 @AccessType("field")
 @NamedQueries({ @NamedQuery(name = "PojoNQ", query = "from Pojo") })
@@ -19,6 +22,7 @@ public class Pojo extends PojoSuper implements Serializable {
 
     private String value;
 
+    @XmlElement
     @Embedded
     private EmbedPojo embedded = new EmbedPojo();
 
