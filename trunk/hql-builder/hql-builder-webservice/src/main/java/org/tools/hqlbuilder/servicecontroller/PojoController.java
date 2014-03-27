@@ -25,9 +25,11 @@ public class PojoController {
     @RequestMapping(method = RequestMethod.GET, value = "/get/{pojo}/{id}")
     public <T> ModelAndView getEmployee(@PathVariable String pojo, @PathVariable Long id) {
         @SuppressWarnings("unchecked")
-		List<T> results = (List<T>) hqlService.execute("from " + pojo + " where id=:id", new QueryParameter("id", "id", id)).getResults();
-        if(results.size()==0)return unll;
-		T rv = results.get(0);
+        List<T> results = (List<T>) hqlService.execute("from " + pojo + " where id=:id", new QueryParameter("id", "id", id)).getResults();
+        if (results.size() == 0) {
+            return null;
+        }
+        T rv = results.get(0);
         return new ModelAndView(VIEW_ID, BindingResult.MODEL_KEY_PREFIX + "pojo", rv);
     }
 }
