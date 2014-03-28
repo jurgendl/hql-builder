@@ -14,6 +14,7 @@ import org.tools.hqlbuilder.common.QueryParameter;
 
 @Controller
 public class PojoController {
+    /** spring bean id */
     private static final String VIEW_ID = "marshallingView";
 
     @Autowired
@@ -23,13 +24,14 @@ public class PojoController {
      * @see http://localhost/hqlbuilder/rest/get/Pojo/1
      */
     @RequestMapping(method = RequestMethod.GET, value = "/get/{pojo}/{id}")
-    public <T> ModelAndView getEmployee(@PathVariable String pojo, @PathVariable Long id) {
+    public <T> ModelAndView get(@PathVariable String pojo, @PathVariable Long id) {
         @SuppressWarnings("unchecked")
         List<T> results = (List<T>) hqlService.execute("from " + pojo + " where id=:id", new QueryParameter("id", "id", id)).getResults();
-        if (results.size() == 0) {
-            return null;
-        }
-        T rv = results.get(0);
-        return new ModelAndView(VIEW_ID, BindingResult.MODEL_KEY_PREFIX + "pojo", rv);
+        return new ModelAndView(VIEW_ID, BindingResult.MODEL_KEY_PREFIX + pojo, results.toArray(new Object[0]));
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{pojo}/{id}")
+    public void delete(@PathVariable String pojo, @PathVariable Long id) {
+        hqlService.execute("delete from " + pojo + " where id=:id", new QueryParameter("id", "id", id)).getResults();
     }
 }
