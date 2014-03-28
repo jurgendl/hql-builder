@@ -9,12 +9,25 @@
 	<artifactId>hql-builder-webservice</artifactId>
 	<name>hql-builder-webservice</name>
 	<description>hql-builder-webservice</description>
-	<dependencies>
+	<dependencies>	
+		<!-- common -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${version.spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+			<version>2.5</version>
+		</dependency>
+		<!-- spring rest -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -25,11 +38,11 @@
 			<artifactId>spring-oxm</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
+		<!-- jboss rest-easy -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<scope>provided</scope>
-			<version>2.5</version>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.6.Final</version>
 		</dependency>
 	</dependencies>
 </project>

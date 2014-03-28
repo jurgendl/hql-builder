@@ -18,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 
+/**
+ * @see http://www.ibm.com/developerworks/web/library/wa-spring3webserv/index.html?ca=dat
+ */
 @Controller
 public class PojoController {
     /** spring bean id */
