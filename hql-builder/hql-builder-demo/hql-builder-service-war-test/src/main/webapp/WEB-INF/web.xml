@@ -26,6 +26,15 @@
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>resteasy</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:/org/tools/hqlbuilder/webservice/resteasy-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>hqlbuilder</servlet-name>
 		<url-pattern>/hqlbuilder/*</url-pattern>
@@ -34,9 +43,17 @@
 		<servlet-name>rest</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>resteasy</servlet-name>
+		<url-pattern>/resteasy/*</url-pattern>
+	</servlet-mapping>
 
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
 
 	<context-param>

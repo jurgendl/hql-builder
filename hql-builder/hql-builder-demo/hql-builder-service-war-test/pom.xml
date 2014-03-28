@@ -21,6 +21,11 @@
 			<artifactId>hql-builder-webservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.6.Final</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

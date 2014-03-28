@@ -40,7 +40,7 @@ public class ClientUtils extends CommonUtils {
      * 
      * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#showDialog(javax.swing.JFrame, java.lang.String, V[])
      */
-    static public <V> V showDialog(JFrame parent, String title, V... options) {
+    static public <V> V showDialog(JFrame parent, String title, @SuppressWarnings("unchecked") V... options) {
         if (options == null || options.length == 0) {
             return null;
         }
