@@ -11,10 +11,9 @@
 		<targetJdk>1.7</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-
 		<version.hibernate>4.2</version.hibernate>
-		<version.spring>3.2.4.RELEASE</version.spring>
-		<version.swingeasy>3.0.0.3-SNAPSHOT</version.swingeasy>
+		<version.spring>3.2.8.RELEASE</version.spring>
+		<version.swingeasy>3.0.0.2</version.swingeasy>
 		<version.lucene>4.7.0</version.lucene>
 		<version.groovy>2.1.5</version.groovy>
 		<version.log4j>1.2.17</version.log4j>
@@ -23,9 +22,13 @@
 		<version.l2fprod>7.3</version.l2fprod>
 		<version.commons-lang>2.6</version.commons-lang>
 		<version.commons-collections>3.2.1</version.commons-collections>
-		<version.commons-beanutils>1.8.3</version.commons-beanutils>
+		<version.commons-beanutils>1.9.1</version.commons-beanutils>
 		<version.javassist>3.18.1-GA</version.javassist>
 		<version.ehcache>2.4.7</version.ehcache>
+		<version.resteasy>2.3.7.Final</version.resteasy>
+		<version.junit>4.11</version.junit>
+		<version.servlet>2.5</version.servlet>
+		<version.httpclient>4.3.3</version.httpclient>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -43,7 +46,8 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.4</version>
+			<version>${version.junit}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<licenses>
