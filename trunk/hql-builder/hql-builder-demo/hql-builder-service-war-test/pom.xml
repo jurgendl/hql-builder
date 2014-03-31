@@ -10,6 +10,9 @@
 	<name>hql-builder-service-war-test</name>
 	<description>hql-builder-service-war-test</description>
 	<packaging>war</packaging>
+	<properties>
+		<contextRoot>hqlbuilder</contextRoot>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -21,20 +24,27 @@
 			<artifactId>hql-builder-webservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<version>3.0.6.Final</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.1.1</version>
 				<configuration>
-					<warName>hqlbuilder</warName>
+					<warName>${contextRoot}</warName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${targetJdk}</source>
+					<target>${targetJdk}</target>
+					<optimize>false</optimize>
+					<verbose>false</verbose>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -42,24 +52,20 @@
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
-					<wtpContextName>hqlbuilder</wtpContextName>
-					<wtpversion>3.0</wtpversion>
+					<wtpContextName>${contextRoot}</wtpContextName>
+					<wtpversion>2.0</wtpversion>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>false</downloadJavadocs>
-					<forceRecheck>true</forceRecheck>
+					<forceRecheck>false</forceRecheck>
 					<buildOutputDirectory>target-eclipse</buildOutputDirectory>
-					<charset>${project.build.sourceEncoding}</charset>
-					<docencoding>${project.build.sourceEncoding}</docencoding>
-					<encoding>${project.build.sourceEncoding}</encoding>
 					<sourceExcludes>
 						<sourceExclude>**/.svn/**</sourceExclude>
 					</sourceExcludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
+					<!-- 
+					<wtpmanifest>true</wtpmanifest>
+					<wtpapplicationxml>true</wtpapplicationxml>
+					<manifest>${basedir}/src/main/resources/META-INF/MANIFEST.MF</manifest>
+					 -->
 				</configuration>
 			</plugin>
 		</plugins>
