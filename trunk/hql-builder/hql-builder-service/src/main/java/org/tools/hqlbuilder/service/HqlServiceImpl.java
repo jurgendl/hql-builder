@@ -32,6 +32,7 @@ import java.util.zip.ZipFile;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.QueryException;
@@ -252,6 +253,9 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public String getSqlForHql(String hql) {
+        if (StringUtils.isBlank(hql)) {
+            throw new IllegalArgumentException("hql");
+        }
         QueryTranslator createQueryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         createQueryTranslator.compile(new HashMap<Object, Object>(), false);
         return createQueryTranslator.getSQLString();
@@ -270,6 +274,9 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
+        if (StringUtils.isBlank(hql)) {
+            throw new IllegalArgumentException("hql");
+        }
         logger.debug("start query");
         ExecutionResult result = new ExecutionResult();
         try {
@@ -507,6 +514,12 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> search(String text, String typeName, int hitsPerPage) {
+        if (StringUtils.isBlank(text)) {
+            throw new IllegalArgumentException("text");
+        }
+        if (StringUtils.isBlank(typeName)) {
+            throw new IllegalArgumentException("type");
+        }
         return getInformation().search(text, typeName, hitsPerPage);
     }
 
@@ -515,6 +528,9 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<String> getProperties(String classname) {
+        if (StringUtils.isBlank(classname)) {
+            throw new IllegalArgumentException("classname");
+        }
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
         Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
@@ -635,6 +651,9 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public List<QueryParameter> findParameters(String hql) {
+        if (StringUtils.isBlank(hql)) {
+            throw new IllegalArgumentException("hql");
+        }
         List<QueryParameter> parameters = new ArrayList<QueryParameter>();
         Session session = newSession();
         try {
@@ -674,9 +693,12 @@ public class HqlServiceImpl implements HqlService {
      * @see org.tools.hqlbuilder.common.HqlService#getPropertyNames(java.lang.String, java.lang.String[])
      */
     @Override
-    public List<String> getPropertyNames(String key, String[] parts) {
+    public List<String> getPropertyNames(String classtype, String[] parts) {
+        if (StringUtils.isBlank(classtype)) {
+            throw new IllegalArgumentException("type");
+        }
         Map<?, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
-        AbstractEntityPersister persister = (AbstractEntityPersister) allClassMetadata.get(key);
+        AbstractEntityPersister persister = (AbstractEntityPersister) allClassMetadata.get(classtype);
 
         for (int i = 1; i < parts.length; i++) {
             int index = -1;
@@ -731,6 +753,9 @@ public class HqlServiceImpl implements HqlService {
     }
 
     protected <T> T get(Object o, String path, Class<T> t) {
+        if (StringUtils.isBlank(path)) {
+            throw new IllegalArgumentException("path");
+        }
         return t.cast(new ObjectWrapper(o).get(path));
     }
 

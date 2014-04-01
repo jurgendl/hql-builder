@@ -172,15 +172,15 @@ public class PojoResourceImpl implements PojoResource {
      * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#save(java.lang.Object)
      */
     @Override
-    public <T> T save(T object) {
-        return hqlWebService.save(object);
+    public void save(Object object) {
+        hqlWebService.save(object);
     }
 
     /**
      * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#delete(java.lang.Object)
      */
     @Override
-    public <T> void delete(T object) {
+    public void delete(Object object) {
         hqlWebService.delete(object);
     }
 
