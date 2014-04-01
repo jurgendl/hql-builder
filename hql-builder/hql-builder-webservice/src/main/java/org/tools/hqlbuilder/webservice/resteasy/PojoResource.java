@@ -59,7 +59,7 @@ public interface PojoResource {
      * @see [get] http://localhost:80/hqlbuilder/rest/pojo/connectionInfo
      */
     @GET
-    @Path("/connectionInfo")
+    @Path("/connectioninfo")
     @Produces({ MediaType.TEXT_PLAIN })
     public abstract String getConnectionInfo();
 
@@ -167,7 +167,7 @@ public interface PojoResource {
     @Path("/save")
     @Consumes({ MediaType.TEXT_XML })
     @Produces({ MediaType.TEXT_XML })
-    public abstract <T> T save(T object);
+    public abstract void save(Object object);
 
     /**
      * @see [delete] http://localhost:80/hqlbuilder/rest/pojo/delete [body]
@@ -175,13 +175,12 @@ public interface PojoResource {
     @DELETE
     @Path("/delete")
     @Consumes({ MediaType.TEXT_XML })
-    @Produces({ MediaType.TEXT_XML })
-    public abstract <T> void delete(T object);
+    public abstract void delete(Object object);
 
     /**
-     * @see [delete] http://localhost:80/hqlbuilder/rest/pojo/execute?hql=...&max=... [body]
+     * @see [put] http://localhost:80/hqlbuilder/rest/pojo/execute?hql=...&max=... [body]
      */
-    @GET
+    @PUT
     @Path("/execute")
     @Consumes({ MediaType.TEXT_XML })
     @Produces({ MediaType.TEXT_XML })
