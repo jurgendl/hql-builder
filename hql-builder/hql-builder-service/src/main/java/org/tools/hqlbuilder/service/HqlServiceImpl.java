@@ -293,7 +293,8 @@ public class HqlServiceImpl implements HqlService {
                 }
                 return result;
             }
-            return innerExecute(result, hql, max, queryParameters);
+            result = innerExecute(result, hql, max, queryParameters);
+            return result;
         } catch (QueryException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
             String msg = ex.getLocalizedMessage();
@@ -661,19 +662,19 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(null, param, simpleName);
+                QueryParameter p = new QueryParameter("", param, simpleName);
                 parameters.add(p);
             }
             Integer mi = CommonUtils.call(pminof, "getOrdinalParameterCount", Integer.class);
             for (int i = 1; i <= mi; i++) {
                 String simpleName = "?";
                 try {
-                    simpleName = CommonUtils.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
                     // simpleName = pminof.getOrdinalParameterExpectedType(i).getReturnedClass().getSimpleName();
+                    simpleName = CommonUtils.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(null, null, i + ":" + simpleName);
+                QueryParameter p = new QueryParameter("", null, i + ":" + simpleName);
                 parameters.add(p);
             }
         } finally {

@@ -49,7 +49,9 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         try {
             HqlWebServiceClient hc = new HqlWebServiceClient();
             hc.afterPropertiesSet();
-            System.out.println(hc.execute(new QueryParameters("from Pojo")));
+            // System.out.println(hc.getHibernateInfo());
+            // System.out.println(hc.execute(new QueryParameters("from Pojo")));
+            System.out.println(hc.findParameters("from Pojo where id=:id"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -131,10 +133,10 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
                 }
             }
         }
-        if (produces != null) {
+        if (produces != null && produces.value() != null && produces.value().length > 0) {
             request.accept(produces.value()[0]);
         }
-        if (consumes != null) {
+        if (consumes != null && consumes.value() != null && consumes.value().length > 0) {
             if (notAcceptedParameters.size() != 1) {
                 throw new IllegalArgumentException("body: " + notAcceptedParameters);
             }
