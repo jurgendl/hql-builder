@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webcommon.jaxb;
+package org.tools.hqlbuilder.common.jaxb;
 
 import java.util.ArrayList;
 import java.util.Collection;

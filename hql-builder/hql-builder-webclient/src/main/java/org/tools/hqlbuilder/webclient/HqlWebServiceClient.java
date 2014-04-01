@@ -15,6 +15,7 @@ import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -24,7 +25,6 @@ import javax.ws.rs.MatrixParam;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -37,7 +37,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.webcommon.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
 public class HqlWebServiceClient implements PojoResource, MethodHandler, InitializingBean {
@@ -49,7 +49,7 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         try {
             HqlWebServiceClient hc = new HqlWebServiceClient();
             hc.afterPropertiesSet();
-            System.out.println(hc.execute(new QueryParameters("from Pojo where id=:id", new QueryParameter("1000l", "id", 1000l))));
+            System.out.println(hc.execute(new QueryParameters("from Pojo")));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -66,19 +66,13 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
      */
     @Override
     public Object invoke(Object self, Method method, Method forwarder, Object[] args) throws Throwable {
-        @SuppressWarnings("unused")
-        Path classPath = PojoResource.class.getAnnotation(Path.class);
-        @SuppressWarnings("unused")
-        Path methodPath = method.getAnnotation(Path.class);
         Produces produces = method.getAnnotation(Produces.class);
         Consumes consumes = method.getAnnotation(Consumes.class);
         GET get = method.getAnnotation(GET.class);
         PUT put = method.getAnnotation(PUT.class);
         POST post = method.getAnnotation(POST.class);
         DELETE delete = method.getAnnotation(DELETE.class);
-        @SuppressWarnings("unused")
         HEAD head = method.getAnnotation(HEAD.class);
-        @SuppressWarnings("unused")
         OPTIONS options = method.getAnnotation(OPTIONS.class);
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -121,6 +115,13 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
                     request.pathParameter(parameterName, value);
                     notAcceptedParameters.remove(args[i]);
                 }
+                if (parameterAnnotation instanceof CookieParam) {
+                    CookieParam cookieParam = CookieParam.class.cast(parameterAnnotation);
+                    String cookieName = cookieParam.value();
+                    Object value = args[i];
+                    request.cookie(cookieName, value);
+                    notAcceptedParameters.remove(args[i]);
+                }
                 if (parameterAnnotation instanceof HeaderParam) {
                     HeaderParam headerParam = HeaderParam.class.cast(parameterAnnotation);
                     String headerName = headerParam.value();
@@ -152,11 +153,14 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
                 response = request.post(method.getReturnType());
             } else if (delete != null) {
                 response = request.delete(method.getReturnType());
+            } else if (head != null) {
+                response = request.head();
+            } else if (options != null) {
+                response = request.options(method.getReturnType());
+            } else {
+                throw new IllegalArgumentException();
             }
-            if (response == null) {
-                return null;
-            }
-            return response.getEntity();
+            return response == null ? null : response.getEntity();
         } catch (org.jboss.resteasy.spi.UnhandledException ex) {
             return ex.getCause();
         }

@@ -5,15 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
 
 @XmlRootElement(name = "result")
 public class ExecutionResult implements Serializable {
     private static final long serialVersionUID = 7646264311502956246L;
 
-    @XmlElementWrapper
-    private List<Object> results;
+    @XmlElement
+    private XmlWrapper<List<Object>> results;
 
     @XmlElementWrapper
     private Map<String, String> fromAliases;
@@ -46,20 +49,12 @@ public class ExecutionResult implements Serializable {
             String[][] scalarColumnNames, String[] sqlAliases, String[] queryReturnTypeNames) {
         this.sql = sql;
         this.fromAliases = fromAliases;
-        this.results = results;
+        this.results = new XmlWrapper<List<Object>>(results);
         this.queryReturnAliases = queryReturnAliases;
         this.scalarColumnNames = scalarColumnNames;
         this.sqlAliases = sqlAliases;
         this.queryReturnTypeNames = queryReturnTypeNames;
         this.size = size;
-    }
-
-    public List<Object> getResults() {
-        return this.results;
-    }
-
-    public void setResults(List<Object> results) {
-        this.results = results;
     }
 
     public String getSql() {
@@ -140,5 +135,17 @@ public class ExecutionResult implements Serializable {
 
     public void setOverhead(long overhead) {
         this.overhead = overhead;
+    }
+
+    public XmlWrapper<List<Object>> getResults() {
+        return this.results;
+    }
+
+    public void setResults(XmlWrapper<List<Object>> results) {
+        this.results = results;
+    }
+
+    public void setSimpleResults(List<Object> results) {
+        this.results = new XmlWrapper<List<Object>>(results);
     }
 }

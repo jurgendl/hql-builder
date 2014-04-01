@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.webcommon.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 import org.tools.hqlbuilder.webservice.HqlWebService;
 

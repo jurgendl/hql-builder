@@ -70,4 +70,9 @@ public class QueryParameters implements Serializable {
     public void setMax(int max) {
         this.max = max;
     }
+
+    @Override
+    public String toString() {
+        return "QueryParameters [hql=" + this.hql + ", max=" + this.max + ", parameters=" + this.parameters + "]";
+    }
 }

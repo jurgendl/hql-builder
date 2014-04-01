@@ -287,7 +287,7 @@ public class HqlServiceImpl implements HqlService {
                         if (result == null) {
                             result = it;
                         } else {
-                            result.getResults().addAll(it.getResults());
+                            result.getResults().getValue().addAll(it.getResults().getValue());
                         }
                     }
                 }
@@ -439,7 +439,7 @@ public class HqlServiceImpl implements HqlService {
         long startTime = System.currentTimeMillis();
         List<Object> list = createQuery.list();
         long endTime = System.currentTimeMillis();
-        result.setResults(list);
+        result.setSimpleResults(list);
         result.setSize(list.size());
         String[] queryReturnTypeNames = new String[queryReturnTypes.length];
         for (int i = 0; i < queryReturnTypes.length; i++) {
