@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.service;
+package org.tools.hqlbuilder.webservice;
 
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;

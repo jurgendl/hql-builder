@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.service;
+package org.tools.hqlbuilder.webclient;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
+import org.tools.hqlbuilder.webservice.HqlWebService;
 
 public class HqlWebServiceClient implements HqlWebService {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlWebServiceClient.class);

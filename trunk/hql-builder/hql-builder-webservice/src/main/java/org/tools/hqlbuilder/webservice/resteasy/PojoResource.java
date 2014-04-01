@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.resteasy;
+package org.tools.hqlbuilder.webservice.resteasy;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ import javax.ws.rs.core.MediaType;
 import org.jboss.resteasy.annotations.GZIP;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
-import org.tools.hqlbuilder.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.webservice.jaxb.XmlWrapper;
 
 @Path("/pojo")
 @Pretty
