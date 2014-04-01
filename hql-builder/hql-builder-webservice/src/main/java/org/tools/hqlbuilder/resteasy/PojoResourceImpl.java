@@ -1,13 +1,21 @@
 package org.tools.hqlbuilder.resteasy;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
+import org.tools.hqlbuilder.jaxb.XmlWrapper;
 import org.tools.hqlbuilder.service.HqlWebService;
 
 /**
  * @see http://docs.jboss.org/resteasy/docs/2.3.7.Final/userguide/html/
  * @see http://blog.comsysto.com/2012/08/02/resteasy-integration-with-spring-tutorial-part-1-introduction/
+ * @see https://access.redhat.com/site/documentation/en-US/JBoss_Enterprise_Web_Platform/5/html-single/RESTEasy_Reference_Guide/index.html
  */
 @Component
 public class PojoResourceImpl implements PojoResource {
@@ -24,5 +32,113 @@ public class PojoResourceImpl implements PojoResource {
         } catch (Exception ex) {
             return "hello from Rest-Easy, service is not available: " + ex;
         }
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getClasses()
+     */
+    @Override
+    public XmlWrapper<SortedSet<String>> getClasses() {
+        return new XmlWrapper<SortedSet<String>>(hqlWebService.getClasses());
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getSqlForHql(java.lang.String)
+     */
+    @Override
+    public String getSqlForHql(String hql) {
+        return hqlWebService.getSqlForHql(hql);
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getProperties(java.lang.String)
+     */
+    @Override
+    public XmlWrapper<List<String>> getProperties(String classname) {
+        return new XmlWrapper<List<String>>(hqlWebService.getProperties(classname));
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getConnectionInfo()
+     */
+    @Override
+    public String getConnectionInfo() {
+        return hqlWebService.getConnectionInfo();
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getProject()
+     */
+    @Override
+    public String getProject() {
+        return hqlWebService.getProject();
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#search(java.lang.String, java.lang.String, int)
+     */
+    @Override
+    public XmlWrapper<List<String>> search(String text, String typeName, int hitsPerPage) {
+        try {
+            return new XmlWrapper<List<String>>(hqlWebService.search(text, typeName, hitsPerPage));
+        } catch (UnsupportedOperationException | IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getReservedKeywords()
+     */
+    @Override
+    public XmlWrapper<Set<String>> getReservedKeywords() {
+        return new XmlWrapper<Set<String>>(hqlWebService.getReservedKeywords());
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getNamedQueries()
+     */
+    @Override
+    public XmlWrapper<Map<String, String>> getNamedQueries() {
+        return new XmlWrapper<Map<String, String>>(hqlWebService.getNamedQueries());
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#createScript()
+     */
+    @Override
+    public String createScript() {
+        return hqlWebService.createScript();
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getHibernateInfo()
+     */
+    @Override
+    public XmlWrapper<Map<String, String>> getHibernateInfo() {
+        return new XmlWrapper<Map<String, String>>(hqlWebService.getHibernateInfo());
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getHibernateHelpURL()
+     */
+    @Override
+    public String getHibernateHelpURL() {
+        return hqlWebService.getHibernateHelpURL();
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getHqlHelpURL()
+     */
+    @Override
+    public String getHqlHelpURL() {
+        return hqlWebService.getHqlHelpURL();
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getLuceneHelpURL()
+     */
+    @Override
+    public String getLuceneHelpURL() {
+        return hqlWebService.getLuceneHelpURL();
     }
 }
