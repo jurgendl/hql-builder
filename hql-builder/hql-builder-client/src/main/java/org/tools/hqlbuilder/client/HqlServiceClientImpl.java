@@ -21,8 +21,6 @@ import org.tools.hqlbuilder.common.HqlService;
 public class HqlServiceClientImpl extends DelegatingHqlService implements HqlServiceClient {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceClientImpl.class);
 
-    private static final long serialVersionUID = 5659734722245348813L;
-
     public static final String NEWLINE = "\n";
 
     private HqlService hqlService;

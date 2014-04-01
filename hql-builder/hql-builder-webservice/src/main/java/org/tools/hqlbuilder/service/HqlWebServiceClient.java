@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.common;
+package org.tools.hqlbuilder.service;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,128 +6,145 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.client.ClientResponse;
+import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.HibernateWebResolver;
+import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
-public abstract class DelegatingHqlService implements HqlService {
-    public abstract HqlService getDelegate();
+public class HqlWebServiceClient implements HqlWebService {
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlWebServiceClient.class);
+
+    public static void main(String[] args) {
+        try {
+            ClientRequest request = new ClientRequest("http://localhost:80/hqlbuilder/rest/pojo/project");
+            request.accept("text/plain");
+            ClientResponse<String> response = request.get(String.class);
+            System.out.println(response.getEntity());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public SortedSet<String> getClasses() {
-        return getDelegate().getClasses();
+        return null;
     }
 
     @Override
     public String getSqlForHql(String hql) {
-        return getDelegate().getSqlForHql(hql);
+        return null;
     }
 
     @Override
     public ExecutionResult execute(String string, QueryParameter... queryParameters) {
-        return getDelegate().execute(string, queryParameters);
+        return null;
     }
 
     @Override
     public ExecutionResult execute(String string, List<QueryParameter> queryParameters) {
-        return getDelegate().execute(string, queryParameters);
+        return null;
     }
 
     @Override
     public ExecutionResult execute(String string, int max, QueryParameter... queryParameters) {
-        return getDelegate().execute(string, max, queryParameters);
+        return null;
     }
 
     @Override
     public ExecutionResult execute(String string, int max, List<QueryParameter> queryParameters) {
-        return getDelegate().execute(string, max, queryParameters);
+        return null;
     }
 
     @Override
     public HibernateWebResolver getHibernateWebResolver() {
-        return getDelegate().getHibernateWebResolver();
+        return null;
     }
 
     @Override
     public List<String> getProperties(String classname) {
-        return getDelegate().getProperties(classname);
+        return null;
     }
 
     @Override
     public String getConnectionInfo() {
-        return getDelegate().getConnectionInfo();
+        return null;
     }
 
     @Override
     public String getProject() {
-        return getDelegate().getProject();
+        return null;
     }
 
     @Override
     public <T> T save(T object) throws ValidationException {
-        return getDelegate().save(object);
+        return null;
     }
 
     @Override
     public <T> void delete(T object) {
-        getDelegate().delete(object);
+        //
     }
 
     @Override
     public List<String> search(String text, String typeName, int hitsPerPage) throws UnsupportedOperationException, IOException {
-        return getDelegate().search(text, typeName, hitsPerPage);
+        return null;
     }
 
     @Override
     public Set<String> getReservedKeywords() {
-        return getDelegate().getReservedKeywords();
+        return null;
     }
 
     @Override
     public Map<String, String> getNamedQueries() {
-        return getDelegate().getNamedQueries();
+        return null;
     }
 
     @Override
     public List<QueryParameter> findParameters(String hql) {
-        return getDelegate().findParameters(hql);
+        return null;
     }
 
     @Override
     public List<String> getPropertyNames(String key, String[] parts) {
-        return getDelegate().getPropertyNames(key, parts);
+        return null;
     }
 
     @Override
     public void log() {
-        getDelegate().log();
+        //
     }
 
     @Override
     public String createScript() {
-        return getDelegate().createScript();
+        return null;
     }
 
     @Override
     public void sql(String... sql) {
-        getDelegate().sql(sql);
+        //
     }
 
     @Override
     public Map<String, String> getHibernateInfo() {
-        return getDelegate().getHibernateInfo();
+        return null;
     }
 
     @Override
     public String getHibernateHelpURL() {
-        return getDelegate().getHibernateHelpURL();
+        return null;
     }
 
     @Override
     public String getHqlHelpURL() {
-        return getDelegate().getHqlHelpURL();
+        return null;
     }
 
     @Override
     public String getLuceneHelpURL() {
-        return getDelegate().getLuceneHelpURL();
+        return null;
     }
 }

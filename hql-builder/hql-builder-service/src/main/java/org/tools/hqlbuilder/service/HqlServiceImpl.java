@@ -62,8 +62,6 @@ import org.tools.hqlbuilder.common.interfaces.Information;
 import org.tools.hqlbuilder.common.interfaces.ValidationExceptionConverter;
 
 public class HqlServiceImpl implements HqlService {
-    private static final long serialVersionUID = 3856142589306194609L;
-
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlServiceImpl.class);
 
     protected static final String SQL_ALIAS_BY_ENTITY_ALIAS = "sqlAliasByEntityAlias";
@@ -673,10 +671,10 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * @see org.tools.hqlbuilder.common.HqlService#getPropertyNames(java.lang.Object, java.lang.String[])
+     * @see org.tools.hqlbuilder.common.HqlService#getPropertyNames(java.lang.String, java.lang.String[])
      */
     @Override
-    public List<String> getPropertyNames(Object key, String[] parts) {
+    public List<String> getPropertyNames(String key, String[] parts) {
         Map<?, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
         AbstractEntityPersister persister = (AbstractEntityPersister) allClassMetadata.get(key);
 

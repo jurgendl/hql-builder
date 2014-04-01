@@ -9,6 +9,8 @@ import java.util.SortedSet;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
+import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.jaxb.XmlWrapper;
 import org.tools.hqlbuilder.service.HqlWebService;
 
@@ -140,5 +142,54 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public String getLuceneHelpURL() {
         return hqlWebService.getLuceneHelpURL();
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#getPropertyNames(java.lang.String, java.lang.String[])
+     */
+    @Override
+    public XmlWrapper<List<String>> getPropertyNames(String key, String[] parts) {
+        return new XmlWrapper<List<String>>(hqlWebService.getPropertyNames(key, parts));
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#sql(java.lang.String[])
+     */
+    @Override
+    public void sql(String[] sql) {
+        hqlWebService.sql(sql);
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#findParameters(java.lang.String)
+     */
+    @Override
+    public List<QueryParameter> findParameters(String hql) {
+        return hqlWebService.findParameters(hql);
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#save(java.lang.Object)
+     */
+    @Override
+    public <T> T save(T object) {
+        return hqlWebService.save(object);
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#delete(java.lang.Object)
+     */
+    @Override
+    public <T> void delete(T object) {
+        hqlWebService.delete(object);
+    }
+
+    /**
+     * 
+     * @see org.tools.hqlbuilder.resteasy.PojoResource#execute(java.lang.String, int, java.util.List)
+     */
+    @Override
+    public ExecutionResult execute(String hql, int max, List<QueryParameter> queryParameters) {
+        return hqlWebService.execute(hql, max, queryParameters);
     }
 }

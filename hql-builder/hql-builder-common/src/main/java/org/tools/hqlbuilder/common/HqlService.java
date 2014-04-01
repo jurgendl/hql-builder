@@ -1,7 +1,6 @@
 package org.tools.hqlbuilder.common;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,7 +8,7 @@ import java.util.SortedSet;
 
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 
-public interface HqlService extends Serializable {
+public interface HqlService {
     public abstract SortedSet<String> getClasses();
 
     public abstract String getSqlForHql(String hql);
@@ -42,7 +41,7 @@ public interface HqlService extends Serializable {
 
     public abstract List<QueryParameter> findParameters(String hql);
 
-    public abstract List<String> getPropertyNames(Object key, String[] parts);
+    public abstract List<String> getPropertyNames(String key, String[] parts);
 
     public abstract void log();
 
