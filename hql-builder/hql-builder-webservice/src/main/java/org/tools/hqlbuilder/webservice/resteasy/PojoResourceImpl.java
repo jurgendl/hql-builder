@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.resteasy;
+package org.tools.hqlbuilder.webservice.resteasy;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,8 +11,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
-import org.tools.hqlbuilder.jaxb.XmlWrapper;
-import org.tools.hqlbuilder.service.HqlWebService;
+import org.tools.hqlbuilder.webservice.HqlWebService;
+import org.tools.hqlbuilder.webservice.jaxb.XmlWrapper;
 
 /**
  * @see http://docs.jboss.org/resteasy/docs/2.3.7.Final/userguide/html/
@@ -25,7 +25,7 @@ public class PojoResourceImpl implements PojoResource {
     private HqlWebService hqlWebService;
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#ping()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#ping()
      */
     @Override
     public String ping() {
@@ -37,7 +37,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getClasses()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getClasses()
      */
     @Override
     public XmlWrapper<SortedSet<String>> getClasses() {
@@ -45,7 +45,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getSqlForHql(java.lang.String)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getSqlForHql(java.lang.String)
      */
     @Override
     public String getSqlForHql(String hql) {
@@ -53,7 +53,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getProperties(java.lang.String)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getProperties(java.lang.String)
      */
     @Override
     public XmlWrapper<List<String>> getProperties(String classname) {
@@ -61,7 +61,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getConnectionInfo()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getConnectionInfo()
      */
     @Override
     public String getConnectionInfo() {
@@ -69,7 +69,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getProject()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getProject()
      */
     @Override
     public String getProject() {
@@ -77,7 +77,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#search(java.lang.String, java.lang.String, int)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#search(java.lang.String, java.lang.String, int)
      */
     @Override
     public XmlWrapper<List<String>> search(String text, String typeName, int hitsPerPage) {
@@ -89,7 +89,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getReservedKeywords()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getReservedKeywords()
      */
     @Override
     public XmlWrapper<Set<String>> getReservedKeywords() {
@@ -97,7 +97,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getNamedQueries()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getNamedQueries()
      */
     @Override
     public XmlWrapper<Map<String, String>> getNamedQueries() {
@@ -105,7 +105,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#createScript()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#createScript()
      */
     @Override
     public String createScript() {
@@ -113,7 +113,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getHibernateInfo()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getHibernateInfo()
      */
     @Override
     public XmlWrapper<Map<String, String>> getHibernateInfo() {
@@ -121,7 +121,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getHibernateHelpURL()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getHibernateHelpURL()
      */
     @Override
     public String getHibernateHelpURL() {
@@ -129,7 +129,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getHqlHelpURL()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getHqlHelpURL()
      */
     @Override
     public String getHqlHelpURL() {
@@ -137,7 +137,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getLuceneHelpURL()
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getLuceneHelpURL()
      */
     @Override
     public String getLuceneHelpURL() {
@@ -145,7 +145,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#getPropertyNames(java.lang.String, java.lang.String[])
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#getPropertyNames(java.lang.String, java.lang.String[])
      */
     @Override
     public XmlWrapper<List<String>> getPropertyNames(String key, String[] parts) {
@@ -153,7 +153,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#sql(java.lang.String[])
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#sql(java.lang.String[])
      */
     @Override
     public void sql(String[] sql) {
@@ -161,7 +161,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#findParameters(java.lang.String)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#findParameters(java.lang.String)
      */
     @Override
     public List<QueryParameter> findParameters(String hql) {
@@ -169,7 +169,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#save(java.lang.Object)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#save(java.lang.Object)
      */
     @Override
     public <T> T save(T object) {
@@ -177,7 +177,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     /**
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#delete(java.lang.Object)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#delete(java.lang.Object)
      */
     @Override
     public <T> void delete(T object) {
@@ -186,7 +186,7 @@ public class PojoResourceImpl implements PojoResource {
 
     /**
      * 
-     * @see org.tools.hqlbuilder.resteasy.PojoResource#execute(java.lang.String, int, java.util.List)
+     * @see org.tools.hqlbuilder.webservice.resteasy.PojoResource#execute(java.lang.String, int, java.util.List)
      */
     @Override
     public ExecutionResult execute(String hql, int max, List<QueryParameter> queryParameters) {

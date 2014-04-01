@@ -16,7 +16,7 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/test/spring-service-config.xml"/>
 
-	<bean id="hqlWebService" class="org.tools.hqlbuilder.service.HqlWebServiceImpl" scope="singleton" lazy-init="false">
+	<bean id="hqlWebService" class="org.tools.hqlbuilder.webservice.HqlWebServiceImpl" scope="singleton" lazy-init="false">
 		<property name="hqlService" ref="hqlService" />
 	</bean>
 

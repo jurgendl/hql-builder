@@ -13,7 +13,7 @@
 
 	<bean id="httpHqlbuilderService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter" p:service-ref="hqlWebService">
 		<property name="serviceInterface">
-			<value>org.tools.hqlbuilder.service.HqlWebService</value>
+			<value>org.tools.hqlbuilder.webservice.HqlWebService</value>
 		</property>
 	</bean>
 
