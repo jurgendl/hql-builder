@@ -50,7 +50,7 @@ public class HqlBuilder {
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
             final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
             hqlServiceClient.createScript();
-            List<Object> results = hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults();
+            List<Object> results = hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults().getValue();
             if (results.size() == 0) {
                 Pojo object = new Pojo();
                 object.setValue("value");

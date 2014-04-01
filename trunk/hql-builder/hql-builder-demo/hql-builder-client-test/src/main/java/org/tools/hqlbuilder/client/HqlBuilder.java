@@ -37,7 +37,7 @@ public class HqlBuilder {
         final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
         try {
             logger.debug(hqlServiceClient.getConnectionInfo());
-            if (hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults().size() == 0) {
+            if (hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults().getValue().size() == 0) {
                 try {
                     hqlServiceClient.save(new Pojo());
                 } catch (ValidationException e) {

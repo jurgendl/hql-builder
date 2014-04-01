@@ -19,7 +19,7 @@ import org.jboss.resteasy.annotations.GZIP;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.webcommon.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
 
 @Path("/pojo")
 @Pretty
