@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.jaxb;
+package org.tools.hqlbuilder.webcommon.jaxb;
 
 import java.util.HashMap;
 import java.util.Map;

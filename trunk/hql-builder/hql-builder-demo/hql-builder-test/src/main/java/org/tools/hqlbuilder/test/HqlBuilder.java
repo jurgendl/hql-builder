@@ -12,6 +12,7 @@ import org.tools.hqlbuilder.client.HqlServiceClient;
 import org.tools.hqlbuilder.client.HqlServiceClientImpl;
 import org.tools.hqlbuilder.client.HqlServiceClientLoader;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue;
 
 public class HqlBuilder {
@@ -49,7 +50,7 @@ public class HqlBuilder {
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-" + v + ".xml");
             final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
             hqlServiceClient.createScript();
-            List<Object> results = hqlServiceClient.execute("from Pojo", Integer.MAX_VALUE).getResults();
+            List<Object> results = hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults();
             if (results.size() == 0) {
                 Pojo object = new Pojo();
                 object.setValue("value");

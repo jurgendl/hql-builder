@@ -166,6 +166,7 @@ import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
+import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
 import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
@@ -1151,8 +1152,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private ExecutionResult doQuery(String hqlGetText, int maxresults) {
-        return hqlService.execute(hqlGetText, maxresults,
-                EList.convertRecords(parametersEDT.getRecords()).toArray(new QueryParameter[parametersEDT.getRecordCount()]));
+        return hqlService.execute(new QueryParameters(hqlGetText, maxresults, EList.convertRecords(parametersEDT.getRecords()).toArray(
+                new QueryParameter[parametersEDT.getRecordCount()])));
     }
 
     private void afterQuery(Throwable ex) {

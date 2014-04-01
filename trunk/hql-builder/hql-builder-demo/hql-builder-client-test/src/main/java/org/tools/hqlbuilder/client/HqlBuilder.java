@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.swingeasy.UIUtils;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.test.Pojo;
 
@@ -36,7 +37,7 @@ public class HqlBuilder {
         final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
         try {
             logger.debug(hqlServiceClient.getConnectionInfo());
-            if (hqlServiceClient.execute("from Pojo", Integer.MAX_VALUE).getResults().size() == 0) {
+            if (hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults().size() == 0) {
                 try {
                     hqlServiceClient.save(new Pojo());
                 } catch (ValidationException e) {
