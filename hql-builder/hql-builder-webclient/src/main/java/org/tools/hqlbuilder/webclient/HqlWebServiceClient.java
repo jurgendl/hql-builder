@@ -49,7 +49,7 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         try {
             HqlWebServiceClient hc = new HqlWebServiceClient();
             hc.afterPropertiesSet();
-            System.out.println(hc.execute(new QueryParameters("from Pojo")));
+            System.out.println(hc.execute(new QueryParameters("from Pojo where id=:id", new QueryParameter("1000l", "id", 1000l))));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
