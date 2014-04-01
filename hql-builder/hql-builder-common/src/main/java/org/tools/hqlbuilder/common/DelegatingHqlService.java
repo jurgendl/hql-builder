@@ -22,23 +22,8 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
-    public ExecutionResult execute(String string, QueryParameter... queryParameters) {
-        return getDelegate().execute(string, queryParameters);
-    }
-
-    @Override
-    public ExecutionResult execute(String string, List<QueryParameter> queryParameters) {
-        return getDelegate().execute(string, queryParameters);
-    }
-
-    @Override
-    public ExecutionResult execute(String string, int max, QueryParameter... queryParameters) {
-        return getDelegate().execute(string, max, queryParameters);
-    }
-
-    @Override
-    public ExecutionResult execute(String string, int max, List<QueryParameter> queryParameters) {
-        return getDelegate().execute(string, max, queryParameters);
+    public ExecutionResult execute(QueryParameters queryParameters) {
+        return getDelegate().execute(queryParameters);
     }
 
     @Override

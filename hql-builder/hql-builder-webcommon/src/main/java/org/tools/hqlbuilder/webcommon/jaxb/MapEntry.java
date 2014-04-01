@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.jaxb;
+package org.tools.hqlbuilder.webcommon.jaxb;
 
 import javax.xml.bind.annotation.XmlElement;
 

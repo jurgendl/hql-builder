@@ -55,6 +55,7 @@ import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.ObjectWrapper;
 import org.tools.hqlbuilder.common.QueryParameter;
+import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
 import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
@@ -261,19 +262,11 @@ public class HqlServiceImpl implements HqlService {
         return createQueryTranslator.getSQLString();
     }
 
-    /**
-     * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, int, java.util.List)
-     */
     @Override
-    public ExecutionResult execute(String hql, int max, List<QueryParameter> queryParameters) {
-        return execute(hql, max, queryParameters.toArray(new QueryParameter[queryParameters.size()]));
-    }
-
-    /**
-     * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, int, org.tools.hqlbuilder.common.QueryParameter[])
-     */
-    @Override
-    public ExecutionResult execute(String hql, int max, QueryParameter... queryParameters) {
+    public ExecutionResult execute(QueryParameters obj) {
+        String hql = obj.getHql();
+        int max = obj.getMax();
+        List<QueryParameter> queryParameters = obj.getParameters();
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");
         }
@@ -290,7 +283,7 @@ public class HqlServiceImpl implements HqlService {
                 }
                 for (ClassNode cn : getHibernateWebResolver().getClasses()) {
                     if (c.isAssignableFrom(cn.getType())) {
-                        ExecutionResult it = execute(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), max, queryParameters);
+                        ExecutionResult it = execute(new QueryParameters(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), max, queryParameters));
                         if (result == null) {
                             result = it;
                         } else {
@@ -377,7 +370,7 @@ public class HqlServiceImpl implements HqlService {
     }
 
     @SuppressWarnings("unchecked")
-    protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, QueryParameter... queryParameters) {
+    protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, List<QueryParameter> queryParameters) {
         long start = System.currentTimeMillis();
         QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         String sql = queryTranslator.getSQLString();
@@ -757,22 +750,6 @@ public class HqlServiceImpl implements HqlService {
             throw new IllegalArgumentException("path");
         }
         return t.cast(new ObjectWrapper(o).get(path));
-    }
-
-    /**
-     * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, java.util.List)
-     */
-    @Override
-    public ExecutionResult execute(String hql, List<QueryParameter> queryParameters) {
-        return execute(hql, Integer.MAX_VALUE, queryParameters);
-    }
-
-    /**
-     * @see org.tools.hqlbuilder.common.HqlService#execute(java.lang.String, org.tools.hqlbuilder.common.QueryParameter[])
-     */
-    @Override
-    public ExecutionResult execute(String hql, QueryParameter... queryParameters) {
-        return execute(hql, Integer.MAX_VALUE, queryParameters);
     }
 
     /**

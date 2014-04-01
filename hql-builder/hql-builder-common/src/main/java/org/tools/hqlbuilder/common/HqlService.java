@@ -13,13 +13,7 @@ public interface HqlService {
 
     public abstract String getSqlForHql(String hql);
 
-    public abstract ExecutionResult execute(String string, QueryParameter... queryParameters);
-
-    public abstract ExecutionResult execute(String string, List<QueryParameter> queryParameters);
-
-    public abstract ExecutionResult execute(String string, int max, QueryParameter... queryParameters);
-
-    public abstract ExecutionResult execute(String string, int max, List<QueryParameter> queryParameters);
+    public abstract ExecutionResult execute(QueryParameters queryParameters);
 
     public abstract HibernateWebResolver getHibernateWebResolver();
 

@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.resteasy;
+package org.tools.hqlbuilder.webcommon.resteasy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
