@@ -5,13 +5,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jboss.resteasy.annotations.GZIP;
+import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.jaxb.XmlWrapper;
 
 @Path("/pojo")
@@ -131,23 +136,56 @@ public interface PojoResource {
     @Produces({ MediaType.TEXT_PLAIN })
     public abstract String getLuceneHelpURL();
 
-    // public abstract ExecutionResult execute(String string, QueryParameter... queryParameters);
+    /**
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/propertynames?key=...&parts=...&parts=...
+     */
+    @GET
+    @Path("/propertynames.")
+    @Produces({ MediaType.TEXT_PLAIN })
+    public abstract XmlWrapper<List<String>> getPropertyNames(@QueryParam("key") String key, @QueryParam("parts") String[] parts);
 
-    // public abstract ExecutionResult execute(String string, List<QueryParameter> queryParameters);
+    /**
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/sql?sql=...&sql=...
+     */
+    @GET
+    @Path("/sql")
+    @Produces({ MediaType.TEXT_PLAIN })
+    public abstract void sql(@QueryParam("sql") String[] sql);
 
-    // public abstract ExecutionResult execute(String string, int max, QueryParameter... queryParameters);
+    /**
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/findparameters?hql=...
+     */
+    @GET
+    @Path("/findparameters")
+    @Produces({ MediaType.TEXT_XML })
+    public abstract List<QueryParameter> findParameters(@QueryParam("hql") String hql);
 
-    // public abstract ExecutionResult execute(String string, int max, List<QueryParameter> queryParameters);
+    /**
+     * @see [put] http://localhost:80/hqlbuilder/rest/pojo/save [body]
+     */
+    @PUT
+    @Path("/save")
+    @Consumes({ MediaType.TEXT_XML })
+    @Produces({ MediaType.TEXT_XML })
+    public abstract <T> T save(T object);
+
+    /**
+     * @see [delete] http://localhost:80/hqlbuilder/rest/pojo/delete [body]
+     */
+    @DELETE
+    @Path("/delete")
+    @Consumes({ MediaType.TEXT_XML })
+    @Produces({ MediaType.TEXT_XML })
+    public abstract <T> void delete(T object);
+
+    /**
+     * @see [delete] http://localhost:80/hqlbuilder/rest/pojo/execute?hql=...&max=... [body]
+     */
+    @GET
+    @Path("/execute")
+    @Consumes({ MediaType.TEXT_XML })
+    @Produces({ MediaType.TEXT_XML })
+    public abstract ExecutionResult execute(@QueryParam("hql") String hql, @QueryParam("max") int max, List<QueryParameter> queryParameters);
 
     // public abstract HibernateWebResolver getHibernateWebResolver();
-
-    // public abstract <T> T save(T object) throws ValidationException;
-
-    // public abstract <T> void delete(T object);
-
-    // public abstract List<QueryParameter> findParameters(String hql);
-
-    // public abstract List<String> getPropertyNames(Object key, String[] parts);
-
-    // public abstract void sql(String... sql);
 }

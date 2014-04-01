@@ -702,7 +702,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         int pos = Math.max(0, Math.max(before.lastIndexOf(getNewline()), before.lastIndexOf(' ')));
         before = before.substring(pos + 1, before.length() - 1);
         String[] parts = before.split("\\Q.\\E");
-        Object key = aliases.get(parts[0]);
+        String key = aliases.get(parts[0]);
 
         List<String> propertyNames = hqlService.getPropertyNames(key, parts);
 

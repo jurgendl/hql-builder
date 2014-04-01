@@ -5,21 +5,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "result")
 public class ExecutionResult implements Serializable {
     private static final long serialVersionUID = 7646264311502956246L;
 
+    @XmlElementWrapper
     private List<Object> results;
 
+    @XmlElementWrapper
     private Map<String, String> fromAliases;
 
     private String sql;
 
+    @XmlElementWrapper
     private String[] queryReturnAliases;
 
+    @XmlElementWrapper
     private String[][] scalarColumnNames;
 
+    @XmlElementWrapper
     private String[] sqlAliases;
 
+    @XmlElementWrapper
     private String[] queryReturnTypeNames;
 
     private int size;
