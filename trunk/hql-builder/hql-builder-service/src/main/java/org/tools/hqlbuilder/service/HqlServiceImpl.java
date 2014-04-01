@@ -623,7 +623,11 @@ public class HqlServiceImpl implements HqlService {
         @SuppressWarnings("unchecked")
         Map<String, Object/* NamedQueryDefinition */> namedQueries = get(getSessionFactory(), "namedQueries", Map.class);
         for (Map.Entry<String, Object/* NamedQueryDefinition */> entry : namedQueries.entrySet()) {
-            namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
+            try {
+                namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
+            } catch (Exception ex) {
+                logger.error("getNamedQueries: " + ex);
+            }
         }
         return namedQueriesRv;
     }
