@@ -164,6 +164,7 @@ import org.swingeasy.system.SystemSettings;
 import org.tools.hqlbuilder.client.HqlWizard.HqlWizardListener;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.GroovyCompiler;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;

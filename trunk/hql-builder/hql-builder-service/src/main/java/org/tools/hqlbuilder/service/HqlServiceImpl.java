@@ -50,6 +50,7 @@ import org.hibernate.type.Type;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.GroovyCompiler;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
 import org.tools.hqlbuilder.common.HqlService;
@@ -383,16 +384,20 @@ public class HqlServiceImpl implements HqlService {
         int index = 0;
         for (QueryParameter value : queryParameters) {
             try {
+                Object valueCompiled = value.getValue();
+                if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
+                    valueCompiled = GroovyCompiler.eval(value.getValueText());
+                }
                 if (value.getName() != null) {
-                    if (value.getValue() instanceof Collection) {
+                    if (valueCompiled instanceof Collection) {
                         @SuppressWarnings({ "rawtypes" })
-                        Object[] l = new ArrayList((Collection) value.getValue()).toArray();
+                        Object[] l = new ArrayList((Collection) valueCompiled).toArray();
                         createQuery.setParameterList(value.getName(), l);
                     } else {
-                        createQuery.setParameter(value.getName(), value.getValue());
+                        createQuery.setParameter(value.getName(), valueCompiled);
                     }
                 } else {
-                    createQuery.setParameter(index++, value.getValue());
+                    createQuery.setParameter(index++, valueCompiled);
                 }
             } catch (org.hibernate.QueryParameterException ex) {
                 // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
