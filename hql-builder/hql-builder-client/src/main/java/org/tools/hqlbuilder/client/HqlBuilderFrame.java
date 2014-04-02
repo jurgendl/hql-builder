@@ -2276,6 +2276,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
         List<QueryParameter> qps = new ArrayList<QueryParameter>();
+        int index = 0;
         for (String el : parts) {
             el = el.trim();
             try {
@@ -2284,12 +2285,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     String[] p = el.split("=");
                     Object val = GroovyCompiler.eval(p[1]);
                     logger.debug(p[0] + "=" + val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(p[1], p[0], val);
+                    QueryParameter qp = new QueryParameter(p[0], p[1], val);
                     qps.add(qp);
                 } else {
                     Object val = GroovyCompiler.eval(el);
                     logger.debug(val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(el, null, val);
+                    QueryParameter qp = new QueryParameter(index++, el, val);
                     qps.add(qp);
                 }
             } catch (Exception ex) {
@@ -2311,7 +2312,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 for (EListRecord<QueryParameter> rec : parametersEDT.getRecords()) {
                     if (rec.get().getName().equals(qp.getName())) {
                         rec.get().setName(qp.getName());
-                        rec.get().setText(qp.getText());
+                        rec.get().setValueText(qp.getValueText());
+                        rec.get().setIndex(qp.getIndex());
                         rec.get().setValue(qp.getValue());
                         exists = true;
                         break;
@@ -3084,9 +3086,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             parametersEDT.setSelectedRecord(record);
         }
 
-        selectedQueryParameter.setText(text);
+        selectedQueryParameter.setValueText(text);
         selectedQueryParameter.setName(name);
         selectedQueryParameter.setValue(value);
+        selectedQueryParameter.setIndex(-1);
 
         ingoreParameterListSelectionListener = false;
 
@@ -3108,7 +3111,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         selectedQueryParameter = parametersEDT.getSelectedRecord().get();
         parameterValue.setText(selectedQueryParameter.toString());
         parameterName.setText((selectedQueryParameter.getName() == null) ? "" : selectedQueryParameter.getName());
-        parameterBuilder.setText(selectedQueryParameter.getText());
+        parameterBuilder.setText(selectedQueryParameter.getValueText());
+        selectedQueryParameter.getIndex();
     }
 
     protected void set_null() {
