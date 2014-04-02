@@ -64,7 +64,9 @@ public class PojoResourceImpl implements PojoResource {
     public XmlWrapper<List<String>> search(String text, String typeName, int hitsPerPage) {
         try {
             return new XmlWrapper<List<String>>(hqlWebService.search(text, typeName, hitsPerPage));
-        } catch (UnsupportedOperationException | IOException ex) {
+        } catch (UnsupportedOperationException ex) {
+            throw new RuntimeException(ex);
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
