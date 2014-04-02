@@ -1,7 +1,8 @@
-package org.tools.hqlbuilder.client;
+package org.tools.hqlbuilder.common;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 /**
  * @author Jurgen
@@ -43,15 +44,19 @@ public class GroovyCompiler {
      * @throws Exception
      * @throws RuntimeException
      */
-    public static Object eval(String code) throws Exception {
+    public static Object eval(String code) {
         if (!success()) {
             throw new RuntimeException("initialization exception");
         }
 
         try {
             return groovyengine.eval(imports + code);
-        } catch (Exception ex) {
-            return groovyengine.eval("'" + code + "'");
+        } catch (ScriptException ex1) {
+            try {
+                return groovyengine.eval("'" + code + "'");
+            } catch (ScriptException ex2) {
+                throw new RuntimeException("ScriptException:\n" + ex1 + "\n" + ex2);
+            }
         }
     }
 
