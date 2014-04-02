@@ -277,7 +277,9 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         Object instance;
         try {
             instance = clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
         ((ProxyObject) instance).setHandler(this);
