@@ -236,6 +236,19 @@ public class CommonUtils {
         return create(className, new Class[] { parameterTypes }, new Object[] { initargs });
     }
 
+    public static Object create(String className, Object initargs) {
+        return create(className, new Class[] { initargs.getClass() }, new Object[] { initargs });
+    }
+
+    public static Object create(String className, Object[] initargs) {
+        @SuppressWarnings("rawtypes")
+        Class[] parameterTypes = new Class[initargs.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            parameterTypes[i] = initargs[i].getClass();
+        }
+        return create(className, parameterTypes, initargs);
+    }
+
     public static Object create(String className, @SuppressWarnings("rawtypes") Class[] parameterTypes, Object[] initargs) {
         try {
             return Class.forName(className).getConstructor(parameterTypes).newInstance(initargs);
