@@ -13,7 +13,7 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
 
     private transient Object value;
 
-    @XmlAttribute
+    @XmlAttribute(name = "pname", required = false)
     private String name;
 
     @XmlAttribute(name = "value", required = true)

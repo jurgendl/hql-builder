@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jboss.resteasy.annotations.GZIP;
+import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
@@ -170,6 +171,7 @@ public interface PojoResource {
 	@GET
 	@Path("/findparameters")
 	@Produces({ MediaType.TEXT_XML })
+	@Wrapped
 	public abstract List<QueryParameter> findParameters(
 			@QueryParam("hql") String hql);
 

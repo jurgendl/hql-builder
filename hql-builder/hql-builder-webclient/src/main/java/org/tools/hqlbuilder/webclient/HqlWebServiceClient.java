@@ -43,19 +43,7 @@ import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 public class HqlWebServiceClient implements PojoResource, MethodHandler, InitializingBean {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlWebServiceClient.class);
 
-    protected URI uri = URI.create("http://localhost:80/hqlbuilder/rest");
-
-    public static void main(String[] args) {
-        try {
-            HqlWebServiceClient hc = new HqlWebServiceClient();
-            hc.afterPropertiesSet();
-            // System.out.println(hc.getHibernateInfo());
-            // System.out.println(hc.execute(new QueryParameters("from Pojo")));
-            System.out.println(hc.findParameters("from Pojo where id=:id"));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+    protected URI uri;
 
     protected PojoResource pojoResource;
 
@@ -68,14 +56,23 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
      */
     @Override
     public Object invoke(Object self, Method method, Method forwarder, Object[] args) throws Throwable {
+        logger.debug("Method=" + method);
         Produces produces = method.getAnnotation(Produces.class);
+        logger.debug("produces=" + (produces == null ? null : Arrays.toString(produces.value())));
         Consumes consumes = method.getAnnotation(Consumes.class);
+        logger.debug("consumes=" + (consumes == null ? null : Arrays.toString(consumes.value())));
         GET get = method.getAnnotation(GET.class);
+        logger.debug("GET=" + get);
         PUT put = method.getAnnotation(PUT.class);
+        logger.debug("PUT=" + put);
         POST post = method.getAnnotation(POST.class);
+        logger.debug("POST=" + post);
         DELETE delete = method.getAnnotation(DELETE.class);
+        logger.debug("DELETE=" + delete);
         HEAD head = method.getAnnotation(HEAD.class);
+        logger.debug("HEAD=" + head);
         OPTIONS options = method.getAnnotation(OPTIONS.class);
+        logger.debug("OPTIONS=" + options);
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Class<?>[] parameterTypes = method.getParameterTypes();
         UriBuilder uriBuilder = UriBuilder.fromUri(uri).path(PojoResource.class).path(method);
@@ -92,6 +89,7 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
             }
         }
         String uriPath = uriBuilder.build().toASCIIString();
+        logger.debug("URI=" + uriPath);
         System.out.println(uriPath);
         ClientRequest request = new ClientRequest(uriPath);
         for (int i = 0; i < parameterTypes.length; i++) {
