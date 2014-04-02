@@ -8,7 +8,7 @@
 	<description>hql-builder-parent</description>
 	<url>http://hql-builder.googlecode.com</url>
 	<properties>
-		<targetJdk>1.7</targetJdk>
+		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<version.hibernate>4.2</version.hibernate>

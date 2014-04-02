@@ -6,7 +6,7 @@
 			<param name="ConversionPattern" value="%m%n" />
 		</layout>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
-			<param name="LevelMin" value="INFO" />
+			<param name="LevelMin" value="DEBUG" />
 			<param name="LevelMax" value="FATAL" />
 			<param name="AcceptOnMatch" value="true" />
 		</filter>
