@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
 
 @XmlRootElement(name = "result")
 public class ExecutionResult implements Serializable {
@@ -35,10 +34,13 @@ public class ExecutionResult implements Serializable {
     @XmlElementWrapper
     private String[] queryReturnTypeNames;
 
+    @XmlAttribute
     private int size;
 
+    @XmlAttribute
     private long duration;
 
+    @XmlAttribute
     private long overhead;
 
     public ExecutionResult() {

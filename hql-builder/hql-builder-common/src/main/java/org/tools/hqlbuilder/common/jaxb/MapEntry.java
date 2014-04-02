@@ -2,6 +2,8 @@ package org.tools.hqlbuilder.common.jaxb;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import org.tools.hqlbuilder.common.XmlWrapper;
+
 public class MapEntry {
     @XmlElement(name = "key", required = false)
     XmlWrapper<?> key;

@@ -662,9 +662,10 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(param, simpleName);
+                QueryParameter p = new QueryParameter(param, null, simpleName);
                 parameters.add(p);
             }
+
             Integer mi = CommonUtils.call(pminof, "getOrdinalParameterCount", Integer.class);
             for (int i = 1; i <= mi; i++) {
                 String simpleName = "?";
@@ -674,7 +675,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(i, simpleName);
+                QueryParameter p = new QueryParameter(i, null, simpleName);
                 parameters.add(p);
             }
         } finally {
@@ -872,7 +873,7 @@ public class HqlServiceImpl implements HqlService {
      * @see org.tools.hqlbuilder.common.HqlService#sql(java.lang.String[])
      */
     @Override
-    public void sql(final String... sql) {
+    public void sql(final String[] sql) {
         for (String s : sql) {
             try {
                 logger.debug(s);
