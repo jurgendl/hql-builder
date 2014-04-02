@@ -50,6 +50,9 @@
 	<logger name="org.apache.http.wire">
 		<level value="warn" />
 	</logger>
+	<logger name="org.eclipse.jetty">
+		<level value="warn" />
+	</logger>
 	<root>
 		<appender-ref ref="CONSOLE" />
 	</root>
