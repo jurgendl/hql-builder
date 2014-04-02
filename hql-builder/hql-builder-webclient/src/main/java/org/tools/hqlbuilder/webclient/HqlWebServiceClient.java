@@ -62,17 +62,29 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         Consumes consumes = method.getAnnotation(Consumes.class);
         logger.debug("consumes=" + (consumes == null ? null : Arrays.toString(consumes.value())));
         GET get = method.getAnnotation(GET.class);
-        logger.debug("GET=" + get);
+        if (get != null) {
+            logger.debug("GET=" + get);
+        }
         PUT put = method.getAnnotation(PUT.class);
-        logger.debug("PUT=" + put);
+        if (put != null) {
+            logger.debug("PUT=" + put);
+        }
         POST post = method.getAnnotation(POST.class);
-        logger.debug("POST=" + post);
+        if (post != null) {
+            logger.debug("POST=" + post);
+        }
         DELETE delete = method.getAnnotation(DELETE.class);
-        logger.debug("DELETE=" + delete);
+        if (delete != null) {
+            logger.debug("DELETE=" + delete);
+        }
         HEAD head = method.getAnnotation(HEAD.class);
-        logger.debug("HEAD=" + head);
+        if (head != null) {
+            logger.debug("HEAD=" + head);
+        }
         OPTIONS options = method.getAnnotation(OPTIONS.class);
-        logger.debug("OPTIONS=" + options);
+        if (options != null) {
+            logger.debug("OPTIONS=" + options);
+        }
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Class<?>[] parameterTypes = method.getParameterTypes();
         UriBuilder uriBuilder = UriBuilder.fromUri(uri).path(PojoResource.class).path(method);
