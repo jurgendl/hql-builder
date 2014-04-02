@@ -24,6 +24,11 @@
 			<artifactId>hql-builder-webservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.tools.hql-builder</groupId>
+			<artifactId>hql-builder-webclient</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

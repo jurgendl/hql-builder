@@ -25,12 +25,12 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/webservice/resteasy-servlet.xml"/>
 
-	<bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">
+	<!-- <bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">
 		<property name="providers">
 			<list>
 				<oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.test"/>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 
 </beans>
