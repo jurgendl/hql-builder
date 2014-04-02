@@ -2276,9 +2276,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
         List<QueryParameter> qps = new ArrayList<QueryParameter>();
-        int index = 0;
-        for (String el : parts) {
-            el = el.trim();
+        for (int i = 0; i < parts.size(); i++) {
+            String el = parts.get(i).trim();
             try {
                 logger.debug(el);
                 if (el.contains("=")) {
@@ -2290,7 +2289,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 } else {
                     Object val = GroovyCompiler.eval(el);
                     logger.debug(val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(index++, el, val);
+                    QueryParameter qp = new QueryParameter(i + 1, el, val);
                     qps.add(qp);
                 }
             } catch (Exception ex) {

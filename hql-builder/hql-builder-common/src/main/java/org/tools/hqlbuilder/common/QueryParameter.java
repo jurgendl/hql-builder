@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.CompareToBuilder;
 
 @XmlRootElement(name = "parameter")
 public class QueryParameter implements Serializable, Comparable<QueryParameter> {
@@ -60,38 +61,6 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         afterInit();
     }
 
-    /**
-     * afterInit
-     */
-    public void afterInit() {
-        StringBuilder sb = new StringBuilder();
-
-        if (name != null) {
-            sb.append(name).append("=");
-        }
-        if (index != null) {
-            sb.append(index).append("=");
-        }
-
-        if (value == null) {
-            sb.append("null");
-        } else {
-            String cb = value.getClass().getName().replaceAll("java.lang.", "");
-            sb.append(cb).append(" ").append(value.toString());
-        }
-
-        toString = sb.toString();
-    }
-
-    /**
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return StringUtils.isBlank(toString) ? "?" : toString;
-    }
-
     public Object getValue() {
         return this.value;
     }
@@ -121,15 +90,6 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         this.toString = toString;
     }
 
-    /**
-     * 
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    @Override
-    public int compareTo(QueryParameter o) {
-        return 0;
-    }
-
     public void clear() {
         setValue(null);
     }
@@ -150,5 +110,97 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
     public void setValueText(String valueText) {
         this.valueText = valueText;
         afterInit();
+    }
+
+    /**
+     * afterInit
+     */
+    public void afterInit() {
+        StringBuilder sb = new StringBuilder();
+
+        if (name != null) {
+            sb.append(name).append("=");
+        }
+        if (index != null) {
+            sb.append(index).append("=");
+        }
+
+        if (value == null) {
+            sb.append("null");
+        } else {
+            String cb = value.getClass().getName().replaceAll("java.lang.", "");
+            sb.append(cb).append(" ").append(value.toString());
+        }
+
+        toString = sb.toString();
+    }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return StringUtils.isBlank(toString) ? "?" : toString;
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.index == null) ? 0 : this.index.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.valueText == null) ? 0 : this.valueText.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        QueryParameter other = (QueryParameter) obj;
+        if (this.index == null) {
+            if (other.index != null) {
+                return false;
+            }
+        } else if (!this.index.equals(other.index)) {
+            return false;
+        }
+        if (this.name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!this.name.equals(other.name)) {
+            return false;
+        }
+        if (this.valueText == null) {
+            if (other.valueText != null) {
+                return false;
+            }
+        } else if (!this.valueText.equals(other.valueText)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(QueryParameter o) {
+        return new CompareToBuilder().append(index, o.index).append(name, o.name).toComparison();
     }
 }

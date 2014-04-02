@@ -228,6 +228,22 @@ public class CommonUtils {
         call(object, methodName, Void.TYPE);
     }
 
+    public static Object create(String className) {
+        return create(className, new Class[0], new Object[0]);
+    }
+
+    public static Object create(String className, Class<?> parameterTypes, Object initargs) {
+        return create(className, new Class[] { parameterTypes }, new Object[] { initargs });
+    }
+
+    public static Object create(String className, @SuppressWarnings("rawtypes") Class[] parameterTypes, Object[] initargs) {
+        try {
+            return Class.forName(className).getConstructor(parameterTypes).newInstance(initargs);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
         logger.debug(String.valueOf(object));
         logger.debug(methodName);
