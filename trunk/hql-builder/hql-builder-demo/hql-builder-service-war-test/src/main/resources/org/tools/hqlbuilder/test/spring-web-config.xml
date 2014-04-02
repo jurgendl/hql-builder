@@ -30,12 +30,7 @@
 			<list>
 				<!-- <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder.test"/> -->
 				<bean class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver">
-					<constructor-arg>
-						<list>
-							<value>org.tools.hqlbuilder.common</value>
-							<value>org.tools.hqlbuilder.test</value>
-						</list>
-					</constructor-arg>
+					<constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg>
 				</bean>
 			</list>
 		</property>
