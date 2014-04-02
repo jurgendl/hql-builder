@@ -12,8 +12,26 @@
 	<packaging>war</packaging>
 	<properties>
 		<contextRoot>hqlbuilder</contextRoot>
+		<version.jetty>7.6.14.v20131031</version.jetty>
+		<!-- <version.jetty>8.1.14.v20131031</version.jetty> requires JDK 1.7 -->
+		<!-- <version.jetty>9.1.3.v20140225</version.jetty> requires JDK 1.7 -->
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${version.jetty}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-spring</artifactId>
+			<version>${version.jetty}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${version.jetty}</version>
+		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-service-test</artifactId>
