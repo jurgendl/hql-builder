@@ -27,7 +27,7 @@ public class HqlWebServiceClientTest {
             System.out.println(hc.getNamedQueries());
             System.out.println(hc.getProperties("org.tools.hqlbuilder.test.Pojo"));
             System.out.println(hc.getReservedKeywords());
-            String hql = "select version from Pojo where id=?";
+            String hql = "from Pojo where id=:id";
             List<QueryParameter> parameters = hc.findParameters(hql);
             System.out.println(parameters);
             parameters.get(0).setValueText("1l");
