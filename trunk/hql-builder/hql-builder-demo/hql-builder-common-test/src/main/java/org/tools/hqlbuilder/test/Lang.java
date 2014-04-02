@@ -1,9 +1,11 @@
 package org.tools.hqlbuilder.test;
 
 import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.AccessType;
 
+@XmlRootElement
 @Entity
 @AccessType("field")
 public class Lang extends Parent {

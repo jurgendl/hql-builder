@@ -4,9 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.AccessType;
 
+@XmlRootElement
 @Entity
 @AccessType("field")
 public class Rel2Trans extends Parent {
