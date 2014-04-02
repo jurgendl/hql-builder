@@ -25,8 +25,12 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         super();
     }
 
-    public QueryParameter(String text, String name, Object value) {
-        this.text = text;
+    public QueryParameter(String name, String valueText) {
+        this(valueText, name, null);
+    }
+
+    public QueryParameter(String valueText, String name, Object value) {
+        this.text = valueText;
         this.name = name;
         this.value = value;
         afterInit();
