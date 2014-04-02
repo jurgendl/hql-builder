@@ -13,11 +13,14 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
 
     private transient Object value;
 
-    @XmlAttribute(name = "pname", required = false)
+    @XmlAttribute
     private String name;
 
-    @XmlAttribute(name = "value", required = true)
-    private String text;
+    @XmlAttribute
+    private String valueText;
+
+    @XmlAttribute
+    private Integer index;
 
     private transient String toString;
 
@@ -25,12 +28,33 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         super();
     }
 
-    public QueryParameter(String name, String valueText) {
-        this(valueText, name, null);
+    public QueryParameter(String name) {
+        this(null, name, null, null);
     }
 
-    public QueryParameter(String valueText, String name, Object value) {
-        this.text = valueText;
+    public QueryParameter(Integer index) {
+        this(index, null, null, null);
+    }
+
+    public QueryParameter(String name, String valueText) {
+        this(null, name, valueText, null);
+    }
+
+    public QueryParameter(Integer index, String valueText) {
+        this(index, null, valueText, null);
+    }
+
+    public QueryParameter(String name, String valueText, Object value) {
+        this(null, name, valueText, value);
+    }
+
+    public QueryParameter(Integer index, String valueText, Object value) {
+        this(index, null, valueText, value);
+    }
+
+    private QueryParameter(Integer index, String name, String valueText, Object value) {
+        this.index = index;
+        this.valueText = valueText;
         this.name = name;
         this.value = value;
         afterInit();
@@ -44,6 +68,9 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
 
         if (name != null) {
             sb.append(name).append("=");
+        }
+        if (index != null) {
+            sb.append(index).append("=");
         }
 
         if (value == null) {
@@ -71,6 +98,9 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
 
     public void setValue(Object value) {
         this.value = value;
+        if (valueText == null) {
+            valueText = String.valueOf(value);
+        }
         afterInit();
     }
 
@@ -80,15 +110,6 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
 
     public void setName(String name) {
         this.name = name;
-        afterInit();
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
         afterInit();
     }
 
@@ -113,13 +134,21 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         setValue(null);
     }
 
-    @Deprecated
-    final public String getType() {
-        return null;
+    public Integer getIndex() {
+        return this.index;
     }
 
-    @Deprecated
-    final public void setType(@SuppressWarnings("unused") String type) {
-        //
+    public void setIndex(Integer index) {
+        this.index = index;
+        afterInit();
+    }
+
+    public String getValueText() {
+        return this.valueText;
+    }
+
+    public void setValueText(String valueText) {
+        this.valueText = valueText;
+        afterInit();
     }
 }

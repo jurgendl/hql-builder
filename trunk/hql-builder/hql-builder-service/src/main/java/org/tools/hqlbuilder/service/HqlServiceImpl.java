@@ -662,7 +662,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter("", param, simpleName);
+                QueryParameter p = new QueryParameter(param, simpleName);
                 parameters.add(p);
             }
             Integer mi = CommonUtils.call(pminof, "getOrdinalParameterCount", Integer.class);
@@ -674,7 +674,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter("", null, i + ":" + simpleName);
+                QueryParameter p = new QueryParameter(i, i + ":" + simpleName);
                 parameters.add(p);
             }
         } finally {
