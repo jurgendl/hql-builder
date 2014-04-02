@@ -54,7 +54,6 @@ public class CommonUtils {
                     File f = new File(p);
                     URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { f.toURI().toURL() }, parent);
                     System.out.println(p + "\n\t" + urlClassLoader.loadClass(c).getName());
-                    urlClassLoader.close();
                 } catch (Throwable ex) {
                     System.out.println(p);
                 }
