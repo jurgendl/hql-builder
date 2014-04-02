@@ -29,6 +29,11 @@
 			<artifactId>hql-builder-webclient</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${version.resteasy}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
