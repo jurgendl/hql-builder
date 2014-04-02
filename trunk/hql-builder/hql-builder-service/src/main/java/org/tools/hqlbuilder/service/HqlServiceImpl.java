@@ -674,7 +674,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(i, i + ":" + simpleName);
+                QueryParameter p = new QueryParameter(i, simpleName);
                 parameters.add(p);
             }
         } finally {
