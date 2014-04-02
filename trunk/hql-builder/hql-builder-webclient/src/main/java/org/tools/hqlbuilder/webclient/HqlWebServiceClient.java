@@ -30,37 +30,46 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
+import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.HibernateWebResolver;
+import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.common.exceptions.ValidationException;
+import org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
-public class HqlWebServiceClient implements PojoResource, MethodHandler, InitializingBean {
+public class HqlWebServiceClient implements HqlService, MethodHandler, InitializingBean {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlWebServiceClient.class);
 
-    protected URI uri;
+    protected String serviceUrl;
 
     protected PojoResource pojoResource;
 
-    public HqlWebServiceClient() {
-        super();
+    public HqlWebServiceClient(String... packages) {
+        RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
+        ResteasyProviderFactory.getInstance().registerProviderInstance(new JAXBContextResolver(packages));
     }
 
     /**
      * @see javassist.util.proxy.MethodHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.reflect.Method, java.lang.Object[])
      */
+    @SuppressWarnings("deprecation")
     @Override
     public Object invoke(Object self, Method method, Method forwarder, Object[] args) throws Throwable {
         logger.debug("Method=" + method);
         Produces produces = method.getAnnotation(Produces.class);
-        logger.debug("produces=" + (produces == null ? null : Arrays.toString(produces.value())));
+        if (produces != null) {
+            logger.debug("produces=" + Arrays.toString(produces.value()));
+        }
         Consumes consumes = method.getAnnotation(Consumes.class);
-        logger.debug("consumes=" + (consumes == null ? null : Arrays.toString(consumes.value())));
+        if (consumes != null) {
+            logger.debug("consumes=" + Arrays.toString(consumes.value()));
+        }
         GET get = method.getAnnotation(GET.class);
         if (get != null) {
             logger.debug("GET=" + get);
@@ -87,7 +96,7 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         }
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        UriBuilder uriBuilder = UriBuilder.fromUri(uri).path(PojoResource.class).path(method);
+        UriBuilder uriBuilder = UriBuilder.fromUri(URI.create(getServiceUrl())).path(PojoResource.class).path(method);
         List<Object> notAcceptedParameters = new ArrayList<Object>(Arrays.asList(args));
         for (int i = 0; i < parameterTypes.length; i++) {
             for (Annotation parameterAnnotation : parameterAnnotations[i]) {
@@ -103,7 +112,11 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         String uriPath = uriBuilder.build().toASCIIString();
         logger.debug("URI=" + uriPath);
         System.out.println(uriPath);
-        ClientRequest request = new ClientRequest(uriPath);
+
+        ResteasyProviderFactory provider = ResteasyProviderFactory.getInstance();
+        org.jboss.resteasy.client.ClientRequest request = new org.jboss.resteasy.client.ClientRequest(uriBuilder,
+                org.jboss.resteasy.client.ClientRequest.getDefaultExecutor(), provider);
+
         for (int i = 0; i < parameterTypes.length; i++) {
             for (Annotation parameterAnnotation : parameterAnnotations[i]) {
                 if (parameterAnnotation instanceof MatrixParam) {
@@ -156,7 +169,7 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
             }
         }
         try {
-            ClientResponse<?> response = null;
+            org.jboss.resteasy.client.ClientResponse<?> response = null;
             if (get != null) {
                 response = request.get(method.getReturnType());
             } else if (put != null) {
@@ -172,13 +185,16 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
             } else {
                 throw new IllegalArgumentException();
             }
-            return response == null ? null : response.getEntity();
+            if (response.getStatus() != 200) {
+                String errorpage = response.getEntity(String.class);
+                throw new RuntimeException(errorpage);
+            }
+            return response.getEntity();
         } catch (org.jboss.resteasy.spi.UnhandledException ex) {
             return ex.getCause();
         }
     }
 
-    @Override
     public String ping() {
         return this.pojoResource.ping();
     }
@@ -189,13 +205,13 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
     }
 
     @Override
-    public XmlWrapper<SortedSet<String>> getClasses() {
-        return this.pojoResource.getClasses();
+    public SortedSet<String> getClasses() {
+        return this.pojoResource.getClasses().getValue();
     }
 
     @Override
-    public XmlWrapper<List<String>> getProperties(String classname) {
-        return this.pojoResource.getProperties(classname);
+    public List<String> getProperties(String classname) {
+        return this.pojoResource.getProperties(classname).getValue();
     }
 
     @Override
@@ -209,18 +225,18 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
     }
 
     @Override
-    public XmlWrapper<List<String>> search(String text, String typeName, int hitsPerPage) {
-        return this.pojoResource.search(text, typeName, hitsPerPage);
+    public List<String> search(String text, String typeName, int hitsPerPage) {
+        return this.pojoResource.search(text, typeName, hitsPerPage).getValue();
     }
 
     @Override
-    public XmlWrapper<Set<String>> getReservedKeywords() {
-        return this.pojoResource.getReservedKeywords();
+    public Set<String> getReservedKeywords() {
+        return this.pojoResource.getReservedKeywords().getValue();
     }
 
     @Override
-    public XmlWrapper<Map<String, String>> getNamedQueries() {
-        return this.pojoResource.getNamedQueries();
+    public Map<String, String> getNamedQueries() {
+        return this.pojoResource.getNamedQueries().getValue();
     }
 
     @Override
@@ -229,8 +245,8 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
     }
 
     @Override
-    public XmlWrapper<Map<String, String>> getHibernateInfo() {
-        return this.pojoResource.getHibernateInfo();
+    public Map<String, String> getHibernateInfo() {
+        return this.pojoResource.getHibernateInfo().getValue();
     }
 
     @Override
@@ -249,8 +265,8 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
     }
 
     @Override
-    public XmlWrapper<List<String>> getPropertyNames(String key, String[] parts) {
-        return this.pojoResource.getPropertyNames(key, parts);
+    public List<String> getPropertyNames(String key, String[] parts) {
+        return this.pojoResource.getPropertyNames(key, parts).getValue();
     }
 
     @Override
@@ -260,15 +276,13 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
 
     @Override
     public List<QueryParameter> findParameters(String hql) {
-        return this.pojoResource.findParameters(hql);
+        return this.pojoResource.findParameters(hql).getValue();
     }
 
-    @Override
     public void save(String pojo, Object object) {
         this.pojoResource.save(pojo, object);
     }
 
-    @Override
     public void delete(String pojo, Object object) {
         this.pojoResource.delete(pojo, object);
     }
@@ -298,11 +312,33 @@ public class HqlWebServiceClient implements PojoResource, MethodHandler, Initial
         pojoResource = PojoResource.class.cast(instance);
     }
 
-    public URI getUri() {
-        return this.uri;
+    @Override
+    public HibernateWebResolver getHibernateWebResolver() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    public void setUri(URI uri) {
-        this.uri = uri;
+    @Override
+    public <T> T save(T object) throws ValidationException {
+        save(object.getClass().getName(), object);
+        return null;
+    }
+
+    @Override
+    public <T> void delete(T object) {
+        delete(object.getClass().getName(), object);
+    }
+
+    @Override
+    public void log() {
+        //
+    }
+
+    public String getServiceUrl() {
+        return this.serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 }

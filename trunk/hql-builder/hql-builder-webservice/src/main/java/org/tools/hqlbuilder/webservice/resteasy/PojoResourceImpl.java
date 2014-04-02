@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.common.XmlWrapper;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 import org.tools.hqlbuilder.webservice.HqlWebService;
 
@@ -117,8 +117,8 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     @Override
-    public List<QueryParameter> findParameters(String hql) {
-        return hqlWebService.findParameters(hql);
+    public XmlWrapper<List<QueryParameter>> findParameters(String hql) {
+        return new XmlWrapper<List<QueryParameter>>(hqlWebService.findParameters(hql));
     }
 
     @Override
@@ -134,5 +134,15 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public ExecutionResult execute(QueryParameters queryParameters) {
         return hqlWebService.execute(queryParameters);
+    }
+
+    @Override
+    public QueryParameter dummy1() {
+        return new QueryParameter("name", "value", "type");
+    }
+
+    @Override
+    public QueryParameters dummy2() {
+        return new QueryParameters("x", 0, dummy1());
     }
 }

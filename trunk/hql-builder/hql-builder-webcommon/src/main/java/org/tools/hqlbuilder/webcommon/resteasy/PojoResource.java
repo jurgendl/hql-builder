@@ -20,7 +20,7 @@ import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.jaxb.XmlWrapper;
+import org.tools.hqlbuilder.common.XmlWrapper;
 
 @Path("/pojo")
 @Pretty
@@ -172,7 +172,7 @@ public interface PojoResource {
 	@Path("/findparameters")
 	@Produces({ MediaType.TEXT_XML })
 	@Wrapped
-	public abstract List<QueryParameter> findParameters(
+	public abstract XmlWrapper<List<QueryParameter>> findParameters(
 			@QueryParam("hql") String hql);
 
 	/**
@@ -201,6 +201,16 @@ public interface PojoResource {
 	@Consumes({ MediaType.TEXT_XML })
 	@Produces({ MediaType.TEXT_XML })
 	public abstract ExecutionResult execute(QueryParameters queryParameters);
+
+	@GET
+	@Path("/dummy1")
+	@Produces({ MediaType.TEXT_XML })
+	public abstract QueryParameter dummy1();
+
+	@GET
+	@Path("/dummy2")
+	@Produces({ MediaType.TEXT_XML })
+	public abstract QueryParameters dummy2();
 
 	// public abstract HibernateWebResolver getHibernateWebResolver();
 }

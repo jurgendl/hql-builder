@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.common.jaxb;
+package org.tools.hqlbuilder.common;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -9,6 +9,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.tools.hqlbuilder.common.jaxb.ArrayAdapter;
+import org.tools.hqlbuilder.common.jaxb.CollectionAdapter;
+import org.tools.hqlbuilder.common.jaxb.EnumAdapter;
+import org.tools.hqlbuilder.common.jaxb.MapAdapter;
 
 @XmlRootElement(name = "any")
 public class XmlWrapper<T> implements Serializable {

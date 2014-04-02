@@ -41,7 +41,7 @@ public interface HqlService {
 
     public abstract String createScript();
 
-    public abstract void sql(String... sql);
+    public abstract void sql(String[] sql);
 
     public abstract Map<String, String> getHibernateInfo();
 

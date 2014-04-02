@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.tools.hqlbuilder.common.XmlWrapper;
+
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class CollectionEntries {
     @XmlAttribute(name = "type", required = true)

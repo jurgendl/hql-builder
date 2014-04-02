@@ -2,6 +2,8 @@ package org.tools.hqlbuilder.common.jaxb;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import org.tools.hqlbuilder.common.XmlWrapper;
+
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ArrayAdapter extends XmlAdapter<XmlWrapper[], Object[]> {
     @Override

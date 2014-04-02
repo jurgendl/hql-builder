@@ -15,5 +15,10 @@
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${version.resteasy}</version>
+		</dependency>
 	</dependencies>
 </project>
