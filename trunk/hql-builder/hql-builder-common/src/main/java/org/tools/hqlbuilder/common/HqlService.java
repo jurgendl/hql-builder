@@ -50,4 +50,6 @@ public interface HqlService {
     public abstract String getHqlHelpURL();
 
     public abstract String getLuceneHelpURL();
+
+    public abstract <T, I> T get(Class<T> type, I id);
 }

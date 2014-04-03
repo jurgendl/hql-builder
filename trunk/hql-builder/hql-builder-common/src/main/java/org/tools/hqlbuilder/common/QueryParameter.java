@@ -60,8 +60,16 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         this(null, name, valueText, value.getClass().getName(), value);
     }
 
+    public QueryParameter(String name, Object value) {
+        this(null, name, String.valueOf(value), value.getClass().getName(), value);
+    }
+
     public QueryParameter(Integer index, String valueText, Object value) {
         this(index, null, valueText, value.getClass().getName(), value);
+    }
+
+    public QueryParameter(Integer index, Object value) {
+        this(index, null, String.valueOf(value), value.getClass().getName(), value);
     }
 
     private QueryParameter(Integer index, String name, String valueText, String type, Object value) {
