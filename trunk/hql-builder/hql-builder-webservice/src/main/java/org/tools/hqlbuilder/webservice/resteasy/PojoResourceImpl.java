@@ -156,13 +156,13 @@ public class PojoResourceImpl implements PojoResource {
         };
     }
 
-    // @Override
-    // public QueryParameter dummy1() {
-    // return new QueryParameter("name", "value", "type");
-    // }
-    //
-    // @Override
-    // public QueryParameters dummy2() {
-    // return new QueryParameters("x", 0, dummy1());
-    // }
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> XmlWrapper<T> get(String type, String id) {
+        try {
+            return (XmlWrapper<T>) new XmlWrapper<Object>(hqlWebService.get(Class.forName(type), id));
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

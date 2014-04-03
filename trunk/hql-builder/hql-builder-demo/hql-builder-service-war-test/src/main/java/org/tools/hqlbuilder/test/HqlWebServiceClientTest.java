@@ -29,17 +29,12 @@ public class HqlWebServiceClientTest {
     }
 
     public static void test0() throws Exception {
-        HqlWebServiceClient hc = new HqlWebServiceClient(Pojo.class.getPackage().getName());
-        hc.setServiceUrl(serviceUrl);
-        hc.afterPropertiesSet();
-        System.out.println(hc.getHibernateWebResolver());
+        HqlWebServiceClient hc = getClient();
+        System.out.println(hc.get(Pojo.class, String.valueOf(1l)));
     }
 
     public static void test1() throws Exception {
-        HqlWebServiceClient hc = new HqlWebServiceClient(Pojo.class.getPackage().getName());
-        hc.setServiceUrl(serviceUrl);
-        hc.afterPropertiesSet();
-
+        HqlWebServiceClient hc = getClient();
         System.out.println(hc.ping());
         System.out.println(hc.createScript());
         System.out.println(hc.getConnectionInfo());
@@ -61,11 +56,7 @@ public class HqlWebServiceClientTest {
     }
 
     public static void test2() throws Exception {
-        Client client = ClientBuilder.newBuilder().build();
-        WebTarget target = client.target(serviceUrl);
-        ResteasyWebTarget rtarget = (ResteasyWebTarget) target;
-        PojoResource hc = rtarget.proxy(PojoResource.class);
-
+        PojoResource hc = getRestClient();
         System.out.println(hc.ping());
         System.out.println(hc.createScript());
         System.out.println(hc.getConnectionInfo());
@@ -86,5 +77,20 @@ public class HqlWebServiceClientTest {
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");
         System.out.println(hc.execute(new QueryParameters(hql, parameters)));
+    }
+
+    public static HqlWebServiceClient getClient() throws Exception {
+        HqlWebServiceClient hc = new HqlWebServiceClient(Pojo.class.getPackage().getName());
+        hc.setServiceUrl(serviceUrl);
+        hc.afterPropertiesSet();
+        return hc;
+    }
+
+    public static PojoResource getRestClient() {
+        Client client = ClientBuilder.newBuilder().build();
+        WebTarget target = client.target(serviceUrl);
+        ResteasyWebTarget rtarget = (ResteasyWebTarget) target;
+        PojoResource hc = rtarget.proxy(PojoResource.class);
+        return hc;
     }
 }
