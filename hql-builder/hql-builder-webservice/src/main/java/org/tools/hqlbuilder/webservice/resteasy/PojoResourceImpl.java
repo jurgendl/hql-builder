@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.XmlWrapper;
@@ -24,7 +25,7 @@ import org.tools.hqlbuilder.webservice.HqlWebService;
 @Component
 public class PojoResourceImpl implements PojoResource {
     @Resource
-    private HqlWebService hqlWebService;
+    protected HqlWebService hqlWebService;
 
     @Override
     public String ping() {
@@ -137,12 +138,17 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     @Override
-    public QueryParameter dummy1() {
-        return new QueryParameter("name", "value", "type");
+    public HibernateWebResolver getHibernateWebResolver() {
+        return hqlWebService.getHibernateWebResolver();
     }
 
-    @Override
-    public QueryParameters dummy2() {
-        return new QueryParameters("x", 0, dummy1());
-    }
+    // @Override
+    // public QueryParameter dummy1() {
+    // return new QueryParameter("name", "value", "type");
+    // }
+    //
+    // @Override
+    // public QueryParameters dummy2() {
+    // return new QueryParameters("x", 0, dummy1());
+    // }
 }

@@ -2,3 +2,4 @@ QueryParameters
 QueryParameter
 ExecutionResult
 XmlWrapper
+HibernateWebResolver
