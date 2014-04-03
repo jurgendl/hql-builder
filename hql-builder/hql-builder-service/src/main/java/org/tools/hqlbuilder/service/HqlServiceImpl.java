@@ -40,12 +40,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.exception.SQLGrammarException;
+import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.type.CollectionType;
+import org.hibernate.type.IdentifierType;
 import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.OneToOneType;
+import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
@@ -604,11 +607,23 @@ public class HqlServiceImpl implements HqlService {
     @SuppressWarnings("unchecked")
     @Override
     public <T, I> T get(Class<T> type, I id) {
+        Object idv = id;
         String name = type.getName();
-        String oid = sessionFactory.getAllClassMetadata().get(name).getIdentifierPropertyName();
-        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter(oid, id));
+        ClassMetadata classMetadata = sessionFactory.getAllClassMetadata().get(name);
+        String oid = classMetadata.getIdentifierPropertyName();
+        if (id instanceof String) {
+            IdentifierType<?> identifierType = (IdentifierType<?>) classMetadata.getIdentifierType();
+            if (!(identifierType instanceof StringType)) {
+                try {
+                    idv = identifierType.stringToObject((String) id);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter(oid, idv));
         logger.debug(String.valueOf(hql));
-        return (T) execute(hql);
+        return (T) execute(hql).getResults().getValue().get(0);
     }
 
     /**
