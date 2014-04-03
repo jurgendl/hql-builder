@@ -24,6 +24,7 @@ import org.tools.hqlbuilder.webservice.HqlWebService;
  * @see http://docs.jboss.org/resteasy/docs/2.3.7.Final/userguide/html/
  * @see http://blog.comsysto.com/2012/08/02/resteasy-integration-with-spring-tutorial-part-1-introduction/
  * @see https://access.redhat.com/site/documentation/en-US/JBoss_Enterprise_Web_Platform/5/html-single/RESTEasy_Reference_Guide/index.html
+ * @see http://howtodoinjava.com/2013/07/25/jax-rs-2-0-resteasy-3-0-2-final-security-tutorial/
  */
 @Component
 public class PojoResourceImpl implements PojoResource {
@@ -33,7 +34,7 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public String ping() {
         try {
-            return "hello from Rest-Easy, service " + hqlWebService.getProject() + " on " + hqlWebService.getConnectionInfo() + " is available";
+            return "hello from Rest-Easy, service " + hqlWebService.getProject() + " on " + hqlWebService.getConnectionInfo() + " is ready to use";
         } catch (Exception ex) {
             return "hello from Rest-Easy, service is not available: " + ex;
         }
