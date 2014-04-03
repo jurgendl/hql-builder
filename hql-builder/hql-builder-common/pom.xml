@@ -11,6 +11,16 @@
 	<description>hql-builder-common</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${version.commons-collections4}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${version.commons-lang3}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.tools.hql-builder.hibernate</groupId>
 			<artifactId>hibernate-${version.hibernate}</artifactId>
 			<version>${project.version}</version>
