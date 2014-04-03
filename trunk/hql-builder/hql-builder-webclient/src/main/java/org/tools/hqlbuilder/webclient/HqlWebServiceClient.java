@@ -314,8 +314,7 @@ public class HqlWebServiceClient implements HqlService, MethodHandler, Initializ
 
     @Override
     public HibernateWebResolver getHibernateWebResolver() {
-        // TODO Auto-generated method stub
-        return null;
+        return pojoResource.getHibernateWebResolver();
     }
 
     @Override
@@ -340,5 +339,13 @@ public class HqlWebServiceClient implements HqlService, MethodHandler, Initializ
 
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
+    }
+
+    public PojoResource getPojoResource() {
+        return this.pojoResource;
+    }
+
+    public void setPojoResource(PojoResource pojoResource) {
+        this.pojoResource = pojoResource;
     }
 }

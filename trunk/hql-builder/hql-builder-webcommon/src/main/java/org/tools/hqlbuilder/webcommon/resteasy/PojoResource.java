@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.XmlWrapper;
@@ -202,15 +203,21 @@ public interface PojoResource {
 	@Produces({ MediaType.TEXT_XML })
 	public abstract ExecutionResult execute(QueryParameters queryParameters);
 
+	/**
+	 * @see [get] http://localhost:80/hqlbuilder/rest/pojo/hibernatewebresolver
+	 */
 	@GET
-	@Path("/dummy1")
+	@Path("/hibernatewebresolver")
 	@Produces({ MediaType.TEXT_XML })
-	public abstract QueryParameter dummy1();
+	public abstract HibernateWebResolver getHibernateWebResolver();
 
-	@GET
-	@Path("/dummy2")
-	@Produces({ MediaType.TEXT_XML })
-	public abstract QueryParameters dummy2();
-
-	// public abstract HibernateWebResolver getHibernateWebResolver();
+	// @GET
+	// @Path("/dummy1")
+	// @Produces({ MediaType.TEXT_XML })
+	// public abstract QueryParameter dummy1();
+	//
+	// @GET
+	// @Path("/dummy2")
+	// @Produces({ MediaType.TEXT_XML })
+	// public abstract QueryParameters dummy2();
 }

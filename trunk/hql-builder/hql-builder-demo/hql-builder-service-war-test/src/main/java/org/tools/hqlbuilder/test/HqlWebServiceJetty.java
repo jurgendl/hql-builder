@@ -9,18 +9,22 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class HqlWebServiceJetty {
     public static void main(String[] args) {
         try {
-            Server server = new Server(8686);
-            WebAppContext context = new WebAppContext();
-            context.setDescriptor("WEB-INF/web.xml");
-            context.setResourceBase("src/main/webapp");
-            context.setContextPath("/hqlbuilder");
-            context.setParentLoaderPriority(true);
-            server.setHandler(context);
-            server.start();
-            server.join();
+            new HqlWebServiceJetty().startServer();
         } catch (Exception ex) {
             ex.printStackTrace();
             System.exit(0);
         }
+    }
+
+    public void startServer() throws Exception, InterruptedException {
+        Server server = new Server(8686);
+        WebAppContext context = new WebAppContext();
+        context.setDescriptor("WEB-INF/web.xml");
+        context.setResourceBase("src/main/webapp");
+        context.setContextPath("/hqlbuilder");
+        context.setParentLoaderPriority(true);
+        server.setHandler(context);
+        server.start();
+        server.join();
     }
 }
