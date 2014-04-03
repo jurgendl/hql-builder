@@ -601,6 +601,16 @@ public class HqlServiceImpl implements HqlService {
         session.flush();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T, I> T get(Class<T> type, I id) {
+        String name = type.getName();
+        String oid = sessionFactory.getAllClassMetadata().get(name).getIdentifierPropertyName();
+        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter(oid, id));
+        logger.debug(String.valueOf(hql));
+        return (T) execute(hql);
+    }
+
     /**
      * @see org.tools.hqlbuilder.common.HqlService#getReservedKeywords()
      */

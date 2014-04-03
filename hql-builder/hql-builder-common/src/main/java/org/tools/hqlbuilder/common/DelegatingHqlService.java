@@ -115,4 +115,9 @@ public abstract class DelegatingHqlService implements HqlService {
     public String getLuceneHelpURL() {
         return getDelegate().getLuceneHelpURL();
     }
+
+    @Override
+    public <T, I> T get(Class<T> type, I id) {
+        return getDelegate().get(type, id);
+    }
 }

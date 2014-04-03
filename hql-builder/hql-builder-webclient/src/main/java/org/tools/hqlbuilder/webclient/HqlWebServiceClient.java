@@ -154,4 +154,10 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
     public void log() {
         //
     }
+
+    @Override
+    public <T, I> T get(Class<T> type, I id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
