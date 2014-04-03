@@ -357,7 +357,7 @@ public class HqlServiceImpl implements HqlService {
         }
     }
 
-    private String concat(Exception ex) {
+    protected String concat(Exception ex) {
         StringBuilder sb = new StringBuilder();
         Throwable t = ex;
         do {
@@ -582,7 +582,7 @@ public class HqlServiceImpl implements HqlService {
         }
     }
 
-    private Session newSession() {
+    protected Session newSession() {
         return HibernateUtils.newSession(sessionFactory);
     }
 
