@@ -2,7 +2,7 @@
 <web-app
 	xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
 	version="2.5"
 	>
 
@@ -13,6 +13,20 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/test/spring-web-config.xml</param-value>
+	</context-param>
+
+	<!-- RESTEasy configuration -->
+	<context-param>
+		<param-name>resteasy.scan.providers</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>resteasy.scan.resources</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>resteasy.providers</param-name>
+		<param-value>org.tools.hqlbuilder.webservice.SecurityInterceptor</param-value>
 	</context-param>
 
 	<!-- RESTEasy configuration -->
