@@ -14,11 +14,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.tools.hqlbuilder.common.ExecutionResult;
-import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.XmlWrapper;
@@ -208,8 +208,8 @@ public interface PojoResource {
 	 */
 	@GET
 	@Path("/hibernatewebresolver")
-	@Produces({ MediaType.TEXT_XML })
-	public abstract HibernateWebResolver getHibernateWebResolver();
+	@Produces({ MediaType.APPLICATION_OCTET_STREAM })
+	public abstract StreamingOutput getHibernateWebResolver();
 
 	// @GET
 	// @Path("/dummy1")

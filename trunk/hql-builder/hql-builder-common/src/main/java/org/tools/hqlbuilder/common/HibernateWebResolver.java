@@ -7,16 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class HibernateWebResolver implements Serializable {
     private static final long serialVersionUID = 756239472693625438L;
 
-    @XmlElement
     protected Map<String, ClassNode> nodes = new HashMap<String, ClassNode>();
 
     public List<ClassNode> getClasses() {
@@ -50,7 +43,6 @@ public class HibernateWebResolver implements Serializable {
     public static class ClassNode extends Node<String, String, Property> {
         private static final long serialVersionUID = 3105646728435394121L;
 
-        @XmlAttribute
         protected Class<?> type;
 
         public ClassNode(String id) {
@@ -81,7 +73,6 @@ public class HibernateWebResolver implements Serializable {
     public static class Property extends Edge<String, String, Property> {
         private static final long serialVersionUID = -7935969067739133609L;
 
-        @XmlAttribute
         protected boolean collection;
 
         public Property(String id) {
@@ -109,10 +100,8 @@ public class HibernateWebResolver implements Serializable {
     public static class Edge<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> implements Serializable {
         private static final long serialVersionUID = 8936945680611529186L;
 
-        @XmlElement
         protected final EdgeId id;
 
-        @XmlElement
         protected Node<NodeId, EdgeId, EdgeImpl> target;
 
         public Edge(EdgeId id) {
@@ -175,11 +164,8 @@ public class HibernateWebResolver implements Serializable {
     public static abstract class Node<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> implements Serializable {
         private static final long serialVersionUID = -422807599223330528L;
 
-        @XmlElement
         protected final NodeId id;
 
-        @XmlElement
-        @XmlElementWrapper
         protected final List<EdgeImpl> edges = new ArrayList<EdgeImpl>();
 
         public Node(NodeId id) {

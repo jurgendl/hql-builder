@@ -1,16 +1,19 @@
 package org.tools.hqlbuilder.webservice.resteasy;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
 import javax.annotation.Resource;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.ExecutionResult;
-import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.XmlWrapper;
@@ -138,8 +141,19 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     @Override
-    public HibernateWebResolver getHibernateWebResolver() {
-        return hqlWebService.getHibernateWebResolver();
+    public StreamingOutput getHibernateWebResolver() {
+        return new StreamingOutput() {
+            @Override
+            public void write(OutputStream output) throws IOException, WebApplicationException {
+                try {
+                    ObjectOutputStream oos = new ObjectOutputStream(output);
+                    oos.writeObject(hqlWebService.getHibernateWebResolver());
+                    oos.close();
+                } catch (RuntimeException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
     }
 
     // @Override
