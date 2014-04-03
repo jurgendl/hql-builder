@@ -17,21 +17,21 @@
 		<!-- <version.jetty>9.1.3.v20140225</version.jetty> requires JDK 1.7 -->
 	</properties>
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 			<version>${version.jetty}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-spring</artifactId>
-			<version>${version.jetty}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
 			<version>${version.jetty}</version>
-		</dependency>
+		</dependency> -->
+ 		<!-- <dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-spring</artifactId>
+			<version>${version.jetty}</version>
+		</dependency> -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-service-test</artifactId>

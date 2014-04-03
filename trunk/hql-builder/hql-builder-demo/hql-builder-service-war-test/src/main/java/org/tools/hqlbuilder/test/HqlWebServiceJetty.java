@@ -1,8 +1,5 @@
 package org.tools.hqlbuilder.test;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-
 /**
  * @see https://wiki.eclipse.org/Jetty/Howto/Spring
  */
@@ -16,15 +13,15 @@ public class HqlWebServiceJetty {
         }
     }
 
-    public void startServer() throws Exception, InterruptedException {
-        Server server = new Server(8686);
-        WebAppContext context = new WebAppContext();
-        context.setDescriptor("WEB-INF/web.xml");
-        context.setResourceBase("src/main/webapp");
-        context.setContextPath("/hqlbuilder");
-        context.setParentLoaderPriority(true);
-        server.setHandler(context);
-        server.start();
-        server.join();
+    public void startServer() throws Exception {
+        // org.eclipse.jetty.Server server = new org.eclipse.jetty.Server(8686);
+        // org.eclipse.jetty. WebAppContext context = new org.eclipse.jetty.WebAppContext();
+        // context.setDescriptor("WEB-INF/web.xml");
+        // context.setResourceBase("src/main/webapp");
+        // context.setContextPath("/hqlbuilder");
+        // context.setParentLoaderPriority(true);
+        // server.setHandler(context);
+        // server.start();
+        // server.join();
     }
 }
