@@ -1,9 +1,5 @@
 package org.tools.hqlbuilder.test;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tools.hqlbuilder.client.HqlBuilderFrame;
@@ -19,15 +15,6 @@ public class HqlBuilder {
 
     public static void main(String[] args) {
         try {
-            File directory = new File("DerbyTestDb");
-            try {
-                FileUtils.deleteDirectory(directory);
-            } catch (IOException ex) {
-                //
-            }
-            if (directory.exists()) {
-                throw new RuntimeException(directory + " not deleted");
-            }
             String v = "3";
             try {
                 String hibv = CommonUtils.readManifestVersion("org.hibernate.Hibernate");
