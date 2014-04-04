@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd"
+	>
+
+	<!-- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security -->
+
+	<security:global-method-security pre-post-annotations="enabled"/>
+
+	<alias name="filterChainProxy" alias="springSecurityFilterChain"/>
+
+	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+		<security:filter-chain-map path-type="ant">
+			<security:filter-chain pattern="/success.jsp*" filters="none"/>
+			<security:filter-chain pattern="/**" filters="securityContextFilter, logoutFilter, formLoginFilter, requestCacheFilter, servletApiFilter, anonFilter, sessionMgmtFilter, exceptionTranslator, filterSecurityInterceptor"/>
+		</security:filter-chain-map>
+	</bean>
+
+	<bean id="securityContextFilter" class="com.demo.security.CustomSecurityContextPersistenceFilter">
+		<property name="securityContextRepository" ref="customSecurityContextRepository"/>
+	</bean>
+
+	<bean id="customSecurityContextRepository" class="com.demo.security.CustomSecurityContextRepository">
+	</bean>
+
+	<bean id="logoutFilter" class="com.demo.security.CustomLogoutFilter">
+		<constructor-arg value="/logged_out.htm"/>
+		<constructor-arg>
+			<list>
+				<bean class="com.demo.security.CustomSecurityContextLogoutHandler"/>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="formLoginFilter" class="com.demo.security.CustomAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
+		<property name="authenticationSuccessHandler">
+			<bean class="com.demo.security.CustomAuthenticationSuccessHandler">
+				<property name="defaultTargetUrl" value="/success.jsp"/>
+				<property name="alwaysUseDefaultTargetUrl" value="true"/>
+			</bean>
+		</property>
+		<property name="authenticationFailureHandler">
+			<bean class="com.demo.security.CustomAuthenticationFailureHandler">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="daoAuthenticationProvider"/>
+				<ref local="anonProvider"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="inMemoryDaoImpl"/>
+	</bean>
+
+	<bean id="inMemoryDaoImpl" class="org.springframework.security.core.userdetails.memory.InMemoryDaoImpl">
+		<property name="userMap">
+			<value>test=testpassword,enabled,ROLE_USER</value>
+		</property>
+	</bean>
+
+	<bean id="anonProvider" class="com.demo.security.CustomAnonymousAuthenticationProvider">
+		<property name="key" value="myapp"/>
+	</bean>
+
+	<bean id="requestCacheFilter" class="com.demo.security.CustomRequestCacheAwareFilter"/>
+
+	<bean id="servletApiFilter" class="com.demo.security.CustomSecurityContextHolderAwareRequestFilter"/>
+
+	<bean id="anonFilter" class="com.demo.security.CustomAnonymousAuthenticationFilter">
+		<property name="key" value="myapp"/>
+		<property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
+	</bean>
+
+	<bean id="sessionMgmtFilter" class="com.demo.security.CustomSessionManagementFilter">
+		<constructor-arg ref="customSecurityContextRepository"/>
+	</bean>
+
+	<bean id="exceptionTranslator" class="com.demo.security.CustomExceptionTranslationFilter">
+		<property name="requestCache" ref="myRequestCache"/>
+		<property name="authenticationEntryPoint">
+			<bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+				<property name="loginFormUrl" value="/file.jsp"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="myRequestCache" class="com.demo.security.CustomRequestCache">
+	</bean>
+
+	<bean id="filterSecurityInterceptor" class="com.demo.security.CustomFilterSecurityInterceptor">
+		<property name="securityMetadataSource">
+			<security:filter-security-metadata-source>
+				<security:intercept-url pattern="/user/**" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/file.jsp*" access="ROLE_ANONYMOUS"/>
+				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+			</security:filter-security-metadata-source>
+		</property>
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="accessDecisionManager" ref="accessDecisionManager"/>
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter"/>
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+			</list>
+		</property>
+	</bean>
+</beans>
+
+
