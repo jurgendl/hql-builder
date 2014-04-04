@@ -16,7 +16,7 @@ import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
  * @see https://jaxb.java.net/guide/index.html
  */
 public class HqlWebServiceClientTest {
-    private static final String serviceUrl = "http://localhost:8686/hqlbuilder/rest";
+    private static final String serviceUrl = "http://localhost:80/hqlbuilder/rest";
 
     public static void main(String[] args) {
         try {
