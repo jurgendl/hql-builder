@@ -30,7 +30,9 @@ import org.tools.hqlbuilder.common.XmlWrapper;
 @GZIP
 public interface PojoResource {
     public static final String TEXT = MediaType.TEXT_PLAIN;
+
     public static final String BINARY = MediaType.APPLICATION_OCTET_STREAM;
+
     public static final String XML = MediaType.TEXT_XML;
 
     /**
@@ -50,6 +52,14 @@ public interface PojoResource {
     public abstract String getSqlForHql(@QueryParam("hql") String hql);
 
     /**
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/executehql?hql=...
+     */
+    @GET
+    @Path("/executehql")
+    @Produces({ XML })
+    public abstract ExecutionResult execute(@QueryParam("hql") String hql);
+
+    /**
      * @see [get] http://localhost:80/hqlbuilder/rest/pojo/classes
      */
     @GET
@@ -66,7 +76,7 @@ public interface PojoResource {
     public abstract XmlWrapper<List<String>> getProperties(@QueryParam("classname") String classname);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/connectionInfo
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/connectioninfo
      */
     @GET
     @Path("/connectioninfo")

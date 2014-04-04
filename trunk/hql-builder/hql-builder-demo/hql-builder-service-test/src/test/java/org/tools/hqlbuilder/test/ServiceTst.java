@@ -15,7 +15,7 @@ public class ServiceTst {
 
     public void test1() {
         try {
-            System.out.println(getHqlService().get(Pojo.class, 1l));
+            System.out.println(getHqlService().get(User.class, 1l));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

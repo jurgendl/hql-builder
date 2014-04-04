@@ -8,7 +8,8 @@ import org.swingeasy.UIUtils;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
-import org.tools.hqlbuilder.test.Pojo;
+import org.tools.hqlbuilder.test.Lang;
+import org.tools.hqlbuilder.test.User;
 
 public class HqlBuilder {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
@@ -37,9 +38,13 @@ public class HqlBuilder {
         final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
         try {
             logger.debug(hqlServiceClient.getConnectionInfo());
-            if (hqlServiceClient.execute(new QueryParameters("from Pojo")).getResults().getValue().size() == 0) {
+            if (hqlServiceClient.execute(new QueryParameters("from User")).getResults().getValue().size() == 0) {
                 try {
-                    hqlServiceClient.save(new Pojo());
+                    Lang langEn = new Lang("en");
+                    hqlServiceClient.save(langEn);
+                    User user = new User("firstName", "lastName", "test@gmail.com");
+                    user.setLanguage(langEn);
+                    hqlServiceClient.save(user);
                 } catch (ValidationException e) {
                     e.printStackTrace();
                 }

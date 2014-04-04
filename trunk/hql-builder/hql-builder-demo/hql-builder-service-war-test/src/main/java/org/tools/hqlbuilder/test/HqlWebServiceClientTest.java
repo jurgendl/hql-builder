@@ -30,7 +30,7 @@ public class HqlWebServiceClientTest {
 
     public static void test0() throws Exception {
         HqlWebServiceClient hc = getClient();
-        System.out.println(hc.get(Pojo.class, String.valueOf(1l)));
+        System.out.println(hc.get(User.class, String.valueOf(1l)));
     }
 
     public static void test1() throws Exception {
@@ -42,13 +42,13 @@ public class HqlWebServiceClientTest {
         System.out.println(hc.getHqlHelpURL());
         System.out.println(hc.getLuceneHelpURL());
         System.out.println(hc.getProject());
-        System.out.println(hc.getSqlForHql("from Pojo"));
+        System.out.println(hc.getSqlForHql("from User"));
         System.out.println(hc.getClasses());
         System.out.println(hc.getHibernateInfo());
         System.out.println(hc.getNamedQueries());
-        System.out.println(hc.getProperties("org.tools.hqlbuilder.test.Pojo"));
+        System.out.println(hc.getProperties("org.tools.hqlbuilder.test.User"));
         System.out.println(hc.getReservedKeywords());
-        String hql = "from Pojo where id=:id";
+        String hql = "from User where id=:id";
         List<QueryParameter> parameters = hc.findParameters(hql);
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");
@@ -64,15 +64,15 @@ public class HqlWebServiceClientTest {
         System.out.println(hc.getHqlHelpURL());
         System.out.println(hc.getLuceneHelpURL());
         System.out.println(hc.getProject());
-        System.out.println(hc.getSqlForHql("from Pojo"));
+        System.out.println(hc.getSqlForHql("from User"));
         System.out.println(hc.getClasses());
         System.out.println(hc.getHibernateInfo());
         System.out.println(hc.getNamedQueries());
-        System.out.println(hc.getProperties("org.tools.hqlbuilder.test.Pojo"));
+        System.out.println(hc.getProperties("org.tools.hqlbuilder.test.User"));
         System.out.println(hc.getReservedKeywords());
 
         // FIXME
-        String hql = "from Pojo where id=:id";
+        String hql = "from User where id=:id";
         List<QueryParameter> parameters = hc.findParameters(hql).getValue();
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");
@@ -80,7 +80,7 @@ public class HqlWebServiceClientTest {
     }
 
     public static HqlWebServiceClient getClient() throws Exception {
-        HqlWebServiceClient hc = new HqlWebServiceClient(Pojo.class.getPackage().getName());
+        HqlWebServiceClient hc = new HqlWebServiceClient(User.class.getPackage().getName());
         hc.setServiceUrl(serviceUrl);
         hc.afterPropertiesSet();
         return hc;

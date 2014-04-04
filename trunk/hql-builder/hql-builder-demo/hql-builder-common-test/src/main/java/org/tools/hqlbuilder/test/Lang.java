@@ -3,13 +3,18 @@ package org.tools.hqlbuilder.test;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.hibernate.annotations.AccessType;
-
 @XmlRootElement
 @Entity
-@AccessType("field")
 public class Lang extends Parent {
     private String code;
+
+    public Lang(String code) {
+        this.code = code;
+    }
+
+    public Lang() {
+        super();
+    }
 
     public String getCode() {
         return code;
@@ -21,6 +26,6 @@ public class Lang extends Parent {
 
     @Override
     public String toString() {
-        return code;
+        return getCode();
     }
 }

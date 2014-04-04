@@ -166,4 +166,9 @@ public class PojoResourceImpl implements PojoResource {
             throw new RuntimeException(ex);
         }
     }
+
+    @Override
+    public ExecutionResult execute(String hql) {
+        return execute(new QueryParameters(hql));
+    }
 }

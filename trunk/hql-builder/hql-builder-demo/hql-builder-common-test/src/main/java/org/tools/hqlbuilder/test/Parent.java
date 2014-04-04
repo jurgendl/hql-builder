@@ -6,7 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.AccessType;
+
 @MappedSuperclass
+@AccessType("field")
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
