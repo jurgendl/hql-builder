@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "UserTable")
 public class User extends Parent {
+    private static final long serialVersionUID = 8069035546088771672L;
+
     private String firstName;
 
     private String lastName;
