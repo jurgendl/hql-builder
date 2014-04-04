@@ -1,4 +1,4 @@
-package com.demo.security;
+package org.tools.hqlbuilder.webservice.security;
 
 import java.io.IOException;
 
@@ -12,22 +12,16 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.session.SessionManagementFilter;
 
 public class CustomSessionManagementFilter extends SessionManagementFilter {
-
     public CustomSessionManagementFilter(SecurityContextRepository securityContextRepository) {
         super(securityContextRepository);
-        // TODO Auto-generated constructor stub
+    }
+
+    public CustomSessionManagementFilter(SecurityContextRepository securityContextRepository, SessionAuthenticationStrategy sessionStrategy) {
+        super(securityContextRepository, sessionStrategy);
     }
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2) throws IOException, ServletException {
-
-        super.doFilter(arg0, arg1, arg2);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        super.doFilter(request, response, chain);
     }
-
-    @Override
-    public void setSessionAuthenticationStrategy(SessionAuthenticationStrategy sessionStrategy) {
-
-        super.setSessionAuthenticationStrategy(sessionStrategy);
-    }
-
 }

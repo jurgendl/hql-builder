@@ -5,9 +5,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+	http://www.springframework.org/schema/beans/spring-beans.xsd  
 	http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security-3.2.xsd"
+	http://www.springframework.org/schema/security/spring-security.xsd"
 	>
 
 	<!-- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security -->
@@ -23,33 +23,33 @@
 		</security:filter-chain-map>
 	</bean>
 
-	<bean id="securityContextFilter" class="com.demo.security.CustomSecurityContextPersistenceFilter">
-		<property name="securityContextRepository" ref="customSecurityContextRepository"/>
+	<bean id="securityContextFilter" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextPersistenceFilter">
+		<constructor-arg ref="customSecurityContextRepository"/>
 	</bean>
 
-	<bean id="customSecurityContextRepository" class="com.demo.security.CustomSecurityContextRepository">
+	<bean id="customSecurityContextRepository" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextRepository">
 	</bean>
 
-	<bean id="logoutFilter" class="com.demo.security.CustomLogoutFilter">
+	<bean id="logoutFilter" class="org.tools.hqlbuilder.webservice.security.CustomLogoutFilter">
 		<constructor-arg value="/logged_out.htm"/>
 		<constructor-arg>
 			<list>
-				<bean class="com.demo.security.CustomSecurityContextLogoutHandler"/>
+				<bean class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextLogoutHandler"/>
 			</list>
 		</constructor-arg>
 	</bean>
 
-	<bean id="formLoginFilter" class="com.demo.security.CustomAuthenticationFilter">
+	<bean id="formLoginFilter" class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationFilter">
 		<property name="authenticationManager" ref="authenticationManager"/>
 		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
 		<property name="authenticationSuccessHandler">
-			<bean class="com.demo.security.CustomAuthenticationSuccessHandler">
+			<bean class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationSuccessHandler">
 				<property name="defaultTargetUrl" value="/success.jsp"/>
 				<property name="alwaysUseDefaultTargetUrl" value="true"/>
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">
-			<bean class="com.demo.security.CustomAuthenticationFailureHandler">
+			<bean class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationFailureHandler">
 			</bean>
 		</property>
 	</bean>
@@ -73,36 +73,38 @@
 		</property>
 	</bean>
 
-	<bean id="anonProvider" class="com.demo.security.CustomAnonymousAuthenticationProvider">
-		<property name="key" value="myapp"/>
+	<bean id="anonProvider" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationProvider">
+		<constructor-arg value="myapp"/>
 	</bean>
 
-	<bean id="requestCacheFilter" class="com.demo.security.CustomRequestCacheAwareFilter"/>
+	<bean id="requestCacheFilter" class="org.tools.hqlbuilder.webservice.security.CustomRequestCacheAwareFilter">
+		<constructor-arg ref="myRequestCache"/>
+	</bean>
 
-	<bean id="servletApiFilter" class="com.demo.security.CustomSecurityContextHolderAwareRequestFilter"/>
+	<bean id="servletApiFilter" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextHolderAwareRequestFilter"/>
 
-	<bean id="anonFilter" class="com.demo.security.CustomAnonymousAuthenticationFilter">
-		<property name="key" value="myapp"/>
+	<bean id="anonFilter" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationFilter">
+		<constructor-arg value="myapp"/>
 		<property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
 	</bean>
 
-	<bean id="sessionMgmtFilter" class="com.demo.security.CustomSessionManagementFilter">
+	<bean id="sessionMgmtFilter" class="org.tools.hqlbuilder.webservice.security.CustomSessionManagementFilter">
 		<constructor-arg ref="customSecurityContextRepository"/>
 	</bean>
 
-	<bean id="exceptionTranslator" class="com.demo.security.CustomExceptionTranslationFilter">
-		<property name="requestCache" ref="myRequestCache"/>
-		<property name="authenticationEntryPoint">
+	<bean id="exceptionTranslator" class="org.tools.hqlbuilder.webservice.security.CustomExceptionTranslationFilter">
+		<constructor-arg>
 			<bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 				<property name="loginFormUrl" value="/file.jsp"/>
 			</bean>
-		</property>
+		</constructor-arg>
+		<constructor-arg ref="myRequestCache"/>
 	</bean>
 
-	<bean id="myRequestCache" class="com.demo.security.CustomRequestCache">
+	<bean id="myRequestCache" class="org.tools.hqlbuilder.webservice.security.CustomRequestCache">
 	</bean>
 
-	<bean id="filterSecurityInterceptor" class="com.demo.security.CustomFilterSecurityInterceptor">
+	<bean id="filterSecurityInterceptor" class="org.tools.hqlbuilder.webservice.security.CustomFilterSecurityInterceptor">
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
 				<security:intercept-url pattern="/user/**" access="ROLE_USER,ROLE_ADMIN"/>

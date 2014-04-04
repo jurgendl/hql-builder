@@ -54,7 +54,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:/org/tools/hqlbuilder/test/SpringSecurityDemo-servlet.xml</param-value>
+			<param-value>classpath:/org/tools/hqlbuilder/test/spring-security-servlet.xml</param-value>
 		</init-param>
 	</servlet>
 	<servlet>

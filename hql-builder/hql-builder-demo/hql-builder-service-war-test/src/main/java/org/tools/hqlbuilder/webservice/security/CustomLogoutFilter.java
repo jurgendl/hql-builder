@@ -1,4 +1,4 @@
-package com.demo.security;
+package org.tools.hqlbuilder.webservice.security;
 
 import java.io.IOException;
 
@@ -11,37 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 public class CustomLogoutFilter extends LogoutFilter {
-
     public CustomLogoutFilter(String logoutSuccessUrl, LogoutHandler[] handlers) {
         super(logoutSuccessUrl, handlers);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2) throws IOException, ServletException {
-
-        super.doFilter(arg0, arg1, arg2);
-    }
-
-    @Override
-    protected String getFilterProcessesUrl() {
-
-        return super.getFilterProcessesUrl();
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        super.doFilter(request, response, filterChain);
     }
 
     @Override
     protected boolean requiresLogout(HttpServletRequest request, HttpServletResponse response) {
-
         return super.requiresLogout(request, response);
     }
-
-    @Override
-    public void setFilterProcessesUrl(String filterProcessesUrl) {
-
-        super.setFilterProcessesUrl(filterProcessesUrl);
-    }
-
 }
