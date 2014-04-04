@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.test;
+package org.tools.hqlbuilder.webservice;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import javax.ws.rs.client.WebTarget;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
+import org.tools.hqlbuilder.test.User;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 

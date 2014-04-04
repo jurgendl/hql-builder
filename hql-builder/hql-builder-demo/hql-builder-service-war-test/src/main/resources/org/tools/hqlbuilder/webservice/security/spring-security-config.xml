@@ -95,7 +95,7 @@
 	<bean id="exceptionTranslator" class="org.tools.hqlbuilder.webservice.security.CustomExceptionTranslationFilter">
 		<constructor-arg>
 			<bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-				<property name="loginFormUrl" value="/file.jsp"/>
+				<property name="loginFormUrl" value="/login.jsp"/>
 			</bean>
 		</constructor-arg>
 		<constructor-arg ref="myRequestCache"/>
@@ -107,8 +107,8 @@
 	<bean id="filterSecurityInterceptor" class="org.tools.hqlbuilder.webservice.security.CustomFilterSecurityInterceptor">
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
-				<security:intercept-url pattern="/user/**" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/file.jsp*" access="ROLE_ANONYMOUS"/>
+				<!-- <security:intercept-url pattern="/user/**" access="ROLE_USER,ROLE_ADMIN"/> -->
+				<security:intercept-url pattern="/login.jsp*" access="ROLE_ANONYMOUS"/>
 				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 			</security:filter-security-metadata-source>
 		</property>
