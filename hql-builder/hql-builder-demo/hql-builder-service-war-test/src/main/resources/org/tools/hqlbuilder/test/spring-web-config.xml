@@ -17,6 +17,8 @@
 		http://www.springframework.org/schema/oxm/spring-oxm-3.2.xsd
 	">
 
+	<import resource="classpath:org/tools/hqlbuilder/test/applicationContext-security.xml"/>
+
 	<import resource="classpath:org/tools/hqlbuilder/test/spring-service-config.xml"/>
 
 	<bean id="hqlWebService" class="org.tools.hqlbuilder.webservice.HqlWebServiceImpl" scope="singleton" lazy-init="false">
@@ -28,10 +30,8 @@
  	<bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">
 		<property name="providers">
 			<list>
-				<!-- <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder.test"/> -->
-				<bean class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver">
-					<constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg>
-				</bean>
+				<!-- <bean class="org.tools.hqlbuilder.webservice.resteasy.providers.SecurityInterceptor"/> -->
+				<bean class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver"><constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg></bean>
 			</list>
 		</property>
 	</bean>

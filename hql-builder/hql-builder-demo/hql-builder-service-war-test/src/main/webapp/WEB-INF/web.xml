@@ -9,25 +9,29 @@
 	<display-name>hqlbuilder</display-name>
 	<description>hqlbuilder</description>
 
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
 	<!-- Custom name for main spring configuration -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/test/spring-web-config.xml</param-value>
 	</context-param>
 
-	<!-- RESTEasy configuration -->
-	<context-param>
-		<param-name>resteasy.scan.providers</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<context-param>
-		<param-name>resteasy.scan.resources</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<context-param>
-		<param-name>resteasy.providers</param-name>
-		<param-value>org.tools.hqlbuilder.webservice.SecurityInterceptor</param-value>
-	</context-param>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- RESTEasy configuration -->
 	<listener>
@@ -46,6 +50,14 @@
 	</context-param>
 
 	<servlet>
+		<servlet-name>SpringSecurityDemo</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:/org/tools/hqlbuilder/test/SpringSecurityDemo-servlet.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet>
 		<servlet-name>restservlet</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 	</servlet>
@@ -58,7 +70,10 @@
 		</init-param>
 	</servlet>
 
-	<!-- NEVER map servlet to root context "/*" ! -->
+	<servlet-mapping>
+		<servlet-name>SpringSecurityDemo</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>restservlet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
@@ -67,5 +82,9 @@
 		<servlet-name>hqlbuilder</servlet-name>
 		<url-pattern>/hqlbuilder/*</url-pattern>
 	</servlet-mapping>
+
+	<session-config>
+		<session-timeout>1</session-timeout>
+	</session-config>
 
 </web-app>
