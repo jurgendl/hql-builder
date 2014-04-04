@@ -29,12 +29,16 @@ import org.tools.hqlbuilder.common.XmlWrapper;
 @Pretty
 @GZIP
 public interface PojoResource {
+    public static final String TEXT = MediaType.TEXT_PLAIN;
+    public static final String BINARY = MediaType.APPLICATION_OCTET_STREAM;
+    public static final String XML = MediaType.TEXT_XML;
+
     /**
      * @see [get] http://localhost:80/hqlbuilder/rest/pojo/ping
      */
     @GET
     @Path("/ping")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public String ping();
 
     /**
@@ -42,7 +46,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/sqlforhql")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String getSqlForHql(@QueryParam("hql") String hql);
 
     /**
@@ -50,7 +54,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/classes")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract XmlWrapper<SortedSet<String>> getClasses();
 
     /**
@@ -58,7 +62,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/properties")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract XmlWrapper<List<String>> getProperties(@QueryParam("classname") String classname);
 
     /**
@@ -66,7 +70,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/connectioninfo")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String getConnectionInfo();
 
     /**
@@ -74,7 +78,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/project")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String getProject();
 
     /**
@@ -82,7 +86,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/search")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract XmlWrapper<List<String>> search(@QueryParam("text") String text, @QueryParam("typename") String typeName,
             @QueryParam("hitsperpage") int hitsPerPage);
 
@@ -91,7 +95,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/reservedkeywords")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract XmlWrapper<Set<String>> getReservedKeywords();
 
     /**
@@ -99,7 +103,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/namedqueries")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract XmlWrapper<Map<String, String>> getNamedQueries();
 
     /**
@@ -107,7 +111,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/createscript")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String createScript();
 
     /**
@@ -115,7 +119,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/hibernateinfo")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract XmlWrapper<Map<String, String>> getHibernateInfo();
 
     /**
@@ -123,7 +127,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/hibernatehelpurl")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String getHibernateHelpURL();
 
     /**
@@ -131,7 +135,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/hqlhelpurl")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String getHqlHelpURL();
 
     /**
@@ -139,7 +143,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/lucenehelpurl")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract String getLuceneHelpURL();
 
     /**
@@ -147,7 +151,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/propertynames.")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract XmlWrapper<List<String>> getPropertyNames(@QueryParam("key") String key, @QueryParam("parts") String[] parts);
 
     /**
@@ -155,7 +159,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/sql")
-    @Produces({ MediaType.TEXT_PLAIN })
+    @Produces({ TEXT })
     public abstract void sql(@QueryParam("sql") String[] sql);
 
     /**
@@ -163,7 +167,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/findparameters")
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     @Wrapped
     public abstract XmlWrapper<List<QueryParameter>> findParameters(@QueryParam("hql") String hql);
 
@@ -172,8 +176,8 @@ public interface PojoResource {
      */
     @PUT
     @Path("/save/{pojo}")
-    @Consumes({ MediaType.TEXT_XML })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes({ XML })
+    @Produces({ XML })
     public abstract void save(@PathParam("pojo") String pojo, Object object);
 
     /**
@@ -181,7 +185,7 @@ public interface PojoResource {
      */
     @DELETE
     @Path("/delete/{pojo}")
-    @Consumes({ MediaType.TEXT_XML })
+    @Consumes({ XML })
     public abstract void delete(@PathParam("pojo") String pojo, Object object);
 
     /**
@@ -189,8 +193,8 @@ public interface PojoResource {
      */
     @PUT
     @Path("/execute")
-    @Consumes({ MediaType.TEXT_XML })
-    @Produces({ MediaType.TEXT_XML })
+    @Consumes({ XML })
+    @Produces({ XML })
     public abstract ExecutionResult execute(QueryParameters queryParameters);
 
     /**
@@ -198,7 +202,7 @@ public interface PojoResource {
      */
     @GET
     @Path("/hibernatewebresolver")
-    @Produces({ MediaType.APPLICATION_OCTET_STREAM })
+    @Produces({ BINARY })
     public abstract StreamingOutput getHibernateWebResolver();
 
     /**
@@ -206,6 +210,6 @@ public interface PojoResource {
      */
     @Path("get")
     @POST
-    @Produces({ MediaType.TEXT_XML })
+    @Produces({ XML })
     public abstract <T> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
 }

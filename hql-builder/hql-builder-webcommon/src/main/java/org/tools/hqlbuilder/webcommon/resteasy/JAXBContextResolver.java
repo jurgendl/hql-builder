@@ -1,7 +1,7 @@
 package org.tools.hqlbuilder.webcommon.resteasy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;
@@ -9,35 +9,45 @@ import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+/**
+ * <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder.test"/>
+ */
 @Provider
 @Produces({ "text/*+xml", "application/*+xml" })
 public class JAXBContextResolver implements ContextResolver<JAXBContext> {
-	protected JAXBContext jaxbContext;
+    protected static final char SEPERATOR = ':';
 
-	protected List<String> packages = new ArrayList<String>();
+    protected static final String DEFAULT_PACKAGE = "org.tools.hqlbuilder.common";
 
-	public JAXBContextResolver(String... packages) {
-		try {
-			String contextPath = "org.tools.hqlbuilder.common";
-			this.packages.add(contextPath);
-			for (String pack : packages) {
-				contextPath += ":" + pack;
-				this.packages.add(pack);
-			}
-			jaxbContext = JAXBContext.newInstance(contextPath);
-		} catch (JAXBException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    protected JAXBContext jaxbContext;
 
-	@Override
-	public JAXBContext getContext(Class<?> type) {
-		String packname = type.getPackage().getName();
-		for (String pack : packages) {
-			if (packname.startsWith(pack)) {
-				return jaxbContext;
-			}
-		}
-		return null;
-	}
+    protected Set<String> packages = new HashSet<String>();
+
+    public JAXBContextResolver(String... packages) {
+        try {
+            StringBuilder packagesstring = new StringBuilder(DEFAULT_PACKAGE);
+            this.packages.add(DEFAULT_PACKAGE);
+            for (String pack : packages) {
+                this.packages.add(pack);
+                packagesstring.append(SEPERATOR).append(pack);
+            }
+            jaxbContext = JAXBContext.newInstance(packagesstring.toString());
+        } catch (JAXBException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * @see javax.ws.rs.ext.ContextResolver#getContext(java.lang.Class)
+     */
+    @Override
+    public JAXBContext getContext(Class<?> type) {
+        String packname = type.getPackage().getName();
+        for (String pack : packages) {
+            if (packname.startsWith(pack)) {
+                return jaxbContext;
+            }
+        }
+        return null;
+    }
 }

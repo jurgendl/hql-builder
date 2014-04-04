@@ -11,8 +11,10 @@
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<!-- versioning -->
 		<version.hibernate>4.2</version.hibernate>
 		<version.spring>3.2.8.RELEASE</version.spring>
+		<version.spring-security>3.2.3.RELEASE</version.spring-security>
 		<version.swingeasy>3.0.0.3</version.swingeasy>
 		<version.lucene>4.7.0</version.lucene>
 		<version.groovy>2.2.2</version.groovy>
@@ -28,9 +30,12 @@
 		<version.javassist>3.18.1-GA</version.javassist>
 		<version.ehcache>2.6.8</version.ehcache>
 		<version.resteasy>3.0.7.Final</version.resteasy>
-		<version.junit>4.11</version.junit>
 		<version.servlet>2.5</version.servlet>
 		<version.httpclient>4.3.3</version.httpclient>
+		<!-- testing -->
+		<version.junit>4.11</version.junit>
+		<version.derby>10.10.1.1</version.derby>
+		<version.jadira>3.1.0.CR10</version.jadira>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
