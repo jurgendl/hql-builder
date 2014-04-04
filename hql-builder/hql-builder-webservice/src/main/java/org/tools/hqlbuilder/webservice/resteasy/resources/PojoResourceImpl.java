@@ -137,11 +137,6 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     @Override
-    public ExecutionResult execute(QueryParameters queryParameters) {
-        return hqlWebService.execute(queryParameters);
-    }
-
-    @Override
     public StreamingOutput getHibernateWebResolver() {
         return new StreamingOutput() {
             @Override
@@ -168,7 +163,23 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     @Override
+    public ExecutionResult execute(QueryParameters queryParameters) {
+        return hqlWebService.execute(queryParameters);
+    }
+
+    @Override
     public ExecutionResult execute(String hql) {
         return execute(new QueryParameters(hql));
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public <T> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters) {
+        return (XmlWrapper) execute(queryParameters).getResults();
+    }
+
+    @Override
+    public <T> XmlWrapper<List<T>> executePlainResult(String hql) {
+        return executePlainResult(new QueryParameters(hql));
     }
 }

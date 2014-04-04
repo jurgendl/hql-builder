@@ -52,14 +52,6 @@ public interface PojoResource {
     public abstract String getSqlForHql(@QueryParam("hql") String hql);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/executehql?hql=...
-     */
-    @GET
-    @Path("/executehql")
-    @Produces({ XML })
-    public abstract ExecutionResult execute(@QueryParam("hql") String hql);
-
-    /**
      * @see [get] http://localhost:80/hqlbuilder/rest/pojo/classes
      */
     @GET
@@ -199,15 +191,6 @@ public interface PojoResource {
     public abstract void delete(@PathParam("pojo") String pojo, Object object);
 
     /**
-     * @see [put] http://localhost:80/hqlbuilder/rest/pojo/execute [body]
-     */
-    @PUT
-    @Path("/execute")
-    @Consumes({ XML })
-    @Produces({ XML })
-    public abstract ExecutionResult execute(QueryParameters queryParameters);
-
-    /**
      * @see [get] http://localhost:80/hqlbuilder/rest/pojo/hibernatewebresolver
      */
     @GET
@@ -222,4 +205,38 @@ public interface PojoResource {
     @POST
     @Produces({ XML })
     public abstract <T> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
+
+    /**
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/executehql?hql=...
+     */
+    @GET
+    @Path("/executehql")
+    @Produces({ XML })
+    public abstract ExecutionResult execute(@QueryParam("hql") String hql);
+
+    /**
+     * @see [put] http://localhost:80/hqlbuilder/rest/pojo/execute [body]
+     */
+    @PUT
+    @Path("/execute")
+    @Consumes({ XML })
+    @Produces({ XML })
+    public abstract ExecutionResult execute(QueryParameters queryParameters);
+
+    /**
+     * @see [get] http://localhost:80/hqlbuilder/rest/pojo/executehqlplain?hql=...
+     */
+    @GET
+    @Path("/executehqlplain")
+    @Produces({ XML })
+    public abstract <T> XmlWrapper<List<T>> executePlainResult(@QueryParam("hql") String hql);
+
+    /**
+     * @see [put] http://localhost:80/hqlbuilder/rest/pojo/executeplain [body]
+     */
+    @PUT
+    @Path("/executeplain")
+    @Consumes({ XML })
+    @Produces({ XML })
+    public abstract <T> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters);
 }
