@@ -254,7 +254,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
          */
         @Override
         public void write(OutputStream output) throws IOException, WebApplicationException {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[1024 * 4];
             int read;
             while ((read = input.read(buffer)) != -1) {
                 output.write(buffer, 0, read);
