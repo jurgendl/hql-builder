@@ -1,4 +1,4 @@
-package com.demo.security;
+package org.tools.hqlbuilder.webservice.security;
 
 import java.io.IOException;
 
@@ -10,11 +10,8 @@ import javax.servlet.ServletResponse;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 public class CustomFilterSecurityInterceptor extends FilterSecurityInterceptor {
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         super.doFilter(request, response, chain);
     }
-
 }

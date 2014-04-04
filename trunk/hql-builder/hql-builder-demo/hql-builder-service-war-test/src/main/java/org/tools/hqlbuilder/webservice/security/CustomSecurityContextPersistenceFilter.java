@@ -1,4 +1,4 @@
-package com.demo.security;
+package org.tools.hqlbuilder.webservice.security;
 
 import java.io.IOException;
 
@@ -11,23 +11,17 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.security.web.context.SecurityContextRepository;
 
 public class CustomSecurityContextPersistenceFilter extends SecurityContextPersistenceFilter {
+    public CustomSecurityContextPersistenceFilter(SecurityContextRepository repo) {
+        super(repo);
+    }
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2) throws IOException, ServletException {
-
-        super.doFilter(arg0, arg1, arg2);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        super.doFilter(request, response, chain);
     }
 
     @Override
     public void setForceEagerSessionCreation(boolean forceEagerSessionCreation) {
-
         super.setForceEagerSessionCreation(forceEagerSessionCreation);
     }
-
-    @Override
-    public void setSecurityContextRepository(SecurityContextRepository repo) {
-
-        super.setSecurityContextRepository(repo);
-    }
-
 }
