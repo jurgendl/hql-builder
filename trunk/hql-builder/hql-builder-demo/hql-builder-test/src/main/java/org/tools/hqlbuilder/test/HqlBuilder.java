@@ -52,7 +52,7 @@ public class HqlBuilder {
             if (hqlServiceClient.execute(new QueryParameters("from User")).getResults().getValue().size() == 0) {
                 try {
                     Lang langEn = new Lang("en");
-                    hqlServiceClient.save(langEn);
+                    langEn = hqlServiceClient.save(langEn);
                     User user = new User("firstName", "lastName", "test@gmail.com");
                     user.setLanguage(langEn);
                     hqlServiceClient.save(user);
