@@ -9,9 +9,6 @@
 	<artifactId>hql-builder-service-test</artifactId>
 	<name>hql-builder-service-test</name>
 	<description>hql-builder-service-test</description>
-	<properties>
-		<version.derby>10.8.2.2</version.derby>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -36,8 +33,8 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
+			<version>${version.servlet}</version>
 			<scope>provided</scope>
-			<version>2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
@@ -62,7 +59,7 @@
 		<dependency>
 			<groupId>org.jadira.usertype</groupId>
 			<artifactId>usertype.core</artifactId>
-			<version>3.1.0.CR10</version>
+			<version>${version.jadira}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>hibernate-jpa-2.0-api</artifactId>
