@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.resteasy.resources;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -141,12 +142,20 @@ public class PojoResourceImpl implements PojoResource {
         return new StreamingOutput() {
             @Override
             public void write(OutputStream output) throws IOException, WebApplicationException {
+                ObjectOutputStream oos = null;
                 try {
-                    ObjectOutputStream oos = new ObjectOutputStream(output);
+                    oos = new ObjectOutputStream(new BufferedOutputStream(output));
                     oos.writeObject(hqlWebService.getHibernateWebResolver());
-                    oos.close();
                 } catch (RuntimeException ex) {
                     ex.printStackTrace();
+                } finally {
+                    try {
+                        if (oos != null) {
+                            oos.close();
+                        }
+                    } catch (Exception unhandled) {
+                        //
+                    }
                 }
             }
         };
