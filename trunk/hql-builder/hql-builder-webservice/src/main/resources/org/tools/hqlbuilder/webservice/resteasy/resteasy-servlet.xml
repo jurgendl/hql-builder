@@ -14,6 +14,4 @@
 		http://www.springframework.org/schema/context/spring-context.xsd"
 	>
 
-	<context:component-scan base-package="org.tools.hqlbuilder.webservice.resteasy" />
-
 </beans>

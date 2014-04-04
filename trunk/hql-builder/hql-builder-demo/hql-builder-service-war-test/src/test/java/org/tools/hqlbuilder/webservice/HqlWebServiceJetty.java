@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.test;
+package org.tools.hqlbuilder.webservice;
 
 /**
  * @see https://wiki.eclipse.org/Jetty/Howto/Spring

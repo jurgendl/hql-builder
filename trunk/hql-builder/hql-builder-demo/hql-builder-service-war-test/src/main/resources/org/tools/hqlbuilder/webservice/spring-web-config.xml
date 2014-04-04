@@ -17,7 +17,9 @@
 		http://www.springframework.org/schema/oxm/spring-oxm.xsd
 	">
 
-	<import resource="classpath:org/tools/hqlbuilder/test/spring-security-config.xml"/>
+	<context:component-scan base-package="org.tools.hqlbuilder.webservice.resteasy" />
+
+	<import resource="classpath:org/tools/hqlbuilder/webservice/security/spring-security-config.xml"/>
 
 	<import resource="classpath:org/tools/hqlbuilder/test/spring-service-config.xml"/>
 
@@ -25,12 +27,9 @@
 		<property name="hqlService" ref="hqlService" />
 	</bean>
 
-	<import resource="classpath:org/tools/hqlbuilder/webservice/resteasy-servlet.xml"/>
-
- 	<bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">
+	<bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">
 		<property name="providers">
 			<list>
-				<!-- <bean class="org.tools.hqlbuilder.webservice.resteasy.providers.SecurityInterceptor"/> -->
 				<bean class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver"><constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg></bean>
 			</list>
 		</property>
