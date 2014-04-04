@@ -14,7 +14,7 @@ public class HqlWebServiceJetty {
     }
 
     public void startServer() throws Exception {
-        // org.eclipse.jetty.Server server = new org.eclipse.jetty.Server(8686);
+        // org.eclipse.jetty.Server server = new org.eclipse.jetty.Server(80);
         // org.eclipse.jetty. WebAppContext context = new org.eclipse.jetty.WebAppContext();
         // context.setDescriptor("WEB-INF/web.xml");
         // context.setResourceBase("src/main/webapp");
