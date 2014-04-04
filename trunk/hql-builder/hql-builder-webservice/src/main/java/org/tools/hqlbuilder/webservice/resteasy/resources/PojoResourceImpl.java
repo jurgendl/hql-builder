@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.resteasy;
+package org.tools.hqlbuilder.webservice.resteasy.resources;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

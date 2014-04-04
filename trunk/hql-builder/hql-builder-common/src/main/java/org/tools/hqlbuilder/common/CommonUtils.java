@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.common;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +55,9 @@ public class CommonUtils {
                     File f = new File(p);
                     URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { f.toURI().toURL() }, parent);
                     System.out.println(p + "\n\t" + urlClassLoader.loadClass(c).getName());
+                    if (urlClassLoader instanceof Closeable) {
+                        ((Closeable) urlClassLoader).close();
+                    }
                 } catch (Throwable ex) {
                     System.out.println(p);
                 }

@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice;
+package org.tools.hqlbuilder.webservice.resteasy.providers;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -19,26 +19,34 @@ import org.jboss.resteasy.core.Headers;
 import org.jboss.resteasy.core.ResourceMethodInvoker;
 import org.jboss.resteasy.core.ServerResponse;
 import org.jboss.resteasy.util.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This interceptor verify the access permissions for a user based on username and passowrd provided in request
  * */
 @Provider
 public class SecurityInterceptor implements javax.ws.rs.container.ContainerRequestFilter {
-    private static final String AUTHORIZATION_PROPERTY = "Authorization";
+    protected static final Logger logger = LoggerFactory.getLogger(SecurityInterceptor.class);
 
-    private static final String AUTHENTICATION_SCHEME = "Basic";
+    protected static final String AUTHORIZATION_PROPERTY = "Authorization";
 
-    private static final ServerResponse ACCESS_DENIED = new ServerResponse("Access denied for this resource", 401, new Headers<Object>());;
+    protected static final String AUTHENTICATION_SCHEME = "Basic";
 
-    private static final ServerResponse ACCESS_FORBIDDEN = new ServerResponse("Nobody can access this resource", 403, new Headers<Object>());;
+    protected static final ServerResponse ACCESS_DENIED = new ServerResponse("Access denied for this resource", 401, new Headers<Object>());;
 
-    private static final ServerResponse SERVER_ERROR = new ServerResponse("INTERNAL SERVER ERROR", 500, new Headers<Object>());;
+    protected static final ServerResponse ACCESS_FORBIDDEN = new ServerResponse("Nobody can access this resource", 403, new Headers<Object>());;
 
+    protected static final ServerResponse SERVER_ERROR = new ServerResponse("INTERNAL SERVER ERROR", 500, new Headers<Object>());;
+
+    /**
+     * @see javax.ws.rs.container.ContainerRequestFilter#filter(javax.ws.rs.container.ContainerRequestContext)
+     */
     @Override
     public void filter(ContainerRequestContext requestContext) {
         ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
         Method method = methodInvoker.getMethod();
+        logger.debug("checking security: " + method);
         // Access allowed for all
         if (!method.isAnnotationPresent(PermitAll.class)) {
             // Access denied for all
@@ -97,7 +105,7 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
         }
     }
 
-    private boolean isUserAllowed(@SuppressWarnings("unused") final String username, @SuppressWarnings("unused") final String password,
+    protected boolean isUserAllowed(@SuppressWarnings("unused") final String username, @SuppressWarnings("unused") final String password,
             final Set<String> rolesSet) {
         boolean isAllowed = false;
 
