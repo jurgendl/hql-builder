@@ -25,23 +25,19 @@
 		<dependency>
 			<groupId>org.swingeasy</groupId>
 			<artifactId>swing-easy</artifactId>
-			<version>${version.swingeasy}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.l2fprod</groupId>
 			<artifactId>l2fprod-common-all</artifactId>
-			<version>${version.l2fprod}</version>
  		</dependency>
 		<dependency>
 			<groupId>com.toedter</groupId>
 			<artifactId>jcalendar</artifactId>
-			<version>${version.jcalendar}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>${version.joda}</version>
 		</dependency>
 	</dependencies>
 	<repositories>
