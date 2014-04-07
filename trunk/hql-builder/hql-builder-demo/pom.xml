@@ -15,11 +15,8 @@
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<version.spring-security>3.2.3.RELEASE</version.spring-security>
 		<version.derby>10.10.1.1</version.derby>
-		<version.jadira>3.1.0.CR10</version.jadira>
 		<version.jetty>7.6.14.v20131031</version.jetty>
-		<version.wicket>6.14.0</version.wicket>
 	</properties>
 	<modules>
 		<module>hql-builder-common-test</module>

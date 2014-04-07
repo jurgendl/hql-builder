@@ -33,7 +33,11 @@
 		<version.resteasy>3.0.7.Final</version.resteasy>
 		<version.servlet>2.5</version.servlet>
 		<version.httpclient>4.3.3</version.httpclient>
+		<version.spring-security>3.2.3.RELEASE</version.spring-security>
+		<version.jadira>3.1.0.CR10</version.jadira>
+		<version.wicket>6.14.0</version.wicket>
 		<version.junit>4.11</version.junit>
+		<version.bouncycastle>1.46</version.bouncycastle>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -279,6 +283,32 @@
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>${version.joda}</version>
+			</dependency>
+			<!-- Security -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${version.spring-security}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk15on</artifactId>
+				<version>${version.bouncycastle}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-ext-jdk15on</artifactId>
+				<version>${version.bouncycastle}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcmail-jdk15on</artifactId>
+				<version>${version.bouncycastle}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bctsp-jdk15on</artifactId>
+				<version>${version.bouncycastle}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
