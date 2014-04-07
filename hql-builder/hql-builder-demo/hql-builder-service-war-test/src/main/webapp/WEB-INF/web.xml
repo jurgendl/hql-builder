@@ -62,7 +62,8 @@
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>spring-security-filter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/wicket/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>wicket-filter</filter-name>
@@ -110,7 +111,8 @@
 
 	<servlet-mapping>
 		<servlet-name>spring-security-servlet</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
+		<url-pattern>/wicket/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>rest-servlet</servlet-name>
