@@ -1,18 +1,13 @@
 package org.tools.hqlbuilder.test;
 
-import java.io.Serializable;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
-import org.hibernate.annotations.AccessType;
-
 @MappedSuperclass
-@AccessType("field")
-public abstract class Parent implements Serializable {
+public abstract class EntityParent implements EntityI {
     private static final long serialVersionUID = -2958424236876731630L;
 
     @Id

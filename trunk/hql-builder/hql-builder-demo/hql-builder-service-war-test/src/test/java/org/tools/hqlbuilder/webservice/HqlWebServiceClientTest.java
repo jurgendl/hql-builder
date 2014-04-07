@@ -43,13 +43,13 @@ public class HqlWebServiceClientTest {
         System.out.println(hc.getHqlHelpURL());
         System.out.println(hc.getLuceneHelpURL());
         System.out.println(hc.getProject());
-        System.out.println(hc.getSqlForHql("from User"));
+        System.out.println(hc.getSqlForHql("from " + User.class.getSimpleName()));
         System.out.println(hc.getClasses());
         System.out.println(hc.getHibernateInfo());
         System.out.println(hc.getNamedQueries());
-        System.out.println(hc.getProperties("org.tools.hqlbuilder.test.User"));
+        System.out.println(hc.getProperties(User.class.getName()));
         System.out.println(hc.getReservedKeywords());
-        String hql = "from User where id=:id";
+        String hql = "from " + User.class.getSimpleName() + " where id=:id";
         List<QueryParameter> parameters = hc.findParameters(hql);
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");
@@ -65,15 +65,15 @@ public class HqlWebServiceClientTest {
         System.out.println(hc.getHqlHelpURL());
         System.out.println(hc.getLuceneHelpURL());
         System.out.println(hc.getProject());
-        System.out.println(hc.getSqlForHql("from User"));
+        System.out.println(hc.getSqlForHql("from " + User.class.getSimpleName()));
         System.out.println(hc.getClasses());
         System.out.println(hc.getHibernateInfo());
         System.out.println(hc.getNamedQueries());
-        System.out.println(hc.getProperties("org.tools.hqlbuilder.test.User"));
+        System.out.println(hc.getProperties(User.class.getName()));
         System.out.println(hc.getReservedKeywords());
 
         // FIXME
-        String hql = "from User where id=:id";
+        String hql = "from " + User.class.getSimpleName() + " where id=:id";
         List<QueryParameter> parameters = hc.findParameters(hql).getValue();
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");

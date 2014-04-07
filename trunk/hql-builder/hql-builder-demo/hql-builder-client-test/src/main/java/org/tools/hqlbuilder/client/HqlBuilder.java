@@ -8,14 +8,47 @@ import org.swingeasy.UIUtils;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
+import org.tools.hqlbuilder.test.Authority;
+import org.tools.hqlbuilder.test.Group;
+import org.tools.hqlbuilder.test.GroupAuthority;
 import org.tools.hqlbuilder.test.Lang;
+import org.tools.hqlbuilder.test.Member;
 import org.tools.hqlbuilder.test.User;
 
 public class HqlBuilder {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
 
-    public static void main(final String[] arguments) {
+    public static void main(final String[] args) {
+        new HqlBuilder(args);
+    }
+
+    public HqlBuilder(final String[] args) {
+        try {
+            init(args);
+        } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "No connection to host");
+        }
+    }
+
+    protected void init(final String[] args) {
         UIUtils.systemLookAndFeel();
+        String v = getHibernateVersion();
+        logger.info("Hibernate " + v + "x");
+        HqlServiceClientImpl hqlServiceClient = loadService(v);
+        logger.debug(hqlServiceClient.getConnectionInfo());
+        testData(hqlServiceClient);
+        HqlBuilderFrame.start(args, new HqlServiceClientLoaderBean(hqlServiceClient));
+    }
+
+    public HqlServiceClientImpl loadService(@SuppressWarnings("unused") String v) {
+        @SuppressWarnings("resource")
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
+        final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
+        return hqlServiceClient;
+    }
+
+    public String getHibernateVersion() {
         String v = "3";
         try {
             String hibv = CommonUtils.readManifestVersion("org.hibernate.Hibernate");
@@ -32,32 +65,30 @@ public class HqlBuilder {
         } catch (Throwable ex) {
             ex.printStackTrace(System.out);
         }
-        logger.info("Hibernate " + v + "x");
-        @SuppressWarnings("resource")
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
-        final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
-        try {
-            logger.debug(hqlServiceClient.getConnectionInfo());
-            if (hqlServiceClient.execute(new QueryParameters("from User")).getResults().getValue().size() == 0) {
-                try {
-                    Lang langEn = new Lang("en");
-                    hqlServiceClient.save(langEn);
-                    User user = new User("firstName", "lastName", "test@gmail.com");
-                    user.setLanguage(langEn);
-                    hqlServiceClient.save(user);
-                } catch (ValidationException e) {
-                    e.printStackTrace();
-                }
+        return v;
+    }
+
+    public void testData(final HqlServiceClientImpl hqlServiceClient) {
+        if (hqlServiceClient.execute(new QueryParameters("from " + User.class.getSimpleName())).getResults().getValue().size() == 0) {
+            try {
+                Group admins = new Group("admins");
+                admins = hqlServiceClient.save(admins);
+                Member member = new Member("hqladmin", admins);
+                member = hqlServiceClient.save(member);
+                GroupAuthority groupauthority = new GroupAuthority("ROLE_ADMIN", admins);
+                groupauthority = hqlServiceClient.save(groupauthority);
+                Authority authority = new Authority("ROLE_ADMIN", member);
+                authority = hqlServiceClient.save(authority);
+                Lang langEn = new Lang("en");
+                langEn = hqlServiceClient.save(langEn);
+                User admin = new User("hqladmin", "hqladmin", "hqladmin@gmail.com");
+                admin.setLanguage(langEn);
+                admin.setPassword("justatestpassword01");
+                admin.setMember(member);
+                admin = hqlServiceClient.save(admin);
+            } catch (ValidationException e) {
+                e.printStackTrace();
             }
-            HqlBuilderFrame.start(arguments, new HqlServiceClientLoader() {
-                @Override
-                public HqlServiceClient getHqlServiceClient() {
-                    return hqlServiceClient;
-                }
-            });
-        } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "No connection to host");
         }
     }
 }
