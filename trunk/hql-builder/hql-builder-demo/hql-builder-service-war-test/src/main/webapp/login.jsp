@@ -7,10 +7,10 @@
 </head>
 <body>
 <p>Login</p>
-<form name="f" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
-<p><label for="j_username">Username</label> <input type="text" name="j_username" id="j_username" /></p>
-<p><label for="j_password">Password</label> <input type="password" name="j_password" id="j_password" /> max 10 characters.</p>
-<p><input name="login" type="submit" id="login" value="login" /><input type="hidden" name="client" value="register" /></p>
-</form>
+	<form name="f" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
+		<p><label for="j_username">Username</label> <input type="text" name="j_username" id="j_username" /></p>
+		<p><label for="j_password">Password</label> <input type="password" name="j_password" id="j_password" /></p>
+		<p><input name="login" type="submit" id="login" value="login" /></p>
+	</form>
 </body>
 </html>
