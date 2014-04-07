@@ -100,7 +100,7 @@ public class HqlBuilder {
                 langEn = hqlServiceClient.save(langEn);
                 User admin = new User("hqladmin", "hqladmin", "hqladmin@gmail.com");
                 admin.setLanguage(langEn);
-                admin.setPassword(getPasswordEncoder().encode("justatestpassword01"));
+                admin.setPassword(getPasswordEncoder().encode("hqladmin"));
                 admin.setMember(member);
                 admin = hqlServiceClient.save(admin);
             } catch (ValidationException e) {
