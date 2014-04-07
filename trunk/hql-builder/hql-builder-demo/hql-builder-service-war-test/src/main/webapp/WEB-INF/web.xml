@@ -23,25 +23,48 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/webservice/spring-web-config.xml</param-value>
 	</context-param>
+	<context-param>
+		<param-name>configuration</param-name>
+		<param-value>deployment</param-value>
+	</context-param>
+
+	<!-- RESTEasy HTTP Request processor -->
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/rest</param-value>
+	</context-param>
 
 	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-name>char-encoding-filter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>spring-security-filter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
 	<filter>
-		<filter-name>wicket</filter-name>
+		<filter-name>wicket-filter</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
 		<init-param>
 			<param-name>applicationClassName</param-name>
 			<param-value>org.tools.hqlbuilder.webservice.wicket.WicketApplication</param-value>
 		</init-param>
 	</filter>
+
 	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-name>char-encoding-filter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>wicket</filter-name>
+		<filter-name>spring-security-filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>wicket-filter</filter-name>
 		<url-pattern>/wicket/*</url-pattern>
 	</filter-mapping>
 
@@ -55,14 +78,12 @@
 		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
 	</listener>
 
-	<!-- RESTEasy HTTP Request processor -->
-	<context-param>
-		<param-name>resteasy.servlet.mapping.prefix</param-name>
-		<param-value>/rest</param-value>
-	</context-param>
+	<listener>
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
 
 	<servlet>
-		<servlet-name>SpringSecurityDemo</servlet-name>
+		<servlet-name>spring-security-servlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -70,7 +91,7 @@
 		</init-param>
 	</servlet>
 	<servlet>
-		<servlet-name>restservlet</servlet-name>
+		<servlet-name>rest-servlet</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -78,7 +99,7 @@
 		</init-param>
 	</servlet>
 	<servlet>
-		<servlet-name>hqlbuilder</servlet-name>
+		<servlet-name>hqlbuilder-servlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -87,20 +108,20 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>SpringSecurityDemo</servlet-name>
+		<servlet-name>spring-security-servlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>restservlet</servlet-name>
+		<servlet-name>rest-servlet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>hqlbuilder</servlet-name>
+		<servlet-name>hqlbuilder-servlet</servlet-name>
 		<url-pattern>/hqlbuilder/*</url-pattern>
 	</servlet-mapping>
 
 	<session-config>
-		<session-timeout>1</session-timeout>
+		<session-timeout>30</session-timeout>
 	</session-config>
 
 </web-app>
