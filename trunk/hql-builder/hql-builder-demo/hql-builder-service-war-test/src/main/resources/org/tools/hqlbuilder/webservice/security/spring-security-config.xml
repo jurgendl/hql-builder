@@ -11,6 +11,7 @@
 	>
 
 	<!-- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security -->
+	<!-- http://javaworkbench.blogspot.com/p/spring-security.html -->
 
 	<security:global-method-security pre-post-annotations="enabled"/>
 
@@ -53,6 +54,7 @@
 		</property>
 		<property name="authenticationFailureHandler">
 			<bean class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationFailureHandler">
+				<property name="defaultFailureUrl" value="/login.jsp"/>
 			</bean>
 		</property>
 	</bean>
@@ -110,9 +112,11 @@
 	<bean id="filterSecurityInterceptor" class="org.tools.hqlbuilder.webservice.security.CustomFilterSecurityInterceptor">
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
+				<!-- <security:intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY"/> -->
+				<security:intercept-url pattern="/login.jsp*" access="ROLE_ANONYMOUS"/>
+				<security:intercept-url pattern="/logged_out.htm*" access="ROLE_ANONYMOUS"/>
 				<security:intercept-url pattern="/wicket/**" access="ROLE_USER,ROLE_ADMIN"/>
 				<security:intercept-url pattern="/rest/**" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/login.jsp*" access="ROLE_ANONYMOUS"/>
 				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 			</security:filter-security-metadata-source>
 		</property>
