@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
 	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util.xsd  
 	http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd  
 	http://www.springframework.org/schema/security
@@ -13,9 +16,9 @@
 	<!-- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security -->
 	<!-- http://javaworkbench.blogspot.com/p/spring-security.html -->
 
-	<util:constant id="logInUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGIN" scope="singleton"/>
+	<util:constant id="logInUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGIN"/>
 
-	<util:constant id="logOutUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGOUT" scope="singleton"/>
+	<util:constant id="logOutUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGOUT"/>
 
 	<security:global-method-security pre-post-annotations="enabled"/>
 
