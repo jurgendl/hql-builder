@@ -14,7 +14,7 @@
 
 	<security:global-method-security pre-post-annotations="enabled"/>
 
-	<alias name="filterChainProxy" alias="springSecurityFilterChain"/>
+	<alias name="filterChainProxy" alias="spring-security-filter"/>
 
 	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
 		<security:filter-chain-map path-type="ant">
