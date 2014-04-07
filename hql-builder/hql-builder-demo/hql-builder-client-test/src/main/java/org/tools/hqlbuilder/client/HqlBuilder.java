@@ -3,7 +3,9 @@ package org.tools.hqlbuilder.client;
 import javax.swing.JOptionPane;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.swingeasy.UIUtils;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.QueryParameters;
@@ -35,20 +37,35 @@ public class HqlBuilder {
         UIUtils.systemLookAndFeel();
         String v = getHibernateVersion();
         logger.info("Hibernate " + v + "x");
-        HqlServiceClientImpl hqlServiceClient = loadService(v);
+        HqlServiceClientImpl hqlServiceClient = getService();
         logger.debug(hqlServiceClient.getConnectionInfo());
         testData(hqlServiceClient);
         HqlBuilderFrame.start(args, new HqlServiceClientLoaderBean(hqlServiceClient));
     }
 
-    public HqlServiceClientImpl loadService(@SuppressWarnings("unused") String v) {
-        @SuppressWarnings("resource")
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
-        final HqlServiceClientImpl hqlServiceClient = (HqlServiceClientImpl) context.getBean("hqlServiceClient");
-        return hqlServiceClient;
+    protected ConfigurableApplicationContext context;
+
+    //
+    protected ConfigurableApplicationContext getContext() {
+        if (context == null) {
+            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
+        }
+        return context;
     }
 
-    public String getHibernateVersion() {
+    protected HqlServiceClientImpl getService() {
+        return get("hqlServiceClient", HqlServiceClientImpl.class);
+    }
+
+    protected PasswordEncoder getPasswordEncoder() {
+        return get("passwordEncoder", PasswordEncoder.class);
+    }
+
+    protected <T> T get(String id, Class<T> type) {
+        return type.cast(getContext().getBean(id));
+    }
+
+    protected String getHibernateVersion() {
         String v = "3";
         try {
             String hibv = CommonUtils.readManifestVersion("org.hibernate.Hibernate");
@@ -68,7 +85,7 @@ public class HqlBuilder {
         return v;
     }
 
-    public void testData(final HqlServiceClientImpl hqlServiceClient) {
+    protected void testData(final HqlServiceClientImpl hqlServiceClient) {
         if (hqlServiceClient.execute(new QueryParameters("from " + User.class.getSimpleName())).getResults().getValue().size() == 0) {
             try {
                 Group admins = new Group("admins");
@@ -83,7 +100,7 @@ public class HqlBuilder {
                 langEn = hqlServiceClient.save(langEn);
                 User admin = new User("hqladmin", "hqladmin", "hqladmin@gmail.com");
                 admin.setLanguage(langEn);
-                admin.setPassword("justatestpassword01");
+                admin.setPassword(getPasswordEncoder().encode("justatestpassword01"));
                 admin.setMember(member);
                 admin = hqlServiceClient.save(admin);
             } catch (ValidationException e) {

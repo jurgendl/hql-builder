@@ -53,6 +53,9 @@
 	<logger name="org.eclipse.jetty">
 		<level value="warn" />
 	</logger>
+	<logger name="net.sf.ehcache.util.UpdateChecker">
+		<level value="warn" />
+	</logger>
 	<root>
 		<appender-ref ref="CONSOLE" />
 	</root>
