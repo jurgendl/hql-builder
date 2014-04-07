@@ -13,6 +13,10 @@
 	<!-- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security -->
 	<!-- http://javaworkbench.blogspot.com/p/spring-security.html -->
 
+	<util:constant id="logInUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGIN" scope="singleton"/>
+
+	<util:constant id="logOutUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGOUT" scope="singleton"/>
+
 	<security:global-method-security pre-post-annotations="enabled"/>
 
 	<alias name="filterChainProxy" alias="spring-security-filter"/>
@@ -40,12 +44,12 @@
 				<bean class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextLogoutHandler"/>
 			</list>
 		</constructor-arg>
-		<property name="filterProcessesUrl" value="/j_spring_security_logout"/>
+		<property name="filterProcessesUrl" ref="logOutUrl"/>
 	</bean>
 
 	<bean id="formLoginFilter" class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationFilter">
 		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
+		<property name="filterProcessesUrl" ref="logInUrl"/>
 		<property name="authenticationSuccessHandler">
 			<bean class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationSuccessHandler">
 				<property name="defaultTargetUrl" value="/success.jsp"/>
