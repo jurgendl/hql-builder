@@ -21,17 +21,16 @@
 		<security:filter-chain-map path-type="ant">
 			<security:filter-chain pattern="/logged_out.htm*" filters="none"/>
 			<security:filter-chain pattern="/index.htm*" filters="none"/>
-			<security:filter-chain pattern="/success.jsp*" filters="none"/>
 			<security:filter-chain pattern="/login.jsp*" filters="none"/>
-			<security:filter-chain pattern="/**" filters="securityContextFilter, logoutFilter, formLoginFilter, requestCacheFilter, servletApiFilter, anonFilter, sessionMgmtFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/**" filters="securityContextFilter, logoutFilter, formLoginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 		</security:filter-chain-map>
 	</bean>
 
 	<bean id="securityContextFilter" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextPersistenceFilter">
-		<constructor-arg ref="customSecurityContextRepository"/>
+		<constructor-arg ref="securityContextRepository"/>
 	</bean>
 
-	<bean id="customSecurityContextRepository" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextRepository">
+	<bean id="securityContextRepository" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextRepository">
 	</bean>
 
 	<bean id="logoutFilter" class="org.tools.hqlbuilder.webservice.security.CustomLogoutFilter">
@@ -62,39 +61,43 @@
 	<bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
 		<property name="providers">
 			<list>
-				<ref local="daoAuthenticationProvider"/>
-				<ref local="anonProvider"/>
+				<ref local="authenticationProvider"/>
+				<ref local="anonAuthenticationProvider"/>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-		<property name="userDetailsService" ref="inMemoryDaoImpl"/>
+	<bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsService"/>
 	</bean>
 
-	<bean id="inMemoryDaoImpl" class="org.springframework.security.core.userdetails.memory.InMemoryDaoImpl">
+	<bean id="userDetailsService" class="org.springframework.security.core.userdetails.memory.InMemoryDaoImpl">
 		<property name="userMap">
-			<value>test=testpassword,enabled,ROLE_USER</value>
+			<value>hqladmin=justatestpassword01,enabled,ROLE_ADMIN</value>
 		</property>
 	</bean>
 
-	<bean id="anonProvider" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationProvider">
-		<constructor-arg value="myapp"/>
+	<!-- <bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<property name="enableGroups" value="true"/>
+	</bean> -->
+
+	<bean id="anonAuthenticationProvider" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationProvider">
+		<constructor-arg value="hqlbuilder"/>
 	</bean>
 
 	<bean id="requestCacheFilter" class="org.tools.hqlbuilder.webservice.security.CustomRequestCacheAwareFilter">
-		<constructor-arg ref="myRequestCache"/>
+		<constructor-arg ref="requestCache"/>
 	</bean>
 
 	<bean id="servletApiFilter" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextHolderAwareRequestFilter"/>
 
-	<bean id="anonFilter" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationFilter">
-		<constructor-arg value="myapp"/>
+	<bean id="anonAuthenticationFilter" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationFilter">
+		<constructor-arg value="hqlbuilder"/>
 		<property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
 	</bean>
 
-	<bean id="sessionMgmtFilter" class="org.tools.hqlbuilder.webservice.security.CustomSessionManagementFilter">
-		<constructor-arg ref="customSecurityContextRepository"/>
+	<bean id="sessionManagementFilter" class="org.tools.hqlbuilder.webservice.security.CustomSessionManagementFilter">
+		<constructor-arg ref="securityContextRepository"/>
 	</bean>
 
 	<bean id="exceptionTranslator" class="org.tools.hqlbuilder.webservice.security.CustomExceptionTranslationFilter">
@@ -103,18 +106,18 @@
 				<property name="loginFormUrl" value="/login.jsp"/>
 			</bean>
 		</constructor-arg>
-		<constructor-arg ref="myRequestCache"/>
+		<constructor-arg ref="requestCache"/>
 	</bean>
 
-	<bean id="myRequestCache" class="org.tools.hqlbuilder.webservice.security.CustomRequestCache">
+	<bean id="requestCache" class="org.tools.hqlbuilder.webservice.security.CustomRequestCache">
 	</bean>
 
 	<bean id="filterSecurityInterceptor" class="org.tools.hqlbuilder.webservice.security.CustomFilterSecurityInterceptor">
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
-				<!-- <security:intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY"/> -->
 				<security:intercept-url pattern="/login.jsp*" access="ROLE_ANONYMOUS"/>
 				<security:intercept-url pattern="/logged_out.htm*" access="ROLE_ANONYMOUS"/>
+				<security:intercept-url pattern="/success.jsp*" access="ROLE_USER,ROLE_ADMIN"/>
 				<security:intercept-url pattern="/wicket/**" access="ROLE_USER,ROLE_ADMIN"/>
 				<security:intercept-url pattern="/rest/**" access="ROLE_USER,ROLE_ADMIN"/>
 				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>

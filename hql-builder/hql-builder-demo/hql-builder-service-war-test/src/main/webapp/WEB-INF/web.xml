@@ -65,6 +65,7 @@
 		<url-pattern>/wicket/*</url-pattern>
 		<url-pattern>/rest/*</url-pattern>
 		<url-pattern>/j_spring_security_check</url-pattern>
+		<url-pattern>/success.jsp</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>wicket-filter</filter-name>

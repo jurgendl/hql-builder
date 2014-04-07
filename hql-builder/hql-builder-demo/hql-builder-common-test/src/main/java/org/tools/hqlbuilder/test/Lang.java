@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @Entity
-public class Lang extends Parent {
+public class Lang extends EntityParent {
     private static final long serialVersionUID = 762036304624420098L;
 
     private String code;
