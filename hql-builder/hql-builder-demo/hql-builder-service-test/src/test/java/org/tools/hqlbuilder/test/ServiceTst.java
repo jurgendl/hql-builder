@@ -8,6 +8,7 @@ public class ServiceTst {
     }
 
     public HqlService getHqlService() {
+        @SuppressWarnings("resource")
         HqlService hqlService = HqlService.class.cast(new org.springframework.context.support.ClassPathXmlApplicationContext(
                 "org/tools/hqlbuilder/test/spring-service-config.xml").getBean("hqlService"));
         return hqlService;
