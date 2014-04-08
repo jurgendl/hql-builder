@@ -1,0 +1,12 @@
+<wicket:enclosure child="f">
+	<p>Login</p>
+	<form wicket:id="f" method="post">
+		<p><label for="username">Username</label> <input type="text" wicket:id="username" /></p>
+		<p><label for="password">Password</label> <input type="password" wicket:id="password"/></p>
+		<p><input wicket:id="login" type="submit" value="login" /></p>
+	</form>
+</wicket:enclosure>
+
+<wicket:enclosure child="logout">
+	<p>Hello <span wicket:id="username"/>, do you want to <a wicket:id="logout">log out</a>?</p>
+</wicket:enclosure>
