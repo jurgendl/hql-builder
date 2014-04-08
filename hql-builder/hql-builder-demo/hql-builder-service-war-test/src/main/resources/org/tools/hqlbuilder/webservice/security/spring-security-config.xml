@@ -16,9 +16,16 @@
 	<!-- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security -->
 	<!-- http://javaworkbench.blogspot.com/p/spring-security.html -->
 
-	<util:constant id="logInUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGIN"/>
+	<bean id="securityPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:org/tools/hqlbuilder/webservice/security/security.properties" />
+	</bean>
 
-	<util:constant id="logOutUrl" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.LOGOUT"/>
+	<util:constant id="$LOGIN$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGIN$"/>
+	<util:constant id="$LOGOUT$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGOUT$"/>
+	<util:constant id="$ANON$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$ANON$"/>
+	<util:constant id="$WICKETURL$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$WICKETURL$"/>
+	<util:constant id="$LOGINWICKETURL$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGINWICKETURL$"/>
+	<util:constant id="$LOGOUTWICKETURL$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGOUTWICKETURL$"/>
 
 	<security:global-method-security pre-post-annotations="enabled"/>
 
@@ -26,42 +33,59 @@
 
 	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
 		<security:filter-chain-map path-type="ant">
-			<security:filter-chain pattern="/logged_out.htm*" filters="none"/>
-			<security:filter-chain pattern="/index.htm*" filters="none"/>
-			<security:filter-chain pattern="/login.jsp*" filters="none"/>
-			<security:filter-chain pattern="/**" filters="securityContextFilter, logoutFilter, formLoginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/auth/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/wicket/login" filters="securityContextFilter"/>
+			<security:filter-chain pattern="/wicket/logout" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/wicket/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/rest/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/**" filters="none"/>
 		</security:filter-chain-map>
 	</bean>
 
-	<bean id="securityContextFilter" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextPersistenceFilter">
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<property name="securityMetadataSource">
+			<security:filter-security-metadata-source>
+				<security:intercept-url pattern="/wicket/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/wicket/logout" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/wicket/**" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/rest/**" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+			</security:filter-security-metadata-source>
+		</property>
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="accessDecisionManager" ref="accessDecisionManager"/>
+	</bean>
+
+	<bean id="securityContextFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
 		<constructor-arg ref="securityContextRepository"/>
 	</bean>
 
-	<bean id="securityContextRepository" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextRepository">
-	</bean>
+	<bean id="securityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
 
-	<bean id="logoutFilter" class="org.tools.hqlbuilder.webservice.security.CustomLogoutFilter">
-		<constructor-arg value="/logged_out.htm"/>
+	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg ref="$LOGINWICKETURL$"/>
 		<constructor-arg>
 			<list>
-				<bean class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextLogoutHandler"/>
+				<bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
 			</list>
 		</constructor-arg>
-		<property name="filterProcessesUrl" ref="logOutUrl"/>
+		<property name="filterProcessesUrl" ref="$LOGOUT$"/>
 	</bean>
 
-	<bean id="formLoginFilter" class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationFilter">
+	<bean id="loginFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<property name="filterProcessesUrl" ref="$LOGIN$"/>
+		<property name="usernameParameter" value="username"/>
+		<property name="passwordParameter" value="password"/>
 		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="filterProcessesUrl" ref="logInUrl"/>
 		<property name="authenticationSuccessHandler">
-			<bean class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationSuccessHandler">
-				<property name="defaultTargetUrl" value="/success.jsp"/>
+			<bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+				<property name="defaultTargetUrl" ref="$LOGINWICKETURL$"/>
 				<property name="alwaysUseDefaultTargetUrl" value="true"/>
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">
-			<bean class="org.tools.hqlbuilder.webservice.security.CustomAuthenticationFailureHandler">
-				<property name="defaultFailureUrl" value="/login.jsp"/>
+			<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+				<property name="defaultFailureUrl" ref="$LOGINWICKETURL$"/>
 			</bean>
 		</property>
 	</bean>
@@ -85,51 +109,34 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 
-	<bean id="anonAuthenticationProvider" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationProvider">
-		<constructor-arg value="hqlbuilder"/>
+	<bean id="anonAuthenticationProvider" class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
+		<constructor-arg ref="$ANON$"/>
 	</bean>
 
-	<bean id="requestCacheFilter" class="org.tools.hqlbuilder.webservice.security.CustomRequestCacheAwareFilter">
+	<bean id="requestCacheFilter" class="org.springframework.security.web.savedrequest.RequestCacheAwareFilter">
 		<constructor-arg ref="requestCache"/>
 	</bean>
 
-	<bean id="servletApiFilter" class="org.tools.hqlbuilder.webservice.security.CustomSecurityContextHolderAwareRequestFilter"/>
+	<bean id="servletApiFilter" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter"/>
 
-	<bean id="anonAuthenticationFilter" class="org.tools.hqlbuilder.webservice.security.CustomAnonymousAuthenticationFilter">
-		<constructor-arg value="hqlbuilder"/>
-		<property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
+	<bean id="anonAuthenticationFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+		<constructor-arg ref="$ANON$"/>
 	</bean>
 
-	<bean id="sessionManagementFilter" class="org.tools.hqlbuilder.webservice.security.CustomSessionManagementFilter">
+	<bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
 		<constructor-arg ref="securityContextRepository"/>
 	</bean>
 
-	<bean id="exceptionTranslator" class="org.tools.hqlbuilder.webservice.security.CustomExceptionTranslationFilter">
+	<bean id="exceptionTranslator" class="org.springframework.security.web.access.ExceptionTranslationFilter">
 		<constructor-arg>
 			<bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-				<property name="loginFormUrl" value="/login.jsp"/>
+				<property name="loginFormUrl" ref="$LOGINWICKETURL$"/>
 			</bean>
 		</constructor-arg>
 		<constructor-arg ref="requestCache"/>
 	</bean>
 
-	<bean id="requestCache" class="org.tools.hqlbuilder.webservice.security.CustomRequestCache">
-	</bean>
-
-	<bean id="filterSecurityInterceptor" class="org.tools.hqlbuilder.webservice.security.CustomFilterSecurityInterceptor">
-		<property name="securityMetadataSource">
-			<security:filter-security-metadata-source>
-				<security:intercept-url pattern="/login.jsp*" access="ROLE_ANONYMOUS"/>
-				<security:intercept-url pattern="/logged_out.htm*" access="ROLE_ANONYMOUS"/>
-				<security:intercept-url pattern="/success.jsp*" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/wicket/**" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/rest/**" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-			</security:filter-security-metadata-source>
-		</property>
-		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="accessDecisionManager" ref="accessDecisionManager"/>
-	</bean>
+	<bean id="requestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache"/>
 
 	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
 		<property name="decisionVoters">

@@ -1,7 +1,21 @@
 package org.tools.hqlbuilder.webservice.security;
 
 public class SecurityConstants {
-    public static final String LOGOUT = "/j_spring_security_logout";
+    /** "/j_spring_security_logout" */
+    public static final String $LOGOUT$ = "/auth/logout";
 
-    public static final String LOGIN = "/j_spring_security_check";
+    /** "/j_spring_security_check" */
+    public static final String $LOGIN$ = "/auth/login";
+
+    public static final String $ANON$ = "anonymous";
+
+    public static final String $WICKETURL$ = "/wicket";
+
+    public static final String $LOGINURL$ = "/login";
+
+    public static final String $LOGOUTURL$ = "/logout";
+
+    public static final String $LOGINWICKETURL$ = $WICKETURL$ + $LOGINURL$;
+
+    public static final String $LOGOUTWICKETURL$ = $WICKETURL$ + $LOGOUTURL$;
 }

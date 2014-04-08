@@ -10,16 +10,9 @@
 	<description>hqlbuilder</description>
 
 	<welcome-file-list>
-		<welcome-file>login.jsp</welcome-file>
 		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 
-	<!-- Custom name for main spring configuration -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/webservice/spring-web-config.xml</param-value>
@@ -28,8 +21,6 @@
 		<param-name>configuration</param-name>
 		<param-value>deployment</param-value>
 	</context-param>
-
-	<!-- RESTEasy HTTP Request processor -->
 	<context-param>
 		<param-name>resteasy.servlet.mapping.prefix</param-name>
 		<param-value>/rest</param-value>
@@ -64,26 +55,21 @@
 		<filter-name>spring-security-filter</filter-name>
 		<url-pattern>/wicket/*</url-pattern>
 		<url-pattern>/rest/*</url-pattern>
-		<url-pattern>/j_spring_security_check</url-pattern>
-		<url-pattern>/success.jsp</url-pattern>
-		<url-pattern>/j_spring_security_logout</url-pattern>
-		<url-pattern>/logout.jsp</url-pattern>
+		<!-- <url-pattern>/j_spring_security_check</url-pattern>
+		<url-pattern>/j_spring_security_logout</url-pattern> -->
+		<url-pattern>/auth/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>wicket-filter</filter-name>
 		<url-pattern>/wicket/*</url-pattern>
 	</filter-mapping>
 
-	<!-- RESTEasy configuration -->
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
-
-	<!-- RESTEasy <-> Spring connector (RESTEasy can access Spring beans) -->
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
 	</listener>
-
 	<listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
@@ -117,6 +103,9 @@
 		<servlet-name>spring-security-servlet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 		<url-pattern>/wicket/*</url-pattern>
+		<!-- <url-pattern>/j_spring_security_check</url-pattern>
+		<url-pattern>/j_spring_security_logout</url-pattern> -->
+		<url-pattern>/auth/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>rest-servlet</servlet-name>
