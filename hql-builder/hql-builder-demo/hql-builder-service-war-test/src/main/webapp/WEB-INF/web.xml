@@ -55,8 +55,6 @@
 		<filter-name>spring-security-filter</filter-name>
 		<url-pattern>/wicket/*</url-pattern>
 		<url-pattern>/rest/*</url-pattern>
-		<!-- <url-pattern>/j_spring_security_check</url-pattern>
-		<url-pattern>/j_spring_security_logout</url-pattern> -->
 		<url-pattern>/auth/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
@@ -103,8 +101,6 @@
 		<servlet-name>spring-security-servlet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 		<url-pattern>/wicket/*</url-pattern>
-		<!-- <url-pattern>/j_spring_security_check</url-pattern>
-		<url-pattern>/j_spring_security_logout</url-pattern> -->
 		<url-pattern>/auth/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
