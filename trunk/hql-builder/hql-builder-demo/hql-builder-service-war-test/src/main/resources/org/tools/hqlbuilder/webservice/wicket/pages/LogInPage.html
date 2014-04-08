@@ -1,12 +1,12 @@
 <wicket:enclosure child="f">
-	<p>Login</p>
+	<p><wicket:message key="login.label">Login</wicket:message></p>
 	<form wicket:id="f" method="post">
-		<p><label for="username">Username</label> <input type="text" wicket:id="username" /></p>
-		<p><label for="password">Password</label> <input type="password" wicket:id="password"/></p>
+		<p><label for="username" wicket:id="username.label">Username</label> <input type="text" wicket:id="username" /></p>
+		<p><label for="password" wicket:id="password.label">Password</label> <input type="password" wicket:id="password"/></p>
 		<p><input wicket:id="login" type="submit" value="login" /></p>
 	</form>
 </wicket:enclosure>
 
 <wicket:enclosure child="logout">
-	<p>Hello <span wicket:id="username"/>, do you want to <a wicket:id="logout">log out</a>?</p>
+	<p><span wicket:id="logout.question">Hello username, do you want to</span> <a wicket:id="logout">log out</a>?</p>
 </wicket:enclosure>
