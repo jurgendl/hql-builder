@@ -13,17 +13,19 @@
 	http://www.springframework.org/schema/security/spring-security.xsd"
 	>
 
-	<bean id="securityPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:org/tools/hqlbuilder/webservice/security/security.properties"/>
+	<bean id="securityPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="securityProperties" />
 	</bean>
 
-	<util:constant id="$LOGIN$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGIN$"/>
-	<util:constant id="$LOGOUT$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGOUT$"/>
-	<util:constant id="$ANON$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$ANON$"/>
-	<util:constant id="$WICKETURL$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$WICKETURL$"/>
-	<util:constant id="$LOGINWICKETURL$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGINWICKETURL$"/>
-	<util:constant id="$LOGOUTWICKETURL$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$LOGOUTWICKETURL$"/>
-	<util:constant id="$REALM$" static-field="org.tools.hqlbuilder.webservice.security.SecurityConstants.$REALM$"/>
+	<bean id="securityProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:org/tools/hqlbuilder/webservice/security/security.properties</value>
+				<value>file:${user.home}/hqlbuilder/security.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
 
 	<security:global-method-security pre-post-annotations="enabled"/>
 
@@ -67,29 +69,30 @@
 	<bean id="securityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
 
 	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-		<constructor-arg ref="$LOGINWICKETURL$"/>
+		<constructor-arg value="${wicket.login}"/>
 		<constructor-arg>
 			<list>
 				<bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
 			</list>
 		</constructor-arg>
-		<property name="filterProcessesUrl" ref="$LOGOUT$"/>
+		<property name="filterProcessesUrl" value="${logout}"/>
 	</bean>
 
 	<bean id="loginFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-		<property name="filterProcessesUrl" ref="$LOGIN$"/>
-		<property name="usernameParameter" value="username"/>
-		<property name="passwordParameter" value="password"/>
+		<property name="filterProcessesUrl" value="${login}"/>
+		<property name="usernameParameter" value="${username.propertyname}"/>
+		<property name="passwordParameter" value="${password.propertyname}"/>
 		<property name="authenticationManager" ref="authenticationManager"/>
 		<property name="authenticationSuccessHandler">
 			<bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-				<property name="defaultTargetUrl" ref="$LOGINWICKETURL$"/>
-				<property name="alwaysUseDefaultTargetUrl" value="true"/>
+				<property name="defaultTargetUrl" value="${wicket.login}"/>
+				<property name="alwaysUseDefaultTargetUrl" value="false"/>
+				<property name="useReferer" value="true"/>
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">
 			<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-				<property name="defaultFailureUrl" ref="$LOGINWICKETURL$"/>
+				<property name="defaultFailureUrl" value="${wicket.login}"/>
 			</bean>
 		</property>
 	</bean>
@@ -110,7 +113,7 @@
 	</bean>
 
 	<bean id="anonAuthenticationProvider" class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-		<constructor-arg ref="$ANON$"/>
+		<constructor-arg value="${anonymous.user}"/>
 	</bean>
 
 	<bean id="requestCacheFilter" class="org.springframework.security.web.savedrequest.RequestCacheAwareFilter">
@@ -120,7 +123,7 @@
 	<bean id="servletApiFilter" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter"/>
 
 	<bean id="anonAuthenticationFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-		<constructor-arg ref="$ANON$"/>
+		<constructor-arg value="${anonymous.user}"/>
 	</bean>
 
 	<bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
@@ -130,7 +133,7 @@
 	<bean id="exceptionTranslator" class="org.springframework.security.web.access.ExceptionTranslationFilter">
 		<constructor-arg>
 			<bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-				<property name="loginFormUrl" ref="$LOGINWICKETURL$"/>
+				<property name="loginFormUrl" value="${wicket.login}"/>
 			</bean>
 		</constructor-arg>
 		<constructor-arg ref="requestCache"/>
