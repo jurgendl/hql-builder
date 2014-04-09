@@ -11,8 +11,6 @@ public class SecurityConstants {
     /** "/j_spring_security_check" */
     public static final String $LOGIN$ = "/auth/login";
 
-    public static final String $ANON$ = "anonymous";
-
     public static final String $WICKETURL$ = "/pages";
 
     public static final String $LOGINURL$ = "/login";
@@ -22,6 +20,4 @@ public class SecurityConstants {
     public static final String $LOGINWICKETURL$ = $WICKETURL$ + $LOGINURL$;
 
     public static final String $LOGOUTWICKETURL$ = $WICKETURL$ + $LOGOUTURL$;
-
-    public static final String $REALM$ = "hqladmin";
 }

@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -16,20 +17,26 @@ public class LogOutPage extends DefaultWebPage {
 
     public LogOutPage(PageParameters parameters) {
         super(parameters);
+        addLogoutComponents(this);
+    }
 
+    public static ExternalLink addLogoutComponents(final WebPage page) {
         final Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
 
-        ExternalLink logout = new ExternalLink("logout", getRequest().getContextPath() + SecurityConstants.$LOGOUT$, getString("logout.label"));
-        add(logout);
+        ExternalLink logout = new ExternalLink("logout", page.getRequest().getContextPath() + SecurityConstants.$LOGOUT$,
+                page.getString("logout.label"));
+        page.add(logout);
 
         Label username = new Label("logout.question", new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = 40702564365319274L;
 
             @Override
             public String getObject() {
-                return String.format(getString("logout.question"), authentication == null ? SecurityConstants.$ANON$ : authentication.getName());
+                return String.format(page.getString("logout.question"), authentication == null ? "?" : authentication.getName());
             }
         });
-        add(username);
+        page.add(username);
+
+        return logout;
     }
 }
