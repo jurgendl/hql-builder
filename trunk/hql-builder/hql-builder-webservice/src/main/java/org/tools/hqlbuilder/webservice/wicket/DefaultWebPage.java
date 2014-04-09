@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
 import org.apache.wicket.Session;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -21,6 +22,7 @@ public class DefaultWebPage extends WebPage {
 
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
+        Injector.get().inject(this);
     }
 
     @Override

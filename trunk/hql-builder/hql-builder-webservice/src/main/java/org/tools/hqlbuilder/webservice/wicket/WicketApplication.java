@@ -1,14 +1,17 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.settings.IMarkupSettings;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.tools.hqlbuilder.webservice.WicketRoot;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
@@ -28,6 +32,9 @@ import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
+
+    @SpringBean(name = "securityProperties")
+    private Properties securityProperties;
 
     public static WicketApplication get() {
         return WicketApplication.class.cast(WebApplication.get());
@@ -61,6 +68,7 @@ public class WicketApplication extends WebApplication {
         super.init();
 
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+        Injector.get().inject(this);
 
         IJQueryLibrarySettings settings = new JQueryLibrarySettings();
         settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
@@ -80,18 +88,30 @@ public class WicketApplication extends WebApplication {
             }
         };
         scanner.addIncludeFilter(TypeFilter);
-        for (BeanDefinition bd : scanner.findCandidateComponents("org.tools.hqlbuilder.webservice.wicket.pages")) {
+        for (BeanDefinition bd : scanner.findCandidateComponents(WicketRoot.class.getPackage().getName())) {
             try {
                 String className = bd.getBeanClassName();
                 logger.info("mounting page " + className);
                 @SuppressWarnings("unchecked")
                 Class<WebPage> pageClass = (Class<WebPage>) Class.forName(className);
                 MountedPage mountedPage = pageClass.getAnnotation(MountedPage.class);
-                logger.info("on path " + mountedPage.value());
-                mountPage(mountedPage.value(), pageClass);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                String path = mountedPage.value();
+                if (path.startsWith("${") && path.endsWith("}")) {
+                    path = securityProperties.getProperty(path.substring(2, path.length() - 1));
+                }
+                logger.info("on path " + path);
+                mountPage(path, pageClass);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
         }
+    }
+
+    public Properties getSecurityProperties() {
+        return this.securityProperties;
+    }
+
+    public void setSecurityProperties(Properties securityProperties) {
+        this.securityProperties = securityProperties;
     }
 }

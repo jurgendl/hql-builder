@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import java.util.Properties;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -9,15 +11,18 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.core.Authentication;
-import org.tools.hqlbuilder.webservice.security.SecurityConstants;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
-@MountedPage(SecurityConstants.$LOGINURL$)
+@MountedPage("${wicket.login.mount}")
 public class LogInPage extends DefaultWebPage {
     private static final long serialVersionUID = -959095871171401454L;
+
+    @SpringBean(name = "securityProperties")
+    private Properties securityProperties;
 
     public LogInPage(PageParameters parameters) {
         super(parameters);
@@ -31,7 +36,7 @@ public class LogInPage extends DefaultWebPage {
 
             @Override
             protected CharSequence getActionUrl() {
-                return getRequest().getContextPath() + SecurityConstants.$LOGIN$;
+                return getRequest().getContextPath() + securityProperties.getProperty("login");
             }
         };
 
@@ -51,7 +56,7 @@ public class LogInPage extends DefaultWebPage {
         }
 
         {
-            ExternalLink logout = LogOutPage.addLogoutComponents(this);
+            ExternalLink logout = LogOutPage.addLogoutComponents(securityProperties, this);
             logout.setVisible(authentication != null);
         }
     }

@@ -25,7 +25,7 @@ import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.XmlWrapper;
 
-@Path("/pojo")
+@Path("/builder")
 @Pretty
 @GZIP
 public interface PojoResource {
@@ -36,15 +36,15 @@ public interface PojoResource {
     public static final String XML = MediaType.TEXT_XML;
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/ping
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/
      */
     @GET
-    @Path("/ping")
+    @Path("/")
     @Produces({ TEXT })
     public String ping();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/sqlforhql?hql=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/sqlforhql?hql=...
      */
     @GET
     @Path("/sqlforhql")
@@ -52,7 +52,7 @@ public interface PojoResource {
     public abstract String getSqlForHql(@QueryParam("hql") String hql);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/classes
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/classes
      */
     @GET
     @Path("/classes")
@@ -60,7 +60,7 @@ public interface PojoResource {
     public abstract XmlWrapper<SortedSet<String>> getClasses();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/properties?classname=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/properties?classname=...
      */
     @GET
     @Path("/properties")
@@ -68,7 +68,7 @@ public interface PojoResource {
     public abstract XmlWrapper<List<String>> getProperties(@QueryParam("classname") String classname);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/connectioninfo
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/connectioninfo
      */
     @GET
     @Path("/connectioninfo")
@@ -76,7 +76,7 @@ public interface PojoResource {
     public abstract String getConnectionInfo();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/project
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/project
      */
     @GET
     @Path("/project")
@@ -84,7 +84,7 @@ public interface PojoResource {
     public abstract String getProject();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/search?text=...&typeName =...&hitsPerPage=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/search?text=...&typeName =...&hitsPerPage=...
      */
     @GET
     @Path("/search")
@@ -93,7 +93,7 @@ public interface PojoResource {
             @QueryParam("hitsperpage") int hitsPerPage);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/reservedkeywords
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/reservedkeywords
      */
     @GET
     @Path("/reservedkeywords")
@@ -101,7 +101,7 @@ public interface PojoResource {
     public abstract XmlWrapper<Set<String>> getReservedKeywords();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/namedqueries
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/namedqueries
      */
     @GET
     @Path("/namedqueries")
@@ -109,7 +109,7 @@ public interface PojoResource {
     public abstract XmlWrapper<Map<String, String>> getNamedQueries();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/createscript
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/createscript
      */
     @GET
     @Path("/createscript")
@@ -117,7 +117,7 @@ public interface PojoResource {
     public abstract String createScript();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/hibernateinfo
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/hibernateinfo
      */
     @GET
     @Path("/hibernateinfo")
@@ -125,7 +125,7 @@ public interface PojoResource {
     public abstract XmlWrapper<Map<String, String>> getHibernateInfo();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/hibernatehelpurl
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/hibernatehelpurl
      */
     @GET
     @Path("/hibernatehelpurl")
@@ -133,7 +133,7 @@ public interface PojoResource {
     public abstract String getHibernateHelpURL();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/hqlhelpurl
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/hqlhelpurl
      */
     @GET
     @Path("/hqlhelpurl")
@@ -141,7 +141,7 @@ public interface PojoResource {
     public abstract String getHqlHelpURL();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/lucenehelpurl
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/lucenehelpurl
      */
     @GET
     @Path("/lucenehelpurl")
@@ -149,7 +149,7 @@ public interface PojoResource {
     public abstract String getLuceneHelpURL();
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/propertynames?key=...& parts=...&parts=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/propertynames?key=...& parts=...&parts=...
      */
     @GET
     @Path("/propertynames.")
@@ -157,7 +157,7 @@ public interface PojoResource {
     public abstract XmlWrapper<List<String>> getPropertyNames(@QueryParam("key") String key, @QueryParam("parts") String[] parts);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/sql?sql=...&sql=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/sql?sql=...&sql=...
      */
     @GET
     @Path("/sql")
@@ -165,7 +165,7 @@ public interface PojoResource {
     public abstract void sql(@QueryParam("sql") String[] sql);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/findparameters?hql=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/findparameters?hql=...
      */
     @GET
     @Path("/findparameters")
@@ -174,7 +174,7 @@ public interface PojoResource {
     public abstract XmlWrapper<List<QueryParameter>> findParameters(@QueryParam("hql") String hql);
 
     /**
-     * @see [put] http://localhost:80/hqlbuilder/xml/pojo/save/{...} [body]
+     * @see [put] http://localhost:80/hqlbuilder/xml/builder/save/{...} [body]
      */
     @PUT
     @Path("/save/{pojo}")
@@ -183,7 +183,7 @@ public interface PojoResource {
     public abstract void save(@PathParam("pojo") String pojo, Object object);
 
     /**
-     * @see [delete] http://localhost:80/hqlbuilder/xml/pojo/delete/{...} [body]
+     * @see [delete] http://localhost:80/hqlbuilder/xml/builder/delete/{...} [body]
      */
     @DELETE
     @Path("/delete/{pojo}")
@@ -191,7 +191,7 @@ public interface PojoResource {
     public abstract void delete(@PathParam("pojo") String pojo, Object object);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/hibernatewebresolver
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/hibernatewebresolver
      */
     @GET
     @Path("/hibernatewebresolver")
@@ -199,7 +199,7 @@ public interface PojoResource {
     public abstract StreamingOutput getHibernateWebResolver();
 
     /**
-     * @see [put] http://localhost:80/hqlbuilder/xml/pojo/get [type,id]
+     * @see [put] http://localhost:80/hqlbuilder/xml/builder/get [type,id]
      */
     @Path("get")
     @POST
@@ -207,7 +207,7 @@ public interface PojoResource {
     public abstract <T> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/executehql?hql=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/executehql?hql=...
      */
     @GET
     @Path("/executehql")
@@ -215,7 +215,7 @@ public interface PojoResource {
     public abstract ExecutionResult execute(@QueryParam("hql") String hql);
 
     /**
-     * @see [put] http://localhost:80/hqlbuilder/xml/pojo/execute [body]
+     * @see [put] http://localhost:80/hqlbuilder/xml/builder/execute [body]
      */
     @PUT
     @Path("/execute")
@@ -224,7 +224,7 @@ public interface PojoResource {
     public abstract ExecutionResult execute(QueryParameters queryParameters);
 
     /**
-     * @see [get] http://localhost:80/hqlbuilder/xml/pojo/executehqlplain?hql=...
+     * @see [get] http://localhost:80/hqlbuilder/xml/builder/executehqlplain?hql=...
      */
     @GET
     @Path("/executehqlplain")
@@ -232,7 +232,7 @@ public interface PojoResource {
     public abstract <T> XmlWrapper<List<T>> executePlainResult(@QueryParam("hql") String hql);
 
     /**
-     * @see [put] http://localhost:80/hqlbuilder/xml/pojo/executeplain [body]
+     * @see [put] http://localhost:80/hqlbuilder/xml/builder/executeplain [body]
      */
     @PUT
     @Path("/executeplain")
