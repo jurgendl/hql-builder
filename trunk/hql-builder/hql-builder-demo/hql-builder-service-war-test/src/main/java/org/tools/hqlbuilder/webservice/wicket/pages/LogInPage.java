@@ -13,8 +13,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.security.SecurityConstants;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
+import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
+@MountedPage(SecurityConstants.$LOGINURL$)
 public class LogInPage extends DefaultWebPage {
     private static final long serialVersionUID = -959095871171401454L;
 

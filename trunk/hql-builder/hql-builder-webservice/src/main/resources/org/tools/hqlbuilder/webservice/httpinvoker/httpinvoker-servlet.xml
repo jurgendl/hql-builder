@@ -20,7 +20,7 @@
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
-				<prop key="hqlbuilder">httpHqlbuilderService</prop>
+				<prop key="bin">httpHqlbuilderService</prop>
 			</props>
 		</property>
 	</bean>

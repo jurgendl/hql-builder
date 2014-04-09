@@ -34,10 +34,13 @@
 	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
 		<security:filter-chain-map path-type="ant">
 			<security:filter-chain pattern="/auth/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/wicket/login" filters="securityContextFilter"/>
-			<security:filter-chain pattern="/wicket/logout" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/wicket/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/rest/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/resource/**" filters="none"/>
+			<security:filter-chain pattern="/pages/resource/**" filters="none"/>
+			<security:filter-chain pattern="/pages/wicket/resource/**" filters="none"/>
+			<security:filter-chain pattern="/pages/login" filters="securityContextFilter"/>
+			<security:filter-chain pattern="/pages/logout" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/xml/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/**" filters="none"/>
 		</security:filter-chain-map>
 	</bean>
@@ -45,10 +48,13 @@
 	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
-				<security:intercept-url pattern="/wicket/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-				<security:intercept-url pattern="/wicket/logout" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/wicket/**" access="ROLE_USER,ROLE_ADMIN"/>
-				<security:intercept-url pattern="/rest/**" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/pages/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/pages/wicket/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/pages/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/pages/logout" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/pages/**" access="ROLE_USER,ROLE_ADMIN"/>
+				<security:intercept-url pattern="/xml/**" access="ROLE_USER,ROLE_ADMIN"/>
 				<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 			</security:filter-security-metadata-source>
 		</property>

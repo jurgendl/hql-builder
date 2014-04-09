@@ -9,7 +9,7 @@ public class SecurityConstants {
 
     public static final String $ANON$ = "anonymous";
 
-    public static final String $WICKETURL$ = "/wicket";
+    public static final String $WICKETURL$ = "/pages";
 
     public static final String $LOGINURL$ = "/login";
 
