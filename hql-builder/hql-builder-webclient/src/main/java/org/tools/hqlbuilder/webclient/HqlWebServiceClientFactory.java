@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.webclient;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -28,10 +27,23 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScheme;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.BasicHttpContext;
+import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
@@ -40,7 +52,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver;
 
 public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, InitializingBean {
-    protected Logger logger;
+    protected final Logger logger;
+
+    protected String[] packages;
 
     protected String serviceUrl;
 
@@ -48,22 +62,61 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
 
     protected Class<R> resourceClass;
 
-    @SuppressWarnings("unchecked")
+    protected ResteasyProviderFactory resteasyProvider;
+
+    @SuppressWarnings("deprecation")
+    protected org.jboss.resteasy.client.ClientExecutor clientExecutor;
+
     public HqlWebServiceClientFactory(String[] packages) {
-        resourceClass = null;
-        RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
-        ResteasyProviderFactory.getInstance().registerProviderInstance(new JAXBContextResolver(packages));
-        logger = LoggerFactory.getLogger(getClass());
-        resourceClass = (Class<R>) ((java.lang.reflect.ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.packages = packages;
+        this.logger = setupLogger();
     }
 
-    /**
-     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    protected Logger setupLogger() {
+        return LoggerFactory.getLogger(getClass());
+    }
+
+    protected ResteasyProviderFactory setupResteasyProvider() {
+        ResteasyProviderFactory resteasyProviderFactory = ResteasyProviderFactory.getInstance();
+        RegisterBuiltin.register(resteasyProviderFactory);
+        resteasyProviderFactory.registerProviderInstance(new JAXBContextResolver(getPackages()));
+        return resteasyProviderFactory;
+    }
+
+    @SuppressWarnings("deprecation")
+    protected org.jboss.resteasy.client.ClientExecutor setupClientExecutor() {
+        AuthCache authCache = new BasicAuthCache();
+        AuthScheme basicAuth = new BasicScheme();
+        authCache.put(new HttpHost(getServiceUrl()), basicAuth);
+
+        BasicHttpContext localContext = new BasicHttpContext();
+        localContext.setAttribute(URI.create(getServiceUrl()).getHost(), authCache);
+
+        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        Credentials credentials = new UsernamePasswordCredentials("hqlbuilder", "hqlbuilder");
+        credentialsProvider.setCredentials(new AuthScope(URI.create(getServiceUrl()).getHost(), URI.create(getServiceUrl()).getPort()), credentials);
+
+        HttpClient httpClient = HttpClientBuilder.create()//
+                .setDefaultCredentialsProvider(credentialsProvider)//
+                .build();//
+
+        try {
+            httpClient.execute(new HttpGet(serviceUrl + "/classes"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return new ApacheHttpClient4Executor(httpClient, localContext);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Class<R> setupResourceClass() {
+        return (Class<R>) ((java.lang.reflect.ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    protected R setupResource() {
         ProxyFactory factory = new ProxyFactory();
-        factory.setInterfaces(new Class[] { resourceClass });
+        factory.setInterfaces(new Class[] { getResourceClass() });
         Class<?> clazz = factory.createClass();
         Object instance;
         try {
@@ -73,8 +126,27 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         } catch (IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
-        ((ProxyObject) instance).setHandler(this);
-        resource = resourceClass.cast(instance);
+        ProxyObject.class.cast(instance).setHandler(this);
+        return getResourceClass().cast(instance);
+    }
+
+    /**
+     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (this.resourceClass == null) {
+            this.resourceClass = setupResourceClass();
+        }
+        if (this.resteasyProvider == null) {
+            this.resteasyProvider = setupResteasyProvider();
+        }
+        if (this.clientExecutor == null) {
+            this.clientExecutor = setupClientExecutor();
+        }
+        if (this.resource == null) {
+            this.resource = setupResource();
+        }
     }
 
     /**
@@ -118,7 +190,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         }
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        UriBuilder uriBuilder = UriBuilder.fromUri(URI.create(getServiceUrl())).path(resourceClass).path(method);
+        UriBuilder uriBuilder = UriBuilder.fromUri(URI.create(getServiceUrl())).path(getResourceClass()).path(method);
         List<Object> notAcceptedParameters = new ArrayList<Object>(Arrays.asList(args));
         for (int i = 0; i < parameterTypes.length; i++) {
             for (Annotation parameterAnnotation : parameterAnnotations[i]) {
@@ -134,9 +206,8 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         String uriPath = uriBuilder.build().toASCIIString();
         logger.debug("URI=" + uriPath);
 
-        ResteasyProviderFactory provider = ResteasyProviderFactory.getInstance();
-        org.jboss.resteasy.client.ClientRequest request = new org.jboss.resteasy.client.ClientRequest(uriBuilder,
-                org.jboss.resteasy.client.ClientRequest.getDefaultExecutor(), provider);
+        org.jboss.resteasy.client.ClientRequest request = new org.jboss.resteasy.client.ClientRequest(uriBuilder, getClientExecutor(),
+                getResteasyProvider());
 
         for (int i = 0; i < parameterTypes.length; i++) {
             for (Annotation parameterAnnotation : parameterAnnotations[i]) {
@@ -226,41 +297,53 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         }
     }
 
-    public String getServiceUrl() {
-        return this.serviceUrl;
+    public String[] getPackages() {
+        return this.packages;
     }
 
-    public void setServiceUrl(String serviceUrl) {
-        this.serviceUrl = serviceUrl;
+    public String getServiceUrl() {
+        return this.serviceUrl;
     }
 
     public R getResource() {
         return this.resource;
     }
 
+    public Class<R> getResourceClass() {
+        return this.resourceClass;
+    }
+
+    public ResteasyProviderFactory getResteasyProvider() {
+        return this.resteasyProvider;
+    }
+
+    public void setPackages(String[] packages) {
+        this.packages = packages;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
+
     public void setResource(R resource) {
         this.resource = resource;
     }
 
-    public static class RedirectedStreamingOutput implements StreamingOutput {
-        protected final InputStream input;
+    public void setResourceClass(Class<R> resourceClass) {
+        this.resourceClass = resourceClass;
+    }
 
-        public RedirectedStreamingOutput(InputStream input) {
-            this.input = input;
-        }
+    public void setResteasyProvider(ResteasyProviderFactory resteasyProvider) {
+        this.resteasyProvider = resteasyProvider;
+    }
 
-        /**
-         * @see javax.ws.rs.core.StreamingOutput#write(java.io.OutputStream)
-         */
-        @Override
-        public void write(OutputStream output) throws IOException, WebApplicationException {
-            byte[] buffer = new byte[1024 * 4];
-            int read;
-            while ((read = input.read(buffer)) != -1) {
-                output.write(buffer, 0, read);
-            }
-            output.close();
-            input.close();
-        }
+    @SuppressWarnings("deprecation")
+    public org.jboss.resteasy.client.ClientExecutor getClientExecutor() {
+        return this.clientExecutor;
+    }
+
+    @SuppressWarnings("deprecation")
+    public void setClientExecutor(org.jboss.resteasy.client.ClientExecutor clientExecutor) {
+        this.clientExecutor = clientExecutor;
     }
 }

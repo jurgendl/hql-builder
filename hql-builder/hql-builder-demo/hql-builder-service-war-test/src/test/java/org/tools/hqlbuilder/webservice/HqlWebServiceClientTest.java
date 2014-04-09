@@ -1,11 +1,27 @@
 package org.tools.hqlbuilder.webservice;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HttpContext;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
@@ -30,8 +46,49 @@ public class HqlWebServiceClientTest {
     }
 
     public static void test0() throws Exception {
-        HqlWebServiceClient hc = getClient();
-        System.out.println(hc.get(User.class, String.valueOf(1l)));
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(new AuthScope("localhost", 80), new UsernamePasswordCredentials("hqladmin", "hqladmin"));
+        CloseableHttpClient httpclient = HttpClients.custom()//
+                .setDefaultCredentialsProvider(credsProvider)//
+                .setRedirectStrategy(new DefaultRedirectStrategy() {
+                    @Override
+                    public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+                        boolean redirected = super.isRedirected(request, response, context);
+                        return redirected;
+                    }
+
+                    @Override
+                    public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+                        HttpUriRequest redirect = super.getRedirect(request, response, context);
+                        return redirect;
+                    }
+                })//
+                .build();//
+
+        try {
+            HttpGet httpget = new HttpGet("http://localhost:80/hqlbuilder/pages");
+
+            System.out.println("Executing request " + httpget.getRequestLine());
+            CloseableHttpResponse response = httpclient.execute(httpget);
+            try {
+                System.out.println("----------------------------------------");
+                System.out.println(response.getStatusLine());
+                InputStream in = response.getEntity().getContent();
+                byte[] buffer = new byte[1024];
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                int read;
+                while ((read = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, read);
+                }
+                in.close();
+                out.close();
+                System.out.println(new String(out.toByteArray()));
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
     }
 
     public static void test1() throws Exception {

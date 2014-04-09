@@ -17,7 +17,6 @@ import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.XmlWrapper;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
@@ -158,7 +157,6 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
 
     @Override
     public <T, I> T get(Class<T> type, I id) {
-        XmlWrapper<T> xmlWrapper = getResource().get(type.getName(), String.valueOf(id));
-        return xmlWrapper.getValue();
+        return type.cast(getResource().get(type.getName(), String.valueOf(id)).getValue());
     }
 }
