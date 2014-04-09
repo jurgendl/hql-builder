@@ -39,8 +39,9 @@ public class HqlWebServiceClientTest {
         try {
             context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/webservice/test-context.xml");
             Properties cfg = Properties.class.cast(context.getBean("securityProperties"));
-            serviceUrl = new URI("http", null, InetAddress.getLocalHost().getHostAddress(), cfg.containsKey("port") ? Integer.parseInt(cfg
-                    .getProperty("port")) : 80, "/" + cfg.getProperty("contextpath").toString(), null, null).toASCIIString();
+            serviceUrl = new URI(cfg.getProperty("protocol"), null, InetAddress.getLocalHost().getHostAddress(),
+                    cfg.containsKey("port") ? Integer.parseInt(cfg.getProperty("port")) : 80, "/" + cfg.getProperty("contextpath").toString(), null,
+                    null).toASCIIString();
             test0(cfg, serviceUrl);
             // test1(serviceUrl + "/xml");
             // test2(serviceUrl + "/xml");
