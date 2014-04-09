@@ -7,8 +7,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.security.SecurityConstants;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
+import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
+@MountedPage(SecurityConstants.$LOGOUTURL$)
 public class LogOutPage extends DefaultWebPage {
     private static final long serialVersionUID = -1844173741599209281L;
 
