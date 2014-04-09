@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -52,19 +51,7 @@ public class LogInPage extends DefaultWebPage {
         }
 
         {
-            ExternalLink logout = new ExternalLink("logout", getRequest().getContextPath() + SecurityConstants.$LOGOUT$, getString("logout.label"));
-            add(logout);
-
-            Label username = new Label("logout.question", new AbstractReadOnlyModel<String>() {
-                private static final long serialVersionUID = 40702564365319274L;
-
-                @Override
-                public String getObject() {
-                    return String.format(getString("logout.question"), authentication == null ? SecurityConstants.$ANON$ : authentication.getName());
-                }
-            });
-            add(username);
-
+            ExternalLink logout = LogOutPage.addLogoutComponents(this);
             logout.setVisible(authentication != null);
         }
     }
