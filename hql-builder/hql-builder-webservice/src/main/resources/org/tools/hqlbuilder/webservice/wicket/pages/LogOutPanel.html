@@ -1,7 +1,10 @@
 <wicket:panel>
 <wicket:enclosure child="logoutform">
 	<form wicket:id="logoutform" method="post">
-		<b><label wicket:id="username"/></b><input wicket:id="logout" type="submit" value="logout" />
+		|
+		<label wicket:id="knownusername"/>
+		<input wicket:id="logout" type="submit" value="logout" />
+		|
 	</form>
 </wicket:enclosure>
 </wicket:panel>

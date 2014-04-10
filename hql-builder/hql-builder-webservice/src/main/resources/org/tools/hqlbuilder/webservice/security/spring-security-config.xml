@@ -38,15 +38,15 @@
 
 	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
 		<security:filter-chain-map path-type="ant">
-			<security:filter-chain pattern="/auth/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/auth/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/resource/**" filters="none"/>
 			<security:filter-chain pattern="/pages/resource/**" filters="none"/>
 			<security:filter-chain pattern="/pages/wicket/resource/**" filters="none"/>
-			<security:filter-chain pattern="/pages/public/**" filters="none"/>
-			<security:filter-chain pattern="/pages/login" filters="securityContextFilter"/>
-			<security:filter-chain pattern="/pages/logout" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/pages/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/xml/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/public/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/login" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/logout" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/xml/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/**" filters="none"/>
 		</security:filter-chain-map>
 	</bean>
