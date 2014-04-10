@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
@@ -22,6 +21,7 @@ public class LogOutPanel extends Panel {
     public LogOutPanel(final String id, final IModel<UserData> model, final Authentication authentication, final Properties securityProperties) {
         super(id, model);
         add(new LogOutForm(authentication, securityProperties));
+        setVisible(authentication != null);
     }
 
     public class LogOutForm extends StatelessForm<UserData> {
@@ -33,15 +33,9 @@ public class LogOutPanel extends Panel {
             super("logoutform", Model.of(new UserData()));
             this.securityProperties = securityProperties;
             Button logout = new Button("logout", new ResourceModel("logout.label"));
-            Label logoutQuestion = new Label("logout.question", new AbstractReadOnlyModel<String>() {
-                private static final long serialVersionUID = 40702564365319274L;
-
-                @Override
-                public String getObject() {
-                    return String.format(getString("logout.question"), authentication == null ? "?" : authentication.getName());
-                }
-            });
-            add(logoutQuestion);
+            Label username = new Label("username", authentication == null ? securityProperties.getProperty("anonymous.user")
+                    : authentication.getName());
+            add(username);
             add(logout.setMarkupId(logout.getId()));
             setMarkupId(getId());
             setVisible(authentication != null);
