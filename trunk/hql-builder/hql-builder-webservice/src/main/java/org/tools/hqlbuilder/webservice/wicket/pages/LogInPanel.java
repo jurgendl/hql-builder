@@ -19,12 +19,15 @@ public class LogInPanel extends Panel {
 
     public LogInPanel(final Authentication authentication, final Properties securityProperties) {
         this("loginpanel", Model.of(new UserData()), authentication, securityProperties);
+        setOutputMarkupPlaceholderTag(false);
+        setRenderBodyOnly(true);
+        setOutputMarkupId(false);
     }
 
     public LogInPanel(final String id, final IModel<UserData> model, final Authentication authentication, final Properties securityProperties) {
         super(id, model);
         add(new LogInForm(authentication, securityProperties));
-        setVisible(authentication == null);
+        setVisible(authentication == null || authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user")));
     }
 
     public class LogInForm extends StatelessForm<UserData> {
@@ -59,8 +62,11 @@ public class LogInPanel extends Panel {
             add(username.setMarkupId(username.getId()));
             add(password.setMarkupId(password.getId()));
             add(login.setMarkupId(login.getId()));
+            Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user")
+                    : authentication.getName());
+            usernamelabel.setVisible(authentication != null);
+            add(usernamelabel);
             setMarkupId(getId());
-            setVisible(authentication == null);
         }
 
         @Override

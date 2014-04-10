@@ -16,12 +16,15 @@ public class LogOutPanel extends Panel {
 
     public LogOutPanel(final Authentication authentication, final Properties securityProperties) {
         this("logoutpanel", Model.of(new UserData()), authentication, securityProperties);
+        setOutputMarkupPlaceholderTag(false);
+        setRenderBodyOnly(true);
+        setOutputMarkupId(false);
     }
 
     public LogOutPanel(final String id, final IModel<UserData> model, final Authentication authentication, final Properties securityProperties) {
         super(id, model);
         add(new LogOutForm(authentication, securityProperties));
-        setVisible(authentication != null);
+        setVisible(authentication != null && !authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user")));
     }
 
     public class LogOutForm extends StatelessForm<UserData> {
@@ -33,12 +36,12 @@ public class LogOutPanel extends Panel {
             super("logoutform", Model.of(new UserData()));
             this.securityProperties = securityProperties;
             Button logout = new Button("logout", new ResourceModel("logout.label"));
-            Label username = new Label("username", authentication == null ? securityProperties.getProperty("anonymous.user")
-                    : authentication.getName());
-            add(username);
             add(logout.setMarkupId(logout.getId()));
+            Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user")
+                    : authentication.getName());
+            usernamelabel.setVisible(authentication != null);
+            add(usernamelabel);
             setMarkupId(getId());
-            setVisible(authentication != null);
         }
 
         @Override

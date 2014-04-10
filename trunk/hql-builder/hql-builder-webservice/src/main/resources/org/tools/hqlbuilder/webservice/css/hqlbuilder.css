@@ -1,6 +1,7 @@
 body {
 	background: #ededed;
 	color: #000;
+	margin: 0px;
 }
 
 ::-webkit-input-placeholder {
@@ -24,11 +25,22 @@ body {
 }
 
 .toright {
+	position: relative;
 	float: right;
 }
 
 .toleft {
+	position: relative;
 	float: left;
+}
+
+.topbar {
+	position: absolute;
+	top: 0px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	border-bottom: solid 1px #b7b7b7;
+	width: 100%;
 }
 
 form input[type='text'],input[type='password'] {
@@ -70,7 +82,7 @@ form input[type='submit'] {
 	width: auto;
 	height: 24px;
 	padding: 3px 15px 3px 15px;
-	margin: 0px 9px 0px 9px;
+	margin: 0px 3px 0px 3px;
 	font: normal 13px/100% Verdana, Tahoma, sans-serif;
 	color : #606060;
 	border: solid 1px #b7b7b7;
@@ -102,7 +114,48 @@ form input[type='submit']:active {
 }
 
 form label {
-	margin-left: 10px;
 	color: #919191;
 	vertical-align: middle;
+	font-style: bold;
+}
+
+.topbar {
+	color: #919191;
+	font-style: bold;
+}
+
+button {
+	vertical-align: middle;
+	width: auto;
+	height: 24px;
+	padding: 3px 15px 3px 15px;
+	margin: 0px 3px 0px 3px;
+	font: normal 13px/100% Verdana, Tahoma, sans-serif;
+	color : #606060;
+	border: solid 1px #b7b7b7;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#ededed));
+	background: -moz-linear-gradient(top, #fff, #ededed);
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+	color: #606060;
+}
+
+button:hover {
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#dcdcdc));
+	background: -moz-linear-gradient(top, #fff, #dcdcdc);
+}
+
+button:active {
+	color: #999;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed),
+		to(#fff));
+	background: -moz-linear-gradient(top, #ededed, #fff);
 }
