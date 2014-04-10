@@ -32,7 +32,10 @@ public class DefaultWebPage extends WebPage {
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
         Injector.get().inject(this);
+        addComponents();
+    }
 
+    protected void addComponents() {
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         add(new LogInPanel(authentication, securityProperties));
         add(new LogOutPanel(authentication, securityProperties));
