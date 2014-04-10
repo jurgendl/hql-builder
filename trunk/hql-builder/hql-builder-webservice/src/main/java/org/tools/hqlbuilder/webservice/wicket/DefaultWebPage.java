@@ -1,13 +1,17 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -36,6 +40,30 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
+        Locale[] locales = { Locale.ENGLISH, new Locale("nl") };
+        for (Locale locale : locales) {
+            final Locale loc = locale;
+            AbstractReadOnlyModel<String> text = new AbstractReadOnlyModel<String>() {
+                private static final long serialVersionUID = 5389356947706144531L;
+
+                @Override
+                public String getObject() {
+                    return loc.getLanguage().toUpperCase();
+                }
+            };
+            Button btn = new Button(locale.getLanguage(), text) {
+                private static final long serialVersionUID = 1509590362769962555L;
+
+                @Override
+                protected void onComponentTag(ComponentTag tag) {
+                    super.onComponentTag(tag);
+                    tag.getAttributes().put("title", loc.getDisplayLanguage(loc));
+                }
+            };
+            btn.setMarkupId(btn.getId());
+            add(btn);
+        }
+
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         add(new LogInPanel(authentication, securityProperties));
         add(new LogOutPanel(authentication, securityProperties));

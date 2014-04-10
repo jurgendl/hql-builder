@@ -24,6 +24,11 @@ body {
 	font: normal 13px/100% Verdana, Tahoma, sans-serif;
 }
 
+.locale {
+	padding: 3px 6px 3px 6px;
+	margin: 0px 0px 0px 3px;
+}
+
 .toright {
 	position: relative;
 	float: right;
