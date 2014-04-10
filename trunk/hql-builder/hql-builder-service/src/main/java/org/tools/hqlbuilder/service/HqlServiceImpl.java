@@ -162,6 +162,7 @@ public class HqlServiceImpl implements HqlService {
                         { "Annotations", "org.hibernate:hibernate-commons-annotations" },
                         { "Annotations", "org.hibernate.commons:hibernate-commons-annotations" },
                         { "Validator", "org.hibernate:hibernate-validator" },
+                        { "JPA", "javax.persistence:persistence-api" },
                         { "JPA", "org.hibernate.javax.persistence:hibernate-jpa-2.0-api" },
                         { "JPA", "org.hibernate.javax.persistence:hibernate-jpa-2.1-api" } };
                 for (String[] dep : deps) {
