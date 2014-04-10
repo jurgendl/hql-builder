@@ -2,7 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import java.io.Serializable;
 
-public class LoginForm implements Serializable {
+public class UserData implements Serializable {
     private static final long serialVersionUID = 5585041908424613045L;
 
     private String username;
