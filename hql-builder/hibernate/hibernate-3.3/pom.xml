@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
+			<version>3.3.1.ga</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>cglib</artifactId>
