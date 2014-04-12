@@ -13,6 +13,23 @@
 		<welcome-file>pages/</welcome-file>
 	</welcome-file-list>
 
+	<error-page>
+		<error-code>401</error-code>
+		<location>/401.html</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.html</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/500.html</location>
+	</error-page>
+	<error-page>
+		<error-code>503</error-code>
+		<location>/503.html</location>
+	</error-page>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/webservice/spring-web-config.xml</param-value>
