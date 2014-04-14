@@ -95,6 +95,7 @@
 				<property name="defaultTargetUrl" value="${wicket.login}"/>
 				<property name="alwaysUseDefaultTargetUrl" value="false"/>
 				<property name="useReferer" value="true"/>
+				<property name="targetUrlParameter" value="${returnto.propertyname}"/>
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">
