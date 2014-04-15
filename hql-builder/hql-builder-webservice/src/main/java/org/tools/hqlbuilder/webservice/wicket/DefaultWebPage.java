@@ -14,11 +14,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.wicket.pages.LocalesPanel;
-import org.tools.hqlbuilder.webservice.wicket.pages.LogInPanel;
-import org.tools.hqlbuilder.webservice.wicket.pages.LogOutPanel;
 
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
@@ -26,7 +23,7 @@ public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
 
     @SpringBean(name = "securityProperties")
-    private Properties securityProperties;
+    protected Properties securityProperties;
 
     public static WicketSession getWebSession() {
         return WicketSession.class.cast(Session.get());
@@ -40,10 +37,6 @@ public class DefaultWebPage extends WebPage {
 
     protected void addComponents() {
         add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
-
-        Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
-        add(new LogInPanel(authentication, securityProperties));
-        add(new LogOutPanel(authentication, securityProperties));
     }
 
     @Override
