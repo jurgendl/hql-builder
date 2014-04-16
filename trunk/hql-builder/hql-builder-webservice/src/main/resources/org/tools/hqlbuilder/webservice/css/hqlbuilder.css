@@ -1,5 +1,5 @@
 html,body {
-	/*height: 100%;*/
+	/* */
 	
 }
 
@@ -18,7 +18,7 @@ body {
 
 .incenter {
 	position: absolute;
-	left: 50%;
+	left: 45%;
 	top: 50%;
 	margin: -100px 0 0 -150px;
 }
@@ -411,10 +411,12 @@ button:hover {
 }
 
 .fileupload input[type='file']:focus {
+	/* */
 	
 }
 
 .fileupload input[type='file']:hover {
+	/* */
 	
 }
 
@@ -434,9 +436,19 @@ form input[type='color'] {
 }
 
 form input[type='color']:focus {
+	/* */
 	
 }
 
 form input[type='color']:hover {
+	/* */
 	
+}
+
+.password {
+	background-image: url("../resources/images/key.png") no-repeat;
+}
+
+.username {
+	background-image: url("../resources/images/user.png") no-repeat;
 }
