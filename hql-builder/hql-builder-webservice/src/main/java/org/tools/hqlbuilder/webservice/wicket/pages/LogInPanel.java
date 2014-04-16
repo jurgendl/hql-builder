@@ -14,6 +14,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.springframework.security.core.Authentication;
+import org.tools.hqlbuilder.webservice.wicket.UserData;
 
 public class LogInPanel extends Panel {
     private static final long serialVersionUID = -3020334357804419643L;
@@ -39,7 +40,7 @@ public class LogInPanel extends Panel {
         public LogInForm(@SuppressWarnings("unused") final Authentication authentication, final Properties securityProperties) {
             super("loginform", Model.of(new UserData()));
             this.securityProperties = securityProperties;
-            TextField<UserData> username = new TextField<UserData>("username") {
+            TextField<String> username = new TextField<String>("username") {
                 private static final long serialVersionUID = -3917878971011538022L;
 
                 @Override

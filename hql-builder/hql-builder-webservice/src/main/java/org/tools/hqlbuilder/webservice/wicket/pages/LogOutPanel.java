@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.springframework.security.core.Authentication;
+import org.tools.hqlbuilder.webservice.wicket.UserData;
 
 public class LogOutPanel extends Panel {
     private static final long serialVersionUID = -6245651530312025190L;
