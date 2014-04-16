@@ -26,11 +26,13 @@ body {
 .toright {
 	position: relative;
 	float: right;
+	padding-right: 10px;
 }
 
 .toleft {
 	position: relative;
 	float: left;
+	padding-left: 10px;
 }
 
 .topbar {
@@ -38,8 +40,10 @@ body {
 	font-style: bold;
 	position: absolute;
 	top: 0px;
-	padding-bottom: 5px;
+	padding-top: 0px;
 	margin-top: 5px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
 	border-bottom: solid 1px #b7b7b7;
 	width: 100%;
 }
