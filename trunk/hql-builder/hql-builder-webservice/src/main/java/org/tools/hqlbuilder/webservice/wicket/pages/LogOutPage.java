@@ -21,4 +21,9 @@ public class LogOutPage extends DefaultWebPage {
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         add(new LogOutPanel(authentication, securityProperties));
     }
+
+    @Override
+    public boolean showAuthLinks() {
+        return false;
+    }
 }

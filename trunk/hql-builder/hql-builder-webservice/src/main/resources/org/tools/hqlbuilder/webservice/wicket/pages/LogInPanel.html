@@ -1,13 +1,9 @@
 <wicket:panel>
 <wicket:enclosure child="loginform">
 	<form wicket:id="loginform" method="post">
-		|
-		<label wicket:id="knownusername"/>
-		|
-		<label for="username" wicket:id="username.label">Username</label> <input type="text" wicket:id="username" placeholder="Username" required />
-		<label for="password" wicket:id="password.label">Password</label> <input type="password" wicket:id="password" placeholder="Password" required />
-		<input wicket:id="login" type="submit" value="login" />
-		|
+		<p><label for="username" wicket:id="username.label">Username</label> <input type="text" wicket:id="username" placeholder="Username" required /></p>
+		<p><label for="password" wicket:id="password.label">Password</label> <input type="password" wicket:id="password" placeholder="Password" required /></p>
+		<p><input wicket:id="login" type="submit" value="login" /></p>
 	</form>
 </wicket:enclosure>
 </wicket:panel>
