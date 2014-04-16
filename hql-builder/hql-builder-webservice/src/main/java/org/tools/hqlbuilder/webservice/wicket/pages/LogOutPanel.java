@@ -31,7 +31,7 @@ public class LogOutPanel extends Panel {
 
         protected final Properties securityProperties;
 
-        public LogOutForm(final Authentication authentication, final Properties securityProperties) {
+        public LogOutForm(@SuppressWarnings("unused") final Authentication authentication, final Properties securityProperties) {
             super("logoutform", Model.of(new UserData()));
             this.securityProperties = securityProperties;
             Button logout = new Button("logout", new ResourceModel("logout.label"));

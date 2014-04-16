@@ -35,7 +35,7 @@ public class LogInPanel extends Panel {
 
         protected final Properties securityProperties;
 
-        public LogInForm(final Authentication authentication, final Properties securityProperties) {
+        public LogInForm(@SuppressWarnings("unused") final Authentication authentication, final Properties securityProperties) {
             super("loginform", Model.of(new UserData()));
             this.securityProperties = securityProperties;
             TextField<UserData> username = new TextField<UserData>("username") {
@@ -57,11 +57,13 @@ public class LogInPanel extends Panel {
                 }
             };
             Button login = new Button("login", new ResourceModel("login.label"));
+            Button reset = new Button("reset", new ResourceModel("reset.label"));
             add(new Label("username.label", new ResourceModel("username.label")));
             add(new Label("password.label", new ResourceModel("password.label")));
             add(username.setMarkupId(username.getId()));
             add(password.setMarkupId(password.getId()));
             add(login.setMarkupId(login.getId()));
+            add(reset.setMarkupId(reset.getId()));
             // Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user") :
             // authentication.getName());
             // usernamelabel.setVisible(authentication != null);
