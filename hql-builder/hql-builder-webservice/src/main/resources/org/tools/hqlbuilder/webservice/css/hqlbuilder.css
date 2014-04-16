@@ -6,6 +6,7 @@ html,body {
 body {
 	font: 12px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
 	margin: 0;
+	margin-top: 75px;
 	background-color: #d9dee2;
 	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
 		to(#d9dee2));
