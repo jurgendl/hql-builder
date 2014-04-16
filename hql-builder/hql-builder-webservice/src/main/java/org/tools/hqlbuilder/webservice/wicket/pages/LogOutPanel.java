@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import java.util.Properties;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -37,10 +36,10 @@ public class LogOutPanel extends Panel {
             this.securityProperties = securityProperties;
             Button logout = new Button("logout", new ResourceModel("logout.label"));
             add(logout.setMarkupId(logout.getId()));
-            Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user")
-                    : authentication.getName());
-            usernamelabel.setVisible(authentication != null);
-            add(usernamelabel);
+            // Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user")
+            // : authentication.getName());
+            // usernamelabel.setVisible(authentication != null);
+            // add(usernamelabel);
             setMarkupId(getId());
         }
 

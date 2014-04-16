@@ -21,4 +21,9 @@ public class LogInPage extends DefaultWebPage {
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         add(new LogInPanel(authentication, securityProperties));
     }
+
+    @Override
+    public boolean showAuthLinks() {
+        return false;
+    }
 }

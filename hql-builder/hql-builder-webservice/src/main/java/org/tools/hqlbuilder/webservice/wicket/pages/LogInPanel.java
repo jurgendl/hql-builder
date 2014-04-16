@@ -62,10 +62,10 @@ public class LogInPanel extends Panel {
             add(username.setMarkupId(username.getId()));
             add(password.setMarkupId(password.getId()));
             add(login.setMarkupId(login.getId()));
-            Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user")
-                    : authentication.getName());
-            usernamelabel.setVisible(authentication != null);
-            add(usernamelabel);
+            // Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user") :
+            // authentication.getName());
+            // usernamelabel.setVisible(authentication != null);
+            // add(usernamelabel);
             setMarkupId(getId());
         }
 

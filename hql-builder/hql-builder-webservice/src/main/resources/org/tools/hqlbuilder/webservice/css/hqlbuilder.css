@@ -24,11 +24,6 @@ body {
 	font: normal 13px/100% Verdana, Tahoma, sans-serif;
 }
 
-.locale {
-	padding: 3px 6px 3px 6px;
-	margin: 0px 0px 0px 3px;
-}
-
 .toright {
 	position: relative;
 	float: right;
@@ -39,13 +34,62 @@ body {
 	float: left;
 }
 
+.incenter {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -100px 0 0 -150px;
+}
+
 .topbar {
+	color: #919191;
+	font-style: bold;
 	position: absolute;
 	top: 0px;
 	padding-bottom: 5px;
 	margin-top: 5px;
 	border-bottom: solid 1px #b7b7b7;
 	width: 100%;
+}
+
+.locale {
+	padding: 3px 6px 3px 6px;
+	margin: 0px 0px 0px 3px;
+}
+
+a.likebutton {
+	width: auto;
+	height: 24px;
+	padding: 3px 15px 3px 15px;
+	margin: 0px 15px 0px 0px;
+	font: normal 13px/100% Verdana, Tahoma, sans-serif;
+	color: #606060;
+	border: solid 1px #b7b7b7;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#ededed));
+	background: -moz-linear-gradient(top, #fff, #ededed);
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+	text-decoration: none;
+}
+
+a:hover.likebutton {
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#dcdcdc));
+	background: -moz-linear-gradient(top, #fff, #dcdcdc);
+}
+
+a:active.likebutton {
+	color: #999;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed),
+		to(#fff));
+	background: -moz-linear-gradient(top, #ededed, #fff);
 }
 
 form input[type='text'],input[type='password'] {
@@ -108,7 +152,7 @@ form input[type='submit'] {
 	padding: 3px 15px 3px 15px;
 	margin: 0px 3px 0px 3px;
 	font: normal 13px/100% Verdana, Tahoma, sans-serif;
-	color : #606060;
+	color: #606060;
 	border: solid 1px #b7b7b7;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -120,7 +164,6 @@ form input[type='submit'] {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
 	-moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
 	-webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
-	color: #606060;
 }
 
 form input[type='submit']:hover {
@@ -143,11 +186,6 @@ form label {
 	font-style: bold;
 }
 
-.topbar {
-	color: #919191;
-	font-style: bold;
-}
-
 button {
 	vertical-align: middle;
 	width: auto;
@@ -155,7 +193,7 @@ button {
 	padding: 3px 15px 3px 15px;
 	margin: 0px 3px 0px 3px;
 	font: normal 13px/100% Verdana, Tahoma, sans-serif;
-	color : #606060;
+	color: #606060;
 	border: solid 1px #b7b7b7;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -167,7 +205,6 @@ button {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
 	-moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
 	-webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
-	color: #606060;
 }
 
 button:hover {
