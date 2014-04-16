@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -68,6 +69,9 @@ public class LogInPanel extends Panel {
             // authentication.getName());
             // usernamelabel.setVisible(authentication != null);
             // add(usernamelabel);
+            BookmarkablePageLink<String> register = new BookmarkablePageLink<String>("register", RegisterPage.class);
+            register.add(new Label("register.label", new ResourceModel("register.label")));
+            add(register.setMarkupId(register.getId()));
             setMarkupId(getId());
         }
 
