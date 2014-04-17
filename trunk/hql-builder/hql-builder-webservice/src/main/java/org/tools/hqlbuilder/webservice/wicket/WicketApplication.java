@@ -33,7 +33,7 @@ import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
 
-    @SpringBean(name = "securityProperties")
+    @SpringBean(name = "securityProperties", required = false)
     private Properties securityProperties;
 
     public static WicketApplication get() {
@@ -42,6 +42,10 @@ public class WicketApplication extends WebApplication {
 
     public static SecurityContext getSecurityContext() {
         return SecurityContextHolder.getContext();
+    }
+
+    public static WicketSession getWebSession() {
+        return WicketSession.class.cast(Session.get());
     }
 
     /**
@@ -97,7 +101,9 @@ public class WicketApplication extends WebApplication {
                 MountedPage mountedPage = pageClass.getAnnotation(MountedPage.class);
                 String path = mountedPage.value();
                 if (path.startsWith("${") && path.endsWith("}")) {
-                    path = securityProperties.getProperty(path.substring(2, path.length() - 1));
+                    if (securityProperties != null) {
+                        path = securityProperties.getProperty(path.substring(2, path.length() - 1));
+                    }
                 }
                 logger.info("on path " + path);
                 mountPage(path, pageClass);
