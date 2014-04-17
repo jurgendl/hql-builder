@@ -10,6 +10,5 @@ public class PublicPage extends DefaultWebPage {
 
     public PublicPage(PageParameters parameters) {
         super(parameters);
-        setStatelessHint(true);
     }
 }
