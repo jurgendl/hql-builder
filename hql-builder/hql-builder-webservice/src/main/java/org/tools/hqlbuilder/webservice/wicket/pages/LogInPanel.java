@@ -15,19 +15,22 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.wicket.UserData;
+import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 public class LogInPanel extends Panel {
     private static final long serialVersionUID = -3020334357804419643L;
 
-    public LogInPanel(final Authentication authentication, final Properties securityProperties) {
-        this("loginpanel", Model.of(new UserData()), authentication, securityProperties);
+    public LogInPanel() {
+        this("loginpanel", Model.of(new UserData()));
         setOutputMarkupPlaceholderTag(false);
         setRenderBodyOnly(true);
         setOutputMarkupId(false);
     }
 
-    public LogInPanel(final String id, final IModel<UserData> model, final Authentication authentication, final Properties securityProperties) {
+    public LogInPanel(final String id, final IModel<UserData> model) {
         super(id, model);
+        Properties securityProperties = WicketApplication.get().getSecurityProperties();
+        Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         add(new LogInForm(authentication, securityProperties));
         setVisible(authentication == null || authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user")));
     }

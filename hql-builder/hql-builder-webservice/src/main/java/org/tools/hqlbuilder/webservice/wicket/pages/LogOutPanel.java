@@ -10,19 +10,22 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.wicket.UserData;
+import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 public class LogOutPanel extends Panel {
     private static final long serialVersionUID = -6245651530312025190L;
 
-    public LogOutPanel(final Authentication authentication, final Properties securityProperties) {
-        this("logoutpanel", Model.of(new UserData()), authentication, securityProperties);
+    public LogOutPanel() {
+        this("logoutpanel", Model.of(new UserData()));
         setOutputMarkupPlaceholderTag(false);
         setRenderBodyOnly(true);
         setOutputMarkupId(false);
     }
 
-    public LogOutPanel(final String id, final IModel<UserData> model, final Authentication authentication, final Properties securityProperties) {
+    public LogOutPanel(final String id, final IModel<UserData> model) {
         super(id, model);
+        Properties securityProperties = WicketApplication.get().getSecurityProperties();
+        Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         add(new LogOutForm(authentication, securityProperties));
         setVisible(authentication != null && !authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user")));
     }

@@ -1,10 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
-import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 @MountedPage("${wicket.login.mount}")
 public class LogInPage extends DefaultWebPage {
@@ -18,8 +16,7 @@ public class LogInPage extends DefaultWebPage {
     @Override
     protected void addComponents() {
         super.addComponents();
-        Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
-        add(new LogInPanel(authentication, securityProperties));
+        add(new LogInPanel());
     }
 
     @Override

@@ -10,8 +10,9 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 public class LogInOutLinksPanel extends Panel {
     private static final long serialVersionUID = 392027721536352791L;
 
-    public LogInOutLinksPanel(String id, final Properties securityProperties, boolean show) {
+    public LogInOutLinksPanel(String id, boolean show) {
         super(id);
+        Properties securityProperties = WicketApplication.get().getSecurityProperties();
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         BookmarkablePageLink<String> loginlink = new BookmarkablePageLink<String>("loginlink", LogInPage.class);
         loginlink.setVisible(show

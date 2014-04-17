@@ -13,11 +13,6 @@
 	http://www.springframework.org/schema/security/spring-security.xsd"
 	>
 
-<!--
- http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security
- http://javaworkbench.blogspot.com/p/spring-security.html
- -->
-
 	<bean id="securityPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="properties" ref="securityProperties" />
 	</bean>
