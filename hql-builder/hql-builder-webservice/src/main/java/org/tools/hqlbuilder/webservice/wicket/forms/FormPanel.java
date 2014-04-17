@@ -14,12 +14,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.springframework.beans.BeanUtils;
-import org.tools.hqlbuilder.webservice.wicket.UserData;
 
 public abstract class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -3268906227997947993L;
@@ -27,7 +26,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
     protected RepeatingView repeater;
 
     public FormPanel(String id, Class<T> modelType) {
-        this(id, Model.of(BeanUtils.instantiate(modelType)));
+        this(id, new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType)));
     }
 
     public FormPanel(String id, IModel<T> model) {
@@ -37,17 +36,17 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         setRenderBodyOnly(true);
         setOutputMarkupId(false);
 
-        Form<UserData> form = new Form<UserData>(FORM) {
+        Form<T> form = new Form<T>(FORM, model) {
             private static final long serialVersionUID = -6736595826748998036L;
 
-            @SuppressWarnings("unchecked")
             @Override
             protected void onSubmit() {
                 super.onSubmit();
-                submit((IModel<T>) getDefaultModel());
+                // submit((IModel<T>) getDefaultModel());
+                System.out.println("\n\n\n\n\n\n\n\n-----------------\n\n\n\n\n\n\n\n");
             }
         };
-        form.setMarkupId(id);
+        // form.setMarkupId(id);
         add(form);
 
         repeater = new RepeatingView(FORM_REPEATER);
@@ -56,10 +55,18 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         repeater.setOutputMarkupId(false);
         form.add(repeater);
 
-        Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
+        Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label")) {
+            @Override
+            public void onSubmit() {
+                super.onSubmit();
+                System.out.println("\n\n\n\n\n\n\n\n*****************\n\n\n\n\n\n\n\n");
+            }
+        };
         Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
-        form.add(submit.setMarkupId(submit.getId()));
-        form.add(reset.setMarkupId(reset.getId()));
+        // submit.setMarkupId(submit.getId());
+        // reset.setMarkupId(reset.getId());
+        form.add(submit);
+        form.add(reset);
     }
 
     protected abstract void submit(IModel<T> model);
@@ -104,7 +111,8 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected C addComponent() {
             C comp = createComponent();
-            add(comp.setMarkupId(property));
+            // comp.setMarkupId(property);
+            add(comp);
             return comp;
         }
 
