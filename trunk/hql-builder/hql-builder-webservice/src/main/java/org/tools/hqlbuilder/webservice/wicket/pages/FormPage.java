@@ -28,7 +28,7 @@ public class FormPage extends DefaultWebPage {
         add(formPanel);
         formPanel.addTextField("firstName");
         formPanel.addTextField("lastName");
-        // formPanel.addEmailTextField("email");
-        // formPanel.addPasswordTextField("password");
+        formPanel.addEmailTextField("email");
+        formPanel.addPasswordTextField("password");
     }
 }
