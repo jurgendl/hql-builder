@@ -1,19 +1,21 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
@@ -21,14 +23,21 @@ import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
 
+    protected transient final Logger logger;
+
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
+        logger = LoggerFactory.getLogger(getClass());
         Injector.get().inject(this);
         addComponents();
     }
 
     protected void addComponents() {
-        // add(new DebugBar("debug"));
+        if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+            add(new DebugBar("debug"));
+        } else {
+            add(new EmptyPanel("debug").setVisible(false));
+        }
         // add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
         // add(new LogInOutLinksPanel("authlinkspanel", securityProperties, showAuthLinks()));
     }
@@ -50,36 +59,27 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addDefaultResources(IHeaderResponse response) {
-        IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) getApplication().getJavaScriptLibrarySettings();
-        response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryGlobalizeReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryUIReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getWicketAjaxDebugReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getWicketAjaxReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getWicketEventReference()));
+        IJavaScriptLibrarySettings javaScriptLibrarySettings = getApplication().getJavaScriptLibrarySettings();
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getJQueryReference()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxDebugReference()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxReference()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketEventReference()));
+        if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
+            IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
+            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryGlobalizeReference()));
+            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryUIReference()));
+        }
     }
 
     @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-        statelessCheck();
-    }
-
-    protected void statelessCheck() {
-        if (!getSession().isTemporary()) {
-            visitChildren(Component.class, new IVisitor<Component, String>() {
+    protected void onInitialize() {
+        super.onInitialize();
+        if (getStatelessHint()) {
+            visitChildren(new IVisitor<Component, Void>() {
                 @Override
-                public void component(Component component, IVisit<String> visit) {
+                public void component(Component component, IVisit<Void> arg1) {
                     if (!component.isStateless()) {
-                        String msg = getPage().getClass().getName() + " is stateful because of stateful component " + component.getClass().getName()
-                                + " with id " + component.getId() + ".";
-                        List<? extends Behavior> behaviourList = component.getBehaviors();
-                        for (Behavior iBehavior : behaviourList) {
-                            if (!iBehavior.getStatelessHint(component)) {
-                                msg += "\n\t" + "The component has stateful behaviour: " + iBehavior.getClass().getName();
-                            }
-                        }
-                        throw new RuntimeException(msg);
+                        logger.error("Component " + component.getId() + " is not stateless");
                     }
                 }
             });

@@ -35,11 +35,10 @@
 		<security:filter-chain-map path-type="ant">
 			<security:filter-chain pattern="/auth/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/resource/**" filters="none"/>
-			<security:filter-chain pattern="/pages/resource/**" filters="none"/>
 			<security:filter-chain pattern="/pages/wicket/resource/**" filters="none"/>
 			<security:filter-chain pattern="/pages/public/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/pages/login" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
-			<security:filter-chain pattern="/pages/logout" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/login/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
+			<security:filter-chain pattern="/pages/logout/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/pages/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/xml/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/**" filters="none"/>
@@ -50,11 +49,10 @@
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
 				<security:intercept-url pattern="/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-				<security:intercept-url pattern="/pages/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 				<security:intercept-url pattern="/pages/wicket/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 				<security:intercept-url pattern="/pages/public/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-				<security:intercept-url pattern="/pages/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-				<security:intercept-url pattern="/pages/logout" access="IS_AUTHENTICATED_FULLY"/>
+				<security:intercept-url pattern="/pages/login/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/pages/logout/**" access="IS_AUTHENTICATED_FULLY"/>
 				<security:intercept-url pattern="/pages/**" access="IS_AUTHENTICATED_FULLY"/>
 				<security:intercept-url pattern="/xml/**" access="IS_AUTHENTICATED_FULLY"/>
 				<security:intercept-url pattern="/**"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>

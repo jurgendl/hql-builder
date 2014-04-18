@@ -7,7 +7,7 @@ import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.UserData;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 
-@MountedPage("/public/form")
+@MountedPage("/form")
 public class FormPage extends DefaultWebPage {
     private static final long serialVersionUID = 264876407045636533L;
 

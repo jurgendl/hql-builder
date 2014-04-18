@@ -39,11 +39,16 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         Form<T> form = new Form<T>(FORM, model) {
             private static final long serialVersionUID = -6736595826748998036L;
 
+            @SuppressWarnings("unchecked")
             @Override
             protected void onSubmit() {
                 super.onSubmit();
-                // submit((IModel<T>) getDefaultModel());
-                System.out.println("\n\n\n\n\n\n\n\n-----------------\n\n\n\n\n\n\n\n");
+                submit((IModel<T>) getDefaultModel());
+            }
+
+            @Override
+            public String toString() {
+                return getClass().getSuperclass().toString();
             }
         };
         // form.setMarkupId(id);
@@ -55,13 +60,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         repeater.setOutputMarkupId(false);
         form.add(repeater);
 
-        Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label")) {
-            @Override
-            public void onSubmit() {
-                super.onSubmit();
-                System.out.println("\n\n\n\n\n\n\n\n*****************\n\n\n\n\n\n\n\n");
-            }
-        };
+        Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
         Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
         // submit.setMarkupId(submit.getId());
         // reset.setMarkupId(reset.getId());
