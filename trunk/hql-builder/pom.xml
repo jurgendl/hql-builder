@@ -298,6 +298,16 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-serializer-kryo2</artifactId>
+				<version>${version.wicket}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-htmlcompressor</artifactId>
+				<version>${version.wicket}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui</artifactId>
 				<version>${version.wicket}</version>

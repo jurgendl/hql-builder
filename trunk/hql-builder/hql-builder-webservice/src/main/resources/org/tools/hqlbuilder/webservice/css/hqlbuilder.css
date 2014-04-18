@@ -17,11 +17,16 @@ body {
 	background-image: linear-gradient(left, #ebeef2, #d9dee2);
 }
 
-.incenter {
+.centeredvertical {
 	position: absolute;
-	left: 45%;
-	top: 50%;
-	margin: -100px 0 0 -150px;
+	top: 45%;
+	margin-top: -100px;
+}
+
+.centeredhorizontal {
+	position: absolute;
+	left : 45%;
+	margin-left: -200px;
 }
 
 .toright {
@@ -152,10 +157,10 @@ form.niceform h1:before {
 	left: 0;
 }
 
-form fieldset {
-	border: 0;
-	padding: 0;
-	margin: 0;
+fieldset {
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
 }
 
 form label {
