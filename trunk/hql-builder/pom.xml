@@ -337,6 +337,11 @@
 				<artifactId>spring-security-config</artifactId>
 				<version>${version.spring-security}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${version.spring-security}</version>
+			</dependency>
 			<!-- WebClient -->
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
