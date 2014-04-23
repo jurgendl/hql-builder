@@ -8,19 +8,19 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 public class EmailTextFieldPanel extends FormRowPanel<String, EmailTextField> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public EmailTextFieldPanel(final IModel<?> model, final String property) {
-        super(model, property, String.class);
+    public EmailTextFieldPanel(final IModel<?> model, final String property, final boolean required) {
+        super(model, property, String.class, required);
     }
 
     @Override
     protected EmailTextField createComponent() {
         return new EmailTextField(VALUE, getValueModel()) {
-            private static final long serialVersionUID = -3814319098009064211L;
+            private static final long serialVersionUID = -8333366326586690978L;
 
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                setPlaceholder(tag);
+                onFormComponentTag(tag);
             }
         };
     }

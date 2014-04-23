@@ -14,6 +14,11 @@
 		<contextRoot>hqlbuilder</contextRoot>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>com.googlecode.lambdaj</groupId>
+			<artifactId>lambdaj</artifactId>
+			<version>2.3.3</version>
+		</dependency>
 		<!-- Core -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>

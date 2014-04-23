@@ -1,16 +1,20 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
+import java.util.MissingResourceException;
 
-import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -18,10 +22,17 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+
+import com.googlecode.wicket.jquery.ui.form.datepicker.AjaxDatePicker;
 
 public abstract class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -3268906227997947993L;
+
+    protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
 
     protected RepeatingView repeater;
 
@@ -29,7 +40,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         this(id, new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType)));
     }
 
-    public FormPanel(String id, IModel<T> model) {
+    public FormPanel(@SuppressWarnings("unused") String id, IModel<T> model) {
         super(FORM_PANEL, model);
 
         setOutputMarkupPlaceholderTag(false);
@@ -68,25 +79,34 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         form.add(reset);
     }
 
+    public FormPanel<T> liveValidation() {
+        AjaxFormValidatingBehavior.addToAllFormComponents(Form.class.cast(get(FORM)), "onkeyup", Duration.NONE);
+        return this;
+    }
+
     protected abstract void submit(IModel<T> model);
 
-    public TextField<String> addTextField(String property) {
-        return addTextField(property, String.class);
+    public AjaxDatePicker addDatePicker(String property, boolean required) {
+        return new AjaxDatePickerPanel(getDefaultModel(), property, required).addTo(repeater);
     }
 
-    public <F> TextField<F> addTextField(String property, Class<F> type) {
-        return new TextFieldPanel<F>(getDefaultModel(), property, type).addTo(repeater);
+    public TextField<String> addTextField(String property, boolean required) {
+        return addTextField(property, String.class, required);
     }
 
-    public EmailTextField addEmailTextField(String property) {
-        return new EmailTextFieldPanel(getDefaultModel(), property).addTo(repeater);
+    public <F> TextField<F> addTextField(String property, Class<F> type, boolean required) {
+        return new TextFieldPanel<F>(getDefaultModel(), property, type, required).addTo(repeater);
     }
 
-    public PasswordTextField addPasswordTextField(String property) {
-        return new PasswordTextFieldPanel(getDefaultModel(), property).addTo(repeater);
+    public EmailTextField addEmailTextField(String property, boolean required) {
+        return new EmailTextFieldPanel(getDefaultModel(), property, required).addTo(repeater);
     }
 
-    public static abstract class FormRowPanel<T, C extends MarkupContainer> extends Panel implements FormConstants {
+    public PasswordTextField addPasswordTextField(String property, boolean required) {
+        return new PasswordTextFieldPanel(getDefaultModel(), property, required).addTo(repeater);
+    }
+
+    public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
         private static final long serialVersionUID = -6401309948019996576L;
 
         protected final Label label;
@@ -97,8 +117,11 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected final C component;
 
-        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type) {
+        protected final boolean required;
+
+        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required) {
             super(FORM_ROW, model);
+            this.required = required;
             this.property = property;
             this.type = type;
             setOutputMarkupPlaceholderTag(false);
@@ -106,11 +129,13 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             setOutputMarkupId(false);
             label = addLabel();
             component = addComponent();
+            add(new FeedbackPanel("componentFeedback", new ComponentFeedbackMessageFilter(component)).setOutputMarkupId(true));
         }
 
         protected C addComponent() {
             C comp = createComponent();
             // comp.setMarkupId(property);
+            comp.setRequired(required);
             add(comp);
             return comp;
         }
@@ -121,7 +146,12 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
                 @Override
                 public String getObject() {
-                    return getLabel();
+                    try {
+                        return getLabel();
+                    } catch (MissingResourceException ex) {
+                        logger.error("no translation for " + property);
+                        return property;
+                    }
                 }
             };
             Label labelComponent = new Label(LABEL, labelModel) {
@@ -151,11 +181,28 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         }
 
         protected void setPlaceholder(ComponentTag tag) {
-            tag.getAttributes().put(PLACEHOLDER, getPlaceholder());
+            try {
+                tag.getAttributes().put(PLACEHOLDER, getPlaceholder());
+            } catch (MissingResourceException ex) {
+                logger.error("no translation for " + PLACEHOLDER);
+            }
+        }
+
+        protected void setRequired(ComponentTag tag) {
+            if (required) {
+                tag.getAttributes().put(REQUIRED, required);
+            } else {
+                tag.getAttributes().remove(REQUIRED);
+            }
+        }
+
+        protected void onFormComponentTag(ComponentTag tag) {
+            setPlaceholder(tag);
+            setRequired(tag);
         }
 
         protected String getLabel() {
-            return property;
+            return getString(property);
         }
 
         protected String getPlaceholder() {
