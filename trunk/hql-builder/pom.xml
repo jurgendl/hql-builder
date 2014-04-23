@@ -35,7 +35,7 @@
 		<version.httpclient>4.3.3</version.httpclient>
 		<version.spring-security>3.2.3.RELEASE</version.spring-security>
 		<version.jadira>3.1.0.CR10</version.jadira>
-		<version.wicket>6.14.0</version.wicket>
+		<version.wicket.core>6.14.0</version.wicket.core>
 		<version.junit>4.11</version.junit>
 		<version.bouncycastle>1.46</version.bouncycastle>
 	</properties>
@@ -259,37 +259,37 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-jmx</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-devutils</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 				<exclusions>
 					<exclusion>
 						<artifactId>joda-time</artifactId>
@@ -300,37 +300,27 @@
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-serializer-kryo2</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-htmlcompressor</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui-core</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui-calendar</artifactId>
-				<version>${version.wicket}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.googlecode.wicket-jquery-ui</groupId>
-				<artifactId>wicket-jquery-ui-core</artifactId>
-				<version>${version.wicket}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.googlecode.wicket-jquery-ui</groupId>
-				<artifactId>wicket-kendo-ui</artifactId>
-				<version>${version.wicket}</version>
+				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -446,7 +436,7 @@
 			 -->
 			<id>nodebuginfo</id>
 			<build>
-				<finalName>${artifactId}-nodebuginfo-${version}</finalName>
+				<finalName>${project.artifactId}-nodebuginfo-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
