@@ -111,6 +111,7 @@ public class WicketApplication extends WebApplication {
         getMarkupSettings().setStripComments(usesDevelopmentConfig());
         getMarkupSettings().setCompressWhitespace(usesDevelopmentConfig());
         if (usesDeploymentConfig()) {
+            getMarkupSettings().setStripWicketTags(true);
             getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
 

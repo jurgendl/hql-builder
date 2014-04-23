@@ -11,6 +11,8 @@ public interface FormConstants {
 
     public static final String PLACEHOLDER = "placeholder";
 
+    public static final String REQUIRED = "required";
+
     public static final String LABEL = "label";
 
     public static final String FOR = "for";

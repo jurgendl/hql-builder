@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
@@ -10,5 +11,10 @@ public class PublicPage extends DefaultWebPage {
 
     public PublicPage(PageParameters parameters) {
         super(parameters);
+    }
+
+    @Override
+    protected void addResources(IHeaderResponse response) {
+        super.addResources(response);
     }
 }
