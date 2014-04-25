@@ -21,7 +21,15 @@ import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
 public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource> implements HqlService {
-    public HqlWebServiceClient(String... packages) {
+    public HqlWebServiceClient() {
+        super();
+    }
+
+    public HqlWebServiceClient(String packages) {
+        super(new String[] { packages });
+    }
+
+    public HqlWebServiceClient(String[] packages) {
         super(packages);
     }
 

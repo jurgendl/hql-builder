@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.model.IModel;
@@ -14,7 +15,7 @@ public class EmailTextFieldPanel extends FormRowPanel<String, EmailTextField> {
 
     @Override
     protected EmailTextField createComponent() {
-        return new EmailTextField(VALUE, getValueModel()) {
+        return new EmailTextField(VALUE, getValueModel(), RfcCompliantEmailAddressValidator.getInstance()) {
             private static final long serialVersionUID = -8333366326586690978L;
 
             @Override

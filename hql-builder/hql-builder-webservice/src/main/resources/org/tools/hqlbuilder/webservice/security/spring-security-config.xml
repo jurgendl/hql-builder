@@ -13,19 +13,7 @@
 	http://www.springframework.org/schema/security/spring-security.xsd"
 	>
 
-	<bean id="securityPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="properties" ref="securityProperties" />
-	</bean>
-
-	<bean id="securityProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<list>
-				<value>classpath:org/tools/hqlbuilder/webservice/security/security.properties</value>
-				<value>file:${user.home}/hqlbuilder/security.properties</value>
-			</list>
-		</property>
-		<property name="ignoreResourceNotFound" value="true" />
-	</bean>
+	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
 
 	<security:global-method-security pre-post-annotations="enabled"/>
 
