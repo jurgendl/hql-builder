@@ -13,7 +13,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<version.slf4j>1.7.7</version.slf4j>
 		<version.hibernate>4.2</version.hibernate>
-		<version.spring>4.0.3.RELEASE</version.spring>
+		<version.spring>3.2.8.RELEASE</version.spring>
 		<version.swingeasy>3.0.0.4-SNAPSHOT</version.swingeasy>
 		<version.lucene>4.7.0</version.lucene>
 		<version.groovy>2.2.2</version.groovy>
@@ -34,7 +34,7 @@
 		<version.servlet>2.5</version.servlet>
 		<version.httpclient>4.3.3</version.httpclient>
 		<version.spring-security>3.2.3.RELEASE</version.spring-security>
-		<version.jadira>3.2.0.GA</version.jadira>
+		<version.jadira>3.1.0.CR11</version.jadira>
 		<version.wicket.core>6.15.0</version.wicket.core>
 		<version.wicket.jquery>6.14.0</version.wicket.jquery>
 		<version.junit>4.11</version.junit>

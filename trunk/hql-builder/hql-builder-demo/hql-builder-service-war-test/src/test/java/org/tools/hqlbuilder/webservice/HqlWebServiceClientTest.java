@@ -37,9 +37,10 @@ public class HqlWebServiceClientTest {
             context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/webservice/test-context.xml");
             Properties cfg = Properties.class.cast(context.getBean("webProperties"));
             ServiceUrlBuilder sub = new ServiceUrlBuilder(cfg);
-            test0(cfg, sub.getServiceUrl());
-            // test1(serviceUrl + "/xml");
-            // test2(serviceUrl + "/xml");
+            sub.afterPropertiesSet();
+            //test0(cfg, sub.getServiceUrl());
+             test1( sub.getServiceUrl() );
+            // test2( sub.getServiceUrl());
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -56,7 +57,7 @@ public class HqlWebServiceClientTest {
     @SuppressWarnings("deprecation")
     public static void test0(Properties cfg, String url) throws Exception {
         String base = url;
-        url = url + cfg.getProperty("rest.pojo") + "/classes";
+        url = url + "/classes";
         try {
             org.apache.http.impl.client.DefaultHttpClient httpclient = new org.apache.http.impl.client.DefaultHttpClient();
             try {
