@@ -11,9 +11,9 @@
 		<targetJdk>1.6</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<version.slf4j>1.7.5</version.slf4j>
+		<version.slf4j>1.7.7</version.slf4j>
 		<version.hibernate>4.2</version.hibernate>
-		<version.spring>3.2.8.RELEASE</version.spring>
+		<version.spring>4.0.3.RELEASE</version.spring>
 		<version.swingeasy>3.0.0.4-SNAPSHOT</version.swingeasy>
 		<version.lucene>4.7.0</version.lucene>
 		<version.groovy>2.2.2</version.groovy>
@@ -29,15 +29,16 @@
 		<version.commons-collections4>4.0</version.commons-collections4>
 		<version.commons-beanutils>1.9.1</version.commons-beanutils>
 		<version.javassist>3.18.1-GA</version.javassist>
-		<version.ehcache>2.6.8</version.ehcache>
+		<version.ehcache>2.6.9</version.ehcache>
 		<version.resteasy>3.0.7.Final</version.resteasy>
 		<version.servlet>2.5</version.servlet>
 		<version.httpclient>4.3.3</version.httpclient>
 		<version.spring-security>3.2.3.RELEASE</version.spring-security>
-		<version.jadira>3.1.0.CR10</version.jadira>
-		<version.wicket.core>6.14.0</version.wicket.core>
+		<version.jadira>3.2.0.GA</version.jadira>
+		<version.wicket.core>6.15.0</version.wicket.core>
+		<version.wicket.jquery>6.14.0</version.wicket.jquery>
 		<version.junit>4.11</version.junit>
-		<version.bouncycastle>1.46</version.bouncycastle>
+		<version.bouncycastle>1.50</version.bouncycastle>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -310,17 +311,17 @@
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui</artifactId>
-				<version>${version.wicket.core}</version>
+				<version>${version.wicket.jquery}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui-core</artifactId>
-				<version>${version.wicket.core}</version>
+				<version>${version.wicket.jquery}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui-calendar</artifactId>
-				<version>${version.wicket.core}</version>
+				<version>${version.wicket.jquery}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -371,11 +372,6 @@
 				<version>${version.joda}</version>
 			</dependency>
 			<!-- Security -->
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>${version.spring-security}</version>
-			</dependency>
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcprov-jdk15on</artifactId>
