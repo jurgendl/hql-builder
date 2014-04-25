@@ -792,7 +792,6 @@ public class HibernateTemplate implements HibernateOperations {
      * @throws DataAccessException in case of Hibernate errors
      * @deprecated as of Spring 2.5, in favor of individual {@code saveOrUpdate} or {@code merge} usage
      */
-    @Override
     @Deprecated
     public void saveOrUpdateAll(@SuppressWarnings("rawtypes") final Collection entities) throws DataAccessException {
         executeWithNativeSession(new HibernateCallback<Object>() {
@@ -1449,7 +1448,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @throws org.springframework.dao.DataAccessException in case of Hibernate errors
      * @see org.hibernate.criterion.Example#create(Object)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<?> findByExample(final Object exampleEntity) throws DataAccessException {
         return findByExample(null, exampleEntity, -1, -1);
     }
@@ -1463,7 +1463,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @throws org.springframework.dao.DataAccessException in case of Hibernate errors
      * @see org.hibernate.criterion.Example#create(Object)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<?> findByExample(final String entityName, final Object exampleEntity) throws DataAccessException {
         return findByExample(entityName, exampleEntity, -1, -1);
     }
@@ -1480,7 +1481,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.Criteria#setFirstResult(int)
      * @see org.hibernate.Criteria#setMaxResults(int)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<?> findByExample(final Object exampleEntity, final int firstResult, final int max) throws DataAccessException {
         return findByExample(null, exampleEntity, firstResult, max);
     }
@@ -1498,7 +1500,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.Criteria#setFirstResult(int)
      * @see org.hibernate.Criteria#setMaxResults(int)
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<?> findByExample(final String entityName, final Object exampleEntity, final int firstResult, final int max)
             throws DataAccessException {
         Assert.notNull(exampleEntity, "Example entity must not be null");

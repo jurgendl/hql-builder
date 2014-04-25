@@ -47,6 +47,7 @@ public class CommonUtils {
         }
     }
 
+    @SuppressWarnings("cast")
     public static void findcp(String c) {
         try {
             ClassLoader parent = ClassLoader.getSystemClassLoader().getParent();
