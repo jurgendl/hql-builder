@@ -86,7 +86,8 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     protected ResteasyProviderFactory setupResteasyProvider() {
         ResteasyProviderFactory resteasyProviderFactory = ResteasyProviderFactory.getInstance();
         RegisterBuiltin.register(resteasyProviderFactory);
-        resteasyProviderFactory.registerProviderInstance(new JAXBContextResolver(getPackages()));
+        JAXBContextResolver provider = new JAXBContextResolver(getPackages());
+        resteasyProviderFactory.registerProviderInstance(provider);
         return resteasyProviderFactory;
     }
 
