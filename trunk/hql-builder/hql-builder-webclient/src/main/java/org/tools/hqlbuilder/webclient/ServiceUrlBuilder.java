@@ -48,15 +48,15 @@ public class ServiceUrlBuilder implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        String contextPath2 = getContextPath();
-        if (contextPath2.startsWith("/")) {
-            contextPath2 = "/" + contextPath2;
+        serviceUrl = new URI(getProtocol(), null, getHostAddress(), getPort(), append(getContextPath()) + append(getRestPath()), null, null)
+                .toASCIIString();
+    }
+
+    protected String append(String path) {
+        if (!path.startsWith("/")) {
+            path = "/" + path;
         }
-        String restPath2 = getRestPath();
-        if (restPath2.startsWith("/")) {
-            restPath2 = "/" + restPath2;
-        }
-        serviceUrl = new URI(getProtocol(), null, getHostAddress(), getPort(), contextPath2 + restPath2, null, null).toASCIIString();
+        return path;
     }
 
     public String getProtocol() {
