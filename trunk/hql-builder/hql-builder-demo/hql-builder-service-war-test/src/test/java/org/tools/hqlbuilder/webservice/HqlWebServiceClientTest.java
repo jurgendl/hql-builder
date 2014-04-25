@@ -151,7 +151,7 @@ public class HqlWebServiceClientTest {
         List<QueryParameter> parameters = hc.findParameters(hql);
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");
-        System.out.println(hc.execute(new QueryParameters(hql, parameters)));
+        //System.out.println(hc.execute(new QueryParameters(hql, parameters)));
     }
 
     public static void test2(String url) throws Exception {
