@@ -24,23 +24,23 @@ public class LogOutPanel extends Panel {
 
     public LogOutPanel(final String id, final IModel<UserData> model) {
         super(id, model);
-        Properties securityProperties = WicketApplication.get().getSecurityProperties();
+        Properties webProperties = WicketApplication.get().getWebProperties();
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
-        add(new LogOutForm(authentication, securityProperties));
-        setVisible(authentication != null && !authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user")));
+        add(new LogOutForm(authentication, webProperties));
+        setVisible(authentication != null && !authentication.getPrincipal().equals(webProperties.getProperty("anonymous.user")));
     }
 
     public class LogOutForm extends StatelessForm<UserData> {
         private static final long serialVersionUID = -8305944845978935182L;
 
-        protected final Properties securityProperties;
+        protected final Properties webProperties;
 
-        public LogOutForm(@SuppressWarnings("unused") final Authentication authentication, final Properties securityProperties) {
+        public LogOutForm(@SuppressWarnings("unused") final Authentication authentication, final Properties webProperties) {
             super("logoutform", Model.of(new UserData()));
-            this.securityProperties = securityProperties;
+            this.webProperties = webProperties;
             Button logout = new Button("logout", new ResourceModel("logout.label"));
             add(logout.setMarkupId(logout.getId()));
-            // Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user")
+            // Label usernamelabel = new Label("knownusername", authentication == null ? webProperties.getProperty("anonymous.user")
             // : authentication.getName());
             // usernamelabel.setVisible(authentication != null);
             // add(usernamelabel);
@@ -49,7 +49,7 @@ public class LogOutPanel extends Panel {
 
         @Override
         protected CharSequence getActionUrl() {
-            return getRequest().getContextPath() + securityProperties.getProperty("logout");
+            return getRequest().getContextPath() + webProperties.getProperty("logout");
         }
     }
 }

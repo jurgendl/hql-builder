@@ -12,11 +12,10 @@ public class LogInOutLinksPanel extends Panel {
 
     public LogInOutLinksPanel(String id, boolean show) {
         super(id);
-        Properties securityProperties = WicketApplication.get().getSecurityProperties();
+        Properties webProperties = WicketApplication.get().getWebProperties();
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
         BookmarkablePageLink<String> loginlink = new BookmarkablePageLink<String>("loginlink", LogInPage.class);
-        loginlink.setVisible(show
-                && (authentication == null || authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user"))));
+        loginlink.setVisible(show && (authentication == null || authentication.getPrincipal().equals(webProperties.getProperty("anonymous.user"))));
         add(loginlink);
         BookmarkablePageLink<String> logoutlink = new BookmarkablePageLink<String>("logoutlink", LogOutPage.class);
         logoutlink.setVisible(show && (!loginlink.isVisible()));

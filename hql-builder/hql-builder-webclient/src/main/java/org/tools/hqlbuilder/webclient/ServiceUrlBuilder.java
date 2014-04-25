@@ -8,7 +8,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.InitializingBean;
 
 public class ServiceUrlBuilder implements InitializingBean {
-    protected Properties securityProperties;
+    protected Properties webProperties;
 
     protected String serviceUrl;
 
@@ -26,16 +26,16 @@ public class ServiceUrlBuilder implements InitializingBean {
         super();
     }
 
-    public ServiceUrlBuilder(Properties securityProperties) {
-        this.securityProperties = securityProperties;
+    public ServiceUrlBuilder(Properties webProperties) {
+        this.webProperties = webProperties;
     }
 
-    public Properties getSecurityProperties() {
-        return this.securityProperties;
+    public Properties getWebProperties() {
+        return this.webProperties;
     }
 
-    public void setSecurityProperties(Properties securityProperties) {
-        this.securityProperties = securityProperties;
+    public void setWebProperties(Properties webProperties) {
+        this.webProperties = webProperties;
     }
 
     public String getServiceUrl() {
@@ -60,8 +60,8 @@ public class ServiceUrlBuilder implements InitializingBean {
     }
 
     public String getProtocol() {
-        if (protocol == null && securityProperties != null) {
-            protocol = securityProperties.getProperty("protocol");
+        if (protocol == null && webProperties != null) {
+            protocol = webProperties.getProperty("protocol");
         }
         return this.protocol;
     }
@@ -78,22 +78,22 @@ public class ServiceUrlBuilder implements InitializingBean {
     }
 
     public String getContextPath() {
-        if (contextPath == null && securityProperties != null) {
-            contextPath = securityProperties.getProperty("contextpath");
+        if (contextPath == null && webProperties != null) {
+            contextPath = webProperties.getProperty("contextpath");
         }
         return this.contextPath;
     }
 
     public String getRestPath() {
-        if (restPath == null && securityProperties != null) {
-            restPath = securityProperties.getProperty("rest.root");
+        if (restPath == null && webProperties != null) {
+            restPath = webProperties.getProperty("rest.root");
         }
         return this.restPath;
     }
 
     public Integer getPort() {
-        if (port == null && securityProperties != null) {
-            String tmp = securityProperties.getProperty("port");
+        if (port == null && webProperties != null) {
+            String tmp = webProperties.getProperty("port");
             port = tmp == null ? 80 : Integer.parseInt(tmp);
         }
         return this.port;

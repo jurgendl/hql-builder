@@ -34,14 +34,10 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScheme;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.BasicHttpContext;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
@@ -50,6 +46,7 @@ import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.tools.hqlbuilder.webcommon.RestEasyProvidersBean;
 import org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver;
 
 public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, InitializingBean {
@@ -66,6 +63,8 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     protected Class<R> resourceClass;
 
     protected ResteasyProviderFactory resteasyProvider;
+
+    protected RestEasyProvidersBean restEasyProvidersBean;
 
     @SuppressWarnings("deprecation")
     protected org.jboss.resteasy.client.ClientExecutor clientExecutor;
@@ -100,12 +99,13 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         BasicHttpContext localContext = new BasicHttpContext();
         localContext.setAttribute(URI.create(getServiceUrl()).getHost(), authCache);
 
-        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        Credentials credentials = new UsernamePasswordCredentials("hqlbuilder", "hqlbuilder");
-        credentialsProvider.setCredentials(new AuthScope(URI.create(getServiceUrl()).getHost(), URI.create(getServiceUrl()).getPort()), credentials);
+        // BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        // Credentials credentials = new UsernamePasswordCredentials("hqlbuilder", "hqlbuilder");
+        // credentialsProvider.setCredentials(new AuthScope(URI.create(getServiceUrl()).getHost(), URI.create(getServiceUrl()).getPort()),
+        // credentials);
 
         HttpClient httpClient = HttpClientBuilder.create()//
-                .setDefaultCredentialsProvider(credentialsProvider)//
+                // .setDefaultCredentialsProvider(credentialsProvider)//
                 .build();//
 
         return new ApacheHttpClient4Executor(httpClient, localContext);
@@ -141,7 +141,13 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
             this.resourceClass = setupResourceClass();
         }
         if (this.resteasyProvider == null) {
-            this.resteasyProvider = setupResteasyProvider();
+            if (restEasyProvidersBean != null) {
+                resteasyProvider = restEasyProvidersBean.getInstance();
+            } else if (getPackages() != null) {
+                this.resteasyProvider = setupResteasyProvider();
+            } else {
+                throw new IllegalArgumentException("either packages or restEasyProvidersBean is required");
+            }
         }
         if (this.clientExecutor == null) {
             this.clientExecutor = setupClientExecutor();
@@ -157,7 +163,6 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     @SuppressWarnings("deprecation")
     @Override
     public Object invoke(Object self, Method method, Method forwarder, Object[] args) throws Throwable {
-        logger.debug("packages=" + Arrays.asList(packages));
         logger.debug("Method=" + method);
         Produces produces = method.getAnnotation(Produces.class);
         if (produces != null) {
@@ -378,5 +383,13 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
 
     public void setServiceUrlBuilder(ServiceUrlBuilder serviceUrlBuilder) {
         this.serviceUrlBuilder = serviceUrlBuilder;
+    }
+
+    public RestEasyProvidersBean getRestEasyProvidersBean() {
+        return this.restEasyProvidersBean;
+    }
+
+    public void setRestEasyProvidersBean(RestEasyProvidersBean restEasyProvidersBean) {
+        this.restEasyProvidersBean = restEasyProvidersBean;
     }
 }

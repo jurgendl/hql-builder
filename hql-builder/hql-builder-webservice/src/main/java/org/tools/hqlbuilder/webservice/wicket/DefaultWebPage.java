@@ -39,7 +39,7 @@ public class DefaultWebPage extends WebPage {
             add(new EmptyPanel("debug").setVisible(false));
         }
         // add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
-        // add(new LogInOutLinksPanel("authlinkspanel", securityProperties, showAuthLinks()));
+        // add(new LogInOutLinksPanel("authlinkspanel", webProperties, showAuthLinks()));
     }
 
     public boolean showAuthLinks() {

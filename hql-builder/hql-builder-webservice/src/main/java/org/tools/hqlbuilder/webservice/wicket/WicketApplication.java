@@ -41,8 +41,8 @@ import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
 
-    // @SpringBean(name = "securityProperties", required = false)
-    protected transient Properties securityProperties;
+    // @SpringBean(name = "webProperties", required = false)
+    protected transient Properties webProperties;
 
     protected boolean diskStore = false;
 
@@ -169,8 +169,8 @@ public class WicketApplication extends WebApplication {
                 String path = mountedPage.value();
                 boolean doMount = true;
                 if (path.startsWith("${") && path.endsWith("}")) {
-                    if (securityProperties != null) {
-                        path = securityProperties.getProperty(path.substring(2, path.length() - 1));
+                    if (webProperties != null) {
+                        path = webProperties.getProperty(path.substring(2, path.length() - 1));
                     } else {
                         doMount = false;
                     }
@@ -185,11 +185,11 @@ public class WicketApplication extends WebApplication {
         }
     }
 
-    public Properties getSecurityProperties() {
-        return this.securityProperties;
+    public Properties getWebProperties() {
+        return this.webProperties;
     }
 
-    public void setSecurityProperties(Properties securityProperties) {
-        this.securityProperties = securityProperties;
+    public void setWebProperties(Properties webProperties) {
+        this.webProperties = webProperties;
     }
 }
