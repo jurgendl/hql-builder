@@ -7,7 +7,9 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
@@ -77,7 +79,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         this.logger = setupLogger();
     }
 
-    protected Logger setupLogger() {
+    public Logger setupLogger() {
         return LoggerFactory.getLogger(getClass());
     }
 
@@ -154,6 +156,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     @SuppressWarnings("deprecation")
     @Override
     public Object invoke(Object self, Method method, Method forwarder, Object[] args) throws Throwable {
+        logger.debug("packages=" + Arrays.asList(packages));
         logger.debug("Method=" + method);
         Produces produces = method.getAnnotation(Produces.class);
         if (produces != null) {
@@ -191,7 +194,10 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         Class<?>[] parameterTypes = method.getParameterTypes();
         UriBuilder uriBuilder = UriBuilder.fromUri(URI.create(getServiceUrl())).path(getResourceClass()).path(method);
         List<Object> notAcceptedParameters = new ArrayList<Object>(Arrays.asList(args));
+        Map<String, Object> templateValues = new HashMap<String, Object>();
         for (int i = 0; i < parameterTypes.length; i++) {
+            logger.debug("parameter: " + parameterTypes[i].getName() + " " + args[i]);
+            logger.debug("parameter-annotations: " + Arrays.toString(parameterAnnotations[i]));
             for (Annotation parameterAnnotation : parameterAnnotations[i]) {
                 if (parameterAnnotation instanceof QueryParam) {
                     QueryParam queryParam = QueryParam.class.cast(parameterAnnotation);
@@ -199,23 +205,43 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
                     Object values = args[i];
                     uriBuilder.queryParam(name, values);
                     notAcceptedParameters.remove(args[i]);
+                    logger.debug("QueryParam[" + name + "=" + values);
+                }
+                if (parameterAnnotation instanceof PathParam) {
+                    PathParam pathParam = PathParam.class.cast(parameterAnnotation);
+                    String parameterName = pathParam.value();
+                    Object value = args[i];
+                    templateValues.put(parameterName, value);
+                    logger.debug("PathParam[" + parameterName + "=" + value);
                 }
             }
         }
-        String uriPath = uriBuilder.build().toASCIIString();
+
+        String uriPath = uriBuilder.resolveTemplates(templateValues).build().toASCIIString();
         logger.debug("URI=" + uriPath);
 
         org.jboss.resteasy.client.ClientRequest request = new org.jboss.resteasy.client.ClientRequest(uriBuilder, getClientExecutor(),
                 getResteasyProvider());
 
         for (int i = 0; i < parameterTypes.length; i++) {
+            logger.debug("parameter: " + parameterTypes[i].getName() + " " + args[i]);
+            logger.debug("parameter-annotations: " + Arrays.toString(parameterAnnotations[i]));
             for (Annotation parameterAnnotation : parameterAnnotations[i]) {
+                if (parameterAnnotation instanceof PathParam) {
+                    PathParam pathParam = PathParam.class.cast(parameterAnnotation);
+                    String parameterName = pathParam.value();
+                    Object value = args[i];
+                    request.pathParameter(parameterName, value);
+                    notAcceptedParameters.remove(args[i]);
+                    logger.debug("PathParam[" + parameterName + "=" + value);
+                }
                 if (parameterAnnotation instanceof MatrixParam) {
                     MatrixParam matrixParam = MatrixParam.class.cast(parameterAnnotation);
                     String parameterName = matrixParam.value();
                     Object value = args[i];
                     request.matrixParameter(parameterName, value);
                     notAcceptedParameters.remove(args[i]);
+                    logger.debug("MatrixParam[" + parameterName + "=" + value);
                 }
                 if (parameterAnnotation instanceof FormParam) {
                     FormParam formParam = FormParam.class.cast(parameterAnnotation);
@@ -223,13 +249,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
                     Object value = args[i];
                     request.formParameter(parameterName, value);
                     notAcceptedParameters.remove(args[i]);
-                }
-                if (parameterAnnotation instanceof PathParam) {
-                    PathParam pathParam = PathParam.class.cast(parameterAnnotation);
-                    String parameterName = pathParam.value();
-                    Object value = args[i];
-                    request.pathParameter(parameterName, value);
-                    notAcceptedParameters.remove(args[i]);
+                    logger.debug("FormParam[" + parameterName + "=" + value);
                 }
                 if (parameterAnnotation instanceof CookieParam) {
                     CookieParam cookieParam = CookieParam.class.cast(parameterAnnotation);
@@ -237,6 +257,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
                     Object value = args[i];
                     request.cookie(cookieName, value);
                     notAcceptedParameters.remove(args[i]);
+                    logger.debug("CookieParam[" + cookieName + "=" + value);
                 }
                 if (parameterAnnotation instanceof HeaderParam) {
                     HeaderParam headerParam = HeaderParam.class.cast(parameterAnnotation);
@@ -244,6 +265,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
                     Object value = args[i];
                     request.header(headerName, value);
                     notAcceptedParameters.remove(args[i]);
+                    logger.debug("HeaderParam[" + headerParam + "=" + value);
                 }
             }
         }

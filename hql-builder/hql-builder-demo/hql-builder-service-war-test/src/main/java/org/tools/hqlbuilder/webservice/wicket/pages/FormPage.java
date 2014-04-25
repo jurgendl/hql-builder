@@ -1,6 +1,10 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import java.util.Date;
+
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.tools.hqlbuilder.test.Registration;
@@ -27,10 +31,9 @@ public class FormPage extends DefaultWebPage {
             @Override
             protected void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
-                System.out.println(hqlWebClient);
-                System.out.println(object.getFirstName());
-                System.out.println(object.getLastName());
-                System.out.println(object.getEmail());
+                object.setVerification(new Date());
+                object = hqlWebClient.save(object);
+                model.setObject(object);
             }
         };
         add(formPanel);
@@ -41,6 +44,15 @@ public class FormPage extends DefaultWebPage {
         formPanel.addTextField(name(registration.getLastName()), true);
         formPanel.addEmailTextField(name(registration.getEmail()), true);
         formPanel.addPasswordTextField(name(registration.getPassword()), true);
+        add(new Label("registration.date", new PropertyModel<Date>(formPanel.getDefaultModelObject(), name(registration.getVerification()))) {
+            private static final long serialVersionUID = 3305246087333291118L;
+
+            @Override
+            public boolean isVisible() {
+                return super.isVisible() && getDefaultModel().getObject() != null;
+            }
+
+        });
         // formPanel.liveValidation();
     }
 
