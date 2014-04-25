@@ -10,17 +10,9 @@
 	http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd  
 	http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security.xsd"
-	>
+	http://www.springframework.org/schema/security/spring-security.xsd
+	">
 
-	<bean id="securityProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<list>
-				<value>classpath:org/tools/hqlbuilder/webservice/security/security.properties</value>
-				<value>file:${user.home}/hqlbuilder/security.properties</value>
-			</list>
-		</property>
-		<property name="ignoreResourceNotFound" value="true" />
-	</bean>
+	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
 
 </beans>

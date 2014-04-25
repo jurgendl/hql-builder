@@ -58,6 +58,8 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
 
     protected String serviceUrl;
 
+    protected ServiceUrlBuilder serviceUrlBuilder;
+
     protected R resource;
 
     protected Class<R> resourceClass;
@@ -66,6 +68,10 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
 
     @SuppressWarnings("deprecation")
     protected org.jboss.resteasy.client.ClientExecutor clientExecutor;
+
+    public HqlWebServiceClientFactory() {
+        this.logger = setupLogger();
+    }
 
     public HqlWebServiceClientFactory(String[] packages) {
         this.packages = packages;
@@ -302,6 +308,9 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     }
 
     public String getServiceUrl() {
+        if (serviceUrl == null && serviceUrlBuilder != null) {
+            serviceUrl = serviceUrlBuilder.getServiceUrl();
+        }
         return this.serviceUrl;
     }
 
@@ -345,5 +354,13 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     @SuppressWarnings("deprecation")
     public void setClientExecutor(org.jboss.resteasy.client.ClientExecutor clientExecutor) {
         this.clientExecutor = clientExecutor;
+    }
+
+    public ServiceUrlBuilder getServiceUrlBuilder() {
+        return this.serviceUrlBuilder;
+    }
+
+    public void setServiceUrlBuilder(ServiceUrlBuilder serviceUrlBuilder) {
+        this.serviceUrlBuilder = serviceUrlBuilder;
     }
 }

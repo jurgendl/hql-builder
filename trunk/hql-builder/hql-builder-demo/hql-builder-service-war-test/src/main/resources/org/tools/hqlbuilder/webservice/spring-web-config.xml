@@ -19,12 +19,25 @@
 
 	<context:component-scan base-package="org.tools.hqlbuilder.webservice.resteasy" />
 
+	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
+
 	<!-- <import resource="classpath:org/tools/hqlbuilder/webservice/security/spring-security-config.xml"/> -->
 
 	<import resource="classpath:org/tools/hqlbuilder/test/spring-service-config.xml"/>
 
 	<bean id="hqlWebService" class="org.tools.hqlbuilder.webservice.HqlWebServiceImpl" scope="singleton" lazy-init="false">
 		<property name="hqlService" ref="hqlService" />
+	</bean>
+	
+	<bean id="hqlWebClient" class="org.tools.hqlbuilder.webclient.HqlWebServiceClient" scope="singleton" lazy-init="false">
+		<property name="serviceUrlBuilder">
+			<bean class="org.tools.hqlbuilder.webclient.ServiceUrlBuilder">
+				<property name="securityProperties" ref="securityProperties"/>
+			</bean>
+		</property>
+		<property name="packages">
+			<list><value>org.tools.hqlbuilder.test</value></list>
+		</property>
 	</bean>
 
 	<bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">

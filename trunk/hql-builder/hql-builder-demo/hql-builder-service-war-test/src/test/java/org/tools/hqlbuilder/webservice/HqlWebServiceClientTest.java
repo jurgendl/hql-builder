@@ -1,7 +1,5 @@
 package org.tools.hqlbuilder.webservice;
 
-import java.net.InetAddress;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -26,23 +24,20 @@ import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.test.User;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
+import org.tools.hqlbuilder.webclient.ServiceUrlBuilder;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
 /**
  * @see https://jaxb.java.net/guide/index.html
  */
 public class HqlWebServiceClientTest {
-    private static String serviceUrl;
-
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = null;
         try {
             context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/webservice/test-context.xml");
             Properties cfg = Properties.class.cast(context.getBean("securityProperties"));
-            serviceUrl = new URI(cfg.getProperty("protocol"), null, InetAddress.getLocalHost().getHostAddress(),
-                    cfg.containsKey("port") ? Integer.parseInt(cfg.getProperty("port")) : 80, "/" + cfg.getProperty("contextpath").toString(), null,
-                    null).toASCIIString();
-            test0(cfg, serviceUrl);
+            ServiceUrlBuilder sub = new ServiceUrlBuilder(cfg);
+            test0(cfg, sub.getServiceUrl());
             // test1(serviceUrl + "/xml");
             // test2(serviceUrl + "/xml");
         } catch (Exception ex) {
