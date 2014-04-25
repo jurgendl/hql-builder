@@ -51,12 +51,4 @@ public class FormPage extends DefaultWebPage {
     public static <A> String name(A arg) {
         return Lambda.argument(arg).getInkvokedPropertyName();
     }
-
-    public HqlWebServiceClient getHqlWebClient() {
-        return this.hqlWebClient;
-    }
-
-    public void setHqlWebClient(HqlWebServiceClient hqlWebClient) {
-        this.hqlWebClient = hqlWebClient;
-    }
 }

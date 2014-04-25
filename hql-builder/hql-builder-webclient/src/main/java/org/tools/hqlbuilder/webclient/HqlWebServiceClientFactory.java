@@ -37,7 +37,6 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -105,12 +104,6 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         HttpClient httpClient = HttpClientBuilder.create()//
                 .setDefaultCredentialsProvider(credentialsProvider)//
                 .build();//
-
-        try {
-            httpClient.execute(new HttpGet(serviceUrl + "/classes"));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
         return new ApacheHttpClient4Executor(httpClient, localContext);
     }
