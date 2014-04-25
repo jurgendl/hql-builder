@@ -182,6 +182,16 @@
 				<artifactId>spring-jdbc</artifactId>
 				<version>${version.spring}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
 			<!-- WebCommon -->
 			<dependency>
 				<groupId>commons-io</groupId>
