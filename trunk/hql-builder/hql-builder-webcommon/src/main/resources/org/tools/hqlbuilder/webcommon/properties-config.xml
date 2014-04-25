@@ -10,11 +10,11 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd  
 	">
 
-	<bean id="securityPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="properties" ref="securityProperties" />
+	<bean id="webPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="webProperties" />
 	</bean>
 
-	<bean id="securityProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	<bean id="webProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
 				<value>classpath:org/tools/hqlbuilder/webcommon/hqlbuilderweb.properties</value>

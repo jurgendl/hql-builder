@@ -28,24 +28,24 @@
 	<bean id="hqlWebService" class="org.tools.hqlbuilder.webservice.HqlWebServiceImpl" scope="singleton" lazy-init="false">
 		<property name="hqlService" ref="hqlService" />
 	</bean>
-	
-	<bean id="hqlWebClient" class="org.tools.hqlbuilder.webclient.HqlWebServiceClient" scope="singleton" lazy-init="false">
-		<property name="serviceUrlBuilder">
-			<bean class="org.tools.hqlbuilder.webclient.ServiceUrlBuilder">
-				<property name="securityProperties" ref="securityProperties"/>
-			</bean>
-		</property>
-		<property name="packages">
-			<list><value>org.tools.hqlbuilder.test</value></list>
+
+	<bean id="jaxbContextResolver" class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver"><constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg></bean>
+
+	<bean id="restEasyProvidersBean" class="org.tools.hqlbuilder.webcommon.RestEasyProvidersBean" init-method="register">
+		<property name="providers">
+			<list>
+				<beans:ref bean="jaxbContextResolver"/>
+			</list>
 		</property>
 	</bean>
 
-	<bean class="org.tools.hqlbuilder.webservice.RestEasyProvidersBean" init-method="register">
-		<property name="providers">
-			<list>
-				<bean class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver"><constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg></bean>
-			</list>
+	<bean id="hqlWebClient" class="org.tools.hqlbuilder.webclient.HqlWebServiceClient" scope="singleton" lazy-init="false">
+		<property name="serviceUrlBuilder">
+			<bean class="org.tools.hqlbuilder.webclient.ServiceUrlBuilder">
+				<property name="webProperties" ref="webProperties"/>
+			</bean>
 		</property>
+		<property name="restEasyProvidersBean" ref="restEasyProvidersBean"/>
 	</bean>
 
 </beans>

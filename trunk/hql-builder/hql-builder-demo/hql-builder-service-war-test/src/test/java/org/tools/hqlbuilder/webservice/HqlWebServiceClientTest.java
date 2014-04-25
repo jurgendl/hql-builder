@@ -35,7 +35,7 @@ public class HqlWebServiceClientTest {
         ClassPathXmlApplicationContext context = null;
         try {
             context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/webservice/test-context.xml");
-            Properties cfg = Properties.class.cast(context.getBean("securityProperties"));
+            Properties cfg = Properties.class.cast(context.getBean("webProperties"));
             ServiceUrlBuilder sub = new ServiceUrlBuilder(cfg);
             test0(cfg, sub.getServiceUrl());
             // test1(serviceUrl + "/xml");

@@ -29,20 +29,20 @@ public class LogInPanel extends Panel {
 
     public LogInPanel(final String id, final IModel<UserData> model) {
         super(id, model);
-        Properties securityProperties = WicketApplication.get().getSecurityProperties();
+        Properties webProperties = WicketApplication.get().getWebProperties();
         Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
-        add(new LogInForm(authentication, securityProperties));
-        setVisible(authentication == null || authentication.getPrincipal().equals(securityProperties.getProperty("anonymous.user")));
+        add(new LogInForm(authentication, webProperties));
+        setVisible(authentication == null || authentication.getPrincipal().equals(webProperties.getProperty("anonymous.user")));
     }
 
     public class LogInForm extends StatelessForm<UserData> {
         private static final long serialVersionUID = -201240593887067454L;
 
-        protected final Properties securityProperties;
+        protected final Properties webProperties;
 
-        public LogInForm(@SuppressWarnings("unused") final Authentication authentication, final Properties securityProperties) {
+        public LogInForm(@SuppressWarnings("unused") final Authentication authentication, final Properties webProperties) {
             super("loginform", Model.of(new UserData()));
-            this.securityProperties = securityProperties;
+            this.webProperties = webProperties;
             TextField<String> username = new TextField<String>("username") {
                 private static final long serialVersionUID = -3917878971011538022L;
 
@@ -69,7 +69,7 @@ public class LogInPanel extends Panel {
             add(password.setMarkupId(password.getId()));
             add(login.setMarkupId(login.getId()));
             add(reset.setMarkupId(reset.getId()));
-            // Label usernamelabel = new Label("knownusername", authentication == null ? securityProperties.getProperty("anonymous.user") :
+            // Label usernamelabel = new Label("knownusername", authentication == null ? webProperties.getProperty("anonymous.user") :
             // authentication.getName());
             // usernamelabel.setVisible(authentication != null);
             // add(usernamelabel);
@@ -81,9 +81,9 @@ public class LogInPanel extends Panel {
 
         @Override
         protected CharSequence getActionUrl() {
-            return getRequest().getContextPath() + securityProperties.getProperty("login")
+            return getRequest().getContextPath() + webProperties.getProperty("login")
             // + "?"
-            // + securityProperties.getProperty("returnto.propertyname") + "="
+            // + webProperties.getProperty("returnto.propertyname") + "="
             // + ((org.apache.wicket.protocol.http.servlet.ServletWebRequest) getRequest()).getContainerRequest().getRequestURL()
             // + super.getActionUrl()
             ;
