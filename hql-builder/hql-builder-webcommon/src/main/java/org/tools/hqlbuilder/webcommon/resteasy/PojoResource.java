@@ -9,7 +9,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -202,7 +201,7 @@ public interface PojoResource {
      * @see [put] http://localhost:80/hqlbuilder/xml/builder/get [type,id]
      */
     @Path("get")
-    @POST
+    @GET
     @Produces({ XML })
     public abstract <T> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
 
