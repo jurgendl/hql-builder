@@ -21,7 +21,6 @@ import org.apache.http.util.EntityUtils;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tools.hqlbuilder.common.QueryParameter;
-import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.test.User;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webclient.ServiceUrlBuilder;
@@ -38,11 +37,11 @@ public class HqlWebServiceClientTest {
             Properties cfg = Properties.class.cast(context.getBean("webProperties"));
             ServiceUrlBuilder sub = new ServiceUrlBuilder(cfg);
             sub.afterPropertiesSet();
-            //test0(cfg, sub.getServiceUrl());
-             test1( sub.getServiceUrl() );
-            // test2( sub.getServiceUrl());
+            // test0(cfg, sub.getServiceUrl());
+            test1(sub.getServiceUrl());
+            // test2(sub.getServiceUrl());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.out);
         } finally {
             if (context != null) {
                 try {
@@ -151,7 +150,7 @@ public class HqlWebServiceClientTest {
         List<QueryParameter> parameters = hc.findParameters(hql);
         System.out.println(parameters);
         parameters.get(0).setValueText("1l");
-        //System.out.println(hc.execute(new QueryParameters(hql, parameters)));
+        // System.out.println(hc.execute(new QueryParameters(hql, parameters)));
     }
 
     public static void test2(String url) throws Exception {
@@ -171,11 +170,11 @@ public class HqlWebServiceClientTest {
         System.out.println(hc.getReservedKeywords());
 
         // FIXME
-        String hql = "from " + User.class.getSimpleName() + " where id=:id";
-        List<QueryParameter> parameters = hc.findParameters(hql).getValue();
-        System.out.println(parameters);
-        parameters.get(0).setValueText("1l");
-        System.out.println(hc.execute(new QueryParameters(hql, parameters)));
+        // String hql = "from " + User.class.getSimpleName() + " where id=:id";
+        // List<QueryParameter> parameters = hc.findParameters(hql).getValue();
+        // System.out.println(parameters);
+        // parameters.get(0).setValueText("1l");
+        // System.out.println(hc.execute(new QueryParameters(hql, parameters)));
     }
 
     public static HqlWebServiceClient getClient(String url) throws Exception {
