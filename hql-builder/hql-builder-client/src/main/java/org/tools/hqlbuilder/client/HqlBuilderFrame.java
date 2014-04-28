@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URL;
@@ -177,6 +178,10 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
+    private static final Serializable SERIALIZABLE = new Serializable() {
+        private static final long serialVersionUID = 1L;
+    };
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
     private String version;
@@ -345,7 +350,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
 
-    private final JComponent values = ClientUtils.getPropertyFrame(new Object(), false);
+    private final JComponent values = ClientUtils.getPropertyFrame(new Serializable() {
+        private static final long serialVersionUID = 1L;
+    }, false);
 
     /** aliases query */
     private Map<String, String> aliases = new HashMap<String, String>();
@@ -539,7 +546,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         sql.setText("");
         scripts.clear();
         clearResults();
-        propertypanel.add(ClientUtils.getPropertyFrame(new Object(), false), BorderLayout.CENTER);
+        propertypanel.add(ClientUtils.getPropertyFrame(SERIALIZABLE, false), BorderLayout.CENTER);
         propertypanel.revalidate();
         hql_sql_tabs.setForegroundAt(0, Color.gray);
         hql_sql_tabs.setForegroundAt(1, Color.gray);
@@ -1725,9 +1732,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 propertypanel.removeAll();
                 Object data = ((row == -1) || (column == -1)) ? null : resultsEDT.getValueAt(row, column);
                 if (data == null) {
-                    propertypanel.add(ClientUtils.getPropertyFrame(new Object(), editableResultsAction.isSelected()), BorderLayout.CENTER);
+                    propertypanel.add(ClientUtils.getPropertyFrame(SERIALIZABLE, editableResultsAction.isSelected()), BorderLayout.CENTER);
                 } else {
-                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editableResultsAction.isSelected());
+                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame((Serializable) data, editableResultsAction.isSelected());
                     propertyFrame.setHqlService(hqlService);
                     propertypanel.add(font(propertyFrame, null), BorderLayout.CENTER);
                 }
@@ -2712,7 +2719,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("no row selected"), "", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            Object bean = resultsEDT.getModel().getValueAt(row, col);
+            Serializable bean = (Serializable) resultsEDT.getModel().getValueAt(row, col);
             hqlService.delete(bean);
             resultsEDT.getModel().setValueAt(null, row, col);
             propertypanel.removeAll();

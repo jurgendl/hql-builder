@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
+import org.tools.hqlbuilder.common.XmlWrapper;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
@@ -117,12 +119,13 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
         return getResource().findParameters(hql).getValue();
     }
 
-    public void save(String pojo, Object object) {
-        getResource().save(pojo, object);
+    @SuppressWarnings("unchecked")
+    public <T extends Serializable, I extends Serializable> I save(String pojo, T object) {
+        return (I) getResource().save(pojo, new XmlWrapper<T>(object)).getValue();
     }
 
-    public void delete(String pojo, Object object) {
-        getResource().delete(pojo, object);
+    public <T extends Serializable> void delete(String pojo, T object) {
+        getResource().delete(pojo, new XmlWrapper<T>(object));
     }
 
     @Override
@@ -148,13 +151,12 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
     }
 
     @Override
-    public <T> T save(T object) throws ValidationException {
-        save(object.getClass().getName(), object);
-        return null;
+    public <T extends Serializable, I extends Serializable> I save(T object) throws ValidationException {
+        return save(object.getClass().getName(), object);
     }
 
     @Override
-    public <T> void delete(T object) {
+    public <T extends Serializable> void delete(T object) {
         delete(object.getClass().getName(), object);
     }
 
@@ -164,7 +166,7 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
     }
 
     @Override
-    public <T, I> T get(Class<T> type, I id) {
+    public <T extends Serializable, I extends Serializable> T get(Class<T> type, I id) {
         return type.cast(getResource().get(type.getName(), String.valueOf(id)).getValue());
     }
 }

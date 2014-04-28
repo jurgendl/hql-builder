@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.client;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class ObjectTree extends JFrame {
                                 //
                             }
                         }
-                        PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editable);
+                        PropertyPanel propertyFrame = ClientUtils.getPropertyFrame((Serializable) data, editable);
                         propertyFrame.setHqlService(hqlService);
                         frame.font(propertyFrame, null);
                         propertypanel.add(propertyFrame, BorderLayout.CENTER);

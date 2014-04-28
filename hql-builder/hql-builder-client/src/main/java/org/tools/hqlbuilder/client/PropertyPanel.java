@@ -10,6 +10,7 @@ import java.beans.Introspector;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -76,7 +77,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
     private static final long serialVersionUID = -5568670775272022905L;
 
-    private Object bean;
+    private Serializable bean;
 
     @SuppressWarnings("unused")
     private Boolean settingValue = false;
@@ -91,7 +92,7 @@ public class PropertyPanel extends PropertySheetPanel {
      * @param bean na
      */
 
-    public PropertyPanel(Object bean, final boolean editable) {
+    public PropertyPanel(Serializable bean, final boolean editable) {
         super(new PropertySheetTable() {
             private static final long serialVersionUID = 5578802576173787006L;
 
@@ -650,7 +651,8 @@ public class PropertyPanel extends PropertySheetPanel {
                 if (!new EqualsBuilder().append(evt.getOldValue(), evt.getNewValue()).isEquals()) {
                     ClientUtils.log("changing value from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
                     writeMethod.invoke(bean, evt.getNewValue());
-                    bean = hqlService.save(bean);
+                    Serializable id = hqlService.save(bean);
+                    bean = hqlService.get(bean.getClass(), id);
                 }
 
                 EventQueue.invokeLater(new Runnable() {

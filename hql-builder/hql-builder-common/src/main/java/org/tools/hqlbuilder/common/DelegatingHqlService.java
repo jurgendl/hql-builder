@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.common;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,12 +48,12 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
-    public <T> T save(T object) throws ValidationException {
+    public <T extends Serializable, I extends Serializable> I save(T object) throws ValidationException {
         return getDelegate().save(object);
     }
 
     @Override
-    public <T> void delete(T object) {
+    public <T extends Serializable> void delete(T object) {
         getDelegate().delete(object);
     }
 
@@ -117,7 +118,7 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
-    public <T, I> T get(Class<T> type, I id) {
+    public <T extends Serializable, I extends Serializable> T get(Class<T> type, I id) {
         return getDelegate().get(type, id);
     }
 }

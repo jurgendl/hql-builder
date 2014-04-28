@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.common;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,9 +24,9 @@ public interface HqlService {
 
     public abstract String getProject();
 
-    public abstract <T> T save(T object) throws ValidationException;
+    public abstract <T extends Serializable, I extends Serializable> I save(T object) throws ValidationException;
 
-    public abstract <T> void delete(T object);
+    public abstract <T extends Serializable> void delete(T object);
 
     public abstract List<String> search(String text, String typeName, int hitsPerPage) throws UnsupportedOperationException, IOException;
 
@@ -51,5 +52,5 @@ public interface HqlService {
 
     public abstract String getLuceneHelpURL();
 
-    public abstract <T, I> T get(Class<T> type, I id);
+    public abstract <T extends Serializable, I extends Serializable> T get(Class<T> type, I id);
 }

@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webcommon.resteasy;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +10,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -179,7 +181,7 @@ public interface PojoResource {
     @Path("/save/{pojo}")
     @Consumes({ XML })
     @Produces({ XML })
-    public abstract void save(@PathParam("pojo") String pojo, Object object);
+    public abstract <T extends Serializable, I extends Serializable> XmlWrapper<I> save(@PathParam("pojo") String pojo, XmlWrapper<T> object);
 
     /**
      * @see [delete] http://localhost:80/hqlbuilder/xml/builder/delete/{...} [body]
@@ -187,7 +189,7 @@ public interface PojoResource {
     @DELETE
     @Path("/delete/{pojo}")
     @Consumes({ XML })
-    public abstract void delete(@PathParam("pojo") String pojo, Object object);
+    public abstract <T extends Serializable> void delete(@PathParam("pojo") String pojo, XmlWrapper<T> object);
 
     /**
      * @see [get] http://localhost:80/hqlbuilder/xml/builder/hibernatewebresolver
@@ -201,9 +203,9 @@ public interface PojoResource {
      * @see [put] http://localhost:80/hqlbuilder/xml/builder/get [type,id]
      */
     @Path("get")
-    @GET
+    @POST
     @Produces({ XML })
-    public abstract <T> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
+    public abstract <T extends Serializable> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
 
     /**
      * @see [get] http://localhost:80/hqlbuilder/xml/builder/executehql?hql=...
@@ -228,7 +230,7 @@ public interface PojoResource {
     @GET
     @Path("/executehqlplain")
     @Produces({ XML })
-    public abstract <T> XmlWrapper<List<T>> executePlainResult(@QueryParam("hql") String hql);
+    public abstract <T extends Serializable> XmlWrapper<List<T>> executePlainResult(@QueryParam("hql") String hql);
 
     /**
      * @see [put] http://localhost:80/hqlbuilder/xml/builder/executeplain [body]
@@ -237,5 +239,5 @@ public interface PojoResource {
     @Path("/executeplain")
     @Consumes({ XML })
     @Produces({ XML })
-    public abstract <T> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters);
+    public abstract <T extends Serializable> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters);
 }

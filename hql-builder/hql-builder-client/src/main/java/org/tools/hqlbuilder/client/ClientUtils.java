@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.io.Serializable;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
@@ -28,11 +29,7 @@ import org.tools.hqlbuilder.common.CommonUtils;
  * @author Jurgen
  */
 public class ClientUtils extends CommonUtils {
-    /**
-     * 
-     * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#getPropertyFrame(org.hibernate.SessionFactory, java.lang.Object, boolean)
-     */
-    static public PropertyPanel getPropertyFrame(Object object, boolean editable) {
+    static public PropertyPanel getPropertyFrame(Serializable object, boolean editable) {
         return new PropertyPanel(object, editable);
     }
 

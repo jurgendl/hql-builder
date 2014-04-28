@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,8 +33,8 @@ public class FormPage extends DefaultWebPage {
             protected void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setVerification(new Date());
-                hqlWebClient.save(object);
-                object = hqlWebClient.get(object.getClass(), object.getId());
+                Serializable id = hqlWebClient.save(object);
+                object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
             }
         };
