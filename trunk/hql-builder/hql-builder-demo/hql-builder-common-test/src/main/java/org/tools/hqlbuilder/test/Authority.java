@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 @Entity
@@ -16,6 +17,7 @@ public class Authority extends EntityParent {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "username")
+    @XmlTransient
     private Member member;
 
     @NotNull

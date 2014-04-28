@@ -7,6 +7,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 @Entity
@@ -16,6 +17,7 @@ public class User extends EntityParent {
 
     private Boolean enabled = Boolean.TRUE;
 
+    @XmlTransient
     private String password;
 
     private String firstName;
