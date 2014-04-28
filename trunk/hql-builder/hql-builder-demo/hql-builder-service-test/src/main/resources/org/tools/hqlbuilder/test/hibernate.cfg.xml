@@ -10,5 +10,6 @@
 		<mapping class="org.tools.hqlbuilder.test.Lang" />
 		<mapping class="org.tools.hqlbuilder.test.Member" />
 		<mapping class="org.tools.hqlbuilder.test.User" />
+		<mapping class="org.tools.hqlbuilder.test.Registration" />
 	</session-factory>
 </hibernate-configuration>
