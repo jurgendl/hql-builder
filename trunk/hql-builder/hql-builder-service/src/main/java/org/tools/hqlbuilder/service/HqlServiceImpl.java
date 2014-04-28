@@ -273,6 +273,7 @@ public class HqlServiceImpl implements HqlService {
     public ExecutionResult execute(QueryParameters obj) {
         String hql = obj.getHql();
         int max = obj.getMax();
+        int first = obj.getFirst();
         List<QueryParameter> queryParameters = obj.getParameters();
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");
@@ -300,7 +301,7 @@ public class HqlServiceImpl implements HqlService {
                 }
                 return result;
             }
-            result = innerExecute(result, hql, max, queryParameters);
+            result = innerExecute(result, hql, max, first, queryParameters);
             return result;
         } catch (QueryException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
@@ -382,7 +383,7 @@ public class HqlServiceImpl implements HqlService {
     }
 
     @SuppressWarnings("unchecked")
-    protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, List<QueryParameter> queryParameters) {
+    protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, int first, List<QueryParameter> queryParameters) {
         long start = System.currentTimeMillis();
         QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         String sql = queryTranslator.getSQLString();
@@ -433,7 +434,12 @@ public class HqlServiceImpl implements HqlService {
             logger.debug(sql);
             result.setSql(sql);
         }
-        createQuery.setMaxResults(max);
+        if (max != -1) {
+            createQuery.setMaxResults(max);
+        }
+        if (first != -1) {
+            createQuery.setFirstResult(first);
+        }
         String QLD = QUERY_LOADER + DOT;
         Type[] queryReturnTypes = get(queryTranslator, QLD + QUERY_RETURN_TYPES, Type[].class);
         String[] queryReturnAliases = get(queryTranslator, QLD + QUERY_RETURN_ALIASES, String[].class);

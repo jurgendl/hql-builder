@@ -18,6 +18,9 @@ public class QueryParameters implements Serializable {
     @XmlAttribute(required = true)
     private int max = -1;
 
+    @XmlAttribute(required = true)
+    private int first = -1;
+
     @XmlElementWrapper
     private List<QueryParameter> parameters;
 
@@ -71,8 +74,16 @@ public class QueryParameters implements Serializable {
         this.max = max;
     }
 
+    public int getFirst() {
+        return this.first;
+    }
+
+    public void setFirst(int first) {
+        this.first = first;
+    }
+
     @Override
     public String toString() {
-        return "QueryParameters [hql=" + this.hql + ", max=" + this.max + ", parameters=" + this.parameters + "]";
+        return "QueryParameters [hql=" + this.hql + ", max=" + this.max + ", first=" + this.first + ", parameters=" + this.parameters + "]";
     }
 }

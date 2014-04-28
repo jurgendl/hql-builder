@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.wicket.pages;
+package org.tools.hqlbuilder.webservice.wicket;
 
 import ch.lambdaj.Lambda;
 
