@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 @Entity
@@ -18,6 +19,7 @@ public class Group extends EntityParent {
     private String name;
 
     @OneToMany(mappedBy = "group")
+    @XmlTransient
     private List<Member> members;
 
     @OneToMany(mappedBy = "group")

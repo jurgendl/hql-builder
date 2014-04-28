@@ -20,7 +20,7 @@ public class Registration extends EntityParent {
 
     private String username;
 
-    private String key;
+    private String regkey;
 
     private Date verification;
 
@@ -64,19 +64,19 @@ public class Registration extends EntityParent {
         this.username = username;
     }
 
-    public String getKey() {
-        return this.key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public Date getVerification() {
         return this.verification;
     }
 
     public void setVerification(Date verification) {
         this.verification = verification;
+    }
+
+    public String getRegkey() {
+        return this.regkey;
+    }
+
+    public void setRegkey(String regkey) {
+        this.regkey = regkey;
     }
 }
