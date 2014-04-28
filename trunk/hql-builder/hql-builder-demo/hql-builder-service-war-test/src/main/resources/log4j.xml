@@ -56,6 +56,21 @@
 	<logger name="net.sf.ehcache.util.UpdateChecker">
 		<level value="warn" />
 	</logger>
+	<logger name="org.jboss.resteasy.core">
+		<level value="debug" />
+	</logger>
+	<logger name="org.jboss.resteasy.plugins.providers">
+		<level value="debug" />
+	</logger>
+	<logger name="org.jboss.resteasy.plugins.server">
+		<level value="debug" />
+	</logger>
+	<logger name="org.jboss.resteasy.specimpl">
+		<level value="debug" />
+	</logger>
+	<logger name="org.jboss.resteasy.mock">
+		<level value="debug" />
+	</logger>
 	<root>
 		<appender-ref ref="CONSOLE" />
 	</root>

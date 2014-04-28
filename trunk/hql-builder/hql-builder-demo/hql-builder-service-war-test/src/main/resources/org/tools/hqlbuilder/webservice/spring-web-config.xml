@@ -2,22 +2,15 @@
 <beans
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:oxm="http://www.springframework.org/schema/oxm"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util
-		http://www.springframework.org/schema/util/spring-util.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/oxm
-		http://www.springframework.org/schema/oxm/spring-oxm.xsd
 	">
 
-	<context:component-scan base-package="org.tools.hqlbuilder.webservice.resteasy" />
+	<context:component-scan base-package="org.tools.hqlbuilder.webcommon.resteasy,org.tools.hqlbuilder.webservice.resteasy,org.tools.hqlbuilder.webservice.resteasy.resources" />
 
 	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
 
@@ -29,12 +22,14 @@
 		<property name="hqlService" ref="hqlService" />
 	</bean>
 
-	<bean id="jaxbContextResolver" class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver"><constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg></bean>
+	<bean id="jaxbContextResolver" class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver">
+		<constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg>
+	</bean>
 
 	<bean id="restEasyProvidersBean" class="org.tools.hqlbuilder.webcommon.RestEasyProvidersBean" init-method="register">
 		<property name="providers">
 			<list>
-				<beans:ref bean="jaxbContextResolver"/>
+				<ref bean="jaxbContextResolver"/>
 			</list>
 		</property>
 	</bean>
