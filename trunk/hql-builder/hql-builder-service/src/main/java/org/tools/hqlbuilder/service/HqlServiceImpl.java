@@ -356,6 +356,10 @@ public class HqlServiceImpl implements HqlService {
         } catch (HibernateException ex) {
             logger.error("execute(String, int, QueryParameter)", ex);
             throw new ServiceException(concat(ex), result);
+        } catch (NullPointerException ex) {
+            logger.error("execute(String, int, QueryParameter)", ex);
+            ex.printStackTrace(System.out);
+            throw new ServiceException("NullPointerException", result);
         } catch (Exception ex) {
             throw new ServiceException(concat(ex), result);
         } finally {
@@ -388,29 +392,31 @@ public class HqlServiceImpl implements HqlService {
         Session session = newSession();
         Query createQuery = session.createQuery(hql);
         int index = 0;
-        for (QueryParameter value : queryParameters) {
-            try {
-                Object valueCompiled = value.getValue();
-                if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
-                    valueCompiled = GroovyCompiler.eval(value.getValueText());
-                }
-                if (value.getName() != null) {
-                    if (valueCompiled instanceof Collection) {
-                        @SuppressWarnings({ "rawtypes" })
-                        Object[] l = new ArrayList((Collection) valueCompiled).toArray();
-                        createQuery.setParameterList(value.getName(), l);
-                    } else {
-                        createQuery.setParameter(value.getName(), valueCompiled);
+        if (queryParameters != null) {
+            for (QueryParameter value : queryParameters) {
+                try {
+                    Object valueCompiled = value.getValue();
+                    if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
+                        valueCompiled = GroovyCompiler.eval(value.getValueText());
                     }
-                } else {
-                    createQuery.setParameter(index++, valueCompiled);
+                    if (value.getName() != null) {
+                        if (valueCompiled instanceof Collection) {
+                            @SuppressWarnings({ "rawtypes" })
+                            Object[] l = new ArrayList((Collection) valueCompiled).toArray();
+                            createQuery.setParameterList(value.getName(), l);
+                        } else {
+                            createQuery.setParameter(value.getName(), valueCompiled);
+                        }
+                    } else {
+                        createQuery.setParameter(index++, valueCompiled);
+                    }
+                } catch (org.hibernate.QueryParameterException ex) {
+                    // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
+                    logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
+                } catch (java.lang.IndexOutOfBoundsException ex) {
+                    // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
+                    logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
                 }
-            } catch (org.hibernate.QueryParameterException ex) {
-                // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
-                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
-            } catch (java.lang.IndexOutOfBoundsException ex) {
-                // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
-                logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
             }
         }
         if (isUpdateStatement) {

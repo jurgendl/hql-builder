@@ -17,13 +17,13 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import ch.lambdaj.Lambda;
 
 @MountedPage("/form/registration")
-public class FormPage extends DefaultWebPage {
+public class RegistrationPage extends DefaultWebPage {
     private static final long serialVersionUID = 264876407045636533L;
 
     @SpringBean
     protected transient HqlWebServiceClient hqlWebClient;
 
-    public FormPage(PageParameters parameters) {
+    public RegistrationPage(PageParameters parameters) {
         super(parameters);
 
         FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class) {
