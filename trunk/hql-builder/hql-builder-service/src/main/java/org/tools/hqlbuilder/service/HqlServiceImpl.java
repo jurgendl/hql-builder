@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -547,11 +548,11 @@ public class HqlServiceImpl implements HqlService {
     }
 
     /**
-     * @see org.tools.hqlbuilder.common.HqlService#save(java.lang.Object)
+     * @see org.tools.hqlbuilder.common.HqlService#save(java.io.Serializable)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T save(T object) throws ValidationException {
+    public <T extends Serializable, I extends Serializable> I save(T object) throws ValidationException {
         try {
             Session session = newSession();
             Transaction tx = session.beginTransaction();
@@ -559,7 +560,10 @@ public class HqlServiceImpl implements HqlService {
             session.persist(object);
             tx.commit();
             session.flush();
-            return object;
+
+            ClassMetadata classMetadata = sessionFactory.getAllClassMetadata().get(object.getClass().getName());
+            String oid = classMetadata.getIdentifierPropertyName();
+            return (I) new ObjectWrapper(object).get(oid);
         } catch (RuntimeException ex) {
             if ("org.hibernate.validator.InvalidStateException".equals(ex.getClass().getName())) {
                 try {
@@ -596,7 +600,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> void delete(T object) {
+    public <T extends Serializable> void delete(T object) {
         Session session = newSession();
         Transaction tx = session.beginTransaction();
         object = (T) session.merge(object);
@@ -607,7 +611,7 @@ public class HqlServiceImpl implements HqlService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T, I> T get(Class<T> type, I id) {
+    public <T extends Serializable, I extends Serializable> T get(Class<T> type, I id) {
         Object idv = id;
         String name = type.getName();
         ClassMetadata classMetadata = sessionFactory.getAllClassMetadata().get(name);

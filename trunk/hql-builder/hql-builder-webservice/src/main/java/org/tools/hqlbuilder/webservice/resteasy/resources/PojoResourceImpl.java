@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -127,14 +128,15 @@ public class PojoResourceImpl implements PojoResource {
         return new XmlWrapper<List<QueryParameter>>(hqlWebService.findParameters(hql));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void save(String pojo, Object object) {
-        hqlWebService.save(object);
+    public <T extends Serializable, I extends Serializable> XmlWrapper<I> save(String pojo, XmlWrapper<T> object) {
+        return new XmlWrapper<I>((I) hqlWebService.save(object.getValue()));
     }
 
     @Override
-    public void delete(String pojo, Object object) {
-        hqlWebService.delete(object);
+    public <T extends Serializable> void delete(String pojo, XmlWrapper<T> object) {
+        hqlWebService.delete(object.getValue());
     }
 
     @Override
@@ -163,9 +165,9 @@ public class PojoResourceImpl implements PojoResource {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> XmlWrapper<T> get(String type, String id) {
+    public <T extends Serializable> XmlWrapper<T> get(String type, String id) {
         try {
-            return (XmlWrapper<T>) new XmlWrapper<Object>(hqlWebService.get(Class.forName(type), id));
+            return (XmlWrapper<T>) new XmlWrapper<Object>(hqlWebService.get((Class<Serializable>) Class.forName(type), id));
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
@@ -183,12 +185,12 @@ public class PojoResourceImpl implements PojoResource {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public <T> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters) {
+    public <T extends Serializable> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters) {
         return (XmlWrapper) execute(queryParameters).getResults();
     }
 
     @Override
-    public <T> XmlWrapper<List<T>> executePlainResult(String hql) {
+    public <T extends Serializable> XmlWrapper<List<T>> executePlainResult(String hql) {
         return executePlainResult(new QueryParameters(hql));
     }
 }
