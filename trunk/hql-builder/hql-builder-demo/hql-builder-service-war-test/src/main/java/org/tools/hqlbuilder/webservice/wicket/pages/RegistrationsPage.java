@@ -38,6 +38,7 @@ public class RegistrationsPage extends DefaultWebPage {
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
         columns.add(new PropertyColumn<Registration, String>(labelModel(registration.getFirstName()), name(registration.getFirstName())));
         columns.add(new PropertyColumn<Registration, String>(labelModel(registration.getLastName()), name(registration.getLastName())));
+        columns.add(new PropertyColumn<Registration, String>(labelModel(registration.getUsername()), name(registration.getUsername())));
         columns.add(new PropertyColumn<Registration, String>(labelModel(registration.getEmail()), name(registration.getEmail())));
         columns.add(new PropertyColumn<Registration, String>(labelModel(registration.getVerification()), name(registration.getVerification())));
         SortableDataProvider<Registration, String> dataProvider = new SortableDataProvider<Registration, String>() {
