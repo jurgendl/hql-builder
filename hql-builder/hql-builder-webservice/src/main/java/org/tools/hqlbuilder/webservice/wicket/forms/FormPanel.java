@@ -150,7 +150,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
                         return getLabel();
                     } catch (MissingResourceException ex) {
                         logger.error("no translation for " + property);
-                        return property;
+                        return "${" + property + "}";
                     }
                 }
             };

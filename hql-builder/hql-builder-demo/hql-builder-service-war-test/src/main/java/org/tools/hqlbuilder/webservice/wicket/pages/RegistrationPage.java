@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,8 +16,6 @@ import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
-
-import ch.lambdaj.Lambda;
 
 @MountedPage("/form/registration")
 public class RegistrationPage extends DefaultWebPage {
@@ -39,6 +40,7 @@ public class RegistrationPage extends DefaultWebPage {
             }
         };
         add(formPanel);
+
         Registration registration = create(Registration.class);
 
         formPanel.addTextField(name(registration.getUsername()), true);
@@ -56,13 +58,5 @@ public class RegistrationPage extends DefaultWebPage {
 
         });
         // formPanel.liveValidation();
-    }
-
-    public static <T> T create(Class<T> type) {
-        return Lambda.on(type);
-    }
-
-    public static <A> String name(A arg) {
-        return Lambda.argument(arg).getInkvokedPropertyName();
     }
 }
