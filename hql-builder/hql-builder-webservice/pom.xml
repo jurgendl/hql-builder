@@ -11,6 +11,16 @@
 	<description>hql-builder-webservice</description>
 	<dependencies>
 		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>

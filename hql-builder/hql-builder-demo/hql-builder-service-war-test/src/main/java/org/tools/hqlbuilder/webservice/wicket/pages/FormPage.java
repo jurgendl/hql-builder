@@ -32,7 +32,8 @@ public class FormPage extends DefaultWebPage {
             protected void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setVerification(new Date());
-                object = hqlWebClient.save(object);
+                hqlWebClient.save(object);
+                object = hqlWebClient.get(object.getClass(), object.getId());
                 model.setObject(object);
             }
         };
