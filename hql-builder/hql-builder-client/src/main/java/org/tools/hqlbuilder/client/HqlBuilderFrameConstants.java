@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.client;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -144,4 +145,12 @@ public interface HqlBuilderFrameConstants {
     public static final String SHOW_ERROR_TOOLTIP = "show error tooltip";
 
     public static final String SELECT_HQL_BEING_EXECUTED = "select hql being executed";
+
+    public static final String LINESEPERATOR = "\\r?\\n";
+
+    public static final String REMARKTAG = "--";
+
+    public static final Serializable SERIALIZABLE = new Serializable() {
+        private static final long serialVersionUID = 1L;
+    };
 }

@@ -105,6 +105,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.Utilities;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -176,10 +177,6 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
-    private static final Serializable SERIALIZABLE = new Serializable() {
-        private static final long serialVersionUID = 1L;
-    };
-
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
 
     private String version;
@@ -460,6 +457,43 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         }
                         return "<html><p>" + errorString + "</p><html>";
                     }
+                }
+                try {
+                    int offs = this.viewToModel(event.getPoint());
+                    int startIndex = Utilities.getWordStart(this, offs);
+                    int endIndex = Utilities.getWordEnd(this, offs);
+                    String substring = this.getText().substring(Math.max(0, startIndex - 1), endIndex);
+                    if (substring.startsWith(":")) {
+                        String tt = substring.substring(1);
+                        for (EListRecord<QueryParameter> record : parametersEDT.getRecords()) {
+                            if (tt.equals(record.get().getName())) {
+                                return record.get().getToString();
+                            }
+                        }
+                    }
+                    if (substring.length() == 2 && substring.charAt(1) == '?') {
+                        String textUpTo = this.getText().substring(0, Math.max(0, startIndex - 1));
+                        String lines[] = textUpTo.split(LINESEPERATOR);
+                        int count = 0;
+                        boolean remarked = false;
+                        for (String line : lines) {
+                            int dash = line.indexOf(REMARKTAG);
+                            remarked = dash != -1;
+                            if (dash != -1) {
+                                line = line.substring(0, dash);
+                            }
+                            count += StringUtils.countMatches(line, "?");
+                        }
+                        if (!remarked) {
+                            try {
+                                return parametersEDT.getRecords().get(count).get().getToString();
+                            } catch (IndexOutOfBoundsException ex) {
+                                //
+                            }
+                        }
+                    }
+                } catch (BadLocationException ex) {
+                    //
                 }
                 return null;
             }
@@ -775,13 +809,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         StringBuilder sb = new StringBuilder();
 
-        if (geselecteerd.contains("--") || geselecteerd.contains("//")) {
+        if (geselecteerd.contains(REMARKTAG) || geselecteerd.contains("//")) {
             sb.append(voor);
-            sb.append(geselecteerd.replaceAll("--", "").replaceAll("//", ""));
+            sb.append(geselecteerd.replaceAll(REMARKTAG, "").replaceAll("//", ""));
             sb.append(na);
         } else {
             if (selectionStart == 0) {
-                sb.append("--");
+                sb.append(REMARKTAG);
             } else {
                 sb.append(voor);
             }
@@ -789,7 +823,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String[] lijnen = geselecteerd.split(getNewline());
 
             for (int i = 0; i < (lijnen.length - 1); i++) {
-                sb.append(lijnen[i]).append(getNewline()).append("--");
+                sb.append(lijnen[i]).append(getNewline()).append(REMARKTAG);
             }
 
             sb.append(lijnen[lijnen.length - 1]);
@@ -1398,8 +1432,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             case unexpected_token: {
                 Caret caret = hql.getCaret();
                 int mark = Math.min(caret.getDot(), caret.getMark());
-                int lnskip = hqltext.substring(0, mark).split("\\r?\\n").length - 1;
-                String[] lines = hqltext.split("\\r?\\n");
+                int lnskip = hqltext.substring(0, mark).split(LINESEPERATOR).length - 1;
+                String[] lines = hqltext.split(LINESEPERATOR);
                 int pos = 0;
                 for (int i = 0; i < lnskip + line - 1; i++) {
                     pos += lines[i].length() + 1;
@@ -1476,10 +1510,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             hqlstring = hqlstring.substring(p3, p4);
         }
 
-        String lines[] = hqlstring.split("\\r?\\n");
+        String lines[] = hqlstring.split(LINESEPERATOR);
         StringBuilder sb = new StringBuilder();
         for (String line : lines) {
-            int dash = line.indexOf("--");
+            int dash = line.indexOf(REMARKTAG);
             if (dash != -1) {
                 sb.append(line.substring(0, dash));
                 for (int i = dash; i < line.length(); i++) {
@@ -2425,7 +2459,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             StringBuilder sb = new StringBuilder("String hql = \"\";" + getNewline());
 
             for (String line : hql.getText().replaceAll("\r\n", getNewline()).split(getNewline())) {
-                if (!line.startsWith("--") && !line.startsWith("//")) {
+                if (!line.startsWith(REMARKTAG) && !line.startsWith("//")) {
                     sb.append("hql +=\" ").append(line).append("\";");
                 } else {
                     sb.append("// ").append(line);
