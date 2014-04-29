@@ -146,7 +146,7 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
      */
     public void afterInit() {
         StringBuilder sb = new StringBuilder();
-        if (index != null) {
+        if (index != null && index != -1) {
             sb.append(index).append(":");
         }
         if (name != null) {
