@@ -1,7 +1,5 @@
 package org.tools.hqlbuilder.client;
 
-import groovy.util.Eval;
-
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -597,6 +595,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         if (selection.getParameters() != null) {
             for (QueryParameter p : selection.getParameters()) {
+                if (StringUtils.isNotBlank(p.getValueText())) {
+                    p.setValue(GroovyCompiler.eval(p.getValueText()));
+                }
                 p.afterInit();
                 parametersEDT.addRecord(new EListRecord<QueryParameter>(p));
             }
@@ -867,7 +868,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 UIUtils.setLongerTooltips();
             }
 
-            Eval.me("new Integer(0)"); // warm up Groovy
+            GroovyCompiler.eval("new Integer(0)"); // warm up Groovy
 
             SplashHelper.step();
 
@@ -2524,7 +2525,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 return;
             }
             try {
-                x = Eval.x(x, script);
+                x = GroovyCompiler.eval(script, x);
                 resultsEDT.setValueAt(x, row, selectedCol);
             } catch (Exception ex) {
                 logger.error("execute_script_on_column()", ex);
@@ -3096,7 +3097,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         selectedQueryParameter.setValueText(text);
         selectedQueryParameter.setName(name);
         selectedQueryParameter.setValue(value);
-        selectedQueryParameter.setIndex(-1);
+        selectedQueryParameter.setIndex(null);
 
         ingoreParameterListSelectionListener = false;
 
