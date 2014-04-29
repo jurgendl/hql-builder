@@ -154,8 +154,13 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         }
         if (type != null) {
             sb.append(type).append(" ");
+        } else if (value != null) {
+            sb.append(value.getClass().getSimpleName()).append(" ");
         }
         sb.append(value);
+        if (sb.length() == 0 && StringUtils.isNotBlank(valueText)) {
+            sb.append(valueText);
+        }
         toString = sb.toString();
     }
 
