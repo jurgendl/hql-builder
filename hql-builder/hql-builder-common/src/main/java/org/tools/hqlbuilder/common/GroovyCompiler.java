@@ -1,16 +1,11 @@
 package org.tools.hqlbuilder.common;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import groovy.util.Eval;
 
 /**
  * @author Jurgen
  */
 public class GroovyCompiler {
-    /** jsengine */
-    private static final ScriptEngine groovyengine = new ScriptEngineManager().getEngineByName("groovy");
-
     private static final String imports;
 
     static {
@@ -36,36 +31,21 @@ public class GroovyCompiler {
 
     /**
      * compile code
-     * 
-     * @param code
-     * 
-     * @return
-     * 
-     * @throws Exception
-     * @throws RuntimeException
      */
-    public static Object eval(String code) {
-        if (!success()) {
-            throw new RuntimeException("initialization exception");
-        }
-
-        try {
-            return groovyengine.eval(imports + code);
-        } catch (ScriptException ex1) {
-            try {
-                return groovyengine.eval("'" + code + "'");
-            } catch (ScriptException ex2) {
-                throw new RuntimeException("ScriptException:\n" + ex1 + "\n" + ex2);
+    public static Object eval(String code, Object... params) {
+        if (params != null) {
+            if (params.length == 0) {
+                return Eval.me(imports + code);
+            } else if (params.length == 1) {
+                return Eval.x(params[0], imports + code);
+            } else if (params.length == 2) {
+                return Eval.xy(params[0], params[1], imports + code);
+            } else if (params.length == 3) {
+                return Eval.xyz(params[0], params[1], params[2], imports + code);
+            } else {
+                throw new UnsupportedOperationException("up to 3 parameters <> " + params.length);
             }
         }
-    }
-
-    /**
-     * init was successful
-     * 
-     * @return
-     */
-    public static boolean success() {
-        return groovyengine != null;
+        return Eval.me(imports + code);
     }
 }
