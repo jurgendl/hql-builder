@@ -54,8 +54,9 @@ public class QueryParameters implements Serializable {
         return this.parameters;
     }
 
-    public void setParameters(List<QueryParameter> parameters) {
+    public QueryParameters setParameters(List<QueryParameter> parameters) {
         this.parameters = parameters;
+        return this;
     }
 
     public String getHql() {
@@ -66,20 +67,23 @@ public class QueryParameters implements Serializable {
         return this.max;
     }
 
-    public void setHql(String hql) {
+    public QueryParameters setHql(String hql) {
         this.hql = hql;
+        return this;
     }
 
-    public void setMax(int max) {
+    public QueryParameters setMax(int max) {
         this.max = max;
+        return this;
     }
 
     public int getFirst() {
         return this.first;
     }
 
-    public void setFirst(int first) {
+    public QueryParameters setFirst(int first) {
         this.first = first;
+        return this;
     }
 
     @Override

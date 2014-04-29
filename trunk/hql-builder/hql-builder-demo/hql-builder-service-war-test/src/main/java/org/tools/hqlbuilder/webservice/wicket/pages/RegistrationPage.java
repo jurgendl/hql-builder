@@ -27,7 +27,7 @@ public class RegistrationPage extends DefaultWebPage {
     public RegistrationPage(PageParameters parameters) {
         super(parameters);
 
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class) {
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true) {
             private static final long serialVersionUID = -2653547660762438431L;
 
             @Override

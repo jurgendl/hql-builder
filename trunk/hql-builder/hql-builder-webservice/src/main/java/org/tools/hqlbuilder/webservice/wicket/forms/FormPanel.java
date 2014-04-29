@@ -36,12 +36,20 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
     protected RepeatingView repeater;
 
+    protected final boolean inheritId;
+
     public FormPanel(String id, Class<T> modelType) {
-        this(id, new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType)));
+        this(id, modelType, false);
     }
 
-    public FormPanel(@SuppressWarnings("unused") String id, IModel<T> model) {
+    public FormPanel(String id, Class<T> modelType, boolean inheritId) {
+        this(id, new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType)), inheritId);
+    }
+
+    public FormPanel(String id, IModel<T> model, boolean inheritId) {
         super(FORM_PANEL, model);
+
+        this.inheritId = inheritId;
 
         setOutputMarkupPlaceholderTag(false);
         setRenderBodyOnly(true);
@@ -62,7 +70,9 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
                 return getClass().getSuperclass().toString();
             }
         };
-        // form.setMarkupId(id);
+        if (inheritId) {
+            form.setMarkupId(id);
+        }
         add(form);
 
         repeater = new RepeatingView(FORM_REPEATER);
@@ -73,8 +83,10 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
         Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
-        // submit.setMarkupId(submit.getId());
-        // reset.setMarkupId(reset.getId());
+        if (inheritId) {
+            submit.setMarkupId(id + "." + FORM_SUBMIT);
+            reset.setMarkupId(id + "." + FORM_RESET);
+        }
         form.add(submit);
         form.add(reset);
     }
@@ -86,8 +98,15 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
     protected abstract void submit(IModel<T> model);
 
+    protected <F extends FormComponent<?>> F addId(String property, F component) {
+        if (inheritId) {
+            component.setMarkupId(property);
+        }
+        return component;
+    }
+
     public AjaxDatePicker addDatePicker(String property, boolean required) {
-        return new AjaxDatePickerPanel(getDefaultModel(), property, required).addTo(repeater);
+        return addId(property, new AjaxDatePickerPanel(getDefaultModel(), property, required).addTo(repeater));
     }
 
     public TextField<String> addTextField(String property, boolean required) {
@@ -95,15 +114,15 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
     }
 
     public <F> TextField<F> addTextField(String property, Class<F> type, boolean required) {
-        return new TextFieldPanel<F>(getDefaultModel(), property, type, required).addTo(repeater);
+        return addId(property, new TextFieldPanel<F>(getDefaultModel(), property, type, required).addTo(repeater));
     }
 
     public EmailTextField addEmailTextField(String property, boolean required) {
-        return new EmailTextFieldPanel(getDefaultModel(), property, required).addTo(repeater);
+        return addId(property, new EmailTextFieldPanel(getDefaultModel(), property, required).addTo(repeater));
     }
 
     public PasswordTextField addPasswordTextField(String property, boolean required) {
-        return new PasswordTextFieldPanel(getDefaultModel(), property, required).addTo(repeater);
+        return addId(property, new PasswordTextFieldPanel(getDefaultModel(), property, required).addTo(repeater));
     }
 
     public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
@@ -134,7 +153,6 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected C addComponent() {
             C comp = createComponent();
-            // comp.setMarkupId(property);
             comp.setRequired(required);
             add(comp);
             return comp;
