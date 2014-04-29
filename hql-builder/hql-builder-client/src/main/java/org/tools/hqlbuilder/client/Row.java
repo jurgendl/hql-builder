@@ -98,7 +98,7 @@ public class Row implements Comparable<Row> {
         return type.getSimpleName();
     }
 
-    public void setSimpleClassName(@SuppressWarnings("unused") String tmp) {
+    public void setSimpleClassName( String tmp) {
         //
     }
 

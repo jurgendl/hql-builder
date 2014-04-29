@@ -837,7 +837,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     /**
      * start app
      */
-    public static void start(@SuppressWarnings("unused") String[] args, HqlServiceClientLoader serviceLoader) {
+    public static void start(String[] args, HqlServiceClientLoader serviceLoader) {
         try {
             // zet look en feel gelijk aan default voor OS
             UIUtils.systemLookAndFeel();
@@ -2150,7 +2150,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
-    @SuppressWarnings("null")
     protected void export_dataset_to_csv_file() {
         OutputStream fout = null;
         try {
@@ -2402,7 +2401,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         });
     }
 
-    private static void outputSelection(@SuppressWarnings("unused") String type, HashMap<String, Integer> map, ETable<?> table,
+    private static void outputSelection(String type, HashMap<String, Integer> map, ETable<?> table,
             TableSelectionListener listener) {
         int row = map.get(ROW);
         int col = map.get(COL);
@@ -2629,7 +2628,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T get(Object o, String path, @SuppressWarnings("unused") Class<T> t) {
+    protected <T> T get(Object o, String path,  Class<T> t) {
         return (T) new ObjectWrapper(o).get(path);
     }
 

@@ -12,8 +12,6 @@
 	<name>hql-builder-demo</name>
 	<description>hql-builder-demo</description>
 	<properties>
-		<targetJdk>1.6</targetJdk>
-		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<version.derby>10.10.2.0</version.derby>
 		<version.jetty>7.6.14.v20131031</version.jetty>

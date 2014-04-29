@@ -429,7 +429,6 @@ public class PropertyPanel extends PropertySheetPanel {
         private NumberFormat format;
 
         public BigIntegerEditor() {
-            @SuppressWarnings("hiding")
             Class type = BigInteger.class;
             if (!Number.class.isAssignableFrom(type)) {
                 throw new IllegalArgumentException("type must be a subclass of Number");
@@ -519,7 +518,6 @@ public class PropertyPanel extends PropertySheetPanel {
         private NumberFormat format;
 
         public BigDecimalEditor() {
-            @SuppressWarnings("hiding")
             Class type = BigDecimal.class;
             if (!Number.class.isAssignableFrom(type)) {
                 throw new IllegalArgumentException("type must be a subclass of Number");
