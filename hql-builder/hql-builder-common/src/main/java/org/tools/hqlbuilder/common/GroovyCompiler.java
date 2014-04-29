@@ -33,6 +33,14 @@ public class GroovyCompiler {
      * compile code
      */
     public static Object eval(String code, Object... params) {
+        try {
+            return internal(code, params);
+        } catch (Exception ex) {
+            return internal("'" + code + "'", params);
+        }
+    }
+
+    protected static Object internal(String code, Object... params) {
         if (params != null) {
             if (params.length == 0) {
                 return Eval.me(imports + code);
