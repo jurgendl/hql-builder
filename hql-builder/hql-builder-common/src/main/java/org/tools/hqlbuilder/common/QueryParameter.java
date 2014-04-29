@@ -85,66 +85,68 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         return this.value;
     }
 
-    public void setValue(Object value) {
+    public QueryParameter setValue(Object value) {
         this.value = value;
         if (valueText == null) {
             valueText = String.valueOf(value);
         }
-        afterInit();
+        return afterInit();
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    public QueryParameter setName(String name) {
         this.name = name;
-        afterInit();
+        return afterInit();
     }
 
     public String getToString() {
         return this.toString;
     }
 
-    public void setToString(String toString) {
+    public QueryParameter setToString(String toString) {
         this.toString = toString;
+        return this;
     }
 
-    public void clear() {
+    public QueryParameter clear() {
         setValue(null);
+        return this;
     }
 
     public Integer getIndex() {
         return this.index;
     }
 
-    public void setIndex(Integer index) {
+    public QueryParameter setIndex(Integer index) {
         this.index = index;
-        afterInit();
+        return afterInit();
     }
 
     public String getValueText() {
         return this.valueText;
     }
 
-    public void setValueText(String valueText) {
+    public QueryParameter setValueText(String valueText) {
         this.valueText = valueText;
-        afterInit();
+        return afterInit();
     }
 
     public String getType() {
         return this.type;
     }
 
-    public void setType(String type) {
+    public QueryParameter setType(String type) {
         this.type = type;
-        afterInit();
+        return afterInit();
     }
 
     /**
      * afterInit
      */
-    public void afterInit() {
+    public QueryParameter afterInit() {
         StringBuilder sb = new StringBuilder();
         if (index != null && index != -1) {
             sb.append(index).append(":");
@@ -162,6 +164,7 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
             sb.append(valueText);
         }
         toString = sb.toString();
+        return this;
     }
 
     /**
