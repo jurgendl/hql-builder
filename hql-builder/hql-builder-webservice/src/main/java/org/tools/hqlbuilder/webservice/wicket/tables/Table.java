@@ -54,7 +54,7 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
     }
 
     public static <D> IColumn<D, String> newColumn(Component parent, Object argument) {
-        return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument));
+        return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument), name(argument));
     }
 
     public static <D> IColumn<D, String> newEmailColumn(Component parent, Object argument) {
@@ -110,7 +110,7 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
     }
 
     public static <D> IColumn<D, String> newDateOrTimeColumn(Component parent, Object argument, final DateConverter dateConverter) {
-        return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument)) {
+        return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument), name(argument)) {
             private static final long serialVersionUID = -4327523236766929509L;
 
             @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -141,7 +141,7 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
         }
 
         public EmailColumn(IModel<String> displayModel, String propertyExpression) {
-            super(displayModel, propertyExpression);
+            super(displayModel, propertyExpression, propertyExpression);
         }
 
         @SuppressWarnings({ "rawtypes", "unchecked" })
