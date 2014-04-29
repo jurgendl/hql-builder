@@ -104,14 +104,15 @@ public class WicketApplication extends WebApplication {
         settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
         this.setJavaScriptLibrarySettings(settings);
 
-        if (usesDeploymentConfig()) {
+        boolean deployed = usesDeploymentConfig();
+        if (deployed) {
             getFrameworkSettings().setSerializer(new KryoSerializer());
         }
 
-        getMarkupSettings().setStripComments(usesDevelopmentConfig());
-        getMarkupSettings().setCompressWhitespace(usesDevelopmentConfig());
-        if (usesDeploymentConfig()) {
-            getMarkupSettings().setStripWicketTags(true);
+        getMarkupSettings().setStripComments(deployed);
+        getMarkupSettings().setCompressWhitespace(deployed);
+        getMarkupSettings().setStripWicketTags(deployed);
+        if (deployed) {
             getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
 

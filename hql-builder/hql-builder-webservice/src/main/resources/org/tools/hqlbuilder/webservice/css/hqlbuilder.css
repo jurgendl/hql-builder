@@ -661,7 +661,7 @@ td {
 		to(#fefefe));
 }
 
-tr.odd-row td {
+tr.odd td {
 	background: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
 	background: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
 		to(#f6f6f6));
@@ -681,22 +681,42 @@ th {
 	*/
 tr:first-child th.first {
 	-moz-border-radius-topleft: 3px;
-	-webkit-border-top-left-radius: 3px; /* Saf3-4 */
+	-webkit-border-top-left-radius: 3px; 
 }
 
 tr:first-child th.last {
 	-moz-border-radius-topright: 3px;
-	-webkit-border-top-right-radius: 3px; /* Saf3-4 */
+	-webkit-border-top-right-radius: 3px; 
 }
 
 tr:last-child td.first {
 	-moz-border-radius-bottomleft: 3px;
-	-webkit-border-bottom-left-radius: 3px; /* Saf3-4 */
+	-webkit-border-bottom-left-radius: 3px; 
 }
 
 tr:last-child td.last {
 	-moz-border-radius-bottomright: 3px;
-	-webkit-border-bottom-right-radius: 3px; /* Saf3-4 */
+	-webkit-border-bottom-right-radius: 3px; 
+}
+
+/* wicket ordering */
+
+table tr th.wicket_orderDown {
+	background-position: right;
+	background-repeat: no-repeat;
+	background-image: url(images/arrow_down.png);
+}
+
+table tr th.wicket_orderUp {
+	background-position: right;
+	background-repeat: no-repeat;
+	background-image: url(images/arrow_up.png);
+}
+
+table tr th.wicket_orderNone {
+	background-position: right;
+	background-repeat: no-repeat;
+	background-image: url(images/arrow_off.png);
 }
 
 /* end */
