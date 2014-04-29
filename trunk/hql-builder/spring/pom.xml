@@ -12,7 +12,7 @@
 	<description>hql-builder-spring-parent</description>
 	<packaging>pom</packaging>
 	<properties>
-		<targetJdk>1.6</targetJdk>
+		<targetJdk>1.7</targetJdk>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<hibernate.version>4.2.8.Final</hibernate.version>
 		<spring.version>3.2.4.RELEASE</spring.version>
