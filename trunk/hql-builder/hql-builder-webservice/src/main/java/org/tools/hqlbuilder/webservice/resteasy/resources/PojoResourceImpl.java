@@ -163,11 +163,11 @@ public class PojoResourceImpl implements PojoResource {
         };
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public <T extends Serializable> XmlWrapper<T> get(String type, String id) {
         try {
-            return (XmlWrapper<T>) new XmlWrapper<Object>(hqlWebService.get((Class<Serializable>) Class.forName(type), id));
+            return (XmlWrapper<T>) new XmlWrapper(hqlWebService.get((Class<Serializable>) Class.forName(type), id));
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
