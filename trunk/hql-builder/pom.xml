@@ -42,6 +42,7 @@
 		<version.bouncycastle>1.50</version.bouncycastle>
 		<version.lambdaj>2.3.3</version.lambdaj>
 		<version.cglib>3.1</version.cglib>
+		<version.asm>5.0.2</version.asm>
 		<version.activation>1.1.1</version.activation>
 	</properties>
 	<modules>
@@ -84,6 +85,11 @@
 				<groupId>javax.activation</groupId>
 				<artifactId>activation</artifactId>
 				<version>${version.activation}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>${version.asm}</version>
 			</dependency>
 			<dependency>
 				<groupId>cglib</groupId>
