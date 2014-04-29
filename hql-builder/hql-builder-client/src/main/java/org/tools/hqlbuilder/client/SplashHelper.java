@@ -120,21 +120,25 @@ public class SplashHelper {
     }
 
     public static void update(String connectionInfo) {
-        // TODO other connection types
-        String key = connectionInfo.replaceAll("jdbc:oracle:thin", "").replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ")
-                .replaceAll("/", " ").trim();
-        cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
-        splashtimest = 0;
-        String splashtimes = cfgp.get("splashtimes", "1,1,1,1,1,1");
-        String[] sptp = splashtimes.split(",");
-        splashtimesd = new long[sptp.length];
-        int i = 0;
-        for (String p : sptp) {
-            splashtimesd[i] = Long.parseLong(p);
-            splashtimest += splashtimesd[i];
-            i++;
-        }
+        try {
+            // TODO other connection types
+            String key = connectionInfo.replaceAll("jdbc:oracle:thin", "").replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ")
+                    .replaceAll("/", " ").trim();
+            cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
+            splashtimest = 0;
+            String splashtimes = cfgp.get("splashtimes", "1,1,1,1,1,1");
+            String[] sptp = splashtimes.split(",");
+            splashtimesd = new long[sptp.length];
+            int i = 0;
+            for (String p : sptp) {
+                splashtimesd[i] = Long.parseLong(p);
+                splashtimest += splashtimesd[i];
+                i++;
+            }
 
-        splashtimesc += splashtimesd[0];
+            splashtimesc += splashtimesd[0];
+        } catch (RuntimeException ex) {
+            //
+        }
     }
 }
