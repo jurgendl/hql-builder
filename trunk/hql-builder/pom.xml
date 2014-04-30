@@ -8,19 +8,18 @@
 	<description>hql-builder-parent</description>
 	<url>http://hql-builder.googlecode.com</url>
 	<properties>
-		<targetJdk>1.7</targetJdk>
-		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<targetJdk>1.7</targetJdk><!-- should be compatible with 1.6; 1.8 requires newer libraries -->
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding><!-- fixed encoding -->
+		<maven.javadoc.skip>true</maven.javadoc.skip><!-- skip by default -->
 		<version.slf4j>1.7.7</version.slf4j>
 		<version.hibernate>4.2</version.hibernate>
-		<version.spring>3.2.8.RELEASE</version.spring>
-		<!-- <version.spring>4.0.3.RELEASE</version.spring> -->
+		<version.spring>3.2.8.RELEASE</version.spring><!-- keep up to date 3.x.x, v 4.0.3.RELEASE Java 1.8 ready but breaks RestEasy -->
 		<version.swingeasy>3.0.0.4-SNAPSHOT</version.swingeasy>
-		<version.lucene>4.8.0</version.lucene>
+		<version.lucene>4.8.0</version.lucene><!-- keep up to date 4.x.x -->
 		<version.groovy>2.2.2</version.groovy>
-		<version.log4j>1.2.17</version.log4j>
+		<version.log4j>1.2.17</version.log4j><!-- newer version available but we stick with this version -->
 		<version.jcalendar>1.4</version.jcalendar>
-		<version.joda>2.3</version.joda>
+		<version.joda>2.3</version.joda><!-- maybe one day replaced by Java 1.8 together with Date/Calender -->
 		<version.l2fprod>7.3</version.l2fprod>
 		<version.commons-codec>1.9</version.commons-codec>
 		<version.commons-io>2.4</version.commons-io>
@@ -29,20 +28,20 @@
 		<version.commons-collections>3.2.1</version.commons-collections>
 		<version.commons-collections4>4.0</version.commons-collections4>
 		<version.commons-beanutils>1.9.1</version.commons-beanutils>
-		<version.javassist>3.18.1-GA</version.javassist>
+		<version.javassist>3.18.1-GA</version.javassist><!-- seems to be Java 1.8 ready -->
 		<version.ehcache>2.6.9</version.ehcache>
-		<version.resteasy>3.0.7.Final</version.resteasy>
-		<version.servlet>2.5</version.servlet>
-		<version.httpclient>4.3.3</version.httpclient>
-		<version.spring-security>3.2.3.RELEASE</version.spring-security>
-		<version.jadira>3.1.0.CR11</version.jadira>
-		<version.wicket.core>6.15.0</version.wicket.core>
-		<version.wicket.jquery>6.14.0</version.wicket.jquery>
+		<version.resteasy>3.0.8.Final</version.resteasy><!-- keep up to date 3.x.x -->
+		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
+		<version.httpclient>4.3.3</version.httpclient><!-- keep up to date 4.x.x -->
+		<version.spring-security>3.2.3.RELEASE</version.spring-security><!-- does not follow Spring version -->
+		<version.jadira>3.1.0.CR11</version.jadira><!-- newer version available but breaks with Hibernate 4.2 -->
+		<version.wicket.core>6.15.0</version.wicket.core><!-- keep up to date 6.x.x -->
+		<version.wicket.jquery>6.15.0</version.wicket.jquery><!-- keep up to date 6.x.x, somewhat behind Wicket core version -->
 		<version.junit>4.11</version.junit>
-		<version.bouncycastle>1.50</version.bouncycastle>
-		<version.lambdaj>2.3.3</version.lambdaj>
-		<version.cglib>3.1</version.cglib>
-		<version.asm>5.0.2</version.asm>
+		<version.bouncycastle>1.50</version.bouncycastle><!-- always use latest version available as of 2013-12-03 -->
+		<version.lambdaj>2.3.3</version.lambdaj><!-- maybe one day replaced by Java 1.8 -->
+		<version.cglib>3.1</version.cglib><!-- check if Java 1.8 ready, mostly dead project -->
+		<version.asm>5.0.2</version.asm><!-- Java 1.8 ready, overridden over the version cglib uses -->
 		<version.activation>1.1.1</version.activation>
 	</properties>
 	<modules>

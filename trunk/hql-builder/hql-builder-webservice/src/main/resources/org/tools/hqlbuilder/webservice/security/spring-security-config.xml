@@ -10,8 +10,8 @@
 	http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd  
 	http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security.xsd"
-	>
+	http://www.springframework.org/schema/security/spring-security.xsd
+	">
 
 	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
 
