@@ -1,0 +1,722 @@
+html,body {
+	/* */
+	
+}
+
+body {
+	font: 12px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+	margin: 0;
+	margin-top: 75px;
+	background-color: #d9dee2;
+	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
+		to(#d9dee2));
+	background-image: -webkit-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -moz-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: linear-gradient(left, #ebeef2, #d9dee2);
+}
+
+.centeredvertical {
+	position: absolute;
+	top: 45%;
+	margin-top: -100px;
+}
+
+.centeredhorizontal {
+	position: absolute;
+	left: 45%;
+	margin-left: -200px;
+}
+
+.toright {
+	position: relative;
+	float: right;
+	padding-right: 10px;
+}
+
+.toleft {
+	position: relative;
+	float: left;
+	padding-left: 10px;
+}
+
+.topbar {
+	color: #919191;
+	font-style: bold;
+	position: absolute;
+	top: 0px;
+	padding-top: 0px;
+	margin-top: 5px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	border-bottom: solid 1px #b7b7b7;
+	width: 100%;
+}
+
+::-webkit-input-placeholder {
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+:-ms-input-placeholder {
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+form.niceform {
+	width: 440px;
+	background-color: #fff;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#eee));
+	background-image: -webkit-linear-gradient(top, #fff, #eee);
+	background-image: -moz-linear-gradient(top, #fff, #eee);
+	background-image: -ms-linear-gradient(top, #fff, #eee);
+	background-image: -o-linear-gradient(top, #fff, #eee);
+	background-image: linear-gradient(top, #fff, #eee);
+	padding: 20px 40px 20px 40px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 0 1px 1px
+		rgba(0, 0, 0, .2), 0 3px 0 #fff, 0 4px 0 rgba(0, 0, 0, .2), 0 6px 0
+		#fff, 0 7px 0 rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 1px 1px 0 rgba(0, 0, 0, .1),
+		3px 3px 0 rgba(255, 255, 255, 1), 4px 4px 0 rgba(0, 0, 0, .1), 6px 6px
+		0 rgba(255, 255, 255, 1), 7px 7px 0 rgba(0, 0, 0, .1);
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, .2), 0
+		3px 0 #fff, 0 4px 0 rgba(0, 0, 0, .2), 0 6px 0 #fff, 0 7px 0
+		rgba(0, 0, 0, .2);
+	background-color: #fff;
+}
+
+form.niceform:before {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	border: 1px dashed #ccc;
+	top: 5px;
+	bottom: 5px;
+	left: 5px;
+	right: 5px;
+	-moz-box-shadow: 0 0 0 1px #fff;
+	-webkit-box-shadow: 0 0 0 1px #fff;
+	box-shadow: 0 0 0 1px #fff;
+}
+
+form.niceform h1 {
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .7), 0px 2px 0
+		rgba(0, 0, 0, .5);
+	text-transform: uppercase;
+	text-align: center;
+	color: #666;
+	margin: 0 0 30px 0;
+	letter-spacing: 4px;
+	font: normal 26px/1 Verdana, Helvetica;
+	position: relative;
+}
+
+form.niceform h1:after,h1:before {
+	background-color: #777;
+	content: "";
+	height: 1px;
+	position: absolute;
+	top: 15px;
+	width: 120px;
+}
+
+form.niceform h1:after {
+	background-image: -webkit-gradient(linear, left top, right top, from(#777),
+		to(#fff));
+	background-image: -webkit-linear-gradient(left, #777, #fff);
+	background-image: -moz-linear-gradient(left, #777, #fff);
+	background-image: -ms-linear-gradient(left, #777, #fff);
+	background-image: -o-linear-gradient(left, #777, #fff);
+	background-image: linear-gradient(left, #777, #fff);
+	right: 0;
+}
+
+form.niceform h1:before {
+	background-image: -webkit-gradient(linear, right top, left top, from(#777),
+		to(#fff));
+	background-image: -webkit-linear-gradient(right, #777, #fff);
+	background-image: -moz-linear-gradient(right, #777, #fff);
+	background-image: -ms-linear-gradient(right, #777, #fff);
+	background-image: -o-linear-gradient(right, #777, #fff);
+	background-image: linear-gradient(right, #777, #fff);
+	left: 0;
+}
+
+fieldset {
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+form label {
+	color: #919191;
+	font-style: bold;
+	width: 10em;
+	float: left;
+	text-align: right;
+	margin-right: 0.5em;
+	display: block;
+	vertical-align: middle;
+}
+
+form input[type='radio'],input[type='checkbox'] {
+	padding: 3px 10px 3px 10px;
+	margin: 0px 3px 0px 0px;
+	vertical-align: middle;
+}
+
+form input[type='text'],input[type='search'],input[type='password'],input[type='date'],input[type='datetime-local'],input[type='datetime'],input[type='email'],input[type='month'],input[type='number'],input[type='tel'],input[type='time'],input[type='url'],input[type='week']
+	{
+	padding: 3px 10px 3px 10px;
+	margin: 0px 0px 0px 0px;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+}
+
+form textarea {
+	padding: 3px 10px 3px 10px;
+	margin: 0px 0px 0px 0px;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+}
+
+form select {
+	padding: 3px 10px 3px 10px;
+	margin: 0 10px 10px 0;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+}
+
+form input[type='text']:focus,input[type='search']:focus,input[type='password']:focus,input[type='date']:focus,input[type='datetime-local']:focus,input[type='datetime']:focus,input[type='email']:focus,input[type='month']:focus,input[type='number']:focus,input[type='tel']:focus,input[type='time']:focus,input[type='url']:focus,input[type='week']:focus
+	{
+	background-color: #fff;
+	border-color: #e8c291;
+	outline: none;
+	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
+	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+	box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+form textarea:focus {
+	background-color: #fff;
+	border-color: #e8c291;
+	outline: none;
+	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
+	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+	box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+form input[type='text']:hover,input[type='search']:hover,input[type='password']:hover,input[type='date']:hover,input[type='datetime-local']:hover,input[type='datetime']:hover,input[type='email']:hover,input[type='month']:hover,input[type='number']:hover,input[type='tel']:hover,input[type='time']:hover,input[type='url']:hover,input[type='week']:hover
+	{
+	background-color: #fff;
+	border-color: #e8c291;
+	outline: none;
+	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
+	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+	box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+form textarea:hover {
+	background-color: #fff;
+	border-color: #e8c291;
+	outline: none;
+	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
+	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+	box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+form select:focus {
+	background-color: #fff;
+	border-color: #e8c291;
+	outline: none;
+	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
+	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+	box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+form select:hover {
+	background-color: #fff;
+	border-color: #e8c291;
+	outline: none;
+	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
+	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+	box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+form input[type='image'] {
+	width: 120px;
+	height: 20px;
+	text-align: center;
+}
+
+form input[type='submit'],input[type='reset'],input[type='button'] {
+	width: 142px;
+}
+
+form input[type='submit'],input[type='reset'],input[type='button'],input[type='image']
+	{
+	background-color: #ffb94b;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
+		to(#ffb94b));
+	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: linear-gradient(top, #fddb6f, #ffb94b);
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
+		rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
+		rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
+		inset;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #d69e31 #e3a037 #d5982d #e3a037;
+	padding: 3px 10px 3px 10px;
+	cursor: pointer;
+	font: bold 15px Arial, Helvetica;
+	color: #8f5a0a;
+}
+
+.likebutton {
+	/* button+ */
+	display: inline-block;
+	/* button+ */
+	text-decoration: none;
+	/* button+ */
+	text-align: center;
+	width: 120px;
+	background-color: #ffb94b;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
+		to(#ffb94b));
+	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: linear-gradient(top, #fddb6f, #ffb94b);
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
+		rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
+		rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
+		inset;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #d69e31 #e3a037 #d5982d #e3a037;
+	padding: 3px 10px 3px 10px;
+	cursor: pointer;
+	font: bold 15px Arial, Helvetica;
+	color: #8f5a0a;
+	width: 120px
+}
+
+button {
+	width: 142px;
+	background-color: #ffb94b;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
+		to(#ffb94b));
+	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: linear-gradient(top, #fddb6f, #ffb94b);
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
+		rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
+		rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
+		inset;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #d69e31 #e3a037 #d5982d #e3a037;
+	padding: 3px 10px 3px 10px;
+	cursor: pointer;
+	font: bold 15px Arial, Helvetica;
+	color: #8f5a0a;
+}
+
+form input[type='submit']:focus,input[type='reset']:focus,input[type='button']:focus:focus,input[type='image']:focus
+	{
+	background-color: #fddb6f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
+		to(#fddb6f));
+	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+}
+
+form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:hover:hover,input[type='image']:hover
+	{
+	background-color: #fddb6f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
+		to(#fddb6f));
+	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+}
+
+.likebutton:focus {
+	background-color: #fddb6f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
+		to(#fddb6f));
+	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+}
+
+.likebutton:hover {
+	background-color: #fddb6f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
+		to(#fddb6f));
+	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+}
+
+button:focus {
+	background-color: #fddb6f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
+		to(#fddb6f));
+	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+}
+
+button:hover {
+	background-color: #fddb6f;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
+		to(#fddb6f));
+	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
+	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+}
+
+.fileupload {
+	overflow: hidden;
+	position: relative;
+}
+
+.fileupload input[type='file'] {
+	cursor: pointer;
+	display: block;
+	font-size: 0px;
+	filter: alpha(opacity = 0);
+	min-height: 100%;
+	min-width: 100%;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	top: 0;
+}
+
+.fileupload input[type='file']:focus {
+	/* */
+	
+}
+
+.fileupload input[type='file']:hover {
+	/* */
+	
+}
+
+form input[type='color'] {
+	display: inline-block;
+	width: 120px;
+	padding: 3px 10px 3px 10px;
+	cursor: pointer;
+	margin: 2px 0px 2px 0px;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+}
+
+form input[type='color']:focus {
+	/* */
+	
+}
+
+form input[type='color']:hover {
+	/* */
+	
+}
+
+.password {
+	background-image: url("../resources/images/key.png") no-repeat;
+}
+
+.username {
+	background-image: url("../resources/images/user.png") no-repeat;
+}
+
+.actions {
+	vertical-align: baseline;
+	text-align: left;
+}
+
+.feedbackPanel {
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 15px;
+	display: inline-block;
+}
+
+.formrow {
+	margin: 5px 5px 5px 5px;
+}
+
+/* range slider */
+form input[type='range'] {
+	-webkit-appearance: none;
+	border-radius: 5px;
+	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	background-color: #ffb94b;
+	height: 10px;
+	vertical-align: middle;
+}
+
+form input[type='range']::-moz-range-track {
+	-moz-appearance: none;
+	border-radius: 5px;
+	box-shadow: inset 0 0 5px #333;
+	background-color: #ffb94b;
+	height: 10px;
+}
+
+form input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none !important;
+	border-radius: 20px;
+	background-color: #FFF;
+	box-shadow: inset 0 0 10px rgba(000, 000, 000, 0.5);
+	border: 1px solid #999;
+	height: 20px;
+	width: 20px;
+}
+
+form input[type='range']::-moz-range-thumb {
+	-moz-appearance: none;
+	border-radius: 20px;
+	background-color: #FFF;
+	box-shadow: inset 0 0 10px rgba(000, 000, 000, 0.5);
+	border: 1px solid #999;
+	height: 20px;
+	width: 20px;
+}
+
+/* class="tooltip" title="tooltiptext" */
+.tooltip {
+	position: relative;
+}
+
+.tooltip:before,.tooltip:after {
+	position: absolute;
+	transition: All 0.5s ease;
+	-webkit-transition: All 0.5s ease;
+	-moz-transition: All 0.5s ease;
+	-o-transition: All 0.5s ease;
+	margin-left: -100px;
+	left: 50%;
+	bottom: 300%;
+	display: block;
+	color: #000;
+	opacity: 0;
+}
+
+.tooltip:before {
+	content: attr(title);
+	border: solid 1px #0088cc;
+	background: #FFF;
+	width: 200px;
+	text-align: center;
+	z-index: 2;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 5px;
+}
+
+.tooltip:after {
+	content: '\25c6';
+	margin-left: 0;
+	margin-top: 10px;
+	width: 15px;
+	height: 15px;
+	z-index: 1;
+	line-height: 28px;
+	color: #0088cc;
+	font-size: 20px;
+}
+
+.tooltip:hover:before,.tooltip:hover:after {
+	bottom: 150%;
+	opacity: 1;
+}
+
+/*
+	Pretty Table Styling
+	CSS Tricks also has a nice writeup: http://css-tricks.com/feature-table-design/
+ */
+table {
+	overflow: hidden;
+	border: 1px solid #d3d3d3;
+	background: #fefefe;
+	margin: 5% auto 0;
+	-moz-border-radius: 5px; /* FF1+ */
+	-webkit-border-radius: 5px; /* Saf3-4 */
+	border-radius: 5px;
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+th,td {
+	padding: 9px 14px 9px;
+	text-align: center;
+}
+
+th {
+	padding-top: 11px;
+	text-shadow: 1px 1px 1px #fff;
+	background: #e8eaeb;
+}
+
+td {
+	border-top: 1px solid #e0e0e0;
+	border-right: 1px solid #e0e0e0;
+}
+
+tr.odd-row td {
+	background: #f6f6f6;
+}
+
+td.first,th.first {
+	text-align: left
+}
+
+td.last {
+	border-right: none;
+}
+
+/*
+	Background gradients are completely unnessary but a neat effect.
+	*/
+td {
+	background: -moz-linear-gradient(100% 25% 90deg, #fefefe, #f9f9f9);
+	background: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f9f9f9),
+		to(#fefefe));
+}
+
+tr.odd td {
+	background: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
+	background: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
+		to(#f6f6f6));
+}
+
+th {
+	background: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
+	background: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#ededed),
+		to(#e8eaeb));
+}
+
+/*
+	I know this is annoying, but we need dditional styling so webkit will recognize rounded corners on background elements.
+	Nice write up of this issue: http://www.onenaught.com/posts/266/css-inner-elements-breaking-border-radius
+	
+	And, since we've applied the background colors to td/th element because of IE, Gecko browsers also need it.
+	*/
+tr:first-child th.first {
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-left-radius: 3px; 
+}
+
+tr:first-child th.last {
+	-moz-border-radius-topright: 3px;
+	-webkit-border-top-right-radius: 3px; 
+}
+
+tr:last-child td.first {
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-left-radius: 3px; 
+}
+
+tr:last-child td.last {
+	-moz-border-radius-bottomright: 3px;
+	-webkit-border-bottom-right-radius: 3px; 
+}
+
+/* wicket ordering */
+
+table tr th.wicket_orderDown {
+	background-position: right;
+	background-repeat: no-repeat;
+	background-image: url(images/arrow_down.png);
+}
+
+table tr th.wicket_orderUp {
+	background-position: right;
+	background-repeat: no-repeat;
+	background-image: url(images/arrow_up.png);
+}
+
+table tr th.wicket_orderNone {
+	background-position: right;
+	background-repeat: no-repeat;
+	background-image: url(images/arrow_off.png);
+}
+
+/* end */

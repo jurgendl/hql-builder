@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ehcache.sf.net/ehcache.xsd">
+
+    <cacheManagerPeerProviderFactory
+        class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+        properties="peerDiscovery=automatic, multicastGroupAddress=230.0.0.1, multicastGroupPort=4446, timeToLive=0" />
+
+    <cacheManagerPeerListenerFactory
+        class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+        properties="hostName=localhost, socketTimeoutMillis=2000" />
+
+    <defaultCache maxElementsInMemory="10000" eternal="false"
+        timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="false"
+        maxElementsOnDisk="10000000" diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
+
+</ehcache>
