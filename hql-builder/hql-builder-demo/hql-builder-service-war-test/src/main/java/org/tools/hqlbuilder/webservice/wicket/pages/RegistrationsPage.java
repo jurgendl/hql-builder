@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -18,6 +19,7 @@ import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table;
+import org.tools.hqlbuilder.webservice.wicket.tables.Table.DeleteCall;
 
 @MountedPage("/form/registrations")
 public class RegistrationsPage extends DefaultWebPage {
@@ -37,6 +39,21 @@ public class RegistrationsPage extends DefaultWebPage {
         columns.add(Table.<Registration> newColumn(this, registration.getUsername()));
         columns.add(Table.<Registration> newEmailColumn(this, registration.getEmail()));
         columns.add(Table.<Registration> newDateTimeColumn(this, registration.getVerification()));
+        columns.add(Table.<Registration> getActionsColumn(this, new DeleteCall<Registration>() {
+            private static final long serialVersionUID = 26719642712228627L;
+
+            @Override
+            public void delete(Registration object) {
+                hqlWebClient.delete(object);
+            }
+
+            @Override
+            public void updateUI(AjaxRequestTarget target) {
+                @SuppressWarnings("unchecked")
+                Table<Registration> table = (Table<Registration>) get(Table.ID);
+                target.add(table);
+            }
+        }));
 
         IDataProvider<Registration> dataProvider = new IDataProvider<Registration>() {
             private static final long serialVersionUID = 6812428385117168023L;
@@ -68,6 +85,7 @@ public class RegistrationsPage extends DefaultWebPage {
             }
         };
 
-        add(new Table<Registration>(columns, dataProvider, 10));
+        Table<Registration> table = new Table<Registration>(columns, dataProvider, 10);
+        add(table);
     }
 }

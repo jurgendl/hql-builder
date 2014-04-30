@@ -9,13 +9,17 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -32,8 +36,10 @@ import org.joda.time.format.DateTimeFormatter;
 public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
     private static final long serialVersionUID = -5074672726454953465L;
 
+    public static final String ID = "table";
+
     public Table(List<IColumn<T, String>> columns, final IDataProvider<T> dataProvider, int max) {
-        super("table", columns, new SortableDataProvider<T, String>() {
+        super(ID, columns, new SortableDataProvider<T, String>() {
             private static final long serialVersionUID = -8317851838497601307L;
 
             @Override
@@ -51,6 +57,8 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
                 return Model.of(object);
             }
         }, max);
+
+        setOutputMarkupId(true);
     }
 
     public static <D> IColumn<D, String> newColumn(Component parent, Object argument) {
@@ -165,5 +173,68 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
                 }, model));
             }
         }
+    }
+
+    public static <D extends Serializable> IColumn<D, String> getActionsColumn(Component parent, final DeleteCall<D> deleter) {
+        return new AbstractColumn<D, String>(labelModel(parent, "delete")) {
+            private static final long serialVersionUID = 3528122666825952597L;
+
+            @Override
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            public void populateItem(Item cellItem, String componentId, IModel rowModel) {
+                D object = ((D) rowModel.getObject());
+                cellItem.add(new ActionsPanel<D>(componentId, object) {
+                    private static final long serialVersionUID = -601177222898722169L;
+
+                    @Override
+                    public void onDelete(AjaxRequestTarget target, D o) {
+                        deleter.delete(o);
+                        deleter.updateUI(target);
+                        info("Row deleted");
+                    }
+                });
+            }
+        };
+    }
+
+    public static abstract class ActionsPanel<T> extends Panel {
+        private static final long serialVersionUID = 7542462926954803874L;
+
+        public static final String ACTIONS_DELETE_ID = "delete";
+
+        public static final String ACTIONS_FORM_ID = "form";
+
+        public ActionsPanel(String id, final T object) {
+            super(id);
+            setOutputMarkupId(true);
+            final Form<T> form = new Form<T>(ACTIONS_FORM_ID);
+            AjaxSubmitLink deleteLink = new AjaxSubmitLink(ACTIONS_DELETE_ID) {
+                private static final long serialVersionUID = 2542930376888979931L;
+
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
+                    onDelete(target, object);
+                }
+            };
+            form.add(deleteLink);
+            add(form);
+        }
+
+        /**
+         * add table to AjaxRequestTarget and make service call to delete object
+         */
+        public abstract void onDelete(AjaxRequestTarget target, T object);
+    }
+
+    public static interface DeleteCall<O> extends Serializable {
+        /**
+         * service call to delete object
+         */
+        public void delete(O object);
+
+        /**
+         * target.add( feedback ); target.add( table );
+         */
+        public void updateUI(AjaxRequestTarget target);
     }
 }
