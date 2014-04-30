@@ -2202,10 +2202,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         } catch (Exception ex) {
             logger.error("export data", ex);
         } finally {
-            try {
-                fout.close();
-            } catch (Exception ex2) {
-                //
+            if (fout != null) {
+                try {
+                    fout.close();
+                } catch (Exception ex2) {
+                    //
+                }
             }
         }
     }
@@ -2401,8 +2403,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         });
     }
 
-    private static void outputSelection(String type, HashMap<String, Integer> map, ETable<?> table,
-            TableSelectionListener listener) {
+    private static void outputSelection(String type, HashMap<String, Integer> map, ETable<?> table, TableSelectionListener listener) {
         int row = map.get(ROW);
         int col = map.get(COL);
 
@@ -2628,7 +2629,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T get(Object o, String path,  Class<T> t) {
+    protected <T> T get(Object o, String path, Class<T> t) {
         return (T) new ObjectWrapper(o).get(path);
     }
 
