@@ -14,7 +14,7 @@
 	<import resource="classpath:org/tools/hqlbuilder/test/properties.xml"/>
 
 	<!-- hibernate 3.x -->
-	<import resource="classpath:org/tools/hqlbuilder/service/applicationContext-3.xml"/>
+	<import resource="classpath:org/tools/hqlbuilder/service/spring-service3-context.xml"/>
 
 	<bean id="hqlServiceClient" class="org.tools.hqlbuilder.client.HqlServiceClientImpl" scope="singleton" lazy-init="false">
 		<property name="hqlService" ref="hqlService"/>

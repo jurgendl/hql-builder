@@ -13,6 +13,6 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/test/properties.xml" />
 
-	<import resource="classpath:org/tools/hqlbuilder/service/applicationContext-4.xml" />
+	<import resource="classpath:org/tools/hqlbuilder/service/spring-service4-context.xml" />
 
 </beans>

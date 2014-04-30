@@ -15,7 +15,7 @@ public class HqlBuilder extends org.tools.hqlbuilder.client.HqlBuilder {
     @Override
     protected ConfigurableApplicationContext getContext() {
         if (context == null) {
-            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/applicationContext-4.xml");
+            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/test/spring-service4-test-context.xml");
         }
         return context;
     }
