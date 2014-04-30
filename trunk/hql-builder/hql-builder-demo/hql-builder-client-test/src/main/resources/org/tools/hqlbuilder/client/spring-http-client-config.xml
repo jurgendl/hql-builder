@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/util
 		http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<import resource="classpath:org/tools/hqlbuilder/client/applicationContext.xml" />
+	<import resource="classpath:org/tools/hqlbuilder/client/spring-swingclient-context.xml" />
 
 	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope="singleton">
 		<property name="locations">
