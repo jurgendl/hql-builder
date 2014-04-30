@@ -14,7 +14,7 @@
 		<version.slf4j>1.7.7</version.slf4j>
 		<version.hibernate>4.2</version.hibernate>
 		<version.spring>3.2.8.RELEASE</version.spring><!-- keep up to date 3.x.x, v 4.0.3.RELEASE Java 1.8 ready but breaks RestEasy -->
-		<version.swingeasy>3.0.0.5</version.swingeasy>
+		<version.swingeasy>3.0.0.4</version.swingeasy>
 		<version.lucene>4.8.0</version.lucene><!-- keep up to date 4.x.x -->
 		<version.groovy>2.2.2</version.groovy>
 		<version.log4j>1.2.17</version.log4j><!-- newer version available but we stick with this version -->
@@ -453,7 +453,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>2.1.2</version>
+						<version>2.2.1</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -554,7 +554,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-webdav-jackrabbit</artifactId>
-				<version>2.6</version>
+				<version>1.0</version>
 			</extension>
 		</extensions>
 		<plugins>
@@ -578,7 +578,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-scm-plugin</artifactId>
-				<version>1.8.1</version>
+				<version>1.9</version>
 				<configuration>
 					<connectionType>developerConnection</connectionType>
 				</configuration>
@@ -606,7 +606,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.16</version>
+				<version>2.17</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 					<argLine>-Xms128m -Xmx128m</argLine>
@@ -649,7 +649,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1</version>
 				<configuration>
 					<targetjdk>${targetJdk}</targetjdk>
 					<format>xml</format>
@@ -666,7 +666,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.9</version>
+				<version>2.17</version>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
@@ -692,18 +692,16 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jdepend-maven-plugin</artifactId>
-				<version>2.0-beta-2</version>
+				<version>2.0</version>
 				<configuration>
 					<projectDirectory>${basedir}</projectDirectory>
-					<classDirectory>
-						${project.build.directory}/classes
-					</classDirectory>
+					<classDirectory>${project.build.directory}/classes</classDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1</version>
 				<configuration>
 					<linkXref>true</linkXref>
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
