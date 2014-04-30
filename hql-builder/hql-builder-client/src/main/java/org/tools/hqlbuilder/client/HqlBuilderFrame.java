@@ -36,9 +36,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -106,10 +104,6 @@ import javax.swing.text.Caret;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.Utilities;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.miginfocom.swing.MigLayout;
@@ -2628,9 +2622,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return (Font) fontAction.getValue();
     }
 
-    @SuppressWarnings("unchecked")
     protected <T> T get(Object o, String path, Class<T> t) {
-        return (T) new ObjectWrapper(o).get(path);
+        return t.cast(new ObjectWrapper(o).get(path));
     }
 
     protected void format_sql() {
@@ -2664,73 +2657,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             favorites.remove(favorites.indexOf(favorite));
         }
         favorites.add(favorite);
-        File favoritesForProject = new File(FAVORITES_DIR, hqlService.getProject());
-        File xmlhistory = new File(favoritesForProject, FAVORITE_PREFIX + name + FAVORITES_EXT);
-        if (!favoritesForProject.exists()) {
-            favoritesForProject.mkdirs();
-        }
-        FileOutputStream os = new FileOutputStream(xmlhistory);
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(QueryFavorite.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(favorite, os);
-            os.close();
-        } catch (JAXBException ex) {
-            log(ex);
-        }
+        QueryFavoriteUtils.save(hqlService.getProject(), name, favorite);
     }
 
     private void loadFavorites() {
-        File favoritesForProject = new File(FAVORITES_DIR, hqlService.getProject());
-        if (!favoritesForProject.exists()) {
-            favoritesForProject.mkdir();
+        QueryFavorite last = QueryFavoriteUtils.load(hqlService.getProject(), favorites);
+        if (last != null) {
+            importFromFavoritesNoQ(last);
         }
-        File[] xmls = favoritesForProject.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(FAVORITES_EXT);
-            }
-        });
-        if (xmls == null) {
-            return;
-        }
-        FavConvert.convert(xmls);
-        xmls = favoritesForProject.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.startsWith(FAVORITE_PREFIX) && name.endsWith(FAVORITES_EXT);
-            }
-        });
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(QueryFavorite.class);
-            for (File xml : xmls) {
-                FileInputStream is;
-                try {
-                    is = new FileInputStream(xml);
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
-                try {
-                    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                    QueryFavorite favorite = (QueryFavorite) jaxbUnmarshaller.unmarshal(is);
-                    is.close();
-                    if (favorites.contains(favorite)) {
-                        favorites.remove(favorites.indexOf(favorite));
-                    }
-                    favorites.add(favorite);
-                    if (xml.getName().equals(FAVORITE_PREFIX + LAST + FAVORITES_EXT)) {
-                        importFromFavoritesNoQ(favorite);
-                    }
-                } catch (JAXBException ex) {
-                    log(ex);
-                } catch (IOException ex) {
-                    log(ex);
-                }
-            }
-        } catch (JAXBException ex) {
-            log(ex);
-        }
+
     }
 
     protected void always_on_top() {
