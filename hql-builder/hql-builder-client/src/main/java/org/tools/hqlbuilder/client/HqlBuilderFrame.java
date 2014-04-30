@@ -498,6 +498,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         setMaxResults(Integer.parseInt("" + maximumNumberOfResultsAction.getValue()));
         new MouseDoubleClickAction(maximumNumberOfResultsAction).inject(maxResults);
         parametersUnsafe = font(new EList<QueryParameter>(new EListConfig().setBackgroundRenderer(backgroundRenderer)), null);
+        parametersUnsafe.setFixedCellHeight(20);
         parametersEDT = parametersUnsafe.stsi();
         resultsUnsafe = font(new ETable<List<Object>>(new ETableConfig(true)), null);
         resultsEDT = resultsUnsafe.stsi();
@@ -519,6 +520,18 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
         addParameterAction = new HqlBuilderAction(parametersUnsafe, this, ADD_PARAMETER, true, ADD_PARAMETER, "add.png", ADD_PARAMETER,
                 ADD_PARAMETER, false, null, null);
+        ActionListener commitParam = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (parametersEDT.getSelectedRecord() != null) {
+                    saveAction.actionPerformed(e);
+                } else {
+                    addParameterAction.actionPerformed(e);
+                }
+            }
+        };
+        parameterName.addActionListener(commitParam);
+        parameterBuilder.addActionListener(commitParam);
         importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, "cog.png",
                 IMPORT_PARAMETERS, IMPORT_PARAMETERS, false, null, null);
         wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
@@ -1558,13 +1571,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         propertypanel.setBorder(BorderFactory.createTitledBorder(HqlResourceBundle.getMessage("properties")));
 
         hqlsp = new JScrollPane(hql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        hql.withLineNumbers(hqlsp).setCurrentLineForeground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+        hql.withLineNumbers(hqlsp);
         font(hql, 0);
         hql_sql_tabs.addTab("HQL", hqlsp);
         hql_sql_tabs.addTab("SQL", new JScrollPane(sql, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
 
         {
             EList<String> searchresults = new EList<String>(new EListConfig().setBackgroundRenderer(backgroundRenderer).setSortable(false));
+            searchresults.setFixedCellHeight(20);
             final EList<String> searchresultsEDTSafe = searchresults.stsi();
             final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
             final ECheckBox searchField = new ECheckBox(new ECheckBoxConfig("field", true));
