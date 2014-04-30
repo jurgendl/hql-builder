@@ -429,13 +429,13 @@ public class PropertyPanel extends PropertySheetPanel {
         private NumberFormat format;
 
         public BigIntegerEditor() {
-            Class type = BigInteger.class;
-            if (!Number.class.isAssignableFrom(type)) {
+            Class t = BigInteger.class;
+            if (!Number.class.isAssignableFrom(t)) {
                 throw new IllegalArgumentException("type must be a subclass of Number");
             }
 
             editor = new JFormattedTextField();
-            this.type = type;
+            this.type = t;
             ((JFormattedTextField) editor).setValue(getDefaultValue());
             ((JFormattedTextField) editor).setBorder(LookAndFeelTweaks.EMPTY_BORDER);
 
@@ -518,13 +518,13 @@ public class PropertyPanel extends PropertySheetPanel {
         private NumberFormat format;
 
         public BigDecimalEditor() {
-            Class type = BigDecimal.class;
-            if (!Number.class.isAssignableFrom(type)) {
+            Class t = BigDecimal.class;
+            if (!Number.class.isAssignableFrom(t)) {
                 throw new IllegalArgumentException("type must be a subclass of Number");
             }
 
             editor = new JFormattedTextField();
-            this.type = type;
+            this.type = t;
             ((JFormattedTextField) editor).setValue(getDefaultValue());
             ((JFormattedTextField) editor).setBorder(LookAndFeelTweaks.EMPTY_BORDER);
 

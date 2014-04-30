@@ -167,7 +167,8 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public <T extends Serializable> XmlWrapper<T> get(String type, String id) {
         try {
-            return (XmlWrapper<T>) new XmlWrapper(hqlWebService.get((Class<Serializable>) Class.forName(type), id));
+            XmlWrapper<?> xmlWrapper = new XmlWrapper(hqlWebService.get((Class<Serializable>) Class.forName(type), id));
+            return (XmlWrapper<T>) xmlWrapper;
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
