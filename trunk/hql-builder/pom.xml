@@ -56,7 +56,6 @@
 		<module>hql-builder-webservice</module>
 		<module>hql-builder-webclient</module>
 		<module>hql-builder-client</module>
-		<module>hql-builder-full</module>
 	</modules>
 	<dependencies>
 		<dependency>
