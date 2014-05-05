@@ -560,6 +560,11 @@ form input[type='range']::-moz-range-thumb {
 	width: 20px;
 }
 
+.unsized {
+	width: auto;
+	height: auto;
+}
+
 /* class="tooltip" title="tooltiptext" */
 .tooltip {
 	position: relative;
@@ -642,10 +647,6 @@ td {
 
 tr.odd-row td {
 	background: #f6f6f6;
-}
-
-td.first,th.first {
-	text-align: left
 }
 
 td.last {
