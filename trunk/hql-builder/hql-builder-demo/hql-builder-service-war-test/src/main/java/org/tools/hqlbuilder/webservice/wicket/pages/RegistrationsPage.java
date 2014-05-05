@@ -1,16 +1,17 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.tools.hqlbuilder.common.QueryParameters;
@@ -18,8 +19,10 @@ import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table;
-import org.tools.hqlbuilder.webservice.wicket.tables.Table.DeleteCall;
+import org.tools.hqlbuilder.webservice.wicket.tables.Table.DataProvider;
+import org.tools.hqlbuilder.webservice.wicket.tables.Table.DefaultDataProvider;
 
 @MountedPage("/form/registrations")
 public class RegistrationsPage extends DefaultWebPage {
@@ -31,40 +34,20 @@ public class RegistrationsPage extends DefaultWebPage {
     public RegistrationsPage(PageParameters parameters) {
         super(parameters);
 
-        Registration registration = create(Registration.class);
+        Registration proxy = create(Registration.class);
 
-        List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
-        columns.add(Table.<Registration> newColumn(this, registration.getFirstName()));
-        columns.add(Table.<Registration> newColumn(this, registration.getLastName()));
-        columns.add(Table.<Registration> newColumn(this, registration.getUsername()));
-        columns.add(Table.<Registration> newEmailColumn(this, registration.getEmail()));
-        columns.add(Table.<Registration> newDateTimeColumn(this, registration.getVerification()));
-        columns.add(Table.<Registration> getActionsColumn(this, new DeleteCall<Registration>() {
-            private static final long serialVersionUID = 26719642712228627L;
-
-            @Override
-            public void delete(Registration object) {
-                hqlWebClient.delete(object);
-            }
-
-            @Override
-            public void updateUI(AjaxRequestTarget target) {
-                @SuppressWarnings("unchecked")
-                Table<Registration> table = (Table<Registration>) get(Table.ID);
-                target.add(table);
-            }
-        }));
-
-        IDataProvider<Registration> dataProvider = new IDataProvider<Registration>() {
+        @SuppressWarnings("unchecked")
+        DataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
             private static final long serialVersionUID = 6812428385117168023L;
 
-            @SuppressWarnings({ "unchecked", "rawtypes" })
             @Override
             public Iterator<Registration> iterator(long first, long count) {
-                return (Iterator) hqlWebClient
-                        .execute(
-                                new QueryParameters().setFirst((int) first).setMax((int) count)
-                                        .setHql("select obj from " + Registration.class.getSimpleName() + " obj")).getResults().getValue().iterator();
+                return Iterator.class
+                        .cast(hqlWebClient
+                                .execute(
+                                        new QueryParameters().setFirst((int) first).setMax((int) count)
+                                                .setHql("select obj from " + Registration.class.getSimpleName() + " obj")).getResults().getValue()
+                                .iterator());
             }
 
             @Override
@@ -75,17 +58,51 @@ public class RegistrationsPage extends DefaultWebPage {
             }
 
             @Override
-            public IModel<Registration> model(Registration object) {
-                return Model.of(object);
+            public void delete(Registration object) {
+                hqlWebClient.delete(object);
             }
 
             @Override
-            public void detach() {
-                //
+            public void updateUI(AjaxRequestTarget target) {
+                Table<Registration> table = (Table<Registration>) get(Table.ID);
+                target.add(table);
             }
         };
 
-        Table<Registration> table = new Table<Registration>(columns, dataProvider, 10);
+        List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
+        columns.add(Table.<Registration> newColumn(this, proxy.getFirstName()));
+        columns.add(Table.<Registration> newColumn(this, proxy.getLastName()));
+        columns.add(Table.<Registration> newColumn(this, proxy.getUsername()));
+        columns.add(Table.<Registration> newEmailColumn(this, proxy.getEmail()));
+        columns.add(Table.<Registration> newDateTimeColumn(this, proxy.getVerification()));
+        columns.add(Table.<Registration> getActionsColumn(this, dataProvider));
+
+        Table<Registration> table = new Table<Registration>(columns, dataProvider);
+
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true) {
+            private static final long serialVersionUID = -2653547660762438431L;
+
+            @Override
+            protected void submit(IModel<Registration> model) {
+                Registration object = model.getObject();
+                object.setVerification(new Date());
+                Serializable id = hqlWebClient.save(object);
+                object = hqlWebClient.get(object.getClass(), id);
+                model.setObject(object);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return super.isVisible() && false;
+            }
+        };
+        formPanel.addTextField(name(proxy.getUsername()), true);
+        formPanel.addTextField(name(proxy.getFirstName()), true);
+        formPanel.addTextField(name(proxy.getLastName()), true);
+        formPanel.addEmailTextField(name(proxy.getEmail()), true);
+        formPanel.addPasswordTextField(name(proxy.getPassword()), true);
+
         add(table);
+        add(formPanel);
     }
 }
