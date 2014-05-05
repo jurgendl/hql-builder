@@ -387,7 +387,7 @@ public class HqlServiceImpl implements HqlService {
         long start = System.currentTimeMillis();
         QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         String sql = queryTranslator.getSQLString();
-        logger.debug(sql);
+        logger.debug("sql=" + sql);
         result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = newSession();
@@ -431,7 +431,7 @@ public class HqlServiceImpl implements HqlService {
                 String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
             }
-            logger.debug(sql);
+            logger.debug("sql=" + sql);
             result.setSql(sql);
         }
         if (max != -1) {
@@ -639,7 +639,7 @@ public class HqlServiceImpl implements HqlService {
             }
         }
         QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter(oid, idv));
-        logger.debug(String.valueOf(hql));
+        logger.debug("hql=" + hql);
         return (T) execute(hql).getResults().getValue().get(0);
     }
 
@@ -924,7 +924,7 @@ public class HqlServiceImpl implements HqlService {
     public void sql(final String[] sql) {
         for (String s : sql) {
             try {
-                logger.debug(s);
+                logger.debug("sql=" + s);
                 dataSource.getConnection().prepareStatement(s).execute();
             } catch (SQLException ex) {
                 throw new ServiceException(ex.getMessage());
