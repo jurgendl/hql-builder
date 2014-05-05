@@ -1,6 +1,10 @@
 package org.tools.hqlbuilder.common;
 
-import groovy.util.Eval;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author Jurgen
@@ -29,10 +33,18 @@ public class GroovyCompiler {
         imports = sb.toString();
     }
 
+    public static Object eval(String code) {
+        return eval(code, (Map<String, Object>) null);
+    }
+
+    public static Object eval(String code, Object x) {
+        return eval(code, Collections.singletonMap("x", x));
+    }
+
     /**
      * compile code
      */
-    public static Object eval(String code, Object... params) {
+    public static Object eval(String code, Map<String, Object> params) {
         try {
             return internal(code, params);
         } catch (Exception ex) {
@@ -40,20 +52,14 @@ public class GroovyCompiler {
         }
     }
 
-    protected static Object internal(String code, Object... params) {
+    protected static Object internal(String expression, Map<String, Object> params) {
+        Binding b = new Binding();
         if (params != null) {
-            if (params.length == 0) {
-                return Eval.me(imports + code);
-            } else if (params.length == 1) {
-                return Eval.x(params[0], imports + code);
-            } else if (params.length == 2) {
-                return Eval.xy(params[0], params[1], imports + code);
-            } else if (params.length == 3) {
-                return Eval.xyz(params[0], params[1], params[2], imports + code);
-            } else {
-                throw new UnsupportedOperationException("up to 3 parameters <> " + params.length);
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                b.setVariable(entry.getKey(), entry.getValue());
             }
         }
-        return Eval.me(imports + code);
+        GroovyShell sh = new GroovyShell(b);
+        return sh.evaluate(imports + expression);
     }
 }
