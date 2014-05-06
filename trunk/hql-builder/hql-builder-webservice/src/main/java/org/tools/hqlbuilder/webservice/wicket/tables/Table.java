@@ -3,8 +3,8 @@ package org.tools.hqlbuilder.webservice.wicket.tables;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -252,7 +252,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     public static abstract class DefaultDataProvider<T extends Serializable> implements DataProvider<T>, ISortState<String> {
         private static final long serialVersionUID = 2267212289729092246L;
 
-        protected Map<String, SortOrder> sort = new HashMap<String, SortOrder>();
+        protected Map<String, SortOrder> sort = new LinkedHashMap<String, SortOrder>();
 
         protected int rowsPerPage = 10;
 
