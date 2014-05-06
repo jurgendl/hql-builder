@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.joda.time.LocalDateTime;
+
 @XmlRootElement
 @Entity
 public class Registration extends EntityParent {
@@ -22,7 +24,9 @@ public class Registration extends EntityParent {
 
     private String regkey;
 
-    private Date verification;
+    private LocalDateTime verification;
+
+    private Date dateOfBirth;
 
     public String getPassword() {
         return this.password;
@@ -42,6 +46,18 @@ public class Registration extends EntityParent {
 
     public String getUsername() {
         return this.username;
+    }
+
+    public String getRegkey() {
+        return this.regkey;
+    }
+
+    public LocalDateTime getVerification() {
+        return this.verification;
+    }
+
+    public Date getDateOfBirth() {
+        return this.dateOfBirth;
     }
 
     public void setPassword(String password) {
@@ -64,19 +80,15 @@ public class Registration extends EntityParent {
         this.username = username;
     }
 
-    public Date getVerification() {
-        return this.verification;
+    public void setRegkey(String regkey) {
+        this.regkey = regkey;
     }
 
-    public void setVerification(Date verification) {
+    public void setVerification(LocalDateTime verification) {
         this.verification = verification;
     }
 
-    public String getRegkey() {
-        return this.regkey;
-    }
-
-    public void setRegkey(String regkey) {
-        this.regkey = regkey;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }
