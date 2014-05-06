@@ -1,8 +1,11 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Locale;
 import java.util.Properties;
 
+import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
@@ -20,6 +23,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReferenceRegistry;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.convert.converter.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -68,14 +72,6 @@ public class WicketApplication extends WebApplication {
     }
 
     /**
-     * @see org.apache.wicket.Application#newConverterLocator()
-     */
-    @Override
-    protected IConverterLocator newConverterLocator() {
-        return super.newConverterLocator();
-    }
-
-    /**
      * @see org.apache.wicket.Application#newSharedResources(org.apache.wicket.request.resource.ResourceReferenceRegistry)
      */
     @Override
@@ -112,7 +108,7 @@ public class WicketApplication extends WebApplication {
 
         getMarkupSettings().setStripComments(deployed);
         getMarkupSettings().setCompressWhitespace(deployed);
-        getMarkupSettings().setStripWicketTags(deployed);
+        getMarkupSettings().setStripWicketTags(true);
         if (deployed) {
             getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
@@ -200,5 +196,24 @@ public class WicketApplication extends WebApplication {
 
     public void setWebProperties(Properties webProperties) {
         this.webProperties = webProperties;
+    }
+
+    @Override
+    protected IConverterLocator newConverterLocator() {
+        ConverterLocator locator = new ConverterLocator();
+        DateTimeConverter dateConverter = new DateTimeConverter();
+        locator.set(java.sql.Date.class, dateConverter);
+        locator.set(java.util.Date.class, dateConverter);
+        locator.set(java.sql.Timestamp.class, dateConverter);
+        return locator;
+    }
+
+    public final class DateTimeConverter extends DateConverter {
+        private static final long serialVersionUID = -6075171947424780395L;
+
+        @Override
+        public DateFormat getDateFormat(Locale locale) {
+            return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
+        }
     }
 }

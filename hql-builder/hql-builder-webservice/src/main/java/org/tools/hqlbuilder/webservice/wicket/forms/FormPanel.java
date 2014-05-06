@@ -1,8 +1,10 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.MissingResourceException;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -28,8 +30,10 @@ import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.tools.hqlbuilder.webservice.wicket.Converter;
+import org.tools.hqlbuilder.webservice.wicket.ModelConverter;
 
-import com.googlecode.wicket.jquery.ui.form.datepicker.AjaxDatePicker;
+import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 
 public abstract class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -3268906227997947993L;
@@ -41,14 +45,14 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
     protected final boolean inheritId;
 
     public FormPanel(String id, Class<T> modelType) {
-        this(id, modelType, false);
+        this(id, modelType, false, false);
     }
 
-    public FormPanel(String id, Class<T> modelType, boolean inheritId) {
-        this(id, newFormModel(modelType), inheritId);
+    public FormPanel(String id, Class<T> modelType, boolean inheritId, boolean ajax) {
+        this(id, newFormModel(modelType), inheritId, ajax);
     }
 
-    public FormPanel(String id, IModel<T> model, boolean inheritId) {
+    public FormPanel(String id, IModel<T> model, boolean inheritId, boolean ajax) {
         super(FORM_PANEL, model);
 
         this.inheritId = inheritId;
@@ -86,21 +90,26 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         repeater.setOutputMarkupId(false);
         form.add(repeater);
 
-        AjaxSubmitLink submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
-            private static final long serialVersionUID = -983242396412538529L;
+        Component submit;
+        if (ajax) {
+            submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
+                private static final long serialVersionUID = -983242396412538529L;
 
-            @Override
-            protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
-                target.add(f);
-            }
-        };
+                @Override
+                protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
+                    target.add(f);
+                }
+            };
+        } else {
+            submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
+        }
 
-        // Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
         Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
         if (inheritId) {
             submit.setMarkupId(id + "." + FORM_SUBMIT);
             reset.setMarkupId(id + "." + FORM_RESET);
         }
+
         form.add(submit);
         form.add(reset);
     }
@@ -123,8 +132,20 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         return component;
     }
 
-    public AjaxDatePicker addDatePicker(String property, boolean required) {
-        return addId(property, new AjaxDatePickerPanel(getDefaultModel(), property, required).addTo(repeater));
+    public DatePicker addDatePicker(String property, boolean required) {
+        return addId(property, new DatePickerPanel(getDefaultModel(), property, required, getLocale()).addTo(repeater));
+    }
+
+    public <X> DatePicker addDatePicker(String property, boolean required, final Converter<X, Date> dateConverter) {
+        return addId(property, new DatePickerPanel(getDefaultModel(), property, required, getLocale()) {
+            private static final long serialVersionUID = -7680994763787874544L;
+
+            @Override
+            protected IModel<Date> getValueModel() {
+                IModel<X> backingModel = new PropertyModel<X>(getDefaultModel(), property);
+                return new ModelConverter<X, Date>(backingModel, dateConverter);
+            };
+        }.addTo(repeater));
     }
 
     public TextField<String> addTextField(String property, boolean required) {
@@ -143,7 +164,9 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         return addId(property, new PasswordTextFieldPanel(getDefaultModel(), property, required).addTo(repeater));
     }
 
-    public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
+    public static abstract class FormRowPanel<T, C extends FormComponent<T>, O> extends Panel implements FormConstants {
+        public static final String FEEDBACK_ID = "componentFeedback";
+
         private static final long serialVersionUID = -6401309948019996576L;
 
         protected final Label label;
@@ -156,8 +179,15 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected final boolean required;
 
+        protected O options;
+
         public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required) {
+            this(model, property, type, required, null);
+        }
+
+        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required, O options) {
             super(FORM_ROW, model);
+            this.options = options;
             this.required = required;
             this.property = property;
             this.type = type;
@@ -166,7 +196,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             setOutputMarkupId(false);
             label = addLabel();
             component = addComponent();
-            add(new FeedbackPanel("componentFeedback", new ComponentFeedbackMessageFilter(component)).setOutputMarkupId(true));
+            add(new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component)).setOutputMarkupId(true));
         }
 
         protected C addComponent() {
@@ -245,7 +275,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             return getString(PLACEHOLDER);
         }
 
-        protected PropertyModel<T> getValueModel() {
+        protected IModel<T> getValueModel() {
             return new PropertyModel<T>(getDefaultModel(), property);
         }
 

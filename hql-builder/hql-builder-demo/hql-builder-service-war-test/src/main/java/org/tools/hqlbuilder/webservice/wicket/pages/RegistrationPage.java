@@ -4,13 +4,11 @@ import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDateTime;
 import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
@@ -27,13 +25,13 @@ public class RegistrationPage extends DefaultWebPage {
     public RegistrationPage(PageParameters parameters) {
         super(parameters);
 
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true) {
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true, false) {
             private static final long serialVersionUID = -2653547660762438431L;
 
             @Override
             protected void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
-                object.setVerification(new Date());
+                object.setVerification(new LocalDateTime());
                 Serializable id = hqlWebClient.save(object);
                 object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
@@ -41,22 +39,13 @@ public class RegistrationPage extends DefaultWebPage {
         };
         add(formPanel);
 
-        Registration registration = create(Registration.class);
+        Registration proxy = create(Registration.class);
 
-        formPanel.addTextField(name(registration.getUsername()), true);
-        formPanel.addTextField(name(registration.getFirstName()), true);
-        formPanel.addTextField(name(registration.getLastName()), true);
-        formPanel.addEmailTextField(name(registration.getEmail()), true);
-        formPanel.addPasswordTextField(name(registration.getPassword()), true);
-        add(new Label("registration.date", new PropertyModel<Date>(formPanel.getDefaultModelObject(), name(registration.getVerification()))) {
-            private static final long serialVersionUID = 3305246087333291118L;
-
-            @Override
-            public boolean isVisible() {
-                return super.isVisible() && getDefaultModel().getObject() != null;
-            }
-
-        });
-        // formPanel.liveValidation();
+        formPanel.addTextField(name(proxy.getUsername()), true);
+        formPanel.addTextField(name(proxy.getFirstName()), true);
+        formPanel.addTextField(name(proxy.getLastName()), true);
+        formPanel.addEmailTextField(name(proxy.getEmail()), true);
+        formPanel.addDatePicker(name(proxy.getDateOfBirth()), false);
+        formPanel.addPasswordTextField(name(proxy.getPassword()), true);
     }
 }

@@ -5,7 +5,6 @@ import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDateTime;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
@@ -90,18 +90,18 @@ public class RegistrationsPage extends DefaultWebPage {
         columns.add(Table.<Registration> newColumn(this, proxy.getLastName()));
         columns.add(Table.<Registration> newColumn(this, proxy.getUsername()));
         columns.add(Table.<Registration> newEmailColumn(this, proxy.getEmail()));
-        columns.add(Table.<Registration> newDateTimeColumn(this, proxy.getVerification()));
+        columns.add(Table.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
         columns.add(Table.<Registration> getActionsColumn(this, dataProvider));
 
         Table<Registration> table = new Table<Registration>(columns, dataProvider);
 
-        formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true) {
+        formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true, true) {
             private static final long serialVersionUID = -2653547660762438431L;
 
             @Override
             protected void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
-                object.setVerification(new Date());
+                object.setVerification(new LocalDateTime());
                 Serializable id = hqlWebClient.save(object);
                 object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
@@ -111,6 +111,7 @@ public class RegistrationsPage extends DefaultWebPage {
         formPanel.addTextField(name(proxy.getFirstName()), true);
         formPanel.addTextField(name(proxy.getLastName()), true);
         formPanel.addEmailTextField(name(proxy.getEmail()), true);
+        formPanel.addDatePicker(name(proxy.getDateOfBirth()), true);
         formPanel.addPasswordTextField(name(proxy.getPassword()), true);
 
         formPanel.setVisible(false);
