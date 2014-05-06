@@ -27,13 +27,13 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
         super();
     }
 
-    public HqlWebServiceClient(String packages) {
-        super(new String[] { packages });
-    }
-
-    public HqlWebServiceClient(String[] packages) {
-        super(packages);
-    }
+    // public HqlWebServiceClient(String packages) {
+    // super(new String[] { packages });
+    // }
+    //
+    // public HqlWebServiceClient(String[] packages) {
+    // super(packages);
+    // }
 
     public String ping() {
         return getResource().ping();

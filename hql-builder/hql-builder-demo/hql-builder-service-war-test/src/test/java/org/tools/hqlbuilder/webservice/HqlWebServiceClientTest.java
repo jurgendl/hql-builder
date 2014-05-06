@@ -24,6 +24,8 @@ import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.test.User;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webclient.ServiceUrlBuilder;
+import org.tools.hqlbuilder.webcommon.ResteasyProvidersBean;
+import org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
 /**
@@ -178,7 +180,11 @@ public class HqlWebServiceClientTest {
     }
 
     public static HqlWebServiceClient getClient(String url) throws Exception {
-        HqlWebServiceClient hc = new HqlWebServiceClient(User.class.getPackage().getName());
+        String pack = User.class.getPackage().getName();
+        JAXBContextResolver jaxbContextResolver = new JAXBContextResolver(pack);
+        ResteasyProvidersBean restEasyProvidersBean = new ResteasyProvidersBean(jaxbContextResolver);
+        HqlWebServiceClient hc = new HqlWebServiceClient();
+        hc.setResteasyProvider(restEasyProvidersBean.getInstance());
         hc.setServiceUrl(url);
         hc.afterPropertiesSet();
         return hc;
