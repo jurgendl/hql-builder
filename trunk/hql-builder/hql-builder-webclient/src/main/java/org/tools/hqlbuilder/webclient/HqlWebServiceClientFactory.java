@@ -42,18 +42,16 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.BasicHttpContext;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
-import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.tools.hqlbuilder.webcommon.RestEasyProvidersBean;
-import org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver;
+import org.tools.hqlbuilder.webcommon.ResteasyProvidersBean;
 
 public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, InitializingBean {
     protected final Logger logger;
 
-    protected String[] packages;
+    // protected String[] packages;
 
     protected String serviceUrl;
 
@@ -65,7 +63,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
 
     protected ResteasyProviderFactory resteasyProvider;
 
-    protected RestEasyProvidersBean restEasyProvidersBean;
+    protected ResteasyProvidersBean resteasyProvidersBean;
 
     @SuppressWarnings("deprecation")
     protected org.jboss.resteasy.client.ClientExecutor clientExecutor;
@@ -74,22 +72,22 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         this.logger = setupLogger();
     }
 
-    public HqlWebServiceClientFactory(String[] packages) {
-        this.packages = packages;
-        this.logger = setupLogger();
-    }
+    // public HqlWebServiceClientFactory(String[] packages) {
+    // this.packages = packages;
+    // this.logger = setupLogger();
+    // }
 
     public Logger setupLogger() {
         return LoggerFactory.getLogger(getClass());
     }
 
-    protected ResteasyProviderFactory setupResteasyProvider() {
-        ResteasyProviderFactory resteasyProviderFactory = ResteasyProviderFactory.getInstance();
-        RegisterBuiltin.register(resteasyProviderFactory);
-        JAXBContextResolver provider = new JAXBContextResolver(getPackages());
-        resteasyProviderFactory.registerProviderInstance(provider);
-        return resteasyProviderFactory;
-    }
+    // protected ResteasyProviderFactory setupResteasyProvider() {
+    // ResteasyProviderFactory resteasyProviderFactory = ResteasyProviderFactory.getInstance();
+    // RegisterBuiltin.register(resteasyProviderFactory);
+    // JAXBContextResolver provider = new JAXBContextResolver(getPackages());
+    // resteasyProviderFactory.registerProviderInstance(provider);
+    // return resteasyProviderFactory;
+    // }
 
     @SuppressWarnings("deprecation")
     protected org.jboss.resteasy.client.ClientExecutor setupClientExecutor() {
@@ -146,10 +144,10 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
             this.resourceClass = setupResourceClass();
         }
         if (this.resteasyProvider == null) {
-            if (restEasyProvidersBean != null) {
-                resteasyProvider = restEasyProvidersBean.getInstance();
-            } else if (getPackages() != null) {
-                this.resteasyProvider = setupResteasyProvider();
+            if (resteasyProvidersBean != null) {
+                resteasyProvider = resteasyProvidersBean.getInstance();
+                // } else if (getPackages() != null) {
+                // this.resteasyProvider = setupResteasyProvider();
             } else {
                 throw new IllegalArgumentException("either packages or restEasyProvidersBean is required");
             }
@@ -355,9 +353,9 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         }
     }
 
-    public String[] getPackages() {
-        return this.packages;
-    }
+    // public String[] getPackages() {
+    // return this.packages;
+    // }
 
     public String getServiceUrl() {
         if (serviceUrl == null && serviceUrlBuilder != null) {
@@ -378,9 +376,9 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         return this.resteasyProvider;
     }
 
-    public void setPackages(String[] packages) {
-        this.packages = packages;
-    }
+    // public void setPackages(String[] packages) {
+    // this.packages = packages;
+    // }
 
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
@@ -416,11 +414,11 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         this.serviceUrlBuilder = serviceUrlBuilder;
     }
 
-    public RestEasyProvidersBean getRestEasyProvidersBean() {
-        return this.restEasyProvidersBean;
+    public ResteasyProvidersBean getResteasyProvidersBean() {
+        return this.resteasyProvidersBean;
     }
 
-    public void setRestEasyProvidersBean(RestEasyProvidersBean restEasyProvidersBean) {
-        this.restEasyProvidersBean = restEasyProvidersBean;
+    public void setResteasyProvidersBean(ResteasyProvidersBean resteasyProvidersBean) {
+        this.resteasyProvidersBean = resteasyProvidersBean;
     }
 }
