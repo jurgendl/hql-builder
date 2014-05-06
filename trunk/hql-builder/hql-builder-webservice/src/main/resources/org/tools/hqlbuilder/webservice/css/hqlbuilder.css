@@ -285,6 +285,8 @@ form input[type='submit'],input[type='reset'],input[type='button'] {
 
 form input[type='submit'],input[type='reset'],input[type='button'],input[type='image']
 	{
+	margin-left: 3px;
+	margin-right: 3px;
 	background-color: #ffb94b;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
 		to(#ffb94b));
@@ -320,6 +322,8 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	/* button+ */
 	text-align: center;
 	width: 120px;
+	margin-left: 3px;
+	margin-right: 3px;
 	background-color: #ffb94b;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
 		to(#ffb94b));
@@ -350,6 +354,8 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 
 button {
 	width: 142px;
+	margin-left: 3px;
+	margin-right: 3px;
 	background-color: #ffb94b;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
 		to(#ffb94b));

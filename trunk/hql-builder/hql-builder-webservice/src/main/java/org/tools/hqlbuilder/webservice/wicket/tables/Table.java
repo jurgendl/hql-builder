@@ -167,7 +167,7 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
         }
     }
 
-    public static <T extends Serializable> IColumn<T, String> getActionsColumn(Component parent, final DataProvider<T> deleter) {
+    public static <T extends Serializable> IColumn<T, String> getActionsColumn(Component parent, final DataProvider<T> provider) {
         return new AbstractColumn<T, String>(labelModel(parent, ACTIONS_ID)) {
             private static final long serialVersionUID = 3528122666825952597L;
 
@@ -180,9 +180,14 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
 
                     @Override
                     public void onDelete(AjaxRequestTarget target, T o) {
-                        deleter.delete(o);
-                        deleter.updateUI(target);
+                        provider.delete(o);
+                        provider.updateUI(target);
                         info("Row deleted");
+                    }
+
+                    @Override
+                    public void onEdit(AjaxRequestTarget target, T o) {
+                        provider.edit(target, o);
                     }
                 });
             }
@@ -207,7 +212,7 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
-                    System.out.println("EDIT"); // TODO
+                    onEdit(target, object);
                 }
             };
             form.add(editLink);
@@ -227,11 +232,18 @@ public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
          * add table to AjaxRequestTarget and make service call to delete object
          */
         public abstract void onDelete(AjaxRequestTarget target, T object);
+
+        /**
+         * add table to AjaxRequestTarget
+         */
+        public abstract void onEdit(AjaxRequestTarget target, T object);
     }
 
     public static interface DataProvider<T extends Serializable> extends ISortableDataProvider<T, String> {
         /** service call to delete object */
         public void delete(T object);
+
+        public void edit(AjaxRequestTarget target, T object);
 
         /** target.add( feedback ); target.add( table ); */
         public void updateUI(AjaxRequestTarget target);
