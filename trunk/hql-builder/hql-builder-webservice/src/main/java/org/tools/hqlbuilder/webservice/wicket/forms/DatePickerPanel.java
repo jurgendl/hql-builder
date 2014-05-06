@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
@@ -28,7 +27,6 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker, Options> {
 
     public DatePickerPanel(IModel<?> model, String property, boolean required, Options options) {
         super(model, property, Date.class, required, options);
-        add(new Label("format", parseString(options.get(DATE_FORMAT))));
     }
 
     private String parseString(Object o) {
@@ -43,6 +41,7 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker, Options> {
     protected DatePicker createComponent() {
         // http://api.jqueryui.com/datepicker/
         IModel<Date> valueModel = getValueModel();
+        options.set("appendText", options.get(DATE_FORMAT));
         return new DatePicker(VALUE, valueModel, parseString(options.get(DATE_FORMAT)), options) {
             private static final long serialVersionUID = 7118431260383127661L;
 
