@@ -3,8 +3,11 @@ package org.tools.hqlbuilder.webservice.wicket.tables;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.apache.wicket.Component;
@@ -15,11 +18,11 @@ import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
-import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -180,9 +183,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
                     @Override
                     public void onDelete(AjaxRequestTarget target, T o) {
-                        provider.delete(o);
-                        provider.updateUI(target);
-                        info("Row deleted");
+                        provider.delete(target, o);
                     }
 
                     @Override
@@ -240,22 +241,18 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     public static interface DataProvider<T extends Serializable> extends ISortableDataProvider<T, String> {
-        /** service call to delete object */
-        public void delete(T object);
+        /** service call to delete object & target.add( feedback ); target.add( table ); */
+        public void delete(AjaxRequestTarget target, T object);
 
         public void edit(AjaxRequestTarget target, T object);
 
-        /** target.add( feedback ); target.add( table ); */
-        public void updateUI(AjaxRequestTarget target);
-
-        /** default 10 */
         public int getRowsPerPage();
     }
 
-    public static abstract class DefaultDataProvider<T extends Serializable> implements DataProvider<T> {
+    public static abstract class DefaultDataProvider<T extends Serializable> implements DataProvider<T>, ISortState<String> {
         private static final long serialVersionUID = 2267212289729092246L;
 
-        protected SingleSortState<String> sortState = new SingleSortState<String>();
+        protected Map<String, SortOrder> sort = new HashMap<String, SortOrder>();
 
         protected int rowsPerPage = 10;
 
@@ -270,8 +267,15 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
+        public Iterator<? extends T> iterator(long first, long count) {
+            return select(first, count, sort);
+        }
+
+        protected abstract Iterator<T> select(long first, long count, Map<String, SortOrder> sorting);
+
+        @Override
         public ISortState<String> getSortState() {
-            return sortState;
+            return this;
         }
 
         @Override
@@ -281,6 +285,22 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
         public void setRowsPerPage(int rowsPerPage) {
             this.rowsPerPage = rowsPerPage;
+        }
+
+        @Override
+        public void setPropertySortOrder(String property, SortOrder sortOrder) {
+            sort.put(property, sortOrder);
+            // System.out.println("SET:" + property + "=" + sortOrder);
+        }
+
+        @Override
+        public SortOrder getPropertySortOrder(String property) {
+            SortOrder sortOrder = sort.get(property);
+            if (sortOrder == null) {
+                sortOrder = SortOrder.NONE;
+            }
+            // System.out.println("GET:" + property + "=" + sortOrder);
+            return sortOrder;
         }
     }
 }

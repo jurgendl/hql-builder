@@ -416,6 +416,9 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
 	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
 	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+	color: #8f5a0a;
+	border-style: solid;
+	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 }
 
 .likebutton:hover {
@@ -427,6 +430,9 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
 	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
 	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+	color: #8f5a0a;
+	border-style: solid;
+	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 }
 
 button:focus {
@@ -757,4 +763,5 @@ a:focus {
 	color: #00aaff;
 	border-bottom: 1px solid;
 }
+
 /* end */
