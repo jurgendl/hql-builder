@@ -645,8 +645,13 @@ table {
 	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
-th,td {
+th {
 	padding: 9px 14px 9px;
+	text-align: center;
+}
+
+td {
+	padding: 4px 8px 4px;
 	text-align: center;
 }
 
