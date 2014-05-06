@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -45,29 +47,32 @@ public class RegistrationsPage extends DefaultWebPage {
             private static final long serialVersionUID = 6812428385117168023L;
 
             @Override
-            public Iterator<Registration> iterator(long first, long count) {
-                return Iterator.class
-                        .cast(hqlWebClient
-                                .execute(
-                                        new QueryParameters().setFirst((int) first).setMax((int) count)
-                                                .setHql("select obj from " + Registration.class.getSimpleName() + " obj")).getResults().getValue()
-                                .iterator());
+            public Iterator<Registration> select(long first, long count, Map<String, SortOrder> sorting) {
+                String hql = "select obj from " + Registration.class.getSimpleName() + " obj";
+                String orderByHql = " order by ";
+                for (Map.Entry<String, SortOrder> sortEntry : sorting.entrySet()) {
+                    if (sortEntry.getValue() != null && sortEntry.getValue() != SortOrder.NONE) {
+                        orderByHql += "obj." + sortEntry.getKey() + " " + (sortEntry.getValue() == SortOrder.ASCENDING ? "asc" : "desc") + ", ";
+                    }
+                }
+                if (!" order by ".equals(orderByHql)) {
+                    hql += orderByHql.substring(0, orderByHql.length() - 2);
+                }
+                QueryParameters query = new QueryParameters().setHql(hql).setFirst((int) first).setMax((int) count);
+                Iterator<Object> iterator = hqlWebClient.execute(query).getResults().getValue().iterator();
+                return Iterator.class.cast(iterator);
             }
 
             @Override
             public long size() {
-                return Long.parseLong(String.valueOf(hqlWebClient
-                        .execute(new QueryParameters().setHql("select count(obj.id) from " + Registration.class.getSimpleName() + " obj"))
-                        .getResults().getValue().get(0)));
+                String hql = "select count(obj.id) from " + Registration.class.getSimpleName() + " obj";
+                List<Object> value = hqlWebClient.execute(new QueryParameters().setHql(hql)).getResults().getValue();
+                return Long.parseLong(String.valueOf(value.get(0)));
             }
 
             @Override
-            public void delete(Registration object) {
+            public void delete(AjaxRequestTarget target, Registration object) {
                 hqlWebClient.delete(object);
-            }
-
-            @Override
-            public void updateUI(AjaxRequestTarget target) {
                 Table<Registration> table = (Table<Registration>) get(Table.ID);
                 target.add(table);
             }

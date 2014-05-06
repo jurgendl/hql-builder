@@ -17,6 +17,7 @@ import org.apache.wicket.pageStore.memory.PageNumberEvictionStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReferenceRegistry;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.slf4j.Logger;
@@ -119,6 +120,13 @@ public class WicketApplication extends WebApplication {
         initStore();
 
         getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
+
+        String cssImages = "css/images/";
+        String[] mountedImages = { "arrow_off.png", "arrow_up.png", "arrow_down.png" };
+        for (String mountedImage : mountedImages) {
+            PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
+            mountResource(cssImages + mountedImage, reference);
+        }
 
         mountPages();
     }
