@@ -3,7 +3,9 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import java.io.Serializable;
 import java.util.MissingResourceException;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -43,7 +45,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
     }
 
     public FormPanel(String id, Class<T> modelType, boolean inheritId) {
-        this(id, new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType)), inheritId);
+        this(id, newFormModel(modelType), inheritId);
     }
 
     public FormPanel(String id, IModel<T> model, boolean inheritId) {
@@ -51,11 +53,11 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         this.inheritId = inheritId;
 
-        setOutputMarkupPlaceholderTag(false);
-        setRenderBodyOnly(true);
-        setOutputMarkupId(false);
+        setOutputMarkupPlaceholderTag(true);
+        setRenderBodyOnly(false);
+        setOutputMarkupId(true);
 
-        Form<T> form = new Form<T>(FORM, model) {
+        final Form<T> form = new Form<T>(FORM, model) {
             private static final long serialVersionUID = -6736595826748998036L;
 
             @SuppressWarnings("unchecked")
@@ -73,6 +75,9 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         if (inheritId) {
             form.setMarkupId(id);
         }
+        form.setOutputMarkupPlaceholderTag(true);
+        form.setRenderBodyOnly(false);
+        form.setOutputMarkupId(true);
         add(form);
 
         repeater = new RepeatingView(FORM_REPEATER);
@@ -81,7 +86,16 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         repeater.setOutputMarkupId(false);
         form.add(repeater);
 
-        Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
+        AjaxSubmitLink submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
+            private static final long serialVersionUID = -983242396412538529L;
+
+            @Override
+            protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
+                target.add(f);
+            }
+        };
+
+        // Button submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
         Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
         if (inheritId) {
             submit.setMarkupId(id + "." + FORM_SUBMIT);
@@ -89,6 +103,10 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         }
         form.add(submit);
         form.add(reset);
+    }
+
+    public static <T> IModel<T> newFormModel(Class<T> modelType) {
+        return new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType));
     }
 
     public FormPanel<T> liveValidation() {
