@@ -515,7 +515,7 @@ form input[type='color']:hover {
 
 .actions {
 	vertical-align: baseline;
-	text-align: left;
+	text-align: center;
 }
 
 .feedbackPanel {
@@ -688,26 +688,25 @@ th {
 	*/
 tr:first-child th.first {
 	-moz-border-radius-topleft: 3px;
-	-webkit-border-top-left-radius: 3px; 
+	-webkit-border-top-left-radius: 3px;
 }
 
 tr:first-child th.last {
 	-moz-border-radius-topright: 3px;
-	-webkit-border-top-right-radius: 3px; 
+	-webkit-border-top-right-radius: 3px;
 }
 
 tr:last-child td.first {
 	-moz-border-radius-bottomleft: 3px;
-	-webkit-border-bottom-left-radius: 3px; 
+	-webkit-border-bottom-left-radius: 3px;
 }
 
 tr:last-child td.last {
 	-moz-border-radius-bottomright: 3px;
-	-webkit-border-bottom-right-radius: 3px; 
+	-webkit-border-bottom-right-radius: 3px;
 }
 
 /* wicket ordering */
-
 table tr th.wicket_orderDown {
 	background-position: right;
 	background-repeat: no-repeat;
@@ -726,4 +725,36 @@ table tr th.wicket_orderNone {
 	background-image: url(images/arrow_off.png);
 }
 
+/* hyperlink */
+a {
+	padding: 3px;
+	outline: none;
+	text-decoration: none;
+	color: #0077dd;
+	border-bottom: 1px dashed;
+	padding: 2px 0px 0px 0px;
+}
+
+/* the normal state of a hyperlink */
+a:link {
+	
+}
+/* when the link has been visited before */
+a:visited {
+	color: #0055bb;
+}
+/* when the user hovers their mouse over a link */
+a:hover {
+	color: #00aaff;
+	border-bottom: 1px solid;
+}
+/* when the user clicks on the link (or presses the Enter key on a focused link) */
+a:active {
+	padding-top: 4px;
+}
+/* when the user uses the Tab key to navigate to hyperlinks */
+a:focus {
+	color: #00aaff;
+	border-bottom: 1px solid;
+}
 /* end */

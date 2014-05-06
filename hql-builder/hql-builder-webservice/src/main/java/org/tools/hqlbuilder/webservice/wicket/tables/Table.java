@@ -12,10 +12,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @see https://www.packtpub.com/article/apache-wicket-displaying-data-using-datatable
  */
-public class Table<T extends Serializable> extends DefaultDataTable<T, String> {
+public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, String> {
     private static final long serialVersionUID = -5074672726454953465L;
 
     private static final Logger logger = LoggerFactory.getLogger(Table.class);
