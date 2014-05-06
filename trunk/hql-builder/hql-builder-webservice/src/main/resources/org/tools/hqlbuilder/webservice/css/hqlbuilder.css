@@ -435,6 +435,10 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 }
 
+.likebutton:active {
+	padding: 3px 10px 3px 10px;
+}
+
 button:focus {
 	background-color: #fddb6f;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
