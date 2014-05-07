@@ -64,11 +64,6 @@ import com.l2fprod.common.swing.LookAndFeelTweaks;
 import com.l2fprod.common.util.converter.NumberConverters;
 
 /**
- * dependency:<br>
- * -) com.l2fprod:l2fprod-common-sheet:7.3<br>
- * -) commons-lang<br>
- * -) jcalendar<br>
- * 
  * @author Jurgen
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })

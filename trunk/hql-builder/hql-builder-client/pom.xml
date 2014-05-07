@@ -31,11 +31,6 @@
 			<artifactId>l2fprod-common-all</artifactId>
  		</dependency>
 		<dependency>
-			<groupId>com.toedter</groupId>
-			<artifactId>jcalendar</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
