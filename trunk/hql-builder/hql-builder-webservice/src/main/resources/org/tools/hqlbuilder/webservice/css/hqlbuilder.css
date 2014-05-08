@@ -736,13 +736,13 @@ tr:last-child td.last {
 table tr th.wicket_orderDown {
 	background-position: right;
 	background-repeat: no-repeat;
-	background-image: url(images/arrow_down.png);
+	background-image: url(images/arrow_up.png);
 }
 
 table tr th.wicket_orderUp {
 	background-position: right;
 	background-repeat: no-repeat;
-	background-image: url(images/arrow_up.png);
+	background-image: url(images/arrow_down.png);
 }
 
 table tr th.wicket_orderNone {
