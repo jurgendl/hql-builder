@@ -5,9 +5,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
-import com.googlecode.wicket.jquery.core.Options;
-
-public class PasswordTextFieldPanel extends FormRowPanel<String, PasswordTextField, Options> {
+public class PasswordTextFieldPanel extends FormRowPanel<String, PasswordTextField> {
     private static final long serialVersionUID = -7993592150932306594L;
 
     public PasswordTextFieldPanel(final IModel<?> model, final String property, final boolean required) {

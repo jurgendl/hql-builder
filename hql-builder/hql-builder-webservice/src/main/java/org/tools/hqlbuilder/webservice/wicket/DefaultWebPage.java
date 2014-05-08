@@ -49,6 +49,9 @@ public class DefaultWebPage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
         addDefaultResources(response);
         addResources(response);
     }
@@ -85,4 +88,5 @@ public class DefaultWebPage extends WebPage {
             });
         }
     }
+
 }

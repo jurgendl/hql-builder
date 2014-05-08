@@ -5,9 +5,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
-import com.googlecode.wicket.jquery.core.Options;
-
-public class TextFieldPanel<T> extends FormRowPanel<T, TextField<T>, Options> {
+public class TextFieldPanel<T> extends FormRowPanel<T, TextField<T>> {
     private static final long serialVersionUID = -7993592150932306594L;
 
     public TextFieldPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required) {
