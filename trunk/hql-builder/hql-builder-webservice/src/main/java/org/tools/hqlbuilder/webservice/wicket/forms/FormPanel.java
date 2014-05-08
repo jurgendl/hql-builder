@@ -133,11 +133,11 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
     }
 
     public DatePicker addDatePicker(String property, boolean required) {
-        return addId(property, new DatePickerPanel(getDefaultModel(), property, required, getLocale()).addTo(repeater));
+        return addId(property, new DatePickerPanel(getDefaultModel(), property, required).addTo(repeater));
     }
 
     public <X> DatePicker addDatePicker(String property, boolean required, final Converter<X, Date> dateConverter) {
-        return addId(property, new DatePickerPanel(getDefaultModel(), property, required, getLocale()) {
+        return addId(property, new DatePickerPanel(getDefaultModel(), property, required) {
             private static final long serialVersionUID = -7680994763787874544L;
 
             @Override
@@ -164,7 +164,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         return addId(property, new PasswordTextFieldPanel(getDefaultModel(), property, required).addTo(repeater));
     }
 
-    public static abstract class FormRowPanel<T, C extends FormComponent<T>, O> extends Panel implements FormConstants {
+    public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
         public static final String FEEDBACK_ID = "componentFeedback";
 
         private static final long serialVersionUID = -6401309948019996576L;
@@ -179,15 +179,8 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected final boolean required;
 
-        protected O options;
-
         public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required) {
-            this(model, property, type, required, null);
-        }
-
-        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required, O options) {
             super(FORM_ROW, model);
-            this.options = options;
             this.required = required;
             this.property = property;
             this.type = type;

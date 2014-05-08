@@ -1,4 +1,3 @@
-
  $(function() {
 		/* For zebra striping */
 		$("table tr:nth-child(odd)").addClass("odd");

@@ -1,48 +1,56 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;
 import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 
-public class DatePickerPanel extends FormRowPanel<Date, DatePicker, Options> {
+/**
+ * @see http://api.jqueryui.com/datepicker/
+ * @see http://wicket.apache.org/guide/guide/jsintegration.html
+ * @see https://github.com/jquery/jquery-ui
+ */
+public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
     private static final long serialVersionUID = -5807168584242557542L;
 
     public static final String DATE_FORMAT = "dateFormat";
 
-    public DatePickerPanel(IModel<?> model, String property, boolean required, Locale locale) {
-        this(model, property, required, LocaleUtils.getLocaleDatePattern(locale, DateFormat.SHORT));
-    }
+    public static final String APPEND_TEXT = "appendText";
 
-    public DatePickerPanel(IModel<?> model, String property, boolean required, String pattern) {
-        this(model, property, required, new Options().set(DATE_FORMAT, Options.asString(pattern)));
-    }
+    protected String dateFormat;
 
-    public DatePickerPanel(IModel<?> model, String property, boolean required, Options options) {
-        super(model, property, Date.class, required, options);
-    }
+    protected String dateFormatClient;
 
-    private String parseString(Object o) {
-        String tmp = String.valueOf(o);
-        if (tmp.startsWith("\"") && tmp.endsWith("\"")) {
-            tmp = tmp.substring(1, tmp.length() - 1);
-        }
-        return tmp;
+    public DatePickerPanel(IModel<?> model, String property, boolean required) {
+        super(model, property, Date.class, required);
     }
 
     @Override
     protected DatePicker createComponent() {
-        // http://api.jqueryui.com/datepicker/
         IModel<Date> valueModel = getValueModel();
-        options.set("appendText", options.get(DATE_FORMAT));
-        return new DatePicker(VALUE, valueModel, parseString(options.get(DATE_FORMAT)), options) {
+        Locale locale = getLocale();
+        Options options = new Options();
+        dateFormat = dateformat(locale);
+        dateFormatClient = dateFormat.toLowerCase().replaceAll("yyyy", "yy");
+        options.set(DATE_FORMAT, Options.asString(dateFormatClient));
+        // options.set(APPEND_TEXT, Options.asString(new SimpleDateFormat(dateFormat, locale).format(new Date())));
+        return new DatePicker(VALUE, valueModel, dateFormat, options) {
             private static final long serialVersionUID = 7118431260383127661L;
 
             @Override
@@ -51,5 +59,77 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker, Options> {
                 onFormComponentTag(tag);
             }
         };
+    }
+
+    public static final String RESOURCE_I18N_PATH = "jquery/ui/datepicker/i18n/";
+
+    public static PackageResourceReference DEFAULT = new PackageResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-en-GB.js");
+
+    public static final Map<Locale, PackageResourceReference> cache = new HashMap<Locale, PackageResourceReference>();
+
+    public static PackageResourceReference cached(Locale locale) {
+        if (cache.containsKey(locale)) {
+            return cache.get(locale);
+        }
+        PackageResourceReference resourceReference = get(locale);
+        cache.put(locale, resourceReference);
+        return resourceReference;
+    }
+
+    public static PackageResourceReference get(Locale locale) {
+        String language = locale.getLanguage();
+        PackageResourceReference uiRef = new PackageResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + "-"
+                + locale.getCountry().toUpperCase() + ".js");
+        boolean found = true;
+        try {
+            if (uiRef.getResource().getResourceStream().getInputStream().available() <= 0) {
+                found = false;
+            }
+        } catch (Exception ex) {
+            found = false;
+        }
+        if (found) {
+            return uiRef;
+        }
+        uiRef = new PackageResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + ".js");
+        found = true;
+        try {
+            if (uiRef.getResource().getResourceStream().getInputStream().available() <= 0) {
+                found = false;
+            }
+        } catch (Exception ex) {
+            found = false;
+        }
+        if (found) {
+            return uiRef;
+        }
+        return DEFAULT;
+    }
+
+    public static String dateformat(Locale locale) {
+        return LocaleUtils.getLocaleDatePattern(locale, DateFormat.SHORT);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        setOutputMarkupId(true);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(cached(getLocale())));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/JQDatePicker.js")));
+        response.render(OnLoadHeaderItem.forScript(";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '"
+                + dateFormatClient + "');"));
+    }
+
+    /**
+     * @see org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel#setPlaceholder(org.apache.wicket.markup.ComponentTag)
+     */
+    @Override
+    protected void setPlaceholder(ComponentTag tag) {
+        tag.getAttributes().put(PLACEHOLDER, getPlaceholder() + ": " + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()));
     }
 }
