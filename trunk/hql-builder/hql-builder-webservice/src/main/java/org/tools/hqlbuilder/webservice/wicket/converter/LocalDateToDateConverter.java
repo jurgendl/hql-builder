@@ -3,7 +3,6 @@ package org.tools.hqlbuilder.webservice.wicket.converter;
 import java.util.Date;
 
 import org.joda.time.LocalDate;
-import org.tools.hqlbuilder.webservice.wicket.Converter;
 
 public class LocalDateToDateConverter implements Converter<LocalDate, Date> {
     private static final long serialVersionUID = -6637566257324415974L;
