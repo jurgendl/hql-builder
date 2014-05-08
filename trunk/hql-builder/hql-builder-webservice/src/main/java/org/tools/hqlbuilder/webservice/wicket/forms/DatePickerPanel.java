@@ -130,6 +130,7 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
      */
     @Override
     protected void setPlaceholder(ComponentTag tag) {
-        tag.getAttributes().put(PLACEHOLDER, getPlaceholder() + ": " + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()));
+        tag.getAttributes().put(PLACEHOLDER,
+                getPlaceholder() + " <" + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()) + ">" + (required ? " *" : ""));
     }
 }

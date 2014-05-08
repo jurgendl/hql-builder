@@ -241,7 +241,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected void setPlaceholder(ComponentTag tag) {
             try {
-                tag.getAttributes().put(PLACEHOLDER, getPlaceholder());
+                tag.getAttributes().put(PLACEHOLDER, getPlaceholder() + (required ? " *" : ""));
             } catch (MissingResourceException ex) {
                 logger.error("no translation for " + PLACEHOLDER);
             }
