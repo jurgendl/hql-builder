@@ -25,6 +25,7 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  * @see http://api.jqueryui.com/datepicker/
  * @see http://wicket.apache.org/guide/guide/jsintegration.html
  * @see https://github.com/jquery/jquery-ui
+ * @see http://stackoverflow.com/questions/1452681/jquery-datepicker-localization
  */
 public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
     private static final long serialVersionUID = -5807168584242557542L;
@@ -130,7 +131,6 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
      */
     @Override
     protected void setPlaceholder(ComponentTag tag) {
-        tag.getAttributes().put(PLACEHOLDER,
-                getPlaceholder() + " <" + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()) + ">" + (required ? " *" : ""));
+        tag.getAttributes().put(PLACEHOLDER, getPlaceholder() + " <" + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()) + ">");
     }
 }

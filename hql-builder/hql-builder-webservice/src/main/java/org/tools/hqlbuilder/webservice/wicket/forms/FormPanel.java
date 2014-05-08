@@ -30,8 +30,9 @@ import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.tools.hqlbuilder.webservice.wicket.Converter;
-import org.tools.hqlbuilder.webservice.wicket.ModelConverter;
+import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
+import org.tools.hqlbuilder.webservice.wicket.ext.RequiredBehavior;
 
 import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 
@@ -236,12 +237,13 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         protected C addTo(RepeatingView repeater) {
             repeater.add(newContainer(repeater).add(this));
+            component.add(new RequiredBehavior());
             return component;
         }
 
         protected void setPlaceholder(ComponentTag tag) {
             try {
-                tag.getAttributes().put(PLACEHOLDER, getPlaceholder() + (required ? " *" : ""));
+                tag.getAttributes().put(PLACEHOLDER, getPlaceholder());
             } catch (MissingResourceException ex) {
                 logger.error("no translation for " + PLACEHOLDER);
             }

@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.wicket;
+package org.tools.hqlbuilder.webservice.wicket.converter;
 
 import org.apache.wicket.model.IModel;
 
