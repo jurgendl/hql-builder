@@ -1,10 +1,10 @@
-html,body {
-	/* */
-	
-}
-
 body {
-	font: 12px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+	/* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
+	/*Baskerville, ‘Times New Roman’, Times, serif*/
+	/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
+	/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
+	/*GillSans, Calibri, Trebuchet, sans-serif*/
+	font: 12px, Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif;
 	margin: 0;
 	margin-top: 75px;
 	background-color: #d9dee2;
@@ -15,6 +15,15 @@ body {
 	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
 	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
 	background-image: linear-gradient(left, #ebeef2, #d9dee2);
+}
+
+h1,h2,h3,h4,h5 {
+	/*Georgia, Times, ‘Times New Roman’, serif*/
+	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
+	/*Tahoma, Verdana, Geneva*/
+	/*Trebuchet, Tahoma, Arial, sans-serif*/
+	font: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New
+		Roman’, serif;
 }
 
 .centeredvertical {
@@ -74,9 +83,18 @@ body {
 	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
 }
 
-.required {
-	color: red;
-	font-size: medium;
+.requiredMarker {
+	background-image: url("images/bullet_star.png");
+	background-position: top;
+	background-repeat: no-repeat;
+	display: inline;
+	height: 16px;
+	width: 16px;
+	color: transparent;
+	text-align: center;
+	vertical-align: middle;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 
 form.niceform {
@@ -736,19 +754,19 @@ tr:last-child td.last {
 table tr th.wicket_orderDown {
 	background-position: right;
 	background-repeat: no-repeat;
-	background-image: url(images/arrow_up.png);
+	background-image: url("images/arrow_up.png");
 }
 
 table tr th.wicket_orderUp {
 	background-position: right;
 	background-repeat: no-repeat;
-	background-image: url(images/arrow_down.png);
+	background-image: url("images/arrow_down.png");
 }
 
 table tr th.wicket_orderNone {
 	background-position: right;
 	background-repeat: no-repeat;
-	background-image: url(images/arrow_off.png);
+	background-image: url("images/arrow_off.png");
 }
 
 /* hyperlink */
