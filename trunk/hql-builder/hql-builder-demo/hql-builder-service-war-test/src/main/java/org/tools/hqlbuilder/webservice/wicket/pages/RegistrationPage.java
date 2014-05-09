@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDateTime;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
@@ -22,6 +23,9 @@ public class RegistrationPage extends DefaultWebPage {
     @SpringBean
     protected transient HqlWebServiceClient hqlWebClient;
 
+    @SpringBean
+    protected transient PasswordEncoder passwordEncoder;
+
     public RegistrationPage(PageParameters parameters) {
         super(parameters);
 
@@ -31,6 +35,7 @@ public class RegistrationPage extends DefaultWebPage {
             @Override
             protected void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
+                object.setPassword(passwordEncoder.encode(object.getPassword()));
                 object.setVerification(new LocalDateTime());
                 Serializable id = hqlWebClient.save(object);
                 object = hqlWebClient.get(object.getClass(), id);

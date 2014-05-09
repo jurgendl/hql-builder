@@ -2,7 +2,9 @@ package org.tools.hqlbuilder.test;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.joda.time.LocalDateTime;
@@ -12,14 +14,20 @@ import org.joda.time.LocalDateTime;
 public class Registration extends EntityParent {
     private static final long serialVersionUID = -787192560827992242L;
 
+    @Column(updatable = false)
+    @NotNull
     private String password;
 
+    @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String username;
 
     private String regkey;
