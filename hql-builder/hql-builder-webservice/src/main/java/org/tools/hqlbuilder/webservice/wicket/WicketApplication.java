@@ -10,9 +10,11 @@ import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
 import org.apache.wicket.SharedResources;
+import org.apache.wicket.css.ICssCompressor;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.javascript.DefaultJavaScriptCompressor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -39,6 +41,7 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
+import com.googlecode.htmlcompressor.compressor.YuiCssCompressor;
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
@@ -111,6 +114,19 @@ public class WicketApplication extends WebApplication {
         getMarkupSettings().setStripWicketTags(true);
         if (deployed) {
             getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
+        }
+
+        getResourceSettings().setUseMinifiedResources(deployed);
+        getResourceSettings().setEncodeJSessionId(deployed);
+        getResourceSettings().setDefaultCacheDuration(org.apache.wicket.request.http.WebResponse.MAX_CACHE_DURATION);
+        if (deployed) {
+            getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
+            getResourceSettings().setCssCompressor(new ICssCompressor() {
+                @Override
+                public String compress(String original) {
+                    return new YuiCssCompressor().compress(original);
+                }
+            });
         }
 
         initStore();
