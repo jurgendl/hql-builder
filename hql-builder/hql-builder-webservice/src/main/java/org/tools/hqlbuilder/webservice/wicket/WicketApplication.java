@@ -118,8 +118,9 @@ public class WicketApplication extends WebApplication {
         getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
 
         String cssImages = "css/images/";
-        String[] mountedImages = { "arrow_off.png", "arrow_up.png", "arrow_down.png" };
+        String[] mountedImages = { "arrow_off.png", "arrow_up.png", "arrow_down.png", "bullet_star.png" };
         for (String mountedImage : mountedImages) {
+            logger.info("mounting image " + cssImages + mountedImage);
             PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
             mountResource(cssImages + mountedImage, reference);
         }
