@@ -13,11 +13,8 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -31,10 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
-import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 import org.tools.hqlbuilder.webservice.wicket.ext.RequiredBehavior;
-
-import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 
 public abstract class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -3268906227997947993L;
@@ -43,7 +37,9 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
     protected RepeatingView repeater;
 
-    protected final boolean inheritId;
+    protected boolean inheritId = false;
+
+    protected boolean showLabel = true;
 
     public FormPanel(String id, Class<T> modelType) {
         this(id, modelType, false, false);
@@ -70,11 +66,6 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             protected void onSubmit() {
                 super.onSubmit();
                 submit((IModel<T>) getDefaultModel());
-            }
-
-            @Override
-            public String toString() {
-                return getClass().getSuperclass().toString();
             }
         };
         if (inheritId) {
@@ -115,6 +106,14 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         form.add(reset);
     }
 
+    public boolean isShowLabel() {
+        return this.showLabel;
+    }
+
+    public void setShowLabel(boolean showLabel) {
+        this.showLabel = showLabel;
+    }
+
     public static <T> IModel<T> newFormModel(Class<T> modelType) {
         return new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType));
     }
@@ -133,36 +132,50 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         return component;
     }
 
-    public DatePicker addDatePicker(String property, boolean required) {
-        return addId(property, new DatePickerPanel(getDefaultModel(), property, required).addTo(repeater));
+    public DatePickerPanel<Date> addDatePicker(String property, boolean required) {
+        return addDatePicker(property, required, (Converter<Date, Date>) null);
     }
 
-    public <X> DatePicker addDatePicker(String property, boolean required, final Converter<X, Date> dateConverter) {
-        return addId(property, new DatePickerPanel(getDefaultModel(), property, required) {
-            private static final long serialVersionUID = -7680994763787874544L;
-
-            @Override
-            protected IModel<Date> getValueModel() {
-                IModel<X> backingModel = new PropertyModel<X>(getDefaultModel(), property);
-                return new ModelConverter<X, Date>(backingModel, dateConverter);
-            };
-        }.addTo(repeater));
-    }
-
-    public TextField<String> addTextField(String property, boolean required) {
+    public TextFieldPanel<String> addTextField(String property, boolean required) {
         return addTextField(property, String.class, required);
     }
 
-    public <F> TextField<F> addTextField(String property, Class<F> type, boolean required) {
-        return addId(property, new TextFieldPanel<F>(getDefaultModel(), property, type, required).addTo(repeater));
+    public <X> DatePickerPanel<X> addDatePicker(String property, boolean required, final Converter<X, Date> dateConverter) {
+        DatePickerPanel<X> row = new DatePickerPanel<X>(getDefaultModel(), property, dateConverter);
+        addRow(property, required, row);
+        return row;
     }
 
-    public EmailTextField addEmailTextField(String property, boolean required) {
-        return addId(property, new EmailTextFieldPanel(getDefaultModel(), property, required).addTo(repeater));
+    public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, boolean required) {
+        TextFieldPanel<F> row = new TextFieldPanel<F>(getDefaultModel(), property, type);
+        addRow(property, required, row);
+        return row;
     }
 
-    public PasswordTextField addPasswordTextField(String property, boolean required) {
-        return addId(property, new PasswordTextFieldPanel(getDefaultModel(), property, required).addTo(repeater));
+    public EmailTextFieldPanel addEmailTextField(String property, boolean required) {
+        EmailTextFieldPanel row = new EmailTextFieldPanel(getDefaultModel(), property);
+        addRow(property, required, row);
+        return row;
+    }
+
+    public PasswordTextFieldPanel addPasswordTextField(String property, boolean required) {
+        PasswordTextFieldPanel row = new PasswordTextFieldPanel(getDefaultModel(), property);
+        addRow(property, required, row);
+        return row;
+    }
+
+    protected <V, C extends FormComponent<V>> FormRowPanel<V, C> addRow(String property, boolean required, FormRowPanel<V, C> row) {
+        settings(row, required);
+        row.addComponentsTo(repeater);
+        addId(property, row.getComponent());
+        return row;
+    }
+
+    protected <V, C extends FormComponent<V>> FormRowPanel<V, C> settings(FormRowPanel<V, C> row, boolean required) {
+        row.setRequired(required);
+        row.setInheritId(inheritId);
+        row.setShowLabel(showLabel);
+        return row;
     }
 
     public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
@@ -170,86 +183,115 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         private static final long serialVersionUID = -6401309948019996576L;
 
-        protected final Label label;
+        protected Label label;
 
-        protected final String property;
+        protected String property;
 
-        protected final Class<T> type;
+        protected Class<T> type;
 
-        protected final C component;
+        protected FeedbackPanel feedbackPanel;
 
-        protected final boolean required;
+        protected WebMarkupContainer container;
 
-        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, final boolean required) {
+        protected C component;
+
+        protected boolean required;
+
+        protected boolean inheritId;
+
+        protected boolean showLabel;
+
+        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type) {
             super(FORM_ROW, model);
-            this.required = required;
             this.property = property;
             this.type = type;
             setOutputMarkupPlaceholderTag(false);
             setRenderBodyOnly(true);
             setOutputMarkupId(false);
-            label = addLabel();
-            component = addComponent();
-            add(new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component)).setOutputMarkupId(true));
         }
 
-        protected C addComponent() {
-            C comp = createComponent();
-            comp.setRequired(required);
-            add(comp);
-            return comp;
-        }
+        protected Label getLabel() {
+            if (label == null) {
+                IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
+                    private static final long serialVersionUID = -6461211838443556886L;
 
-        protected Label addLabel() {
-            AbstractReadOnlyModel<String> labelModel = new AbstractReadOnlyModel<String>() {
-                private static final long serialVersionUID = -6461211838443556886L;
-
-                @Override
-                public String getObject() {
-                    try {
-                        return getLabel();
-                    } catch (MissingResourceException ex) {
-                        logger.error("no translation for " + property);
-                        return "${" + property + "}";
+                    @Override
+                    public String getObject() {
+                        try {
+                            return getLabelText();
+                        } catch (MissingResourceException ex) {
+                            logger.error("no translation for " + property);
+                            return "${" + property + "}";
+                        }
                     }
-                }
-            };
-            Label labelComponent = new Label(LABEL, labelModel) {
-                private static final long serialVersionUID = -4486835664954887226L;
+                };
+                label = new Label(LABEL, labelModel) {
+                    private static final long serialVersionUID = -4486835664954887226L;
 
-                @Override
-                protected void onComponentTag(ComponentTag tag) {
-                    super.onComponentTag(tag);
-                    tag.getAttributes().put(FOR, property);
-                }
-            };
-            add(labelComponent);
-            return labelComponent;
+                    @Override
+                    public boolean isVisible() {
+                        return super.isVisible() && showLabel;
+                    }
+
+                    @Override
+                    protected void onComponentTag(ComponentTag tag) {
+                        super.onComponentTag(tag);
+                        tag.getAttributes().put(FOR, property);
+                    }
+                };
+            }
+            return label;
         }
 
-        protected WebMarkupContainer newContainer(RepeatingView repeater) {
-            WebMarkupContainer container = new WebMarkupContainer(repeater.newChildId());
-            container.setOutputMarkupPlaceholderTag(false);
-            container.setRenderBodyOnly(true);
-            container.setOutputMarkupId(false);
+        protected C getComponent() {
+            if (component == null) {
+                component = createComponent();
+                component.setRequired(required);
+                component.add(new RequiredBehavior());
+            }
+            return this.component;
+        }
+
+        protected abstract C createComponent();
+
+        protected FeedbackPanel getFeedback() {
+            if (feedbackPanel == null) {
+                feedbackPanel = new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component));
+                feedbackPanel.setOutputMarkupId(true);
+            }
+            return feedbackPanel;
+        }
+
+        protected WebMarkupContainer getContainer(RepeatingView repeater) {
+            if (container == null) {
+                container = new WebMarkupContainer(repeater.newChildId());
+                container.setOutputMarkupPlaceholderTag(false);
+                container.setRenderBodyOnly(true);
+                container.setOutputMarkupId(false);
+            }
             return container;
         }
 
-        protected C addTo(RepeatingView repeater) {
-            repeater.add(newContainer(repeater).add(this));
-            component.add(new RequiredBehavior());
-            return component;
+        protected C addComponentsTo(RepeatingView repeater) {
+            C c = getComponent();
+            this.add(getLabel());
+            this.add(c);
+            this.add(getFeedback());
+            WebMarkupContainer rowContainer = getContainer(repeater);
+            repeater.add(rowContainer);
+            rowContainer.add(this);
+            return c;
         }
 
-        protected void setPlaceholder(ComponentTag tag) {
+        protected void setupPlaceholder(ComponentTag tag) {
             try {
-                tag.getAttributes().put(PLACEHOLDER, getPlaceholder());
+                tag.getAttributes().put(PLACEHOLDER, getPlaceholderText());
             } catch (MissingResourceException ex) {
                 logger.error("no translation for " + PLACEHOLDER);
             }
         }
 
-        protected void setRequired(ComponentTag tag) {
+        protected void setupRequired(ComponentTag tag) {
             if (required) {
                 tag.getAttributes().put(REQUIRED, required);
             } else {
@@ -257,16 +299,20 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             }
         }
 
+        /**
+         * call this in overridden method:<br>
+         * org.tools.hqlbuilder.webservice.wicket.forms.[Component]Panel.createComponent().new [Component]() {...}.onComponentTag(ComponentTag)
+         */
         protected void onFormComponentTag(ComponentTag tag) {
-            setPlaceholder(tag);
-            setRequired(tag);
+            setupPlaceholder(tag);
+            setupRequired(tag);
         }
 
-        protected String getLabel() {
+        protected String getLabelText() {
             return getString(property);
         }
 
-        protected String getPlaceholder() {
+        protected String getPlaceholderText() {
             return getString(PLACEHOLDER);
         }
 
@@ -274,10 +320,28 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             return new PropertyModel<T>(getDefaultModel(), property);
         }
 
-        protected abstract C createComponent();
+        public boolean isShowLabel() {
+            return this.showLabel;
+        }
 
-        public C getComponent() {
-            return this.component;
+        public void setShowLabel(boolean showLabel) {
+            this.showLabel = showLabel;
+        }
+
+        public boolean isInheritId() {
+            return this.inheritId;
+        }
+
+        public void setInheritId(boolean inheritId) {
+            this.inheritId = inheritId;
+        }
+
+        public boolean isRequired() {
+            return this.required;
+        }
+
+        public void setRequired(boolean required) {
+            this.required = required;
         }
     }
 }

@@ -9,8 +9,8 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 public class EmailTextFieldPanel extends FormRowPanel<String, EmailTextField> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public EmailTextFieldPanel(final IModel<?> model, final String property, final boolean required) {
-        super(model, property, String.class, required);
+    public EmailTextFieldPanel(final IModel<?> model, final String property) {
+        super(model, property, String.class);
     }
 
     @Override
