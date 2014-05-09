@@ -12,9 +12,12 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.tools.hqlbuilder.webservice.WicketRoot;
+import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -27,7 +30,7 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  * @see https://github.com/jquery/jquery-ui
  * @see http://stackoverflow.com/questions/1452681/jquery-datepicker-localization
  */
-public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
+public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
     private static final long serialVersionUID = -5807168584242557542L;
 
     public static final String DATE_FORMAT = "dateFormat";
@@ -38,9 +41,21 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
 
     protected String dateFormatClient;
 
-    public DatePickerPanel(IModel<?> model, String property, boolean required) {
-        super(model, property, Date.class, required);
+    protected Converter<X, Date> dateConverter;
+
+    public DatePickerPanel(IModel<?> model, String property, Converter<X, Date> dateConverter) {
+        super(model, property, Date.class);
+        this.dateConverter = dateConverter;
     }
+
+    @Override
+    protected IModel<Date> getValueModel() {
+        if (dateConverter == null) {
+            return super.getValueModel();
+        }
+        IModel<X> backingModel = new PropertyModel<X>(getDefaultModel(), property);
+        return new ModelConverter<X, Date>(backingModel, dateConverter);
+    };
 
     @Override
     protected DatePicker createComponent() {
@@ -130,7 +145,7 @@ public class DatePickerPanel extends FormRowPanel<Date, DatePicker> {
      * @see org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel#setPlaceholder(org.apache.wicket.markup.ComponentTag)
      */
     @Override
-    protected void setPlaceholder(ComponentTag tag) {
-        tag.getAttributes().put(PLACEHOLDER, getPlaceholder() + " <" + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()) + ">");
+    protected void setupPlaceholder(ComponentTag tag) {
+        tag.getAttributes().put(PLACEHOLDER, getPlaceholderText() + " <" + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()) + ">");
     }
 }
