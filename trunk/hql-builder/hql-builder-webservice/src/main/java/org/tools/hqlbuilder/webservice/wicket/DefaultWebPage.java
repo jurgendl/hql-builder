@@ -58,19 +58,21 @@ public class DefaultWebPage extends WebPage {
 
     protected void addResources(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "css/hqlbuilder.css")));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/hqlbuilder.js")));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/hqlbuilder.js"), true));
     }
 
     protected void addDefaultResources(IHeaderResponse response) {
         IJavaScriptLibrarySettings javaScriptLibrarySettings = getApplication().getJavaScriptLibrarySettings();
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getJQueryReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxDebugReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxReference()));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketEventReference()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getJQueryReference(), true));
+        if (WicketApplication.get().usesDevelopmentConfig()) {
+            response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxDebugReference(), true));
+        }
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxReference(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketEventReference(), true));
         if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
             IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
-            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryGlobalizeReference()));
-            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryUIReference()));
+            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryGlobalizeReference(), true));
+            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryUIReference(), true));
         }
     }
 
