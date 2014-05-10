@@ -779,6 +779,10 @@ a {
 	padding: 2px 0px 0px 0px;
 }
 
+.ui-widget a {
+	border: none;
+}
+
 /* the normal state of a hyperlink */
 a:link {
 	
