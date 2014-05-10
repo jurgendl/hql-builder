@@ -14,7 +14,7 @@ import org.apache.wicket.css.ICssCompressor;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.javascript.DefaultJavaScriptCompressor;
+import org.apache.wicket.javascript.IJavaScriptCompressor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -42,6 +42,7 @@ import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
 import com.googlecode.htmlcompressor.compressor.YuiCssCompressor;
+import com.googlecode.htmlcompressor.compressor.YuiJavaScriptCompressor;
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
@@ -100,10 +101,6 @@ public class WicketApplication extends WebApplication {
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         Injector.get().inject(this);
 
-        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
-        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
-        this.setJavaScriptLibrarySettings(settings);
-
         boolean deployed = usesDeploymentConfig();
         if (deployed) {
             getFrameworkSettings().setSerializer(new KryoSerializer());
@@ -120,7 +117,12 @@ public class WicketApplication extends WebApplication {
         getResourceSettings().setEncodeJSessionId(deployed);
         getResourceSettings().setDefaultCacheDuration(org.apache.wicket.request.http.WebResponse.MAX_CACHE_DURATION);
         if (deployed) {
-            getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
+            getResourceSettings().setJavaScriptCompressor(new IJavaScriptCompressor() {
+                @Override
+                public String compress(String original) {
+                    return new YuiJavaScriptCompressor().compress(original);
+                }
+            });
             getResourceSettings().setCssCompressor(new ICssCompressor() {
                 @Override
                 public String compress(String original) {
@@ -128,6 +130,10 @@ public class WicketApplication extends WebApplication {
                 }
             });
         }
+
+        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
+        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
+        this.setJavaScriptLibrarySettings(settings);
 
         initStore();
 
