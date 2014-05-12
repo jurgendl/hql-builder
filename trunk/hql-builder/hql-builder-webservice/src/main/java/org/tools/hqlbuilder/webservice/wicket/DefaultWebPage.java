@@ -55,7 +55,15 @@ public class DefaultWebPage extends WebPage {
             return;
         }
         addDefaultResources(response);
+        addThemeResources(response);
         addResources(response);
+    }
+
+    protected void addThemeResources(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "jquery/ui/jquery-ui-themes-1.10.4/themes/"
+                + WicketSession.get().getJQueryUITheme() + "/jquery-ui.css")));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "jquery/ui/jquery-ui-themes-1.10.4/themes/"
+                + WicketSession.get().getJQueryUITheme() + "/jquery.ui.theme.css")));
     }
 
     protected void addResources(IHeaderResponse response) {

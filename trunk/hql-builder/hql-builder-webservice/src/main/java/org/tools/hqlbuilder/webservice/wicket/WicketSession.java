@@ -8,6 +8,8 @@ import org.apache.wicket.request.Request;
 public class WicketSession extends WebSession {
     private static final long serialVersionUID = 5401902370873451702L;
 
+    private String jqueryUITheme = "redmond";
+
     public WicketSession(Request request) {
         super(request);
         Injector.get().inject(this);
@@ -15,5 +17,13 @@ public class WicketSession extends WebSession {
 
     public static WicketSession get() {
         return WicketSession.class.cast(Session.get());
+    }
+
+    public String getJQueryUITheme() {
+        return this.jqueryUITheme;
+    }
+
+    public void setJQueryUITheme(String theme) {
+        this.jqueryUITheme = theme;
     }
 }
