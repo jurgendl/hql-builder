@@ -23,19 +23,23 @@ public class HqlBuilder {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
 
     public static void main(final String[] args) {
-        new HqlBuilder(args);
-    }
-
-    public HqlBuilder(final String[] args) {
         try {
-            init(args);
+            new HqlBuilder(args);
         } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "No connection to host");
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
         }
     }
 
-    protected void init(final String[] args) {
+    public HqlBuilder(final String[] args) throws Exception {
+
+        init(args);
+
+    }
+
+    protected void init(final String[] args) throws Exception {
         UIUtils.systemLookAndFeel();
         String v = getHibernateVersion();
         logger.info("Hibernate " + v + "x");
@@ -47,7 +51,6 @@ public class HqlBuilder {
 
     protected ConfigurableApplicationContext context;
 
-    //
     protected ConfigurableApplicationContext getContext() {
         if (context == null) {
             context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/spring-http-client-config.xml");
