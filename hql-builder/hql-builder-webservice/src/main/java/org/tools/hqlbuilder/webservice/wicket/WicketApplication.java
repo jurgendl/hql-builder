@@ -10,11 +10,9 @@ import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
 import org.apache.wicket.SharedResources;
-import org.apache.wicket.css.ICssCompressor;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.javascript.IJavaScriptCompressor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -24,6 +22,8 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReferenceRegistry;
+import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
+import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.slf4j.Logger;
@@ -41,11 +41,17 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
-import com.googlecode.htmlcompressor.compressor.YuiCssCompressor;
-import com.googlecode.htmlcompressor.compressor.YuiJavaScriptCompressor;
+import com.google.javascript.jscomp.CompilationLevel;
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
+
+import de.agilecoders.wicket.core.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
+import de.agilecoders.wicket.extensions.javascript.GoogleClosureJavaScriptCompressor;
+import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.html5player.Html5PlayerCssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.html5player.Html5PlayerJavaScriptReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.OpenWebIconsCssReference;
 
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
@@ -113,27 +119,31 @@ public class WicketApplication extends WebApplication {
             getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
 
+        getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
         getResourceSettings().setUseMinifiedResources(deployed);
         getResourceSettings().setEncodeJSessionId(deployed);
         getResourceSettings().setDefaultCacheDuration(org.apache.wicket.request.http.WebResponse.MAX_CACHE_DURATION);
         if (deployed) {
-            getResourceSettings().setJavaScriptCompressor(new IJavaScriptCompressor() {
-                @Override
-                public String compress(String original) {
-                    return new YuiJavaScriptCompressor().compress(original);
-                }
-            });
-            getResourceSettings().setCssCompressor(new ICssCompressor() {
-                @Override
-                public String compress(String original) {
-                    return new YuiCssCompressor().compress(original);
-                }
-            });
+            // getResourceSettings().setJavaScriptCompressor(new IJavaScriptCompressor() {
+            // @Override
+            // public String compress(String original) {
+            // return new YuiJavaScriptCompressor().compress(original);
+            // }
+            // });
+            getResourceSettings().setJavaScriptCompressor(new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
+            getResourceSettings().setCssCompressor(new YuiCssCompressor());
         }
 
         IJQueryLibrarySettings settings = new JQueryLibrarySettings();
         settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
         this.setJavaScriptLibrarySettings(settings);
+
+        getResourceBundles().addJavaScriptBundle(WicketApplication.class, "bootstrap-extensions.js", /* JQueryUIJavaScriptReference.instance(), */
+        Html5PlayerJavaScriptReference.instance());
+        getResourceBundles().addCssBundle(WicketApplication.class, "bootstrap-extensions.css", Html5PlayerCssReference.instance(),
+                OpenWebIconsCssReference.instance());
+
+        setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator("footer-bucket"));
 
         initStore();
 

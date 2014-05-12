@@ -461,7 +461,7 @@ public class HqlServiceImpl implements HqlService {
             }
         }
         long startTime = System.currentTimeMillis();
-        List<Object> list = createQuery.list();
+        List<Serializable> list = createQuery.list();
         long endTime = System.currentTimeMillis();
         result.setSimpleResults(list);
         result.setSize(list.size());
