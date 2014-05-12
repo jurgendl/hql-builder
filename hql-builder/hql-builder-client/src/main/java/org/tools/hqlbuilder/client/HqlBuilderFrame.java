@@ -982,6 +982,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             logger.error("start(String[], HqlService)");
             logger.error("{}", ExceptionUtils.getFullStackTrace(ex));
             SplashHelper.end();
+            ex.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
         }
     }

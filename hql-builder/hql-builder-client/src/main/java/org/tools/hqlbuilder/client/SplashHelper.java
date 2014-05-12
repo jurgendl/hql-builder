@@ -77,6 +77,9 @@ public class SplashHelper {
     }
 
     public static void step() {
+        if (splashtimesd == null) {
+            return;
+        }
         if (step > 0) {
             splashtimessb.append(System.currentTimeMillis() - time);
             if (step < splashtimesd.length) {
@@ -121,9 +124,7 @@ public class SplashHelper {
 
     public static void update(String connectionInfo) {
         try {
-            // TODO other connection types
-            String key = connectionInfo.replaceAll("jdbc:oracle:thin", "").replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ")
-                    .replaceAll("/", " ").trim();
+            String key = connectionInfo.replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ").replaceAll("/", " ").trim();
             cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
             splashtimest = 0;
             String splashtimes = cfgp.get("splashtimes", "1,1,1,1,1,1");
