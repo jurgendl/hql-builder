@@ -4,3 +4,5 @@ http://www.codeproject.com/Articles/253901/Getting-Started-Spring-Security
 http://javaworkbench.blogspot.com/p/spring-security.html
 http://www.htmllion.com/css3-tooltip.html
 http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/
+http://wb.agilecoders.de/demo/components
+http://blog.agilecoders.de/index.php/category/wicket/

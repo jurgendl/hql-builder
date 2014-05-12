@@ -15,6 +15,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.springframework.stereotype.Component;
+import org.tools.hqlbuilder.common.DetachedHqlService;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
@@ -33,10 +34,26 @@ public class PojoResourceImpl implements PojoResource {
     @Resource
     protected HqlWebService hqlWebService;
 
+    protected boolean wrapped = false;
+
+    protected HqlWebService getService() {
+        if (!wrapped) {
+            hqlWebService = new DetachedHqlWebService(hqlWebService);
+            wrapped = true;
+        }
+        return hqlWebService;
+    }
+
+    protected static class DetachedHqlWebService extends DetachedHqlService implements HqlWebService {
+        public DetachedHqlWebService(HqlWebService delegate) {
+            setDelegate(delegate);
+        }
+    }
+
     @Override
     public String ping() {
         try {
-            return "hello from Rest-Easy, service " + hqlWebService.getProject() + " on " + hqlWebService.getConnectionInfo() + " is ready to use";
+            return "hello from Rest-Easy, service " + getService().getProject() + " on " + getService().getConnectionInfo() + " is ready to use";
         } catch (Exception ex) {
             return "hello from Rest-Easy, service is not available: " + ex;
         }
@@ -44,33 +61,33 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<SortedSet<String>> getClasses() {
-        return new XmlWrapper<SortedSet<String>>(hqlWebService.getClasses());
+        return new XmlWrapper<SortedSet<String>>(getService().getClasses());
     }
 
     @Override
     public String getSqlForHql(String hql) {
-        return hqlWebService.getSqlForHql(hql);
+        return getService().getSqlForHql(hql);
     }
 
     @Override
     public XmlWrapper<List<String>> getProperties(String classname) {
-        return new XmlWrapper<List<String>>(hqlWebService.getProperties(classname));
+        return new XmlWrapper<List<String>>(getService().getProperties(classname));
     }
 
     @Override
     public String getConnectionInfo() {
-        return hqlWebService.getConnectionInfo();
+        return getService().getConnectionInfo();
     }
 
     @Override
     public String getProject() {
-        return hqlWebService.getProject();
+        return getService().getProject();
     }
 
     @Override
     public XmlWrapper<List<String>> search(String text, String typeName, int hitsPerPage) {
         try {
-            return new XmlWrapper<List<String>>(hqlWebService.search(text, typeName, hitsPerPage));
+            return new XmlWrapper<List<String>>(getService().search(text, typeName, hitsPerPage));
         } catch (UnsupportedOperationException ex) {
             throw new RuntimeException(ex);
         } catch (IOException ex) {
@@ -80,63 +97,63 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<Set<String>> getReservedKeywords() {
-        return new XmlWrapper<Set<String>>(hqlWebService.getReservedKeywords());
+        return new XmlWrapper<Set<String>>(getService().getReservedKeywords());
     }
 
     @Override
     public XmlWrapper<Map<String, String>> getNamedQueries() {
-        return new XmlWrapper<Map<String, String>>(hqlWebService.getNamedQueries());
+        return new XmlWrapper<Map<String, String>>(getService().getNamedQueries());
     }
 
     @Override
     public String createScript() {
-        return hqlWebService.createScript();
+        return getService().createScript();
     }
 
     @Override
     public XmlWrapper<Map<String, String>> getHibernateInfo() {
-        return new XmlWrapper<Map<String, String>>(hqlWebService.getHibernateInfo());
+        return new XmlWrapper<Map<String, String>>(getService().getHibernateInfo());
     }
 
     @Override
     public String getHibernateHelpURL() {
-        return hqlWebService.getHibernateHelpURL();
+        return getService().getHibernateHelpURL();
     }
 
     @Override
     public String getHqlHelpURL() {
-        return hqlWebService.getHqlHelpURL();
+        return getService().getHqlHelpURL();
     }
 
     @Override
     public String getLuceneHelpURL() {
-        return hqlWebService.getLuceneHelpURL();
+        return getService().getLuceneHelpURL();
     }
 
     @Override
     public XmlWrapper<List<String>> getPropertyNames(String key, String[] parts) {
-        return new XmlWrapper<List<String>>(hqlWebService.getPropertyNames(key, parts));
+        return new XmlWrapper<List<String>>(getService().getPropertyNames(key, parts));
     }
 
     @Override
     public void sql(String[] sql) {
-        hqlWebService.sql(sql);
+        getService().sql(sql);
     }
 
     @Override
     public XmlWrapper<List<QueryParameter>> findParameters(String hql) {
-        return new XmlWrapper<List<QueryParameter>>(hqlWebService.findParameters(hql));
+        return new XmlWrapper<List<QueryParameter>>(getService().findParameters(hql));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Serializable, I extends Serializable> XmlWrapper<I> save(String pojo, XmlWrapper<T> object) {
-        return new XmlWrapper<I>((I) hqlWebService.save(object.getValue()));
+        return new XmlWrapper<I>((I) getService().save(object.getValue()));
     }
 
     @Override
     public <T extends Serializable> void delete(String pojo, XmlWrapper<T> object) {
-        hqlWebService.delete(object.getValue());
+        getService().delete(object.getValue());
     }
 
     @Override
@@ -147,7 +164,7 @@ public class PojoResourceImpl implements PojoResource {
                 ObjectOutputStream oos = null;
                 try {
                     oos = new ObjectOutputStream(new BufferedOutputStream(output));
-                    oos.writeObject(hqlWebService.getHibernateWebResolver());
+                    oos.writeObject(getService().getHibernateWebResolver());
                 } catch (RuntimeException ex) {
                     ex.printStackTrace();
                 } finally {
@@ -167,7 +184,7 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public <T extends Serializable> XmlWrapper<T> get(String type, String id) {
         try {
-            XmlWrapper<?> xmlWrapper = new XmlWrapper(hqlWebService.get((Class<Serializable>) Class.forName(type), id));
+            XmlWrapper<?> xmlWrapper = new XmlWrapper(getService().get((Class<Serializable>) Class.forName(type), id));
             return (XmlWrapper<T>) xmlWrapper;
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
@@ -176,7 +193,8 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public ExecutionResult execute(QueryParameters queryParameters) {
-        return hqlWebService.execute(queryParameters);
+        ExecutionResult execute = getService().execute(queryParameters);
+        return execute;
     }
 
     @Override

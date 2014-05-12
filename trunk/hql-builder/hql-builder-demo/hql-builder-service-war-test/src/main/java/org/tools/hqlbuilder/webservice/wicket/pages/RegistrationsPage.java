@@ -59,14 +59,14 @@ public class RegistrationsPage extends DefaultWebPage {
                     hql += orderByHql.substring(0, orderByHql.length() - 2);
                 }
                 QueryParameters query = new QueryParameters().setHql(hql).setFirst((int) first).setMax((int) count);
-                Iterator<Object> iterator = hqlWebClient.execute(query).getResults().getValue().iterator();
+                Iterator<Serializable> iterator = hqlWebClient.execute(query).getResults().getValue().iterator();
                 return Iterator.class.cast(iterator);
             }
 
             @Override
             public long size() {
                 String hql = "select count(obj.id) from " + Registration.class.getSimpleName() + " obj";
-                List<Object> value = hqlWebClient.execute(new QueryParameters().setHql(hql)).getResults().getValue();
+                List<Serializable> value = hqlWebClient.execute(new QueryParameters().setHql(hql)).getResults().getValue();
                 return Long.parseLong(String.valueOf(value.get(0)));
             }
 

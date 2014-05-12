@@ -15,7 +15,7 @@ public class ExecutionResult implements Serializable {
     private static final long serialVersionUID = 7646264311502956246L;
 
     @XmlElement
-    private XmlWrapper<List<Object>> results;
+    private XmlWrapper<List<Serializable>> results;
 
     @XmlElementWrapper
     private Map<String, String> fromAliases;
@@ -47,11 +47,11 @@ public class ExecutionResult implements Serializable {
         super();
     }
 
-    public ExecutionResult(String sql, Map<String, String> fromAliases, int size, List<Object> results, String[] queryReturnAliases,
+    public ExecutionResult(String sql, Map<String, String> fromAliases, int size, List<Serializable> results, String[] queryReturnAliases,
             String[][] scalarColumnNames, String[] sqlAliases, String[] queryReturnTypeNames) {
         this.sql = sql;
         this.fromAliases = fromAliases;
-        this.results = new XmlWrapper<List<Object>>(results);
+        this.results = new XmlWrapper<List<Serializable>>(results);
         this.queryReturnAliases = queryReturnAliases;
         this.scalarColumnNames = scalarColumnNames;
         this.sqlAliases = sqlAliases;
@@ -139,15 +139,15 @@ public class ExecutionResult implements Serializable {
         this.overhead = overhead;
     }
 
-    public XmlWrapper<List<Object>> getResults() {
+    public XmlWrapper<List<Serializable>> getResults() {
         return this.results;
     }
 
-    public void setResults(XmlWrapper<List<Object>> results) {
+    public void setResults(XmlWrapper<List<Serializable>> results) {
         this.results = results;
     }
 
-    public void setSimpleResults(List<Object> results) {
-        this.results = new XmlWrapper<List<Object>>(results);
+    public void setSimpleResults(List<Serializable> results) {
+        this.results = new XmlWrapper<List<Serializable>>(results);
     }
 }

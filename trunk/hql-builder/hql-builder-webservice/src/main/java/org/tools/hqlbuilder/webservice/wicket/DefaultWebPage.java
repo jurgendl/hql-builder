@@ -6,6 +6,7 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -40,6 +41,7 @@ public class DefaultWebPage extends WebPage {
         }
         // add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
         // add(new LogInOutLinksPanel("authlinkspanel", webProperties, showAuthLinks()));
+        add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }
 
     public boolean showAuthLinks() {
