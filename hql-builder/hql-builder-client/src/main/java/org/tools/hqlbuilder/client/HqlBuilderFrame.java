@@ -1720,6 +1720,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     // zet automatisch l achter nummers (parameters zijn dikwijls id's en die zijn van het type long)
                     Long.parseLong(text);
                     text = text + "l";
+                    parameterBuilder.setText(text);
                 } catch (Exception ex2) {
                     //
                 }
