@@ -11,7 +11,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<import resource="classpath:org/tools/hqlbuilder/service/spring-service-common.xml" />
+	<import resource="classpath:org/tools/hqlbuilder/common/spring-common.xml" />
 
 	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:org/tools/hqlbuilder/common/commonconfig.properties"/>
