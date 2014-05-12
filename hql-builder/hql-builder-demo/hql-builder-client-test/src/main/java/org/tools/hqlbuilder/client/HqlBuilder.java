@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.client;
 
+import java.util.Locale;
+
 import javax.swing.JOptionPane;
 
 import org.slf4j.LoggerFactory;
@@ -89,20 +91,20 @@ public class HqlBuilder {
         if (hqlServiceClient.execute(new QueryParameters("from " + User.class.getSimpleName())).getResults().getValue().size() == 0) {
             try {
                 Group admins = new Group("admins");
-                admins = hqlServiceClient.save(admins);
+                admins = hqlServiceClient.get(Group.class, hqlServiceClient.save(admins));
                 Member member = new Member("hqladmin", admins);
-                member = hqlServiceClient.save(member);
+                member = hqlServiceClient.get(Member.class, hqlServiceClient.save(member));
                 GroupAuthority groupauthority = new GroupAuthority("ROLE_ADMIN", admins);
-                groupauthority = hqlServiceClient.save(groupauthority);
+                groupauthority = hqlServiceClient.get(GroupAuthority.class, hqlServiceClient.save(groupauthority));
                 Authority authority = new Authority("ROLE_ADMIN", member);
-                authority = hqlServiceClient.save(authority);
-                Lang langEn = new Lang("en");
-                langEn = hqlServiceClient.save(langEn);
+                authority = hqlServiceClient.get(Authority.class, hqlServiceClient.save(authority));
+                Lang langEn = new Lang(Locale.getDefault().getLanguage());
+                langEn = hqlServiceClient.get(Lang.class, hqlServiceClient.save(langEn));
                 User admin = new User("hqladmin", "hqladmin", "hqladmin@gmail.com");
                 admin.setLanguage(langEn);
                 admin.setPassword(getPasswordEncoder().encode("hqladmin"));
                 admin.setMember(member);
-                admin = hqlServiceClient.save(admin);
+                admin = hqlServiceClient.get(User.class, hqlServiceClient.save(admin));
             } catch (ValidationException e) {
                 e.printStackTrace();
             }

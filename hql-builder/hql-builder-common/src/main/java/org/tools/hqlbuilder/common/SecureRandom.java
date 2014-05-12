@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.service;
+package org.tools.hqlbuilder.common;
 
 import java.security.NoSuchAlgorithmException;
 

@@ -640,7 +640,8 @@ public class HqlServiceImpl implements HqlService {
         }
         QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter(oid, idv));
         logger.debug("hql=" + hql);
-        return (T) execute(hql).getResults().getValue().get(0);
+        List<Serializable> value = execute(hql).getResults().getValue();
+        return (T) (value.isEmpty() ? null : value.get(0));
     }
 
     /**

@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.test;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -18,6 +20,7 @@ public class User extends EntityParent {
     private Boolean enabled = Boolean.TRUE;
 
     @XmlTransient
+    @Basic(fetch = FetchType.LAZY)
     private String password;
 
     private String firstName;
