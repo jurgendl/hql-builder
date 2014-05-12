@@ -14,7 +14,6 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
@@ -79,22 +78,22 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
 
     public static final String RESOURCE_I18N_PATH = "jquery/ui/datepicker/i18n/";
 
-    public static PackageResourceReference DEFAULT = new PackageResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-en-GB.js");
+    public static JavaScriptResourceReference DEFAULT = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-en-GB.js");
 
-    public static final Map<Locale, PackageResourceReference> cache = new HashMap<Locale, PackageResourceReference>();
+    public static final Map<Locale, JavaScriptResourceReference> cache = new HashMap<Locale, JavaScriptResourceReference>();
 
-    public static PackageResourceReference cached(Locale locale) {
+    public static JavaScriptResourceReference cached(Locale locale) {
         if (cache.containsKey(locale)) {
             return cache.get(locale);
         }
-        PackageResourceReference resourceReference = get(locale);
+        JavaScriptResourceReference resourceReference = get(locale);
         cache.put(locale, resourceReference);
         return resourceReference;
     }
 
-    public static PackageResourceReference get(Locale locale) {
+    public static JavaScriptResourceReference get(Locale locale) {
         String language = locale.getLanguage();
-        PackageResourceReference uiRef = new PackageResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + "-"
+        JavaScriptResourceReference uiRef = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + "-"
                 + locale.getCountry().toUpperCase() + ".js");
         boolean found = true;
         try {
@@ -107,7 +106,7 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
         if (found) {
             return uiRef;
         }
-        uiRef = new PackageResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + ".js");
+        uiRef = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + ".js");
         found = true;
         try {
             if (uiRef.getResource().getResourceStream().getInputStream().available() <= 0) {

@@ -49,9 +49,6 @@ import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 import de.agilecoders.wicket.core.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
 import de.agilecoders.wicket.extensions.javascript.GoogleClosureJavaScriptCompressor;
 import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.html5player.Html5PlayerCssReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.html5player.Html5PlayerJavaScriptReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.OpenWebIconsCssReference;
 
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
@@ -138,10 +135,10 @@ public class WicketApplication extends WebApplication {
         settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
         this.setJavaScriptLibrarySettings(settings);
 
-        getResourceBundles().addJavaScriptBundle(WicketApplication.class, "bootstrap-extensions.js", /* JQueryUIJavaScriptReference.instance(), */
-        Html5PlayerJavaScriptReference.instance());
-        getResourceBundles().addCssBundle(WicketApplication.class, "bootstrap-extensions.css", Html5PlayerCssReference.instance(),
-                OpenWebIconsCssReference.instance());
+        // getResourceBundles().addJavaScriptBundle(WicketApplication.class, "bootstrap-extensions.js", /* JQueryUIJavaScriptReference.instance(), */
+        // Html5PlayerJavaScriptReference.instance());
+        // getResourceBundles().addCssBundle(WicketApplication.class, "bootstrap-extensions.css", Html5PlayerCssReference.instance(),
+        // OpenWebIconsCssReference.instance());
 
         setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator("footer-bucket"));
 
