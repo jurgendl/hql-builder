@@ -805,4 +805,20 @@ a:focus {
 	border-bottom: 1px solid;
 }
 
+/* clearfix - http://code.tutsplus.com/tutorials/the-30-css-selectors-you-must-memorize--net-16048 */
+
+.clearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+    }
+ 
+.clearfix {
+   *display: inline-block;
+   _height: 1%;
+}
+
 /* end */
