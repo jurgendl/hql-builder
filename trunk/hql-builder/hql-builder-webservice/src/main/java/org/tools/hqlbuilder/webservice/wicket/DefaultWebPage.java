@@ -13,15 +13,13 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.settings.IJavaScriptLibrarySettings;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.WicketRoot;
-
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -58,7 +56,6 @@ public class DefaultWebPage extends WebPage {
         }
         addDefaultResources(response);
         addThemeResources(response);
-        addResources(response);
     }
 
     protected void addThemeResources(IHeaderResponse response) {
@@ -68,23 +65,17 @@ public class DefaultWebPage extends WebPage {
                 + WicketSession.get().getJQueryUITheme() + "/jquery.ui.theme.css")));
     }
 
-    protected void addResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "css/hqlbuilder.css")));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/hqlbuilder.js"), true));
-    }
-
     protected void addDefaultResources(IHeaderResponse response) {
-        IJavaScriptLibrarySettings javaScriptLibrarySettings = getApplication().getJavaScriptLibrarySettings();
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getJQueryReference(), true));
         if (WicketApplication.get().usesDevelopmentConfig()) {
-            response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxDebugReference(), true));
-        }
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketAjaxReference(), true));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptLibrarySettings.getWicketEventReference(), true));
-        if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
-            IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
-            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryGlobalizeReference(), true));
-            response.render(JavaScriptHeaderItem.forReference(javaScriptSettings.getJQueryUIReference(), true));
+            for (ResourceReference resource : WicketApplication.get().getCssResources()) {
+                response.render(CssHeaderItem.forReference(CssResourceReference.class.cast(resource)));
+            }
+            for (ResourceReference resource : WicketApplication.get().getJsResources()) {
+                response.render(JavaScriptHeaderItem.forReference(JavaScriptResourceReference.class.cast(resource), true));
+            }
+        } else {
+            response.render(WicketApplication.get().getJsBundleReference());
+            response.render(WicketApplication.get().getCssBundleReference());
         }
     }
 
