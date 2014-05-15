@@ -2,6 +2,8 @@ package org.tools.hqlbuilder.webservice.wicket;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -13,6 +15,8 @@ import org.apache.wicket.SharedResources;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -21,10 +25,14 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceReferenceRegistry;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
+import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.slf4j.Logger;
@@ -141,14 +149,7 @@ public class WicketApplication extends WebApplication {
         }
 
         // library resources
-        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
-        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
-        this.setJavaScriptLibrarySettings(settings);
-
-        // getResourceBundles().addJavaScriptBundle(WicketApplication.class, "bootstrap-extensions.js", /* JQueryUIJavaScriptReference.instance(), */
-        // Html5PlayerJavaScriptReference.instance());
-        // getResourceBundles().addCssBundle(WicketApplication.class, "bootstrap-extensions.css", Html5PlayerCssReference.instance(),
-        // OpenWebIconsCssReference.instance());
+        createDefaultResourcesBundles();
 
         // to put javascript down on the page (DefaultWebPage.html must contain wicket:id='footer-bucket'
         setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator("footer-bucket"));
@@ -164,6 +165,52 @@ public class WicketApplication extends WebApplication {
 
         // mount pages
         mountPages();
+    }
+
+    protected JavaScriptReferenceHeaderItem jsBundleReference;
+
+    protected CssReferenceHeaderItem cssBundleReference;
+
+    /** only add CssResourceReference */
+    protected List<ResourceReference> jsResources = new ArrayList<ResourceReference>();
+
+    /** only add JavaScriptResourceReference */
+    protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
+
+    protected void createDefaultResourcesBundles() {
+        // ================== setup ==================
+        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
+        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
+        this.setJavaScriptLibrarySettings(settings);
+
+        // ================== JS bundle ==================
+        IJavaScriptLibrarySettings javaScriptLibrarySettings = getJavaScriptLibrarySettings();
+        // jsBundle.add(Html5PlayerJavaScriptReference.instance());
+        jsResources.add(javaScriptLibrarySettings.getJQueryReference());
+        jsResources.add(javaScriptLibrarySettings.getWicketAjaxReference());
+        jsResources.add(javaScriptLibrarySettings.getWicketEventReference());
+        if (WicketApplication.get().usesDevelopmentConfig()) {
+            jsResources.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
+        }
+        if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
+            IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
+            jsResources.add(javaScriptSettings.getJQueryGlobalizeReference());
+            jsResources.add(javaScriptSettings.getJQueryUIReference());
+        }
+        jsResources.add(new JavaScriptResourceReference(WicketRoot.class, "js/hqlbuilder.js"));
+        if (WicketApplication.get().usesDeploymentConfig()) {
+            jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketRoot.class, "jsbundle.js",
+                    jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
+        }
+
+        // ================== CSS bundle ==================
+        // cssResources.add(Html5PlayerCssReference.instance());
+        // cssResources.add(OpenWebIconsCssReference.instance());
+        cssResources.add(new CssResourceReference(WicketRoot.class, "css/hqlbuilder.css"));
+        if (WicketApplication.get().usesDeploymentConfig()) {
+            cssBundleReference = getResourceBundles().addCssBundle(WicketRoot.class, "cssbundle.css",
+                    cssResources.toArray(new CssResourceReference[cssResources.size()]));
+        }
     }
 
     protected void initStore() {
@@ -231,7 +278,13 @@ public class WicketApplication extends WebApplication {
 
     protected void mountResources() {
         String cssImages = "css/images/";
-        String[] mountedImages = { "arrow_off.png", "arrow_up.png", "arrow_down.png", "bullet_star.png" };
+        String[] mountedImages = { //
+        //
+                "arrow_off.png", //
+                "arrow_up.png",//
+                "arrow_down.png", //
+                "bullet_star.png"//
+        };//
         for (String mountedImage : mountedImages) {
             logger.info("mounting image " + cssImages + mountedImage);
             PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
@@ -267,5 +320,37 @@ public class WicketApplication extends WebApplication {
         public DateFormat getDateFormat(Locale locale) {
             return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
         }
+    }
+
+    public JavaScriptReferenceHeaderItem getJsBundleReference() {
+        return this.jsBundleReference;
+    }
+
+    public CssReferenceHeaderItem getCssBundleReference() {
+        return this.cssBundleReference;
+    }
+
+    public void setJsBundleReference(JavaScriptReferenceHeaderItem jsBundleReference) {
+        this.jsBundleReference = jsBundleReference;
+    }
+
+    public void setCssBundleReference(CssReferenceHeaderItem cssBundleReference) {
+        this.cssBundleReference = cssBundleReference;
+    }
+
+    public List<ResourceReference> getJsResources() {
+        return this.jsResources;
+    }
+
+    public List<ResourceReference> getCssResources() {
+        return this.cssResources;
+    }
+
+    public void setJsResources(List<ResourceReference> jsResources) {
+        this.jsResources = jsResources;
+    }
+
+    public void setCssResources(List<ResourceReference> cssResources) {
+        this.cssResources = cssResources;
     }
 }
