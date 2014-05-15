@@ -9,10 +9,12 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
+import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
@@ -101,4 +103,12 @@ public class DefaultWebPage extends WebPage {
         }
     }
 
+    @Override
+    protected void setHeaders(WebResponse response) {
+        if (isPageStateless()) {
+            response.enableCaching(Duration.ONE_DAY, WebResponse.CacheScope.PUBLIC);
+        } else {
+            response.disableCaching();
+        }
+    }
 }
