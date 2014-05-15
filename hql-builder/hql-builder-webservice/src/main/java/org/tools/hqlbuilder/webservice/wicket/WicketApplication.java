@@ -20,6 +20,7 @@ import org.apache.wicket.pageStore.memory.PageNumberEvictionStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReferenceRegistry;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
@@ -101,14 +102,19 @@ public class WicketApplication extends WebApplication {
     protected void init() {
         super.init();
 
+        boolean deployed = usesDeploymentConfig();
+        boolean inDevelopment = !deployed;
+
+        // spring injector
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         Injector.get().inject(this);
 
-        boolean deployed = usesDeploymentConfig();
+        // framework settings
         if (deployed) {
             getFrameworkSettings().setSerializer(new KryoSerializer());
         }
 
+        // markup settings
         getMarkupSettings().setStripComments(deployed);
         getMarkupSettings().setCompressWhitespace(deployed);
         getMarkupSettings().setStripWicketTags(true);
@@ -116,21 +122,25 @@ public class WicketApplication extends WebApplication {
             getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
 
+        // request logger settings
+        getRequestLoggerSettings().setRecordSessionSize(inDevelopment);
+        getRequestLoggerSettings().setRequestLoggerEnabled(inDevelopment);
+
+        // debug settings
+        getDebugSettings().setOutputComponentPath(inDevelopment);
+        getDebugSettings().setOutputMarkupContainerClassName(inDevelopment);
+
+        // resource settings
         getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
         getResourceSettings().setUseMinifiedResources(deployed);
         getResourceSettings().setEncodeJSessionId(deployed);
-        getResourceSettings().setDefaultCacheDuration(org.apache.wicket.request.http.WebResponse.MAX_CACHE_DURATION);
+        getResourceSettings().setDefaultCacheDuration(WebResponse.MAX_CACHE_DURATION);
         if (deployed) {
-            // getResourceSettings().setJavaScriptCompressor(new IJavaScriptCompressor() {
-            // @Override
-            // public String compress(String original) {
-            // return new YuiJavaScriptCompressor().compress(original);
-            // }
-            // });
             getResourceSettings().setJavaScriptCompressor(new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
             getResourceSettings().setCssCompressor(new YuiCssCompressor());
         }
 
+        // library resources
         IJQueryLibrarySettings settings = new JQueryLibrarySettings();
         settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
         this.setJavaScriptLibrarySettings(settings);
@@ -140,20 +150,19 @@ public class WicketApplication extends WebApplication {
         // getResourceBundles().addCssBundle(WicketApplication.class, "bootstrap-extensions.css", Html5PlayerCssReference.instance(),
         // OpenWebIconsCssReference.instance());
 
+        // to put javascript down on the page (DefaultWebPage.html must contain wicket:id='footer-bucket'
         setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator("footer-bucket"));
 
+        // store
         initStore();
 
+        // stateless checker
         getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
 
-        String cssImages = "css/images/";
-        String[] mountedImages = { "arrow_off.png", "arrow_up.png", "arrow_down.png", "bullet_star.png" };
-        for (String mountedImage : mountedImages) {
-            logger.info("mounting image " + cssImages + mountedImage);
-            PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
-            mountResource(cssImages + mountedImage, reference);
-        }
+        // mount resources
+        mountResources();
 
+        // mount pages
         mountPages();
     }
 
@@ -220,6 +229,16 @@ public class WicketApplication extends WebApplication {
         }
     }
 
+    protected void mountResources() {
+        String cssImages = "css/images/";
+        String[] mountedImages = { "arrow_off.png", "arrow_up.png", "arrow_down.png", "bullet_star.png" };
+        for (String mountedImage : mountedImages) {
+            logger.info("mounting image " + cssImages + mountedImage);
+            PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
+            mountResource(cssImages + mountedImage, reference);
+        }
+    }
+
     public Properties getWebProperties() {
         return this.webProperties;
     }
@@ -228,6 +247,9 @@ public class WicketApplication extends WebApplication {
         this.webProperties = webProperties;
     }
 
+    /**
+     * @see org.apache.wicket.Application#newConverterLocator()
+     */
     @Override
     protected IConverterLocator newConverterLocator() {
         ConverterLocator locator = new ConverterLocator();
