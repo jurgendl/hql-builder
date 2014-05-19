@@ -23,11 +23,25 @@ public class LocalesPanel extends Panel {
 
         this.locales = locales;
         Model<Locale> localeModel = new Model<Locale>();
-        if (locales.contains(getSession().getLocale())) {
-            localeModel.setObject(getSession().getLocale());
-        } else {
-            localeModel.setObject(locales.get(0));
+        Locale sessionLocale = getSession().getLocale();
+        Locale defaultLocale = null;
+        for (Locale locale : locales) {
+            if (locale.equals(sessionLocale)) {
+                defaultLocale = locale;
+            }
         }
+        if (defaultLocale == null) {
+            for (Locale locale : locales) {
+                if (locale.getLanguage().equals(sessionLocale.getLanguage())) {
+                    defaultLocale = locale;
+                }
+            }
+        }
+        if (defaultLocale == null) {
+            defaultLocale = locales.get(0);
+        }
+        localeModel.setObject(defaultLocale);
+
         this.changeLocale = new DropDownChoice<Locale>("localeOptions", localeModel, locales, new IChoiceRenderer<Locale>() {
             private static final long serialVersionUID = 3647609757885700569L;
 
@@ -41,7 +55,6 @@ public class LocalesPanel extends Panel {
                 return object.getLanguage();
             }
         }) {
-
             private static final long serialVersionUID = -8172239789623605717L;
 
             @Override
