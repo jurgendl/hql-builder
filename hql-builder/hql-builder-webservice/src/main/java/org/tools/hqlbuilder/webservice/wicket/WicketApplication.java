@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
@@ -302,13 +304,23 @@ public class WicketApplication extends WebApplication {
         //
                 "arrow_off.png", //
                 "arrow_up.png",//
-                "arrow_down.png", //
-                "bullet_star.png"//
+                "arrow_down.png" //
         };//
         for (String mountedImage : mountedImages) {
             logger.info("mounting image " + cssImages + mountedImage);
             PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
             mountResource(cssImages + mountedImage, reference);
+        }
+
+        for (Field field : WicketIconsRoot.class.getFields()) {
+            try {
+                String path = String.valueOf(field.get(WicketIconsRoot.class));
+                PackageResourceReference reference = new PackageResourceReference(WicketIconsRoot.class, path);
+                mountResource(cssImages + path, reference);
+                logger.info("mounting image " + cssImages + path);
+            } catch (Exception ex) {
+                //
+            }
         }
     }
 

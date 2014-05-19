@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.client;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -20,30 +21,37 @@ public class HqlBuilderAction extends Action implements HasParentComponent {
 
     private JComponent component;
 
-    public HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, String iconResourcePath,
+    protected static Icon icon(Object icon) {
+        if (icon == null) {
+            return null;
+        }
+        if (icon instanceof Icon) {
+            return Icon.class.cast(icon);
+        }
+        return new ImageIcon(HqlBuilderAction.class.getClassLoader().getResource(String.class.cast(icon)));
+    }
+
+    public HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, Object iconResourcePath,
             String shortDescription, String longDescription, Boolean selected, Character mnemonic, String accelerator) {
-        super(name, enabled, HqlResourceBundle.getMessage(name), iconResourcePath == null ? null : new ImageIcon(HqlBuilderAction.class
-                .getClassLoader().getResource(iconResourcePath)), HqlResourceBundle.getMessage(shortDescription + ".short"), HqlResourceBundle
-                .getMessage(longDescription + ".long"), selected, mnemonic, accelerator);
+        super(name, enabled, HqlResourceBundle.getMessage(name), icon(iconResourcePath), HqlResourceBundle.getMessage(shortDescription + ".short"),
+                HqlResourceBundle.getMessage(longDescription + ".long"), selected, mnemonic, accelerator);
         this.component = component;
         init(source, method);
     }
 
-    public HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, String iconResourcePath,
+    public HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, Object iconResourcePath,
             String shortDescription, String longDescription, Boolean selected, Character mnemonic, String accelerator, String parentId) {
-        super(name, enabled, HqlResourceBundle.getMessage(name), iconResourcePath == null ? null : new ImageIcon(HqlBuilderAction.class
-                .getClassLoader().getResource(iconResourcePath)), HqlResourceBundle.getMessage(shortDescription + ".short"), HqlResourceBundle
-                .getMessage(longDescription + ".long"), selected, mnemonic, accelerator, parentId);
+        super(name, enabled, HqlResourceBundle.getMessage(name), icon(iconResourcePath), HqlResourceBundle.getMessage(shortDescription + ".short"),
+                HqlResourceBundle.getMessage(longDescription + ".long"), selected, mnemonic, accelerator, parentId);
         this.component = component;
         init(source, method);
     }
 
-    public <T> HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, String iconResourcePath,
+    public <T> HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, Object iconResourcePath,
             String shortDescription, String longDescription, Boolean selected, Character mnemonic, String accelerator, String parentId,
             Class<T> type, T value) {
-        super(name, enabled, HqlResourceBundle.getMessage(name), iconResourcePath == null ? null : new ImageIcon(HqlBuilderAction.class
-                .getClassLoader().getResource(iconResourcePath)), HqlResourceBundle.getMessage(shortDescription + ".short"), HqlResourceBundle
-                .getMessage(longDescription + ".long"), selected, mnemonic, accelerator, parentId, type, value);
+        super(name, enabled, HqlResourceBundle.getMessage(name), icon(iconResourcePath), HqlResourceBundle.getMessage(shortDescription + ".short"),
+                HqlResourceBundle.getMessage(longDescription + ".long"), selected, mnemonic, accelerator, parentId, type, value);
         this.component = component;
         init(source, method);
     }

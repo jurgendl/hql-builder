@@ -315,15 +315,15 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     @Override
     public void addBottomToolbar(AbstractToolbar toolbar) {
-        super.addBottomToolbar(new NoRecordsToolbar(this, (DataProvider<T>) getDataProvider()));
+        super.addBottomToolbar(new BottomToolbar(this, (DataProvider<T>) getDataProvider()));
     }
 
-    public class NoRecordsToolbar extends AbstractToolbar {
+    public class BottomToolbar extends AbstractToolbar {
         private static final long serialVersionUID = -4470457770018795944L;
 
         public static final String ACTIONS_ADD_ID = "add";
 
-        public NoRecordsToolbar(final DataTable<T, ?> table, final DataProvider<T> dataProvider) {
+        public BottomToolbar(final DataTable<T, ?> table, final DataProvider<T> dataProvider) {
             super(table);
 
             WebMarkupContainer td = new WebMarkupContainer("td");
@@ -337,7 +337,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                     return String.valueOf(table.getColumns().size());
                 }
             }));
-            td.add(new Label("norecordsfound", new ResourceModel("norecordsfound")));
+            Label norecordsfoundLabel = new Label("norecordsfound", new ResourceModel("norecordsfound"));
+            norecordsfoundLabel.setVisible(getTable().getRowCount() == 0);
+            td.add(norecordsfoundLabel);
 
             AjaxLink<String> addLink = new AjaxLink<String>(ACTIONS_ADD_ID) {
                 private static final long serialVersionUID = 2542930376888979931L;
@@ -348,11 +350,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 }
             };
             td.add(addLink);
-        }
-
-        @Override
-        public boolean isVisible() {
-            return getTable().getRowCount() == 0;
         }
     }
 }
