@@ -134,8 +134,8 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(cached(getLocale()), true));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/JQDatePicker.js"), true));
+        response.render(JavaScriptHeaderItem.forReference(cached(getLocale())));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/JQDatePicker.js")));
         response.render(OnLoadHeaderItem.forScript(";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '"
                 + dateFormatClient + "');"));
     }

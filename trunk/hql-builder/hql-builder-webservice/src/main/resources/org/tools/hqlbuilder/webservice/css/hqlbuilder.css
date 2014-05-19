@@ -1,3 +1,4 @@
+/* main */
 body {
 	/* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 	/*Baskerville, ‘Times New Roman’, Times, serif*/
@@ -93,6 +94,14 @@ h1,h2,h3,h4,h5 {
 	color: transparent;
 	text-align: center;
 	vertical-align: middle;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.requiredMackup {
+	font-size: xx-small;
+	color: olive;
+	vertical-align: top;
 	padding-left: 3px;
 	padding-right: 3px;
 }

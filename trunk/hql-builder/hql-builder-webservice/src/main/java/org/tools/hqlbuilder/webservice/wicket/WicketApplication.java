@@ -35,6 +35,7 @@ import org.apache.wicket.request.resource.caching.version.MessageDigestResourceV
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.converter.DateConverter;
+import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -47,16 +48,16 @@ import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.tools.hqlbuilder.webservice.WicketRoot;
+import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
+import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
-import com.google.javascript.jscomp.CompilationLevel;
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 
 import de.agilecoders.wicket.core.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
-import de.agilecoders.wicket.extensions.javascript.GoogleClosureJavaScriptCompressor;
 import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
 
 public class WicketApplication extends WebApplication {
@@ -135,6 +136,9 @@ public class WicketApplication extends WebApplication {
         getRequestLoggerSettings().setRequestLoggerEnabled(inDevelopment);
 
         // debug settings
+        getDebugSettings().setAjaxDebugModeEnabled(inDevelopment);
+        getDebugSettings().setComponentUseCheck(inDevelopment);
+        getDebugSettings().setDevelopmentUtilitiesEnabled(inDevelopment);
         getDebugSettings().setOutputComponentPath(inDevelopment);
         getDebugSettings().setOutputMarkupContainerClassName(inDevelopment);
 
@@ -142,14 +146,14 @@ public class WicketApplication extends WebApplication {
         getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
         getResourceSettings().setUseMinifiedResources(deployed);
         getResourceSettings().setEncodeJSessionId(deployed);
-        getResourceSettings().setDefaultCacheDuration(WebResponse.MAX_CACHE_DURATION);
+        getResourceSettings().setDefaultCacheDuration(inDevelopment ? Duration.NONE : WebResponse.MAX_CACHE_DURATION);
         if (deployed) {
-            getResourceSettings().setJavaScriptCompressor(new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
+            // getResourceSettings().setJavaScriptCompressor(new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
             getResourceSettings().setCssCompressor(new YuiCssCompressor());
         }
 
         // library resources
-        createDefaultResourcesBundles();
+        initDefaultResources();
 
         // to put javascript down on the page (DefaultWebPage.html must contain wicket:id='footer-bucket'
         setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator("footer-bucket"));
@@ -158,7 +162,9 @@ public class WicketApplication extends WebApplication {
         initStore();
 
         // stateless checker
-        getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
+        if (inDevelopment) {
+            getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
+        }
 
         // mount resources
         mountResources();
@@ -177,40 +183,54 @@ public class WicketApplication extends WebApplication {
     /** only add JavaScriptResourceReference */
     protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
 
-    protected void createDefaultResourcesBundles() {
-        // ================== setup ==================
-        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
-        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get());
-        this.setJavaScriptLibrarySettings(settings);
+    protected void addToJsBundle(List<ResourceReference> js) {
+        js.add(new JavaScriptResourceReference(WicketJSRoot.class, "hqlbuilder.js"));
+    }
 
-        // ================== JS bundle ==================
+    protected void addToJsResources(List<ResourceReference> js) {
         IJavaScriptLibrarySettings javaScriptLibrarySettings = getJavaScriptLibrarySettings();
-        // jsBundle.add(Html5PlayerJavaScriptReference.instance());
-        jsResources.add(javaScriptLibrarySettings.getJQueryReference());
-        jsResources.add(javaScriptLibrarySettings.getWicketAjaxReference());
-        jsResources.add(javaScriptLibrarySettings.getWicketEventReference());
-        if (WicketApplication.get().usesDevelopmentConfig()) {
-            jsResources.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
-        }
+        js.add(javaScriptLibrarySettings.getJQueryReference());
+        js.add(javaScriptLibrarySettings.getWicketAjaxReference());
+        js.add(javaScriptLibrarySettings.getWicketEventReference());
         if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
             IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
-            jsResources.add(javaScriptSettings.getJQueryGlobalizeReference());
-            jsResources.add(javaScriptSettings.getJQueryUIReference());
+            js.add(javaScriptSettings.getJQueryGlobalizeReference());
+            js.add(javaScriptSettings.getJQueryUIReference());
         }
-        jsResources.add(new JavaScriptResourceReference(WicketRoot.class, "js/hqlbuilder.js"));
-        if (WicketApplication.get().usesDeploymentConfig()) {
-            jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketRoot.class, "jsbundle.js",
-                    jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
+        if (WicketApplication.get().usesDevelopmentConfig()) {
+            js.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
         }
+    }
 
-        // ================== CSS bundle ==================
-        // cssResources.add(Html5PlayerCssReference.instance());
-        // cssResources.add(OpenWebIconsCssReference.instance());
-        cssResources.add(new CssResourceReference(WicketRoot.class, "css/hqlbuilder.css"));
-        if (WicketApplication.get().usesDeploymentConfig()) {
-            cssBundleReference = getResourceBundles().addCssBundle(WicketRoot.class, "cssbundle.css",
-                    cssResources.toArray(new CssResourceReference[cssResources.size()]));
+    protected void addToCssBundle(List<ResourceReference> css) {
+        css.add(new CssResourceReference(WicketCSSRoot.class, "hqlbuilder.css"));
+        css.add(new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts.css"));
+    }
+
+    protected void addToCssResources(@SuppressWarnings("unused") List<ResourceReference> css) {
+        //
+    }
+
+    protected void initDefaultResources() {
+        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
+        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get()); // not set by default
+        this.setJavaScriptLibrarySettings(settings);
+
+        addToJsBundle(jsResources);
+        if (WicketApplication.get().usesDeploymentConfig() && !jsResources.isEmpty()) {
+            jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "hqlbuilder.jsbundle.js",
+                    jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
+            jsResources.clear();
         }
+        addToJsResources(jsResources);
+
+        addToCssBundle(cssResources);
+        if (WicketApplication.get().usesDeploymentConfig() && !cssResources.isEmpty()) {
+            cssBundleReference = getResourceBundles().addCssBundle(WicketCSSRoot.class, "hqlbuilder.cssbundle.css",
+                    cssResources.toArray(new CssResourceReference[cssResources.size()]));
+            cssResources.clear();
+        }
+        addToCssResources(cssResources);
     }
 
     protected void initStore() {
