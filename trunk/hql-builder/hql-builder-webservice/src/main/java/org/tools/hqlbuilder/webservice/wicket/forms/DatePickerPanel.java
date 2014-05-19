@@ -13,8 +13,11 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.tools.hqlbuilder.common.icons.WicketIconsResources;
 import org.tools.hqlbuilder.webservice.WicketRoot;
+import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
@@ -31,6 +34,9 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  */
 public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
     private static final long serialVersionUID = -5807168584242557542L;
+
+    public static final JavaScriptResourceReference JQUERY_DATEPICKER_REFERENCE = new JavaScriptResourceReference(WicketJSRoot.class,
+            "JQDatePicker.js");
 
     public static final String DATE_FORMAT = "dateFormat";
 
@@ -134,10 +140,18 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+
         response.render(JavaScriptHeaderItem.forReference(cached(getLocale())));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(WicketRoot.class, "js/JQDatePicker.js")));
-        response.render(OnLoadHeaderItem.forScript(";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '"
-                + dateFormatClient + "');"));
+        response.render(JavaScriptHeaderItem.forReference(JQUERY_DATEPICKER_REFERENCE));
+
+        CharSequence urlForIcon = urlFor(WicketIconsResources.REF_CALENDER, new PageParameters());
+        String initScript = ";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '" + dateFormatClient + "', " + "'"
+                + urlForIcon + "');";
+        response.render(OnLoadHeaderItem.forScript(initScript));
     }
 
     /**
