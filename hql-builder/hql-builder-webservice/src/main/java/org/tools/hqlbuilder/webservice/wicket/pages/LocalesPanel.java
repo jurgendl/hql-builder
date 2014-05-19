@@ -9,6 +9,9 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+/**
+ * floating bar: http://stackoverflow.com/questions/17165915/how-to-build-floating-menu-bar-when-scroll-down
+ */
 public class LocalesPanel extends Panel {
     private static final long serialVersionUID = -4736100030405768191L;
 
