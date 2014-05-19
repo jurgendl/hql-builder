@@ -34,7 +34,7 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
-        if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+        if (WicketApplication.get().usesDevelopmentConfig()) {
             add(new DebugBar("debug"));
         } else {
             add(new EmptyPanel("debug").setVisible(false));
@@ -56,6 +56,16 @@ public class DefaultWebPage extends WebPage {
         }
         addDefaultResources(response);
         addThemeResources(response);
+        addPageResources(response);
+        addUserResources(response);
+    }
+
+    protected void addUserResources(@SuppressWarnings("unused") IHeaderResponse response) {
+        // none by default
+    }
+
+    protected void addPageResources(@SuppressWarnings("unused") IHeaderResponse response) {
+        // none by default
     }
 
     protected void addThemeResources(IHeaderResponse response) {
@@ -66,15 +76,16 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addDefaultResources(IHeaderResponse response) {
-        if (WicketApplication.get().usesDevelopmentConfig()) {
-            for (ResourceReference resource : WicketApplication.get().getCssResources()) {
-                response.render(CssHeaderItem.forReference(CssResourceReference.class.cast(resource)));
-            }
-            for (ResourceReference resource : WicketApplication.get().getJsResources()) {
-                response.render(JavaScriptHeaderItem.forReference(JavaScriptResourceReference.class.cast(resource), true));
-            }
-        } else {
+        for (ResourceReference resource : WicketApplication.get().getCssResources()) {
+            response.render(CssHeaderItem.forReference(CssResourceReference.class.cast(resource)));
+        }
+        for (ResourceReference resource : WicketApplication.get().getJsResources()) {
+            response.render(JavaScriptHeaderItem.forReference(JavaScriptResourceReference.class.cast(resource)));
+        }
+        if (WicketApplication.get().getJsBundleReference() != null) {
             response.render(WicketApplication.get().getJsBundleReference());
+        }
+        if (WicketApplication.get().getCssBundleReference() != null) {
             response.render(WicketApplication.get().getCssBundleReference());
         }
     }
@@ -82,7 +93,8 @@ public class DefaultWebPage extends WebPage {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        if (getStatelessHint()) {
+
+        if (getStatelessHint() && WicketApplication.get().usesDevelopmentConfig()) {
             visitChildren(new IVisitor<Component, Void>() {
                 @Override
                 public void component(Component component, IVisit<Void> arg1) {

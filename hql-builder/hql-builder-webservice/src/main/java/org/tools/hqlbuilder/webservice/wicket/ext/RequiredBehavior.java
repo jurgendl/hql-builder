@@ -14,7 +14,8 @@ public class RequiredBehavior extends Behavior {
         Response response = component.getResponse();
         StringBuffer asterisktHtml = new StringBuffer(200);
         if (component instanceof FormComponent && ((FormComponent) component).isRequired()) {
-            asterisktHtml.append("<span class=\"requiredMarker\">*</span>");
+            // asterisktHtml.append("<span class=\"requiredMarker\">*</span>");
+            asterisktHtml.append("<span class=\"fontawesome-asterisk requiredMackup\"/>");
         }
         response.write(asterisktHtml);
     }
