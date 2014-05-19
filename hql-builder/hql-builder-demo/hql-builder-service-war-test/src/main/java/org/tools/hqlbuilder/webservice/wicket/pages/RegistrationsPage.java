@@ -33,22 +33,25 @@ import org.tools.hqlbuilder.webservice.wicket.tables.Table.DefaultDataProvider;
 public class RegistrationsPage extends DefaultWebPage {
     private static final long serialVersionUID = 1247275992404894937L;
 
+    private static final String FORM_ID = "userdata.form";
+
     @SpringBean
     protected HqlWebServiceClient hqlWebClient;
 
     private FormPanel<Registration> formPanel;
 
+    private Table<Registration> table;
+
     public RegistrationsPage(PageParameters parameters) {
         super(parameters);
 
         Registration proxy = create(Registration.class);
-        final String FORM_ID = "userdata.form";
 
-        @SuppressWarnings("unchecked")
         DataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
             private static final long serialVersionUID = 6812428385117168023L;
 
             @Override
+            @SuppressWarnings("unchecked")
             public Iterator<Registration> select(long first, long count, Map<String, SortOrder> sorting) {
                 String hql = "select obj from " + Registration.class.getSimpleName() + " obj";
                 String orderByHql = " order by ";
@@ -75,7 +78,6 @@ public class RegistrationsPage extends DefaultWebPage {
             @Override
             public void delete(AjaxRequestTarget target, Registration object) {
                 hqlWebClient.delete(object);
-                Table<Registration> table = (Table<Registration>) get(Table.ID);
                 target.add(table);
             }
 
@@ -101,7 +103,7 @@ public class RegistrationsPage extends DefaultWebPage {
         columns.add(Table.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
         columns.add(Table.<Registration> getActionsColumn(this, dataProvider));
 
-        final Table<Registration> table = new Table<Registration>(columns, dataProvider);
+        table = new Table<Registration>(columns, dataProvider);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             private static final long serialVersionUID = 3530578296967349699L;
@@ -117,6 +119,7 @@ public class RegistrationsPage extends DefaultWebPage {
 
             @Override
             public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
+                formPanel.setDefaultModelObject(Model.of(Registration.class));
                 formPanel.setVisible(false);
                 table.setVisible(true);
                 super.afterSubmit(target, form, model);

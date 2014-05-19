@@ -299,7 +299,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         public void setPropertySortOrder(String property, SortOrder sortOrder) {
             sort.put(property, sortOrder);
-            // System.out.println("SET:" + property + "=" + sortOrder);
         }
 
         @Override
@@ -308,7 +307,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             if (sortOrder == null) {
                 sortOrder = SortOrder.NONE;
             }
-            // System.out.println("GET:" + property + "=" + sortOrder);
             return sortOrder;
         }
     }
@@ -323,7 +321,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
         public static final String ACTIONS_ADD_ID = "add";
 
-        public BottomToolbar(final DataTable<T, ?> table, final DataProvider<T> dataProvider) {
+        public BottomToolbar(final DataTable<T, String> table, final DataProvider<T> dataProvider) {
             super(table);
 
             WebMarkupContainer td = new WebMarkupContainer("td");
