@@ -90,7 +90,6 @@ import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -184,6 +183,7 @@ import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.GroovyCompiler;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
+import org.tools.hqlbuilder.common.HqlBuilderImages;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
@@ -288,11 +288,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction exitAction = new HqlBuilderAction(null, this, EXIT, true, EXIT, "sc_quit.png", EXIT, EXIT, true, 'x', "alt X");
 
-    private final HqlBuilderAction aboutAction = new HqlBuilderAction(null, this, ABOUT, true, ABOUT, "bricks-icon.png", ABOUT, ABOUT, true, null,
-            null);
+    private final HqlBuilderAction aboutAction = new HqlBuilderAction(null, this, ABOUT, true, ABOUT, HqlBuilderImages.getIcon(), ABOUT, ABOUT, true,
+            null, null);
 
-    private final HqlBuilderAction versionsAction = new HqlBuilderAction(null, this, VERSIONS, true, VERSIONS, "bricks-icon.png", VERSIONS, VERSIONS,
-            true, null, null);
+    private final HqlBuilderAction versionsAction = new HqlBuilderAction(null, this, VERSIONS, true, VERSIONS, HqlBuilderImages.getIcon(), VERSIONS,
+            VERSIONS, true, null, null);
 
     private final HqlBuilderAction helpHibernateAction = new HqlBuilderAction(null, this, HIBERNATE_DOCUMENTATION, true, HIBERNATE_DOCUMENTATION,
             getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP), HIBERNATE_DOCUMENTATION, HIBERNATE_DOCUMENTATION, true, null, null);
@@ -1016,7 +1016,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     // private static void loadModelAtRuntime() {
     // JFrame dummy = new JFrame();
-    // dummy.setIconImage(new ImageIcon(HqlBuilderFrame.class.getClassLoader().getResource("bricks-icon.png")).getImage());
+    // dummy.setIconImage(HqlBuilderImages.getIcon()).getImage());
     // JFileChooser fc = new JFileChooser(new File("."));
     // fc.setDialogTitle(HqlResourceBundle.getMessage("open model & hibernate configuration"));
     // fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -2048,7 +2048,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         frame.setVisible(true);
         frame.setSize(new Dimension(1024, 768));
         frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
-        frame.setIconImage(new ImageIcon(HqlBuilderFrame.class.getClassLoader().getResource("bricks-icon.png")).getImage());
+        frame.setIconImage(HqlBuilderImages.getIcon().getImage());
         frame.setGlassPane(getGlass(frame));
         frame.setAlwaysOnTop(Boolean.TRUE.equals(alwaysOnTopAction.getValue()));
     }
@@ -3165,8 +3165,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             boolean upToDate = "?".equals(latest) || version.compareTo(latest) >= 0;
 
-            cp.add(new JLabel(new ImageIcon(ImageIO.read(SplashHelper.class.getClassLoader().getResourceAsStream("hql-builder-logo.png")))),
-                    "dock north");
+            cp.add(new JLabel(new ImageIcon(HqlBuilderImages.getLogo())), "dock north");
             cp.add(font(
                     new ELabel(HqlResourceBundle.getMessage("versioning", version, latest,
                             HqlResourceBundle.getMessage(String.valueOf(upToDate), false))), 14), "wrap");
