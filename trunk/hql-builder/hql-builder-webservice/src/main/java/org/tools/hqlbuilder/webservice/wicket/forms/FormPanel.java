@@ -98,13 +98,34 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
 
         Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
+
+        Component cancel;
+        if (actions.isAjax()) {
+            cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
+                private static final long serialVersionUID = 4339770380895679763L;
+
+                @SuppressWarnings("unchecked")
+                @Override
+                protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
+                    actions.afterCancel(target, form, (IModel<T>) getDefaultModel());
+                }
+            };
+            ((AjaxSubmitLink) cancel).setDefaultFormProcessing(false);
+        } else {
+            cancel = new Button(FORM_CANCEL, new ResourceModel("cancel.label"));
+            ((Button) cancel).setDefaultFormProcessing(false);
+        }
+        cancel.setVisible(actions.isCancelable());
+
         if (inheritId) {
             submit.setMarkupId(id + "." + FORM_SUBMIT);
             reset.setMarkupId(id + "." + FORM_RESET);
+            cancel.setMarkupId(id + "." + FORM_CANCEL);
         }
 
         form.add(submit);
         form.add(reset);
+        form.add(cancel);
     }
 
     public boolean isShowLabel() {
@@ -345,14 +366,18 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public static interface FormActions<T> extends Serializable {
+        public abstract void afterCancel(AjaxRequestTarget target, Form<T> form, IModel<T> model);
+
         public abstract void submit(IModel<T> model);
 
         public abstract boolean isAjax();
 
+        public abstract boolean isCancelable();
+
         public abstract void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model);
     }
 
-    public static abstract class DefaultFormActions<T> implements FormActions<T> {
+    public static class DefaultFormActions<T> implements FormActions<T> {
         private static final long serialVersionUID = 555158530492799693L;
 
         @Override
@@ -363,6 +388,21 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         @Override
         public boolean isAjax() {
             return true;
+        }
+
+        @Override
+        public boolean isCancelable() {
+            return false;
+        }
+
+        @Override
+        public void afterCancel(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
+            afterSubmit(target, form, model);
+        }
+
+        @Override
+        public void submit(IModel<T> model) {
+            //
         }
     }
 }
