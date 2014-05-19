@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -23,6 +24,7 @@ import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.DataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.DefaultDataProvider;
@@ -99,20 +101,29 @@ public class RegistrationsPage extends DefaultWebPage {
         columns.add(Table.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
         columns.add(Table.<Registration> getActionsColumn(this, dataProvider));
 
-        Table<Registration> table = new Table<Registration>(columns, dataProvider);
+        final Table<Registration> table = new Table<Registration>(columns, dataProvider);
 
-        formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true, true) {
-            private static final long serialVersionUID = -2653547660762438431L;
+        DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
+            private static final long serialVersionUID = 3530578296967349699L;
 
             @Override
-            protected void submit(IModel<Registration> model) {
+            public void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setVerification(new LocalDateTime());
                 Serializable id = hqlWebClient.save(object);
                 object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
             }
+
+            @Override
+            public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
+                formPanel.setVisible(false);
+                table.setVisible(true);
+                super.afterSubmit(target, form, model);
+                target.add(table);
+            }
         };
+        formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true, formActions);
         formPanel.addTextField(name(proxy.getUsername()), true);
         formPanel.addTextField(name(proxy.getFirstName()), true);
         formPanel.addTextField(name(proxy.getLastName()), true);
