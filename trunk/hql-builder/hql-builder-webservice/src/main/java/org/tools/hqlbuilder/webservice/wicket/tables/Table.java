@@ -138,7 +138,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             label = parent.getString(property);
         } catch (MissingResourceException ex) {
             logger.error(parent.getClass().getName() + ": no translation for " + property);
-            label = "${" + property + "}";
+            label = "[" + property + "]";
         }
         return new Model<String>(label);
     }

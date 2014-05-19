@@ -82,6 +82,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         repeater.setOutputMarkupId(false);
         form.add(repeater);
 
+        ResourceModel submitModel = new ResourceModel("submit.label");
+        ResourceModel resetModel = new ResourceModel("reset.label");
+        ResourceModel cancelModel = new ResourceModel("cancel.label");
+
         Component submit;
         if (actions.isAjax()) {
             submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
@@ -93,12 +97,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     actions.afterSubmit(target, form, (IModel<T>) getDefaultModel());
                 }
             };
+            submit.setDefaultModel(submitModel);
         } else {
-            submit = new Button(FORM_SUBMIT, new ResourceModel("submit.label"));
+            submit = new Button(FORM_SUBMIT, submitModel);
         }
 
-        Button reset = new Button(FORM_RESET, new ResourceModel("reset.label"));
+        Button reset = new Button(FORM_RESET, resetModel);
 
+        // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons
         Component cancel;
         if (actions.isAjax()) {
             cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
@@ -110,9 +116,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     actions.afterCancel(target, form, (IModel<T>) getDefaultModel());
                 }
             };
+            cancel.setDefaultModel(cancelModel);
             ((AjaxSubmitLink) cancel).setDefaultFormProcessing(false);
         } else {
-            cancel = new Button(FORM_CANCEL, new ResourceModel("cancel.label"));
+            cancel = new Button(FORM_CANCEL, cancelModel);
             ((Button) cancel).setDefaultFormProcessing(false);
         }
         cancel.setVisible(actions.isCancelable());
@@ -241,7 +248,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                             return getLabelText();
                         } catch (MissingResourceException ex) {
                             logger.error("no translation for " + property);
-                            return "${" + property + "}";
+                            return "[" + property + "]";
                         }
                     }
                 };
