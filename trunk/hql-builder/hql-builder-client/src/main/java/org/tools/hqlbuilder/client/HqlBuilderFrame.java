@@ -1,5 +1,29 @@
 package org.tools.hqlbuilder.client;
 
+import static org.tools.hqlbuilder.common.icons.ClientIcons.ADD;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.APPLICATION_SIDE_TREE;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.ATTACH;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.AWARD_STAR_ADD;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.AWARD_STAR_GOLD_3;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.BIN_EMPTY;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.BOOK_NEXT;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.BULLET_ARROW_DOWN;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.BULLET_ARROW_UP;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.COG;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.CONTROL_PLAY_BLUE;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.DISK;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.LAYOUT_CONTENT;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.PACKAGE_GO;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.PAGE_WHITE_STACK;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.PICTURE_EMPTY;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.TABLE_LIGHTNING;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.TABLE_ROW_DELETE;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.TEXTFIELD;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.TEXT_ALIGN_LEFT;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.TEXT_INDENT;
+import static org.tools.hqlbuilder.common.icons.ClientIcons.ZOOM;
+import static org.tools.hqlbuilder.common.icons.CommonIcons.getIcon;
+
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -259,7 +283,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction deleteInvertedSelectionAction;
 
-    private final HqlBuilderAction helpAction = new HqlBuilderAction(null, this, HELP, true, HELP, "help16.png", HELP, HELP, true, 'h', "F1");
+    private final HqlBuilderAction helpAction = new HqlBuilderAction(null, this, HELP, true, HELP,
+            getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP), HELP, HELP, true, 'h', "F1");
 
     private final HqlBuilderAction exitAction = new HqlBuilderAction(null, this, EXIT, true, EXIT, "sc_quit.png", EXIT, EXIT, true, 'x', "alt X");
 
@@ -270,13 +295,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             true, null, null);
 
     private final HqlBuilderAction helpHibernateAction = new HqlBuilderAction(null, this, HIBERNATE_DOCUMENTATION, true, HIBERNATE_DOCUMENTATION,
-            "help16.png", HIBERNATE_DOCUMENTATION, HIBERNATE_DOCUMENTATION, true, null, null);
+            getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP), HIBERNATE_DOCUMENTATION, HIBERNATE_DOCUMENTATION, true, null, null);
 
-    private final HqlBuilderAction helpHqlAction = new HqlBuilderAction(null, this, HQL_DOCUMENTATION, true, HQL_DOCUMENTATION, "help16.png",
-            HQL_DOCUMENTATION, HQL_DOCUMENTATION, true, null, null);
+    private final HqlBuilderAction helpHqlAction = new HqlBuilderAction(null, this, HQL_DOCUMENTATION, true, HQL_DOCUMENTATION,
+            getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP), HQL_DOCUMENTATION, HQL_DOCUMENTATION, true, null, null);
 
     private final HqlBuilderAction luceneQuerySyntaxAction = new HqlBuilderAction(null, this, LUCENE_QUERY_SYNTAX, true, LUCENE_QUERY_SYNTAX,
-            "help16.png", LUCENE_QUERY_SYNTAX, LUCENE_QUERY_SYNTAX, true, null, null);
+            getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP), LUCENE_QUERY_SYNTAX, LUCENE_QUERY_SYNTAX, true, null, null);
 
     private final HqlBuilderAction forceExitAction = new HqlBuilderAction(null, this, FORCE_EXIT, true, FORCE_EXIT, "exit.png", FORCE_EXIT,
             FORCE_EXIT, true, 't', null);
@@ -323,7 +348,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction editableResultsAction;
 
-    private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, "layout_content.png",
+    private final HqlBuilderAction switchLayoutAction = new HqlBuilderAction(null, this, SWITCH_LAYOUT, true, SWITCH_LAYOUT, getIcon(LAYOUT_CONTENT),
             SWITCH_LAYOUT, SWITCH_LAYOUT, false, 'w', null, PERSISTENT_ID);
 
     private final HqlBuilderAction addEndBraceAction = new HqlBuilderAction(null, this, null, true, ADD_END_BRACE, null, ADD_END_BRACE,
@@ -406,8 +431,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private HqlBuilderFrame() {
         // needs to be first to init font
-        fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, "font.png", FONT, FONT, true, null, null, PERSISTENT_ID, Font.class,
-                ClientUtils.getDefaultFont());
+        fontAction = new HqlBuilderAction(null, this, FONT, true, FONT, getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.FONT), FONT, FONT,
+                true, null, null, PERSISTENT_ID, Font.class, ClientUtils.getDefaultFont());
         fontAction.setWarnRestart(true);
 
         UIManager.put("ToolTip.font", new FontUIResource(getFont()));
@@ -503,22 +528,23 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         resultsUnsafe = font(new ETable<List<Object>>(new ETableConfig(true)), null);
         resultsEDT = resultsUnsafe.stsi();
         hibernatePropertiesAction = new HqlBuilderAction(resultsUnsafe, this, HIBERNATE_PROPERTIES, true, HIBERNATE_PROPERTIES,
-                "page_white_stack.png", HIBERNATE_PROPERTIES, HIBERNATE_PROPERTIES, true, null, "shift alt F8");
-        objectTreeAction = new HqlBuilderAction(resultsUnsafe, this, OBJECT_TREE, true, OBJECT_TREE, "application_side_tree.png", OBJECT_TREE,
+                getIcon(PAGE_WHITE_STACK), HIBERNATE_PROPERTIES, HIBERNATE_PROPERTIES, true, null, "shift alt F8");
+        objectTreeAction = new HqlBuilderAction(resultsUnsafe, this, OBJECT_TREE, true, OBJECT_TREE, getIcon(APPLICATION_SIDE_TREE), OBJECT_TREE,
                 OBJECT_TREE, true, null, "shift alt F9");
-        deleteObjectAction = new HqlBuilderAction(resultsUnsafe, this, DELETE_OBJECT, true, DELETE_OBJECT, "bin_empty.png", DELETE_OBJECT,
+        deleteObjectAction = new HqlBuilderAction(resultsUnsafe, this, DELETE_OBJECT, true, DELETE_OBJECT, getIcon(BIN_EMPTY), DELETE_OBJECT,
                 DELETE_OBJECT, true, null, "shift alt F10");
-        copyCellAction = new HqlBuilderAction(resultsUnsafe, this, COPY_SELECTED_CELL, true, COPY_SELECTED_CELL, "cell_layout.png",
+        copyCellAction = new HqlBuilderAction(resultsUnsafe, this, COPY_SELECTED_CELL, true, COPY_SELECTED_CELL, getIcon(TABLE_LIGHTNING),
                 COPY_SELECTED_CELL, COPY_SELECTED_CELL, true, null, "shift alt F11");
         executeScriptOnColumnAction = new HqlBuilderAction(resultsUnsafe, this, EXECUTE_SCRIPT_ON_COLUMN, true, EXECUTE_SCRIPT_ON_COLUMN,
                 "groovy.png", EXECUTE_SCRIPT_ON_COLUMN, EXECUTE_SCRIPT_ON_COLUMN, true, null, "shift alt F12");
-        downAction = new HqlBuilderAction(parametersUnsafe, this, DOWN, true, DOWN, "bullet_arrow_down.png", DOWN, DOWN, false, null, null);
-        removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, "bin_empty.png", REMOVE, REMOVE, false, null, null);
-        saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, "disk.png", SAVE, SAVE, false, null, null);
-        setNullAction = new HqlBuilderAction(parametersUnsafe, this, SET_NULL, true, SET_NULL, "page (2).png", SET_NULL, SET_NULL, false, null, null);
-        toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, "textfield.png", TO_TEXT, TO_TEXT, false, null, null);
-        upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, "bullet_arrow_up.png", UP, UP, false, null, null);
-        addParameterAction = new HqlBuilderAction(parametersUnsafe, this, ADD_PARAMETER, true, ADD_PARAMETER, "add.png", ADD_PARAMETER,
+        downAction = new HqlBuilderAction(parametersUnsafe, this, DOWN, true, DOWN, getIcon(BULLET_ARROW_DOWN), DOWN, DOWN, false, null, null);
+        removeAction = new HqlBuilderAction(parametersUnsafe, this, REMOVE, true, REMOVE, getIcon(BIN_EMPTY), REMOVE, REMOVE, false, null, null);
+        saveAction = new HqlBuilderAction(parametersUnsafe, this, SAVE, true, SAVE, getIcon(DISK), SAVE, SAVE, false, null, null);
+        setNullAction = new HqlBuilderAction(parametersUnsafe, this, SET_NULL, true, SET_NULL, getIcon(PICTURE_EMPTY), SET_NULL, SET_NULL, false,
+                null, null);
+        toTextAction = new HqlBuilderAction(parametersUnsafe, this, TO_TEXT, true, TO_TEXT, getIcon(TEXTFIELD), TO_TEXT, TO_TEXT, false, null, null);
+        upAction = new HqlBuilderAction(parametersUnsafe, this, UP, true, UP, getIcon(BULLET_ARROW_UP), UP, UP, false, null, null);
+        addParameterAction = new HqlBuilderAction(parametersUnsafe, this, ADD_PARAMETER, true, ADD_PARAMETER, getIcon(ADD), ADD_PARAMETER,
                 ADD_PARAMETER, false, null, null);
         ActionListener commitParam = new ActionListener() {
             @Override
@@ -532,20 +558,21 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         };
         parameterName.addActionListener(commitParam);
         parameterBuilder.addActionListener(commitParam);
-        importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, "cog.png",
+        importParametersAction = new HqlBuilderAction(parametersUnsafe, this, IMPORT_PARAMETERS, true, IMPORT_PARAMETERS, getIcon(COG),
                 IMPORT_PARAMETERS, IMPORT_PARAMETERS, false, null, null);
         wizardAction = new HqlBuilderAction(hql, this, WIZARD, true, WIZARD, "wizard.png", WIZARD, WIZARD, true, null, "alt F1");
-        clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, "bin_empty.png", CLEAR, CLEAR, true, null, "alt F2");
-        findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, "book_next.png", FIND_PARAMETERS,
+        clearAction = new HqlBuilderAction(hql, this, CLEAR, true, CLEAR, getIcon(BIN_EMPTY), CLEAR, CLEAR, true, null, "alt F2");
+        findParametersAction = new HqlBuilderAction(hql, this, FIND_PARAMETERS, true, FIND_PARAMETERS, getIcon(BOOK_NEXT), FIND_PARAMETERS,
                 FIND_PARAMETERS, true, null, "alt F3");
-        favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, "favb16.png", FAVORITES, FAVORITES, true, null, "alt F4");
-        addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, "favbadd16.png", ADD_TO_FAVORITES,
+        favoritesAction = new HqlBuilderAction(hql, this, FAVORITES, true, FAVORITES, getIcon(AWARD_STAR_GOLD_3), FAVORITES, FAVORITES, true, null,
+                "alt F4");
+        addToFavoritesAction = new HqlBuilderAction(hql, this, ADD_TO_FAVORITES, true, ADD_TO_FAVORITES, getIcon(AWARD_STAR_ADD), ADD_TO_FAVORITES,
                 ADD_TO_FAVORITES, true, null, "alt F5");
         // alt F6 not taken
         // alt F7 not taken
         // alt F8 not taken
-        formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, "text_align_justify.png", FORMAT, FORMAT, true, null, "alt F9");
-        namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, "package_go.png", LOAD_NAMED_QUERY,
+        formatAction = new HqlBuilderAction(hql, this, FORMAT, true, FORMAT, getIcon(TEXT_ALIGN_LEFT), FORMAT, FORMAT, true, null, "alt F9");
+        namedQueryAction = new HqlBuilderAction(hql, this, LOAD_NAMED_QUERY, true, LOAD_NAMED_QUERY, getIcon(PACKAGE_GO), LOAD_NAMED_QUERY,
                 LOAD_NAMED_QUERY, true, null, "alt F10");
         clipboardExportAction = new HqlBuilderAction(hql, this, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD,
                 "sc_arrowshapes.striped-right-arrow.png", EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, EXPORT_COPY_HQL_AS_JAVA_TO_CLIPBOARD, true, null,
@@ -553,14 +580,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         clipboardImportAction = new HqlBuilderAction(hql, this, IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, "sc_arrowshapes.striped-left-arrow.png", IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, null, "alt F12");
-        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, "attach.png", HELP_INSERT, HELP_INSERT, true, null,
+        helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, getIcon(ATTACH), HELP_INSERT, HELP_INSERT, true, null,
                 "ctrl shift SPACE");
-        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, "text_indent.png", REMARK_TOGGLE, REMARK_TOGGLE,
+        remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, getIcon(TEXT_INDENT), REMARK_TOGGLE, REMARK_TOGGLE,
                 true, null, "ctrl shift SLASH");
-        startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, "control_play_blue.png", START_QUERY, START_QUERY, true,
-                null, "ctrl ENTER");
+        startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, getIcon(CONTROL_PLAY_BLUE), START_QUERY, START_QUERY,
+                true, null, "ctrl ENTER");
         deleteInvertedSelectionAction = new HqlBuilderAction(hql, this, DELETE_INVERTED_SELECTION, true, DELETE_INVERTED_SELECTION,
-                "table_row_delete.png", DELETE_INVERTED_SELECTION, DELETE_INVERTED_SELECTION, true, null, "ctrl DELETE");
+                getIcon(TABLE_ROW_DELETE), DELETE_INVERTED_SELECTION, DELETE_INVERTED_SELECTION, true, null, "ctrl DELETE");
 
         // other
         editableResultsAction = new HqlBuilderAction(null, this, EDITABLE_RESULTS, true, EDITABLE_RESULTS, null, EDITABLE_RESULTS, EDITABLE_RESULTS,
@@ -1598,7 +1625,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                 @Override
                 protected Icon getIcon() {
-                    return new ImageIcon(HqlBuilderFrame.class.getClassLoader().getResource("search.png"));
+                    return org.tools.hqlbuilder.common.icons.CommonIcons.getIcon(ZOOM);
                 }
 
                 @Override
