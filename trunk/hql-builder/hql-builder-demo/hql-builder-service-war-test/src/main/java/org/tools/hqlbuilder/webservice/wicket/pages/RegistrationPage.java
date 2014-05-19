@@ -15,6 +15,7 @@ import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormActions;
 
 @MountedPage("/form/registration")
 public class RegistrationPage extends DefaultWebPage {
@@ -29,11 +30,11 @@ public class RegistrationPage extends DefaultWebPage {
     public RegistrationPage(PageParameters parameters) {
         super(parameters);
 
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true, false) {
-            private static final long serialVersionUID = -2653547660762438431L;
+        DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
+            private static final long serialVersionUID = 8800675930559925368L;
 
             @Override
-            protected void submit(IModel<Registration> model) {
+            public void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setPassword(passwordEncoder.encode(object.getPassword()));
                 object.setVerification(new LocalDateTime());
@@ -42,6 +43,7 @@ public class RegistrationPage extends DefaultWebPage {
                 model.setObject(object);
             }
         };
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true, formActions);
         add(formPanel);
 
         Registration proxy = create(Registration.class);

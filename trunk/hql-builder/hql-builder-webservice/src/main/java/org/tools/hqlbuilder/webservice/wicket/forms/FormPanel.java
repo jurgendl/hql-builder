@@ -30,7 +30,7 @@ import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.ext.RequiredBehavior;
 
-public abstract class FormPanel<T extends Serializable> extends Panel implements FormConstants {
+public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -3268906227997947993L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
@@ -41,15 +41,15 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
     protected boolean showLabel = true;
 
-    public FormPanel(String id, Class<T> modelType) {
-        this(id, modelType, false, false);
+    public FormPanel(String id, Class<T> modelType, FormActions<T> actions) {
+        this(id, modelType, false, actions);
     }
 
-    public FormPanel(String id, Class<T> modelType, boolean inheritId, boolean ajax) {
-        this(id, newFormModel(modelType), inheritId, ajax);
+    public FormPanel(String id, Class<T> modelType, boolean inheritId, FormActions<T> actions) {
+        this(id, newFormModel(modelType), inheritId, actions);
     }
 
-    public FormPanel(String id, IModel<T> model, boolean inheritId, boolean ajax) {
+    public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
         super(FORM_PANEL, model);
 
         this.inheritId = inheritId;
@@ -65,7 +65,7 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
             @Override
             protected void onSubmit() {
                 super.onSubmit();
-                submit((IModel<T>) getDefaultModel());
+                actions.submit((IModel<T>) getDefaultModel());
             }
         };
         if (inheritId) {
@@ -83,13 +83,14 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         form.add(repeater);
 
         Component submit;
-        if (ajax) {
+        if (actions.isAjax()) {
             submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
                 private static final long serialVersionUID = -983242396412538529L;
 
+                @SuppressWarnings("unchecked")
                 @Override
                 protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
-                    target.add(f);
+                    actions.afterSubmit(target, form, (IModel<T>) getDefaultModel());
                 }
             };
         } else {
@@ -122,8 +123,6 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
         AjaxFormValidatingBehavior.addToAllFormComponents(Form.class.cast(get(FORM)), "onkeyup", Duration.NONE);
         return this;
     }
-
-    protected abstract void submit(IModel<T> model);
 
     protected <F extends FormComponent<?>> F addId(String property, F component) {
         if (inheritId) {
@@ -342,6 +341,28 @@ public abstract class FormPanel<T extends Serializable> extends Panel implements
 
         public void setRequired(boolean required) {
             this.required = required;
+        }
+    }
+
+    public static interface FormActions<T> extends Serializable {
+        public abstract void submit(IModel<T> model);
+
+        public abstract boolean isAjax();
+
+        public abstract void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model);
+    }
+
+    public static abstract class DefaultFormActions<T> implements FormActions<T> {
+        private static final long serialVersionUID = 555158530492799693L;
+
+        @Override
+        public void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
+            target.add(form);
+        }
+
+        @Override
+        public boolean isAjax() {
+            return true;
         }
     }
 }
