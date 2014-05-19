@@ -21,5 +21,7 @@ public interface FormConstants {
 
     public static final String FORM_RESET = "form.reset";
 
+    public static final String FORM_CANCEL = "form.cancel";
+
     public static final String FORM_SUBMIT = "form.submit";
 }

@@ -91,6 +91,7 @@ public class RegistrationsPage extends DefaultWebPage {
             @Override
             public void add(AjaxRequestTarget target) {
                 formPanel.setVisible(true);
+                formPanel.setDefaultModelObject(FormPanel.newFormModel(Registration.class));
                 target.add(formPanel);
             }
         };
@@ -119,11 +120,16 @@ public class RegistrationsPage extends DefaultWebPage {
 
             @Override
             public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
-                formPanel.setDefaultModelObject(Model.of(Registration.class));
+                formPanel.setDefaultModelObject(FormPanel.newFormModel(Registration.class));
                 formPanel.setVisible(false);
                 table.setVisible(true);
-                super.afterSubmit(target, form, model);
+                target.add(formPanel);
                 target.add(table);
+            }
+
+            @Override
+            public boolean isCancelable() {
+                return true;
             }
         };
         formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true, formActions);
