@@ -42,6 +42,11 @@ public class RegistrationPage extends DefaultWebPage {
                 object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
             }
+
+            @Override
+            public boolean isAjax() {
+                return false;
+            }
         };
         FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true, formActions);
         add(formPanel);
