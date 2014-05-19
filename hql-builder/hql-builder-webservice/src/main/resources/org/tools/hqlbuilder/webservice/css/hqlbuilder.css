@@ -98,9 +98,9 @@ h1,h2,h3,h4,h5 {
 	padding-right: 3px;
 }
 
-.requiredMackup {
+.requiredMakeup {
 	font-size: xx-small;
-	color: olive;
+	color: #BCBF60;
 	vertical-align: top;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -317,7 +317,8 @@ form input[type='image'] {
 	text-align: center;
 }
 
-form input[type='submit'],input[type='reset'],input[type='button'] {
+form input[type='submit'].fixedw,input[type='reset'].fixedw,input[type='button'].fixedw
+	{
 	width: 142px;
 }
 
@@ -352,6 +353,10 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	color: #8f5a0a;
 }
 
+.likebutton.fixedw {
+	width: 120px;
+}
+
 .likebutton {
 	/* button+ */
 	display: inline-block;
@@ -359,7 +364,6 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	text-decoration: none;
 	/* button+ */
 	text-align: center;
-	width: 120px;
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: #ffb94b;
@@ -387,11 +391,13 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	cursor: pointer;
 	font: bold 15px Arial, Helvetica;
 	color: #8f5a0a;
-	width: 120px
+}
+
+button.fixedw {
+	width: 142px;
 }
 
 button {
-	width: 142px;
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: #ffb94b;
@@ -815,19 +821,18 @@ a:focus {
 }
 
 /* clearfix - http://code.tutsplus.com/tutorials/the-30-css-selectors-you-must-memorize--net-16048 */
-
 .clearfix:after {
-    content: "";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    font-size: 0;
-    height: 0;
-    }
- 
+	content: "";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	font-size: 0;
+	height: 0;
+}
+
 .clearfix {
-   *display: inline-block;
-   _height: 1%;
+	*display: inline-block;
+	_height: 1%;
 }
 
 /* end */

@@ -10,8 +10,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
@@ -20,9 +22,13 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -30,6 +36,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -246,6 +253,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
         public void edit(AjaxRequestTarget target, T object);
 
+        public void add(AjaxRequestTarget target);
+
         public int getRowsPerPage();
     }
 
@@ -301,6 +310,49 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             }
             // System.out.println("GET:" + property + "=" + sortOrder);
             return sortOrder;
+        }
+    }
+
+    @Override
+    public void addBottomToolbar(AbstractToolbar toolbar) {
+        super.addBottomToolbar(new NoRecordsToolbar(this, (DataProvider<T>) getDataProvider()));
+    }
+
+    public class NoRecordsToolbar extends AbstractToolbar {
+        private static final long serialVersionUID = -4470457770018795944L;
+
+        public static final String ACTIONS_ADD_ID = "add";
+
+        public NoRecordsToolbar(final DataTable<T, ?> table, final DataProvider<T> dataProvider) {
+            super(table);
+
+            WebMarkupContainer td = new WebMarkupContainer("td");
+            add(td);
+
+            td.add(AttributeModifier.replace("colspan", new AbstractReadOnlyModel<String>() {
+                private static final long serialVersionUID = 2633574748119137606L;
+
+                @Override
+                public String getObject() {
+                    return String.valueOf(table.getColumns().size());
+                }
+            }));
+            td.add(new Label("norecordsfound", new ResourceModel("norecordsfound")));
+
+            AjaxLink<String> addLink = new AjaxLink<String>(ACTIONS_ADD_ID) {
+                private static final long serialVersionUID = 2542930376888979931L;
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    dataProvider.add(target);
+                }
+            };
+            td.add(addLink);
+        }
+
+        @Override
+        public boolean isVisible() {
+            return getTable().getRowCount() == 0;
         }
     }
 }

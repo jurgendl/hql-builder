@@ -2,10 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" xml:lang="en" lang="en">
 
 <wicket:panel>
-	<form wicket:id="form">
-		<a class="likebutton" wicket:id="edit"><wicket:message key="edit.label">Edit</wicket:message></a>
-		<a class="likebutton" wicket:id="delete"><wicket:message key="delete.label">Delete</wicket:message></a>
-	</form>
+	<tr class="norecords-tr">
+		<td wicket:id="td" class="norecords-td">
+			<div wicket:id=norecordsfound>[no records found]</div>
+			<a class="likebutton" wicket:id="add"><wicket:message key="add">[add]</wicket:message></a>
+		</td>
+	</tr>
 </wicket:panel>
 
 </html>

@@ -83,6 +83,12 @@ public class RegistrationsPage extends DefaultWebPage {
                 formPanel.setDefaultModelObject(Model.of(object));
                 target.add(formPanel);
             }
+
+            @Override
+            public void add(AjaxRequestTarget target) {
+                formPanel.setVisible(true);
+                target.add(formPanel);
+            }
         };
 
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
