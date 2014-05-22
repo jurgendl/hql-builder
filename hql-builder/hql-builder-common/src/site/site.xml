@@ -26,9 +26,9 @@
 		<width/><height/>
 		<border/>
 	</bannerRight>
-	<googleAdSenseClient/>
+	<!--<googleAdSenseClient/>
 	<googleAdSenseSlot/>
-	<googleAnalyticsAccountId/>
+	<googleAnalyticsAccountId/>-->
 	<!--<publishDate position=.. format=.. />-->
 	<!--<version position=.. />-->
 	<body>
