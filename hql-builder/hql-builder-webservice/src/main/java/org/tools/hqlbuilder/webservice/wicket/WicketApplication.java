@@ -12,7 +12,6 @@ import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
-import org.apache.wicket.SharedResources;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
@@ -30,7 +29,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.request.resource.ResourceReferenceRegistry;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
@@ -88,14 +86,6 @@ public class WicketApplication extends WebApplication {
     @Override
     public Session newSession(Request request, Response response) {
         return new WicketSession(request);
-    }
-
-    /**
-     * @see org.apache.wicket.Application#newSharedResources(org.apache.wicket.request.resource.ResourceReferenceRegistry)
-     */
-    @Override
-    protected SharedResources newSharedResources(ResourceReferenceRegistry registry) {
-        return super.newSharedResources(registry);
     }
 
     /**
@@ -237,27 +227,25 @@ public class WicketApplication extends WebApplication {
 
     protected void initStore() {
         if (usesDevelopmentConfig()) {
-            if (diskStore) {
-                DebugDiskDataStore.register(this);
-            } else {
+            if (!diskStore) {
                 setPageManagerProvider(new DefaultPageManagerProvider(this) {
                     @Override
                     protected IDataStore newDataStore() {
                         return new HttpSessionDataStore(getPageManagerContext(), new PageNumberEvictionStrategy(20));
                     }
                 });
+            } else {
+                DebugDiskDataStore.register(this);
             }
         } else {
-            if (diskStore) {
-                //
-            } else {
+            if (!diskStore) {
                 setPageManagerProvider(new DefaultPageManagerProvider(this) {
                     @Override
                     protected IDataStore newDataStore() {
                         return new HttpSessionDataStore(getPageManagerContext(), new PageNumberEvictionStrategy(20));
                     }
                 });
-            }
+            } // no else
         }
     }
 
@@ -319,7 +307,7 @@ public class WicketApplication extends WebApplication {
                 mountResource(cssImages + path, reference);
                 logger.info("mounting image " + cssImages + path);
             } catch (Exception ex) {
-                //
+                ex.printStackTrace();
             }
         }
     }

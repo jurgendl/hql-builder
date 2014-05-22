@@ -18,7 +18,7 @@ public class LogInOutLinksPanel extends Panel {
         loginlink.setVisible(show && (authentication == null || authentication.getPrincipal().equals(webProperties.getProperty("anonymous.user"))));
         add(loginlink);
         BookmarkablePageLink<String> logoutlink = new BookmarkablePageLink<String>("logoutlink", LogOutPage.class);
-        logoutlink.setVisible(show && (!loginlink.isVisible()));
+        logoutlink.setVisible(show && !loginlink.isVisible());
         add(logoutlink);
     }
 }
