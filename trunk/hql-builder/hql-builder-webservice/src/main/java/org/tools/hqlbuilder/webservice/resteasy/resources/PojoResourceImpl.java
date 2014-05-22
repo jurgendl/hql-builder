@@ -173,7 +173,7 @@ public class PojoResourceImpl implements PojoResource {
                             oos.close();
                         }
                     } catch (Exception unhandled) {
-                        //
+                        unhandled.printStackTrace();
                     }
                 }
             }
