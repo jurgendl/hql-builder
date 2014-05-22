@@ -447,11 +447,6 @@
 				<artifactId>bcmail-jdk15on</artifactId>
 				<version>${version.bouncycastle}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.bouncycastle</groupId>
-				<artifactId>bctsp-jdk15on</artifactId>
-				<version>${version.bouncycastle}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<licenses>
