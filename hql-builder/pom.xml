@@ -13,6 +13,7 @@
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding><!-- fixed encoding -->
 		<project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip><!-- skip by default -->
+		<maven.site.skip>false</maven.site.skip><!-- do not skip by default -->
 
 		<!-- versions checked 2014.05.07 and tested against 4.2 -->
 		<version.hibernate>4.2</version.hibernate><!-- version 4.3 is not finished patching -->
@@ -601,6 +602,7 @@
 				<configuration>
 					<locales>en</locales>
 					<generateSitemap>true</generateSitemap>
+					<skip>${maven.site.skip}</skip>
 				</configuration>
 			</plugin>
 			<plugin>
