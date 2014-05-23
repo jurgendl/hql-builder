@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.tools.hql-builder</groupId>
+		<artifactId>hql-builder-parent</artifactId>
+		<version>2.0.7-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<packaging>pom</packaging>
+	<groupId>org.tools.hql-builder.web</groupId>
+	<artifactId>hql-builder-web</artifactId>
+	<name>hql-builder-web</name>
+	<description>hql-builder-web</description>
+	<modules>
+		<module>hql-builder-webcommon</module>
+		<module>hql-builder-webservice</module>
+		<module>hql-builder-webclient</module>
+	</modules>
+</project>
