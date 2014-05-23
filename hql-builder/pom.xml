@@ -59,9 +59,7 @@
 		<module>hql-builder-common</module>
 		<module>hql-builder-lucene</module>
 		<module>hql-builder-service</module>
-		<module>hql-builder-webcommon</module>
-		<module>hql-builder-webservice</module>
-		<module>hql-builder-webclient</module>
+		<module>hql-builder-web</module>
 		<module>hql-builder-client</module>
 	</modules>
 	<dependencies>
