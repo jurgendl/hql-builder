@@ -486,7 +486,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         String tt = substring.substring(1);
                         for (EListRecord<QueryParameter> record : parametersEDT.getRecords()) {
                             if (tt.equals(record.get().getName())) {
-                                return record.get().getToString();
+                                return record.get().toString();
                             }
                         }
                     }
@@ -505,7 +505,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         }
                         if (!remarked) {
                             try {
-                                return parametersEDT.getRecords().get(count).get().getToString();
+                                return parametersEDT.getRecords().get(count).get().toString();
                             } catch (IndexOutOfBoundsException ex) {
                                 //
                             }
@@ -663,10 +663,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         if (selection.getParameters() != null) {
             for (QueryParameter p : selection.getParameters()) {
-                if (StringUtils.isNotBlank(p.getValueText())) {
-                    p.setValue(GroovyCompiler.eval(p.getValueText()));
+                String valueText = p.getValueText();
+                if (StringUtils.isNotBlank(valueText)) {
+                    Object val = GroovyCompiler.eval(valueText);
+                    p.setValueTypeText(val).setValueText(valueText);
                 }
-                p.afterInit();
                 parametersEDT.addRecord(new EListRecord<QueryParameter>(p));
             }
         }
@@ -676,7 +677,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         log("compiling");
         selectedQueryParameter.setValue(null);
         try {
-            selectedQueryParameter.setValue(GroovyCompiler.eval(text));
+            Object val = GroovyCompiler.eval(text);
+            selectedQueryParameter.setValueTypeText(val).setValueText(text);
         } catch (Exception ex2) {
             log(ex2);
         }
@@ -873,6 +875,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(String[] args, HqlServiceClientLoader serviceLoader) {
         try {
+            System.out.println("arguments: " + Arrays.asList(args));
+
             // zet look en feel gelijk aan default voor OS
             UIUtils.systemLookAndFeel();
 
@@ -2365,13 +2369,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     String[] p = el.split("=");
                     Object val = GroovyCompiler.eval(p[1]);
                     logger.debug(p[0] + "=" + val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(p[0], p[1], val);
-                    qps.add(qp);
+                    qps.add(new QueryParameter().setName(p[0]).setValueText(p[1]).setType(val.getClass().getName()).setValue(val));
                 } else {
                     Object val = GroovyCompiler.eval(el);
                     logger.debug(val.getClass() + "=" + val);
-                    QueryParameter qp = new QueryParameter(i + 1, el, val);
-                    qps.add(qp);
+                    qps.add(new QueryParameter().setIndex(i + 1).setValueText(el).setType(val.getClass().getName()).setValue(val));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -2440,7 +2442,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         });
     }
 
-    private static void outputSelection(String type, HashMap<String, Integer> map, ETable<?> table, TableSelectionListener listener) {
+    private static void outputSelection(@SuppressWarnings("unused") String type, HashMap<String, Integer> map, ETable<?> table,
+            TableSelectionListener listener) {
         int row = map.get(ROW);
         int col = map.get(COL);
 

@@ -32,147 +32,31 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         super();
     }
 
-    public QueryParameter(String name) {
-        this(null, name, null, null, null);
-    }
-
-    public QueryParameter(Integer index) {
-        this(index, null, null, null, null);
-    }
-
-    public QueryParameter(String name, String valueText) {
-        this(null, name, valueText, null, null);
-    }
-
-    public QueryParameter(Integer index, String valueText) {
-        this(index, null, valueText, null, null);
-    }
-
-    public QueryParameter(String name, String valueText, String type) {
-        this(null, name, valueText, type, null);
-    }
-
-    public QueryParameter(Integer index, String valueText, String type) {
-        this(index, null, valueText, type, null);
-    }
-
-    public QueryParameter(String name, String valueText, Object value) {
-        this(null, name, valueText, value.getClass().getName(), value);
-    }
-
-    public QueryParameter(String name, Object value) {
-        this(null, name, String.valueOf(value), value.getClass().getName(), value);
-    }
-
-    public QueryParameter(Integer index, String valueText, Object value) {
-        this(index, null, valueText, value.getClass().getName(), value);
-    }
-
-    public QueryParameter(Integer index, Object value) {
-        this(index, null, String.valueOf(value), value.getClass().getName(), value);
-    }
-
-    private QueryParameter(Integer index, String name, String valueText, String type, Object value) {
-        this.index = index;
-        this.valueText = valueText;
-        this.name = name;
-        this.value = value;
-        this.type = type;
-        afterInit();
-    }
-
-    public Object getValue() {
-        return this.value;
-    }
-
-    public QueryParameter setValue(Object value) {
-        this.value = value;
-        if (valueText == null) {
-            valueText = String.valueOf(value);
-        }
-        return afterInit();
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public QueryParameter setName(String name) {
-        this.name = name;
-        return afterInit();
-    }
-
-    public String getToString() {
-        return this.toString;
-    }
-
-    public QueryParameter setToString(String toString) {
-        this.toString = toString;
-        return this;
-    }
-
-    public QueryParameter clear() {
-        setValue(null);
-        return this;
-    }
-
-    public Integer getIndex() {
-        return this.index;
-    }
-
-    public QueryParameter setIndex(Integer index) {
-        this.index = index;
-        return afterInit();
-    }
-
-    public String getValueText() {
-        return this.valueText;
-    }
-
-    public QueryParameter setValueText(String valueText) {
-        this.valueText = valueText;
-        return afterInit();
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public QueryParameter setType(String type) {
-        this.type = type;
-        return afterInit();
-    }
-
-    /**
-     * afterInit
-     */
-    public QueryParameter afterInit() {
-        StringBuilder sb = new StringBuilder();
-        if (index != null && index != -1) {
-            sb.append(index).append(":");
-        }
-        if (name != null) {
-            sb.append(name).append("=");
-        }
-        if (type != null) {
-            sb.append(type).append(" ");
-        } else if (value != null) {
-            sb.append(value.getClass().getSimpleName()).append(" ");
-        }
-        sb.append(value);
-        if (sb.length() == 0 && StringUtils.isNotBlank(valueText)) {
-            sb.append(valueText);
-        }
-        toString = sb.toString();
-        return this;
-    }
-
     /**
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return StringUtils.isBlank(toString) ? "?" : toString;
+        if (toString == null) {
+            StringBuilder sb = new StringBuilder();
+            if (index != null && index != -1) {
+                sb.append(index).append(":");
+            }
+            if (name != null) {
+                sb.append(name).append("=");
+            }
+            if (type != null) {
+                sb.append(type).append(" ");
+            } else if (value != null) {
+                sb.append(value.getClass().getSimpleName()).append(" ");
+            }
+            sb.append(value);
+            if (sb.length() == 0 && StringUtils.isNotBlank(valueText)) {
+                sb.append(valueText);
+            }
+            toString = sb.toString();
+        }
+        return toString;
     }
 
     @Override
@@ -236,5 +120,62 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
     @Override
     public int compareTo(QueryParameter o) {
         return new CompareToBuilder().append(index, o.index).append(name, o.name).toComparison();
+    }
+
+    public Object getValue() {
+        return this.value;
+    }
+
+    public QueryParameter setValue(Object value) {
+        toString = null;
+        this.value = value;
+        return this;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public QueryParameter setName(String name) {
+        toString = null;
+        this.name = name;
+        return this;
+    }
+
+    public String getValueText() {
+        return this.valueText;
+    }
+
+    public QueryParameter setValueText(String valueText) {
+        toString = null;
+        this.valueText = valueText;
+        return this;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public QueryParameter setType(String type) {
+        toString = null;
+        this.type = type;
+        return this;
+    }
+
+    public Integer getIndex() {
+        return this.index;
+    }
+
+    public QueryParameter setIndex(Integer index) {
+        toString = null;
+        this.index = index;
+        return this;
+    }
+
+    public QueryParameter setValueTypeText(Object value) {
+        setValue(value);
+        setValueText(value == null ? "null" : String.valueOf(value));
+        setType(value == null ? "java.lang.Object" : value.getClass().getName());
+        return this;
     }
 }

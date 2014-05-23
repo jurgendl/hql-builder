@@ -638,7 +638,8 @@ public class HqlServiceImpl implements HqlService {
                 }
             }
         }
-        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter(oid, idv));
+        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter().setName(oid).setValueTypeText(
+                idv));
         logger.debug("hql=" + hql);
         List<Serializable> value = execute(hql).getResults().getValue();
         return (T) (value.isEmpty() ? null : value.get(0));
@@ -711,8 +712,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(param, null, simpleName);
-                parameters.add(p);
+                parameters.add(new QueryParameter().setName(param).setType(simpleName));
             }
 
             Integer mi = CommonUtils.call(pminof, "getOrdinalParameterCount", Integer.class);
@@ -724,8 +724,7 @@ public class HqlServiceImpl implements HqlService {
                 } catch (Exception ex) {
                     //
                 }
-                QueryParameter p = new QueryParameter(i, null, simpleName);
-                parameters.add(p);
+                parameters.add(new QueryParameter().setIndex(i).setType(simpleName));
             }
         } finally {
             session.close();
