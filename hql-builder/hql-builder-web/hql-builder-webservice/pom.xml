@@ -23,12 +23,12 @@
 			<artifactId>asm</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>org.tools.hql-builder</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>org.tools.hql-builder</groupId>
 			<artifactId>hql-builder-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
