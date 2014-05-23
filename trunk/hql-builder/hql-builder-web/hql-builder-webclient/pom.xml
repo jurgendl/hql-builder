@@ -11,7 +11,7 @@
 	<description>hql-builder-webclient</description>
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>org.tools.hql-builder</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
