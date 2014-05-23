@@ -23,7 +23,7 @@
 			<artifactId>asm</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.tools.hql-builder</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
