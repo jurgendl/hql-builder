@@ -61,6 +61,7 @@
 		<module>hql-builder-service</module>
 		<module>hql-builder-web</module>
 		<module>hql-builder-client</module>
+		<module>hql-builder-lucene</module>
 	</modules>
 	<dependencies>
 		<dependency>
