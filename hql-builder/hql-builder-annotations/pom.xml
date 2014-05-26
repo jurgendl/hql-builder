@@ -10,5 +10,12 @@
 	<name>hql-builder-annotations</name>
 	<description>hql-builder-annotations</description>
 	<dependencies>
+		<dependency>
+			<groupId>org.tools.hql-builder.hibernate</groupId>
+			<artifactId>hibernate-${version.hibernate}</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>

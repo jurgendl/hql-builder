@@ -53,9 +53,9 @@
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
-		<module>hql-builder-annotations</module>
 		<module>hibernate</module>
 		<module>spring</module>
+		<module>hql-builder-annotations</module>
 		<module>hql-builder-common</module>
 		<module>hql-builder-lucene</module>
 		<module>hql-builder-service</module>
