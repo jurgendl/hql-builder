@@ -9,4 +9,25 @@
 	<artifactId>hql-builder-osgi</artifactId>
 	<name>hql-builder-osgi</name>
 	<description>hql-builder-osgi</description>
+	<repositories>
+		<repository>
+			<id>knopflerfish</id>
+			<name>knopflerfish Repository for Maven2</name>
+			<url>http://www.knopflerfish.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<dependencies>
+	<!-- http://www.knopflerfish.org/ -->
+		<dependency>
+			<groupId>org.knopflerfish</groupId>
+			<artifactId>framework</artifactId>
+			<version>7.0.1</version>
+		</dependency>
+	</dependencies>
 </project>
