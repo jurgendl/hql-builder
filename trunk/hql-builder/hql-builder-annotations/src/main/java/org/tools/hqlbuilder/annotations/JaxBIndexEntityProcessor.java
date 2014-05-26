@@ -27,22 +27,16 @@ import javax.tools.StandardLocation;
 @SupportedAnnotationTypes("javax.persistence.Entity")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class JaxBIndexEntityProcessor extends AbstractProcessor {
-    public JaxBIndexEntityProcessor() {
-        super();
-    }
-
     private Map<String, BufferedWriter> jaxbIndices = new HashMap<String, BufferedWriter>();
 
-    /**
-     * 
-     * @see javax.annotation.processing.AbstractProcessor#process(java.util.Set, javax.annotation.processing.RoundEnvironment)
-     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        System.out.println("JaxBIndexEntityProcessor: start processing");
         try {
             for (Element e : roundEnv.getElementsAnnotatedWith(Entity.class)) {
                 Entity entity = e.getAnnotation(Entity.class);
-                String message = "annotation found in " + e.getSimpleName() + " with entity " + entity.name();
+                String message = "JaxBIndexEntityProcessor: annotation found in " + e.getSimpleName() + " with entity " + entity.name();
+                System.out.println(message);
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, message);
                 if (e.getKind() == ElementKind.CLASS) {
                     TypeElement classElement = (TypeElement) e;
@@ -57,8 +51,9 @@ public class JaxBIndexEntityProcessor extends AbstractProcessor {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, String.valueOf(ex));
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "JaxBIndexEntityProcessor: " + String.valueOf(ex));
         }
+        System.out.println("JaxBIndexEntityProcessor: end processing");
         return false;
     }
 
