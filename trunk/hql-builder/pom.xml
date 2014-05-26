@@ -8,16 +8,26 @@
 	<description>HqlBuilder</description>
 	<url>http://hql-builder.googlecode.com</url>
 	<properties>
-
+		<!-- general properties -->
 		<targetJdk>1.7</targetJdk><!-- should be compatible with 1.6; not ready for 1.8 - reason library problems -->
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding><!-- fixed encoding -->
 		<project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
+		<!--  -->
 		<maven.javadoc.skip>true</maven.javadoc.skip><!-- skip by default -->
+		<!-- maven-site-plugin -->
 		<maven.site.skip>false</maven.site.skip><!-- do not skip by default -->
-
+		<!-- maven-compiler-plugin -->
+		<maven.compiler.optimize>true</maven.compiler.optimize>
+		<maven.compiler.fork>true</maven.compiler.fork>
+		<maven.compiler.source>${targetJdk}</maven.compiler.source>
+		<maven.compiler.target>${targetJdk}</maven.compiler.target>
+		<maven.compiler.verbose>true</maven.compiler.verbose>
+		<maven.compiler.debug>true</maven.compiler.debug>
+		<maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
+		<!-- maven-surefire-plugin -->
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2014.05.07 and tested against 4.2 -->
 		<version.hibernate>4.2</version.hibernate><!-- version 4.3 is not finished patching -->
-
 		<version.slf4j>1.7.7</version.slf4j><!-- recent version, keep up to date -->
 		<version.spring>3.2.8.RELEASE</version.spring><!-- keep up to date 3.x.x, v 4.0.3.RELEASE Java 1.8 ready but breaks RestEasy -->
 		<version.swingeasy>3.0.0.4</version.swingeasy><!-- recent version, keep up to date -->
@@ -49,7 +59,6 @@
 		<version.cglib>3.1</version.cglib><!-- check if Java 1.8 ready, mostly dead project -->
 		<version.asm>5.0.2</version.asm><!-- Java 1.8 ready, Spring includes version for included Cglig -->
 		<version.activation>1.1.1</version.activation><!-- not being updated -->
-
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -498,14 +507,8 @@
 						<artifactId>maven-compiler-plugin</artifactId>
 						<version>3.1</version>
 						<configuration>
-							<fork>true</fork>
-							<source>${targetJdk}</source>
-							<target>${targetJdk}</target>
-							<optimize>true</optimize>
-							<verbose>false</verbose>
-							<encoding>${project.build.sourceEncoding}</encoding>
 							<debug>false</debug> 
-							<debuglevel>none</debuglevel><!-- lines, vars, and source or none -->
+							<debuglevel>none</debuglevel>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -600,7 +603,6 @@
 				<configuration>
 					<locales>en</locales>
 					<generateSitemap>true</generateSitemap>
-					<skip>${maven.site.skip}</skip>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -612,24 +614,14 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
-				<configuration>
-					<fork>true</fork>
-					<source>${targetJdk}</source>
-					<target>${targetJdk}</target>
-					<optimize>true</optimize>
-					<verbose>false</verbose>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<debug>true</debug>
-					<debuglevel>lines,vars,source</debuglevel>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
 				<configuration>
-					<testFailureIgnore>true</testFailureIgnore>
-					<argLine>-Xms128m -Xmx128m</argLine>
+					<forkCount>1</forkCount>
+					<reuseForks>true</reuseForks>
 				</configuration>
 			</plugin>
 			<plugin>
