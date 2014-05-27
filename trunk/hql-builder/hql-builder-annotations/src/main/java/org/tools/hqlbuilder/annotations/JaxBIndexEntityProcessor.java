@@ -60,7 +60,9 @@ public class JaxBIndexEntityProcessor extends AbstractProcessor {
     public BufferedWriter getJaxbIndex(String packageName) throws IOException {
         BufferedWriter fileObjectWriter = jaxbIndices.get(packageName);
         if (fileObjectWriter == null) {
-            FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, packageName, "jaxb.index");
+            FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, packageName, "jaxb.index");
+            System.out.println(fileObject.toUri().toASCIIString());
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, fileObject.toUri().toASCIIString());
             fileObjectWriter = new BufferedWriter(fileObject.openWriter());
             jaxbIndices.put(packageName, fileObjectWriter);
         }

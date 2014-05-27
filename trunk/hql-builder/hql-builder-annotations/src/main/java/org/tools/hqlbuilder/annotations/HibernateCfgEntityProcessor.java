@@ -67,7 +67,9 @@ public class HibernateCfgEntityProcessor extends AbstractProcessor {
 
     private BufferedWriter getWriter() throws IOException {
         if (hibernateCfgXml == null) {
-            FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", "hibernate.cfg.xml");
+            FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, "", "hibernate.cfg.xml");
+            System.out.println(fileObject.toUri().toASCIIString());
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, fileObject.toUri().toASCIIString());
             Writer writer = fileObject.openWriter();
             hibernateCfgXml = new BufferedWriter(writer);
             hibernateCfgXml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
