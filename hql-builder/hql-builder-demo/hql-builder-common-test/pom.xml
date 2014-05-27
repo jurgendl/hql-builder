@@ -86,7 +86,7 @@
 								<annotationProcessor>org.tools.hqlbuilder.annotations.JaxBIndexEntityProcessor</annotationProcessor>
 								<annotationProcessor>org.tools.hqlbuilder.annotations.HibernateCfgEntityProcessor</annotationProcessor>
 							</annotationProcessors>
-							<generatedSourcesDirectory>${project.build.directory}/generated-resources/annotations</generatedSourcesDirectory>
+							<generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
 							<proc>only</proc>
 						</configuration>
 					</execution>
