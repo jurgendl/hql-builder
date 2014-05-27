@@ -42,16 +42,55 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/annotations/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
-				<configuration>
-					<annotationProcessors>
-						<!-- jar in normal dependencies but optional or this doesn't work -->
-						<annotationProcessor>org.tools.hqlbuilder.annotations.JaxBIndexEntityProcessor</annotationProcessor>
-						<annotationProcessor>org.tools.hqlbuilder.annotations.HibernateCfgEntityProcessor</annotationProcessor>
-					</annotationProcessors>
-				</configuration>
+				<executions>
+					<execution>
+						<!-- normal compile and generation of other classes to standard location 
+							(implicit, you shouldn't need that) -->
+						<id>default-compile</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<!-- Generates Test-Helper-Class into ${project.build.directory}/generated-test-sources/test-annotations 
+							WITHOUT compiling it -->
+						<id>compile-TestHelperClass</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<annotationProcessors>
+								<!-- jar in normal dependencies but optional or this doesn't work -->
+								<annotationProcessor>org.tools.hqlbuilder.annotations.JaxBIndexEntityProcessor</annotationProcessor>
+								<annotationProcessor>org.tools.hqlbuilder.annotations.HibernateCfgEntityProcessor</annotationProcessor>
+							</annotationProcessors>
+							<generatedSourcesDirectory>${project.build.directory}/generated-resources/annotations</generatedSourcesDirectory>
+							<proc>only</proc>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
