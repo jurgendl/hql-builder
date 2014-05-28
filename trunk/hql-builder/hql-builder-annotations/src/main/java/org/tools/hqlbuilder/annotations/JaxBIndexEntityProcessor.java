@@ -15,10 +15,10 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.persistence.Entity;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @see http://deors.wordpress.com/2011/10/08/annotation-processors/
@@ -33,11 +33,10 @@ public class JaxBIndexEntityProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         System.out.println("JaxBIndexEntityProcessor: start processing");
         try {
-            for (Element e : roundEnv.getElementsAnnotatedWith(Entity.class)) {
-                Entity entity = e.getAnnotation(Entity.class);
+            for (Element e : roundEnv.getElementsAnnotatedWith(XmlRootElement.class)) {
+                XmlRootElement entity = e.getAnnotation(XmlRootElement.class);
                 String message = "JaxBIndexEntityProcessor: annotation found in " + e.getSimpleName() + " with entity " + entity.name();
-                System.out.println(message);
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, message);
+                log(message);
                 if (e.getKind() == ElementKind.CLASS) {
                     TypeElement classElement = (TypeElement) e;
                     PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
@@ -57,12 +56,17 @@ public class JaxBIndexEntityProcessor extends AbstractProcessor {
         return false;
     }
 
+    private void log(String message) {
+        System.out.println(message);
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.MANDATORY_WARNING, message);
+    }
+
     public BufferedWriter getJaxbIndex(String packageName) throws IOException {
         BufferedWriter fileObjectWriter = jaxbIndices.get(packageName);
         if (fileObjectWriter == null) {
             FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, packageName, "jaxb.index");
             System.out.println(fileObject.toUri().toASCIIString());
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, fileObject.toUri().toASCIIString());
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.MANDATORY_WARNING, fileObject.toUri().toASCIIString());
             fileObjectWriter = new BufferedWriter(fileObject.openWriter());
             jaxbIndices.put(packageName, fileObjectWriter);
         }

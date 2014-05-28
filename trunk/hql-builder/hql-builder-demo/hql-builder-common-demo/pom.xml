@@ -65,24 +65,20 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<executions>
-					<execution>
-						<!-- normal compile and generation of other classes to standard location 
-							(implicit, you shouldn't need that) -->
+					<!-- <execution>
 						<id>default-compile</id>
 						<goals>
 							<goal>compile</goal>
 						</goals>
-					</execution>
+					</execution> -->
 					<execution>
-						<!-- Generates Test-Helper-Class into ${project.build.directory}/generated-test-sources/test-annotations 
-							WITHOUT compiling it -->
-						<id>compile-TestHelperClass</id>
+						<!-- <id>compile-TestHelperClass</id>
 						<goals>
 							<goal>compile</goal>
-						</goals>
+						</goals> -->
 						<configuration>
+							<verbose>true</verbose>
 							<annotationProcessors>
-								<!-- jar in normal dependencies but optional or this doesn't work -->
 								<annotationProcessor>org.tools.hqlbuilder.annotations.JaxBIndexEntityProcessor</annotationProcessor>
 								<annotationProcessor>org.tools.hqlbuilder.annotations.HibernateCfgEntityProcessor</annotationProcessor>
 							</annotationProcessors>
