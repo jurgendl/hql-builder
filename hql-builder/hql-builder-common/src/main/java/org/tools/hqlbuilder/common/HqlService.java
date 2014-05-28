@@ -53,4 +53,6 @@ public interface HqlService {
     public abstract String getLuceneHelpURL();
 
     public abstract <T extends Serializable, I extends Serializable> T get(Class<T> type, I id);
+
+    public abstract String getVersion();
 }

@@ -19,7 +19,7 @@
 				<property name="properties">
 					<props>
 						<prop key="project">HqlBuilderTestProject</prop>
-						<prop key="hibernate.cfg.xml">classpath:hibernate.cfg.xml</prop>
+						<prop key="hibernate.cfg.xml">hibernate.cfg.xml</prop>
 						<prop key="hibernate.validator.autoregister_listeners">true</prop>
 					</props>
 				</property>
