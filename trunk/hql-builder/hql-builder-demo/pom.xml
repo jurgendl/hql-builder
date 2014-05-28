@@ -8,9 +8,9 @@
 	</parent>
 	<packaging>pom</packaging>
 	<groupId>org.tools.hql-builder.demo</groupId>
-	<artifactId>hql-builder-demo</artifactId>
-	<name>hql-builder-demo</name>
-	<description>hql-builder-demo</description>
+	<artifactId>hql-builder-demo-parent</artifactId>
+	<name>hql-builder-demo-parent</name>
+	<description>hql-builder-demo-parent</description>
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<maven.site.skip>false</maven.site.skip>
@@ -18,11 +18,11 @@
 		<version.jetty>7.6.14.v20131031</version.jetty>
 	</properties>
 	<modules>
-		<module>hql-builder-common-test</module>
-		<module>hql-builder-service-test</module>
-		<module>hql-builder-client-test</module>
-		<module>hql-builder-test</module>
-		<module>hql-builder-service-war-test</module>
+		<module>hql-builder-common-demo</module>
+		<module>hql-builder-service-demo</module>
+		<module>hql-builder-client-demo</module>
+		<module>hql-builder-demo</module>
+		<module>hql-builder-service-war-demo</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

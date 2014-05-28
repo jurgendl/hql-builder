@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.tools.hql-builder.demo</groupId>
-		<artifactId>hql-builder-demo</artifactId>
+		<artifactId>hql-builder-demo-parent</artifactId>
 		<version>2.0.7-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>hql-builder-common-test</artifactId>
-	<name>hql-builder-common-test</name>
-	<description>hql-builder-common-test</description>
+	<artifactId>hql-builder-common-demo</artifactId>
+	<name>hql-builder-common-demo</name>
+	<description>hql-builder-common-demo</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.tools.hql-builder.hibernate</groupId>
