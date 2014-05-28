@@ -560,9 +560,6 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(text)) {
             throw new IllegalArgumentException("text");
         }
-        if (StringUtils.isBlank(typeName)) {
-            throw new IllegalArgumentException("type");
-        }
         return getInformation().search(text, typeName, hitsPerPage);
     }
 
