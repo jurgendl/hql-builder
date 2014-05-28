@@ -139,6 +139,7 @@ public class RegistrationsPage extends DefaultWebPage {
         formPanel.addEmailTextField(name(proxy.getEmail()), true);
         formPanel.addDatePicker(name(proxy.getDateOfBirth()), true);
         formPanel.addPasswordTextField(name(proxy.getPassword()), true);
+        formPanel.liveValidation();
 
         formPanel.setVisible(false);
 
