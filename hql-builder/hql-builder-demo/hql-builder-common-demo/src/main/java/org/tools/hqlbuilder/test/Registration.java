@@ -12,7 +12,7 @@ import org.joda.time.LocalDateTime;
 @XmlRootElement
 @Entity
 public class Registration extends EntityParent {
-    private static final long serialVersionUID = -787192560827992242L;
+    private static final long serialVersionUID = -78719256082799222L;
 
     @Column(updatable = false)
     @NotNull
