@@ -2028,9 +2028,22 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             menuBar.add(helpmenu);
         }
 
+        getVersion();
+
+        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo() + " - " + hqlService.getProject()
+                + (hqlService.getServiceUrl() == null ? "" : " - " + hqlService.getServiceUrl()));
+        frame.setVisible(true);
+        frame.setSize(new Dimension(1024, 768));
+        frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+        frame.setIconImage(HqlBuilderImages.getIcon().getImage());
+        frame.setGlassPane(getGlass(frame));
+        frame.setAlwaysOnTop(Boolean.TRUE.equals(alwaysOnTopAction.getValue()));
+    }
+
+    public void getVersion() {
         try {
             Properties p = new Properties();
-            p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools/hql-builder-client/pom.properties"));
+            p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools.hql-builder/hql-builder-client/pom.properties"));
             version = p.getProperty("version").toString();
         } catch (Exception ex) {
             try {
@@ -2046,15 +2059,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
             }
         }
-
-        frame.setTitle(NAME + " v" + version + " - " + hqlService.getConnectionInfo() + " - " + hqlService.getProject()
-                + (hqlService.getServiceUrl() == null ? "" : " - " + hqlService.getServiceUrl()));
-        frame.setVisible(true);
-        frame.setSize(new Dimension(1024, 768));
-        frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
-        frame.setIconImage(HqlBuilderImages.getIcon().getImage());
-        frame.setGlassPane(getGlass(frame));
-        frame.setAlwaysOnTop(Boolean.TRUE.equals(alwaysOnTopAction.getValue()));
     }
 
     protected void startPre() {

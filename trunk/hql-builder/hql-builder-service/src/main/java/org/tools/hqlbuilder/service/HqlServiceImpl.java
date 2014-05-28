@@ -178,6 +178,32 @@ public class HqlServiceImpl implements HqlService {
         return hibernateVersions;
     }
 
+    @Override
+    public String getVersion() {
+        String version = "";
+        try {
+            Properties p = new Properties();
+            p.load(getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools.hql-builder/hql-builder-service/pom.properties"));
+            if (p.containsKey("version")) {
+                version = p.getProperty("version");
+            }
+        } catch (Exception ex) {
+            try {
+                version = org.w3c.dom.Node.class.cast(
+                        CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project", "/default:project/default:version/text()")).getNodeValue();
+            } catch (Exception ex2) {
+                try {
+                    version = org.w3c.dom.Node.class.cast(
+                            CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project",
+                                    "/default:project/default:parent/default:version/text()")).getNodeValue();
+                } catch (Exception ex3) {
+                    //
+                }
+            }
+        }
+        return version;
+    }
+
     public String getModelVersion() {
         if (modelVersion == null) {
             try {
@@ -223,7 +249,7 @@ public class HqlServiceImpl implements HqlService {
                 }
                 modelVersion.toString();
             } catch (Exception ex) {
-                modelVersion = "?";
+                modelVersion = "";
             }
         }
         return this.modelVersion;

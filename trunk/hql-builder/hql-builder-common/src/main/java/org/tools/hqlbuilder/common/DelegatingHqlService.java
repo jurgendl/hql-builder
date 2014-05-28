@@ -13,6 +13,11 @@ public abstract class DelegatingHqlService implements HqlService {
     public abstract HqlService getDelegate();
 
     @Override
+    public String getVersion() {
+        return getDelegate().getVersion();
+    }
+
+    @Override
     public SortedSet<String> getClasses() {
         return getDelegate().getClasses();
     }
