@@ -34,7 +34,7 @@
 		<version.spring>3.2.8.RELEASE</version.spring><!-- keep up to date 3.x.x, v 4.0.3.RELEASE Java 1.8 ready but breaks RestEasy -->
 		<version.swingeasy>3.0.0.4</version.swingeasy><!-- recent version, keep up to date -->
 		<version.lucene>4.8.0</version.lucene><!-- keep up to date 4.x.x -->
-		<version.groovy>2.2.2</version.groovy><!-- Java 1.8 ready -->
+		<version.groovy>2.3.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.log4j>1.2.17</version.log4j><!-- newer version available but we stick with this version -->
 		<version.joda>2.3</version.joda><!-- maybe one day replaced by Java 1.8 together with Date/Calender -->
 		<version.l2fprod>7.3</version.l2fprod><!-- not being updated -->

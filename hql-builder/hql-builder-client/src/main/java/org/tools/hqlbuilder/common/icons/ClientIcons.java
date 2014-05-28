@@ -1,6 +1,10 @@
 package org.tools.hqlbuilder.common.icons;
 
 public class ClientIcons extends CommonIcons {
+    public static final String CONTROL_REWIND_BLUE_PNG = "control_rewind_blue.png";
+
+    public static final String CONTROL_FASTFORWARD_BLUE_PNG = "control_fastforward_blue.png";
+
     public static final String ZOOM = "zoom.png";
 
     public static final String TABLE_LIGHTNING = "table_lightning.png";
@@ -48,4 +52,10 @@ public class ClientIcons extends CommonIcons {
     public static final String APPLICATION_SIDE_TREE = "application_side_tree.png";
 
     public static final String ADD = "add.png";
+
+    public static final String WAND = "wand.png";
+
+    public static final String DOOR = "door.png";
+
+    public static final String CROSS = "cross.png";
 }
