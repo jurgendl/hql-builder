@@ -42,7 +42,7 @@ public class JaxBIndexEntityProcessor extends AbstractProcessor {
                     TypeElement classElement = (TypeElement) e;
                     PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
                     BufferedWriter jaxbIndex = getJaxbIndex(packageElement.getQualifiedName().toString());
-                    jaxbIndex.write(classElement.getQualifiedName().toString());
+                    jaxbIndex.write(classElement.getSimpleName().toString());
                     jaxbIndex.newLine();
                 }
             }
