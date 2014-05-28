@@ -6,7 +6,6 @@ import java.util.MissingResourceException;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
@@ -23,11 +22,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.util.time.Duration;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.ext.ComponentVisualErrorBehavior;
 import org.tools.hqlbuilder.webservice.wicket.ext.RequiredBehavior;
 
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
@@ -37,9 +38,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected RepeatingView repeater;
 
-    protected boolean inheritId = false;
+    protected final boolean inheritId;
 
-    protected boolean showLabel = true;
+    protected boolean showLabel;
+
+    /** activate ajax on form (per field live validation, submit by ajax) */
+    protected final boolean ajax;
 
     public FormPanel(String id, Class<T> modelType, FormActions<T> actions) {
         this(id, modelType, false, actions);
@@ -52,6 +56,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
         super(FORM_PANEL, model);
 
+        this.ajax = actions.isAjax();
         this.inheritId = inheritId;
 
         setOutputMarkupPlaceholderTag(true);
@@ -87,7 +92,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         ResourceModel cancelModel = new ResourceModel("cancel.label");
 
         Component submit;
-        if (actions.isAjax()) {
+
+        if (ajax) {
             submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
                 private static final long serialVersionUID = -983242396412538529L;
 
@@ -106,7 +112,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons
         Component cancel;
-        if (actions.isAjax()) {
+        if (ajax) {
             cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
                 private static final long serialVersionUID = 4339770380895679763L;
 
@@ -147,8 +153,20 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType));
     }
 
+    @SuppressWarnings("unchecked")
     public FormPanel<T> liveValidation() {
-        AjaxFormValidatingBehavior.addToAllFormComponents(Form.class.cast(get(FORM)), "onkeyup", Duration.NONE);
+        // AjaxFormValidatingBehavior.addToAllFormComponents(Form.class.cast(get(FORM)), "onblur", Duration.NONE);
+        final Form<T> form = Form.class.cast(get(FORM));
+        form.visitChildren(FormComponent.class, new IVisitor<Component, Void>() {
+            @Override
+            public void component(Component component, IVisit<Void> visit) {
+                if (ajax && component.getParent() instanceof FormRowPanel<?, ?>) {
+                    FormRowPanel<T, FormComponent<T>> formRowPanel = (FormRowPanel<T, FormComponent<T>>) component.getParent();
+                    formRowPanel.getComponent().add(new ComponentVisualErrorBehavior("onblur", formRowPanel.getFeedback()));
+                }
+                visit.dontGoDeeper();
+            }
+        });
         return this;
     }
 
@@ -199,6 +217,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected <V, C extends FormComponent<V>> FormRowPanel<V, C> settings(FormRowPanel<V, C> row, boolean required) {
+        row.setAjax(ajax);
         row.setRequired(required);
         row.setInheritId(inheritId);
         row.setShowLabel(showLabel);
@@ -222,11 +241,17 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected C component;
 
+        /** inherited from form it lives in, only set once and never changes value */
         protected boolean required;
 
+        /** inherited from form it lives in, only set once and never changes value */
         protected boolean inheritId;
 
+        /** inherited from form it lives in, only set once and never changes value */
         protected boolean showLabel;
+
+        /** inherited from form it lives in, only set once and never changes value */
+        protected boolean ajax;
 
         public FormRowPanel(final IModel<?> model, final String property, final Class<T> type) {
             super(FORM_ROW, model);
@@ -274,7 +299,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             if (component == null) {
                 component = createComponent();
                 component.setRequired(required);
-                component.add(new RequiredBehavior());
+                if (!ajax) {
+                    component.add(new RequiredBehavior());
+                }
             }
             return this.component;
         }
@@ -369,6 +396,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         public void setRequired(boolean required) {
             this.required = required;
+        }
+
+        public boolean isAjax() {
+            return this.ajax;
+        }
+
+        public void setAjax(boolean ajax) {
+            this.ajax = ajax;
         }
     }
 

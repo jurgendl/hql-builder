@@ -148,6 +148,14 @@ h1,h2,h3,h4,h5 {
 	padding-right: 3px;
 }
 
+.feedbackPanelERROR {
+	font-size: xx-small;
+	color: #EC6F30;
+	vertical-align: top;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
 form.niceform {
 	width: 440px;
 	background-color: #fff;
