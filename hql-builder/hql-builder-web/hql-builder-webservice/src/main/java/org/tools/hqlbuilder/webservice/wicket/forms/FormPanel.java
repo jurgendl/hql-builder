@@ -27,6 +27,7 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.ext.ComponentVisualErrorBehavior;
 import org.tools.hqlbuilder.webservice.wicket.ext.RequiredBehavior;
@@ -155,14 +156,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     @SuppressWarnings("unchecked")
     public FormPanel<T> liveValidation() {
-        // AjaxFormValidatingBehavior.addToAllFormComponents(Form.class.cast(get(FORM)), "onblur", Duration.NONE);
         final Form<T> form = Form.class.cast(get(FORM));
         form.visitChildren(FormComponent.class, new IVisitor<Component, Void>() {
             @Override
             public void component(Component component, IVisit<Void> visit) {
                 if (ajax && component.getParent() instanceof FormRowPanel<?, ?>) {
                     FormRowPanel<T, FormComponent<T>> formRowPanel = (FormRowPanel<T, FormComponent<T>>) component.getParent();
-                    formRowPanel.getComponent().add(new ComponentVisualErrorBehavior("onblur", formRowPanel.getFeedback()));
+                    formRowPanel.getComponent().add(new ComponentVisualErrorBehavior(HtmlFormEvent.BLUR, formRowPanel.getFeedback()));
                 }
                 visit.dontGoDeeper();
             }
