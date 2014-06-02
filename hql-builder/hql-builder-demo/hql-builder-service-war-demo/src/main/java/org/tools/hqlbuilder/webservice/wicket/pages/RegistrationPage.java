@@ -16,6 +16,7 @@ import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormActions;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormComponentSettings;
 
 @MountedPage("/form/registration")
 public class RegistrationPage extends DefaultWebPage {
@@ -53,11 +54,11 @@ public class RegistrationPage extends DefaultWebPage {
 
         Registration proxy = create(Registration.class);
 
-        formPanel.addTextField(name(proxy.getUsername()), true);
-        formPanel.addTextField(name(proxy.getFirstName()), true);
-        formPanel.addTextField(name(proxy.getLastName()), true);
-        formPanel.addEmailTextField(name(proxy.getEmail()), true);
-        formPanel.addDatePicker(name(proxy.getDateOfBirth()), false);
-        formPanel.addPasswordTextField(name(proxy.getPassword()), true);
+        formPanel.addTextField(name(proxy.getUsername()), new FormComponentSettings(true));
+        formPanel.addTextField(name(proxy.getFirstName()), new FormComponentSettings(true));
+        formPanel.addTextField(name(proxy.getLastName()), new FormComponentSettings(true));
+        formPanel.addEmailTextField(name(proxy.getEmail()), new FormComponentSettings(true));
+        formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormComponentSettings(false));
+        formPanel.addPasswordTextField(name(proxy.getPassword()), new FormComponentSettings(true));
     }
 }

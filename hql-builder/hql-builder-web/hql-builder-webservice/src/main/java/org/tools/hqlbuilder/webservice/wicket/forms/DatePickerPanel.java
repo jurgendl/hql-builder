@@ -20,7 +20,9 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormComponentSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSettings;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;
@@ -48,8 +50,9 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
 
     protected Converter<X, Date> dateConverter;
 
-    public DatePickerPanel(IModel<?> model, String property, Converter<X, Date> dateConverter) {
-        super(model, property, Date.class);
+    public DatePickerPanel(IModel<?> model, String property, Converter<X, Date> dateConverter, FormSettings formSettings,
+            FormComponentSettings componentSettings) {
+        super(model, property, Date.class, formSettings, componentSettings);
         this.dateConverter = dateConverter;
     }
 

@@ -13,6 +13,8 @@ public interface FormConstants {
 
     public static final String REQUIRED = "required";
 
+    public static final String CLASS = "class";
+
     public static final String LABEL = "label";
 
     public static final String FOR = "for";

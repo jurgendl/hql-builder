@@ -3,13 +3,16 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormComponentSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSettings;
 
 public class TextFieldPanel<T> extends FormRowPanel<T, TextField<T>> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public TextFieldPanel(final IModel<?> model, final String property, final Class<T> type) {
-        super(model, property, type);
+    public TextFieldPanel(final IModel<?> model, final String property, final Class<T> type, FormSettings formSettings,
+            FormComponentSettings componentSettings) {
+        super(model, property, type, formSettings, componentSettings);
     }
 
     @Override

@@ -141,7 +141,7 @@ h1,h2,h3,h4,h5 {
 }
 
 .requiredMakeup {
-	font-size: xx-small;
+	font-size: small;
 	color: #BCBF60;
 	vertical-align: top;
 	padding-left: 3px;
@@ -149,8 +149,8 @@ h1,h2,h3,h4,h5 {
 }
 
 .feedbackPanelERROR {
-	font-size: xx-small;
-	color: #EC6F30;
+	font-size: small;
+	color: #BCBF60;
 	vertical-align: top;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -668,6 +668,26 @@ form input[type='range']::-moz-range-thumb {
 	border: 1px solid #999;
 	height: 20px;
 	width: 20px;
+}
+
+.valid {
+	border-color: green !important;
+}
+
+.invalid {
+	border-color: red !important;
+}
+
+.required {
+	border-color: yellow !important;
+}
+
+.required.valid {
+	border-color: green !important;
+}
+
+.required.invalid {
+	border-color: red !important;
 }
 
 .unsized {
