@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.MissingResourceException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,6 +17,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -22,15 +26,15 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.request.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
-import org.tools.hqlbuilder.webservice.wicket.ext.ComponentVisualErrorBehavior;
-import org.tools.hqlbuilder.webservice.wicket.ext.RequiredBehavior;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -3268906227997947993L;
@@ -39,12 +43,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected RepeatingView repeater;
 
-    protected final boolean inheritId;
-
-    protected boolean showLabel;
-
-    /** activate ajax on form (per field live validation, submit by ajax) */
-    protected final boolean ajax;
+    protected final FormSettings formSettings;
 
     public FormPanel(String id, Class<T> modelType, FormActions<T> actions) {
         this(id, modelType, false, actions);
@@ -56,10 +55,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
         super(FORM_PANEL, model);
+        formSettings = new FormSettings(inheritId, actions.isAjax());
+        createForm(id, model, actions);
+    }
 
-        this.ajax = actions.isAjax();
-        this.inheritId = inheritId;
-
+    protected void createForm(String id, IModel<T> model, final FormActions<T> actions) {
         setOutputMarkupPlaceholderTag(true);
         setRenderBodyOnly(false);
         setOutputMarkupId(true);
@@ -74,12 +74,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 actions.submit((IModel<T>) getDefaultModel());
             }
         };
-        if (inheritId) {
+        if (formSettings.inheritId) {
             form.setMarkupId(id);
         }
+
         form.setOutputMarkupPlaceholderTag(true);
         form.setRenderBodyOnly(false);
         form.setOutputMarkupId(true);
+
         add(form);
 
         repeater = new RepeatingView(FORM_REPEATER);
@@ -94,7 +96,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         Component submit;
 
-        if (ajax) {
+        if (formSettings.ajax) {
             submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
                 private static final long serialVersionUID = -983242396412538529L;
 
@@ -102,6 +104,22 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 @Override
                 protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
                     actions.afterSubmit(target, form, (IModel<T>) getDefaultModel());
+                }
+
+                @Override
+                protected void onAfterRender() {
+                    super.onAfterRender();
+                    // possible fix ajax validation on password fields (unsafe?)
+                    // for now validation on password fields is disabled
+                    // pass.setResetPassword(false);
+                }
+
+                @Override
+                protected void onBeforeRender() {
+                    super.onBeforeRender();
+                    // possible fix ajax validation on password fields (unsafe?)
+                    // for now validation on password fields is disabled
+                    // pass.setResetPassword(true);
                 }
             };
             submit.setDefaultModel(submitModel);
@@ -113,7 +131,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons
         Component cancel;
-        if (ajax) {
+        if (formSettings.ajax) {
             cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
                 private static final long serialVersionUID = 4339770380895679763L;
 
@@ -131,7 +149,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
         cancel.setVisible(actions.isCancelable());
 
-        if (inheritId) {
+        if (formSettings.inheritId) {
             submit.setMarkupId(id + "." + FORM_SUBMIT);
             reset.setMarkupId(id + "." + FORM_RESET);
             cancel.setMarkupId(id + "." + FORM_CANCEL);
@@ -143,85 +161,233 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public boolean isShowLabel() {
-        return this.showLabel;
+        return formSettings.showLabel;
     }
 
     public void setShowLabel(boolean showLabel) {
-        this.showLabel = showLabel;
+        formSettings.showLabel = showLabel;
+    }
+
+    public String getRequiredClass() {
+        return formSettings.requiredClass;
+    }
+
+    public void setRequiredClass(String requiredClass) {
+        formSettings.requiredClass = requiredClass;
+    }
+
+    public void setLiveValidation(boolean liveValidation) {
+        formSettings.liveValidation = liveValidation;
+    }
+
+    public boolean isLiveValidation() {
+        return formSettings.liveValidation;
     }
 
     public static <T> IModel<T> newFormModel(Class<T> modelType) {
         return new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType));
     }
 
-    @SuppressWarnings("unchecked")
-    public FormPanel<T> liveValidation() {
-        final Form<T> form = Form.class.cast(get(FORM));
-        form.visitChildren(FormComponent.class, new IVisitor<Component, Void>() {
-            @Override
-            public void component(Component component, IVisit<Void> visit) {
-                if (ajax && component.getParent() instanceof FormRowPanel<?, ?>) {
-                    FormRowPanel<T, FormComponent<T>> formRowPanel = (FormRowPanel<T, FormComponent<T>>) component.getParent();
-                    formRowPanel.getComponent().add(new ComponentVisualErrorBehavior(HtmlFormEvent.BLUR, formRowPanel.getFeedback()));
-                }
-                visit.dontGoDeeper();
-            }
-        });
-        return this;
+    protected <V, C extends FormComponent<V>> void setupRequiredBehavior(FormRowPanel<V, C> row) {
+        C component = row.getComponent();
+        if (formSettings.isAjax() && formSettings.isLiveValidation() && !(component instanceof PasswordTextField)) {
+            component.add(setupDynamicRequiredBehavior(row));
+        } else {
+            component.add(setupStaticRequiredBehavior(row));
+        }
     }
 
-    protected <F extends FormComponent<?>> F addId(String property, F component) {
-        if (inheritId) {
+    protected <V, C extends FormComponent<V>> Behavior setupDynamicRequiredBehavior(final FormRowPanel<V, C> row) {
+        return new AjaxFormComponentUpdatingBehavior(HtmlFormEvent.BLUR) {
+            private static final long serialVersionUID = -4260087964340628125L;
+
+            @Override
+            protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
+                C component = row.getComponent();
+                component.add(new CssClassNameRemover(formSettings.validClass));
+                component.add(new CssClassNameAppender(formSettings.invalidClass));
+                ajaxRequestTarget.add(component, row.getFeedback());
+            }
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
+                C component = row.getComponent();
+                component.add(new CssClassNameRemover(formSettings.invalidClass));
+                component.add(new CssClassNameAppender(formSettings.validClass));
+                ajaxRequestTarget.add(component, row.getFeedback());
+            }
+        };
+    }
+
+    protected <V, C extends FormComponent<V>> Behavior setupStaticRequiredBehavior(@SuppressWarnings("unused") FormRowPanel<V, C> row) {
+        return new Behavior() {
+            private static final long serialVersionUID = -8002420572609567089L;
+
+            @SuppressWarnings("rawtypes")
+            @Override
+            public void afterRender(Component c) {
+                Response response = c.getResponse();
+                StringBuffer asterisktHtml = new StringBuffer(200);
+                if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
+                    asterisktHtml.append("<span class=\"fontawesome-asterisk " + formSettings.requiredMarkerClass + "\"/>");
+                }
+                response.write(asterisktHtml);
+            }
+        };
+    }
+
+    protected <F extends FormComponent<?>> void setupId(String property, F component) {
+        if (formSettings.inheritId) {
             component.setMarkupId(property);
         }
-        return component;
     }
 
-    public DatePickerPanel<Date> addDatePicker(String property, boolean required) {
-        return addDatePicker(property, required, (Converter<Date, Date>) null);
+    public DatePickerPanel<Date> addDatePicker(String property, FormComponentSettings componentSettings) {
+        return addDatePicker(property, componentSettings, (Converter<Date, Date>) null);
     }
 
-    public TextFieldPanel<String> addTextField(String property, boolean required) {
-        return addTextField(property, String.class, required);
+    public TextFieldPanel<String> addTextField(String property, FormComponentSettings componentSettings) {
+        return addTextField(property, String.class, componentSettings);
     }
 
-    public <X> DatePickerPanel<X> addDatePicker(String property, boolean required, final Converter<X, Date> dateConverter) {
-        DatePickerPanel<X> row = new DatePickerPanel<X>(getDefaultModel(), property, dateConverter);
-        addRow(property, required, row);
+    public <X> DatePickerPanel<X> addDatePicker(String property, FormComponentSettings componentSettings, final Converter<X, Date> dateConverter) {
+        DatePickerPanel<X> row = new DatePickerPanel<X>(getDefaultModel(), property, dateConverter, formSettings, componentSettings);
+        addRow(property, row);
         return row;
     }
 
-    public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, boolean required) {
-        TextFieldPanel<F> row = new TextFieldPanel<F>(getDefaultModel(), property, type);
-        addRow(property, required, row);
+    public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, FormComponentSettings componentSettings) {
+        TextFieldPanel<F> row = new TextFieldPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings);
+        addRow(property, row);
         return row;
     }
 
-    public EmailTextFieldPanel addEmailTextField(String property, boolean required) {
-        EmailTextFieldPanel row = new EmailTextFieldPanel(getDefaultModel(), property);
-        addRow(property, required, row);
+    public EmailTextFieldPanel addEmailTextField(String property, FormComponentSettings componentSettings) {
+        EmailTextFieldPanel row = new EmailTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings);
+        addRow(property, row);
         return row;
     }
 
-    public PasswordTextFieldPanel addPasswordTextField(String property, boolean required) {
-        PasswordTextFieldPanel row = new PasswordTextFieldPanel(getDefaultModel(), property);
-        addRow(property, required, row);
+    public PasswordTextFieldPanel addPasswordTextField(String property, FormComponentSettings componentSettings) {
+        PasswordTextFieldPanel row = new PasswordTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings);
+        addRow(property, row);
         return row;
     }
 
-    protected <V, C extends FormComponent<V>> FormRowPanel<V, C> addRow(String property, boolean required, FormRowPanel<V, C> row) {
-        settings(row, required);
+    protected <V, C extends FormComponent<V>> FormRowPanel<V, C> addRow(String property, FormRowPanel<V, C> row) {
         row.addComponentsTo(repeater);
-        addId(property, row.getComponent());
+        setupRequiredBehavior(row);
+        setupId(property, row.getComponent());
         return row;
     }
 
-    protected <V, C extends FormComponent<V>> FormRowPanel<V, C> settings(FormRowPanel<V, C> row, boolean required) {
-        row.setAjax(ajax);
-        row.setRequired(required);
-        row.setInheritId(inheritId);
-        row.setShowLabel(showLabel);
-        return row;
+    public static class FormComponentSettings implements Serializable {
+        private static final long serialVersionUID = -2716372832273804363L;
+
+        protected boolean required;
+
+        public FormComponentSettings() {
+            super();
+        }
+
+        public FormComponentSettings(boolean required) {
+            this.required = required;
+        }
+
+        public boolean isRequired() {
+            return this.required;
+        }
+
+        public FormComponentSettings setRequired(boolean required) {
+            this.required = required;
+            return this;
+        }
+    }
+
+    public static class FormSettings implements Serializable {
+        private static final long serialVersionUID = 3682532274799101432L;
+
+        /** fixed ids */
+        protected final boolean inheritId;
+
+        /** activate ajax on form (per field live validation, submit by ajax) */
+        protected final boolean ajax;
+
+        /** show label */
+        protected boolean showLabel = true;
+
+        /** css class for required fields */
+        protected String requiredClass = "required";
+
+        protected String validClass = "valid";
+
+        protected String invalidClass = "invalid";
+
+        protected String requiredMarkerClass = "requiredMarker";
+
+        /** requires ajax = true */
+        protected boolean liveValidation = false;
+
+        public FormSettings(boolean inheritId, boolean ajax) {
+            this.inheritId = inheritId;
+            this.ajax = ajax;
+        }
+
+        public boolean isInheritId() {
+            return this.inheritId;
+        }
+
+        public boolean isShowLabel() {
+            return this.showLabel;
+        }
+
+        public boolean isAjax() {
+            return this.ajax;
+        }
+
+        public String getRequiredClass() {
+            return this.requiredClass;
+        }
+
+        public boolean isLiveValidation() {
+            return this.liveValidation;
+        }
+
+        protected String getClassInvalid() {
+            return "invalid";
+        }
+
+        protected String getClassValid() {
+            return "valid";
+        }
+
+        public String getValidClass() {
+            return this.validClass;
+        }
+
+        public String getInvalidClass() {
+            return this.invalidClass;
+        }
+
+        public String getRequiredMarkerClass() {
+            return this.requiredMarkerClass;
+        }
+
+        public void setRequiredClass(String requiredClass) {
+            this.requiredClass = requiredClass;
+        }
+
+        public void setValidClass(String validClass) {
+            this.validClass = validClass;
+        }
+
+        public void setInvalidClass(String invalidClass) {
+            this.invalidClass = invalidClass;
+        }
+
+        public void setRequiredMarkerClass(String requiredMarkerClass) {
+            this.requiredMarkerClass = requiredMarkerClass;
+        }
     }
 
     public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
@@ -241,22 +407,18 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected C component;
 
-        /** inherited from form it lives in, only set once and never changes value */
-        protected boolean required;
+        protected final FormSettings formSettings;
 
-        /** inherited from form it lives in, only set once and never changes value */
-        protected boolean inheritId;
+        protected final FormComponentSettings componentSettings;
 
-        /** inherited from form it lives in, only set once and never changes value */
-        protected boolean showLabel;
-
-        /** inherited from form it lives in, only set once and never changes value */
-        protected boolean ajax;
-
-        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type) {
+        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, FormSettings formSettings,
+                FormComponentSettings componentSettings) {
             super(FORM_ROW, model);
+            this.formSettings = formSettings;
+            this.componentSettings = componentSettings;
             this.property = property;
             this.type = type;
+
             setOutputMarkupPlaceholderTag(false);
             setRenderBodyOnly(true);
             setOutputMarkupId(false);
@@ -282,7 +444,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
                     @Override
                     public boolean isVisible() {
-                        return super.isVisible() && showLabel;
+                        return super.isVisible() && formSettings.isShowLabel();
                     }
 
                     @Override
@@ -298,10 +460,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         protected C getComponent() {
             if (component == null) {
                 component = createComponent();
-                component.setRequired(required);
-                if (!ajax) {
-                    component.add(new RequiredBehavior());
-                }
+                setupRequired(component);
             }
             return this.component;
         }
@@ -346,10 +505,21 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
 
         protected void setupRequired(ComponentTag tag) {
-            if (required) {
-                tag.getAttributes().put(REQUIRED, required);
+            if (componentSettings.isRequired()) {
+                tag.getAttributes().put(REQUIRED, componentSettings.isRequired());
             } else {
                 tag.getAttributes().remove(REQUIRED);
+            }
+        }
+
+        private void setupRequired(C component) {
+            component.setRequired(componentSettings.isRequired());
+            if (StringUtils.isNotBlank(formSettings.getRequiredClass())) {
+                if (componentSettings.isRequired()) {
+                    component.add(new CssClassNameAppender(formSettings.getRequiredClass()));
+                } else {
+                    component.add(new CssClassNameRemover(formSettings.getRequiredClass()));
+                }
             }
         }
 
@@ -374,37 +544,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return new PropertyModel<T>(getDefaultModel(), property);
         }
 
-        public boolean isShowLabel() {
-            return this.showLabel;
-        }
-
-        public void setShowLabel(boolean showLabel) {
-            this.showLabel = showLabel;
-        }
-
-        public boolean isInheritId() {
-            return this.inheritId;
-        }
-
-        public void setInheritId(boolean inheritId) {
-            this.inheritId = inheritId;
-        }
-
-        public boolean isRequired() {
-            return this.required;
-        }
-
-        public void setRequired(boolean required) {
-            this.required = required;
-        }
-
-        public boolean isAjax() {
-            return this.ajax;
-        }
-
-        public void setAjax(boolean ajax) {
-            this.ajax = ajax;
-        }
     }
 
     public static interface FormActions<T> extends Serializable {

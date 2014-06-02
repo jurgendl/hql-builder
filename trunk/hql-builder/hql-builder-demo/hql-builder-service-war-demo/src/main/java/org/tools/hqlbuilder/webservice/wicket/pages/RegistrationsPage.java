@@ -25,8 +25,8 @@ import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormActions;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormComponentSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table;
-import org.tools.hqlbuilder.webservice.wicket.tables.Table.DataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.DefaultDataProvider;
 
 @MountedPage("/form/registrations")
@@ -47,7 +47,7 @@ public class RegistrationsPage extends DefaultWebPage {
 
         Registration proxy = create(Registration.class);
 
-        DataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
+        DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
             private static final long serialVersionUID = 6812428385117168023L;
 
             @Override
@@ -95,6 +95,7 @@ public class RegistrationsPage extends DefaultWebPage {
                 target.add(formPanel);
             }
         };
+        dataProvider.setRowsPerPage(5);
 
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
         columns.add(Table.<Registration> newColumn(this, proxy.getFirstName()));
@@ -133,13 +134,13 @@ public class RegistrationsPage extends DefaultWebPage {
             }
         };
         formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true, formActions);
-        formPanel.addTextField(name(proxy.getUsername()), true);
-        formPanel.addTextField(name(proxy.getFirstName()), true);
-        formPanel.addTextField(name(proxy.getLastName()), true);
-        formPanel.addEmailTextField(name(proxy.getEmail()), true);
-        formPanel.addDatePicker(name(proxy.getDateOfBirth()), true);
-        formPanel.addPasswordTextField(name(proxy.getPassword()), true);
-        formPanel.liveValidation();
+        formPanel.setLiveValidation(true);
+        formPanel.addTextField(name(proxy.getUsername()), new FormComponentSettings(true));
+        formPanel.addTextField(name(proxy.getFirstName()), new FormComponentSettings(true));
+        formPanel.addTextField(name(proxy.getLastName()), new FormComponentSettings(true));
+        formPanel.addEmailTextField(name(proxy.getEmail()), new FormComponentSettings(true));
+        formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormComponentSettings(true));
+        formPanel.addPasswordTextField(name(proxy.getPassword()), new FormComponentSettings(true));
 
         formPanel.setVisible(false);
 
