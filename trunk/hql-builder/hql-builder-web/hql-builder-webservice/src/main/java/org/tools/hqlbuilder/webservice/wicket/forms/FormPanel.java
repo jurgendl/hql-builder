@@ -45,27 +45,23 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected final FormSettings formSettings;
 
-    public FormPanel(String id, Class<T> modelType, FormActions<T> actions) {
-        super(FORM_PANEL, newFormModel(modelType));
-        formSettings = new FormSettings(false, actions.isAjax());
-        createForm(id, getFormModel(), actions);
+    public static <T> IModel<T> newFormModel(Class<T> modelType) {
+        return newFormModel(BeanUtils.instantiate(modelType));
     }
 
-    public FormPanel(String id, Class<T> modelType, boolean inheritId, FormActions<T> actions) {
-        super(FORM_PANEL, newFormModel(modelType));
-        formSettings = new FormSettings(inheritId, actions.isAjax());
-        createForm(id, getFormModel(), actions);
-    }
-
-    @SuppressWarnings("unchecked")
-    public IModel<T> getFormModel() {
-        return (IModel<T>) getDefaultModel();
+    public static <T> IModel<T> newFormModel(T model) {
+        return new CompoundPropertyModel<T>(model);
     }
 
     public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
         super(FORM_PANEL, model);
         formSettings = new FormSettings(inheritId, actions.isAjax());
         createForm(id, model, actions);
+    }
+
+    @SuppressWarnings("unchecked")
+    public IModel<T> getFormModel() {
+        return (IModel<T>) getDefaultModel();
     }
 
     protected void createForm(String id, IModel<T> model, final FormActions<T> actions) {
@@ -191,10 +187,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public boolean isLiveValidation() {
         return formSettings.liveValidation;
-    }
-
-    public static <T> IModel<T> newFormModel(Class<T> modelType) {
-        return new CompoundPropertyModel<T>(BeanUtils.instantiate(modelType));
     }
 
     protected <V, C extends FormComponent<V>> void setupRequiredBehavior(FormRowPanel<V, C> row) {

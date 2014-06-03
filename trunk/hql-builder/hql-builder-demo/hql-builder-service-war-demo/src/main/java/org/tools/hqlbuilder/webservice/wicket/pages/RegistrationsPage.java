@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
+import static org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.newFormModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -84,14 +85,14 @@ public class RegistrationsPage extends DefaultWebPage {
             @Override
             public void edit(AjaxRequestTarget target, Registration object) {
                 formPanel.setVisible(true);
-                formPanel.setDefaultModelObject(Model.of(object));
+                formPanel.setDefaultModel(newFormModel(object));
                 target.add(formPanel);
             }
 
             @Override
             public void add(AjaxRequestTarget target) {
                 formPanel.setVisible(true);
-                formPanel.setDefaultModelObject(FormPanel.newFormModel(Registration.class));
+                formPanel.setDefaultModel(newFormModel(Registration.class));
                 target.add(formPanel);
             }
         };
@@ -121,7 +122,7 @@ public class RegistrationsPage extends DefaultWebPage {
 
             @Override
             public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
-                formPanel.setDefaultModelObject(FormPanel.newFormModel(Registration.class));
+                formPanel.setDefaultModel(newFormModel(Registration.class));
                 formPanel.setVisible(false);
                 table.setVisible(true);
                 target.add(formPanel);
@@ -133,7 +134,7 @@ public class RegistrationsPage extends DefaultWebPage {
                 return true;
             }
         };
-        formPanel = new FormPanel<Registration>(FORM_ID, Registration.class, true, formActions);
+        formPanel = new FormPanel<Registration>(FORM_ID, Model.of(new Registration()), true, formActions);
         formPanel.setLiveValidation(true);
         formPanel.addTextField(name(proxy.getUsername()), new FormComponentSettings(true));
         formPanel.addTextField(name(proxy.getFirstName()), new FormComponentSettings(true));
