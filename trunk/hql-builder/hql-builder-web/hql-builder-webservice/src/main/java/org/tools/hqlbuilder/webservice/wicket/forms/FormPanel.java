@@ -46,11 +46,20 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected final FormSettings formSettings;
 
     public FormPanel(String id, Class<T> modelType, FormActions<T> actions) {
-        this(id, modelType, false, actions);
+        super(FORM_PANEL, newFormModel(modelType));
+        formSettings = new FormSettings(false, actions.isAjax());
+        createForm(id, getFormModel(), actions);
     }
 
     public FormPanel(String id, Class<T> modelType, boolean inheritId, FormActions<T> actions) {
-        this(id, newFormModel(modelType), inheritId, actions);
+        super(FORM_PANEL, newFormModel(modelType));
+        formSettings = new FormSettings(inheritId, actions.isAjax());
+        createForm(id, getFormModel(), actions);
+    }
+
+    @SuppressWarnings("unchecked")
+    public IModel<T> getFormModel() {
+        return (IModel<T>) getDefaultModel();
     }
 
     public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
@@ -190,7 +199,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected <V, C extends FormComponent<V>> void setupRequiredBehavior(FormRowPanel<V, C> row) {
         C component = row.getComponent();
-        if (formSettings.isAjax() && formSettings.isLiveValidation() && !(component instanceof PasswordTextField)) {
+        if (formSettings.isAjax() && formSettings.isLiveValidation() && !(component instanceof PasswordTextField)
+                && !(component instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
             component.add(setupDynamicRequiredBehavior(row));
         } else {
             component.add(setupStaticRequiredBehavior(row));
