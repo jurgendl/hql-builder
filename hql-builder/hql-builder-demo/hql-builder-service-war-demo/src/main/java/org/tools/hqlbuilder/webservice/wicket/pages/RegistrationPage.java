@@ -6,6 +6,7 @@ import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 import java.io.Serializable;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDateTime;
@@ -49,7 +50,7 @@ public class RegistrationPage extends DefaultWebPage {
                 return false;
             }
         };
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Registration.class, true, formActions);
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Model.of(new Registration()), true, formActions);
         add(formPanel);
 
         Registration proxy = create(Registration.class);
