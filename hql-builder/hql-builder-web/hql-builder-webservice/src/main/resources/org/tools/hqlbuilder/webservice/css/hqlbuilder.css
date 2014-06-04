@@ -443,6 +443,18 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	color: #8f5a0a;
 }
 
+.likebutton.disabled {
+	background-color: #999999;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#888888),
+		to(#AAAAAA));
+	background-image: -webkit-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -moz-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -ms-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -o-linear-gradient(top, #888888, #AAAAAA);
+	background-image: linear-gradient(top, #888888, #AAAAAA);
+	cursor: default;
+}
+
 button.fixedw {
 	width: 142px;
 }
@@ -515,6 +527,18 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 }
 
+.likebutton.disabled:focus {
+	background-color: #999999;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#888888),
+		to(#AAAAAA));
+	background-image: -webkit-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -moz-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -ms-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -o-linear-gradient(top, #888888, #AAAAAA);
+	background-image: linear-gradient(top, #888888, #AAAAAA);
+	cursor: default;
+}
+
 .likebutton:hover {
 	background-color: #fddb6f;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
@@ -527,6 +551,18 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 	color: #8f5a0a;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
+}
+
+.likebutton.disabled:hover {
+	background-color: #999999;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#888888),
+		to(#AAAAAA));
+	background-image: -webkit-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -moz-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -ms-linear-gradient(top, #888888, #AAAAAA);
+	background-image: -o-linear-gradient(top, #888888, #AAAAAA);
+	background-image: linear-gradient(top, #888888, #AAAAAA);
+	cursor: default;
 }
 
 .likebutton:active {
@@ -762,20 +798,14 @@ table {
 th {
 	padding: 9px 14px 9px;
 	text-align: center;
-}
-
-td {
-	padding: 4px 8px 4px;
-	text-align: center;
-}
-
-th {
 	padding-top: 11px;
 	text-shadow: 1px 1px 1px #fff;
 	background: #e8eaeb;
 }
 
 td {
+	padding: 4px 8px 4px;
+	text-align: center;
 	border-top: 1px solid #e0e0e0;
 	border-right: 1px solid #e0e0e0;
 }
@@ -792,20 +822,21 @@ td.last {
 	Background gradients are completely unnessary but a neat effect.
 	*/
 td {
-	background: -moz-linear-gradient(100% 25% 90deg, #fefefe, #f9f9f9);
-	background: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f9f9f9),
+	background-image: -moz-linear-gradient(100% 25% 90deg, #fefefe, #f9f9f9);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f9f9f9),
 		to(#fefefe));
 }
 
 tr.odd td {
-	background: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
-	background: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
+	background-image: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
 		to(#f6f6f6));
 }
 
 th {
-	background: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
-	background: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#ededed),
+	background-color: #e8eaeb;
+	background-image: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#e8eaeb),
 		to(#e8eaeb));
 }
 

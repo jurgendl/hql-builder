@@ -15,6 +15,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
@@ -32,9 +35,12 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -45,6 +51,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 /**
  * @see https://www.packtpub.com/article/apache-wicket-displaying-data-using-datatable
@@ -351,6 +360,55 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
         public PagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
             super(id, pageable, labelProvider);
+        }
+
+        @Override
+        protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
+            AbstractLink link = new AjaxPagingNavigationIncrementLink(id, pageable, increment);
+            modifyButtonLinkDisableBehavior(link);
+            return link;
+        }
+
+        @Override
+        protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
+            final AbstractLink link = new AjaxPagingNavigationLink(id, pageable, pageNumber);
+            modifyButtonLinkDisableBehavior(link);
+            return link;
+        }
+
+        @Override
+        protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
+            return new AjaxPagingNavigation(id, pageable, labelProvider) {
+                private static final long serialVersionUID = -6446431226749147484L;
+
+                @SuppressWarnings("hiding")
+                @Override
+                protected Link<?> newPagingNavigationLink(String id, IPageable pageable, long pageIndex) {
+                    final Link<?> link = new AjaxPagingNavigationLink(id, pageable, pageIndex);
+                    modifyButtonLinkDisableBehavior(link);
+                    return link;
+                }
+            };
+        }
+
+        protected void modifyButtonLinkDisableBehavior(final AbstractLink link) {
+            String CSS_DISABLED_STYLE = "disabled";
+            link.add(new CssClassNameAppender(CSS_DISABLED_STYLE) {
+                private static final long serialVersionUID = -7077515156924411650L;
+
+                @Override
+                public boolean isEnabled(Component component) {
+                    return super.isEnabled(component) && !link.isEnabled();
+                }
+            });
+            link.add(new CssClassNameRemover(CSS_DISABLED_STYLE) {
+                private static final long serialVersionUID = -4390935870504634276L;
+
+                @Override
+                public boolean isEnabled(Component component) {
+                    return super.isEnabled(component) && link.isEnabled();
+                }
+            });
         }
     }
 
