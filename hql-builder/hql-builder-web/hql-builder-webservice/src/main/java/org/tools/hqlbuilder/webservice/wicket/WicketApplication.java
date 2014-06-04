@@ -159,10 +159,13 @@ public class WicketApplication extends WebApplication {
         }
 
         // mount resources
-        mountResources();
+        mountImages();
 
         // mount pages
         mountPages();
+
+        getMarkupSettings().setDefaultBeforeDisabledLink("");
+        getMarkupSettings().setDefaultAfterDisabledLink("");
     }
 
     protected JavaScriptReferenceHeaderItem jsBundleReference;
@@ -210,7 +213,7 @@ public class WicketApplication extends WebApplication {
 
         addToJsBundle(jsResources);
         if (WicketApplication.get().usesDeploymentConfig() && !jsResources.isEmpty()) {
-            jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "hqlbuilder.jsbundle.js",
+            jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "hqlbuilder.jsbundle.js", // virtual name
                     jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
             jsResources.clear();
         }
@@ -218,7 +221,7 @@ public class WicketApplication extends WebApplication {
 
         addToCssBundle(cssResources);
         if (WicketApplication.get().usesDeploymentConfig() && !cssResources.isEmpty()) {
-            cssBundleReference = getResourceBundles().addCssBundle(WicketCSSRoot.class, "hqlbuilder.cssbundle.css",
+            cssBundleReference = getResourceBundles().addCssBundle(WicketCSSRoot.class, "hqlbuilder.cssbundle.css", // virtual name
                     cssResources.toArray(new CssResourceReference[cssResources.size()]));
             cssResources.clear();
         }
@@ -286,7 +289,7 @@ public class WicketApplication extends WebApplication {
         }
     }
 
-    protected void mountResources() {
+    protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
         //
@@ -295,17 +298,18 @@ public class WicketApplication extends WebApplication {
                 "arrow_down.png" //
         };//
         for (String mountedImage : mountedImages) {
-            logger.info("mounting image " + cssImages + mountedImage);
-            PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, cssImages + mountedImage);
-            mountResource(cssImages + mountedImage, reference);
+            String fullpath = cssImages + mountedImage;
+            PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, fullpath);
+            mountResource(fullpath, reference);
+            logger.info("mounting image: " + WicketRoot.class.getCanonicalName() + ": " + fullpath);
         }
-
         for (Field field : WicketIconsRoot.class.getFields()) {
             try {
-                String path = String.valueOf(field.get(WicketIconsRoot.class));
-                PackageResourceReference reference = new PackageResourceReference(WicketIconsRoot.class, path);
-                mountResource(cssImages + path, reference);
-                logger.info("mounting image " + cssImages + path);
+                final String name = String.valueOf(field.get(WicketIconsRoot.class));
+                PackageResourceReference reference = new ResourceRef(WicketCSSRoot.class, cssImages + name, name);
+                getSharedResources().add(cssImages + name, reference.getResource());
+                mountResource(cssImages + name, reference);
+                logger.info("mounting image: " + WicketRoot.class.getCanonicalName() + ": " + cssImages + name);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

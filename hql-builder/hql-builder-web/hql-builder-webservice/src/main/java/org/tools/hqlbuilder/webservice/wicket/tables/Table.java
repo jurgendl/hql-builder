@@ -15,9 +15,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -31,6 +33,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.navigation.paging.IPageable;
+import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -57,6 +61,10 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     public Table(List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
         super(ID, columns, dataProvider, dataProvider.getRowsPerPage());
         setOutputMarkupId(true);
+    }
+
+    public DataProvider<T> getDataprovider() {
+        return (DataProvider<T>) getDataProvider();
     }
 
     public static <D> IColumn<D, String> newColumn(Component parent, Object argument) {
@@ -313,7 +321,37 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     @Override
     public void addBottomToolbar(AbstractToolbar toolbar) {
-        super.addBottomToolbar(new BottomToolbar(this, (DataProvider<T>) getDataProvider()));
+        super.addBottomToolbar(new BottomToolbar(this, getDataprovider()));
+    }
+
+    @Override
+    public void addTopToolbar(AbstractToolbar toolbar) {
+        if (toolbar instanceof AjaxNavigationToolbar) {
+            super.addTopToolbar(new TopToolbar(this, getDataprovider()));
+        } else {
+            super.addTopToolbar(toolbar);
+        }
+    }
+
+    public class TopToolbar extends AjaxNavigationToolbar {
+        private static final long serialVersionUID = 5357630031470369371L;
+
+        public TopToolbar(final DataTable<T, String> table, @SuppressWarnings("unused") final DataProvider<T> dataProvider) {
+            super(table);
+        }
+
+        @Override
+        protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
+            return new PagingNavigator(navigatorId, table, null);
+        }
+    }
+
+    public class PagingNavigator extends AjaxPagingNavigator {
+        private static final long serialVersionUID = -7908599596836839759L;
+
+        public PagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
+            super(id, pageable, labelProvider);
+        }
     }
 
     public class BottomToolbar extends AbstractToolbar {
