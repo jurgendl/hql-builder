@@ -13,8 +13,8 @@ import java.util.MissingResourceException;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
@@ -232,7 +232,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             super(id);
             setOutputMarkupId(true);
             final Form<T> form = new Form<T>(ACTIONS_FORM_ID);
-            AjaxSubmitLink editLink = new AjaxSubmitLink(ACTIONS_EDIT_ID) {
+            AjaxFallbackButton editLink = new AjaxFallbackButton(ACTIONS_EDIT_ID, form) {
                 private static final long serialVersionUID = 2542930376888979931L;
 
                 @Override
@@ -241,7 +241,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 }
             };
             form.add(editLink);
-            AjaxSubmitLink deleteLink = new AjaxSubmitLink(ACTIONS_DELETE_ID) {
+            AjaxFallbackButton deleteLink = new AjaxFallbackButton(ACTIONS_DELETE_ID, form) {
                 private static final long serialVersionUID = 2542930376888979931L;
 
                 @Override
@@ -435,7 +435,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             norecordsfoundLabel.setVisible(getTable().getRowCount() == 0);
             td.add(norecordsfoundLabel);
 
-            AjaxLink<String> addLink = new AjaxLink<String>(ACTIONS_ADD_ID) {
+            AjaxFallbackLink<String> addLink = new AjaxFallbackLink<String>(ACTIONS_ADD_ID) {
                 private static final long serialVersionUID = 2542930376888979931L;
 
                 @Override
