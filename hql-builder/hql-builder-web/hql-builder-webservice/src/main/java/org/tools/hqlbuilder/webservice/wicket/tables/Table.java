@@ -3,12 +3,12 @@ package org.tools.hqlbuilder.webservice.wicket.tables;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
@@ -18,6 +18,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -55,8 +56,8 @@ class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, Stri
 
     public String CSS_DISABLED_STYLE = "disabled";
 
-    public Table(String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
-        super(id, columns, dataProvider, dataProvider.getRowsPerPage());
+    public Table(Form<?> form, String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
+        super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
         setOutputMarkupId(true);
     }
 
@@ -265,13 +266,78 @@ class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, Stri
             norecordsfoundLabel.setVisible(getTable().getRowCount() == 0);
             td.add(norecordsfoundLabel);
 
-            AjaxFallbackLink<String> addLink = new AjaxFallbackLink<String>(ACTIONS_ADD_ID) {
+            // ugly hack, parent='tableform' is set during form.add(table) which happens later and we need the form here
+            // possible fix 1: put this in a form (form within form)
+            // possible fix 2: adjust AjaxFallbackButton to fetch form at the moment of execution later so it is not needed during contruction
+            Form<?> form = ((DelegateDataProvider<T>) getDataprovider()).getForm();
+            AjaxFallbackButton addLink = new AjaxFallbackButton(ACTIONS_ADD_ID, form) {
                 @Override
-                public void onClick(AjaxRequestTarget target) {
+                protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
                     dataProvider.add(target);
                 }
             };
-            td.add(addLink);
+            add(addLink);
+        }
+    }
+
+    /** ugly hack to get form parent later during contructor execution */
+    private static class DelegateDataProvider<T extends Serializable> implements DataProvider<T> {
+        private final Form<?> form;
+
+        private final DataProvider<T> delegate;
+
+        public DelegateDataProvider(Form<?> form, DataProvider<T> delegate) {
+            this.delegate = delegate;
+            this.form = form;
+        }
+
+        @Override
+        public void delete(AjaxRequestTarget target, T object) {
+            this.delegate.delete(target, object);
+        }
+
+        @Override
+        public void edit(AjaxRequestTarget target, T object) {
+            this.delegate.edit(target, object);
+        }
+
+        @Override
+        public void add(AjaxRequestTarget target) {
+            this.delegate.add(target);
+        }
+
+        @Override
+        public int getRowsPerPage() {
+            return this.delegate.getRowsPerPage();
+        }
+
+        @Override
+        public ISortState<String> getSortState() {
+            return this.delegate.getSortState();
+        }
+
+        @Override
+        public void detach() {
+            this.delegate.detach();
+        }
+
+        @Override
+        public Iterator<? extends T> iterator(long first, long count) {
+            return this.delegate.iterator(first, count);
+        }
+
+        @Override
+        public long size() {
+            return this.delegate.size();
+        }
+
+        @Override
+        public IModel<T> model(T object) {
+            return this.delegate.model(object);
+        }
+
+        public Form<?> getForm() {
+            return this.form;
         }
     }
 }
