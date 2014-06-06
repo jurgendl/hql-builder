@@ -86,12 +86,12 @@ public class DefaultWebPage extends WebPage {
         for (ResourceReference resource : WicketApplication.get().getJsResources()) {
             response.render(JavaScriptHeaderItem.forReference(JavaScriptResourceReference.class.cast(resource)));
         }
-        if (WicketApplication.get().getJsBundleReference() != null) {
-            response.render(WicketApplication.get().getJsBundleReference());
-        }
-        if (WicketApplication.get().getCssBundleReference() != null) {
-            response.render(WicketApplication.get().getCssBundleReference());
-        }
+        // if (WicketApplication.get().getJsBundleReference() != null) {
+        // response.render(WicketApplication.get().getJsBundleReference());
+        // }
+        // if (WicketApplication.get().getCssBundleReference() != null) {
+        // response.render(WicketApplication.get().getCssBundleReference());
+        // }
     }
 
     @Override

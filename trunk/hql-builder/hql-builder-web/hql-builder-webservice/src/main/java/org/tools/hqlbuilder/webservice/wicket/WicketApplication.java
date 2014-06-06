@@ -15,8 +15,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -168,9 +166,9 @@ public class WicketApplication extends WebApplication {
         getMarkupSettings().setDefaultAfterDisabledLink("");
     }
 
-    protected JavaScriptReferenceHeaderItem jsBundleReference;
+    // protected JavaScriptReferenceHeaderItem jsBundleReference;
 
-    protected CssReferenceHeaderItem cssBundleReference;
+    // protected CssReferenceHeaderItem cssBundleReference;
 
     /** only add CssResourceReference */
     protected List<ResourceReference> jsResources = new ArrayList<ResourceReference>();
@@ -195,6 +193,7 @@ public class WicketApplication extends WebApplication {
         if (WicketApplication.get().usesDevelopmentConfig()) {
             js.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
         }
+        addToJsBundle(js);
     }
 
     protected void addToCssBundle(List<ResourceReference> css) {
@@ -202,8 +201,8 @@ public class WicketApplication extends WebApplication {
         css.add(new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts.css"));
     }
 
-    protected void addToCssResources(@SuppressWarnings("unused") List<ResourceReference> css) {
-        //
+    protected void addToCssResources(List<ResourceReference> css) {
+        addToCssBundle(css);
     }
 
     protected void initDefaultResources() {
@@ -211,20 +210,22 @@ public class WicketApplication extends WebApplication {
         settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get()); // not set by default
         this.setJavaScriptLibrarySettings(settings);
 
-        addToJsBundle(jsResources);
-        if (WicketApplication.get().usesDeploymentConfig() && !jsResources.isEmpty()) {
-            jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "hqlbuilder.jsbundle.js", // virtual name
-                    jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
-            jsResources.clear();
-        }
+        // disable bundling: css image url bug?
+
+        // addToJsBundle(jsResources);
+        // if (WicketApplication.get().usesDeploymentConfig() && !jsResources.isEmpty()) {
+        // jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "hqlbuilder.jsbundle.js", // virtual name
+        // jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
+        // jsResources.clear();
+        // }
         addToJsResources(jsResources);
 
-        addToCssBundle(cssResources);
-        if (WicketApplication.get().usesDeploymentConfig() && !cssResources.isEmpty()) {
-            cssBundleReference = getResourceBundles().addCssBundle(WicketCSSRoot.class, "hqlbuilder.cssbundle.css", // virtual name
-                    cssResources.toArray(new CssResourceReference[cssResources.size()]));
-            cssResources.clear();
-        }
+        // addToCssBundle(cssResources);
+        // if (WicketApplication.get().usesDeploymentConfig() && !cssResources.isEmpty()) {
+        // cssBundleReference = getResourceBundles().addCssBundle(WicketCSSRoot.class, "hqlbuilder.cssbundle.css", // virtual name
+        // cssResources.toArray(new CssResourceReference[cssResources.size()]));
+        // cssResources.clear();
+        // }
         addToCssResources(cssResources);
     }
 
@@ -346,21 +347,21 @@ public class WicketApplication extends WebApplication {
         }
     }
 
-    public JavaScriptReferenceHeaderItem getJsBundleReference() {
-        return this.jsBundleReference;
-    }
-
-    public CssReferenceHeaderItem getCssBundleReference() {
-        return this.cssBundleReference;
-    }
-
-    public void setJsBundleReference(JavaScriptReferenceHeaderItem jsBundleReference) {
-        this.jsBundleReference = jsBundleReference;
-    }
-
-    public void setCssBundleReference(CssReferenceHeaderItem cssBundleReference) {
-        this.cssBundleReference = cssBundleReference;
-    }
+    // public JavaScriptReferenceHeaderItem getJsBundleReference() {
+    // return this.jsBundleReference;
+    // }
+    //
+    // public CssReferenceHeaderItem getCssBundleReference() {
+    // return this.cssBundleReference;
+    // }
+    //
+    // public void setJsBundleReference(JavaScriptReferenceHeaderItem jsBundleReference) {
+    // this.jsBundleReference = jsBundleReference;
+    // }
+    //
+    // public void setCssBundleReference(CssReferenceHeaderItem cssBundleReference) {
+    // this.cssBundleReference = cssBundleReference;
+    // }
 
     public List<ResourceReference> getJsResources() {
         return this.jsResources;

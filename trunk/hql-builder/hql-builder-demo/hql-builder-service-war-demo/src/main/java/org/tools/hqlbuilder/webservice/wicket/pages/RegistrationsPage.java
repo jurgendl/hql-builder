@@ -79,21 +79,27 @@ public class RegistrationsPage extends DefaultWebPage {
             @Override
             public void delete(AjaxRequestTarget target, Registration object) {
                 hqlWebClient.delete(object);
-                target.add(table);
+                if (target != null) {
+                    target.add(table);
+                }
             }
 
             @Override
             public void edit(AjaxRequestTarget target, Registration object) {
                 formPanel.setVisible(true);
                 formPanel.setDefaultModel(newFormModel(object));
-                target.add(formPanel);
+                if (target != null) {
+                    target.add(formPanel);
+                }
             }
 
             @Override
             public void add(AjaxRequestTarget target) {
                 formPanel.setVisible(true);
                 formPanel.setDefaultModel(newFormModel(Registration.class));
-                target.add(formPanel);
+                if (target != null) {
+                    target.add(formPanel);
+                }
             }
         };
         dataProvider.setRowsPerPage(5);
@@ -125,8 +131,12 @@ public class RegistrationsPage extends DefaultWebPage {
                 formPanel.setDefaultModel(newFormModel(Registration.class));
                 formPanel.setVisible(false);
                 table.setVisible(true);
-                target.add(formPanel);
-                target.add(table);
+                if (target != null) {
+                    target.add(formPanel);
+                }
+                if (target != null) {
+                    target.add(table);
+                }
             }
 
             @Override

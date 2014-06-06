@@ -21,6 +21,10 @@ public interface FormConstants {
 
     public static final String FORM_ROW = "form.row";
 
+    public static final String FORM_ACTIONS = "form.actions";
+
+    public static final String FORM_BODY = "form.body";
+
     public static final String FORM_RESET = "form.reset";
 
     public static final String FORM_CANCEL = "form.cancel";
