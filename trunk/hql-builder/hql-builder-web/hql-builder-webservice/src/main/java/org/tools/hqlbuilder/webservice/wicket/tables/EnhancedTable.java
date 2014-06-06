@@ -47,7 +47,7 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         setOutputMarkupId(true);
         Form<?> form = new Form<Object>(FORM_ID);
         add(form);
-        table = new Table<T>(TABLE_ID, columns, dataProvider);
+        table = new Table<T>(form, TABLE_ID, columns, dataProvider);
         form.add(table);
     }
 
