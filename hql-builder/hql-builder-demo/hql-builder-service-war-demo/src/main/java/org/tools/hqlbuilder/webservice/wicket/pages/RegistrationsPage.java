@@ -24,11 +24,11 @@ import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
+import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormActions;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormComponentSettings;
-import org.tools.hqlbuilder.webservice.wicket.tables.Table;
-import org.tools.hqlbuilder.webservice.wicket.tables.Table.DefaultDataProvider;
+import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
+import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
 
 @MountedPage("/form/registrations")
 public class RegistrationsPage extends DefaultWebPage {
@@ -41,7 +41,7 @@ public class RegistrationsPage extends DefaultWebPage {
 
     private FormPanel<Registration> formPanel;
 
-    private Table<Registration> table;
+    private EnhancedTable<Registration> table;
 
     public RegistrationsPage(PageParameters parameters) {
         super(parameters);
@@ -105,14 +105,14 @@ public class RegistrationsPage extends DefaultWebPage {
         dataProvider.setRowsPerPage(5);
 
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
-        columns.add(Table.<Registration> newColumn(this, proxy.getFirstName()));
-        columns.add(Table.<Registration> newColumn(this, proxy.getLastName()));
-        columns.add(Table.<Registration> newColumn(this, proxy.getUsername()));
-        columns.add(Table.<Registration> newEmailColumn(this, proxy.getEmail()));
-        columns.add(Table.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
-        columns.add(Table.<Registration> getActionsColumn(this, dataProvider));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName()));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName()));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername()));
+        columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()));
+        columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
+        columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider));
 
-        table = new Table<Registration>(columns, dataProvider);
+        table = new EnhancedTable<Registration>("registrations", columns, dataProvider);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             private static final long serialVersionUID = 3530578296967349699L;
@@ -146,12 +146,12 @@ public class RegistrationsPage extends DefaultWebPage {
         };
         formPanel = new FormPanel<Registration>(FORM_ID, Model.of(new Registration()), true, formActions);
         formPanel.setLiveValidation(true);
-        formPanel.addTextField(name(proxy.getUsername()), new FormComponentSettings(true));
-        formPanel.addTextField(name(proxy.getFirstName()), new FormComponentSettings(true));
-        formPanel.addTextField(name(proxy.getLastName()), new FormComponentSettings(true));
-        formPanel.addEmailTextField(name(proxy.getEmail()), new FormComponentSettings(true));
-        formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormComponentSettings(true));
-        formPanel.addPasswordTextField(name(proxy.getPassword()), new FormComponentSettings(true));
+        formPanel.addTextField(name(proxy.getUsername()), new FormElementSettings(true));
+        formPanel.addTextField(name(proxy.getFirstName()), new FormElementSettings(true));
+        formPanel.addTextField(name(proxy.getLastName()), new FormElementSettings(true));
+        formPanel.addEmailTextField(name(proxy.getEmail()), new FormElementSettings(true));
+        formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormElementSettings(true));
+        formPanel.addPasswordTextField(name(proxy.getPassword()), new FormElementSettings(true));
 
         formPanel.setVisible(false);
 

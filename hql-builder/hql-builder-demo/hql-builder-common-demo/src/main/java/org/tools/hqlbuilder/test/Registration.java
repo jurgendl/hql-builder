@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.LocalDateTime;
 
 @XmlRootElement
@@ -35,6 +36,12 @@ public class Registration extends EntityParent {
     private LocalDateTime verification;
 
     private Date dateOfBirth;
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("firstName", firstName).append("lastName", lastName).append("email", email)
+                .append("username", username).append("dateOfBirth", dateOfBirth).toString();
+    }
 
     public String getPassword() {
         return this.password;
