@@ -276,11 +276,11 @@ class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, Stri
                     dataProvider.add(target);
                 }
             };
-            add(addLink);
+            td.add(addLink);
         }
     }
 
-    /** ugly hack to get form parent later during contructor execution */
+    /* ugly hack */
     private static class DelegateDataProvider<T extends Serializable> implements DataProvider<T> {
         private final Form<?> form;
 
