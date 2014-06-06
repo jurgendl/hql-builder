@@ -36,9 +36,8 @@ import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
+@SuppressWarnings("serial")
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
-    private static final long serialVersionUID = -3268906227997947993L;
-
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
 
     protected RepeatingView repeater;
@@ -70,8 +69,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         setOutputMarkupId(true);
 
         final Form<T> form = new Form<T>(FORM, model) {
-            private static final long serialVersionUID = -6736595826748998036L;
-
             @SuppressWarnings("unchecked")
             @Override
             protected void onSubmit() {
@@ -106,8 +103,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         if (formSettings.ajax) {
             submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
-                private static final long serialVersionUID = -983242396412538529L;
-
                 @SuppressWarnings("unchecked")
                 @Override
                 protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
@@ -141,8 +136,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         Component cancel;
         if (formSettings.ajax) {
             cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
-                private static final long serialVersionUID = 4339770380895679763L;
-
                 @SuppressWarnings("unchecked")
                 @Override
                 protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
@@ -207,8 +200,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected <V, C extends FormComponent<V>> Behavior setupDynamicRequiredBehavior(final FormRowPanel<V, C> row) {
         return new AjaxFormComponentUpdatingBehavior(HtmlFormEvent.BLUR) {
-            private static final long serialVersionUID = -4260087964340628125L;
-
             @Override
             protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
                 C component = row.getComponent();
@@ -229,8 +220,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected <V, C extends FormComponent<V>> Behavior setupStaticRequiredBehavior(@SuppressWarnings("unused") FormRowPanel<V, C> row) {
         return new Behavior() {
-            private static final long serialVersionUID = -8002420572609567089L;
-
             @SuppressWarnings("rawtypes")
             @Override
             public void afterRender(Component c) {
@@ -292,8 +281,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
         public static final String FEEDBACK_ID = "componentFeedback";
 
-        private static final long serialVersionUID = -6401309948019996576L;
-
         protected Label label;
 
         protected String property;
@@ -313,6 +300,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, FormSettings formSettings,
                 FormElementSettings componentSettings) {
             super(FORM_ROW, model);
+
             this.formSettings = formSettings;
             this.componentSettings = componentSettings;
             this.property = property;
@@ -326,8 +314,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         protected Label getLabel() {
             if (label == null) {
                 IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
-                    private static final long serialVersionUID = -6461211838443556886L;
-
                     @Override
                     public String getObject() {
                         try {
@@ -339,8 +325,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     }
                 };
                 label = new Label(LABEL, labelModel) {
-                    private static final long serialVersionUID = -4486835664954887226L;
-
                     @Override
                     public boolean isVisible() {
                         return super.isVisible() && formSettings.isShowLabel();
