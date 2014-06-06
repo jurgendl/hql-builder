@@ -89,11 +89,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         add(form);
 
+        WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
+        form.add(formBody);
+
         repeater = new RepeatingView(FORM_REPEATER);
-        repeater.setOutputMarkupPlaceholderTag(false);
-        repeater.setRenderBodyOnly(true);
-        repeater.setOutputMarkupId(false);
-        form.add(repeater);
+        repeater.setOutputMarkupPlaceholderTag(true);
+        repeater.setRenderBodyOnly(false);
+        repeater.setOutputMarkupId(true);
+        formBody.add(repeater);
 
         ResourceModel submitModel = new ResourceModel("submit.label");
         ResourceModel resetModel = new ResourceModel("reset.label");
@@ -160,9 +163,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             cancel.setMarkupId(id + "." + FORM_CANCEL);
         }
 
-        form.add(submit);
-        form.add(reset);
-        form.add(cancel);
+        WebMarkupContainer formActions = new WebMarkupContainer(FORM_ACTIONS);
+        form.add(formActions);
+
+        formActions.add(submit);
+        formActions.add(reset);
+        formActions.add(cancel);
     }
 
     public boolean isShowLabel() {
@@ -565,7 +571,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         @Override
         public void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
-            target.add(form);
+            if (target != null) {
+                target.add(form);
+            }
         }
 
         @Override

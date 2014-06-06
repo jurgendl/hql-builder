@@ -3,6 +3,8 @@ package org.tools.hqlbuilder.webservice.wicket.tables;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.MissingResourceException;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxFallbackButton;
@@ -19,10 +23,12 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -31,41 +37,57 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractTool
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.string.Strings;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.webservice.wicket.ext.ExternalLink;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 /**
  * @see https://www.packtpub.com/article/apache-wicket-displaying-data-using-datatable
+ * @see http://wicketinaction.com/2008/10/building-a-listeditor-form-component/
  */
+@SuppressWarnings("serial")
 public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, String> {
-    private static final long serialVersionUID = -5074672726454953465L;
-
     private static final Logger logger = LoggerFactory.getLogger(Table.class);
 
     public static final String ID = "table";
 
     public static final String ACTIONS_ID = "table.actions";
+
+    public static final String ACTIONS_DELETE_ID = "delete";
+
+    public static final String ACTIONS_EDIT_ID = "edit";
+
+    public static final String ACTIONS_FORM_ID = "rowform";
+
+    public static final String ACTIONS_ADD_ID = "add";
+
+    public String CSS_DISABLED_STYLE = "disabled";
 
     public Table(List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
         super(ID, columns, dataProvider, dataProvider.getRowsPerPage());
@@ -84,10 +106,13 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         return new EmailColumn<D>(labelModel(parent, argument), name(argument));
     }
 
+    /** {@link URL}, {@link URI} and url as {@link String} supported */
+    public static <D> IColumn<D, String> newURLColumn(Component parent, Object argument) {
+        return new URLColumn<D>(labelModel(parent, argument), name(argument));
+    }
+
     public static <D> IColumn<D, String> newTimeColumn(Component parent, Object argument) {
         return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
-            private static final long serialVersionUID = 2343896464273737921L;
-
             @Override
             protected DateTimeFormatter getFormat(Locale locale) {
                 return DateTimeFormat.longTime().withLocale(locale);
@@ -102,8 +127,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     public static <D> IColumn<D, String> newDateColumn(Component parent, Object argument) {
         return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
-            private static final long serialVersionUID = 7740123878863398108L;
-
             @Override
             protected DateTimeFormatter getFormat(Locale locale) {
                 return DateTimeFormat.longDate().withLocale(locale);
@@ -118,8 +141,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     public static <D> IColumn<D, String> newDateTimeColumn(Component parent, Object argument) {
         return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
-            private static final long serialVersionUID = 3387299335035913335L;
-
             @Override
             protected DateTimeFormatter getFormat(Locale locale) {
                 return DateTimeFormat.longDateTime().withLocale(locale);
@@ -134,8 +155,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     public static <D> IColumn<D, String> newDateOrTimeColumn(Component parent, Object argument, final DateConverter dateConverter) {
         return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument), name(argument)) {
-            private static final long serialVersionUID = -4327523236766929509L;
-
             @SuppressWarnings({ "unchecked", "rawtypes" })
             @Override
             public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
@@ -161,8 +180,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     public static class EmailColumn<D> extends PropertyColumn<D, String> {
-        private static final long serialVersionUID = 4348693361586305371L;
-
         public EmailColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
             super(displayModel, sortProperty, propertyExpression);
         }
@@ -171,20 +188,20 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             super(displayModel, propertyExpression, propertyExpression);
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
         @Override
         public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
-            item.add(new LinkPanel(componentId, (IModel) getDataModel(rowModel)));
+            IModel<Object> dataModel = getDataModel(rowModel);
+            @SuppressWarnings("rawtypes")
+            IModel dataModelUncast = dataModel;
+            @SuppressWarnings("unchecked")
+            IModel<String> dataModelCast = dataModelUncast;
+            item.add(new LinkPanel(componentId, dataModelCast));
         }
 
         private class LinkPanel extends Panel {
-            private static final long serialVersionUID = -9215479986488566139L;
-
             public LinkPanel(String id, final IModel<String> model) {
                 super(id);
                 add(new ExternalLink("link", new AbstractReadOnlyModel<String>() {
-                    private static final long serialVersionUID = 11942951671862663L;
-
                     @Override
                     public String getObject() {
                         return "mailto:" + model.getObject();
@@ -194,17 +211,54 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
+    public static class URLColumn<D> extends PropertyColumn<D, String> {
+        public URLColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
+            super(displayModel, sortProperty, propertyExpression);
+        }
+
+        public URLColumn(IModel<String> displayModel, String propertyExpression) {
+            super(displayModel, propertyExpression, propertyExpression);
+        }
+
+        @Override
+        public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
+            item.add(new LinkPanel(componentId, getDataModel(rowModel)));
+        }
+
+        private class LinkPanel extends Panel {
+            public LinkPanel(String id, final IModel<Object> model) {
+                super(id);
+                AbstractReadOnlyModel<String> linkModel = new AbstractReadOnlyModel<String>() {
+                    @Override
+                    public String getObject() {
+                        Object object = model.getObject();
+                        if (object == null) {
+                            return null;
+                        }
+                        if (object instanceof String) {
+                            return String.class.cast(object);
+                        }
+                        if (object instanceof URL) {
+                            return URL.class.cast(object).toExternalForm();
+                        }
+                        if (object instanceof URI) {
+                            return URI.class.cast(object).toASCIIString();
+                        }
+                        throw new UnsupportedOperationException("type for url not supported: " + object.getClass().getName());
+                    }
+                };
+                add(new ExternalLink("link", linkModel, true));
+            }
+        }
+    }
+
     public static <T extends Serializable> IColumn<T, String> getActionsColumn(Component parent, final DataProvider<T> provider) {
         return new AbstractColumn<T, String>(labelModel(parent, ACTIONS_ID)) {
-            private static final long serialVersionUID = 3528122666825952597L;
-
             @Override
             @SuppressWarnings({ "rawtypes", "unchecked" })
             public void populateItem(Item cellItem, String componentId, IModel rowModel) {
                 T object = ((T) rowModel.getObject());
                 cellItem.add(new ActionsPanel<T>(componentId, object) {
-                    private static final long serialVersionUID = -601177222898722169L;
-
                     @Override
                     public void onDelete(AjaxRequestTarget target, T o) {
                         provider.delete(target, o);
@@ -220,37 +274,25 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     public static abstract class ActionsPanel<T extends Serializable> extends Panel {
-        private static final long serialVersionUID = 7542462926954803874L;
-
-        public static final String ACTIONS_DELETE_ID = "delete";
-
-        public static final String ACTIONS_EDIT_ID = "edit";
-
-        public static final String ACTIONS_FORM_ID = "form";
-
         public ActionsPanel(String id, final T object) {
             super(id);
             setOutputMarkupId(true);
-            final Form<T> form = new Form<T>(ACTIONS_FORM_ID);
+            @SuppressWarnings("unchecked")
+            final Form<T> form = (Form<T>) getParent();
             AjaxFallbackButton editLink = new AjaxFallbackButton(ACTIONS_EDIT_ID, form) {
-                private static final long serialVersionUID = 2542930376888979931L;
-
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
                     onEdit(target, object);
                 }
             };
-            form.add(editLink);
+            add(editLink);
             AjaxFallbackButton deleteLink = new AjaxFallbackButton(ACTIONS_DELETE_ID, form) {
-                private static final long serialVersionUID = 2542930376888979931L;
-
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
                     onDelete(target, object);
                 }
             };
-            form.add(deleteLink);
-            add(form);
+            add(deleteLink);
         }
 
         /**
@@ -276,8 +318,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     public static abstract class DefaultDataProvider<T extends Serializable> implements DataProvider<T>, ISortState<String> {
-        private static final long serialVersionUID = 2267212289729092246L;
-
         protected Map<String, SortOrder> sort = new LinkedHashMap<String, SortOrder>();
 
         protected int rowsPerPage = 10;
@@ -338,13 +378,117 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         if (toolbar instanceof AjaxNavigationToolbar) {
             super.addTopToolbar(new TopToolbar(this, getDataprovider()));
         } else {
-            super.addTopToolbar(toolbar);
+            super.addTopToolbar(toolbar); // headers toolbar
+        }
+    }
+
+    @Override
+    protected DataGridView<T> newDataGridView(String id, List<? extends IColumn<T, String>> columns, IDataProvider<T> dataProvider) {
+        return new DataGrid(id, columns, dataProvider);
+    }
+
+    @Override
+    protected void onAfterRenderChildren() {
+        debug("", this);
+    }
+
+    private void debug(String prefix, MarkupContainer component) {
+        Iterator<Component> iterator = component.iterator();
+        System.out.println(prefix + component);
+        while (iterator.hasNext()) {
+            Component child = iterator.next();
+            if (child instanceof MarkupContainer) {
+                debug(prefix + "\t", (MarkupContainer) child);
+            } else {
+                System.out.println(prefix + "\t" + child);
+            }
+        }
+    }
+
+    public class DataGrid extends org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView<T> {
+        protected static final String CELL_REPEATER_ID = "cells";
+
+        protected static final String CELL_ITEM_ID = "cell";
+
+        public DataGrid(String id, List<? extends IColumn<T, String>> columns, IDataProvider<T> dataProvider) {
+            super(id, columns, dataProvider);
+        }
+
+        protected void populateItemNotFinal(final WebMarkupContainer container, final Item<T> item) {
+            RepeatingView cells = new RepeatingView(CELL_REPEATER_ID);
+            container.add(cells);
+
+            int populatorsNumber = internalGetPopulators().size();
+            for (int i = 0; i < populatorsNumber; i++) {
+                ICellPopulator<T> populator = internalGetPopulators().get(i);
+                IModel<ICellPopulator<T>> populatorModel = new Model<ICellPopulator<T>>(populator);
+                @SuppressWarnings("unchecked")
+                Item<ICellPopulator<T>> cellItem = newCellItem(cells.newChildId(), i, populatorModel);
+                cells.add(cellItem);
+
+                populator.populateItem(cellItem, CELL_ITEM_ID, item.getModel());
+
+                if (cellItem.get("cell") == null) {
+                    throw new WicketRuntimeException(
+                            populator.getClass().getName()
+                                    + ".populateItem() failed to add a component with id ["
+                                    + CELL_ITEM_ID
+                                    + "] to the provided [cellItem] object. Make sure you call add() on cellItem and make sure you gave the added component passed in 'componentId' id. ( *cellItem*.add(new MyComponent(*componentId*, rowModel) )");
+                }
+            }
+        }
+
+        @Override
+        protected IItemFactory<T> newItemFactory() {
+            return new IItemFactory<T>() {
+                @Override
+                public Item<T> newItem(int index, IModel<T> model) {
+                    String id = DataGrid.this.newChildId();
+                    Item<T> item = DataGrid.this.newItem(id, index, model);
+                    Form<T> form = new Form<T>(ACTIONS_FORM_ID, model);
+                    form.add(new Label("test", "test"));
+                    item.add(form);
+                    DataGrid.this.populateItemNotFinal(form, item); // why oh why is the original final?
+                    return item;
+                }
+            };
+        }
+
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @Override
+        protected Item newCellItem(final String id, final int index, final IModel model) {
+            Item item = Table.this.newCellItem(id, index, model);
+            final IColumn<T, String> column = getColumns().get(index);
+            if (column instanceof IStyledColumn) {
+                item.add(new CssAttributeBehavior() {
+                    @Override
+                    protected String getCssClass() {
+                        return ((IStyledColumn<T, String>) column).getCssClass();
+                    }
+                });
+            }
+            return item;
+        }
+
+        @Override
+        protected Item<T> newRowItem(final String id, final int index, final IModel<T> model) {
+            return Table.this.newRowItem(id, index, model);
+        }
+
+        public abstract class CssAttributeBehavior extends Behavior {
+            protected abstract String getCssClass();
+
+            @Override
+            public void onComponentTag(final Component component, final ComponentTag tag) {
+                String className = getCssClass();
+                if (!Strings.isEmpty(className)) {
+                    tag.append("class", className, " ");
+                }
+            }
         }
     }
 
     public class TopToolbar extends AjaxNavigationToolbar {
-        private static final long serialVersionUID = 5357630031470369371L;
-
         public TopToolbar(final DataTable<T, String> table, @SuppressWarnings("unused") final DataProvider<T> dataProvider) {
             super(table);
         }
@@ -356,8 +500,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     public class PagingNavigator extends AjaxPagingNavigator {
-        private static final long serialVersionUID = -7908599596836839759L;
-
         public PagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
             super(id, pageable, labelProvider);
         }
@@ -379,8 +521,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
             return new AjaxPagingNavigation(id, pageable, labelProvider) {
-                private static final long serialVersionUID = -6446431226749147484L;
-
                 @SuppressWarnings("hiding")
                 @Override
                 protected Link<?> newPagingNavigationLink(String id, IPageable pageable, long pageIndex) {
@@ -392,18 +532,13 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         protected void modifyButtonLinkDisableBehavior(final AbstractLink link) {
-            String CSS_DISABLED_STYLE = "disabled";
             link.add(new CssClassNameAppender(CSS_DISABLED_STYLE) {
-                private static final long serialVersionUID = -7077515156924411650L;
-
                 @Override
                 public boolean isEnabled(Component component) {
                     return super.isEnabled(component) && !link.isEnabled();
                 }
             });
             link.add(new CssClassNameRemover(CSS_DISABLED_STYLE) {
-                private static final long serialVersionUID = -4390935870504634276L;
-
                 @Override
                 public boolean isEnabled(Component component) {
                     return super.isEnabled(component) && link.isEnabled();
@@ -413,10 +548,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     public class BottomToolbar extends AbstractToolbar {
-        private static final long serialVersionUID = -4470457770018795944L;
-
-        public static final String ACTIONS_ADD_ID = "add";
-
         public BottomToolbar(final DataTable<T, String> table, final DataProvider<T> dataProvider) {
             super(table);
 
@@ -424,8 +555,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             add(td);
 
             td.add(AttributeModifier.replace("colspan", new AbstractReadOnlyModel<String>() {
-                private static final long serialVersionUID = 2633574748119137606L;
-
                 @Override
                 public String getObject() {
                     return String.valueOf(table.getColumns().size());
@@ -436,8 +565,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             td.add(norecordsfoundLabel);
 
             AjaxFallbackLink<String> addLink = new AjaxFallbackLink<String>(ACTIONS_ADD_ID) {
-                private static final long serialVersionUID = 2542930376888979931L;
-
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     dataProvider.add(target);

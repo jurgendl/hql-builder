@@ -1,12 +1,16 @@
 <wicket:panel>
 	<form wicket:id="form">
-		<span wicket:id="form.repeater">
-			<span wicket:id="form.row" />
+		<span class="formbody" wicket:id="form.body">
+			<span wicket:id="form.repeater">
+				<span wicket:id="form.row" />
+			</span>
 		</span>
-		<fieldset class="actions">
-			<input wicket:id="form.submit" type="submit" value="[Submit]" wicket:message="value:submit.label"/>
-			<input wicket:id="form.reset" type="reset" value="[Reset]" wicket:message="value:reset.label"/>
-			<input wicket:id="form.cancel" type="button" value="[Cancel]" wicket:message="value:cancel.label"/>
-		</fieldset>
+		<span class="formactions" wicket:id="form.actions">
+			<fieldset class="actions">
+				<input wicket:id="form.submit" type="submit" value="[Submit]" wicket:message="value:submit.label"/>
+				<input wicket:id="form.reset" type="reset" value="[Reset]" wicket:message="value:reset.label"/>
+				<input wicket:id="form.cancel" type="button" value="[Cancel]" wicket:message="value:cancel.label"/>
+			</fieldset>
+		</span>
 	</form>
 </wicket:panel>
