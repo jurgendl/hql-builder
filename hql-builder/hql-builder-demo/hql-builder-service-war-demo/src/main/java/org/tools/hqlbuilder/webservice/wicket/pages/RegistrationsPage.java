@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
-import static org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.newFormModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ public class RegistrationsPage extends DefaultWebPage {
             @Override
             public void edit(AjaxRequestTarget target, Registration object) {
                 formPanel.setVisible(true);
-                formPanel.setDefaultModel(newFormModel(object));
+                formPanel.setDefaultModelObject(object);
                 if (target != null) {
                     target.add(formPanel);
                 }
@@ -96,7 +95,7 @@ public class RegistrationsPage extends DefaultWebPage {
             @Override
             public void add(AjaxRequestTarget target) {
                 formPanel.setVisible(true);
-                formPanel.setDefaultModel(newFormModel(Registration.class));
+                formPanel.setDefaultModelObject(new Registration());
                 if (target != null) {
                     target.add(formPanel);
                 }
@@ -128,7 +127,7 @@ public class RegistrationsPage extends DefaultWebPage {
 
             @Override
             public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
-                formPanel.setDefaultModel(newFormModel(Registration.class));
+                formPanel.setDefaultModelObject(new Registration());
                 formPanel.setVisible(false);
                 table.setVisible(true);
                 if (target != null) {
