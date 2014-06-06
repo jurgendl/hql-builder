@@ -250,33 +250,33 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
-    public DatePickerPanel<Date> addDatePicker(String property, FormComponentSettings componentSettings) {
+    public DatePickerPanel<Date> addDatePicker(String property, FormElementSettings componentSettings) {
         return addDatePicker(property, componentSettings, (Converter<Date, Date>) null);
     }
 
-    public TextFieldPanel<String> addTextField(String property, FormComponentSettings componentSettings) {
+    public TextFieldPanel<String> addTextField(String property, FormElementSettings componentSettings) {
         return addTextField(property, String.class, componentSettings);
     }
 
-    public <X> DatePickerPanel<X> addDatePicker(String property, FormComponentSettings componentSettings, final Converter<X, Date> dateConverter) {
+    public <X> DatePickerPanel<X> addDatePicker(String property, FormElementSettings componentSettings, final Converter<X, Date> dateConverter) {
         DatePickerPanel<X> row = new DatePickerPanel<X>(getDefaultModel(), property, dateConverter, formSettings, componentSettings);
         addRow(property, row);
         return row;
     }
 
-    public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, FormComponentSettings componentSettings) {
+    public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, FormElementSettings componentSettings) {
         TextFieldPanel<F> row = new TextFieldPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings);
         addRow(property, row);
         return row;
     }
 
-    public EmailTextFieldPanel addEmailTextField(String property, FormComponentSettings componentSettings) {
+    public EmailTextFieldPanel addEmailTextField(String property, FormElementSettings componentSettings) {
         EmailTextFieldPanel row = new EmailTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings);
         addRow(property, row);
         return row;
     }
 
-    public PasswordTextFieldPanel addPasswordTextField(String property, FormComponentSettings componentSettings) {
+    public PasswordTextFieldPanel addPasswordTextField(String property, FormElementSettings componentSettings) {
         PasswordTextFieldPanel row = new PasswordTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings);
         addRow(property, row);
         return row;
@@ -289,116 +289,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return row;
     }
 
-    public static class FormComponentSettings implements Serializable {
-        private static final long serialVersionUID = -2716372832273804363L;
-
-        protected boolean required;
-
-        public FormComponentSettings() {
-            super();
-        }
-
-        public FormComponentSettings(boolean required) {
-            this.required = required;
-        }
-
-        public boolean isRequired() {
-            return this.required;
-        }
-
-        public FormComponentSettings setRequired(boolean required) {
-            this.required = required;
-            return this;
-        }
-    }
-
-    public static class FormSettings implements Serializable {
-        private static final long serialVersionUID = 3682532274799101432L;
-
-        /** fixed ids */
-        protected final boolean inheritId;
-
-        /** activate ajax on form (per field live validation, submit by ajax) */
-        protected final boolean ajax;
-
-        /** show label */
-        protected boolean showLabel = true;
-
-        /** css class for required fields */
-        protected String requiredClass = "required";
-
-        protected String validClass = "valid";
-
-        protected String invalidClass = "invalid";
-
-        protected String requiredMarkerClass = "requiredMarker";
-
-        /** requires ajax = true */
-        protected boolean liveValidation = false;
-
-        public FormSettings(boolean inheritId, boolean ajax) {
-            this.inheritId = inheritId;
-            this.ajax = ajax;
-        }
-
-        public boolean isInheritId() {
-            return this.inheritId;
-        }
-
-        public boolean isShowLabel() {
-            return this.showLabel;
-        }
-
-        public boolean isAjax() {
-            return this.ajax;
-        }
-
-        public String getRequiredClass() {
-            return this.requiredClass;
-        }
-
-        public boolean isLiveValidation() {
-            return this.liveValidation;
-        }
-
-        protected String getClassInvalid() {
-            return "invalid";
-        }
-
-        protected String getClassValid() {
-            return "valid";
-        }
-
-        public String getValidClass() {
-            return this.validClass;
-        }
-
-        public String getInvalidClass() {
-            return this.invalidClass;
-        }
-
-        public String getRequiredMarkerClass() {
-            return this.requiredMarkerClass;
-        }
-
-        public void setRequiredClass(String requiredClass) {
-            this.requiredClass = requiredClass;
-        }
-
-        public void setValidClass(String validClass) {
-            this.validClass = validClass;
-        }
-
-        public void setInvalidClass(String invalidClass) {
-            this.invalidClass = invalidClass;
-        }
-
-        public void setRequiredMarkerClass(String requiredMarkerClass) {
-            this.requiredMarkerClass = requiredMarkerClass;
-        }
-    }
-
-    public static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
+    protected static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
         public static final String FEEDBACK_ID = "componentFeedback";
 
         private static final long serialVersionUID = -6401309948019996576L;
@@ -417,10 +308,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected final FormSettings formSettings;
 
-        protected final FormComponentSettings componentSettings;
+        protected final FormElementSettings componentSettings;
 
         public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, FormSettings formSettings,
-                FormComponentSettings componentSettings) {
+                FormElementSettings componentSettings) {
             super(FORM_ROW, model);
             this.formSettings = formSettings;
             this.componentSettings = componentSettings;
@@ -550,50 +441,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected IModel<T> getValueModel() {
             return new PropertyModel<T>(getDefaultModel(), property);
-        }
-
-    }
-
-    public static interface FormActions<T> extends Serializable {
-        public abstract void afterCancel(AjaxRequestTarget target, Form<T> form, IModel<T> model);
-
-        public abstract void submit(IModel<T> model);
-
-        public abstract boolean isAjax();
-
-        public abstract boolean isCancelable();
-
-        public abstract void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model);
-    }
-
-    public static class DefaultFormActions<T> implements FormActions<T> {
-        private static final long serialVersionUID = 555158530492799693L;
-
-        @Override
-        public void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
-            if (target != null) {
-                target.add(form);
-            }
-        }
-
-        @Override
-        public boolean isAjax() {
-            return true;
-        }
-
-        @Override
-        public boolean isCancelable() {
-            return false;
-        }
-
-        @Override
-        public void afterCancel(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
-            afterSubmit(target, form, model);
-        }
-
-        @Override
-        public void submit(IModel<T> model) {
-            //
         }
     }
 }
