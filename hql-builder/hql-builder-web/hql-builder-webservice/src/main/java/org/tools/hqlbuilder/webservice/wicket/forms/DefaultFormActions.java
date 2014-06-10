@@ -26,7 +26,9 @@ public class DefaultFormActions<T> implements FormActions<T> {
 
     @Override
     public void afterCancel(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
-        afterSubmit(target, form, model);
+        if (target != null) {
+            target.add(form);
+        }
     }
 
     @Override

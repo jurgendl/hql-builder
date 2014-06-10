@@ -36,7 +36,7 @@ public class RegistrationsPage extends DefaultWebPage {
     private static final String FORM_ID = "userdata.form";
 
     @SpringBean
-    protected HqlWebServiceClient hqlWebClient;
+    private HqlWebServiceClient hqlWebClient;
 
     private FormPanel<Registration> formPanel;
 
@@ -98,6 +98,8 @@ public class RegistrationsPage extends DefaultWebPage {
                 formPanel.setDefaultModelObject(new Registration());
                 if (target != null) {
                     target.add(formPanel);
+                    @SuppressWarnings({ "unused", "unchecked" })
+                    Form<Registration> form = (Form<Registration>) formPanel.get(FormPanel.FORM);
                 }
             }
         };
@@ -132,8 +134,6 @@ public class RegistrationsPage extends DefaultWebPage {
                 table.setVisible(true);
                 if (target != null) {
                     target.add(formPanel);
-                }
-                if (target != null) {
                     target.add(table);
                 }
             }
