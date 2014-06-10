@@ -843,7 +843,6 @@ th {
 /*
 	I know this is annoying, but we need dditional styling so webkit will recognize rounded corners on background elements.
 	Nice write up of this issue: http://www.onenaught.com/posts/266/css-inner-elements-breaking-border-radius
-	
 	And, since we've applied the background colors to td/th element because of IE, Gecko browsers also need it.
 	*/
 tr:first-child th.first {
@@ -962,7 +961,6 @@ a:focus {
 }
 
 /* navigation */
-
 tr.navigation .likebutton {
 	margin: 1px 1px 1px 1px;
 	padding: 2px 2px 2px 2px;
@@ -973,7 +971,119 @@ tr.navigation .likebutton {
 }
 
 tr.navigation .navigatorLabel {
-	font-weight:bold;
+	font-weight: bold;
+}
+
+/* menu with option submenu: http://www.cssnewbie.com/super-simple-horizontal-navigation-bar */
+ul.horizontalmenu {
+	float: left;
+	margin: 0 0 3em 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul.horizontalmenu>li {
+	float: left;
+	border-bottom: 1px solid #e3a037;
+	border-top: 1px solid #e3a037;
+	background-color: #fddb6f;
+}
+
+ul.horizontalmenu>li:first-child {
+	border-right: 1px solid #e3a037;
+	border-left: 1px solid #e3a037;
+	-moz-top-left-border-radius: 9px;
+	-webkit-top-left-border-radius: 9px;
+	border-top-left-radius: 9px;
+}
+
+ul.horizontalmenu>li:not(:first-child ):not(:last-child ) {
+	border-right: 1px solid #e3a037;
+}
+
+ul.horizontalmenu>li:last-child {
+	border-right: 1px solid #e3a037;
+	-moz-top-right-border-radius: 9px;
+	-webkit-top-right-border-radius: 9px;
+	border-top-right-radius: 9px;
+}
+
+ul.horizontalmenu>li>a {
+	display: block;
+	padding: 8px 9px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #8f5a0a;
+}
+
+ul.horizontalmenu>li.active>a {
+	color: #6f2909;
+}
+
+ul.horizontalmenu>li>a:hover {
+	color: #8f5a0a;
+}
+
+ul.horizontalmenu>li:hover>ul {
+	display: inline;
+}
+
+ul.horizontalmenu>li>ul {
+	list-style: none;
+	display: none;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+	background-color: white;
+	border: 0px none white;
+}
+
+ul.horizontalmenu>li>ul>li {
+	clear: both;
+	width: 100%;
+}
+
+ul.horizontalmenu>li>ul>li>ul {
+	position: absolute;
+	padding: 0px;
+}
+
+ul.horizontalmenu>li>ul>li:first-child {
+	background-color: #fddb6f;
+	border-left: 1px solid #e3a037;
+	border-right: 1px solid #e3a037;
+	border-top: 1px solid #e3a037;
+}
+
+ul.horizontalmenu>li>ul>li:not(:first-child ):not(:last-child ) {
+	background-color: #fddb6f;
+	border-left: 1px solid #e3a037;
+	border-right: 1px solid #e3a037;
+	border-top: 1px solid #e3a037;
+}
+
+ul.horizontalmenu>li>ul>li:last-child {
+	background-color: #fddb6f;
+	border: 1px solid #e3a037;
+	-moz-border-radius: 0px 0px 9px 9px;
+	-webkit-border-radius: 0px 0px 9px 9px;
+	border-radius: 0px 0px 9px 9px;
+}
+
+ul.horizontalmenu>li>ul>li>a {
+	display: block;
+	padding: 8px 9px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #8f5a0a;
+}
+
+ul.horizontalmenu>li>ul>li.active>a {
+	color: #6f2909;
+}
+
+ul.horizontalmenu>li>ul>li>a:hover {
+	color: #8f5a0a;
 }
 
 /* end */
