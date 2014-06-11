@@ -12,9 +12,8 @@ import org.apache.wicket.model.Model;
 /**
  * floating bar: http://stackoverflow.com/questions/17165915/how-to-build-floating-menu-bar-when-scroll-down
  */
+@SuppressWarnings("serial")
 public class LocalesPanel extends Panel {
-    private static final long serialVersionUID = -4736100030405768191L;
-
     protected StatelessForm<Object> localeForm;
 
     protected DropDownChoice<Locale> changeLocale;
@@ -46,8 +45,6 @@ public class LocalesPanel extends Panel {
         localeModel.setObject(defaultLocale);
 
         this.changeLocale = new DropDownChoice<Locale>("localeOptions", localeModel, locales, new IChoiceRenderer<Locale>() {
-            private static final long serialVersionUID = 3647609757885700569L;
-
             @Override
             public Object getDisplayValue(Locale object) {
                 return object.getDisplayLanguage(object);
@@ -58,8 +55,6 @@ public class LocalesPanel extends Panel {
                 return object.getLanguage();
             }
         }) {
-            private static final long serialVersionUID = -8172239789623605717L;
-
             @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
@@ -72,8 +67,6 @@ public class LocalesPanel extends Panel {
         };
         this.changeLocale.setNullValid(false);
         localeForm = new StatelessForm<Object>("localeForm") {
-            private static final long serialVersionUID = 3472974973453278342L;
-
             @Override
             protected void onSubmit() {
                 getSession().setLocale(changeLocale.getModelObject());

@@ -1,8 +1,5 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
@@ -23,7 +20,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.WicketRoot;
-import org.tools.hqlbuilder.webservice.wicket.pages.LocalesPanel;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -43,7 +39,7 @@ public class DefaultWebPage extends WebPage {
         } else {
             add(new EmptyPanel("debug").setVisible(false));
         }
-        add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
+        // add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
         // add(new LogInOutLinksPanel("authlinkspanel", webProperties, showAuthLinks()));
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }

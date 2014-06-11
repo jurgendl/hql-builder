@@ -157,7 +157,7 @@ h1,h2,h3,h4,h5 {
 }
 
 form.niceform {
-	width: 440px;
+	/* width: 440px; */
 	background-color: #fff;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff),
 		to(#eee));
@@ -184,8 +184,8 @@ form.niceform {
 
 form.niceform:before {
 	content: '';
-	position: absolute;
-	z-index: -1;
+	/* position: absolute;
+	z-index: -1; */
 	border: 1px dashed #ccc;
 	top: 5px;
 	bottom: 5px;
@@ -976,10 +976,12 @@ tr.navigation .navigatorLabel {
 
 /* menu with option submenu: http://www.cssnewbie.com/super-simple-horizontal-navigation-bar */
 ul.horizontalmenu {
-	float: left;
-	margin: 0 0 3em 0;
+	/* float: left; */
+	margin: 0px;
+	margin-left: 0px;
 	padding: 0;
 	list-style: none;
+	width: 100%;
 }
 
 ul.horizontalmenu>li {
@@ -987,6 +989,14 @@ ul.horizontalmenu>li {
 	border-bottom: 1px solid #e3a037;
 	border-top: 1px solid #e3a037;
 	background-color: #fddb6f;
+	text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
+		rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
+		rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3)
+		inset;
+	height: 35px;
 }
 
 ul.horizontalmenu>li:first-child {
@@ -1027,6 +1037,8 @@ ul.horizontalmenu>li>a:hover {
 ul.horizontalmenu>li:hover>ul {
 	display: inline;
 }
+
+/* submenu */ 
 
 ul.horizontalmenu>li>ul {
 	list-style: none;
@@ -1084,6 +1096,35 @@ ul.horizontalmenu>li>ul>li.active>a {
 
 ul.horizontalmenu>li>ul>li>a:hover {
 	color: #8f5a0a;
+}
+
+.aroundhorizontalmenu {
+	width: 100%;
+	height: 100%;
+}
+
+.belowhorizontalmenu {
+	border: 1px solid #e3a037;
+	position: relative;
+	top: 37px;
+	-moz-border-radius: 0px 9px 9px 9px;
+	-webkit-border-radius: 0px 9px 9px 9px;
+	border-radius: 0px 9px 9px 9px;
+	text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
+		rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
+		rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3)
+		inset;
+	width: 100%;
+	height: calc(100% - 37px);
+	text-align: left;
+	background-color: white;
+}
+
+.belowhorizontalmenu>span {
+	width: inherit;
 }
 
 /* end */

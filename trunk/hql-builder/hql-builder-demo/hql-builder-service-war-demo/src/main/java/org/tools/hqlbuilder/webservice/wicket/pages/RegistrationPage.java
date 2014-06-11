@@ -13,16 +13,14 @@ import org.joda.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
-import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 
+@SuppressWarnings("serial")
 @MountedPage("/form/registration")
-public class RegistrationPage extends DefaultWebPage {
-    private static final long serialVersionUID = 264876407045636533L;
-
+public class RegistrationPage extends BasePage {
     @SpringBean
     protected transient HqlWebServiceClient hqlWebClient;
 
@@ -33,8 +31,6 @@ public class RegistrationPage extends DefaultWebPage {
         super(parameters);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
-            private static final long serialVersionUID = 8800675930559925368L;
-
             @Override
             public void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
