@@ -21,7 +21,6 @@ import org.joda.time.LocalDateTime;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.test.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
-import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
@@ -29,10 +28,9 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
 
+@SuppressWarnings("serial")
 @MountedPage("/form/registrations")
-public class RegistrationsPage extends DefaultWebPage {
-    private static final long serialVersionUID = 1247275992404894937L;
-
+public class RegistrationsPage extends BasePage {
     private static final String FORM_ID = "userdata.form";
 
     @SpringBean
@@ -48,8 +46,6 @@ public class RegistrationsPage extends DefaultWebPage {
         Registration proxy = create(Registration.class);
 
         DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
-            private static final long serialVersionUID = 6812428385117168023L;
-
             @Override
             @SuppressWarnings("unchecked")
             public Iterator<Registration> select(long first, long count, Map<String, SortOrder> sorting) {
@@ -116,8 +112,6 @@ public class RegistrationsPage extends DefaultWebPage {
         table = new EnhancedTable<Registration>("registrations", columns, dataProvider);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
-            private static final long serialVersionUID = 3530578296967349699L;
-
             @Override
             public void submit(IModel<Registration> model) {
                 Registration object = model.getObject();
