@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.tools.hqlbuilder.common.EntityI;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
@@ -21,6 +22,10 @@ import org.tools.hqlbuilder.common.EntityRelationHelper;
 @Table(name = "group_members")
 public class Member implements EntityI, MemberProperties {
     private static final long serialVersionUID = -6012619912508524393L;
+
+    @Transient
+    @XmlTransient
+    protected transient final EntityRelationHelper erh;
 
     @Version
     private Integer version;
@@ -33,20 +38,17 @@ public class Member implements EntityI, MemberProperties {
     @NotNull
     private Group group;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = Authority.MEMBER)
     private List<Authority> authorities;
-
-    @Transient
-    protected transient final EntityRelationHelper erh;
 
     public Member() {
         erh = new EntityRelationHelper(this);
     }
 
     public Member(String username, Group group) {
-        this.username = username;
-        this.group = group;
-        erh = new EntityRelationHelper(this);
+        this();
+        setUsername(username);
+        setGroup(group);
     }
 
     @Override
@@ -67,6 +69,30 @@ public class Member implements EntityI, MemberProperties {
     }
 
     public void setGroup(Group group) {
-        this.group = group;
+        erh.moSet(GROUP, group);
+    }
+
+    public List<Authority> getAuthorities() {
+        return erh.omGet(this.authorities);
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        erh.omSet(AUTHORITIES, authorities);
+    }
+
+    public void addAuthority(Authority authority) {
+        erh.omAdd(AUTHORITIES, authority);
+    }
+
+    public void removeAuthority(Authority authority) {
+        erh.omRemove(AUTHORITIES, authority);
+    }
+
+    public Integer getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

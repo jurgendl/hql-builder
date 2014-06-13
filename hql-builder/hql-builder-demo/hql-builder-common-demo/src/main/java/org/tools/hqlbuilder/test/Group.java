@@ -20,11 +20,11 @@ public class Group extends EntityExtAdapter implements GroupProperties {
     @Column(name = "group_name")
     private String name;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = Member.GROUP)
     @XmlTransient
     private List<Member> members;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = GroupAuthority.GROUP)
     private List<GroupAuthority> authorities;
 
     public Group() {
@@ -32,7 +32,7 @@ public class Group extends EntityExtAdapter implements GroupProperties {
     }
 
     public Group(String name) {
-        this.name = name;
+        setName(name);
     }
 
     @Override
@@ -44,23 +44,39 @@ public class Group extends EntityExtAdapter implements GroupProperties {
         return this.name;
     }
 
-    public List<GroupAuthority> getAuthorities() {
-        return this.authorities;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setAuthorities(List<GroupAuthority> authorities) {
-        this.authorities = authorities;
+    public List<Member> getMembers() {
+        return erh.omGet(this.members);
     }
 
-    public List<Member> getMembers() {
-        return this.members;
+    public void addMember(Member member) {
+        erh.omAdd(MEMBERS, member);
+    }
+
+    public void removeMember(Member member) {
+        erh.omRemove(MEMBERS, member);
     }
 
     public void setMembers(List<Member> members) {
-        this.members = members;
+        erh.omSet(MEMBERS, members);
+    }
+
+    public List<GroupAuthority> getAuthorities() {
+        return erh.omGet(this.authorities);
+    }
+
+    public void setAuthorities(List<GroupAuthority> authorities) {
+        erh.omSet(AUTHORITIES, authorities);
+    }
+
+    public void addAuthority(Authority authority) {
+        erh.omAdd(AUTHORITIES, authority);
+    }
+
+    public void removeAuthority(Authority authority) {
+        erh.omRemove(AUTHORITIES, authority);
     }
 }
