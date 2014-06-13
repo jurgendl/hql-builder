@@ -8,14 +8,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.tools.hqlbuilder.common.EntityI;
+import org.tools.hqlbuilder.common.EntityRelationHelper;
+
 @XmlRootElement
 @Entity
 @Table(name = "group_members")
-public class Member implements EntityI {
+public class Member implements EntityI, MemberProperties {
     private static final long serialVersionUID = -6012619912508524393L;
 
     @Version
@@ -32,13 +36,17 @@ public class Member implements EntityI {
     @OneToMany(mappedBy = "member")
     private List<Authority> authorities;
 
+    @Transient
+    protected transient final EntityRelationHelper erh;
+
     public Member() {
-        super();
+        erh = new EntityRelationHelper(this);
     }
 
     public Member(String username, Group group) {
         this.username = username;
         this.group = group;
+        erh = new EntityRelationHelper(this);
     }
 
     @Override

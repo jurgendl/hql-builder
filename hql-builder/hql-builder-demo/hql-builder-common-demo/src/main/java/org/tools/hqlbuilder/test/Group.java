@@ -9,10 +9,12 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.tools.hqlbuilder.common.EntityExtAdapter;
+
 @XmlRootElement
 @Entity
 @Table(name = "groups")
-public class Group extends EntityParent {
+public class Group extends EntityExtAdapter implements GroupProperties {
     private static final long serialVersionUID = 3647597053577793581L;
 
     @Column(name = "group_name")

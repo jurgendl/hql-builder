@@ -8,10 +8,12 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.tools.hqlbuilder.common.EntityExtAdapter;
+
 @XmlRootElement
 @Entity
 @Table(name = "group_authorities")
-public class GroupAuthority extends EntityParent {
+public class GroupAuthority extends EntityExtAdapter implements GroupAuthorityProperties {
     private static final long serialVersionUID = -5692615727091910274L;
 
     @ManyToOne

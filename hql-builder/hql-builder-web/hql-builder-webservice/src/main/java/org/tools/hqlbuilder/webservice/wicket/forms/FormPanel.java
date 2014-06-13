@@ -53,7 +53,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
-        super(FORM_PANEL, model);
+        super(id, model);
         formSettings = new FormSettings(inheritId, actions.isAjax());
         createForm(id, model, actions);
     }
