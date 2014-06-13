@@ -11,10 +11,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.tools.hqlbuilder.common.EntityExtAdapter;
+
 @XmlRootElement
 @Entity
 @Table(name = "users")
-public class User extends EntityParent {
+public class User extends EntityExtAdapter implements UserProperties {
     private static final long serialVersionUID = 8069035546088771672L;
 
     private Boolean enabled = Boolean.TRUE;

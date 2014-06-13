@@ -24,7 +24,7 @@ import javax.tools.StandardLocation;
  * @see http://deors.wordpress.com/2011/10/31/annotation-generators/
  */
 @SupportedAnnotationTypes("javax.persistence.Entity")
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_5)
 public class HibernateCfgEntityProcessor extends AbstractProcessor {
     private boolean run = false;
 

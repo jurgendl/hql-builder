@@ -46,7 +46,7 @@ public class RegistrationPage extends BasePage {
                 return false;
             }
         };
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("userdata.form", Model.of(new Registration()), true, formActions);
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", Model.of(new Registration()), true, formActions);
         add(formPanel);
 
         Registration proxy = create(Registration.class);

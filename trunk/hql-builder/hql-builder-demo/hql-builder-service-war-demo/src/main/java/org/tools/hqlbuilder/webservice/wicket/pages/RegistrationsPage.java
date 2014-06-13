@@ -31,8 +31,6 @@ import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
 @SuppressWarnings("serial")
 @MountedPage("/form/registrations")
 public class RegistrationsPage extends BasePage {
-    private static final String FORM_ID = "userdata.form";
-
     @SpringBean
     private HqlWebServiceClient hqlWebClient;
 
@@ -109,7 +107,7 @@ public class RegistrationsPage extends BasePage {
         columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
         columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider));
 
-        table = new EnhancedTable<Registration>("registrations", columns, dataProvider);
+        table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             @Override
@@ -137,7 +135,7 @@ public class RegistrationsPage extends BasePage {
                 return true;
             }
         };
-        formPanel = new FormPanel<Registration>(FORM_ID, Model.of(new Registration()), true, formActions);
+        formPanel = new FormPanel<Registration>("registrationform", Model.of(new Registration()), true, formActions);
         formPanel.setLiveValidation(true);
         formPanel.addTextField(name(proxy.getUsername()), new FormElementSettings(true));
         formPanel.addTextField(name(proxy.getFirstName()), new FormElementSettings(true));
