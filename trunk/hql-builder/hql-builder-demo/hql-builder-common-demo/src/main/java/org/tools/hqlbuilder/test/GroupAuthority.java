@@ -30,21 +30,13 @@ public class GroupAuthority extends EntityExtAdapter implements GroupAuthorityPr
     }
 
     public GroupAuthority(String authority, Group group) {
-        this.authority = authority;
-        this.group = group;
+        setAuthority(authority);
+        setGroup(group);
     }
 
     @Override
     public String toString() {
         return getAuthority();
-    }
-
-    public Group getGroup() {
-        return this.group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 
     public String getAuthority() {
@@ -53,5 +45,13 @@ public class GroupAuthority extends EntityExtAdapter implements GroupAuthorityPr
 
     public void setAuthority(String authority) {
         this.authority = authority;
+    }
+
+    public Group getGroup() {
+        return this.group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

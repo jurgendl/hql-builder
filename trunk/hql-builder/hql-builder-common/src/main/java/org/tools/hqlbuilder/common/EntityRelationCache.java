@@ -4,9 +4,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -213,7 +218,7 @@ class EntityRelationCache<P> {
         } catch (IllegalAccessException ex) {
             throw new MethodNotFoundException(ex);
         } catch (InvocationTargetException ex) {
-            throw new MethodNotFoundException(ex);
+            throw new MethodNotFoundException(ex.getCause());
         }
     }
 
@@ -267,6 +272,14 @@ class EntityRelationCache<P> {
             ooUnset(bean, property, child, backprop);
             ooSet0(bean, property, target, backprop);
         } // else => no action required
+    }
+
+    /**
+     * many-to-one set
+     */
+    public <C> void moSet(P bean, String property, C target) {
+        String backprop = moInverseProp(bean, property);
+        moSet(bean, property, target, backprop);
     }
 
     /**
@@ -357,6 +370,11 @@ class EntityRelationCache<P> {
         // HashSet<CentralObject>();
         //
         Collection<C> collection = (Collection<C>) invokeGet(bean, property);
+        if (collection == null) {
+            collection = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
+
         C[] array = (C[]) collection.toArray();
 
         for (C child : array) {
@@ -399,6 +417,11 @@ class EntityRelationCache<P> {
         // HashSet<CentralObject>();
         //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
+        if (children == null) {
+            children = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
+
         mmAdd(bean, property, children, target, backprop);
     }
 
@@ -416,6 +439,10 @@ class EntityRelationCache<P> {
 
         EntityRelationCache<C> targetWrapper = (EntityRelationCache<C>) getInstance(target.getClass());
         Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
+        if (parents == null) {
+            parents = targetWrapper.invokeCreateCollection(target, backprop);
+            // throw new CollectionNeedsInitException(target, backprop);
+        }
 
         if (parents.contains(bean) && children.contains(target)) {
             targetWrapper.invokeCollectionRemove(parents, bean);
@@ -473,7 +500,8 @@ class EntityRelationCache<P> {
         Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
 
         if (parents == null) {
-            throw new CollectionNeedsInitException(target, backprop);
+            parents = targetWrapper.invokeCreateCollection(target, backprop);
+            // throw new CollectionNeedsInitException(target, backprop);
         }
 
         if (!parents.contains(bean) && !children.contains(target)) {
@@ -521,6 +549,11 @@ class EntityRelationCache<P> {
         // HashSet<CentralObject>();
         //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
+        if (children == null) {
+            children = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
+
         mmRemove(bean, property, children, target, backprop);
     }
 
@@ -545,6 +578,10 @@ class EntityRelationCache<P> {
         // HashSet<CentralObject>();
         //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
+        if (children == null) {
+            children = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
 
         for (C child : (C[]) children.toArray()) {
             if (!targets.contains(child)) {
@@ -584,6 +621,11 @@ class EntityRelationCache<P> {
         // private CentralObject centralObject;
         //
         Collection<C> collection = (Collection<C>) invokeGet(bean, property);
+
+        if (collection == null) {
+            return;
+        }
+
         C[] array = (C[]) collection.toArray();
 
         for (C child : array) {
@@ -619,6 +661,11 @@ class EntityRelationCache<P> {
         }
 
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
+        if (children == null) {
+            children = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
+
         omAdd(bean, property, children, target, backprop);
     }
 
@@ -696,6 +743,11 @@ class EntityRelationCache<P> {
         }
 
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
+        if (children == null) {
+            children = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
+
         omRemove(bean, property, children, target, backprop);
     }
 
@@ -736,6 +788,10 @@ class EntityRelationCache<P> {
         // private CentralObject centralObject;
         //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
+        if (children == null) {
+            children = invokeCreateCollection(bean, property);
+            // throw new CollectionNeedsInitException(bean, property);
+        }
 
         for (C child : (C[]) children.toArray()) {
             if (!targets.contains(child)) {
@@ -920,5 +976,55 @@ class EntityRelationCache<P> {
         }
 
         throw new IllegalArgumentException();
+    }
+
+    protected String moInverseProp(P bean, String property) {
+        String backProp = mappedBy.get(property);
+
+        if (backProp == null) {
+            Class<?> beanClass = bean.getClass();
+            Class<?> otherBean = findField(beanClass, property).getType();
+
+            for (Field otherField : otherBean.getDeclaredFields()) {
+                OneToMany oneToMany = otherField.getAnnotation(OneToMany.class);
+                if (oneToMany != null) {
+                    if (property.equals(oneToMany.mappedBy())) {
+                        backProp = otherField.getName();
+                        break;
+                    }
+                }
+            }
+
+            if (backProp == null) {
+                throw new IllegalArgumentException("inverse property not found: " + beanClass.getName() + "#" + property);
+            }
+
+            mappedBy.put(property, backProp);
+        }
+
+        return backProp;
+    }
+
+    protected <T> Collection<T> invokeCreateCollection(P bean, String property) {
+        Class<T> type = (Class<T>) findField(bean.getClass(), property).getType();
+        int modifiers = type.getModifiers();
+        Collection<T> collection;
+        if (!Modifier.isFinal(modifiers) && !Modifier.isInterface(modifiers) && !Modifier.isAbstract(modifiers)) {
+            try {
+                collection = (Collection<T>) type.newInstance();
+            } catch (InstantiationException ex) {
+                throw new RuntimeException(ex);
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (List.class.equals(type)) {
+            collection = new ArrayList<T>();
+        } else if (Set.class.equals(type)) {
+            collection = new HashSet<T>();
+        } else {
+            throw new IllegalArgumentException("creation of collection not supported: " + type.getName());
+        }
+        invokeSet(bean, property, collection);
+        return collection;
     }
 }

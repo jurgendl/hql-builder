@@ -13,7 +13,7 @@ public class Lang extends EntityExtAdapter implements LangProperties {
     private String code;
 
     public Lang(String code) {
-        this.code = code;
+        setCode(code);
     }
 
     public Lang() {

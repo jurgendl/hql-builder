@@ -40,9 +40,9 @@ public class User extends EntityExtAdapter implements UserProperties {
     private Lang language;
 
     public User(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
     }
 
     public User() {

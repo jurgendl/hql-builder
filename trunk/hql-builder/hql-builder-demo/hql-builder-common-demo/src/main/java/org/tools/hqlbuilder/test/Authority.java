@@ -30,8 +30,8 @@ public class Authority extends EntityExtAdapter implements AuthorityProperties {
     }
 
     public Authority(String authority, Member member) {
-        this.authority = authority;
-        this.member = member;
+        setAuthority(authority);
+        setMember(member);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class Authority extends EntityExtAdapter implements AuthorityProperties {
     }
 
     public void setMember(Member member) {
-        this.member = member;
+        erh.moSet(MEMBER, member);
     }
 }
