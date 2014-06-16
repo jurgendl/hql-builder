@@ -12,7 +12,6 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.tools.hqlbuilder.common.EntityI;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
@@ -24,7 +23,6 @@ public class Member implements EntityI, MemberProperties {
     private static final long serialVersionUID = -6012619912508524393L;
 
     @Transient
-    @XmlTransient
     protected transient final EntityRelationHelper erh;
 
     @Version

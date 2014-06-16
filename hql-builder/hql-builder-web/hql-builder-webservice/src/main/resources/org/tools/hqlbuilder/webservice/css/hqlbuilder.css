@@ -1,4 +1,5 @@
 /* main */
+
 body {
 	/* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 	/*Baskerville, ‘Times New Roman’, Times, serif*/
@@ -17,6 +18,9 @@ body {
 	margin: 8px;
 }
 
+/* http://css-tricks.com/things-it-might-be-funuseful-to-try-the-universal-selector-on/ */
+/* http://css-tricks.com/a-couple-of-use-cases-for-calc/ */
+
 * {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -29,6 +33,24 @@ body {
 	-ms-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 }
+
+/*
+* {
+	background-repeat: no-repeat;
+}
+*/
+
+/*
+* {
+	position: relative;
+}
+*/
+
+/*
+* {
+	vertical-align: middle;
+}
+*/
 
 h1,h2,h3,h4,h5 {
 	/*Georgia, Times, ‘Times New Roman’, serif*/
@@ -171,7 +193,6 @@ h1,h2,h3,h4,h5 {
 }
 
 form.niceform {
-	/* width: 440px; */
 	background-color: #fff;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff),
 		to(#eee));
@@ -1141,10 +1162,12 @@ ul.horizontalmenu>li>ul>li>a:hover {
 	z-index: 0;
 }
 
-/* .belowhorizontalmenu>span {
+/*
+.belowhorizontalmenu>span {
 	width: inherit;
 	float: left;
 	text-align: left;
-} */
+}
+*/
 
 /* end */
