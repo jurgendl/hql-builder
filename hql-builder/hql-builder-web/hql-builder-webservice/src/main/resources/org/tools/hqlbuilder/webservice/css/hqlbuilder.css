@@ -1048,26 +1048,28 @@ ul.horizontalmenu>li>a:hover {
 	color: #8f5a0a;
 }
 
-ul.horizontalmenu>li:hover>ul {
-	display: inline;
-}
-
 /* submenu */ 
+
+ul.horizontalmenu>li:hover>ul {
+	display: inline-block;
+}
 
 ul.horizontalmenu>li>ul {
 	list-style: none;
 	display: none;
-	position: absolute;
+	position: relative;
 	padding: 0px;
-	margin: 0px;
-	background-color: white;
-	border: 0px none white;
+	border: 0px;
+	margin-bottom: 0px;
+	margin-top: -2px;
+	margin-left: -1px;
+	margin-right: -1px;
 	z-index: 10;
 }
 
 ul.horizontalmenu>li>ul>li {
 	clear: both;
-	width: 100%;
+	width: auto;
 }
 
 ul.horizontalmenu>li>ul>li>ul {
@@ -1132,9 +1134,11 @@ ul.horizontalmenu>li>ul>li>a:hover {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3)
 		inset;
 	background-color: white;
+	left: 8px;
 	width: calc(100% - 1px - 1px - 8px - 8px);
-	top: calc(35px + 8px + 1px);
+	top: calc(35px + 8px);
 	height: calc(100% - 35px - 1px - 1px - 8px - 8px);
+	z-index: 0;
 }
 
 /* .belowhorizontalmenu>span {
