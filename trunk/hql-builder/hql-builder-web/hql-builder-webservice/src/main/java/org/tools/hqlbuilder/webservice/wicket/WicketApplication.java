@@ -293,7 +293,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
