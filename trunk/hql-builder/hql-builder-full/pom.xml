@@ -54,6 +54,7 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<!-- assembly:single -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>

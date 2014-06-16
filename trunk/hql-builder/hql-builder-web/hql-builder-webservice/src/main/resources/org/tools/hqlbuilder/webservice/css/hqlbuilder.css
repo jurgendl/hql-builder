@@ -14,6 +14,20 @@ body {
 	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
 	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
 	background-image: linear-gradient(left, #ebeef2, #d9dee2);
+	margin: 8px;
+}
+
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+* {
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
 }
 
 h1,h2,h3,h4,h5 {
@@ -981,7 +995,7 @@ ul.horizontalmenu {
 	margin-left: 0px;
 	padding: 0;
 	list-style: none;
-	width: 100%;
+	width: auto;
 }
 
 ul.horizontalmenu>li {
@@ -1048,6 +1062,7 @@ ul.horizontalmenu>li>ul {
 	margin: 0px;
 	background-color: white;
 	border: 0px none white;
+	z-index: 10;
 }
 
 ul.horizontalmenu>li>ul>li {
@@ -1098,15 +1113,14 @@ ul.horizontalmenu>li>ul>li>a:hover {
 	color: #8f5a0a;
 }
 
-.aroundhorizontalmenu {
+/* .aroundhorizontalmenu {
 	width: 100%;
 	height: 100%;
-}
+} */
 
 .belowhorizontalmenu {
 	border: 1px solid #e3a037;
-	position: relative;
-	top: 37px;
+	position: absolute;
 	-moz-border-radius: 0px 9px 9px 9px;
 	-webkit-border-radius: 0px 9px 9px 9px;
 	border-radius: 0px 9px 9px 9px;
@@ -1117,14 +1131,16 @@ ul.horizontalmenu>li>ul>li>a:hover {
 		rgba(255, 255, 255, 0.3) inset;
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3)
 		inset;
-	width: 100%;
-	height: calc(100% - 37px);
-	text-align: left;
 	background-color: white;
+	width: calc(100% - 1px - 1px - 8px - 8px);
+	top: calc(35px + 8px + 1px);
+	height: calc(100% - 35px - 1px - 1px - 8px - 8px);
 }
 
-.belowhorizontalmenu>span {
+/* .belowhorizontalmenu>span {
 	width: inherit;
-}
+	float: left;
+	text-align: left;
+} */
 
 /* end */
