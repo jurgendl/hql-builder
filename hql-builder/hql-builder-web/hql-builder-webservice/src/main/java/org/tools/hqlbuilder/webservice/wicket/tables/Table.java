@@ -14,6 +14,7 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
@@ -24,7 +25,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLoc
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -39,6 +42,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.string.Strings;
 import org.tools.hqlbuilder.webservice.wicket.ext.ExternalLink;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -189,7 +193,49 @@ class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, Stri
 
     @Override
     protected DataGridView<T> newDataGridView(String id, List<? extends IColumn<T, String>> columns, IDataProvider<T> dataProvider) {
-        return new DataGridView<T>(id, columns, dataProvider);
+        return new DefaultDataGridView(id, columns, dataProvider);
+    }
+
+    protected class DefaultDataGridView extends DataGridView<T> {
+        public DefaultDataGridView(String id, List<? extends IColumn<T, String>> columns, IDataProvider<T> dataProvider) {
+            super(id, columns, dataProvider);
+        }
+
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @Override
+        protected Item newCellItem(final String id, final int index, final IModel model) {
+            Item item = Table.this.newCellItem(id, index, model);
+            final IColumn<T, String> column = Table.this.getColumns().get(index);
+            if (column instanceof IStyledColumn) {
+                item.add(new CssAttributeBehavior() {
+                    @Override
+                    protected String getCssClass() {
+                        return ((IStyledColumn<T, String>) column).getCssClass();
+                    }
+                });
+            }
+            return item;
+        }
+
+        @Override
+        protected Item<T> newRowItem(final String id, final int index, final IModel<T> model) {
+            return Table.this.newRowItem(id, index, model);
+        }
+    }
+
+    protected static abstract class CssAttributeBehavior extends Behavior {
+        protected abstract String getCssClass();
+
+        /**
+         * @see Behavior#onComponentTag(Component, ComponentTag)
+         */
+        @Override
+        public void onComponentTag(final Component component, final ComponentTag tag) {
+            String className = getCssClass();
+            if (!Strings.isEmpty(className)) {
+                tag.append("class", className, " ");
+            }
+        }
     }
 
     protected class HeadersToolbar extends AjaxFallbackHeadersToolbar<String> {

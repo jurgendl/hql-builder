@@ -1,0 +1,263 @@
+body {
+	/* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
+	/*Baskerville, ‘Times New Roman’, Times, serif*/
+	/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
+	/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
+	/*GillSans, Calibri, Trebuchet, sans-serif*/
+	font: 12px, Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif;
+	background-color: #d9dee2;
+	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
+		to(#d9dee2));
+	background-image: -webkit-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -moz-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: linear-gradient(left, #ebeef2, #d9dee2);
+	margin: 8px;
+}
+
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+* {
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+}
+
+/*
+* {
+	background-repeat: no-repeat;
+}
+*/
+
+/*
+* {
+	position: relative;
+}
+*/
+
+/*
+* {
+	vertical-align: middle;
+}
+*/
+
+h1,h2,h3,h4,h5 {
+	/*Georgia, Times, ‘Times New Roman’, serif*/
+	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
+	/*Tahoma, Verdana, Geneva*/
+	/*Trebuchet, Tahoma, Arial, sans-serif*/
+	font: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New
+		Roman’, serif;
+}
+
+.centeredvertical {
+	position: absolute;
+	top: 45%;
+	margin-top: -100px;
+}
+
+.centeredhorizontal {
+	position: absolute;
+	left: 45%;
+	margin-left: -200px;
+}
+
+.toright {
+	position: relative;
+	float: right;
+	padding-right: 10px;
+}
+
+.toleft {
+	position: relative;
+	float: left;
+	padding-left: 10px;
+}
+
+.spanned {
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.almostspanned {
+	padding: 2px 2px 2px 2px;
+	margin: 2px 2px 2px 2px;
+}
+
+
+.topbar {
+	color: #919191;
+	font-style: bold;
+	position: absolute;
+	top: 0px;
+	padding-top: 0px;
+	margin-top: 5px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	border-bottom: solid 1px #b7b7b7;
+	width: 100%;
+}
+
+.topbarfloating {
+	background-color: #d9dee2;
+	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
+		to(#d9dee2));
+	background-image: -webkit-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -moz-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: linear-gradient(left, #ebeef2, #d9dee2);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	border-bottom: solid 1px #b7b7b7;
+}
+
+.bottombarfloating {
+	background-color: #d9dee2;
+	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
+		to(#d9dee2));
+	background-image: -webkit-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -moz-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
+	background-image: linear-gradient(left, #ebeef2, #d9dee2);
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	border-top: solid 1px #b7b7b7;
+}
+
+::-webkit-input-placeholder {
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+:-ms-input-placeholder {
+	padding: 0px;
+	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+.unsized {
+	width: auto;
+	height: auto;
+}
+
+/* class="tooltip" title="tooltiptext" */
+.tooltip {
+	position: relative;
+}
+
+.tooltip:before,.tooltip:after {
+	position: absolute;
+	transition: All 0.5s ease;
+	-webkit-transition: All 0.5s ease;
+	-moz-transition: All 0.5s ease;
+	-o-transition: All 0.5s ease;
+	margin-left: -100px;
+	left: 50%;
+	bottom: 300%;
+	display: block;
+	color: #000;
+	opacity: 0;
+}
+
+.tooltip:before {
+	content: attr(title);
+	border: solid 1px #0088cc;
+	background: #FFF;
+	width: 200px;
+	text-align: center;
+	z-index: 2;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 5px;
+}
+
+.tooltip:after {
+	content: '\25c6';
+	margin-left: 0;
+	margin-top: 10px;
+	width: 15px;
+	height: 15px;
+	z-index: 1;
+	line-height: 28px;
+	color: #0088cc;
+	font-size: 20px;
+}
+
+.tooltip:hover:before,.tooltip:hover:after {
+	bottom: 150%;
+	opacity: 1;
+}
+
+/* hyperlink */
+a {
+	outline: none;
+	text-decoration: none;
+	color: #0077dd;
+	border-bottom: 1px dashed;
+	padding: 2px 0px 0px 0px;
+}
+
+.ui-widget a {
+	border: none;
+}
+
+/* the normal state of a hyperlink */
+a:link {
+	
+}
+/* when the link has been visited before */
+a:visited {
+	color: #0055bb;
+}
+/* when the user hovers their mouse over a link */
+a:hover {
+	color: #00aaff;
+	border-bottom: 1px solid;
+}
+/* when the user clicks on the link (or presses the Enter key on a focused link) */
+a:active {
+	padding-top: 4px;
+}
+/* when the user uses the Tab key to navigate to hyperlinks */
+a:focus {
+	color: #00aaff;
+	border-bottom: 1px solid;
+}
+
+/* clearfix - http://code.tutsplus.com/tutorials/the-30-css-selectors-you-must-memorize--net-16048 */
+.clearfix:after {
+	content: "";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	font-size: 0;
+	height: 0;
+}
+
+.clearfix {
+	*display: inline-block;
+	_height: 1%;
+}

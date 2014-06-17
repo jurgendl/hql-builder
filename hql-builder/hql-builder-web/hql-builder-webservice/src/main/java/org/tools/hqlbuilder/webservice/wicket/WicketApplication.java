@@ -198,7 +198,10 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void addToCssBundle(List<ResourceReference> css) {
-        css.add(new CssResourceReference(WicketCSSRoot.class, "hqlbuilder.css"));
+        css.add(new CssResourceReference(WicketCSSRoot.class, "general.css"));
+        css.add(new CssResourceReference(WicketCSSRoot.class, "horizontalmenu.css"));
+        css.add(new CssResourceReference(WicketCSSRoot.class, "form.css"));
+        css.add(new CssResourceReference(WicketCSSRoot.class, "table.css"));
         css.add(new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts.css"));
     }
 
