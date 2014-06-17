@@ -15,10 +15,12 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -180,14 +182,20 @@ class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, Stri
     public void addTopToolbar(AbstractToolbar toolbar) {
         if (toolbar instanceof AjaxNavigationToolbar) {
             super.addTopToolbar(new TopToolbar(this, getDataprovider()));
-        } else {
-            super.addTopToolbar(toolbar); // headers toolbar
+        } else if (toolbar instanceof AjaxFallbackHeadersToolbar) {
+            super.addTopToolbar(new HeadersToolbar(this, getDataprovider()));
         }
     }
 
     @Override
     protected DataGridView<T> newDataGridView(String id, List<? extends IColumn<T, String>> columns, IDataProvider<T> dataProvider) {
         return new DataGridView<T>(id, columns, dataProvider);
+    }
+
+    protected class HeadersToolbar extends AjaxFallbackHeadersToolbar<String> {
+        public HeadersToolbar(DataTable<?, String> table, ISortStateLocator<String> stateLocator) {
+            super(table, stateLocator);
+        }
     }
 
     protected class TopToolbar extends AjaxNavigationToolbar {

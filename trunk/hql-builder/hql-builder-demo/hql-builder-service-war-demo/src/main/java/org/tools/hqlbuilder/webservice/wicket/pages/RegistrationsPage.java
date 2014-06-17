@@ -40,9 +40,15 @@ public class RegistrationsPage extends BasePage {
 
     public RegistrationsPage(PageParameters parameters) {
         super(parameters);
-
         Registration proxy = create(Registration.class);
+        DefaultDataProvider<Registration> dataProvider = initDataProvider();
+        DefaultFormActions<Registration> formActions = initTable(proxy, dataProvider);
+        add(table);
+        initForm(proxy, formActions);
+        add(formPanel);
+    }
 
+    protected DefaultDataProvider<Registration> initDataProvider() {
         DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
             @Override
             @SuppressWarnings("unchecked")
@@ -98,7 +104,10 @@ public class RegistrationsPage extends BasePage {
             }
         };
         dataProvider.setRowsPerPage(5);
+        return dataProvider;
+    }
 
+    protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName()));
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName()));
@@ -135,6 +144,11 @@ public class RegistrationsPage extends BasePage {
                 return true;
             }
         };
+
+        return formActions;
+    }
+
+    protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
         formPanel = new FormPanel<Registration>("registrationform", Model.of(new Registration()), true, formActions);
         formPanel.setLiveValidation(true);
         formPanel.addTextField(name(proxy.getUsername()), new FormElementSettings(true));
@@ -143,10 +157,6 @@ public class RegistrationsPage extends BasePage {
         formPanel.addEmailTextField(name(proxy.getEmail()), new FormElementSettings(true));
         formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormElementSettings(true));
         formPanel.addPasswordTextField(name(proxy.getPassword()), new FormElementSettings(true));
-
         formPanel.setVisible(false);
-
-        add(table);
-        add(formPanel);
     }
 }
