@@ -39,8 +39,6 @@ public class DefaultWebPage extends WebPage {
         } else {
             add(new EmptyPanel("debug").setVisible(false));
         }
-        // add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
-        // add(new LogInOutLinksPanel("authlinkspanel", webProperties, showAuthLinks()));
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }
 
