@@ -837,26 +837,6 @@ table tr th.wicket_orderNone {
 	background-image: url("images/arrow_off.png");
 }
 
-/* 45° rotated table headers */
-
-table.rotatedheaders {
-}
-
-table.rotatedheaders>th {
-	white-space: nowrap;
-	height: 140px;
-}
-
-table.rotatedheaders>th>div {
-	transform: translate(25px, 51px) rotate(315deg);
-	width: 30px;
-}
-
-table.rotatedheaders>th>div>span {
-	border-bottom: 1px solid #ccc;
-	padding: 5px 10px;
-}
-
 /* hyperlink */
 a {
 	outline: none;
