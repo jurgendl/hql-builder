@@ -29,31 +29,16 @@ body {
 	-o-transition: all 0.2s ease;
 }
 
-/*
 * {
 	background-repeat: no-repeat;
 }
-*/
 
-/*
-* {
-	position: relative;
-}
-*/
-
-/*
-* {
-	vertical-align: middle;
-}
-*/
-
-h1,h2,h3,h4,h5 {
+h1, h2, h3, h4, h5 {
 	/*Georgia, Times, ‘Times New Roman’, serif*/
 	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
 	/*Tahoma, Verdana, Geneva*/
 	/*Trebuchet, Tahoma, Arial, sans-serif*/
-	font: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New
-		Roman’, serif;
+	font: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif;
 }
 
 .centeredvertical {
@@ -67,29 +52,6 @@ h1,h2,h3,h4,h5 {
 	left: 45%;
 	margin-left: -200px;
 }
-
-.toright {
-	position: relative;
-	float: right;
-	padding-right: 10px;
-}
-
-.toleft {
-	position: relative;
-	float: left;
-	padding-left: 10px;
-}
-
-.spanned {
-	padding: 0px 0px 0px 0px;
-	margin: 0px 0px 0px 0px;
-}
-
-.almostspanned {
-	padding: 2px 2px 2px 2px;
-	margin: 2px 2px 2px 2px;
-}
-
 
 .topbar {
 	color: #919191;
@@ -158,11 +120,6 @@ h1,h2,h3,h4,h5 {
 	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
 }
 
-.unsized {
-	width: auto;
-	height: auto;
-}
-
 /* class="tooltip" title="tooltiptext" */
 .tooltip {
 	position: relative;
@@ -226,21 +183,25 @@ a {
 
 /* the normal state of a hyperlink */
 a:link {
-	
+	/* */
 }
+
 /* when the link has been visited before */
 a:visited {
 	color: #0055bb;
 }
+
 /* when the user hovers their mouse over a link */
 a:hover {
 	color: #00aaff;
 	border-bottom: 1px solid;
 }
+
 /* when the user clicks on the link (or presses the Enter key on a focused link) */
 a:active {
 	padding-top: 4px;
 }
+
 /* when the user uses the Tab key to navigate to hyperlinks */
 a:focus {
 	color: #00aaff;

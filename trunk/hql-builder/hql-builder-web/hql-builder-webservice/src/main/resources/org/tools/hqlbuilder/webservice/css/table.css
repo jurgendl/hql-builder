@@ -25,10 +25,6 @@ td {
 	border-right: 1px solid #e0e0e0;
 }
 
-tr.odd-row td {
-	background: #f6f6f6;
-}
-
 td.last {
 	border-right: none;
 }
@@ -40,6 +36,7 @@ td {
 }
 
 tr.odd td {
+	background: #f6f6f6;
 	background-image: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
 		to(#f6f6f6));

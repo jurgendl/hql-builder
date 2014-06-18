@@ -3,13 +3,17 @@
 
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
 	<form wicket:id="form">
+		<span>
+			<fieldset class="formheader">
+			</fieldset>
+		</span>
 		<span class="formbody" wicket:id="form.body">
 			<span wicket:id="form.repeater">
 				<span wicket:id="form.row"></span>
 			</span>
 		</span>
-		<span class="formactions" wicket:id="form.actions">
-			<fieldset class="actions">
+		<span wicket:id="form.actions">
+			<fieldset class="formactions">
 				<input wicket:id="form.submit" type="submit" value="[Submit]" wicket:message="value:submit.label"></input>
 				<input wicket:id="form.reset" type="reset" value="[Reset]" wicket:message="value:reset.label"></input>
 				<input wicket:id="form.cancel" type="button" value="[Cancel]" wicket:message="value:cancel.label"></input>

@@ -1,50 +1,3 @@
-.requiredMarker {
-	background-image: url("images/bullet_star.png");
-	background-position: top;
-	background-repeat: no-repeat;
-	display: inline;
-	height: 16px;
-	width: 16px;
-	color: transparent;
-	text-align: center;
-	vertical-align: middle;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-
-.requiredMakeup {
-	font-size: small;
-	color: #BCBF60;
-	vertical-align: top;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-
-.feedbackPanelERROR {
-	font-size: small;
-	color: #BCBF60;
-	vertical-align: top;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-
-fieldset {
-	border: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-form label {
-	color: #919191;
-	font-style: bold;
-	width: 10em;
-	float: left;
-	text-align: right;
-	margin-right: 0.5em;
-	display: block;
-	vertical-align: middle;
-}
-
 form .ui-datepicker-append {
 	color: #919191;
 	font-style: bold;
@@ -401,12 +354,10 @@ button:hover {
 
 .fileupload input[type='file']:focus {
 	/* */
-	
 }
 
 .fileupload input[type='file']:hover {
 	/* */
-	
 }
 
 form input[type='color'] {
@@ -426,28 +377,10 @@ form input[type='color'] {
 
 form input[type='color']:focus {
 	/* */
-	
 }
 
 form input[type='color']:hover {
 	/* */
-	
-}
-
-
-.actions {
-	vertical-align: baseline;
-	text-align: center;
-}
-
-.feedbackPanel {
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 15px;
-	display: inline-block;
-}
-
-.formrow {
-	margin: 5px 5px 5px 5px;
 }
 
 /* range slider */
@@ -488,6 +421,44 @@ form input[type='range']::-moz-range-thumb {
 	width: 20px;
 }
 
+/* validation etc */
+
+.requiredMarker {
+	background-image: url("images/bullet_star.png");
+	background-position: top;
+	background-repeat: no-repeat;
+	display: inline;
+	height: 16px;
+	width: 16px;
+	color: transparent;
+	text-align: center;
+	vertical-align: middle;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.requiredMakeup {
+	font-size: small;
+	color: #BCBF60;
+	vertical-align: top;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.feedbackPanelERROR {
+	font-size: small;
+	color: #BCBF60;
+	vertical-align: top;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.feedbackPanel {
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 15px;
+	display: inline-block;
+}
+
 .valid {
 	border-color: green !important;
 }
@@ -506,4 +477,69 @@ form input[type='range']::-moz-range-thumb {
 
 .required.invalid {
 	border-color: red !important;
+}
+
+/* layout */
+
+.niceform form {
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+
+	border: 1px solid #d3d3d3;
+	background: #fefefe;
+	-moz-border-radius: 5px; /* FF1+ */
+	-webkit-border-radius: 5px; /* Saf3-4 */
+	border-radius: 5px;
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+
+form label {
+	float: left;
+	text-align: right;
+	display: block;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	color: #919191;
+	font-weight: bold;
+	width: 10em;
+}
+
+.forminput {
+	
+}
+
+fieldset {
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+	vertical-align: baseline;
+}
+
+.formheader {
+	padding: 9px 14px 9px;
+	text-align: center;
+	background-color: #e8eaeb;
+	background-image: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#e8eaeb),
+		to(#e8eaeb));
+}
+
+.formactions {
+	padding: 9px 14px 9px;
+	text-align: center;
+	background-color: #e8eaeb;
+	background-image: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#e8eaeb),
+		to(#e8eaeb));
+}
+
+.formrow {
+	padding: 6px 2px 6px 2px;
+	background: #f6f6f6;
+	background-image: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
+		to(#f6f6f6));
 }
