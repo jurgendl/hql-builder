@@ -1295,7 +1295,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         aliases = rv.getFromAliases();
 
-        List<?> list = rv.getResults().getValue();
+        List<?> list = rv.getResults() == null ? null : rv.getResults().getValue();
         ETableHeaders<List<Object>> headers = null;
 
         List<ETableRecord<List<Object>>> records = new ArrayList<ETableRecord<List<Object>>>();
