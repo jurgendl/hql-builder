@@ -177,7 +177,8 @@ public class WicketApplication extends WebApplication {
     protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
 
     protected void addToJsBundle(List<ResourceReference> js) {
-        js.add(new JavaScriptResourceReference(WicketJSRoot.class, "hqlbuilder.js"));
+        js.add(new JavaScriptResourceReference(WicketJSRoot.class, "colors.js"));
+        js.add(new JavaScriptResourceReference(WicketJSRoot.class, "floatingbar.js"));
     }
 
     protected void addToJsResources(List<ResourceReference> js) {
@@ -198,6 +199,7 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void addToCssBundle(List<ResourceReference> css) {
+        css.add(new CssResourceReference(WicketCSSRoot.class, "colors.css"));
         css.add(new CssResourceReference(WicketCSSRoot.class, "general.css"));
         css.add(new CssResourceReference(WicketCSSRoot.class, "horizontalmenu.css"));
         css.add(new CssResourceReference(WicketCSSRoot.class, "form.css"));

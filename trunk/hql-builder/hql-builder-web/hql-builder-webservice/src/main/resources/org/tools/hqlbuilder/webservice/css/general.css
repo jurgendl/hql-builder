@@ -172,7 +172,7 @@ h1, h2, h3, h4, h5 {
 a {
 	outline: none;
 	text-decoration: none;
-	color: #0077dd;
+	/*color: #0077dd;*/
 	border-bottom: 1px dashed;
 	padding: 2px 0px 0px 0px;
 }
@@ -188,37 +188,37 @@ a:link {
 
 /* when the link has been visited before */
 a:visited {
-	color: #0055bb;
+	/*color: #0055bb;*/
 }
 
 /* when the user hovers their mouse over a link */
 a:hover {
-	color: #00aaff;
+	/*color: #00aaff;*/
 	border-bottom: 1px solid;
 }
 
 /* when the user clicks on the link (or presses the Enter key on a focused link) */
 a:active {
-	padding-top: 4px;
+	/*padding-top: 4px;*/
 }
 
 /* when the user uses the Tab key to navigate to hyperlinks */
 a:focus {
-	color: #00aaff;
+	/*color: #00aaff;*/
 	border-bottom: 1px solid;
 }
 
-/* clearfix - http://code.tutsplus.com/tutorials/the-30-css-selectors-you-must-memorize--net-16048 */
+/* clearfix - http://css-tricks.com/snippets/css/clear-fix/*/
 .clearfix:after {
-	content: "";
-	display: block;
-	clear: both;
 	visibility: hidden;
+	display: block;
 	font-size: 0;
+	content: " ";
+	clear: both;
 	height: 0;
-}
-
-.clearfix {
-	*display: inline-block;
-	_height: 1%;
-}
+	}
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
