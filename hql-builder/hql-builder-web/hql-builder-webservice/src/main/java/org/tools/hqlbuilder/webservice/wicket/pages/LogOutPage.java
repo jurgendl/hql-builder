@@ -18,9 +18,4 @@ public class LogOutPage extends DefaultWebPage {
         super.addComponents();
         add(new LogOutPanel());
     }
-
-    @Override
-    public boolean showAuthLinks() {
-        return false;
-    }
 }

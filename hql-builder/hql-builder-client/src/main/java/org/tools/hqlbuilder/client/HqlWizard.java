@@ -167,9 +167,13 @@ public class HqlWizard {
         queryBuilder.setPreferredSize(size);
         queryBuilder.setSize(size);
 
-        table.packColumn(0, 3);
-        table.packColumn(4, 3);
-        table.packColumn(5, 3);
+        try {
+            table.packColumn(0, 3);
+            table.packColumn(4, 3);
+            table.packColumn(5, 3);
+        } catch (Exception ex) {
+            //
+        }
 
         table = table.stsi();
 

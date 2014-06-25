@@ -42,13 +42,10 @@ public class DefaultWebPage extends WebPage {
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }
 
-    public boolean showAuthLinks() {
-        return true;
-    }
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+
         if (!isEnabledInHierarchy()) {
             return;
         }
@@ -66,6 +63,11 @@ public class DefaultWebPage extends WebPage {
         // none by default
     }
 
+    /**
+     * add jquery theme resources
+     *
+     * @see {@link WicketSession#getJQueryUITheme()}
+     */
     protected void addThemeResources(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "jquery/ui/jquery-ui-themes-1.10.4/themes/"
                 + WicketSession.get().getJQueryUITheme() + "/jquery-ui.css")));
@@ -80,18 +82,22 @@ public class DefaultWebPage extends WebPage {
         for (ResourceReference resource : WicketApplication.get().getJsResources()) {
             response.render(JavaScriptHeaderItem.forReference(JavaScriptResourceReference.class.cast(resource)));
         }
-        // if (WicketApplication.get().getJsBundleReference() != null) {
-        // response.render(WicketApplication.get().getJsBundleReference());
-        // }
-        // if (WicketApplication.get().getCssBundleReference() != null) {
-        // response.render(WicketApplication.get().getCssBundleReference());
-        // }
+        if (WicketApplication.get().getJsBundleReference() != null) {
+            response.render(WicketApplication.get().getJsBundleReference());
+        }
+        if (WicketApplication.get().getCssBundleReference() != null) {
+            response.render(WicketApplication.get().getCssBundleReference());
+        }
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
 
+        statelessCheck();
+    }
+
+    protected void statelessCheck() {
         if (getStatelessHint() && WicketApplication.get().usesDevelopmentConfig()) {
             visitChildren(new IVisitor<Component, Void>() {
                 @Override
@@ -106,10 +112,31 @@ public class DefaultWebPage extends WebPage {
 
     @Override
     protected void setHeaders(WebResponse response) {
-        if (isPageStateless()) {
-            response.enableCaching(Duration.ONE_DAY, WebResponse.CacheScope.PUBLIC);
+        super.setHeaders(response);
+
+        // if page is stateless en in deployment mode, we enable caching
+        if (isPageStateless() && WicketApplication.get().usesDeploymentConfig()) {
+            enableCaching(response);
         } else {
-            response.disableCaching();
+            disableCaching(response);
         }
+    }
+
+    protected Duration defaultCacheDuration = Duration.ONE_DAY;
+
+    protected void disableCaching(WebResponse response) {
+        response.disableCaching();
+    }
+
+    protected void enableCaching(WebResponse response) {
+        response.enableCaching(defaultCacheDuration, WebResponse.CacheScope.PUBLIC);
+    }
+
+    public Duration getDefaultCacheDuration() {
+        return this.defaultCacheDuration;
+    }
+
+    public void setDefaultCacheDuration(Duration defaultCacheDuration) {
+        this.defaultCacheDuration = defaultCacheDuration;
     }
 }
