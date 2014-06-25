@@ -18,9 +18,4 @@ public class LogInPage extends DefaultWebPage {
         super.addComponents();
         add(new LogInPanel());
     }
-
-    @Override
-    public boolean showAuthLinks() {
-        return false;
-    }
 }

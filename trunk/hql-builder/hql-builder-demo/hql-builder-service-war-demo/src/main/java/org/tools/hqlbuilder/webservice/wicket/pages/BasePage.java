@@ -24,6 +24,7 @@ public class BasePage extends DefaultWebPage {
         pages.add(RegistrationPage.class);
         pages.add(RegistrationsPage.class);
         pages.add(SettingsPage.class);
+        pages.add(LongPage.class);
         IModel<? extends List<? extends Class<? extends DefaultWebPage>>> pagesModel = new AbstractReadOnlyModel<List<? extends Class<? extends DefaultWebPage>>>() {
             @Override
             public List<? extends Class<? extends DefaultWebPage>> getObject() {

@@ -105,8 +105,8 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
         }
     }
 
-    protected boolean isUserAllowed(final String username,  final String password,
-            final Set<String> rolesSet) {
+    @SuppressWarnings("unused")
+    protected boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet) {
         boolean isAllowed = false;
 
         // Step 1. Fetch password from database and match with password in argument
