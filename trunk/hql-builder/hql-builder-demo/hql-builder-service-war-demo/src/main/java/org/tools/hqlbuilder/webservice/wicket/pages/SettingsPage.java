@@ -13,5 +13,7 @@ public class SettingsPage extends BasePage {
         super(parameters);
 
         add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
+
+        add(new ThemesPanel("themespanel"));
     }
 }
