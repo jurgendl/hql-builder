@@ -1,6 +1,23 @@
-@form_element_border: #cccccc;
 @form_label: #919191;
-@form_element_focus_border: #e8c291;
+
+@form_element_border: #cccccc;
+@form_element_border_gradient: #ffffff;
 @form_element_background: #ffffff;
+
+@form_element_hover_border: #e8c291;
+@form_element_hover_border_gradient: #ffffff;
+@form_element_hover_background: #fddb6f;
+
+@form_element_focus_border: #e8c291;
+@form_element_focus_border_gradient: #ffffff;
+@form_element_focus_background: #fddb6f;
+
 @form_required: #BCBF60;
-@form_element_background_focus: #fddb6f;
+
+@form_header_background: #e8eaeb;
+@form_header_background_gradient: #ededed;
+
+@form_row_background: #f6f6f6;
+@form_row_background_gradient: #f1f1f1;
+
+@form_button_background: #ffb94b;
