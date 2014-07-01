@@ -201,10 +201,10 @@ public class WicketApplication extends WebApplication {
     protected void addToCssBundle(List<ResourceReference> css) {
         css.add(WicketCSSRoot.COLORS);
         css.add(WicketCSSRoot.WE_LOVE_ICONS);
-        css.add(new CssResourceReference(WicketCSSRoot.class, "general.css"));
-        css.add(new CssResourceReference(WicketCSSRoot.class, "horizontalmenu.css"));
-        css.add(new CssResourceReference(WicketCSSRoot.class, "form.css"));
-        css.add(new CssResourceReference(WicketCSSRoot.class, "table.css"));
+        css.add(WicketCSSRoot.GENERAL);
+        // css.add(WicketCSSRoot.HORIZONTAL_MENU);
+        // css.add(WicketCSSRoot.FORMS);
+        // css.add(WicketCSSRoot.TABLES);
     }
 
     protected void addToCssResources(List<ResourceReference> css) {
@@ -304,7 +304,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //

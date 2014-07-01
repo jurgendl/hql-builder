@@ -155,9 +155,6 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
         response.render(OnLoadHeaderItem.forScript(initScript));
     }
 
-    /**
-     * @see org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel#setPlaceholder(org.apache.wicket.markup.ComponentTag)
-     */
     @Override
     protected void setupPlaceholder(ComponentTag tag) {
         tag.getAttributes().put(PLACEHOLDER, getPlaceholderText() + " <" + new SimpleDateFormat(dateFormat, getLocale()).format(new Date()) + ">");

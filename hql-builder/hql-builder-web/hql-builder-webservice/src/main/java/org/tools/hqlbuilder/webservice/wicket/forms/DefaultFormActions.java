@@ -7,6 +7,14 @@ import org.apache.wicket.model.IModel;
 public class DefaultFormActions<T> implements FormActions<T> {
     private static final long serialVersionUID = 555158530492799693L;
 
+    protected boolean ajax = true;
+
+    protected boolean cancelable = false;
+
+    public DefaultFormActions() {
+        super();
+    }
+
     @Override
     public void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model) {
         if (target != null) {
@@ -16,12 +24,12 @@ public class DefaultFormActions<T> implements FormActions<T> {
 
     @Override
     public boolean isAjax() {
-        return true;
+        return ajax;
     }
 
     @Override
     public boolean isCancelable() {
-        return false;
+        return cancelable;
     }
 
     @Override
@@ -34,5 +42,15 @@ public class DefaultFormActions<T> implements FormActions<T> {
     @Override
     public void submit(IModel<T> model) {
         //
+    }
+
+    public DefaultFormActions<T> setAjax(boolean ajax) {
+        this.ajax = ajax;
+        return this;
+    }
+
+    public DefaultFormActions<T> setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
+        return this;
     }
 }

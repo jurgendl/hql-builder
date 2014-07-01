@@ -243,6 +243,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDatePicker(property, componentSettings, (Converter<Date, Date>) null);
     }
 
+    public ColorPickerPanel addColorPicker(String property, FormElementSettings componentSettings) {
+        ColorPickerPanel row = new ColorPickerPanel(getDefaultModel(), property, formSettings, componentSettings);
+        addRow(property, row);
+        return row;
+    }
+
     public TextFieldPanel<String> addTextField(String property, FormElementSettings componentSettings) {
         return addTextField(property, String.class, componentSettings);
     }
@@ -271,7 +277,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return row;
     }
 
-    protected <V, C extends FormComponent<V>> FormRowPanel<V, C> addRow(String property, FormRowPanel<V, C> row) {
+    public <V, C extends FormComponent<V>> FormRowPanel<V, C> addRow(String property, FormRowPanel<V, C> row) {
         row.addComponentsTo(repeater);
         setupRequiredBehavior(row);
         setupId(property, row.getComponent());
@@ -426,5 +432,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         protected IModel<T> getValueModel() {
             return new PropertyModel<T>(getDefaultModel(), property);
         }
+    }
+
+    public FormSettings getFormSettings() {
+        return this.formSettings;
     }
 }

@@ -20,6 +20,7 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.WicketRoot;
+import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -53,6 +54,7 @@ public class DefaultWebPage extends WebPage {
         addThemeResources(response);
         addPageResources(response);
         addUserResources(response);
+        addDynamicResources(response);
     }
 
     protected void addUserResources(@SuppressWarnings("unused") IHeaderResponse response) {
@@ -88,6 +90,12 @@ public class DefaultWebPage extends WebPage {
         if (WicketApplication.get().getCssBundleReference() != null) {
             response.render(WicketApplication.get().getCssBundleReference());
         }
+    }
+
+    protected void addDynamicResources(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.HORIZONTAL_MENU));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.FORMS));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.TABLES));
     }
 
     @Override

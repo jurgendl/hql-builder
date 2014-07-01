@@ -52,10 +52,10 @@ public class CssResourceReference extends org.apache.wicket.request.resource.Css
         List<HeaderItem> l = Lists.newArrayList(super.getDependencies());
         l.addAll(dependencies);
         for (ResourceReference dependency : dependenciesJavaScript) {
-            dependencies.add(JavaScriptHeaderItem.forReference(dependency));
+            l.add(JavaScriptHeaderItem.forReference(dependency));
         }
         for (ResourceReference dependency : dependenciesCss) {
-            dependencies.add(CssHeaderItem.forReference(dependency));
+            l.add(CssHeaderItem.forReference(dependency));
         }
         return l;
     }

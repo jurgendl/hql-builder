@@ -1,5 +1,5 @@
 form .ui-datepicker-append {
-	color: #919191;
+	color: @form_label;
 	font-style: bold;
 	margin-left: 0.5em;
 }
@@ -14,94 +14,101 @@ form input[type='text'],input[type='search'],input[type='password'],input[type='
 	{
 	padding: 3px 10px 3px 10px;
 	margin: 0px 0px 0px 0px;
-	border: 1px solid #ccc;
+	border: 1px solid @form_element_border;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-moz-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	-webkit-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
 }
 
 form textarea {
 	padding: 3px 10px 3px 10px;
 	margin: 0px 0px 0px 0px;
-	border: 1px solid #ccc;
+	border: 1px solid @form_element_border;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-moz-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	-webkit-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
 }
 
 form select {
 	padding: 3px 10px 3px 10px;
 	margin: 0 10px 10px 0;
-	border: 1px solid #ccc;
+	border: 1px solid @form_element_border;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-moz-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	-webkit-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
 }
 
 form input[type='text']:focus,input[type='search']:focus,input[type='password']:focus,input[type='date']:focus,input[type='datetime-local']:focus,input[type='datetime']:focus,input[type='email']:focus,input[type='month']:focus,input[type='number']:focus,input[type='tel']:focus,input[type='time']:focus,input[type='url']:focus,input[type='week']:focus
 	{
-	background-color: #fff;
-	border-color: #e8c291;
+	background-color: @form_element_background;
+	border-color: @form_element_focus_border;
 	outline: none;
-	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
-	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
-	box-shadow: 0 0 0 1px #e8c291 inset;
+	-moz-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	-webkit-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	box-shadow: 0 0 0 1px @form_element_focus_border inset;
 }
 
 form textarea:focus {
-	background-color: #fff;
-	border-color: #e8c291;
+	background-color: @form_element_background;
+	border-color: @form_element_focus_border;
 	outline: none;
-	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
-	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
-	box-shadow: 0 0 0 1px #e8c291 inset;
+	-moz-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	-webkit-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	box-shadow: 0 0 0 1px @form_element_focus_border inset;
 }
 
 form input[type='text']:hover,input[type='search']:hover,input[type='password']:hover,input[type='date']:hover,input[type='datetime-local']:hover,input[type='datetime']:hover,input[type='email']:hover,input[type='month']:hover,input[type='number']:hover,input[type='tel']:hover,input[type='time']:hover,input[type='url']:hover,input[type='week']:hover
 	{
-	background-color: #fff;
-	border-color: #e8c291;
+	background-color: @form_element_background;
+	border-color: @form_element_focus_border;
 	outline: none;
-	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
-	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
-	box-shadow: 0 0 0 1px #e8c291 inset;
+	-moz-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	-webkit-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	box-shadow: 0 0 0 1px @form_element_focus_border inset;
 }
 
 form textarea:hover {
-	background-color: #fff;
-	border-color: #e8c291;
+	background-color: @form_element_background;
+	border-color: @form_element_focus_border;
 	outline: none;
-	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
-	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
-	box-shadow: 0 0 0 1px #e8c291 inset;
+	-moz-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	-webkit-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	box-shadow: 0 0 0 1px @form_element_focus_border inset;
 }
 
 form select:focus {
-	background-color: #fff;
-	border-color: #e8c291;
+	background-color: @form_element_background;
+	border-color: @form_element_focus_border;
 	outline: none;
-	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
-	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
-	box-shadow: 0 0 0 1px #e8c291 inset;
+	-moz-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	-webkit-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	box-shadow: 0 0 0 1px @form_element_focus_border inset;
 }
 
 form select:hover {
-	background-color: #fff;
-	border-color: #e8c291;
+	background-color: @form_element_background;
+	border-color: @form_element_focus_border;
 	outline: none;
-	-moz-box-shadow: 0 0 0 1px #e8c291 inset;
-	-webkit-box-shadow: 0 0 0 1px #e8c291 inset;
-	box-shadow: 0 0 0 1px #e8c291 inset;
+	-moz-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	-webkit-box-shadow: 0 0 0 1px @form_element_focus_border inset;
+	box-shadow: 0 0 0 1px @form_element_focus_border inset;
 }
+
+/* form_element_border: @form_element_border */
+/* form_label: @form_label */
+/* form_element_focus_border: @form_element_focus_border */
+/* form_element_background: @form_element_background */
+/* form_required: @form_required */
+/* form_element_background_focus: @form_element_background_focus; */
 
 form input[type='image'] {
 	width: 120px;
@@ -119,13 +126,13 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: #ffb94b;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_element_background_focus),
 		to(#ffb94b));
-	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -webkit-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -moz-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -ms-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -o-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: linear-gradient(top, @form_element_background_focus, #ffb94b);
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
@@ -159,13 +166,13 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: #ffb94b;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_element_background_focus),
 		to(#ffb94b));
-	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -webkit-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -moz-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -ms-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -o-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: linear-gradient(top, @form_element_background_focus, #ffb94b);
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
@@ -205,13 +212,13 @@ button {
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: #ffb94b;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#fddb6f),
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_element_background_focus),
 		to(#ffb94b));
-	background-image: -webkit-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -moz-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -ms-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: -o-linear-gradient(top, #fddb6f, #ffb94b);
-	background-image: linear-gradient(top, #fddb6f, #ffb94b);
+	background-image: -webkit-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -moz-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -ms-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: -o-linear-gradient(top, @form_element_background_focus, #ffb94b);
+	background-image: linear-gradient(top, @form_element_background_focus, #ffb94b);
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
@@ -233,37 +240,37 @@ button {
 
 form input[type='submit']:focus,input[type='reset']:focus,input[type='button']:focus:focus,input[type='image']:focus
 	{
-	background-color: #fddb6f;
+	background-color: @form_element_background_focus;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
-		to(#fddb6f));
-	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+		to(@form_element_background_focus));
+	background-image: -webkit-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -moz-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -ms-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -o-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: linear-gradient(top, #ffb94b, @form_element_background_focus);
 }
 
 form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:hover:hover,input[type='image']:hover
 	{
-	background-color: #fddb6f;
+	background-color: @form_element_background_focus;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
-		to(#fddb6f));
-	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+		to(@form_element_background_focus));
+	background-image: -webkit-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -moz-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -ms-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -o-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: linear-gradient(top, #ffb94b, @form_element_background_focus);
 }
 
 .likebutton:focus {
-	background-color: #fddb6f;
+	background-color: @form_element_background_focus;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
-		to(#fddb6f));
-	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+		to(@form_element_background_focus));
+	background-image: -webkit-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -moz-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -ms-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -o-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: linear-gradient(top, #ffb94b, @form_element_background_focus);
 	color: #8f5a0a;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
@@ -282,14 +289,14 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 }
 
 .likebutton:hover {
-	background-color: #fddb6f;
+	background-color: @form_element_background_focus;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
-		to(#fddb6f));
-	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+		to(@form_element_background_focus));
+	background-image: -webkit-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -moz-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -ms-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -o-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: linear-gradient(top, #ffb94b, @form_element_background_focus);
 	color: #8f5a0a;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
@@ -312,25 +319,25 @@ form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:h
 }
 
 button:focus {
-	background-color: #fddb6f;
+	background-color: @form_element_background_focus;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
-		to(#fddb6f));
-	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+		to(@form_element_background_focus));
+	background-image: -webkit-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -moz-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -ms-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -o-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: linear-gradient(top, #ffb94b, @form_element_background_focus);
 }
 
 button:hover {
-	background-color: #fddb6f;
+	background-color: @form_element_background_focus;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffb94b),
-		to(#fddb6f));
-	background-image: -webkit-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -moz-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -ms-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: -o-linear-gradient(top, #ffb94b, #fddb6f);
-	background-image: linear-gradient(top, #ffb94b, #fddb6f);
+		to(@form_element_background_focus));
+	background-image: -webkit-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -moz-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -ms-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: -o-linear-gradient(top, #ffb94b, @form_element_background_focus);
+	background-image: linear-gradient(top, #ffb94b, @form_element_background_focus);
 }
 
 .fileupload {
@@ -366,13 +373,13 @@ form input[type='color'] {
 	padding: 3px 10px 3px 10px;
 	cursor: pointer;
 	margin: 2px 0px 2px 0px;
-	border: 1px solid #ccc;
+	border: 1px solid @form_element_border;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	-moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	-webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
-	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	-moz-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	-webkit-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
+	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
 }
 
 form input[type='color']:focus {
@@ -387,7 +394,7 @@ form input[type='color']:hover {
 form input[type='range'] {
 	-webkit-appearance: none;
 	border-radius: 5px;
-	box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_background;
 	background-color: #ffb94b;
 	height: 10px;
 	vertical-align: middle;
@@ -404,7 +411,7 @@ form input[type='range']::-moz-range-track {
 form input[type='range']::-webkit-slider-thumb {
 	-webkit-appearance: none !important;
 	border-radius: 20px;
-	background-color: #FFF;
+	background-color: @form_element_background;
 	box-shadow: inset 0 0 10px rgba(000, 000, 000, 0.5);
 	border: 1px solid #999;
 	height: 20px;
@@ -414,7 +421,7 @@ form input[type='range']::-webkit-slider-thumb {
 form input[type='range']::-moz-range-thumb {
 	-moz-appearance: none;
 	border-radius: 20px;
-	background-color: #FFF;
+	background-color: @form_element_background;
 	box-shadow: inset 0 0 10px rgba(000, 000, 000, 0.5);
 	border: 1px solid #999;
 	height: 20px;
@@ -439,7 +446,7 @@ form input[type='range']::-moz-range-thumb {
 
 .requiredMakeup {
 	font-size: small;
-	color: #BCBF60;
+	color: @form_required;
 	vertical-align: top;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -447,7 +454,7 @@ form input[type='range']::-moz-range-thumb {
 
 .feedbackPanelERROR {
 	font-size: small;
-	color: #BCBF60;
+	color: @form_required;
 	vertical-align: top;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -502,7 +509,7 @@ form label {
 	display: block;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
-	color: #919191;
+	color: @form_label;
 	font-weight: bold;
 	width: 14em;
 }
