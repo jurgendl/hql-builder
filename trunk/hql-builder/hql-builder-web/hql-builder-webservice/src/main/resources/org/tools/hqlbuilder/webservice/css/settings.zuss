@@ -1,0 +1,6 @@
+@form_element_border: #cccccc;
+@form_label: #919191;
+@form_element_focus_border: #e8c291;
+@form_element_background: #ffffff;
+@form_required: #BCBF60;
+@form_element_background_focus: #fddb6f;
