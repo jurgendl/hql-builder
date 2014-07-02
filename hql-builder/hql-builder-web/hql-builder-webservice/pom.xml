@@ -11,6 +11,11 @@
 	<description>hql-builder-webservice</description>
 	<dependencies>
 		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.tomyeh</groupId>
 			<artifactId>zuss</artifactId>
 			<version>1.0.0-FL-2012-03-20</version>
