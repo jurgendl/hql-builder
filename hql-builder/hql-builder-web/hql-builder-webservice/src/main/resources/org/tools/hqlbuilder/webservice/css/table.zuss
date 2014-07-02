@@ -1,7 +1,7 @@
 table {
 	overflow: hidden;
-	border: 1px solid #d3d3d3;
-	background: #fefefe;
+	border: 1px solid @table_border;
+	background: @table_background;
 	margin: 5% auto 0;
 	-moz-border-radius: 5px; /* FF1+ */
 	-webkit-border-radius: 5px; /* Saf3-4 */
@@ -15,14 +15,14 @@ th {
 	text-align: center;
 	padding-top: 11px;
 	text-shadow: 1px 1px 1px #fff;
-	background: #e8eaeb;
+	background: @table_header_background;
 }
 
 td {
 	padding: 4px 8px 4px;
 	text-align: center;
-	border-top: 1px solid #e0e0e0;
-	border-right: 1px solid #e0e0e0;
+	border-top: 1px solid @table_data_border;
+	border-right: 1px solid @table_data_border;
 }
 
 td.last {
@@ -30,23 +30,21 @@ td.last {
 }
 
 td {
-	background-image: -moz-linear-gradient(100% 25% 90deg, #fefefe, #f9f9f9);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f9f9f9),
-		to(#fefefe));
+	background: @table_data_background;
+	background-image: -moz-linear-gradient(100% 25% 90deg, @table_data_background_gradient, @table_data_background);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(@table_data_background_gradient), to(@table_data_background));
 }
 
 tr.odd td {
-	background: #f6f6f6;
-	background-image: -moz-linear-gradient(100% 25% 90deg, #f6f6f6, #f1f1f1);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f1f1f1),
-		to(#f6f6f6));
+	background: @table_data_alt_background;
+	background-image: -moz-linear-gradient(100% 25% 90deg, @table_data_alt_background_gradient, @table_data_alt_background);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(@table_data_alt_background_gradient), to(@table_data_alt_background));
 }
 
 th {
-	background-color: #e8eaeb;
-	background-image: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#e8eaeb),
-		to(#e8eaeb));
+	background-color: @table_header_background;
+	background-image: -moz-linear-gradient(100% 20% 90deg, @table_header_background_gradient, @table_header_background);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(@table_header_background_gradient), to(@table_header_background));
 }
 
 tr:first-child th.first {
