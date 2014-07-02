@@ -10,8 +10,9 @@ form input[type='radio'],input[type='checkbox'] {
 	vertical-align: middle;
 }
 
-form input[type='text'],input[type='search'],input[type='password'],input[type='date'],input[type='datetime-local'],input[type='datetime'],input[type='email'],input[type='month'],input[type='number'],input[type='tel'],input[type='time'],input[type='url'],input[type='week']
-	{
+/* form element */
+
+form input[type='text'],input[type='search'],input[type='password'],input[type='date'],input[type='datetime-local'],input[type='datetime'],input[type='email'],input[type='month'],input[type='number'],input[type='tel'],input[type='time'],input[type='url'],input[type='week'] {
 	padding: 3px 10px 3px 10px;
 	margin: 0px 0px 0px 0px;
 	border: 1px solid @form_element_border;
@@ -47,8 +48,9 @@ form select {
 	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_border_gradient;
 }
 
-form input[type='text']:focus,input[type='search']:focus,input[type='password']:focus,input[type='date']:focus,input[type='datetime-local']:focus,input[type='datetime']:focus,input[type='email']:focus,input[type='month']:focus,input[type='number']:focus,input[type='tel']:focus,input[type='time']:focus,input[type='url']:focus,input[type='week']:focus
-	{
+/* form element focus */
+
+form input[type='text']:focus,input[type='search']:focus,input[type='password']:focus,input[type='date']:focus,input[type='datetime-local']:focus,input[type='datetime']:focus,input[type='email']:focus,input[type='month']:focus,input[type='number']:focus,input[type='tel']:focus,input[type='time']:focus,input[type='url']:focus,input[type='week']:focus {
 	background-color: @form_element_focus_background;
 	border-color: @form_element_focus_border;
 	outline: none;
@@ -66,8 +68,18 @@ form textarea:focus {
 	box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
 }
 
-form input[type='text']:hover,input[type='search']:hover,input[type='password']:hover,input[type='date']:hover,input[type='datetime-local']:hover,input[type='datetime']:hover,input[type='email']:hover,input[type='month']:hover,input[type='number']:hover,input[type='tel']:hover,input[type='time']:hover,input[type='url']:hover,input[type='week']:hover
-	{
+form select:focus {
+	background-color: @form_element_focus_background;
+	border-color: @form_element_focus_border;
+	outline: none;
+	-moz-box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
+	-webkit-box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
+	box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
+}
+
+/* form element hover */
+
+form input[type='text']:hover,input[type='search']:hover,input[type='password']:hover,input[type='date']:hover,input[type='datetime-local']:hover,input[type='datetime']:hover,input[type='email']:hover,input[type='month']:hover,input[type='number']:hover,input[type='tel']:hover,input[type='time']:hover,input[type='url']:hover,input[type='week']:hover {
 	background-color: @form_element_hover_background;
 	border-color: @form_element_hover_border;
 	outline: none;
@@ -85,15 +97,6 @@ form textarea:hover {
 	box-shadow: 0 1px 1px @form_element_hover_border inset, 0 1px 0 @form_element_hover_border_gradient;
 }
 
-form select:focus {
-	background-color: @form_element_focus_background;
-	border-color: @form_element_focus_border;
-	outline: none;
-	-moz-box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
-	-webkit-box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
-	box-shadow: 0 1px 1px @form_element_focus_border inset, 0 1px 0 @form_element_focus_border_gradient;
-}
-
 form select:hover {
 	background-color: @form_element_hover_background;
 	border-color: @form_element_hover_border;
@@ -103,50 +106,58 @@ form select:hover {
 	box-shadow: 0 1px 1px @form_element_hover_border inset, 0 1px 0 @form_element_hover_border_gradient;
 }
 
+/* */
+
 form input[type='image'] {
 	width: 120px;
 	height: 20px;
 	text-align: center;
 }
 
-form input[type='submit'].fixedw,input[type='reset'].fixedw,input[type='button'].fixedw
-	{
+/* buttons size */
+
+form input[type='submit'].fixedw,input[type='reset'].fixedw,input[type='button'].fixedw {
 	width: 142px;
 }
 
-form input[type='submit'],input[type='reset'],input[type='button'],input[type='image']
-	{
+.likebutton.fixedw {
+	width: 120px;
+}
+
+button.fixedw {
+	width: 142px;
+}
+
+.likebutton:active {
+	padding: 3px 10px 3px 10px;
+}
+
+/* buttons */
+
+form input[type='submit'],input[type='reset'],input[type='button'],input[type='image'] {
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: @form_button_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_element_focus_background),
-		to(@form_button_background));
-	background-image: -webkit-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -moz-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -ms-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -o-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: linear-gradient(top, @form_element_focus_background, @form_button_background);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background_gradient), to(@form_button_background));
+	background-image: -webkit-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -moz-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -ms-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -o-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: linear-gradient(top, @form_button_background_gradient, @form_button_background);
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
-		inset;
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
 	border-width: 1px;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 	padding: 3px 10px 3px 10px;
 	cursor: pointer;
 	font: bold 15px Arial, Helvetica;
-	color: #8f5a0a;
-}
-
-.likebutton.fixedw {
-	width: 120px;
+	color: @form_button;
 }
 
 .likebutton {
@@ -159,179 +170,160 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: @form_button_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_element_focus_background),
-		to(@form_button_background));
-	background-image: -webkit-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -moz-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -ms-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -o-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: linear-gradient(top, @form_element_focus_background, @form_button_background);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background_gradient), to(@form_button_background));
+	background-image: -webkit-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -moz-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -ms-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -o-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: linear-gradient(top, @form_button_background_gradient, @form_button_background);
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
-		inset;
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
 	border-width: 1px;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 	padding: 3px 10px 3px 10px;
 	cursor: pointer;
 	font: bold 15px Arial, Helvetica;
-	color: #8f5a0a;
-}
-
-.likebutton.disabled {
-	background-color: #999999;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#888888),
-		to(#AAAAAA));
-	background-image: -webkit-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -moz-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -ms-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -o-linear-gradient(top, #888888, #AAAAAA);
-	background-image: linear-gradient(top, #888888, #AAAAAA);
-	cursor: default;
-}
-
-button.fixedw {
-	width: 142px;
+	color: @form_button;
 }
 
 button {
 	margin-left: 3px;
 	margin-right: 3px;
 	background-color: @form_button_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_element_focus_background),
-		to(@form_button_background));
-	background-image: -webkit-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -moz-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -ms-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: -o-linear-gradient(top, @form_element_focus_background, @form_button_background);
-	background-image: linear-gradient(top, @form_element_focus_background, @form_button_background);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background_gradient), to(@form_button_background));
+	background-image: -webkit-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -moz-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -ms-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: -o-linear-gradient(top, @form_button_background_gradient, @form_button_background);
+	background-image: linear-gradient(top, @form_button_background_gradient, @form_button_background);
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0
-		rgba(255, 255, 255, 0.3) inset;
-	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3)
-		inset;
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
 	border-width: 1px;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 	padding: 3px 10px 3px 10px;
 	cursor: pointer;
 	font: bold 15px Arial, Helvetica;
-	color: #8f5a0a;
+	color: @form_button;
 }
 
-form input[type='submit']:focus,input[type='reset']:focus,input[type='button']:focus:focus,input[type='image']:focus
-	{
-	background-color: @form_element_focus_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background),
-		to(@form_element_focus_background));
-	background-image: -webkit-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -moz-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -ms-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -o-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: linear-gradient(top, @form_button_background, @form_element_focus_background);
-}
+/* buttons disabled */
 
-form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:hover:hover,input[type='image']:hover
-	{
-	background-color: @form_element_focus_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background),
-		to(@form_element_focus_background));
-	background-image: -webkit-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -moz-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -ms-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -o-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: linear-gradient(top, @form_button_background, @form_element_focus_background);
-}
-
-.likebutton:focus {
-	background-color: @form_element_focus_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background),
-		to(@form_element_focus_background));
-	background-image: -webkit-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -moz-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -ms-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -o-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: linear-gradient(top, @form_button_background, @form_element_focus_background);
-	color: #8f5a0a;
-	border-style: solid;
-	border-color: #d69e31 #e3a037 #d5982d #e3a037;
+.likebutton.disabled {
+	background-color: @form_button_disabled_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_disabled_background_gradient), to(@form_button_disabled_background));
+	background-image: -webkit-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -moz-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -ms-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -o-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	cursor: default;
 }
 
 .likebutton.disabled:focus {
-	background-color: #999999;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#888888),
-		to(#AAAAAA));
-	background-image: -webkit-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -moz-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -ms-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -o-linear-gradient(top, #888888, #AAAAAA);
-	background-image: linear-gradient(top, #888888, #AAAAAA);
+	background-color: @form_button_disabled_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_disabled_background_gradient), to(@form_button_disabled_background));
+	background-image: -webkit-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -moz-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -ms-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -o-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
 	cursor: default;
 }
 
-.likebutton:hover {
-	background-color: @form_element_focus_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background),
-		to(@form_element_focus_background));
-	background-image: -webkit-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -moz-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -ms-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -o-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: linear-gradient(top, @form_button_background, @form_element_focus_background);
-	color: #8f5a0a;
+.likebutton.disabled:hover {
+	background-color: @form_button_disabled_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_disabled_background_gradient), to(@form_button_disabled_background));
+	background-image: -webkit-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -moz-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -ms-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: -o-linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	background-image: linear-gradient(top, @form_button_disabled_background_gradient, @form_button_disabled_background);
+	cursor: default;
+}
+
+/* buttons focus */
+
+form input[type='submit']:focus,input[type='reset']:focus,input[type='button']:focus:focus,input[type='image']:focus {
+	background-color: @form_button_focus_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_focus_background_gradient), to(@form_button_focus_background));
+	background-image: -webkit-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -moz-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -ms-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -o-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+}
+
+.likebutton:focus {
+	background-color: @form_button_focus_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_focus_background_gradient), to(@form_button_focus_background));
+	background-image: -webkit-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -moz-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -ms-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -o-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	color: @form_button;
 	border-style: solid;
 	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 }
 
-.likebutton.disabled:hover {
-	background-color: #999999;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#888888),
-		to(#AAAAAA));
-	background-image: -webkit-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -moz-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -ms-linear-gradient(top, #888888, #AAAAAA);
-	background-image: -o-linear-gradient(top, #888888, #AAAAAA);
-	background-image: linear-gradient(top, #888888, #AAAAAA);
-	cursor: default;
-}
-
-.likebutton:active {
-	padding: 3px 10px 3px 10px;
-}
-
 button:focus {
-	background-color: @form_element_focus_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background),
-		to(@form_element_focus_background));
-	background-image: -webkit-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -moz-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -ms-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -o-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: linear-gradient(top, @form_button_background, @form_element_focus_background);
+	background-color: @form_button_focus_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_focus_background_gradient), to(@form_button_focus_background));
+	background-image: -webkit-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -moz-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -ms-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: -o-linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+	background-image: linear-gradient(top, @form_button_focus_background_gradient, @form_button_focus_background);
+}
+
+/* buttons hover */
+
+form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:hover:hover,input[type='image']:hover {
+	background-color: @form_button_hover_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_hover_background_gradient), to(@form_button_hover_background));
+	background-image: -webkit-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -moz-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -ms-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -o-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+}
+
+.likebutton:hover {
+	background-color: @form_button_hover_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_hover_background_gradient), to(@form_button_hover_background));
+	background-image: -webkit-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -moz-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -ms-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -o-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	color: @form_button;
+	border-style: solid;
+	border-color: #d69e31 #e3a037 #d5982d #e3a037;
 }
 
 button:hover {
-	background-color: @form_element_focus_background;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_background),
-		to(@form_element_focus_background));
-	background-image: -webkit-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -moz-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -ms-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: -o-linear-gradient(top, @form_button_background, @form_element_focus_background);
-	background-image: linear-gradient(top, @form_button_background, @form_element_focus_background);
+	background-color: @form_button_hover_background;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@form_button_hover_background_gradient), to(@form_button_hover_background));
+	background-image: -webkit-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -moz-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -ms-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: -o-linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
+	background-image: linear-gradient(top, @form_button_hover_background_gradient, @form_button_hover_background);
 }
+
+/* */
 
 .fileupload {
 	overflow: hidden;
@@ -447,7 +439,7 @@ form input[type='range']::-moz-range-thumb {
 
 .feedbackPanelERROR {
 	font-size: small;
-	color: @form_required;
+	color: @form_error;
 	vertical-align: top;
 	padding-left: 3px;
 	padding-right: 3px;
@@ -460,23 +452,23 @@ form input[type='range']::-moz-range-thumb {
 }
 
 .valid {
-	border-color: green !important;
+	border-color: @form_valid_border !important;
 }
 
 .invalid {
-	border-color: red !important;
+	border-color: @form_invalid_border !important;
 }
 
 .required {
-	border-color: yellow !important;
+	border-color: @form_required_border !important;
 }
 
 .required.valid {
-	border-color: green !important;
+	border-color: @form_valid_border !important;
 }
 
 .required.invalid {
-	border-color: red !important;
+	border-color: @form_invalid_border !important;
 }
 
 /* layout */
@@ -485,7 +477,6 @@ form input[type='range']::-moz-range-thumb {
 	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
-
 	border: 1px solid #d3d3d3;
 	background: #fefefe;
 	-moz-border-radius: 5px; /* FF1+ */
@@ -504,7 +495,7 @@ form label {
 	margin-right: 0.5em;
 	color: @form_label;
 	font-weight: bold;
-	width: 14em;
+	width: 18em;
 }
 
 .forminput {
@@ -523,8 +514,7 @@ fieldset {
 	text-align: center;
 	background-color: @form_header_background;
 	background-image: -moz-linear-gradient(100% 20% 90deg, @form_header_background, @form_header_background_gradient);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(@form_header_background),
-		to(@form_header_background));
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(@form_header_background), to(@form_header_background));
 }
 
 .formactions {
@@ -532,14 +522,12 @@ fieldset {
 	text-align: center;
 	background-color: @form_header_background;
 	background-image: -moz-linear-gradient(100% 20% 90deg, @form_header_background, @form_header_background_gradient);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(@form_header_background),
-		to(@form_header_background));
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(@form_header_background), to(@form_header_background));
 }
 
 .formrow {
 	padding: 6px 2px 6px 2px;
 	background: @form_row_background;
 	background-image: -moz-linear-gradient(100% 25% 90deg, @form_row_background, @form_row_background_gradient);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(@form_row_background_gradient),
-		to(@form_row_background));
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(@form_row_background_gradient), to(@form_row_background));
 }

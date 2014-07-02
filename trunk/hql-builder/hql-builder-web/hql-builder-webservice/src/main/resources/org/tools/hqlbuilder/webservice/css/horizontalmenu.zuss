@@ -13,12 +13,9 @@ ul.horizontalmenu>li {
 	border-top: 1px solid #e3a037;
 	background-color: #fddb6f;
 	text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
-	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
-		rgba(255, 255, 255, 0.3) inset;
-	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
-		rgba(255, 255, 255, 0.3) inset;
-	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3)
-		inset;
+	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
 	height: 35px;
 }
 
@@ -136,12 +133,9 @@ ul.horizontalmenu>li>ul>li>a:hover {
 	-webkit-border-radius: 0px 9px 9px 9px;
 	border-radius: 0px 9px 9px 9px;
 	text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
-	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
-		rgba(255, 255, 255, 0.3) inset;
-	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0
-		rgba(255, 255, 255, 0.3) inset;
-	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3)
-		inset;
+	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
+	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
 	background-color: white;
 	left: 8px;
 	width: calc(100% - 1px - 1px - 8px - 8px);

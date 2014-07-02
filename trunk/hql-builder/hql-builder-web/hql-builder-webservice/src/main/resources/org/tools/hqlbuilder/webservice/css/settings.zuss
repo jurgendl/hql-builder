@@ -12,12 +12,38 @@
 @form_element_focus_border_gradient: #ffffff;
 @form_element_focus_background: #fddb6f;
 
-@form_required: #BCBF60;
-
 @form_header_background: #e8eaeb;
 @form_header_background_gradient: #ededed;
 
 @form_row_background: #f6f6f6;
 @form_row_background_gradient: #f1f1f1;
 
+@form_button: #8f5a0a;
 @form_button_background: #ffb94b;
+@form_button_background_gradient: #fddb6f;
+
+@form_button_disabled_background: ##C1C1C1;
+@form_button_disabled_background_gradient: #D8D8D8;
+
+@form_button_hover_background: #fddb6f;
+@form_button_hover_background_gradient: #ffb94b;
+
+@form_button_focus_background: #fddb6f;
+@form_button_focus_background_gradient: #ffb94b;
+
+@form_required: #BCBF60;
+@form_error: #BCBF60;
+@form_required_border: #0000FF;
+@form_valid_border: #00FF00;
+@form_invalid_border: #FF0000;
+
+@table_border: #d3d3d3;
+@table_background: #fefefe;
+@table_header_background: #e8eaeb;
+@table_header_background_gradient: #e8eaeb;
+@table_data_border: #e0e0e0;
+@table_data_background: #f9f9f9;
+@table_data_background_gradient: #fefefe;
+@table_data_alt_background: #f9f9f9;
+@table_data_alt_background_gradient: #fefefe;
+
