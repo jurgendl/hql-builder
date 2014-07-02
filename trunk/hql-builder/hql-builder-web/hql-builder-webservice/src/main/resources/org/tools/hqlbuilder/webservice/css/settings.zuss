@@ -47,3 +47,8 @@
 @table_data_alt_background: #f9f9f9;
 @table_data_alt_background_gradient: #fefefe;
 
+@menu_border: #e3a037;
+@menu_background: #fddb6f;
+@menu_link: #6f2909;
+@menu_link_active: #6f2909;
+@menu_link_hover: #8f5a0a;

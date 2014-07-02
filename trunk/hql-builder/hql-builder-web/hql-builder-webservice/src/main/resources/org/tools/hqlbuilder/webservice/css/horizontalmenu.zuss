@@ -9,9 +9,9 @@ ul.horizontalmenu {
 
 ul.horizontalmenu>li {
 	float: left;
-	border-bottom: 1px solid #e3a037;
-	border-top: 1px solid #e3a037;
-	background-color: #fddb6f;
+	border-bottom: 1px solid @menu_border;
+	border-top: 1px solid @menu_border;
+	background-color: @menu_background;
 	text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
 	-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
 	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3) inset;
@@ -20,19 +20,19 @@ ul.horizontalmenu>li {
 }
 
 ul.horizontalmenu>li:first-child {
-	border-right: 1px solid #e3a037;
-	border-left: 1px solid #e3a037;
+	border-right: 1px solid @menu_border;
+	border-left: 1px solid @menu_border;
 	-moz-top-left-border-radius: 9px;
 	-webkit-top-left-border-radius: 9px;
 	border-top-left-radius: 9px;
 }
 
 ul.horizontalmenu>li:not(:first-child ):not(:last-child ) {
-	border-right: 1px solid #e3a037;
+	border-right: 1px solid @menu_border;
 }
 
 ul.horizontalmenu>li:last-child {
-	border-right: 1px solid #e3a037;
+	border-right: 1px solid @menu_border;
 	-moz-top-right-border-radius: 9px;
 	-webkit-top-right-border-radius: 9px;
 	border-top-right-radius: 9px;
@@ -43,15 +43,15 @@ ul.horizontalmenu>li>a {
 	padding: 8px 9px;
 	text-decoration: none;
 	font-weight: bold;
-	color: #8f5a0a;
+	color: @menu_link;
 }
 
 ul.horizontalmenu>li.active>a {
-	color: #6f2909;
+	color: @menu_link_active;
 }
 
 ul.horizontalmenu>li>a:hover {
-	color: #8f5a0a;
+	color: @menu_link_hover;
 }
 
 /* submenu */ 
@@ -84,22 +84,22 @@ ul.horizontalmenu>li>ul>li>ul {
 }
 
 ul.horizontalmenu>li>ul>li:first-child {
-	background-color: #fddb6f;
-	border-left: 1px solid #e3a037;
-	border-right: 1px solid #e3a037;
-	border-top: 1px solid #e3a037;
+	background-color: @menu_background;
+	border-left: 1px solid @menu_border;
+	border-right: 1px solid @menu_border;
+	border-top: 1px solid @menu_border;
 }
 
 ul.horizontalmenu>li>ul>li:not(:first-child ):not(:last-child ) {
-	background-color: #fddb6f;
-	border-left: 1px solid #e3a037;
-	border-right: 1px solid #e3a037;
-	border-top: 1px solid #e3a037;
+	background-color: @menu_background;
+	border-left: 1px solid @menu_border;
+	border-right: 1px solid @menu_border;
+	border-top: 1px solid @menu_border;
 }
 
 ul.horizontalmenu>li>ul>li:last-child {
-	background-color: #fddb6f;
-	border: 1px solid #e3a037;
+	background-color: @menu_background;
+	border: 1px solid @menu_border;
 	-moz-border-radius: 0px 0px 9px 9px;
 	-webkit-border-radius: 0px 0px 9px 9px;
 	border-radius: 0px 0px 9px 9px;
@@ -110,15 +110,15 @@ ul.horizontalmenu>li>ul>li>a {
 	padding: 8px 9px;
 	text-decoration: none;
 	font-weight: bold;
-	color: #8f5a0a;
+	color: @menu_link_hover;
 }
 
 ul.horizontalmenu>li>ul>li.active>a {
-	color: #6f2909;
+	color: @menu_link_active;
 }
 
 ul.horizontalmenu>li>ul>li>a:hover {
-	color: #8f5a0a;
+	color: @menu_link_hover;
 }
 
 /* .aroundhorizontalmenu {
@@ -127,7 +127,7 @@ ul.horizontalmenu>li>ul>li>a:hover {
 } */
 
 .belowhorizontalmenu {
-	border: 1px solid #e3a037;
+	border: 1px solid @menu_border;
 	position: absolute;
 	-moz-border-radius: 0px 9px 9px 9px;
 	-webkit-border-radius: 0px 9px 9px 9px;

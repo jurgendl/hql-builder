@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel.ColorPickerSettings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
@@ -243,7 +244,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDatePicker(property, componentSettings, (Converter<Date, Date>) null);
     }
 
-    public ColorPickerPanel addColorPicker(String property, FormElementSettings componentSettings) {
+    public ColorPickerPanel addColorPicker(String property, ColorPickerSettings componentSettings) {
         ColorPickerPanel row = new ColorPickerPanel(getDefaultModel(), property, formSettings, componentSettings);
         addRow(property, row);
         return row;
@@ -431,6 +432,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected IModel<T> getValueModel() {
             return new PropertyModel<T>(getDefaultModel(), property);
+        }
+
+        protected FormElementSettings getComponentSettings() {
+            return this.componentSettings;
         }
     }
 

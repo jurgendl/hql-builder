@@ -20,6 +20,8 @@ import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel.ColorFormat;
+import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
@@ -52,10 +54,17 @@ public class StylingPage extends BasePage {
         stylingform.addDatePicker(name(proxy.getTestDate()), fset);
         stylingform.addPasswordTextField(name(proxy.getPassword()), new FormElementSettings());
 
-        for (Object keyO : WicketSession.get().getStyling().keySet()) {
-            String property = keyO.toString().substring(1);
+        ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
+        colorPickerSettings.setClickoutFiresChange(true);
+        colorPickerSettings.setPreferredFormat(ColorFormat.hsl);
+        colorPickerSettings.setShowButtons(true);
+        colorPickerSettings.setShowPalette(true);
+        colorPickerSettings.setShowInitial(true);
+        colorPickerSettings.setShowInput(true);
+        for (Object _key_ : WicketSession.get().getStyling().keySet()) {
+            String property = _key_.toString().substring(1);
             ColorPickerPanel cpp = new ColorPickerPanel(stylingform.getDefaultModel(), property, stylingform.getFormSettings(),
-                    new FormElementSettings()) {
+                    ColorPickerSettings.class.cast(colorPickerSettings.clone())) {
                 @Override
                 protected IModel<String> getValueModel() {
                     return new IModel<String>() {
