@@ -1,7 +1,11 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Properties;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.injection.Injector;
@@ -15,7 +19,7 @@ public class WicketSession extends WebSession {
 
     private String jqueryUITheme = "redmond";
 
-    private Properties styling = null;
+    private LinkedHashMap<String, String> styling = null;
 
     public WicketSession(Request request) {
         super(request);
@@ -34,15 +38,40 @@ public class WicketSession extends WebSession {
         this.jqueryUITheme = theme;
     }
 
-    public Properties getStyling() {
+    public LinkedHashMap<String, String> getStyling() {
         if (styling == null) {
-            styling = new Properties();
+            styling = new LinkedHashMap<String, String>();
+            BufferedReader in = null;
             try {
-                styling.load(DefaultWebPage.class.getClassLoader().getResourceAsStream(STYLE_PATH + "settings.zuss"));
+                in = new BufferedReader(
+                        new InputStreamReader(DefaultWebPage.class.getClassLoader().getResourceAsStream(STYLE_PATH + "settings.zuss")));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        styling.put(parts[0].trim(), parts[1].trim());
+                    }
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (Exception ex) {
+                        //
+                    }
+                }
             }
         }
         return this.styling;
+    }
+
+    public void printStyling(PrintStream out) {
+        if (styling != null) {
+            for (Map.Entry<String, String> entry : styling.entrySet()) {
+                out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        }
     }
 }

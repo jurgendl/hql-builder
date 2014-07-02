@@ -38,7 +38,13 @@ public class StylingPage extends BasePage {
 
         Model<Styling> model = Model.of(new Styling());
         Styling proxy = create(Styling.class);
-        FormPanel<Styling> stylingform = new FormPanel<Styling>("stylingform", model, true, new DefaultFormActions<Styling>().setAjax(false));
+        DefaultFormActions<Styling> actions = new DefaultFormActions<Styling>() {
+            @Override
+            public void submit(IModel<Styling> m) {
+                WicketSession.get().printStyling(System.out);
+            }
+        };
+        FormPanel<Styling> stylingform = new FormPanel<Styling>("stylingform", model, true, actions.setAjax(false));
 
         FormElementSettings fset = new FormElementSettings().setRequired(true);
         stylingform.addEmailTextField(name(proxy.getTestEmail()), fset);
@@ -60,14 +66,14 @@ public class StylingPage extends BasePage {
 
                         @Override
                         public String getObject() {
-                            String value = WicketSession.get().getStyling().getProperty("@" + property);
+                            String value = WicketSession.get().getStyling().get("@" + property);
                             value = StringUtils.isBlank(value) ? null : value.substring(0, value.length() - 1);
                             return value;
                         }
 
                         @Override
                         public void setObject(String value) {
-                            WicketSession.get().getStyling().setProperty("@" + property, value + ";");
+                            WicketSession.get().getStyling().put("@" + property, value + ";");
                         }
                     };
                 }
@@ -100,7 +106,7 @@ public class StylingPage extends BasePage {
         Resolver resolver = new BuiltinResolver() {
             @Override
             public Object getVariable(String name) {
-                String value = WicketSession.get().getStyling().getProperty("@" + name);
+                String value = WicketSession.get().getStyling().get("@" + name);
                 if (value == null) {
                     return super.getVariable(name);
                 }
