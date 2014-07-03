@@ -17,7 +17,7 @@ import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 
 @SuppressWarnings("serial")
 public class BasePage extends DefaultWebPage {
-    public BasePage(PageParameters parameters) {
+    public BasePage(final PageParameters parameters) {
         super(parameters);
 
         final List<Class<? extends DefaultWebPage>> pages = new ArrayList<Class<? extends DefaultWebPage>>();
@@ -36,6 +36,10 @@ public class BasePage extends DefaultWebPage {
             protected void populateItem(ListItem<Class<? extends DefaultWebPage>> item) {
                 WebMarkupContainer menuitem = new WebMarkupContainer("menuitem");
                 menuitem.add(new AttributeModifier("title", new Model<String>(item.getModelObject().getSimpleName())));
+                boolean active = item.getModelObject().equals(BasePage.this);
+                if (active) {
+                    menuitem.add(new AttributeModifier("class", "active"));
+                }
                 item.add(menuitem);
                 BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("menulink", item.getModelObject());
                 menuitem.add(link);

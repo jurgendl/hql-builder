@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,6 +22,8 @@ public class WicketSession extends WebSession {
     private String jqueryUITheme = "redmond";
 
     private LinkedHashMap<String, String> styling = null;
+
+    private long lastModified = -1l;
 
     public WicketSession(Request request) {
         super(request);
@@ -39,12 +43,20 @@ public class WicketSession extends WebSession {
     }
 
     public LinkedHashMap<String, String> getStyling() {
-        if (styling == null) {
+        URL resource = DefaultWebPage.class.getClassLoader().getResource(STYLE_PATH + "settings.zuss");
+        long remoteLastModified;
+        try {
+            URLConnection connection = resource.openConnection();
+            remoteLastModified = connection.getLastModified();
+        } catch (IOException ex1) {
+            remoteLastModified = Long.MAX_VALUE;
+        }
+        if (styling == null || this.lastModified < remoteLastModified) {
+            lastModified = remoteLastModified;
             styling = new LinkedHashMap<String, String>();
             BufferedReader in = null;
             try {
-                in = new BufferedReader(
-                        new InputStreamReader(DefaultWebPage.class.getClassLoader().getResourceAsStream(STYLE_PATH + "settings.zuss")));
+                in = new BufferedReader(new InputStreamReader(resource.openStream()));
                 String line;
                 while ((line = in.readLine()) != null) {
                     String[] parts = line.split(":");

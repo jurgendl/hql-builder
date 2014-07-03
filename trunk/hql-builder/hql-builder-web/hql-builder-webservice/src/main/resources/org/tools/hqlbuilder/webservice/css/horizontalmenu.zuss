@@ -46,8 +46,18 @@ ul.horizontalmenu>li>a {
 	color: @menu_link;
 }
 
-ul.horizontalmenu>li.active>a {
+ul.horizontalmenu>li.active,
+ul.horizontalmenu>li.active:hover {
+	background-color: @menu_background_active;
+}
+
+ul.horizontalmenu>li.active>a,
+ul.horizontalmenu>li.active:hover>a {
 	color: @menu_link_active;
+}
+
+ul.horizontalmenu>li:hover {
+	background-color: @menu_background_hover;
 }
 
 ul.horizontalmenu>li>a:hover {
