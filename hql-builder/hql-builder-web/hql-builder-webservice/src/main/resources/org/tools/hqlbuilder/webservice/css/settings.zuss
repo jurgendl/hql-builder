@@ -1,3 +1,8 @@
+@_orange: rgb(225, 112, 9);
+@_lighterblue: rgb(223, 239, 252);
+@_lightblue: rgb(197, 219, 236);
+@_darkblue: rgb(46, 110, 158);
+
 @form_label: #919191;
 
 @form_element_border: #cccccc;
@@ -31,8 +36,8 @@
 @form_button_focus_background: #fddb6f;
 @form_button_focus_background_gradient: #ffb94b;
 
-@form_required: #BCBF60;
-@form_error: #BCBF60;
+@form_required: #b81900;
+@form_error: #b81900;
 @form_required_border: #0000FF;
 @form_valid_border: #00FF00;
 @form_invalid_border: #FF0000;
@@ -47,8 +52,13 @@
 @table_data_alt_background: #f9f9f9;
 @table_data_alt_background_gradient: #fefefe;
 
-@menu_border: #e3a037;
-@menu_background: #fddb6f;
-@menu_link: #6f2909;
-@menu_link_active: #6f2909;
-@menu_link_hover: #8f5a0a;
+@menu_border: rgb(46, 110, 158);
+
+@menu_background: rgb(223, 239, 252);
+@menu_link: rgb(46, 110, 158);
+
+@menu_background_active: white; 
+@menu_link_active: rgb(225, 112, 9);
+
+@menu_background_hover: rgb(197, 219, 236);
+@menu_link_hover: rgb(46, 110, 158);
