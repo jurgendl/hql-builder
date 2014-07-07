@@ -14,6 +14,7 @@ public class WicketJSRoot {
     static {
         try {
             VELOCITY.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            FLOATING_BAR.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
