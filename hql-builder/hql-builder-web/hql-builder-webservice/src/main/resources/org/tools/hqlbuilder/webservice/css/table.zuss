@@ -1,4 +1,5 @@
 table {
+	table-layout: fixed;
 	overflow: hidden;
 	border: 1px solid @table_border;
 	background: @table_background;

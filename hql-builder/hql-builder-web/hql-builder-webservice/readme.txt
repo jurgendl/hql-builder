@@ -7,7 +7,7 @@ http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/
 http://wb.agilecoders.de/demo/components
 http://blog.agilecoders.de/index.php/category/wicket/
 http://api.jqueryui.com/datepicker/
-
+http://necolas.github.io/normalize.css/3.0.1/normalize.css
 
 enable gzip in Tomcat
 
