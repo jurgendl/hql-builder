@@ -199,9 +199,10 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void addToCssBundle(List<ResourceReference> css) {
+        css.add(WicketCSSRoot.NORMALIZE);
+        css.add(WicketCSSRoot.GENERAL);
         css.add(WicketCSSRoot.COLORS);
         css.add(WicketCSSRoot.WE_LOVE_ICONS);
-        css.add(WicketCSSRoot.GENERAL);
         // css.add(WicketCSSRoot.HORIZONTAL_MENU);
         // css.add(WicketCSSRoot.FORMS);
         // css.add(WicketCSSRoot.TABLES);
