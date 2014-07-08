@@ -1,8 +1,11 @@
 package org.tools.hqlbuilder.webservice.js;
 
+import org.apache.wicket.request.resource.ResourceReference;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
+
+import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
 public class WicketJSRoot {
     public static JavaScriptResourceReference COLORS = new JavaScriptResourceReference(WicketJSRoot.class, "colors.js");
@@ -13,8 +16,10 @@ public class WicketJSRoot {
 
     static {
         try {
-            VELOCITY.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
-            FLOATING_BAR.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            ResourceReference jQueryUIReference = ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings())
+                    .getJQueryUIReference();
+            VELOCITY.addJavaScriptResourceReferenceDependency(jQueryUIReference);
+            FLOATING_BAR.addJavaScriptResourceReferenceDependency(jQueryUIReference);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
