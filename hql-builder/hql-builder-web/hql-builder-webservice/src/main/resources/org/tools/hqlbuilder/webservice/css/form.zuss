@@ -416,7 +416,7 @@ form input[type='range']::-moz-range-thumb {
 /* validation etc */
 
 .requiredMarker {
-	background-image: url("images/bullet_star.png");
+	/*background-image: url("images/bullet_star.png");*/
 	background-position: top;
 	background-repeat: no-repeat;
 	display: inline;
