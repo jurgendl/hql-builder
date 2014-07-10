@@ -30,4 +30,12 @@ public interface FormConstants {
     public static final String FORM_CANCEL = "form.cancel";
 
     public static final String FORM_SUBMIT = "form.submit";
+
+    public static final String CANCEL_LABEL = "cancel.label";
+
+    public static final String RESET_LABEL = "reset.label";
+
+    public static final String SUBMIT_LABEL = "submit.label";
+
+    public static final String FEEDBACK_ID = "componentFeedback";
 }

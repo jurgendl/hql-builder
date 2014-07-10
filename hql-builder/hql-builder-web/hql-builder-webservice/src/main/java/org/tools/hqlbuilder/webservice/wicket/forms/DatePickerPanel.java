@@ -55,7 +55,7 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
     }
 
     @Override
-    protected IModel<Date> getValueModel() {
+    public IModel<Date> getValueModel() {
         if (dateConverter == null) {
             return super.getValueModel();
         }
@@ -65,14 +65,13 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
 
     @Override
     protected DatePicker createComponent() {
-        IModel<Date> valueModel = getValueModel();
         Locale locale = getLocale();
         Options options = new Options();
         dateFormat = dateformat(locale);
         dateFormatClient = dateFormat.toLowerCase().replaceAll("yyyy", "yy");
         options.set(DATE_FORMAT, Options.asString(dateFormatClient));
         // options.set(APPEND_TEXT, Options.asString(new SimpleDateFormat(dateFormat, locale).format(new Date())));
-        return new DatePicker(VALUE, valueModel, dateFormat, options) {
+        return new DatePicker(VALUE, getValueModel(), dateFormat, options) {
             private static final long serialVersionUID = 7118431260383127661L;
 
             @Override

@@ -9,7 +9,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang.StringUtils;
 
-public class FormElementSettings implements Serializable {
+public class FormElementSettings implements Serializable, Cloneable {
     private static final long serialVersionUID = -2716372832273804363L;
 
     protected boolean required;
@@ -32,9 +32,9 @@ public class FormElementSettings implements Serializable {
     }
 
     @Override
-    public Object clone() {
+    public FormElementSettings clone() {
         try {
-            return BeanUtils.cloneBean(this);
+            return getClass().cast(BeanUtils.cloneBean(this));
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
             throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
         }

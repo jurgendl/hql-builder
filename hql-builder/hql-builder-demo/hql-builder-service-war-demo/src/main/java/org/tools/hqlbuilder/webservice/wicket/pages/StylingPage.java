@@ -1,20 +1,15 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
@@ -22,9 +17,6 @@ import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel.ColorFormat;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel.ColorPickerSettings;
-import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.zkoss.zuss.Resolver;
 import org.zkoss.zuss.Zuss;
 import org.zkoss.zuss.impl.out.BuiltinResolver;
@@ -35,24 +27,9 @@ import org.zkoss.zuss.metainfo.ZussDefinition;
 public class StylingPage extends BasePage {
     public StylingPage(PageParameters parameters) {
         super(parameters);
-
         setStatelessHint(false);
 
-        Model<Styling> model = Model.of(new Styling());
-        Styling proxy = create(Styling.class);
-        DefaultFormActions<Styling> actions = new DefaultFormActions<Styling>() {
-            @Override
-            public void submit(IModel<Styling> m) {
-                WicketSession.get().printStyling(System.out);
-            }
-        };
-        FormPanel<Styling> stylingform = new FormPanel<Styling>("stylingform", model, true, actions.setAjax(false));
-
-        FormElementSettings fset = new FormElementSettings().setRequired(true);
-        stylingform.addEmailTextField(name(proxy.getTestEmail()), fset);
-        stylingform.addTextField(name(proxy.getTestString()), fset);
-        stylingform.addDatePicker(name(proxy.getTestDate()), fset);
-        stylingform.addPasswordTextField(name(proxy.getPassword()), new FormElementSettings());
+        ExampleForm stylingform = new ExampleForm("stylingform");
 
         ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
         colorPickerSettings.setClickoutFiresChange(true);
@@ -62,11 +39,21 @@ public class StylingPage extends BasePage {
         colorPickerSettings.setShowInitial(true);
         colorPickerSettings.setShowInput(true);
         for (Object _key_ : WicketSession.get().getStyling().keySet()) {
-            String property = _key_.toString().substring(1);
+            final String property = _key_.toString().substring(1);
             ColorPickerPanel cpp = new ColorPickerPanel(stylingform.getDefaultModel(), property, stylingform.getFormSettings(),
                     ColorPickerSettings.class.cast(colorPickerSettings.clone())) {
                 @Override
-                protected IModel<String> getValueModel() {
+                public IModel<String> getLabelModel() {
+                    return new LoadableDetachableModel<String>() {
+                        @Override
+                        protected String load() {
+                            return property.replace('_', ' ').replace('[', ' ').replace(']', ' ').trim();
+                        }
+                    };
+                }
+
+                @Override
+                public IModel<String> getValueModel() {
                     return new IModel<String>() {
                         @Override
                         public void detach() {
@@ -127,48 +114,5 @@ public class StylingPage extends BasePage {
         String css = new String(out.toByteArray(), charset);
         CssContentHeaderItem cssHeader = CssHeaderItem.forCSS(css, cssId + ".css");
         response.render(cssHeader);
-    }
-
-    public static class Styling implements Serializable {
-        private char[] password;
-
-        private String testEmail = "test@gmail.com";
-
-        private String testString = "testString";
-
-        @SuppressWarnings("deprecation")
-        private Date testDate = new Date(2000, 4, 4);
-
-        public String getTestString() {
-            return this.testString;
-        }
-
-        public void setTestString(String testString) {
-            this.testString = testString;
-        }
-
-        public Date getTestDate() {
-            return this.testDate;
-        }
-
-        public void setTestDate(Date testDate) {
-            this.testDate = testDate;
-        }
-
-        public String getTestEmail() {
-            return this.testEmail;
-        }
-
-        public void setTestEmail(String testEmail) {
-            this.testEmail = testEmail;
-        }
-
-        public char[] getPassword() {
-            return this.password;
-        }
-
-        public void setPassword(char[] password) {
-            this.password = password;
-        }
     }
 }
