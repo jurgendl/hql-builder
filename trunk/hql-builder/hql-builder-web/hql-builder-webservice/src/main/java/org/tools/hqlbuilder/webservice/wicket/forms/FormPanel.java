@@ -17,15 +17,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +45,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected RepeatingView repeater;
 
-    protected final FormSettings formSettings;
+    protected FormSettings formSettings;
 
     public static <T> IModel<T> newFormModel(Class<T> modelType) {
         return newFormModel(BeanUtils.instantiate(modelType));
@@ -53,10 +55,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return new CompoundPropertyModel<T>(model);
     }
 
-    public FormPanel(String id, IModel<T> model, boolean inheritId, final FormActions<T> actions) {
+    public FormPanel(String id, IModel<T> model, boolean inheritId, FormActions<T> actions) {
         super(id, model);
         formSettings = new FormSettings(inheritId, actions.isAjax());
         createForm(id, model, actions);
+    }
+
+    public FormSettings getFormSettings() {
+        return this.formSettings;
     }
 
     @SuppressWarnings("unchecked")
@@ -64,17 +70,22 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return (IModel<T>) getDefaultModel();
     }
 
-    protected void createForm(String id, IModel<T> model, final FormActions<T> actions) {
+    protected FormActions<T> actions;
+
+    protected Form<T> form;
+
+    protected void createForm(String id, IModel<T> model, FormActions<T> formactions) {
         setOutputMarkupPlaceholderTag(true);
         setRenderBodyOnly(false);
         setOutputMarkupId(true);
 
-        final Form<T> form = new Form<T>(FORM, model) {
+        this.actions = formactions;
+        this.form = new Form<T>(FORM, model) {
             @SuppressWarnings("unchecked")
             @Override
             protected void onSubmit() {
                 super.onSubmit();
-                actions.submit((IModel<T>) getDefaultModel());
+                FormPanel.this.actions.submit((IModel<T>) getDefaultModel());
             }
         };
         if (formSettings.inheritId) {
@@ -96,9 +107,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         repeater.setOutputMarkupId(true);
         formBody.add(repeater);
 
-        ResourceModel submitModel = new ResourceModel("submit.label");
-        ResourceModel resetModel = new ResourceModel("reset.label");
-        ResourceModel cancelModel = new ResourceModel("cancel.label");
+        ResourceModel submitModel = new ResourceModel(SUBMIT_LABEL);
+        ResourceModel resetModel = new ResourceModel(RESET_LABEL);
+        ResourceModel cancelModel = new ResourceModel(CANCEL_LABEL);
 
         Component submit;
 
@@ -107,7 +118,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 @SuppressWarnings("unchecked")
                 @Override
                 protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
-                    actions.afterSubmit(target, form, (IModel<T>) getDefaultModel());
+                    FormPanel.this.actions.afterSubmit(target, form, (IModel<T>) getDefaultModel());
                 }
 
                 @Override
@@ -140,7 +151,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 @SuppressWarnings("unchecked")
                 @Override
                 protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
-                    actions.afterCancel(target, form, (IModel<T>) getDefaultModel());
+                    FormPanel.this.actions.afterCancel(target, form, (IModel<T>) getDefaultModel());
                 }
             };
             cancel.setDefaultModel(cancelModel);
@@ -149,7 +160,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             cancel = new Button(FORM_CANCEL, cancelModel);
             ((Button) cancel).setDefaultFormProcessing(false);
         }
-        cancel.setVisible(actions.isCancelable());
+        cancel.setVisible(formactions.isCancelable());
 
         if (formSettings.inheritId) {
             submit.setMarkupId(id + "." + FORM_SUBMIT);
@@ -163,30 +174,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         formActions.add(submit);
         formActions.add(reset);
         formActions.add(cancel);
-    }
-
-    public boolean isShowLabel() {
-        return formSettings.showLabel;
-    }
-
-    public void setShowLabel(boolean showLabel) {
-        formSettings.showLabel = showLabel;
-    }
-
-    public String getRequiredClass() {
-        return formSettings.requiredClass;
-    }
-
-    public void setRequiredClass(String requiredClass) {
-        formSettings.requiredClass = requiredClass;
-    }
-
-    public void setLiveValidation(boolean liveValidation) {
-        formSettings.liveValidation = liveValidation;
-    }
-
-    public boolean isLiveValidation() {
-        return formSettings.liveValidation;
     }
 
     protected <V, C extends FormComponent<V>> void setupRequiredBehavior(FormRowPanel<V, C> row) {
@@ -240,55 +227,58 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
+    public <Propertytype, Formcomponent extends FormComponent<Propertytype>, Rowpanel extends FormRowPanel<Propertytype, Formcomponent>> Rowpanel addRow(
+            String property, Rowpanel rowpanel) {
+        rowpanel.addComponentsTo(repeater);
+        setupRequiredBehavior(rowpanel);
+        setupId(property, rowpanel.getComponent());
+        return rowpanel;
+    }
+
     public DatePickerPanel<Date> addDatePicker(String property, FormElementSettings componentSettings) {
         return addDatePicker(property, componentSettings, (Converter<Date, Date>) null);
     }
 
     public ColorPickerPanel addColorPicker(String property, ColorPickerSettings componentSettings) {
-        ColorPickerPanel row = new ColorPickerPanel(getDefaultModel(), property, formSettings, componentSettings);
-        addRow(property, row);
-        return row;
+        return addRow(property, new ColorPickerPanel(getDefaultModel(), property, formSettings, componentSettings));
     }
 
     public TextFieldPanel<String> addTextField(String property, FormElementSettings componentSettings) {
         return addTextField(property, String.class, componentSettings);
     }
 
-    public <X> DatePickerPanel<X> addDatePicker(String property, FormElementSettings componentSettings, final Converter<X, Date> dateConverter) {
-        DatePickerPanel<X> row = new DatePickerPanel<X>(getDefaultModel(), property, dateConverter, formSettings, componentSettings);
-        addRow(property, row);
-        return row;
+    public <F> DatePickerPanel<F> addDatePicker(String property, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
+        return addRow(property, new DatePickerPanel<F>(getDefaultModel(), property, dateConverter, formSettings, componentSettings));
+    }
+
+    public <F> RadioButtonsPanel<F> addRadioButtons(String property, Class<F> type, FormElementSettings componentSettings, ListModel<F> choices,
+            IChoiceRenderer<F> renderer) {
+        return addRow(property, new RadioButtonsPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings, choices, renderer));
+    }
+
+    public <F> DropDownPanel<F> addDropDown(String property, Class<F> type, FormElementSettings componentSettings, ListModel<F> choices,
+            IChoiceRenderer<F> renderer) {
+        return addRow(property, new DropDownPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings, choices, renderer));
     }
 
     public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, FormElementSettings componentSettings) {
-        TextFieldPanel<F> row = new TextFieldPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings);
-        addRow(property, row);
-        return row;
+        return addRow(property, new TextFieldPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings));
     }
 
     public EmailTextFieldPanel addEmailTextField(String property, FormElementSettings componentSettings) {
-        EmailTextFieldPanel row = new EmailTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings);
-        addRow(property, row);
-        return row;
+        return addRow(property, new EmailTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings));
     }
 
     public PasswordTextFieldPanel addPasswordTextField(String property, FormElementSettings componentSettings) {
-        PasswordTextFieldPanel row = new PasswordTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings);
-        addRow(property, row);
-        return row;
-    }
-
-    public <V, C extends FormComponent<V>> FormRowPanel<V, C> addRow(String property, FormRowPanel<V, C> row) {
-        row.addComponentsTo(repeater);
-        setupRequiredBehavior(row);
-        setupId(property, row.getComponent());
-        return row;
+        return addRow(property, new PasswordTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings));
     }
 
     protected static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
-        public static final String FEEDBACK_ID = "componentFeedback";
-
         protected Label label;
+
+        protected IModel<String> labelModel;
+
+        protected IModel<T> valueModel;
 
         protected String property;
 
@@ -300,12 +290,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected C component;
 
-        protected final FormSettings formSettings;
+        protected FormSettings formSettings;
 
-        protected final FormElementSettings componentSettings;
+        protected FormElementSettings componentSettings;
 
-        public FormRowPanel(final IModel<?> model, final String property, final Class<T> type, FormSettings formSettings,
-                FormElementSettings componentSettings) {
+        public FormRowPanel(IModel<?> model, String property, Class<T> type, FormSettings formSettings, FormElementSettings componentSettings) {
             super(FORM_ROW, model);
 
             this.formSettings = formSettings;
@@ -320,18 +309,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected Label getLabel() {
             if (label == null) {
-                IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
-                    @Override
-                    public String getObject() {
-                        try {
-                            return getLabelText();
-                        } catch (MissingResourceException ex) {
-                            logger.error("no translation for " + property);
-                            return "[" + property + "]";
-                        }
-                    }
-                };
-                label = new Label(LABEL, labelModel) {
+                label = new Label(LABEL, getLabelModel()) {
                     @Override
                     public boolean isVisible() {
                         return super.isVisible() && formSettings.isShowLabel();
@@ -395,14 +373,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
 
         protected void setupRequired(ComponentTag tag) {
-            if (componentSettings.isRequired()) {
+            if (componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) {
                 tag.getAttributes().put(REQUIRED, componentSettings.isRequired());
             } else {
                 tag.getAttributes().remove(REQUIRED);
             }
         }
 
-        private void setupRequired(C component) {
+        protected void setupRequired(C component) {
             component.setRequired(componentSettings.isRequired());
             if (StringUtils.isNotBlank(formSettings.getRequiredClass())) {
                 if (componentSettings.isRequired()) {
@@ -430,16 +408,40 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return getString(PLACEHOLDER);
         }
 
-        protected IModel<T> getValueModel() {
-            return new PropertyModel<T>(getDefaultModel(), property);
-        }
-
         protected FormElementSettings getComponentSettings() {
             return this.componentSettings;
         }
-    }
 
-    public FormSettings getFormSettings() {
-        return this.formSettings;
+        public IModel<String> getLabelModel() {
+            if (labelModel == null) {
+                labelModel = new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        try {
+                            return getLabelText();
+                        } catch (MissingResourceException ex) {
+                            logger.error("no translation for " + property);
+                            return "[" + property + "]";
+                        }
+                    }
+                };
+            }
+            return labelModel;
+        }
+
+        public IModel<T> getValueModel() {
+            if (valueModel == null) {
+                valueModel = new PropertyModel<T>(getDefaultModel(), property);
+            }
+            return valueModel;
+        }
+
+        public void setLabelModel(IModel<String> labelModel) {
+            this.labelModel = labelModel;
+        }
+
+        public void setValueModel(IModel<T> valueModel) {
+            this.valueModel = valueModel;
+        }
     }
 }

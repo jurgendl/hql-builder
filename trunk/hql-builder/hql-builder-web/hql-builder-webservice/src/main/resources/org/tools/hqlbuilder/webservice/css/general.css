@@ -33,6 +33,10 @@ body {
 	background-repeat: no-repeat;
 }
 
+.transparentbg {
+	background-color : transparent !important;
+}
+
 h1, h2, h3, h4, h5 {
 	/*Georgia, Times, ‘Times New Roman’, serif*/
 	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
