@@ -1,7 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
 
@@ -50,12 +49,11 @@ public class RegistrationPage extends BasePage {
         add(formPanel);
 
         Registration proxy = create(Registration.class);
-
-        formPanel.addTextField(name(proxy.getUsername()), new FormElementSettings(true));
-        formPanel.addTextField(name(proxy.getFirstName()), new FormElementSettings(true));
-        formPanel.addTextField(name(proxy.getLastName()), new FormElementSettings(true));
-        formPanel.addEmailTextField(name(proxy.getEmail()), new FormElementSettings(true));
-        formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormElementSettings(false));
-        formPanel.addPasswordTextField(name(proxy.getPassword()), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));
+        formPanel.addEmailTextField(proxy.getEmail(), new FormElementSettings(true));
+        formPanel.addDatePicker(proxy.getDateOfBirth(), new FormElementSettings(false));
+        formPanel.addPasswordTextField(proxy.getPassword(), new FormElementSettings(true));
     }
 }

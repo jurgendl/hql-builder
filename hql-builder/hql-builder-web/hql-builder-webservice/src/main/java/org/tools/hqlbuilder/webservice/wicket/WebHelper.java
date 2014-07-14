@@ -10,4 +10,8 @@ public class WebHelper {
     public static <A> String name(A arg) {
         return Lambda.argument(arg).getInkvokedPropertyName();
     }
+
+    public static <A> Class<A> type(A arg) {
+        return Lambda.argument(arg).getReturnType();
+    }
 }

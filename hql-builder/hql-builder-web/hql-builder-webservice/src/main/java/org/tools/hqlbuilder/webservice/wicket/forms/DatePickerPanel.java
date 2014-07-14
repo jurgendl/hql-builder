@@ -32,7 +32,8 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  * @see https://github.com/jquery/jquery-ui
  * @see http://stackoverflow.com/questions/1452681/jquery-datepicker-localization
  */
-public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public class DatePickerPanel<X> extends FormRowPanel {
     private static final long serialVersionUID = -5807168584242557542L;
 
     public static final JavaScriptResourceReference JQUERY_DATEPICKER_REFERENCE = new JavaScriptResourceReference(WicketJSRoot.class,
@@ -48,9 +49,14 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
 
     protected Converter<X, Date> dateConverter;
 
-    public DatePickerPanel(IModel<?> model, String property, Converter<X, Date> dateConverter, FormSettings formSettings,
+    public DatePickerPanel(IModel<?> model, Date propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(model, propertyPath, formSettings, componentSettings);
+        this.dateConverter = null;
+    }
+
+    public DatePickerPanel(IModel<?> model, X propertyPath, Converter<X, Date> dateConverter, FormSettings formSettings,
             FormElementSettings componentSettings) {
-        super(model, property, Date.class, formSettings, componentSettings);
+        super(model, propertyPath, formSettings, componentSettings);
         this.dateConverter = dateConverter;
     }
 
@@ -59,7 +65,7 @@ public class DatePickerPanel<X> extends FormRowPanel<Date, DatePicker> {
         if (dateConverter == null) {
             return super.getValueModel();
         }
-        IModel<X> backingModel = new PropertyModel<X>(getDefaultModel(), property);
+        IModel<X> backingModel = new PropertyModel<X>(getDefaultModel(), getPropertyName());
         return new ModelConverter<X, Date>(backingModel, dateConverter);
     };
 

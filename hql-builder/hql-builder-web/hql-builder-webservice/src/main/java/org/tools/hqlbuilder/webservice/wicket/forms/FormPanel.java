@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.type;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.MissingResourceException;
@@ -73,6 +76,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected FormActions<T> actions;
 
     protected Form<T> form;
+
+    protected static WebMarkupContainer createContainer(RepeatingView repeater) {
+        WebMarkupContainer container = new WebMarkupContainer(repeater.newChildId());
+        container.setOutputMarkupPlaceholderTag(false);
+        container.setRenderBodyOnly(true);
+        container.setOutputMarkupId(false);
+        return container;
+    }
 
     protected void createForm(String id, IModel<T> model, FormActions<T> formactions) {
         setOutputMarkupPlaceholderTag(true);
@@ -228,49 +239,57 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public <Propertytype, Formcomponent extends FormComponent<Propertytype>, Rowpanel extends FormRowPanel<Propertytype, Formcomponent>> Rowpanel addRow(
-            String property, Rowpanel rowpanel) {
+            Rowpanel rowpanel) {
         rowpanel.addComponentsTo(repeater);
         setupRequiredBehavior(rowpanel);
-        setupId(property, rowpanel.getComponent());
+        setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
         return rowpanel;
     }
 
-    public DatePickerPanel<Date> addDatePicker(String property, FormElementSettings componentSettings) {
-        return addDatePicker(property, componentSettings, (Converter<Date, Date>) null);
+    public <F> HiddenFieldPanel<F> addHidden(F propertyPath) {
+        return addRow(new HiddenFieldPanel<F>(getDefaultModel(), propertyPath));
     }
 
-    public ColorPickerPanel addColorPicker(String property, ColorPickerSettings componentSettings) {
-        return addRow(property, new ColorPickerPanel(getDefaultModel(), property, formSettings, componentSettings));
+    public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
+        return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
     }
 
-    public TextFieldPanel<String> addTextField(String property, FormElementSettings componentSettings) {
-        return addTextField(property, String.class, componentSettings);
+    public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
+        return addRow(new ColorPickerPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
-    public <F> DatePickerPanel<F> addDatePicker(String property, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
-        return addRow(property, new DatePickerPanel<F>(getDefaultModel(), property, dateConverter, formSettings, componentSettings));
+    @SuppressWarnings("unchecked")
+    public <F> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
+        return addRow(new DatePickerPanel<F>(getDefaultModel(), propertyPath, dateConverter, formSettings, componentSettings));
     }
 
-    public <F> RadioButtonsPanel<F> addRadioButtons(String property, Class<F> type, FormElementSettings componentSettings, ListModel<F> choices,
+    public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addRow(property, new RadioButtonsPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings, choices, renderer));
+        return addRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
     }
 
-    public <F> DropDownPanel<F> addDropDown(String property, Class<F> type, FormElementSettings componentSettings, ListModel<F> choices,
-            IChoiceRenderer<F> renderer) {
-        return addRow(property, new DropDownPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings, choices, renderer));
+    public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
+        return addRow(new DropDownPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
     }
 
-    public <F> TextFieldPanel<F> addTextField(String property, Class<F> type, FormElementSettings componentSettings) {
-        return addRow(property, new TextFieldPanel<F>(getDefaultModel(), property, type, formSettings, componentSettings));
+    public <F> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
+        return addRow(new TextFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
-    public EmailTextFieldPanel addEmailTextField(String property, FormElementSettings componentSettings) {
-        return addRow(property, new EmailTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings));
+    public <F> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
+        return addRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
-    public PasswordTextFieldPanel addPasswordTextField(String property, FormElementSettings componentSettings) {
-        return addRow(property, new PasswordTextFieldPanel(getDefaultModel(), property, formSettings, componentSettings));
+    public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
+        return addRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
+        return addRow(new EmailTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
+        return addRow(new PasswordTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     protected static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
@@ -280,9 +299,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected IModel<T> valueModel;
 
-        protected String property;
+        /** lambda path */
+        protected transient T propertyPath;
 
-        protected Class<T> type;
+        protected Class<T> propertyType;
+
+        protected String propertyName;
 
         protected FeedbackPanel feedbackPanel;
 
@@ -290,18 +312,15 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected C component;
 
-        protected FormSettings formSettings;
+        protected transient FormSettings formSettings;
 
-        protected FormElementSettings componentSettings;
+        protected transient FormElementSettings componentSettings;
 
-        public FormRowPanel(IModel<?> model, String property, Class<T> type, FormSettings formSettings, FormElementSettings componentSettings) {
+        public FormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
             super(FORM_ROW, model);
-
             this.formSettings = formSettings;
             this.componentSettings = componentSettings;
-            this.property = property;
-            this.type = type;
-
+            this.propertyPath = propertyPath;
             setOutputMarkupPlaceholderTag(false);
             setRenderBodyOnly(true);
             setOutputMarkupId(false);
@@ -318,7 +337,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     @Override
                     protected void onComponentTag(ComponentTag tag) {
                         super.onComponentTag(tag);
-                        tag.getAttributes().put(FOR, property);
+                        tag.getAttributes().put(FOR, getPropertyName());
                     }
                 };
             }
@@ -345,45 +364,46 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected WebMarkupContainer getContainer(RepeatingView repeater) {
             if (container == null) {
-                container = new WebMarkupContainer(repeater.newChildId());
-                container.setOutputMarkupPlaceholderTag(false);
-                container.setRenderBodyOnly(true);
-                container.setOutputMarkupId(false);
+                container = createContainer(repeater);
             }
             return container;
         }
 
         protected C addComponentsTo(RepeatingView repeater) {
-            C c = getComponent();
+            C comp = getComponent();
             this.add(getLabel());
-            this.add(c);
+            this.add(comp);
             this.add(getFeedback());
             WebMarkupContainer rowContainer = getContainer(repeater);
             repeater.add(rowContainer);
             rowContainer.add(this);
-            return c;
+            return comp;
+        }
+
+        protected void tag(ComponentTag tag, String tagId, Object value) {
+            if (value == null || (value instanceof String && StringUtils.isBlank(String.class.cast(value)))) {
+                tag.getAttributes().remove(tagId);
+            } else {
+                tag.getAttributes().put(tagId, value);
+            }
         }
 
         protected void setupPlaceholder(ComponentTag tag) {
-            try {
-                tag.getAttributes().put(PLACEHOLDER, getPlaceholderText());
-            } catch (MissingResourceException ex) {
-                logger.error("no translation for " + PLACEHOLDER);
-            }
+            tag(tag, PLACEHOLDER, getPlaceholderText());
         }
 
         protected void setupRequired(ComponentTag tag) {
-            if (componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) {
-                tag.getAttributes().put(REQUIRED, componentSettings.isRequired());
-            } else {
-                tag.getAttributes().remove(REQUIRED);
-            }
+            tag(tag, REQUIRED, isRequired());
+        }
+
+        public boolean isRequired() {
+            return componentSettings.isRequired() && formSettings.isClientsideRequiredValidation();
         }
 
         protected void setupRequired(C component) {
-            component.setRequired(componentSettings.isRequired());
+            component.setRequired(isRequired());
             if (StringUtils.isNotBlank(formSettings.getRequiredClass())) {
-                if (componentSettings.isRequired()) {
+                if (isRequired()) {
                     component.add(new CssClassNameAppender(formSettings.getRequiredClass()));
                 } else {
                     component.add(new CssClassNameRemover(formSettings.getRequiredClass()));
@@ -401,11 +421,21 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
 
         protected String getLabelText() {
-            return getString(property);
+            try {
+                return getString(getPropertyName());
+            } catch (MissingResourceException ex) {
+                logger.error("no translation for " + getPropertyName());
+                return "[" + getPropertyName() + "]";
+            }
         }
 
         protected String getPlaceholderText() {
-            return getString(PLACEHOLDER);
+            try {
+                return getString(PLACEHOLDER);
+            } catch (MissingResourceException ex) {
+                logger.error("no translation for " + PLACEHOLDER);
+                return null;
+            }
         }
 
         protected FormElementSettings getComponentSettings() {
@@ -417,12 +447,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 labelModel = new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
-                        try {
-                            return getLabelText();
-                        } catch (MissingResourceException ex) {
-                            logger.error("no translation for " + property);
-                            return "[" + property + "]";
-                        }
+                        return getLabelText();
                     }
                 };
             }
@@ -431,7 +456,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         public IModel<T> getValueModel() {
             if (valueModel == null) {
-                valueModel = new PropertyModel<T>(getDefaultModel(), property);
+                valueModel = new PropertyModel<T>(getDefaultModel(), getPropertyName());
             }
             return valueModel;
         }
@@ -442,6 +467,28 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         public void setValueModel(IModel<T> valueModel) {
             this.valueModel = valueModel;
+        }
+
+        public String getPropertyName() {
+            if (propertyName == null) {
+                propertyName = name(propertyPath);
+            }
+            return this.propertyName;
+        }
+
+        public Class<T> getPropertyType() {
+            if (propertyType == null) {
+                this.propertyType = type(propertyPath);
+            }
+            return this.propertyType;
+        }
+
+        public void setPropertyType(Class<T> propertyType) {
+            this.propertyType = propertyType;
+        }
+
+        public void setPropertyName(String propertyName) {
+            this.propertyName = propertyName;
         }
     }
 }

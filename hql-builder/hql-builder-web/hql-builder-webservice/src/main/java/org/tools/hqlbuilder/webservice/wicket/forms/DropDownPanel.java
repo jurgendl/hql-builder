@@ -14,9 +14,9 @@ public class DropDownPanel<T> extends FormRowPanel<T, DropDownChoice<T>> {
 
     protected IChoiceRenderer<T> renderer;
 
-    public DropDownPanel(IModel<?> model, String property, Class<T> type, FormSettings formSettings, FormElementSettings componentSettings,
-            ListModel<T> choices, IChoiceRenderer<T> renderer) {
-        super(model, property, type, formSettings, componentSettings);
+    public DropDownPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings, ListModel<T> choices,
+            IChoiceRenderer<T> renderer) {
+        super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;
     }
