@@ -9,6 +9,8 @@ public interface FormConstants {
 
     public static final String VALUE = "value";
 
+    public static final String VALUE_OUTPUT = "valueoutput";
+
     public static final String PLACEHOLDER = "placeholder";
 
     public static final String REQUIRED = "required";

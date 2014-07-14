@@ -16,8 +16,7 @@ import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
-import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
-import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.ExampleForm.Example;
 
 @SuppressWarnings("serial")
@@ -49,29 +48,29 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
 
-        addHidden(proxy.getHidden1());
-        addHidden(proxy.getHidden2());
-        addCheckBox(proxy.getCheck(), fset);
-        addRadioButtons(proxy.getRadio(), fset, optsChoices, optsRenderer);
-        addDropDown(proxy.getCombo(), fset, optsChoices, optsRenderer);
-        addEmailTextField(proxy.getEmail(), fset);
-        addTextField(proxy.getText(), fset);
-        addDatePicker(proxy.getDate1(), fset);
-        addDatePicker(proxy.getDate2(), fset, dateConverter);
-        addPasswordTextField(proxy.getPassword(), new FormElementSettings());
-        addTextArea(proxy.getLongText(), new TextAreaSettings());
-        addNumberField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
-        addNumberField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
-        addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-        addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
-        addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
-        addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>(Double.MIN_VALUE, Double.MAX_VALUE, 1d));
-        addRangeField(proxy.getByter(), new NumberFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
-        addRangeField(proxy.getShortr(), new NumberFieldSettings<Short>((short) 0, (short) 100, (short) 1));
-        addRangeField(proxy.getIntegerr(), new NumberFieldSettings<Integer>(0, 100, 1));
-        addRangeField(proxy.getLongr(), new NumberFieldSettings<Long>(0l, 100l, 1l));
-        addRangeField(proxy.getFloatr(), new NumberFieldSettings<Float>(0f, 100f, 1f));
-        addRangeField(proxy.getDoubler(), new NumberFieldSettings<Double>(0d, 100d, 1d));
+        // addHidden(proxy.getHidden1());
+        // addHidden(proxy.getHidden2());
+        // addCheckBox(proxy.getCheck(), fset);
+        // addRadioButtons(proxy.getRadio(), fset, optsChoices, optsRenderer);
+        // addDropDown(proxy.getCombo(), fset, optsChoices, optsRenderer);
+        // addEmailTextField(proxy.getEmail(), fset);
+        // addTextField(proxy.getText(), fset);
+        // addDatePicker(proxy.getDate1(), fset);
+        // addDatePicker(proxy.getDate2(), fset, dateConverter);
+        // addPasswordTextField(proxy.getPassword(), new FormElementSettings());
+        // addTextArea(proxy.getLongText(), new TextAreaSettings());
+        // addNumberField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
+        // addNumberField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
+        // addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        // addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
+        // addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
+        // addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
+        // addRangeField(proxy.getByter(), new RangeFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
+        // addRangeField(proxy.getShortr(), new RangeFieldSettings<Short>((short) 0, (short) 100, (short) 1));
+        addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
+        // addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
+        // addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
+        // addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
     }
 
     public static enum ExampleOpts {
@@ -103,15 +102,15 @@ public class ExampleForm extends FormPanel<Example> {
         @SuppressWarnings("deprecation")
         private Long date2 = new Date(2000, 4, 4).getTime();
 
-        private Integer integerv = Integer.MAX_VALUE;
+        private Integer integerv = 50;
 
-        private Long longv = Long.MAX_VALUE;
+        private Long longv = 50l;
 
-        private Short shortv = Short.MAX_VALUE;
+        private Short shortv = (short) 50;
 
-        private Double doublev = Double.MAX_VALUE;
+        private Double doublev = 50d;
 
-        private Float floatv = Float.MAX_VALUE;
+        private Float floatv = 50f;
 
         private Byte bytev = (byte) 50;
 
