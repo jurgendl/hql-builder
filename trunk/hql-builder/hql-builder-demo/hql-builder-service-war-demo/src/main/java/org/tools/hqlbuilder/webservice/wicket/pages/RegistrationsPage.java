@@ -1,7 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -151,12 +150,12 @@ public class RegistrationsPage extends BasePage {
     protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
         formPanel = new FormPanel<Registration>("registrationform", Model.of(new Registration()), true, formActions);
         formPanel.getFormSettings().setLiveValidation(true);
-        formPanel.addTextField(name(proxy.getUsername()), new FormElementSettings(true));
-        formPanel.addTextField(name(proxy.getFirstName()), new FormElementSettings(true));
-        formPanel.addTextField(name(proxy.getLastName()), new FormElementSettings(true));
-        formPanel.addEmailTextField(name(proxy.getEmail()), new FormElementSettings(true));
-        formPanel.addDatePicker(name(proxy.getDateOfBirth()), new FormElementSettings(true));
-        formPanel.addPasswordTextField(name(proxy.getPassword()), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));
+        formPanel.addEmailTextField(proxy.getEmail(), new FormElementSettings(true));
+        formPanel.addDatePicker(proxy.getDateOfBirth(), new FormElementSettings(true));
+        formPanel.addPasswordTextField(proxy.getPassword(), new FormElementSettings(true));
         formPanel.setVisible(false);
     }
 }

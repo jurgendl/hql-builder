@@ -19,8 +19,8 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 public class ColorPickerPanel extends FormRowPanel<String, TextField<String>> {
     private static final long serialVersionUID = 3920158103962799959L;
 
-    public ColorPickerPanel(final IModel<?> model, final String property, FormSettings formSettings, ColorPickerSettings colorPickerSettings) {
-        super(model, property, String.class, formSettings, colorPickerSettings);
+    public ColorPickerPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, ColorPickerSettings colorPickerSettings) {
+        super(model, propertyPath, formSettings, colorPickerSettings);
     }
 
     @Override
@@ -30,8 +30,13 @@ public class ColorPickerPanel extends FormRowPanel<String, TextField<String>> {
     }
 
     @Override
+    public Class<String> getPropertyType() {
+        return String.class;
+    }
+
+    @Override
     protected TextField<String> createComponent() {
-        return new TextField<String>(VALUE, getValueModel(), type) {
+        return new TextField<String>(VALUE, getValueModel(), getPropertyType()) {
             private static final long serialVersionUID = -989970628058227688L;
 
             @Override

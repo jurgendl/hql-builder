@@ -8,14 +8,13 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 public class TextFieldPanel<T> extends FormRowPanel<T, TextField<T>> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public TextFieldPanel(final IModel<?> model, final String property, final Class<T> type, FormSettings formSettings,
-            FormElementSettings componentSettings) {
-        super(model, property, type, formSettings, componentSettings);
+    public TextFieldPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(model, propertyPath, formSettings, componentSettings);
     }
 
     @Override
     protected TextField<T> createComponent() {
-        return new TextField<T>(VALUE, getValueModel(), type) {
+        return new TextField<T>(VALUE, getValueModel(), getPropertyType()) {
             private static final long serialVersionUID = -3231896888772971388L;
 
             @Override

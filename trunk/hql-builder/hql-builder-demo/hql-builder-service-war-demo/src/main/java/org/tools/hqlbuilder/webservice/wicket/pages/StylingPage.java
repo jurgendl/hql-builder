@@ -53,6 +53,11 @@ public class StylingPage extends BasePage {
                 }
 
                 @Override
+                public String getPropertyName() {
+                    return property;
+                }
+
+                @Override
                 public IModel<String> getValueModel() {
                     return new IModel<String>() {
                         @Override
@@ -74,7 +79,7 @@ public class StylingPage extends BasePage {
                     };
                 }
             };
-            stylingform.addRow(property, cpp);
+            stylingform.addRow(cpp);
         }
 
         add(stylingform);
