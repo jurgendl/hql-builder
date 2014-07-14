@@ -22,6 +22,7 @@ form input[type='radio'],input[type='checkbox'] {
 	vertical-align: middle;
 }
 
+form output,
 form select,
 form textarea,
 form input[type='text'],input[type='search'],input[type='password'],input[type='date'],input[type='datetime-local'],input[type='datetime'],input[type='email'],input[type='month'],input[type='number'],input[type='tel'],input[type='time'],input[type='url'],input[type='week'] {

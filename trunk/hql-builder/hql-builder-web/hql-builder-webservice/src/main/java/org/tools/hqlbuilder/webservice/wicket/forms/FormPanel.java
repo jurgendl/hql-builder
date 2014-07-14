@@ -280,12 +280,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
-    public <F extends Number & Comparable<F>> NumberFieldPanel<F> addNumberField(F propertyPath, NumberFieldSettings<F> componentSettings) {
-        return addRow(new NumberFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
+        return addRow(new NumberFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
-    public <F extends Number & Comparable<F>> RangeFieldPanel<F> addRangeField(F propertyPath, NumberFieldSettings<F> componentSettings) {
-        return addRow(new RangeFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
+        return addRow(new RangeFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
@@ -377,15 +377,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return container;
         }
 
-        protected C addComponentsTo(RepeatingView repeater) {
-            C comp = getComponent();
+        protected WebMarkupContainer addComponentsTo(RepeatingView repeater) {
             this.add(getLabel());
-            this.add(comp);
+            this.add(getComponent());
             this.add(getFeedback());
             WebMarkupContainer rowContainer = getContainer(repeater);
             repeater.add(rowContainer);
             rowContainer.add(this);
-            return comp;
+            return rowContainer;
         }
 
         protected void tag(ComponentTag tag, String tagId, Object value) {

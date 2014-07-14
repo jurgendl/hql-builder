@@ -2,7 +2,8 @@
 	<div class="formrow">
 		<label class="formlabel" for="value" wicket:id="label">Label</label>
 		<span class="forminput">
-			<input type="range" wicket:id="value" min="0" max="100" step="1"></input>
+			<input type="range" wicket:id="value" min="0" max="100" step="1" list="rangelist" oninput="outputUpdate('valueoutput',value)"></input>
+			<output for="value" wicket:id="valueoutput"></output>
 		</span>
 		<span wicket:id="componentFeedback"></span>
 	</div>
