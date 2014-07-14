@@ -280,6 +280,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
+    public <F extends Number & Comparable<F>> NumberFieldPanel<F> addNumberField(F propertyPath, NumberFieldSettings<F> componentSettings) {
+        return addRow(new NumberFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
     public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
         return addRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
