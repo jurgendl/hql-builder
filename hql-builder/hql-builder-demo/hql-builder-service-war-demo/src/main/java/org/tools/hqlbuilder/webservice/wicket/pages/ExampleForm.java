@@ -66,6 +66,12 @@ public class ExampleForm extends FormPanel<Example> {
         addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
         addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
         addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>(Double.MIN_VALUE, Double.MAX_VALUE, 1d));
+        addRangeField(proxy.getByter(), new NumberFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
+        addRangeField(proxy.getShortr(), new NumberFieldSettings<Short>((short) 0, (short) 100, (short) 1));
+        addRangeField(proxy.getIntegerr(), new NumberFieldSettings<Integer>(0, 100, 1));
+        addRangeField(proxy.getLongr(), new NumberFieldSettings<Long>(0l, 100l, 1l));
+        addRangeField(proxy.getFloatr(), new NumberFieldSettings<Float>(0f, 100f, 1f));
+        addRangeField(proxy.getDoubler(), new NumberFieldSettings<Double>(0d, 100d, 1d));
     }
 
     public static enum ExampleOpts {
@@ -107,7 +113,19 @@ public class ExampleForm extends FormPanel<Example> {
 
         private Float floatv = Float.MAX_VALUE;
 
-        private Byte bytev = Byte.MAX_VALUE;
+        private Byte bytev = (byte) 50;
+
+        private Integer integerr = 50;
+
+        private Long longr = 50l;
+
+        private Short shortr = (short) 50;
+
+        private Double doubler = 50d;
+
+        private Float floatr = 50f;
+
+        private Byte byter = (byte) 50;
 
         public String getPassword() {
             return this.password;
@@ -243,6 +261,54 @@ public class ExampleForm extends FormPanel<Example> {
 
         public void setBytev(Byte bytev) {
             this.bytev = bytev;
+        }
+
+        public Integer getIntegerr() {
+            return this.integerr;
+        }
+
+        public Long getLongr() {
+            return this.longr;
+        }
+
+        public Short getShortr() {
+            return this.shortr;
+        }
+
+        public Double getDoubler() {
+            return this.doubler;
+        }
+
+        public Float getFloatr() {
+            return this.floatr;
+        }
+
+        public Byte getByter() {
+            return this.byter;
+        }
+
+        public void setIntegerr(Integer integerr) {
+            this.integerr = integerr;
+        }
+
+        public void setLongr(Long longr) {
+            this.longr = longr;
+        }
+
+        public void setShortr(Short shortr) {
+            this.shortr = shortr;
+        }
+
+        public void setDoubler(Double doubler) {
+            this.doubler = doubler;
+        }
+
+        public void setFloatr(Float floatr) {
+            this.floatr = floatr;
+        }
+
+        public void setByter(Byte byter) {
+            this.byter = byter;
         }
     }
 }
