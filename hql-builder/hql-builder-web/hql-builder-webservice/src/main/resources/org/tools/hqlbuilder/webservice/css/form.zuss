@@ -135,6 +135,7 @@ button {
 	padding: 3px 10px 3px 10px;
 }
 
+.btn.disabled,
 .likebutton.disabled,
 .likebutton.disabled:focus,
 .likebutton.disabled:hover {
@@ -151,6 +152,7 @@ button {
 	border-style: solid;
 }
 
+.btn:focus,
 button:focus,
 .likebutton:focus,
 form input[type='submit']:focus,input[type='reset']:focus,input[type='button']:focus:focus,input[type='image']:focus {
@@ -166,6 +168,7 @@ form input[type='submit']:focus,input[type='reset']:focus,input[type='button']:f
 	border-style: solid;
 }
 
+.btn:hover,
 button:hover,
 .likebutton:hover,
 form input[type='submit']:hover,input[type='reset']:hover,input[type='button']:hover:hover,input[type='image']:hover {
