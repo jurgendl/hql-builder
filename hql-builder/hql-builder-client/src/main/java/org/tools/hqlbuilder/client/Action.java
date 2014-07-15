@@ -53,7 +53,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     public <T> Action(String id, boolean enabled, String name, Icon icon, String shortDescription,
-             String longDescription, Boolean selected, Character mnemonic, String accelerator, boolean persist,
+            @SuppressWarnings("unused") String longDescription, Boolean selected, Character mnemonic, String accelerator, boolean persist,
             String parentId, Class<T> type, T defaultValue) {
         logger.debug(id + " " + value);
         this.id = id;
@@ -299,7 +299,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     /**
-     * 
+     *
      * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
      */
     @Override
@@ -310,7 +310,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     /**
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override

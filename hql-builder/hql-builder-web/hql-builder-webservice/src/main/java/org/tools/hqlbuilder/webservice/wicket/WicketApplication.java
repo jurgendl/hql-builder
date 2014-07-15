@@ -51,6 +51,7 @@ import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.resources.colors.Colors;
 import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
 import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
+import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
@@ -63,6 +64,8 @@ import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
 
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
+
+    protected final ZussStyle zussStyle = new ZussStyle();
 
     // @SpringBean(name = "webProperties", required = false)
     protected transient Properties webProperties;
@@ -323,7 +326,8 @@ public class WicketApplication extends WebApplication {
         for (Field field : WicketIconsRoot.class.getFields()) {
             try {
                 final String name = String.valueOf(field.get(WicketIconsRoot.class));
-                PackageResourceReference reference = new ResourceRef(WicketCSSRoot.class, cssImages + name, name);
+                PackageResourceReference reference = new VirtualPackageResourceReference(WicketCSSRoot.class, cssImages + name,
+                        WicketIconsRoot.class, name);
                 getSharedResources().add(cssImages + name, reference.getResource());
                 mountResource(cssImages + name, reference);
                 logger.info("mounting image: " + WicketRoot.class.getCanonicalName() + ": " + cssImages + name);
@@ -393,5 +397,9 @@ public class WicketApplication extends WebApplication {
 
     public void setCssResources(List<ResourceReference> cssResources) {
         this.cssResources = cssResources;
+    }
+
+    public ZussStyle getZussStyle() {
+        return this.zussStyle;
     }
 }

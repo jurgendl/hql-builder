@@ -12,15 +12,16 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.WicketRoot;
-import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -93,9 +94,33 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addDynamicResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.HORIZONTAL_MENU));
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.FORMS));
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.TABLES));
+        response.render(CssHeaderItem.forReference(new StreamResourceReference(CssResourceReference.class, "form.css") {
+            private static final long serialVersionUID = 5225484261666478929L;
+
+            @Override
+            public IResourceStream getResourceStream() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        }));
+        response.render(CssHeaderItem.forReference(new ResourceReference("table.css") {
+            private static final long serialVersionUID = 4270502740689973988L;
+
+            @Override
+            public IResource getResource() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        }));
+        response.render(CssHeaderItem.forReference(new ResourceReference("horizontalmenu.css") {
+            private static final long serialVersionUID = -733152667032402368L;
+
+            @Override
+            public IResource getResource() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        }));
     }
 
     @Override

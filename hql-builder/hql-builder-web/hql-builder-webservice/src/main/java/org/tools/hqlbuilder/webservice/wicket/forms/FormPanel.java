@@ -1,8 +1,5 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.type;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.MissingResourceException;
@@ -38,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
+import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -473,7 +471,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         public String getPropertyName() {
             if (propertyName == null) {
-                propertyName = name(propertyPath);
+                propertyName = WebHelper.name(propertyPath);
             }
             return this.propertyName;
         }
@@ -521,7 +519,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         @Override
         public Class<T> getPropertyType() {
             if (propertyType == null) {
-                this.propertyType = type(propertyPath);
+                this.propertyType = WebHelper.type(propertyPath);
             }
             return this.propertyType;
         }
