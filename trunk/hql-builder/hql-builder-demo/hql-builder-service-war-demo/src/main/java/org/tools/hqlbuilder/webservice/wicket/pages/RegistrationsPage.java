@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.proxy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class RegistrationsPage extends BasePage {
 
     public RegistrationsPage(PageParameters parameters) {
         super(parameters);
-        Registration proxy = create(Registration.class);
+        Registration proxy = proxy(Registration.class);
         DefaultDataProvider<Registration> dataProvider = initDataProvider();
         DefaultFormActions<Registration> formActions = initTable(proxy, dataProvider);
         add(table);
