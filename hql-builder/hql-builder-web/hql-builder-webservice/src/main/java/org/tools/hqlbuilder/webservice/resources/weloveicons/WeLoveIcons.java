@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.css;
+package org.tools.hqlbuilder.webservice.resources.weloveicons;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -6,7 +6,12 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
+import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
+
 public class WeLoveIcons {
+    public static CssResourceReference WE_LOVE_ICONS_CSS = new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts.css");
+
     public static void main(String[] args) {
         try {
             InputStream in = URI.create("http://weloveiconfonts.com/").toURL().openStream();

@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.wicket.ext;
+package org.tools.hqlbuilder.webservice.wicket.components;
 
 import java.net.URI;
 import java.net.URL;

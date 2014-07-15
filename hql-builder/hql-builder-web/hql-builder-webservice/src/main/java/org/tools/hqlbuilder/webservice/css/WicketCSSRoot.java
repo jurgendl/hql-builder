@@ -7,10 +7,6 @@ public class WicketCSSRoot {
 
     public static CssResourceReference NORMALIZE = new CssResourceReference(WicketCSSRoot.class, "normalize.css");
 
-    public static CssResourceReference COLORS = new CssResourceReference(WicketCSSRoot.class, "colors.css");
-
-    public static CssResourceReference WE_LOVE_ICONS = new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts.css");
-
     public static CssResourceReference GENERAL = new CssResourceReference(WicketCSSRoot.class, "general.css");
 
     public static CssResourceReference HORIZONTAL_MENU = new CssResourceReference(WicketCSSRoot.class, "horizontalmenu.css");
