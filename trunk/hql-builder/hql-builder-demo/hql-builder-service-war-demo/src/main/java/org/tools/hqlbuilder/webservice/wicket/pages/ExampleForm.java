@@ -14,12 +14,12 @@ import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
+import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
-import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.ExampleForm.Example;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class ExampleForm extends FormPanel<Example> {
     public ExampleForm(String id) {
         super(id, Model.of(new Example()), true, new DefaultFormActions<Example>() {
@@ -67,10 +67,11 @@ public class ExampleForm extends FormPanel<Example> {
         // addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
         // addRangeField(proxy.getByter(), new RangeFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
         // addRangeField(proxy.getShortr(), new RangeFieldSettings<Short>((short) 0, (short) 100, (short) 1));
-        addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
+        // addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
         // addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
         // addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
         // addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
+        addFilePicker(proxy.getData(), new FilePickerSettings().setMimeType("application/pdf"));
     }
 
     public static enum ExampleOpts {
@@ -78,6 +79,8 @@ public class ExampleForm extends FormPanel<Example> {
     }
 
     public static class Example implements Serializable {
+        private byte[] data;
+
         private String hidden1 = "hid";
 
         private Integer hidden2 = 10;
@@ -308,6 +311,14 @@ public class ExampleForm extends FormPanel<Example> {
 
         public void setByter(Byte byter) {
             this.byter = byter;
+        }
+
+        public byte[] getData() {
+            return this.data;
+        }
+
+        public void setData(byte[] data) {
+            this.data = data;
         }
     }
 }

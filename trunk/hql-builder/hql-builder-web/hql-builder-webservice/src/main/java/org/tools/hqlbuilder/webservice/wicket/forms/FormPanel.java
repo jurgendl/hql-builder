@@ -187,8 +187,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         formActions.add(cancel);
     }
 
-    protected <V, C extends FormComponent<V>> void setupRequiredBehavior(FormRowPanel<V, C> row) {
-        C component = row.getComponent();
+    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, Rowpanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> void setupRequiredBehavior(
+            Rowpanel row) {
+        ComponentType component = row.getComponent();
         if (formSettings.isAjax() && formSettings.isLiveValidation() && !(component instanceof PasswordTextField)
                 && !(component instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
             component.add(setupDynamicRequiredBehavior(row));
@@ -197,11 +198,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
-    protected <V, C extends FormComponent<V>> Behavior setupDynamicRequiredBehavior(final FormRowPanel<V, C> row) {
+    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupDynamicRequiredBehavior(
+            final RowPanel row) {
         return new AjaxFormComponentUpdatingBehavior(HtmlFormEvent.BLUR) {
             @Override
             protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
-                C component = row.getComponent();
+                ComponentType component = row.getComponent();
                 component.add(new CssClassNameRemover(formSettings.validClass));
                 component.add(new CssClassNameAppender(formSettings.invalidClass));
                 ajaxRequestTarget.add(component, row.getFeedback());
@@ -209,7 +211,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             @Override
             protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
-                C component = row.getComponent();
+                ComponentType component = row.getComponent();
                 component.add(new CssClassNameRemover(formSettings.invalidClass));
                 component.add(new CssClassNameAppender(formSettings.validClass));
                 ajaxRequestTarget.add(component, row.getFeedback());
@@ -217,7 +219,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         };
     }
 
-    protected <V, C extends FormComponent<V>> Behavior setupStaticRequiredBehavior(@SuppressWarnings("unused") FormRowPanel<V, C> row) {
+    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupStaticRequiredBehavior(
+            @SuppressWarnings("unused") RowPanel row) {
         return new Behavior() {
             @SuppressWarnings("rawtypes")
             @Override
@@ -238,8 +241,16 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
-    public <Propertytype, Formcomponent extends FormComponent<Propertytype>, Rowpanel extends FormRowPanel<Propertytype, Formcomponent>> Rowpanel addRow(
-            Rowpanel rowpanel) {
+    public <PropertyType, ComponentType extends FormComponent<PropertyType>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType>> RowPanel addDefaultRow(
+            RowPanel rowpanel) {
+        rowpanel.addComponentsTo(repeater);
+        setupRequiredBehavior(rowpanel);
+        setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
+        return rowpanel;
+    }
+
+    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addRow(
+            RowPanel rowpanel) {
         rowpanel.addComponentsTo(repeater);
         setupRequiredBehavior(rowpanel);
         setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
@@ -247,7 +258,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public <F> HiddenFieldPanel<F> addHidden(F propertyPath) {
-        return addRow(new HiddenFieldPanel<F>(getDefaultModel(), propertyPath));
+        return addDefaultRow(new HiddenFieldPanel<F>(getDefaultModel(), propertyPath));
     }
 
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
@@ -255,52 +266,56 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
-        return addRow(new ColorPickerPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new ColorPickerPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     @SuppressWarnings("unchecked")
     public <F> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
-        return addRow(new DatePickerPanel<F>(getDefaultModel(), propertyPath, dateConverter, formSettings, componentSettings));
+        return addDefaultRow(new DatePickerPanel<F>(getDefaultModel(), propertyPath, dateConverter, formSettings, componentSettings));
     }
 
     public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+        return addDefaultRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
     }
 
     public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addRow(new DropDownPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+        return addDefaultRow(new DropDownPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
     }
 
     public <F> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
-        return addRow(new TextFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new TextFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public <F> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
-        return addRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
-        return addRow(new NumberFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new NumberFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
-        return addRow(new RangeFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new RangeFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
-        return addRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addRow(new EmailTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new EmailTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
     public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addRow(new PasswordTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new PasswordTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
     }
 
-    protected static abstract class FormRowPanel<T, C extends FormComponent<T>> extends Panel implements FormConstants {
+    public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings) {
+        return addRow(new FilePickerPanel<F>(propertyPath, formSettings, componentSettings));
+    }
+
+    protected static abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Panel implements FormConstants {
         protected Label label;
 
         protected IModel<String> labelModel;
@@ -308,7 +323,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         protected IModel<T> valueModel;
 
         /** lambda path */
-        protected transient T propertyPath;
+        protected transient P propertyPath;
 
         protected Class<T> propertyType;
 
@@ -322,9 +337,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected transient FormSettings formSettings;
 
-        protected transient FormElementSettings componentSettings;
+        protected FormElementSettings componentSettings;
 
-        public FormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
+            this(valueModel, propertyPath, formSettings, componentSettings);
+            this.valueModel = valueModel;
+        }
+
+        protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
             super(FORM_ROW, model);
             this.formSettings = formSettings;
             this.componentSettings = componentSettings;
@@ -354,13 +374,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         protected C getComponent() {
             if (component == null) {
-                component = createComponent();
+                component = createComponent(getValueModel(), getPropertyType());
                 setupRequired(component);
             }
             return this.component;
         }
 
-        protected abstract C createComponent();
+        protected abstract C createComponent(IModel<T> model, Class<T> valueType);
 
         protected FeedbackPanel getFeedback() {
             if (feedbackPanel == null) {
@@ -461,19 +481,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return labelModel;
         }
 
-        public IModel<T> getValueModel() {
-            if (valueModel == null) {
-                valueModel = new PropertyModel<T>(getDefaultModel(), getPropertyName());
-            }
-            return valueModel;
-        }
-
         public void setLabelModel(IModel<String> labelModel) {
             this.labelModel = labelModel;
-        }
-
-        public void setValueModel(IModel<T> valueModel) {
-            this.valueModel = valueModel;
         }
 
         public String getPropertyName() {
@@ -483,9 +492,24 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return this.propertyName;
         }
 
+        public void setPropertyName(String propertyName) {
+            this.propertyName = propertyName;
+        }
+
+        public IModel<T> getValueModel() {
+            if (valueModel == null) {
+                throw new NullPointerException();
+            }
+            return this.valueModel;
+        }
+
+        public void setValueModel(IModel<T> valueModel) {
+            this.valueModel = valueModel;
+        }
+
         public Class<T> getPropertyType() {
             if (propertyType == null) {
-                this.propertyType = type(propertyPath);
+                throw new NullPointerException();
             }
             return this.propertyType;
         }
@@ -493,9 +517,27 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         public void setPropertyType(Class<T> propertyType) {
             this.propertyType = propertyType;
         }
+    }
 
-        public void setPropertyName(String propertyName) {
-            this.propertyName = propertyName;
+    protected static abstract class DefaultFormRowPanel<T, C extends FormComponent<T>> extends FormRowPanel<T, T, C> {
+        public DefaultFormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+            super(model, propertyPath, formSettings, componentSettings);
+        }
+
+        @Override
+        public IModel<T> getValueModel() {
+            if (valueModel == null) {
+                valueModel = new PropertyModel<T>(getDefaultModel(), getPropertyName());
+            }
+            return valueModel;
+        }
+
+        @Override
+        public Class<T> getPropertyType() {
+            if (propertyType == null) {
+                this.propertyType = type(propertyPath);
+            }
+            return this.propertyType;
         }
     }
 }

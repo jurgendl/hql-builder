@@ -10,12 +10,12 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 /**
  * @see http://demosthenes.info/blog/757/Playing-With-The-HTML5-range-Slider-Input
  */
-public class RangeFieldPanel<N extends Number & Comparable<N>> extends FormRowPanel<N, RangeTextField<N>> {
+public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, RangeTextField<N>> {
     public static final String STEP = "step";
 
     public static final String MAX = "max";
@@ -51,8 +51,8 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends FormRowPa
     }
 
     @Override
-    protected RangeTextField<N> createComponent() {
-        return new RangeTextField<N>(VALUE, getValueModel(), getPropertyType()) {
+    protected RangeTextField<N> createComponent(IModel<N> model, Class<N> valueType) {
+        return new RangeTextField<N>(VALUE, model, valueType) {
             private static final long serialVersionUID = 5507304679724490593L;
 
             @Override
