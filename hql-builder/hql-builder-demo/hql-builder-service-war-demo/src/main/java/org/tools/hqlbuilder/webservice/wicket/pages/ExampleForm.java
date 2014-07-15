@@ -37,7 +37,7 @@ public class ExampleForm extends FormPanel<Example> {
 
         getFormSettings().setClientsideRequiredValidation(false);
 
-        FormElementSettings fset = new FormElementSettings().setRequired(true);
+        FormElementSettings fset = new FormElementSettings();
         IChoiceRenderer<ExampleOpts> optsRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
         ListModel<ExampleOpts> optsChoices = new ListModel<ExampleOpts>(Arrays.asList(ExampleOpts.values()));
         Converter<Long, Date> dateConverter = new Converter<Long, Date>() {

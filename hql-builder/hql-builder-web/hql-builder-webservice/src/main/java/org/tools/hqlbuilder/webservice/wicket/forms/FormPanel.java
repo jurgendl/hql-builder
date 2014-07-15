@@ -404,7 +404,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
 
         protected void setupRequired(ComponentTag tag) {
-            tag(tag, REQUIRED, isRequired());
+            tag(tag, REQUIRED, isRequired() ? "true" : null);
         }
 
         public boolean isRequired() {
