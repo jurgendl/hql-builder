@@ -4,8 +4,12 @@ import org.tools.hqlbuilder.webservice.jquery.WicketJQueryRoot;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
+/**
+ * requires twitter bootstrap
+ */
 public class FileStyle {
-    public static JavaScriptResourceReference FILESTYLE_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, "ui/filestyle/bootstrap-filestyle.js");
+    public static JavaScriptResourceReference FILESTYLE_JS = new JavaScriptResourceReference(WicketJQueryRoot.class,
+            "ui/filestyle/bootstrap-filestyle.js");
 
     static {
         try {

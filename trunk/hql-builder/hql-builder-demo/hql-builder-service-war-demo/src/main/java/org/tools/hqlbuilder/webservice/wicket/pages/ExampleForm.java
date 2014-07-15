@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.create;
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.proxy;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -25,11 +25,14 @@ public class ExampleForm extends FormPanel<Example> {
         super(id, Model.of(new Example()), true, new DefaultFormActions<Example>() {
             @Override
             public void submit(IModel<Example> m) {
+                System.out.println(m.getObject());
                 WicketSession.get().printStyling(System.out);
             }
         }.setAjax(false));
 
-        Example proxy = create(Example.class);
+        Example proxy = proxy(Example.class);
+
+        form.setMultiPart(true);
 
         getFormSettings().setClientsideRequiredValidation(false);
 
@@ -319,6 +322,16 @@ public class ExampleForm extends FormPanel<Example> {
 
         public void setData(byte[] data) {
             this.data = data;
+        }
+
+        @Override
+        public String toString() {
+            return "Example [data=" + Arrays.toString(this.data) + ", hidden1=" + this.hidden1 + ", hidden2=" + this.hidden2 + ", password="
+                    + this.password + ", text=" + this.text + ", email=" + this.email + ", longText?=" + (this.longText != null) + ", radio="
+                    + this.radio + ", combo=" + this.combo + ", check=" + this.check + ", date1=" + this.date1 + ", date2=" + this.date2
+                    + ", integerv=" + this.integerv + ", longv=" + this.longv + ", shortv=" + this.shortv + ", doublev=" + this.doublev + ", floatv="
+                    + this.floatv + ", bytev=" + this.bytev + ", integerr=" + this.integerr + ", longr=" + this.longr + ", shortr=" + this.shortr
+                    + ", doubler=" + this.doubler + ", floatr=" + this.floatr + ", byter=" + this.byter + "]";
         }
     }
 }
