@@ -13,7 +13,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.file.FileCleaner;
 import org.apache.wicket.util.upload.DiskFileItemFactory;
 import org.apache.wicket.util.upload.FileItemFactory;
-import org.tools.hqlbuilder.webservice.jquery.FileStyle;
+import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
 /**

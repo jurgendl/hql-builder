@@ -48,6 +48,9 @@ import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
+import org.tools.hqlbuilder.webservice.resources.colors.Colors;
+import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
+import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
@@ -177,7 +180,7 @@ public class WicketApplication extends WebApplication {
     protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
 
     protected void addToJsBundle(List<ResourceReference> js) {
-        js.add(WicketJSRoot.COLORS);
+        js.add(Colors.COLORS_JS);
         js.add(WicketJSRoot.FLOATING_BAR);
     }
 
@@ -194,7 +197,7 @@ public class WicketApplication extends WebApplication {
         if (WicketApplication.get().usesDevelopmentConfig()) {
             js.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
         }
-        js.add(WicketJSRoot.VELOCITY);
+        js.add(Velocity.VELOCITY_JS);
         addToJsBundle(js);
     }
 
@@ -202,8 +205,8 @@ public class WicketApplication extends WebApplication {
         // css.add(WicketCSSRoot.NORMALIZE);
         // css.add(WicketCSSRoot.RESET);
         css.add(WicketCSSRoot.GENERAL);
-        css.add(WicketCSSRoot.COLORS);
-        css.add(WicketCSSRoot.WE_LOVE_ICONS);
+        css.add(Colors.COLORS_CSS);
+        css.add(WeLoveIcons.WE_LOVE_ICONS_CSS);
         // css.add(WicketCSSRoot.HORIZONTAL_MENU);
         // css.add(WicketCSSRoot.FORMS);
         // css.add(WicketCSSRoot.TABLES);
