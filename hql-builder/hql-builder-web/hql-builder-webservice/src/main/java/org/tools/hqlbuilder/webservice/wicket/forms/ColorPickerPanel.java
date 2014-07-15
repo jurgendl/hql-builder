@@ -11,12 +11,12 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.jquery.Spectrum;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 /**
  * @see http://bgrins.github.io/spectrum
  */
-public class ColorPickerPanel extends FormRowPanel<String, TextField<String>> {
+public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<String>> {
     private static final long serialVersionUID = 3920158103962799959L;
 
     public ColorPickerPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, ColorPickerSettings colorPickerSettings) {
@@ -35,8 +35,8 @@ public class ColorPickerPanel extends FormRowPanel<String, TextField<String>> {
     }
 
     @Override
-    protected TextField<String> createComponent() {
-        return new TextField<String>(VALUE, getValueModel(), getPropertyType()) {
+    protected TextField<String> createComponent(IModel<String> model, Class<String> valueType) {
+        return new TextField<String>(VALUE, model, valueType) {
             private static final long serialVersionUID = -989970628058227688L;
 
             @Override

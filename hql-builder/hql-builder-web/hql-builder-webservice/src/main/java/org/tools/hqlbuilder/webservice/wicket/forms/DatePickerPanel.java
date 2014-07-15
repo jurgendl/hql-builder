@@ -11,6 +11,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -20,7 +21,7 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;
@@ -33,7 +34,7 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  * @see http://stackoverflow.com/questions/1452681/jquery-datepicker-localization
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class DatePickerPanel<X> extends FormRowPanel {
+public class DatePickerPanel<X> extends DefaultFormRowPanel {
     private static final long serialVersionUID = -5807168584242557542L;
 
     public static final JavaScriptResourceReference JQUERY_DATEPICKER_REFERENCE = new JavaScriptResourceReference(WicketJSRoot.class,
@@ -67,17 +68,17 @@ public class DatePickerPanel<X> extends FormRowPanel {
         }
         IModel<X> backingModel = new PropertyModel<X>(getDefaultModel(), getPropertyName());
         return new ModelConverter<X, Date>(backingModel, dateConverter);
-    };
+    }
 
     @Override
-    protected DatePicker createComponent() {
+    protected FormComponent createComponent(IModel model, Class valueType) {
         Locale locale = getLocale();
         Options options = new Options();
         dateFormat = dateformat(locale);
         dateFormatClient = dateFormat.toLowerCase().replaceAll("yyyy", "yy");
         options.set(DATE_FORMAT, Options.asString(dateFormatClient));
         // options.set(APPEND_TEXT, Options.asString(new SimpleDateFormat(dateFormat, locale).format(new Date())));
-        return new DatePicker(VALUE, getValueModel(), dateFormat, options) {
+        return new DatePicker(VALUE, model, dateFormat, options) {
             private static final long serialVersionUID = 7118431260383127661L;
 
             @Override

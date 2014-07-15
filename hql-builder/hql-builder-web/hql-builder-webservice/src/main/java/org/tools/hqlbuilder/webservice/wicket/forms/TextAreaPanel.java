@@ -3,9 +3,9 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
-public class TextAreaPanel<T> extends FormRowPanel<T, TextArea<T>> {
+public class TextAreaPanel<T> extends DefaultFormRowPanel<T, TextArea<T>> {
     private static final long serialVersionUID = 7189330022100675150L;
 
     public TextAreaPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings, TextAreaSettings textAreaSettings) {
@@ -13,8 +13,8 @@ public class TextAreaPanel<T> extends FormRowPanel<T, TextArea<T>> {
     }
 
     @Override
-    protected TextArea<T> createComponent() {
-        TextArea<T> textArea = new TextArea<T>(VALUE, getValueModel()) {
+    protected TextArea<T> createComponent(IModel<T> model, Class<T> valueType) {
+        TextArea<T> textArea = new TextArea<T>(VALUE, model) {
             private static final long serialVersionUID = 4613842350545363891L;
 
             @Override
