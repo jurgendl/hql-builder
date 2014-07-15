@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.MissingResourceException;
 
@@ -536,6 +537,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
         return addDefaultRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+    }
+
+    public <F> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath, FormElementSettings componentSettings,
+            ListModel<F> choices, IChoiceRenderer<F> renderer) {
+        return addDefaultRow(new MultiSelectCheckBoxPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
     }
 
     public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {

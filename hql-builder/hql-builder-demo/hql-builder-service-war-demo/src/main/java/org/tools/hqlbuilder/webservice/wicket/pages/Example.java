@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Example implements Serializable {
     private static final long serialVersionUID = 8505173683889617800L;
@@ -10,6 +11,8 @@ public class Example implements Serializable {
     public static enum ExampleOpts {
         OPT1, OPT2, OPT3, OPT4, OPT5;
     }
+
+    private List<ExampleOpts> multi;
 
     private byte[] data;
 
@@ -261,5 +264,13 @@ public class Example implements Serializable {
                 + this.integerv + ", longv=" + this.longv + ", shortv=" + this.shortv + ", doublev=" + this.doublev + ", floatv=" + this.floatv
                 + ", bytev=" + this.bytev + ", integerr=" + this.integerr + ", longr=" + this.longr + ", shortr=" + this.shortr + ", doubler="
                 + this.doubler + ", floatr=" + this.floatr + ", byter=" + this.byter + "]";
+    }
+
+    protected List<ExampleOpts> getMulti() {
+        return this.multi;
+    }
+
+    protected void setMulti(List<ExampleOpts> multi) {
+        this.multi = multi;
     }
 }
