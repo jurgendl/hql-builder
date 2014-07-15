@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 public class FormElementSettings implements Serializable, Cloneable {
     private static final long serialVersionUID = -2716372832273804363L;
 
-    protected boolean required;
+    protected boolean required = false;
 
     public FormElementSettings() {
         super();

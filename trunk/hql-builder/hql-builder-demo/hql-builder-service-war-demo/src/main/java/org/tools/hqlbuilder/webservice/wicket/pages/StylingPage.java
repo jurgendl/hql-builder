@@ -1,18 +1,14 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings.ColorFormat;
-import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
 @SuppressWarnings("serial")
 @MountedPage("/styling")
@@ -78,15 +74,5 @@ public class StylingPage extends BasePage {
         }
 
         add(stylingform);
-    }
-
-    /**
-     * @see org.tools.hqlbuilder.webservice.wicket.DefaultWebPage#addDynamicResources(org.apache.wicket.markup.head.IHeaderResponse)
-     */
-    @Override
-    protected void addDynamicResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "table.css")));
     }
 }

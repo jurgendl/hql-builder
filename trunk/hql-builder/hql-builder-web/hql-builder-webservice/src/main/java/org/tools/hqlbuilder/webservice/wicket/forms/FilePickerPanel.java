@@ -96,19 +96,19 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         }
         if (File.class.isAssignableFrom(type)) {
             try {
-                set(parentObject, (File) propertyPath, fileUpload.writeToTempFile());
+                set(parentObject, (File) propertyPath, fileUpload == null ? null : fileUpload.writeToTempFile());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             return;
         }
         if (byte[].class.isAssignableFrom(type)) {
-            set(parentObject, (byte[]) propertyPath, fileUpload.getBytes());
+            set(parentObject, (byte[]) propertyPath, fileUpload == null ? null : fileUpload.getBytes());
             return;
         }
         if (InputStream.class.isAssignableFrom(type)) {
             try {
-                set(parentObject, (InputStream) propertyPath, fileUpload.getInputStream());
+                set(parentObject, (InputStream) propertyPath, fileUpload == null ? null : fileUpload.getInputStream());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

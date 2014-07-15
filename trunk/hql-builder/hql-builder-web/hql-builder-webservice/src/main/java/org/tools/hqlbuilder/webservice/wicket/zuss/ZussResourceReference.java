@@ -128,7 +128,7 @@ public class ZussResourceReference extends StreamResourceReference implements IR
 
     protected void write(OutputStream out) throws IOException {
         ZussDefinition parsed = Zuss.parse(read(), charset, null, getZussName());
-        Zuss.translate(parsed, out, charset, resolver);
+        Zuss.translate(parsed, out, charset, getResolver());
     }
 
     @Override
