@@ -1,5 +1,11 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.set;
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.type;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,22 +21,27 @@ import org.apache.wicket.util.upload.DiskFileItemFactory;
 import org.apache.wicket.util.upload.FileItemFactory;
 import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitInterceptor;
 
 /**
- * based on version 1.1.0
+ * based on markusslima bootstrap-filestyle version 1.1.0
  *
  * @see http://markusslima.github.io/bootstrap-filestyle/
+ * @see http://www.surrealcms.com/blog/whipping-file-inputs-into-shape-with-bootstrap-3
  */
-public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField> {
+public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField> implements FormSubmitInterceptor {
     public static final String BUTTON_TEXT_ID = "buttonText";
 
     private static final long serialVersionUID = -6943635423428119032L;
 
-    private FileItemFactory fileItemFactory;
+    protected FileItemFactory fileItemFactory;
+
+    protected IModel<?> parentModel;
 
     @SuppressWarnings("unchecked")
-    public FilePickerPanel(P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings) {
+    public FilePickerPanel(IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings) {
         super(propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
+        this.parentModel = parentModel;
         setPropertyType((Class<List<FileUpload>>) (new ArrayList<FileUpload>().getClass()));
     }
 
@@ -72,5 +83,42 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
 
     public void setFileItemFactory(FileItemFactory fileItemFactory) {
         this.fileItemFactory = fileItemFactory;
+    }
+
+    @Override
+    public void onBeforeSubmit() {
+        FileUpload fileUpload = getComponent().getFileUpload();
+        Class<?> type = type(propertyPath);
+        Object parentObject = parentModel.getObject();
+        if (FileUpload.class.isAssignableFrom(type)) {
+            set(parentObject, (FileUpload) propertyPath, fileUpload);
+            return;
+        }
+        if (File.class.isAssignableFrom(type)) {
+            try {
+                set(parentObject, (File) propertyPath, fileUpload.writeToTempFile());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            return;
+        }
+        if (byte[].class.isAssignableFrom(type)) {
+            set(parentObject, (byte[]) propertyPath, fileUpload.getBytes());
+            return;
+        }
+        if (InputStream.class.isAssignableFrom(type)) {
+            try {
+                set(parentObject, (InputStream) propertyPath, fileUpload.getInputStream());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            return;
+        }
+        throw new UnsupportedOperationException("data transport");
+    }
+
+    @Override
+    public void onAfterSubmit() {
+        //
     }
 }

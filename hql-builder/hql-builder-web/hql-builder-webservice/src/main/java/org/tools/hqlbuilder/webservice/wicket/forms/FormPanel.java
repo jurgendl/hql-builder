@@ -32,6 +32,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -48,6 +50,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected RepeatingView repeater;
 
     protected FormSettings formSettings;
+
+    protected FormActions<T> actions;
+
+    protected Form<T> form;
 
     public static <T> IModel<T> newFormModel(Class<T> modelType) {
         return newFormModel(BeanUtils.instantiate(modelType));
@@ -67,21 +73,17 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.formSettings;
     }
 
+    public Form<T> getForm() {
+        return this.form;
+    }
+
     @SuppressWarnings("unchecked")
     public IModel<T> getFormModel() {
         return (IModel<T>) getDefaultModel();
     }
 
-    protected FormActions<T> actions;
-
-    protected Form<T> form;
-
-    protected static WebMarkupContainer createContainer(RepeatingView repeater) {
-        WebMarkupContainer container = new WebMarkupContainer(repeater.newChildId());
-        container.setOutputMarkupPlaceholderTag(false);
-        container.setRenderBodyOnly(true);
-        container.setOutputMarkupId(false);
-        return container;
+    protected FormActions<T> getActions() {
+        return this.actions;
     }
 
     protected void createForm(String id, IModel<T> model, FormActions<T> formactions) {
@@ -94,8 +96,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             @SuppressWarnings("unchecked")
             @Override
             protected void onSubmit() {
+                onBeforeSubmit();
                 super.onSubmit();
-                FormPanel.this.actions.submit((IModel<T>) getDefaultModel());
+                getActions().submit((IModel<T>) getDefaultModel());
+                onAfterSubmit();
             }
         };
         if (formSettings.inheritId) {
@@ -110,11 +114,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
         form.add(formBody);
-
-        repeater = new RepeatingView(FORM_REPEATER);
-        repeater.setOutputMarkupPlaceholderTag(true);
-        repeater.setRenderBodyOnly(false);
-        repeater.setOutputMarkupId(true);
+        repeater = createRepeater();
         formBody.add(repeater);
 
         ResourceModel submitModel = new ResourceModel(SUBMIT_LABEL);
@@ -180,10 +180,49 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         WebMarkupContainer formActions = new WebMarkupContainer(FORM_ACTIONS);
         form.add(formActions);
-
         formActions.add(submit);
         formActions.add(reset);
         formActions.add(cancel);
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected void onBeforeSubmit() {
+        repeater.visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
+            @Override
+            public void component(FormRowPanel object, IVisit<Void> visit) {
+                if (object instanceof FormSubmitInterceptor) {
+                    FormSubmitInterceptor.class.cast(object).onBeforeSubmit();
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected void onAfterSubmit() {
+        repeater.visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
+            @Override
+            public void component(FormRowPanel object, IVisit<Void> visit) {
+                if (object instanceof FormSubmitInterceptor) {
+                    FormSubmitInterceptor.class.cast(object).onAfterSubmit();
+                }
+            }
+        });
+    }
+
+    protected static WebMarkupContainer createContainer(RepeatingView repeater) {
+        WebMarkupContainer container = new WebMarkupContainer(repeater.newChildId());
+        container.setOutputMarkupPlaceholderTag(false);
+        container.setRenderBodyOnly(true);
+        container.setOutputMarkupId(false);
+        return container;
+    }
+
+    protected RepeatingView createRepeater() {
+        RepeatingView repeatingView = new RepeatingView(FORM_REPEATER);
+        repeatingView.setOutputMarkupPlaceholderTag(true);
+        repeatingView.setRenderBodyOnly(false);
+        repeatingView.setOutputMarkupId(true);
+        return repeatingView;
     }
 
     protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, Rowpanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> void setupRequiredBehavior(
@@ -248,7 +287,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return rowpanel;
     }
 
-    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addRow(
+    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addCustomRow(
             RowPanel rowpanel) {
         rowpanel.addComponentsTo(repeater);
         setupRequiredBehavior(rowpanel);
@@ -256,62 +295,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return rowpanel;
     }
 
-    public <F> HiddenFieldPanel<F> addHidden(F propertyPath) {
-        return addDefaultRow(new HiddenFieldPanel<F>(getDefaultModel(), propertyPath));
-    }
+    public static interface FormSubmitInterceptor {
+        public void onBeforeSubmit();
 
-    public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
-        return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
-    }
-
-    public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
-        return addDefaultRow(new ColorPickerPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <F> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
-        return addDefaultRow(new DatePickerPanel<F>(getDefaultModel(), propertyPath, dateConverter, formSettings, componentSettings));
-    }
-
-    public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
-            IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
-    }
-
-    public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new DropDownPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
-    }
-
-    public <F> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new TextFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public <F> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
-        return addDefaultRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
-        return addDefaultRow(new NumberFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
-        return addDefaultRow(new RangeFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new EmailTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new PasswordTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
-    }
-
-    public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings) {
-        return addRow(new FilePickerPanel<F>(propertyPath, formSettings, componentSettings));
+        public void onAfterSubmit();
     }
 
     protected static abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Panel implements FormConstants {
@@ -538,5 +525,66 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             }
             return this.propertyType;
         }
+    }
+
+    public <F> HiddenFieldPanel<F> addHidden(F propertyPath) {
+        return addDefaultRow(new HiddenFieldPanel<F>(getDefaultModel(), propertyPath));
+    }
+
+    public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
+        return addDefaultRow(new ColorPickerPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
+            IChoiceRenderer<F> renderer) {
+        return addDefaultRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+    }
+
+    public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
+        return addDefaultRow(new DropDownPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+    }
+
+    public <F> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
+        return addDefaultRow(new TextFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public <F> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
+        return addDefaultRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
+        return addDefaultRow(new NumberFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
+        return addDefaultRow(new RangeFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
+        return addDefaultRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
+        return addDefaultRow(new EmailTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
+        return addDefaultRow(new PasswordTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    /**
+     * also "form.setMultiPart(true);" and "form.setMaxSize(Bytes.megabytes(1));"
+     */
+    public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings) {
+        return addCustomRow(new FilePickerPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <F> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
+        return addDefaultRow(new DatePickerPanel<F>(getDefaultModel(), propertyPath, dateConverter, formSettings, componentSettings));
+    }
+
+    public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
+        return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
     }
 }

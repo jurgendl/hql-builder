@@ -4,6 +4,9 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
+/**
+ * @see http://getbootstrap.com/getting-started/#download
+ */
 public class Twitter {
     public static JavaScriptResourceReference TWITTER_JS = new JavaScriptResourceReference(WicketRoot.class,
             "twitter/bootstrap-3.2.0-dist/js/bootstrap.js");
