@@ -46,7 +46,7 @@ public class QueryFavorite implements Serializable {
     }
 
     /**
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override
@@ -82,7 +82,7 @@ public class QueryFavorite implements Serializable {
     }
 
     /**
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -95,7 +95,7 @@ public class QueryFavorite implements Serializable {
     }
 
     /**
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -110,7 +110,7 @@ public class QueryFavorite implements Serializable {
         return this.hqlPreview;
     }
 
-    public void setHqlPreview(String hqlPreview) {
+    public void setHqlPreview(@SuppressWarnings("unused") String hqlPreview) {
         //
     }
 
@@ -121,7 +121,7 @@ public class QueryFavorite implements Serializable {
         return this.parametersPreview;
     }
 
-    public void setParametersPreview( String parametersPreview) {
+    public void setParametersPreview(@SuppressWarnings("unused") String parametersPreview) {
         //
     }
 }
