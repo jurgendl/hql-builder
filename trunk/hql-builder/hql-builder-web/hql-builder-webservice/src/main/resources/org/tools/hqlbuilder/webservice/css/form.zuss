@@ -1,12 +1,12 @@
-.formrow {
+._formrow {
 	height: 38px;
 }
 
-.likeinput {
+._likeinput {
 	height: 24px;
 }
 
-.forminput {
+._forminput {
 	height: 26px;
 }
 
