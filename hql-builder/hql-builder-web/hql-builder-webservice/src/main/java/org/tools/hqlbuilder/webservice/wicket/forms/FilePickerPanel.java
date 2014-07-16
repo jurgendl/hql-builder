@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.markup.ComponentTag;
@@ -21,9 +20,6 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.file.FileCleaner;
 import org.apache.wicket.util.upload.DiskFileItemFactory;
 import org.apache.wicket.util.upload.FileItemFactory;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
 import org.tools.hqlbuilder.webservice.resources.validation.JQueryValidation;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
@@ -72,22 +68,6 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
                 tag(tag, "multiple", Boolean.TRUE.equals(filePickerSettings.getMultiple()) ? "multiple" : null);
             }
         };
-        comp.add(new IValidator<Collection<FileUpload>>() {
-            private static final long serialVersionUID = 5216820839594332356L;
-
-            @Override
-            public void validate(IValidatable<Collection<FileUpload>> validatable) {
-                Collection<FileUpload> files = validatable.getValue();
-                FilePickerSettings filePickerSettings = FilePickerSettings.class.cast(getComponentSettings());
-                for (FileUpload file : files) {
-                    if (filePickerSettings.getMimeType() != null) {
-                        if (!filePickerSettings.getMimeType().equals(file.getContentType())) {
-                            validatable.error(new ValidationError(this).addKey("KEY"));
-                        }
-                    }
-                }
-            }
-        });
         return comp;
     }
 
@@ -103,21 +83,20 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     }
 
     protected void renderHeadClientSideValidation(IHeaderResponse response) {
-        // also imports JQueryValidation.VALIDATION_JS, JQueryForm.FORM_JS and JqueryUI
-        response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_ADDITIONAL_JS));
-
-        // localisation
-        response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_LOCALIZATION_JS));
-
         // validation inject
         FilePickerSettings filePickerSettings = FilePickerSettings.class.cast(getComponentSettings());
         if (filePickerSettings.getMimeType() != null) {
+            // also imports JQueryValidation.VALIDATION_JS, JQueryForm.FORM_JS and JqueryUI
+            response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_ADDITIONAL_JS));
+
+            // localisation
+            response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_LOCALIZATION_JS));
+
             String formId = getComponent().getForm().getMarkupId();
             StringBuilder initScript = new StringBuilder();
-            initScript.append("alert($.validator.messages['extension']);");
             initScript.append("$(\"#" + formId + "\").validate();").append("\n");
             initScript.append("$(\"#" + getComponent().getMarkupId() + "\").rules('add', { accept: \"" + filePickerSettings.getMimeType() + "\" })")
-                    .append("\n");
+            .append("\n");
             response.render(OnLoadHeaderItem.forScript(initScript));
         }
     }
