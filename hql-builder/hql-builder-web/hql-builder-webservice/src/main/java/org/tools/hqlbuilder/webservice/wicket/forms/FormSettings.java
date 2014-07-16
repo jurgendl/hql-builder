@@ -16,10 +16,10 @@ public class FormSettings implements Serializable {
     protected boolean clientsideRequiredValidation = true;
 
     /** fixed ids */
-    protected final boolean inheritId;
+    protected boolean inheritId = false;
 
     /** activate ajax on form (per field live validation, submit by ajax) */
-    protected final boolean ajax;
+    protected boolean ajax;
 
     /** show label */
     protected boolean showLabel = true;
@@ -36,8 +36,8 @@ public class FormSettings implements Serializable {
     /** requires ajax = true */
     protected boolean liveValidation = false;
 
-    public FormSettings(boolean inheritId, boolean ajax) {
-        this.inheritId = inheritId;
+    public FormSettings(boolean ajax) {
+        // this.inheritId = inheritId;
         this.ajax = ajax;
     }
 

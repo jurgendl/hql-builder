@@ -12,6 +12,8 @@ public class FilePickerSettings extends FormElementSettings {
     /** data-icon */
     protected Boolean showIcon;
 
+    protected Boolean multiple;
+
     public String getMimeType() {
         return this.mimeType;
     }
@@ -36,6 +38,15 @@ public class FilePickerSettings extends FormElementSettings {
 
     public FilePickerSettings setShowIcon(Boolean showIcon) {
         this.showIcon = showIcon;
+        return this;
+    }
+
+    public Boolean getMultiple() {
+        return this.multiple;
+    }
+
+    public FilePickerSettings setMultiple(Boolean multiple) {
+        this.multiple = multiple;
         return this;
     }
 }
