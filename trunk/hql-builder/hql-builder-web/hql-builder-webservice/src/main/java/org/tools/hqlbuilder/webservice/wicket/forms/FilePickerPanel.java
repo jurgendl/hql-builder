@@ -36,21 +36,6 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitIntercep
  * @see http://www.surrealcms.com/blog/whipping-file-inputs-into-shape-with-bootstrap-3
  */
 public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField> implements FormSubmitInterceptor {
-    // $("#user_profile_pic").change(function() {
-    //
-    // var val = $(this).val();
-    //
-    // switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
-    // case 'gif': case 'jpg': case 'png':
-    // alert("an image");
-    // break;
-    // default:
-    // $(this).val('');
-    // // error message here
-    // alert("not an image");
-    // break;
-    // }
-    // });
     public static final String BUTTON_TEXT_ID = "buttonText";
 
     private static final long serialVersionUID = -6943635423428119032L;
@@ -129,6 +114,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         if (filePickerSettings.getMimeType() != null) {
             String formId = getComponent().getForm().getMarkupId();
             StringBuilder initScript = new StringBuilder();
+            initScript.append("alert($.validator.messages['extension']);");
             initScript.append("$(\"#" + formId + "\").validate();").append("\n");
             initScript.append("$(\"#" + getComponent().getMarkupId() + "\").rules('add', { accept: \"" + filePickerSettings.getMimeType() + "\" })")
                     .append("\n");
