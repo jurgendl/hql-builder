@@ -13,15 +13,8 @@ import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 public class Spectrum {
     public static JavaScriptResourceReference SPECTRUM_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, "ui/spectrum/spectrum.js");
 
-    public static CssResourceReference SPECTRUM_CSS = new CssResourceReference(WicketJQueryRoot.class, "ui/spectrum/spectrum.css");
-
-    static {
-        try {
-            SPECTRUM_JS.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
-            SPECTRUM_JS.addJavaScriptResourceReferenceDependency(((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings())
-                    .getJQueryUIReference());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+    public static CssResourceReference SPECTRUM_CSS = new CssResourceReference(WicketJQueryRoot.class, "ui/spectrum/spectrum.css")
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference())
+            .addJavaScriptResourceReferenceDependency(
+                    ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings()).getJQueryUIReference());
 }

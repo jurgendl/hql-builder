@@ -21,15 +21,27 @@ public class JQueryValidation {
     /** http://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.0 */
     public static final String URL = "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/";
 
-    public static JavaScriptResourceReference VALIDATION_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, PATH + "jquery.validate.js");
+    public static final String PATH_JQUERY_VALIDATE_JS = "jquery.validate.js";
+
+    public static final String PATH_ADDITIONAL_METHODS_JS = "additional-methods.js";
+
+    public static final String PATH_LOCALIZATION_MESSAGES_JS = "localization/messages.js";
+
+    public static final String PATH_LOCALIZATION_METHODS_JS = "localization/methods.js";
+
+    public static JavaScriptResourceReference VALIDATION_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, PATH + PATH_JQUERY_VALIDATE_JS)
+            .addJavaScriptResourceReferenceDependency(JQueryForm.FORM_JS);
 
     public static JavaScriptResourceReference VALIDATION_ADDITIONAL_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, PATH
-            + "additional-methods.js");
+            + PATH_ADDITIONAL_METHODS_JS).addJavaScriptResourceReferenceDependency(VALIDATION_JS);
 
     public static JavaScriptResourceReference VALIDATION_LOCALIZATION_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, PATH
-            + "localization/messages.js");
+            + PATH_LOCALIZATION_MESSAGES_JS).addJavaScriptResourceReferenceDependency(VALIDATION_JS);
 
-    public static UrlResourceReference CDN_VALIDATION_JS = new UrlResourceReference(Url.parse(URL + "jquery.validate.js")) {
+    public static JavaScriptResourceReference VALIDATION_LOCALIZATION_METHODS_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, PATH
+            + PATH_LOCALIZATION_METHODS_JS).addJavaScriptResourceReferenceDependency(VALIDATION_LOCALIZATION_JS);
+
+    public static UrlResourceReference CDN_VALIDATION_JS = new UrlResourceReference(Url.parse(URL + PATH_JQUERY_VALIDATE_JS)) {
         private static final long serialVersionUID = -3223394738670776800L;
 
         @Override
@@ -38,7 +50,7 @@ public class JQueryValidation {
         }
     };
 
-    public static UrlResourceReference CDN_VALIDATION_ADDITIONAL_JS = new UrlResourceReference(Url.parse(URL + "additional-methods.js")) {
+    public static UrlResourceReference CDN_VALIDATION_ADDITIONAL_JS = new UrlResourceReference(Url.parse(URL + PATH_ADDITIONAL_METHODS_JS)) {
         private static final long serialVersionUID = -4452640036671378227L;
 
         @Override
@@ -47,7 +59,7 @@ public class JQueryValidation {
         }
     };
 
-    public static UrlResourceReference CDN_VALIDATION_LOCALIZATION_JS = new UrlResourceReference(Url.parse(URL + "localization/messages.js")) {
+    public static UrlResourceReference CDN_VALIDATION_LOCALIZATION_JS = new UrlResourceReference(Url.parse(URL + PATH_LOCALIZATION_MESSAGES_JS)) {
         private static final long serialVersionUID = 3397791923898457501L;
 
         @Override
@@ -56,13 +68,13 @@ public class JQueryValidation {
         }
     };
 
-    static {
-        try {
-            VALIDATION_JS.addJavaScriptResourceReferenceDependency(JQueryForm.FORM_JS);
-            VALIDATION_ADDITIONAL_JS.addJavaScriptResourceReferenceDependency(VALIDATION_JS);
-            VALIDATION_LOCALIZATION_JS.addJavaScriptResourceReferenceDependency(VALIDATION_JS);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    public static UrlResourceReference CDN_VALIDATION_LOCALIZATION_METHODS_JS = new UrlResourceReference(
+            Url.parse(URL + PATH_LOCALIZATION_METHODS_JS)) {
+        private static final long serialVersionUID = 7126346418465627172L;
+
+        @Override
+        public Iterable<? extends HeaderItem> getDependencies() {
+            return Arrays.asList(JavaScriptHeaderItem.forReference(CDN_VALIDATION_LOCALIZATION_JS));
         }
-    }
+    };
 }

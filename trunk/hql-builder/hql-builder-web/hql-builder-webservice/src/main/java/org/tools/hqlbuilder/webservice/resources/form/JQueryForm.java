@@ -16,11 +16,16 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
  * @see http://malsup.com/jquery/form/
  */
 public class JQueryForm {
+    public static final String PATH = "ui/form/";
+
     public static final String URL = "http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.50/";
 
-    public static JavaScriptResourceReference FORM_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, "ui/form/jquery.form.js");
+    public static final String PATH_JQUERY_FORM_JS = "jquery.form.js";
 
-    public static UrlResourceReference CDN_FORM_JS = new UrlResourceReference(Url.parse(URL + "jquery.form.js")) {
+    public static JavaScriptResourceReference FORM_JS = new JavaScriptResourceReference(WicketJQueryRoot.class, PATH + PATH_JQUERY_FORM_JS)
+    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+
+    public static UrlResourceReference CDN_FORM_JS = new UrlResourceReference(Url.parse(URL + PATH_JQUERY_FORM_JS)) {
         private static final long serialVersionUID = -3223394738670776800L;
 
         @Override
@@ -28,12 +33,4 @@ public class JQueryForm {
             return Arrays.asList(JavaScriptHeaderItem.forReference(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference()));
         }
     };
-
-    static {
-        try {
-            FORM_JS.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 }
