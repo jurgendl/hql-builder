@@ -23,7 +23,7 @@ import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 @SuppressWarnings("serial")
 public class ExampleForm extends FormPanel<Example> {
     public ExampleForm(String id) {
-        super(id, Model.of(new Example()), true, new DefaultFormActions<Example>() {
+        super(id, Model.of(new Example()), new DefaultFormActions<Example>() {
             @Override
             public void submit(IModel<Example> m) {
                 System.out.println(m.getObject());
@@ -77,8 +77,8 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
             addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
-            addFilePicker(proxy.getData(), new FilePickerSettings().setMimeType("application/pdf"));
+            addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
         }
-        addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
+        addFilePicker(proxy.getData(), new FilePickerSettings().setMimeType("application/pdf").setMultiple(true));
     }
 }

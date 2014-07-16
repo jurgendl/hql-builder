@@ -3,9 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -15,10 +13,8 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.tools.hqlbuilder.common.icons.WicketIconsResources;
-import org.tools.hqlbuilder.webservice.WicketRoot;
-import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
+import org.tools.hqlbuilder.webservice.resources.datepicker.JQueryDatePicker;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
@@ -36,9 +32,6 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DatePickerPanel<X> extends DefaultFormRowPanel {
     private static final long serialVersionUID = -5807168584242557542L;
-
-    public static final JavaScriptResourceReference JQUERY_DATEPICKER_REFERENCE = new JavaScriptResourceReference(WicketJSRoot.class,
-            "JQDatePicker.js");
 
     public static final String DATE_FORMAT = "dateFormat";
 
@@ -89,51 +82,6 @@ public class DatePickerPanel<X> extends DefaultFormRowPanel {
         };
     }
 
-    public static final String RESOURCE_I18N_PATH = "jquery/ui/datepicker/i18n/";
-
-    public static JavaScriptResourceReference DEFAULT = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-en-GB.js");
-
-    public static final Map<Locale, JavaScriptResourceReference> cache = new HashMap<Locale, JavaScriptResourceReference>();
-
-    public static JavaScriptResourceReference cached(Locale locale) {
-        if (cache.containsKey(locale)) {
-            return cache.get(locale);
-        }
-        JavaScriptResourceReference resourceReference = get(locale);
-        cache.put(locale, resourceReference);
-        return resourceReference;
-    }
-
-    public static JavaScriptResourceReference get(Locale locale) {
-        String language = locale.getLanguage();
-        JavaScriptResourceReference uiRef = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + "-"
-                + locale.getCountry().toUpperCase() + ".js");
-        boolean found = true;
-        try {
-            if (uiRef.getResource().getResourceStream().getInputStream().available() <= 0) {
-                found = false;
-            }
-        } catch (Exception ex) {
-            found = false;
-        }
-        if (found) {
-            return uiRef;
-        }
-        uiRef = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + ".js");
-        found = true;
-        try {
-            if (uiRef.getResource().getResourceStream().getInputStream().available() <= 0) {
-                found = false;
-            }
-        } catch (Exception ex) {
-            found = false;
-        }
-        if (found) {
-            return uiRef;
-        }
-        return DEFAULT;
-    }
-
     public static String dateformat(Locale locale) {
         return LocaleUtils.getLocaleDatePattern(locale, DateFormat.SHORT);
     }
@@ -152,8 +100,8 @@ public class DatePickerPanel<X> extends DefaultFormRowPanel {
             return;
         }
 
-        response.render(JavaScriptHeaderItem.forReference(cached(getLocale())));
-        response.render(JavaScriptHeaderItem.forReference(JQUERY_DATEPICKER_REFERENCE));
+        response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.cached(getLocale())));
+        response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
 
         CharSequence urlForIcon = urlFor(WicketIconsResources.REF_CALENDER, new PageParameters());
         String initScript = ";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '" + dateFormatClient + "', " + "'"

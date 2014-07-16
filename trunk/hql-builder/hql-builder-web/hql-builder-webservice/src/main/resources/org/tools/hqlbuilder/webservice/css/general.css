@@ -22,12 +22,14 @@ body {
 	box-sizing: border-box;
 }
 
+/*
 * {
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 }
+*/
 
 * {
 	background-repeat: no-repeat;

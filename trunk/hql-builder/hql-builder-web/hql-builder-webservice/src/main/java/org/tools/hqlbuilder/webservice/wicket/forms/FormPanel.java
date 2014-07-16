@@ -62,9 +62,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return new CompoundPropertyModel<T>(model);
     }
 
-    public FormPanel(String id, IModel<T> model, boolean inheritId, FormActions<T> actions) {
+    public FormPanel(String id, IModel<T> model, FormActions<T> actions) {
         super(id, model);
-        formSettings = new FormSettings(inheritId, actions.isAjax());
+        formSettings = new FormSettings(actions.isAjax());
         createForm(id, model, actions);
     }
 

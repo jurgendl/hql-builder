@@ -7,11 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
@@ -19,7 +21,11 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.file.FileCleaner;
 import org.apache.wicket.util.upload.DiskFileItemFactory;
 import org.apache.wicket.util.upload.FileItemFactory;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
+import org.tools.hqlbuilder.webservice.resources.validation.JQueryValidation;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitInterceptor;
 
@@ -30,6 +36,21 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitIntercep
  * @see http://www.surrealcms.com/blog/whipping-file-inputs-into-shape-with-bootstrap-3
  */
 public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField> implements FormSubmitInterceptor {
+    // $("#user_profile_pic").change(function() {
+    //
+    // var val = $(this).val();
+    //
+    // switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
+    // case 'gif': case 'jpg': case 'png':
+    // alert("an image");
+    // break;
+    // default:
+    // $(this).val('');
+    // // error message here
+    // alert("not an image");
+    // break;
+    // }
+    // });
     public static final String BUTTON_TEXT_ID = "buttonText";
 
     private static final long serialVersionUID = -6943635423428119032L;
@@ -63,15 +84,56 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
                 tag(tag, "data-iconName", null);
                 tag(tag, "data-disabled", null);
                 tag(tag, "data-buttonBefore", null);
+                tag(tag, "multiple", Boolean.TRUE.equals(filePickerSettings.getMultiple()) ? "multiple" : null);
             }
         };
+        comp.add(new IValidator<Collection<FileUpload>>() {
+            private static final long serialVersionUID = 5216820839594332356L;
+
+            @Override
+            public void validate(IValidatable<Collection<FileUpload>> validatable) {
+                Collection<FileUpload> files = validatable.getValue();
+                FilePickerSettings filePickerSettings = FilePickerSettings.class.cast(getComponentSettings());
+                for (FileUpload file : files) {
+                    if (filePickerSettings.getMimeType() != null) {
+                        if (!filePickerSettings.getMimeType().equals(file.getContentType())) {
+                            validatable.error(new ValidationError(this).addKey("KEY"));
+                        }
+                    }
+                }
+            }
+        });
         return comp;
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        renderHeadConsistentLook(response);
+        renderHeadClientSideValidation(response);
+    }
+
+    protected void renderHeadConsistentLook(IHeaderResponse response) {
         response.render(JavaScriptHeaderItem.forReference(FileStyle.FILESTYLE_JS));
+    }
+
+    protected void renderHeadClientSideValidation(IHeaderResponse response) {
+        // also imports JQueryValidation.VALIDATION_JS, JQueryForm.FORM_JS and JqueryUI
+        response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_ADDITIONAL_JS));
+
+        // localisation
+        response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_LOCALIZATION_JS));
+
+        // validation inject
+        FilePickerSettings filePickerSettings = FilePickerSettings.class.cast(getComponentSettings());
+        if (filePickerSettings.getMimeType() != null) {
+            String formId = getComponent().getForm().getMarkupId();
+            StringBuilder initScript = new StringBuilder();
+            initScript.append("$(\"#" + formId + "\").validate();").append("\n");
+            initScript.append("$(\"#" + getComponent().getMarkupId() + "\").rules('add', { accept: \"" + filePickerSettings.getMimeType() + "\" })")
+                    .append("\n");
+            response.render(OnLoadHeaderItem.forScript(initScript));
+        }
     }
 
     public FileItemFactory getFileItemFactory() {
@@ -119,6 +181,6 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
 
     @Override
     public void onAfterSubmit() {
-        //
+        // nothing to do
     }
 }

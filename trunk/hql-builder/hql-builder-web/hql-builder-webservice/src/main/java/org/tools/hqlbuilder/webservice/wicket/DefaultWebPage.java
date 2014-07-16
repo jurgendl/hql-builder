@@ -19,8 +19,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
+import org.tools.hqlbuilder.webservice.jquery.WicketJQueryRoot;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
 public class DefaultWebPage extends WebPage {
@@ -72,9 +72,9 @@ public class DefaultWebPage extends WebPage {
      * @see {@link WicketSession#getJQueryUITheme()}
      */
     protected void addThemeResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "jquery/ui/jquery-ui-themes-1.10.4/themes/"
+        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketJQueryRoot.class, "ui/jquery-ui-themes-1.10.4/themes/"
                 + WicketSession.get().getJQueryUITheme() + "/jquery-ui.css")));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketRoot.class, "jquery/ui/jquery-ui-themes-1.10.4/themes/"
+        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketJQueryRoot.class, "ui/jquery-ui-themes-1.10.4/themes/"
                 + WicketSession.get().getJQueryUITheme() + "/jquery.ui.theme.css")));
     }
 
