@@ -280,7 +280,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public <PropertyType, ComponentType extends FormComponent<PropertyType>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType>> RowPanel addDefaultRow(
             RowPanel rowpanel) {
-        rowpanel.addComponentsTo(repeater);
+        rowpanel.addComponents();
+        rowpanel.addThisTo(repeater);
         setupRequiredBehavior(rowpanel);
         setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
         return rowpanel;
@@ -288,7 +289,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addCustomRow(
             RowPanel rowpanel) {
-        rowpanel.addComponentsTo(repeater);
+        rowpanel.addComponents();
+        rowpanel.addThisTo(repeater);
         setupRequiredBehavior(rowpanel);
         setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
         return rowpanel;
@@ -382,10 +384,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return container;
         }
 
-        protected WebMarkupContainer addComponentsTo(RepeatingView repeater) {
+        protected void addComponents() {
             this.add(getLabel());
             this.add(getComponent());
             this.add(getFeedback());
+        }
+
+        protected WebMarkupContainer addThisTo(RepeatingView repeater) {
             WebMarkupContainer rowContainer = getContainer(repeater);
             repeater.add(rowContainer);
             rowContainer.add(this);
