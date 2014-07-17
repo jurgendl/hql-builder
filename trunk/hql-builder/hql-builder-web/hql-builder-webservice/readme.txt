@@ -8,6 +8,7 @@ http://wb.agilecoders.de/demo/components
 http://blog.agilecoders.de/index.php/category/wicket/
 http://api.jqueryui.com/datepicker/
 http://necolas.github.io/normalize.css/3.0.1/normalize.css
+https://github.com/carhartl/jquery-cookie
 
 enable gzip in Tomcat
 

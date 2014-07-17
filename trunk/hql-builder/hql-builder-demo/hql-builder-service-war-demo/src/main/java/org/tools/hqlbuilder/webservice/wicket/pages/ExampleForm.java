@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.util.lang.Bytes;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
@@ -34,6 +35,7 @@ public class ExampleForm extends FormPanel<Example> {
         Example proxy = WebHelper.proxy(Example.class);
 
         form.setMultiPart(true);
+        form.setMaxSize(Bytes.kilobytes(1));
 
         getFormSettings().setClientsideRequiredValidation(false);
 
@@ -79,6 +81,6 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
             addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
         }
-        addFilePicker(proxy.getData(), new FilePickerSettings().setMimeType("application/pdf").setMultiple(true));
+        addFilePicker(proxy.getData(), new FilePickerSettings().setMimeType("application/pdf"));
     }
 }

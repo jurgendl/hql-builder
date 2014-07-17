@@ -4,9 +4,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.RangeTextField;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
@@ -35,8 +33,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
     }
 
     @Override
-    protected WebMarkupContainer addComponentsTo(RepeatingView repeater) {
-        WebMarkupContainer webMarkupContainer = super.addComponentsTo(repeater);
+    protected void addComponents() {
         output = new Output(VALUE_OUTPUT, getValueModel()) {
             private static final long serialVersionUID = 2019925551669937151L;
 
@@ -47,7 +44,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
             }
         };
         add(output);
-        return webMarkupContainer;
+        super.addComponents();
     }
 
     @Override

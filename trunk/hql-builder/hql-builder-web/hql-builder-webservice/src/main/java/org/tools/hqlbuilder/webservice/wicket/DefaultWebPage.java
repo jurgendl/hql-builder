@@ -36,7 +36,7 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
-        if (WicketApplication.get().usesDevelopmentConfig()) {
+        if (false && WicketApplication.get().usesDevelopmentConfig()) {
             add(new DebugBar("debug"));
         } else {
             add(new EmptyPanel("debug").setVisible(false));

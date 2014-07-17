@@ -1,8 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.HiddenField;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
@@ -19,13 +17,9 @@ public class HiddenFieldPanel<T> extends DefaultFormRowPanel<T, HiddenField<T>> 
     }
 
     @Override
-    protected HiddenField<T> addComponentsTo(RepeatingView repeater) {
+    protected void addComponents() {
         HiddenField<T> comp = getComponent();
         this.add(comp);
-        WebMarkupContainer rowContainer = getContainer(repeater);
-        repeater.add(rowContainer);
-        rowContainer.add(this);
-        return comp;
     }
 
     @Override
