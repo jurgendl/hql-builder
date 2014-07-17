@@ -14,6 +14,10 @@ public class FilePickerSettings extends FormElementSettings {
 
     protected Boolean multiple;
 
+    protected boolean consistentLook = false;
+
+    protected boolean clientSideTypeCheck = false;
+
     public String getMimeType() {
         return this.mimeType;
     }
@@ -47,6 +51,24 @@ public class FilePickerSettings extends FormElementSettings {
 
     public FilePickerSettings setMultiple(Boolean multiple) {
         this.multiple = multiple;
+        return this;
+    }
+
+    public boolean isConsistentLook() {
+        return this.consistentLook;
+    }
+
+    public FilePickerSettings setConsistentLook(boolean consistentLook) {
+        this.consistentLook = consistentLook;
+        return this;
+    }
+
+    public boolean isClientSideTypeCheck() {
+        return this.clientSideTypeCheck;
+    }
+
+    public FilePickerSettings setClientSideTypeCheck(boolean clientSideTypeCheck) {
+        this.clientSideTypeCheck = clientSideTypeCheck;
         return this;
     }
 }

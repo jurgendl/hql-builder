@@ -1,31 +1,27 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.set;
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.type;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.util.file.FileCleaner;
-import org.apache.wicket.util.upload.DiskFileItemFactory;
-import org.apache.wicket.util.upload.FileItemFactory;
-import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
 import org.tools.hqlbuilder.webservice.resources.validation.JQueryValidation;
+import org.tools.hqlbuilder.webservice.wicket.components.AJAXDownload;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitInterceptor;
 
@@ -38,19 +34,30 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitIntercep
 public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField> implements FormSubmitInterceptor {
     private static final long serialVersionUID = -6943635423428119032L;
 
-    public static final JavaScriptResourceReference FILEPICKER_JS = new JavaScriptResourceReference(WicketJSRoot.class, "filepicker.js");
+    public static final String REMOVE_FILE_ID = "removeFile";
 
-    public static final String FILE_INPUT_CONTAINER_ID = "fileinputcontainer";
+    public static final String DOWNLOAD_FILE_ID = "downloadFile";
+
+    public static final String FILENAME_LABEL_ID = "filenameLabel";
+
+    public static final String FILE_COMPONENT_CONTAINER_ID = "fileComponentContainer";
+
+    public static final String FILE_INPUT_CONTAINER_ID = "fileInputContainer";
+
+    public static final String FILE_PRESENT_CONTAINER_ID = "filePresentContainer";
 
     public static final String BUTTON_TEXT_ID = "buttonText";
 
-    protected FileItemFactory fileItemFactory;
+    // protected FileItemFactory fileItemFactory;
 
     protected IModel<?> parentModel;
 
+    protected FilePickerHook hook;
+
     @SuppressWarnings("unchecked")
-    public FilePickerPanel(IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings) {
+    public FilePickerPanel(IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings, FilePickerHook hook) {
         super(propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
+        this.hook = hook;
         this.parentModel = parentModel;
         setPropertyType((Class<List<FileUpload>>) (new ArrayList<FileUpload>().getClass()));
     }
@@ -58,22 +65,97 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     @Override
     protected void addComponents() {
         this.add(getLabel());
-        WebMarkupContainer fileinputcontainer = new WebMarkupContainer(FILE_INPUT_CONTAINER_ID);
-        fileinputcontainer.setOutputMarkupId(true);
-        fileinputcontainer.add(getComponent());
-        this.add(fileinputcontainer);
-        this.add(getClearFile());
-        this.add(getFeedback());
-    }
 
-    protected Component getClearFile() {
-        Button button = new Button("clearFileInput") {
-            private static final long serialVersionUID = 8048984912207444565L;
+        WebMarkupContainer fileComponentContainer = new WebMarkupContainer(FILE_COMPONENT_CONTAINER_ID);
+        fileComponentContainer.setOutputMarkupId(true);
+        add(fileComponentContainer);
+
+        WebMarkupContainer fileInputContainer = new WebMarkupContainer(FILE_INPUT_CONTAINER_ID) {
+            private static final long serialVersionUID = -5403623924747451558L;
 
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                tag.getAttributes().put("onclick", "clearFileInput('" + getComponent().getMarkupId() + "')");
+                if (hook.getCurrentFilenames() == null || hook.getCurrentFilenames().size() == 0) {
+                    tag.getAttributes().remove("style");
+                } else {
+                    tag.getAttributes().put("style", "display:none");
+                }
+            }
+        };
+        fileComponentContainer.add(fileInputContainer);
+        fileInputContainer.setOutputMarkupId(true);
+        fileInputContainer.add(getComponent());
+
+        WebMarkupContainer filePresentContainer = new WebMarkupContainer(FILE_PRESENT_CONTAINER_ID) {
+            private static final long serialVersionUID = -3719538448746978418L;
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if (hook.getCurrentFilenames() == null || hook.getCurrentFilenames().size() == 0) {
+                    tag.getAttributes().put("style", "display:none");
+                } else {
+                    tag.getAttributes().remove("style");
+                }
+            }
+        };
+        fileComponentContainer.add(filePresentContainer);
+        filePresentContainer.setOutputMarkupId(true);
+        filePresentContainer.add(getFilePresentLabel());
+        filePresentContainer.add(getDownloadFile());
+        filePresentContainer.add(getRemoveFile());
+
+        this.add(getFeedback());
+    }
+
+    protected Component getFilePresentLabel() {
+        Label filenameLabel = new Label(FILENAME_LABEL_ID, new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = -1394872283988076378L;
+
+            @Override
+            public String getObject() {
+                return getInitialValue();
+            }
+        });
+        return filenameLabel;
+    }
+
+    protected Component getDownloadFile() {
+        final AJAXDownload download = new AJAXDownload() {
+            private static final long serialVersionUID = 3386413702948444161L;
+
+            @Override
+            protected IResourceStream getResourceStream() {
+                return hook.download(hook.getCurrentFilenames().iterator().next());
+            }
+
+            @Override
+            protected String getFileName() {
+                return hook.getCurrentFilenames().iterator().next();
+            }
+        };
+        AjaxFallbackLink<String> button = new AjaxFallbackLink<String>(DOWNLOAD_FILE_ID) {
+            private static final long serialVersionUID = -4513016499912698499L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                download.initiate(target);
+            }
+        };
+        button.add(download);
+        return button;
+    }
+
+    protected Component getRemoveFile() {
+        AjaxFallbackLink<String> button = new AjaxFallbackLink<String>(REMOVE_FILE_ID) {
+            private static final long serialVersionUID = -5973307610040597469L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                hook.clear(hook.getCurrentFilenames());
+                target.add(FilePickerPanel.this.get(FILE_COMPONENT_CONTAINER_ID));
+                target.appendJavaScript("$('#" + getComponent().getMarkupId() + "').filestyle();");
             }
         };
         return button;
@@ -88,7 +170,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 onFormComponentTag(tag);
-                FilePickerSettings filePickerSettings = FilePickerSettings.class.cast(getComponentSettings());
+                FilePickerSettings filePickerSettings = getFilePickerSettings();
                 tag(tag, "accept", filePickerSettings.getMimeType());
                 tag(tag, "data-input", filePickerSettings.getShowInput());
                 tag(tag, "data-icon", filePickerSettings.getShowIcon());
@@ -111,35 +193,26 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     }
 
     protected void renderHeadConsistentLook(IHeaderResponse response) {
-        // response.render(JavaScriptHeaderItem.forReference(FileStyle.FILESTYLE_JS));
+        if (!getFilePickerSettings().isConsistentLook()) {
+            return;
+        }
+
+        response.render(JavaScriptHeaderItem.forReference(FileStyle.FILESTYLE_JS));
     }
 
     protected void renderHeadClientSideValidation(IHeaderResponse response) {
+        if (!getFilePickerSettings().isClientSideTypeCheck()) {
+            return;
+        }
+
         // also imports JQueryValidation.VALIDATION_JS, JQueryForm.FORM_JS and JqueryUI
         response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_ADDITIONAL_JS));
 
         // localisation
         response.render(JavaScriptHeaderItem.forReference(JQueryValidation.VALIDATION_LOCALIZATION_JS));
 
-        // clear
-        // response.render(JavaScriptHeaderItem.forReference(FILEPICKER_JS));
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("function clearFileInput(compid) {").append(";\n");
-        sb.append("var comp = $('#'+compid)").append(";\n");
-        sb.append("comp.removeAttr('value')").append(";\n");
-        // sb.append("comp.removeAttr('aria-invalid')").append(";\n");
-        // sb.append("comp.attr('class', 'filestyle')").append(";\n");
-        // sb.append("var x = comp.clone()").append(";\n");
-        // sb.append("comp.replaceWith( x )").append(";\n");
-        // sb.append("comp.parent().find('.error').remove()").append(";\n");
-        sb.append("}");
-        response.render(JavaScriptHeaderItem.forScript(sb.toString(), "s564879"));
-
-        // validation inject
-        FilePickerSettings filePickerSettings = FilePickerSettings.class.cast(getComponentSettings());
+        FilePickerSettings filePickerSettings = getFilePickerSettings();
         if (filePickerSettings.getMimeType() != null) {
-
             String formId = getComponent().getForm().getMarkupId();
             StringBuilder initScript = new StringBuilder();
             initScript.append("$(\"#" + formId + "\").validate();").append("\n");
@@ -149,51 +222,46 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         }
     }
 
-    public FileItemFactory getFileItemFactory() {
-        if (fileItemFactory == null) {
-            fileItemFactory = new DiskFileItemFactory(new FileCleaner());
-        }
-        return this.fileItemFactory;
-    }
-
-    public void setFileItemFactory(FileItemFactory fileItemFactory) {
-        this.fileItemFactory = fileItemFactory;
-    }
+    // public FileItemFactory getFileItemFactory() {
+    // if (fileItemFactory == null) {
+    // fileItemFactory = new DiskFileItemFactory(new FileCleaner());
+    // }
+    // return this.fileItemFactory;
+    // }
+    //
+    // public void setFileItemFactory(FileItemFactory fileItemFactory) {
+    // this.fileItemFactory = fileItemFactory;
+    // }
 
     @Override
     public void onBeforeSubmit() {
-        FileUpload fileUpload = getComponent().getFileUpload();
-        Class<?> type = type(propertyPath);
-        Object parentObject = parentModel.getObject();
-        if (FileUpload.class.isAssignableFrom(type)) {
-            set(parentObject, (FileUpload) propertyPath, fileUpload);
-            return;
+        List<FileUpload> fileUploads = getComponent().getFileUploads();
+        System.out.println("onBeforeSubmit " + fileUploads);
+        if (fileUploads == null || fileUploads.size() == 0) {
+            hook.clear(hook.getCurrentFilenames());
+        } else {
+            hook.write(fileUploads);
         }
-        if (File.class.isAssignableFrom(type)) {
-            try {
-                set(parentObject, (File) propertyPath, fileUpload == null ? null : fileUpload.writeToTempFile());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            return;
+    }
+
+    protected String getInitialValue() {
+        Collection<String> currentFilenames = hook.getCurrentFilenames();
+        if (currentFilenames == null || currentFilenames.size() == 0) {
+            return null;
         }
-        if (byte[].class.isAssignableFrom(type)) {
-            set(parentObject, (byte[]) propertyPath, fileUpload == null ? null : fileUpload.getBytes());
-            return;
+        StringBuilder sb = new StringBuilder();
+        for (String currentFilename : currentFilenames) {
+            sb.append(currentFilename).append(", ");
         }
-        if (InputStream.class.isAssignableFrom(type)) {
-            try {
-                set(parentObject, (InputStream) propertyPath, fileUpload == null ? null : fileUpload.getInputStream());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            return;
-        }
-        throw new UnsupportedOperationException("data transport");
+        return sb.deleteCharAt(sb.length() - 1).deleteCharAt(sb.length() - 1).toString();
     }
 
     @Override
     public void onAfterSubmit() {
         // nothing to do
+    }
+
+    public FilePickerSettings getFilePickerSettings() {
+        return FilePickerSettings.class.cast(getComponentSettings());
     }
 }

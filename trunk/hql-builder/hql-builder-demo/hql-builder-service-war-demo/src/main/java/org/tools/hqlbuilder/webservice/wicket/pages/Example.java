@@ -1,20 +1,51 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Example implements Serializable {
     private static final long serialVersionUID = 8505173683889617800L;
 
+    protected Serializable id;
+
     public static enum ExampleOpts {
         OPT1, OPT2, OPT3, OPT4, OPT5;
     }
 
+    public static class MemFile implements Serializable {
+        private static final long serialVersionUID = -6191656254956606060L;
+
+        protected String filename;
+
+        protected byte[] data;
+
+        public String getFilename() {
+            return this.filename;
+        }
+
+        public byte[] getData() {
+            return this.data;
+        }
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+        public void setData(byte[] data) {
+            this.data = data;
+        }
+
+        @Override
+        public String toString() {
+            return filename + ":" + data.length;
+        }
+    }
+
     private List<ExampleOpts> multi;
 
-    private byte[] data;
+    private List<MemFile> files = new ArrayList<MemFile>();
 
     private String hidden1 = "hid";
 
@@ -22,9 +53,9 @@ public class Example implements Serializable {
 
     private String password = null;
 
-    private String text = "test@gmail.com";
+    private String email = "test@gmail.com";
 
-    private String email = "testString";
+    private String text;
 
     private String longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.";
 
@@ -248,29 +279,37 @@ public class Example implements Serializable {
         this.byter = byter;
     }
 
-    public byte[] getData() {
-        return this.data;
+    public List<ExampleOpts> getMulti() {
+        return this.multi;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setMulti(List<ExampleOpts> multi) {
+        this.multi = multi;
     }
 
     @Override
     public String toString() {
-        return "Example [data=" + Arrays.toString(this.data) + ", hidden1=" + this.hidden1 + ", hidden2=" + this.hidden2 + ", password="
-                + this.password + ", text=" + this.text + ", email=" + this.email + ", longText?=" + (this.longText != null) + ", radio="
-                + this.radio + ", combo=" + this.combo + ", check=" + this.check + ", date1=" + this.date1 + ", date2=" + this.date2 + ", integerv="
-                + this.integerv + ", longv=" + this.longv + ", shortv=" + this.shortv + ", doublev=" + this.doublev + ", floatv=" + this.floatv
-                + ", bytev=" + this.bytev + ", integerr=" + this.integerr + ", longr=" + this.longr + ", shortr=" + this.shortr + ", doubler="
-                + this.doubler + ", floatr=" + this.floatr + ", byter=" + this.byter + "]";
+        return "Example[" + hashCode() + ",id=" + id + ",files=" + getFiles() + ", hidden1=" + this.hidden1 + ", hidden2=" + this.hidden2
+                + ", password=" + this.password + ", text=" + this.text + ", email=" + this.email + ", longText?=" + (this.longText != null)
+                + ", radio=" + this.radio + ", combo=" + this.combo + ", check=" + this.check + ", date1=" + this.date1 + ", date2=" + this.date2
+                + ", integerv=" + this.integerv + ", longv=" + this.longv + ", shortv=" + this.shortv + ", doublev=" + this.doublev + ", floatv="
+                + this.floatv + ", bytev=" + this.bytev + ", integerr=" + this.integerr + ", longr=" + this.longr + ", shortr=" + this.shortr
+                + ", doubler=" + this.doubler + ", floatr=" + this.floatr + ", byter=" + this.byter + ", multi=" + this.multi + "]";
     }
 
-    protected List<ExampleOpts> getMulti() {
-        return this.multi;
+    public List<MemFile> getFiles() {
+        return this.files;
     }
 
-    protected void setMulti(List<ExampleOpts> multi) {
-        this.multi = multi;
+    public void setFiles(List<MemFile> files) {
+        this.files = files;
+    }
+
+    public Serializable getId() {
+        return this.id;
+    }
+
+    public void setId(Serializable id) {
+        this.id = id;
     }
 }

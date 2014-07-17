@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
 
 import ch.lambdaj.Lambda;
@@ -28,5 +31,17 @@ public class WebHelper {
 
     public static <A> void set(Object bean, A arg, Object value) {
         PropertyAccessorFactory.forBeanPropertyAccess(bean).setPropertyValue(Lambda.argument(arg).getInkvokedPropertyName(), value);
+    }
+
+    public static <T> IModel<T> model(Class<T> modelType) {
+        return model(create(modelType));
+    }
+
+    public static <T> T create(Class<T> modelType) {
+        return BeanUtils.instantiate(modelType);
+    }
+
+    public static <T> IModel<T> model(T model) {
+        return new CompoundPropertyModel<T>(model);
     }
 }
