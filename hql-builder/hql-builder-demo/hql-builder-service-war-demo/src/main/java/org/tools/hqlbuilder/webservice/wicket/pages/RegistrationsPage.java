@@ -13,7 +13,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDateTime;
@@ -24,6 +23,7 @@ import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
 
@@ -119,7 +119,7 @@ public class RegistrationsPage extends BasePage {
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             @Override
-            public void submit(IModel<Registration> model) {
+            public void submitModel(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setVerification(new LocalDateTime());
                 Serializable id = hqlWebClient.save(object);
@@ -137,19 +137,13 @@ public class RegistrationsPage extends BasePage {
                     target.add(table);
                 }
             }
-
-            @Override
-            public boolean isCancelable() {
-                return true;
-            }
         };
 
         return formActions;
     }
 
     protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
-        formPanel = new FormPanel<Registration>("registrationform", Model.of(new Registration()), formActions);
-        formPanel.getFormSettings().setLiveValidation(true);
+        formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setLiveValidation(true).setAjax(true));
         formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
         formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
         formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));

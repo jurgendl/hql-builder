@@ -15,11 +15,8 @@ public class FormSettings implements Serializable {
     /** add required to form elements */
     protected boolean clientsideRequiredValidation = true;
 
-    /** fixed ids */
-    protected boolean inheritId = false;
-
     /** activate ajax on form (per field live validation, submit by ajax) */
-    protected boolean ajax;
+    protected boolean ajax = false;
 
     /** show label */
     protected boolean showLabel = true;
@@ -36,13 +33,12 @@ public class FormSettings implements Serializable {
     /** requires ajax = true */
     protected boolean liveValidation = false;
 
-    public FormSettings(boolean ajax) {
-        // this.inheritId = inheritId;
-        this.ajax = ajax;
-    }
+    protected boolean cancelable = false;
 
-    public boolean isInheritId() {
-        return this.inheritId;
+    protected boolean inheritId = false;
+
+    public FormSettings() {
+        super();
     }
 
     public boolean isShowLabel() {
@@ -165,5 +161,28 @@ public class FormSettings implements Serializable {
 
     protected boolean skipForExport(String propertyName) {
         return propertyName != null;
+    }
+
+    public FormSettings setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
+        return this;
+    }
+
+    public boolean isCancelable() {
+        return this.cancelable;
+    }
+
+    public FormSettings setAjax(boolean ajax) {
+        this.ajax = ajax;
+        return this;
+    }
+
+    public boolean isInheritId() {
+        return this.inheritId;
+    }
+
+    public FormSettings setInheritId(boolean inheritId) {
+        this.inheritId = inheritId;
+        return this;
     }
 }

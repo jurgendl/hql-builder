@@ -6,9 +6,11 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 /**
  * requires twitter bootstrap
+ *
+ * @see http://dev.tudosobreweb.com.br/bootstrap-filestyle/
  */
 public class FileStyle {
     public static JavaScriptResourceReference FILESTYLE_JS = new JavaScriptResourceReference(WicketJQueryRoot.class,
             "ui/filestyle/bootstrap-filestyle.js").addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings()
-            .getJQueryReference());
+                    .getJQueryReference());
 }

@@ -1,15 +1,3 @@
-._formrow {
-	height: 38px;
-}
-
-._likeinput {
-	height: 24px;
-}
-
-._forminput {
-	height: 26px;
-}
-
 form .ui-datepicker-append {
 	color: @form_label;
 	font-style: bold;
@@ -22,12 +10,15 @@ form input[type='radio'],input[type='checkbox'] {
 	vertical-align: middle;
 }
 
+.likeinput,
 form output,
 form select,
 form textarea,
 form input[type='text'],input[type='search'],input[type='password'],input[type='date'],input[type='datetime-local'],input[type='datetime'],input[type='email'],input[type='month'],input[type='number'],input[type='tel'],input[type='time'],input[type='url'],input[type='week'] {
 	color: @form_element;
 	border: 1px solid @form_element_border;
+	background-color: @form_element_background;
+	font: 12px, Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif;
 	padding: 3px 10px 3px 10px;
 	margin: 0px 0px 0px 0px;
 	-moz-border-radius: 5px;

@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -34,7 +33,6 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
@@ -42,7 +40,7 @@ import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
 
@@ -50,138 +48,158 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected FormSettings formSettings;
 
-    protected FormActions<T> actions;
+    protected FormActions<T> formActions;
 
     protected Form<T> form;
 
-    public static <T> IModel<T> newFormModel(Class<T> modelType) {
-        return newFormModel(BeanUtils.instantiate(modelType));
-    }
-
-    public static <T> IModel<T> newFormModel(T model) {
-        return new CompoundPropertyModel<T>(model);
-    }
-
-    public FormPanel(String id, IModel<T> model, FormActions<T> actions) {
-        super(id, model);
-        formSettings = new FormSettings(actions.isAjax());
-        createForm(id, model, actions);
-    }
-
-    public FormSettings getFormSettings() {
-        return this.formSettings;
-    }
-
-    public Form<T> getForm() {
-        return this.form;
-    }
-
-    @SuppressWarnings("unchecked")
-    public IModel<T> getFormModel() {
-        return (IModel<T>) getDefaultModel();
-    }
-
-    protected FormActions<T> getActions() {
-        return this.actions;
-    }
-
-    protected void createForm(String id, IModel<T> model, FormActions<T> formactions) {
+    public FormPanel(String id) {
+        super(id);
         setOutputMarkupPlaceholderTag(true);
         setRenderBodyOnly(false);
         setOutputMarkupId(true);
+    }
 
-        this.actions = formactions;
-        this.form = new Form<T>(FORM, model) {
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void onSubmit() {
-                onBeforeSubmit();
-                super.onSubmit();
-                getActions().submit((IModel<T>) getDefaultModel());
-                onAfterSubmit();
+    public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
+        this(id);
+        setFormActions(formActions);
+        setFormSettings(formSettings);
+    }
+
+    protected FormActions<T> getFormActions() {
+        if (formActions == null) {
+            throw new RuntimeException("FormActions required");
+        }
+        return this.formActions;
+    }
+
+    public void setFormActions(FormActions<T> formActions) {
+        if (formActions == null) {
+            throw new RuntimeException("FormActions required");
+        }
+        this.formActions = formActions;
+    }
+
+    public FormSettings getFormSettings() {
+        if (formSettings == null) {
+            throw new RuntimeException("FormSettings required");
+        }
+        return this.formSettings;
+    }
+
+    public void setFormSettings(FormSettings formSettings) {
+        if (formSettings == null) {
+            throw new RuntimeException("FormSettings required");
+        }
+        this.formSettings = formSettings;
+    }
+
+    public Form<T> getForm() {
+        if (form == null) {
+            getFormActions();
+            getFormSettings();
+            IModel<T> formModel = new LoadableDetachableModel<T>() {
+                @Override
+                protected T load() {
+                    return getFormActions().loadObject();
+                }
+            };
+            this.form = new Form<T>(FORM, formModel) {
+                @Override
+                protected void onSubmit() {
+                    System.out.println("SUBMITTING");
+                    onBeforeSubmit();
+                    getFormActions().submitModel(getFormModel());
+                    onAfterSubmit();
+                }
+            };
+
+            if (getFormSettings().isInheritId()) {
+                form.setMarkupId(form.getId());
             }
-        };
-        if (formSettings.inheritId) {
-            form.setMarkupId(id);
+
+            form.setOutputMarkupPlaceholderTag(true);
+            form.setRenderBodyOnly(false);
+            form.setOutputMarkupId(true);
+
+            add(form);
+
+            WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
+            form.add(formBody);
+            repeater = createRepeater();
+            formBody.add(repeater);
+
+            ResourceModel submitModel = new ResourceModel(SUBMIT_LABEL);
+            ResourceModel resetModel = new ResourceModel(RESET_LABEL);
+            ResourceModel cancelModel = new ResourceModel(CANCEL_LABEL);
+
+            Component submit;
+
+            if (getFormSettings().isAjax()) {
+                submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
+                        getFormActions().afterSubmit(target, (Form<T>) f, getFormModel());
+                    }
+
+                    @Override
+                    protected void onAfterRender() {
+                        super.onAfterRender();
+                        // possible fix ajax validation on password fields (unsafe?)
+                        // for now validation on password fields is disabled
+                        // pass.setResetPassword(false);
+                    }
+
+                    @Override
+                    protected void onBeforeRender() {
+                        super.onBeforeRender();
+                        // possible fix ajax validation on password fields (unsafe?)
+                        // for now validation on password fields is disabled
+                        // pass.setResetPassword(true);
+                    }
+                };
+                submit.setDefaultModel(submitModel);
+            } else {
+                submit = new Button(FORM_SUBMIT, submitModel);
+            }
+
+            Button reset = new Button(FORM_RESET, resetModel);
+
+            // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons
+            Component cancel;
+            if (getFormSettings().isAjax()) {
+                cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
+                        getFormActions().afterCancel(target, (Form<T>) f, getFormModel());
+                    }
+                };
+                cancel.setDefaultModel(cancelModel);
+                ((AjaxSubmitLink) cancel).setDefaultFormProcessing(false);
+            } else {
+                cancel = new Button(FORM_CANCEL, cancelModel);
+                ((Button) cancel).setDefaultFormProcessing(false);
+            }
+            cancel.setVisible(getFormSettings().isCancelable());
+
+            if (getFormSettings().isInheritId()) {
+                submit.setMarkupId(getId() + "." + FORM_SUBMIT);
+                reset.setMarkupId(getId() + "." + FORM_RESET);
+                cancel.setMarkupId(getId() + "." + FORM_CANCEL);
+            }
+
+            WebMarkupContainer formActionsContainer = new WebMarkupContainer(FORM_ACTIONS);
+            form.add(formActionsContainer);
+            formActionsContainer.add(submit);
+            formActionsContainer.add(reset);
+            formActionsContainer.add(cancel);
         }
+        return form;
+    }
 
-        form.setOutputMarkupPlaceholderTag(true);
-        form.setRenderBodyOnly(false);
-        form.setOutputMarkupId(true);
-
-        add(form);
-
-        WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
-        form.add(formBody);
-        repeater = createRepeater();
-        formBody.add(repeater);
-
-        ResourceModel submitModel = new ResourceModel(SUBMIT_LABEL);
-        ResourceModel resetModel = new ResourceModel(RESET_LABEL);
-        ResourceModel cancelModel = new ResourceModel(CANCEL_LABEL);
-
-        Component submit;
-
-        if (formSettings.ajax) {
-            submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
-                @SuppressWarnings("unchecked")
-                @Override
-                protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
-                    FormPanel.this.actions.afterSubmit(target, form, (IModel<T>) getDefaultModel());
-                }
-
-                @Override
-                protected void onAfterRender() {
-                    super.onAfterRender();
-                    // possible fix ajax validation on password fields (unsafe?)
-                    // for now validation on password fields is disabled
-                    // pass.setResetPassword(false);
-                }
-
-                @Override
-                protected void onBeforeRender() {
-                    super.onBeforeRender();
-                    // possible fix ajax validation on password fields (unsafe?)
-                    // for now validation on password fields is disabled
-                    // pass.setResetPassword(true);
-                }
-            };
-            submit.setDefaultModel(submitModel);
-        } else {
-            submit = new Button(FORM_SUBMIT, submitModel);
-        }
-
-        Button reset = new Button(FORM_RESET, resetModel);
-
-        // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons
-        Component cancel;
-        if (formSettings.ajax) {
-            cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
-                @SuppressWarnings("unchecked")
-                @Override
-                protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
-                    FormPanel.this.actions.afterCancel(target, form, (IModel<T>) getDefaultModel());
-                }
-            };
-            cancel.setDefaultModel(cancelModel);
-            ((AjaxSubmitLink) cancel).setDefaultFormProcessing(false);
-        } else {
-            cancel = new Button(FORM_CANCEL, cancelModel);
-            ((Button) cancel).setDefaultFormProcessing(false);
-        }
-        cancel.setVisible(formactions.isCancelable());
-
-        if (formSettings.inheritId) {
-            submit.setMarkupId(id + "." + FORM_SUBMIT);
-            reset.setMarkupId(id + "." + FORM_RESET);
-            cancel.setMarkupId(id + "." + FORM_CANCEL);
-        }
-
-        WebMarkupContainer formActions = new WebMarkupContainer(FORM_ACTIONS);
-        form.add(formActions);
-        formActions.add(submit);
-        formActions.add(reset);
-        formActions.add(cancel);
+    public IModel<T> getFormModel() {
+        return getForm().getModel();
     }
 
     @SuppressWarnings("rawtypes")
@@ -227,7 +245,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, Rowpanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> void setupRequiredBehavior(
             Rowpanel row) {
         ComponentType component = row.getComponent();
-        if (formSettings.isAjax() && formSettings.isLiveValidation() && !(component instanceof PasswordTextField)
+        if (getFormSettings().isAjax() && getFormSettings().isLiveValidation() && !(component instanceof PasswordTextField)
                 && !(component instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
             component.add(setupDynamicRequiredBehavior(row));
         } else {
@@ -241,23 +259,23 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             @Override
             protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
                 ComponentType component = row.getComponent();
-                component.add(new CssClassNameRemover(formSettings.validClass));
-                component.add(new CssClassNameAppender(formSettings.invalidClass));
+                component.add(new CssClassNameRemover(getFormSettings().validClass));
+                component.add(new CssClassNameAppender(getFormSettings().invalidClass));
                 ajaxRequestTarget.add(component, row.getFeedback());
             }
 
             @Override
             protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
                 ComponentType component = row.getComponent();
-                component.add(new CssClassNameRemover(formSettings.invalidClass));
-                component.add(new CssClassNameAppender(formSettings.validClass));
+                component.add(new CssClassNameRemover(getFormSettings().invalidClass));
+                component.add(new CssClassNameAppender(getFormSettings().validClass));
                 ajaxRequestTarget.add(component, row.getFeedback());
             }
         };
     }
 
     protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupStaticRequiredBehavior(
-            @SuppressWarnings("unused") RowPanel row) {
+            RowPanel row) {
         return new Behavior() {
             @SuppressWarnings("rawtypes")
             @Override
@@ -265,7 +283,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 Response response = c.getResponse();
                 StringBuffer asterisktHtml = new StringBuffer(200);
                 if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
-                    asterisktHtml.append("<span class=\"fontawesome-asterisk " + formSettings.requiredMarkerClass + "\"/>");
+                    asterisktHtml.append("<span class=\"fontawesome-asterisk " + getFormSettings().getRequiredMarkerClass() + "\"/>");
                 }
                 response.write(asterisktHtml);
             }
@@ -273,7 +291,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected <F extends FormComponent<?>> void setupId(String property, F component) {
-        if (formSettings.inheritId) {
+        if (getFormSettings().isInheritId()) {
             component.setMarkupId(property);
         }
     }
@@ -441,7 +459,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             try {
                 return getString(getPropertyName());
             } catch (MissingResourceException ex) {
-                logger.error("no translation for " + getPropertyName());
+                logger.info("no translation for " + getPropertyName());
                 return "[" + getPropertyName() + "]";
             }
         }
@@ -450,7 +468,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             try {
                 return getString(PLACEHOLDER);
             } catch (MissingResourceException ex) {
-                logger.error("no translation for " + PLACEHOLDER);
+                logger.info("no translation for " + PLACEHOLDER);
                 return null;
             }
         }
@@ -532,65 +550,65 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public <F> HiddenFieldPanel<F> addHidden(F propertyPath) {
-        return addDefaultRow(new HiddenFieldPanel<F>(getDefaultModel(), propertyPath));
+        return addDefaultRow(new HiddenFieldPanel<F>(getFormModel(), propertyPath));
     }
 
     public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
-        return addDefaultRow(new ColorPickerPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new ColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new RadioButtonsPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+        return addDefaultRow(new RadioButtonsPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath, FormElementSettings componentSettings,
             ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new MultiSelectCheckBoxPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+        return addDefaultRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new DropDownPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings, choices, renderer));
+        return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new TextFieldPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new TextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
-        return addDefaultRow(new TextAreaPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
-        return addDefaultRow(new NumberFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new NumberFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
-        return addDefaultRow(new RangeFieldPanel<N>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new RangeFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new CheckBoxPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new CheckBoxPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new EmailTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new EmailTextFieldPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new PasswordTextFieldPanel(getDefaultModel(), propertyPath, formSettings, componentSettings));
+        return addDefaultRow(new PasswordTextFieldPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     /**
      * also "form.setMultiPart(true);" and "form.setMaxSize(Bytes.megabytes(1));"
      */
-    public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings) {
-        return addCustomRow(new FilePickerPanel<F>(getDefaultModel(), propertyPath, formSettings, componentSettings));
+    public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings, FilePickerHook hook) {
+        return addCustomRow(new FilePickerPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, hook));
     }
 
     @SuppressWarnings("unchecked")
     public <F> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
-        return addDefaultRow(new DatePickerPanel<F>(getDefaultModel(), propertyPath, dateConverter, formSettings, componentSettings));
+        return addDefaultRow(new DatePickerPanel<F>(getFormModel(), propertyPath, dateConverter, getFormSettings(), componentSettings));
     }
 
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {

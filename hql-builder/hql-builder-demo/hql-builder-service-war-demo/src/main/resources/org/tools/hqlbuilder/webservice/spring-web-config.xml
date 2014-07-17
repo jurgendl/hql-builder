@@ -42,5 +42,8 @@
 		</property>
 		<property name="resteasyProvidersBean" ref="resteasyProvidersBean"/>
 	</bean>
+	
+	<bean id="exampleService" class="org.tools.hqlbuilder.webservice.services.ServiceImpl" scope="singleton" lazy-init="false">
+	</bean>
 
 </beans>

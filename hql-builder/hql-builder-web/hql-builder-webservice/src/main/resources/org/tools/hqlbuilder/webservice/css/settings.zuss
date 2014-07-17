@@ -31,6 +31,7 @@
 
 @form_label: #919191;
 
+@form_element: #000000;
 @form_element_border: #cccccc;
 @form_element_border_gradient: #ffffff;
 @form_element_background: #ffffff;

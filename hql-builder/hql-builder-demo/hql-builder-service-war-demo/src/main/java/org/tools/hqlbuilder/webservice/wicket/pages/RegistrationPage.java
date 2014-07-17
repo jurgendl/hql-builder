@@ -5,7 +5,6 @@ import static org.tools.hqlbuilder.webservice.wicket.WebHelper.proxy;
 import java.io.Serializable;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDateTime;
@@ -16,6 +15,7 @@ import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 
 @SuppressWarnings("serial")
 @MountedPage("/form/registration")
@@ -31,7 +31,7 @@ public class RegistrationPage extends BasePage {
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             @Override
-            public void submit(IModel<Registration> model) {
+            public void submitModel(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setPassword(passwordEncoder.encode(object.getPassword()));
                 object.setVerification(new LocalDateTime());
@@ -39,13 +39,8 @@ public class RegistrationPage extends BasePage {
                 object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
             }
-
-            @Override
-            public boolean isAjax() {
-                return false;
-            }
         };
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", Model.of(new Registration()), formActions);
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings());
         add(formPanel);
 
         Registration proxy = proxy(Registration.class);

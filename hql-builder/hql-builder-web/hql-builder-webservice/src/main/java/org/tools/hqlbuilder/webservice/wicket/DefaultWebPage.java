@@ -35,8 +35,10 @@ public class DefaultWebPage extends WebPage {
         addComponents();
     }
 
+    boolean debugbar = false;
+
     protected void addComponents() {
-        if (false && WicketApplication.get().usesDevelopmentConfig()) {
+        if (debugbar && WicketApplication.get().usesDevelopmentConfig()) {
             add(new DebugBar("debug"));
         } else {
             add(new EmptyPanel("debug").setVisible(false));
