@@ -11,10 +11,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<import resource="classpath:org/tools/hqlbuilder/test/properties.xml"/>
-
-	<!-- hibernate 4.x -->
-	<import resource="classpath:org/tools/hqlbuilder/service/spring-service4-context.xml"/>
+	<import resource="classpath:org/tools/hqlbuilder/service/demo/spring-service-demo-context.xml" />
 
 	<bean id="hqlServiceClient" class="org.tools.hqlbuilder.client.HqlServiceClientImpl" scope="singleton" lazy-init="false">
 		<property name="hqlService" ref="hqlService"/>

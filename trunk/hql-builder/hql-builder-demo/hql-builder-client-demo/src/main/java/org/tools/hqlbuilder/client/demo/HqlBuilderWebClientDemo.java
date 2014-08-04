@@ -23,12 +23,12 @@ import org.tools.hqlbuilder.demo.Lang;
 import org.tools.hqlbuilder.demo.Member;
 import org.tools.hqlbuilder.demo.User;
 
-public class HqlBuilder {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilder.class);
+public class HqlBuilderWebClientDemo {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderWebClientDemo.class);
 
     public static void main(final String[] args) {
         try {
-            new HqlBuilder(args);
+            new HqlBuilderWebClientDemo(args);
         } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
             ex.printStackTrace(System.out);
             try {
@@ -43,7 +43,7 @@ public class HqlBuilder {
         }
     }
 
-    public HqlBuilder(final String[] args) throws Exception {
+    public HqlBuilderWebClientDemo(final String[] args) throws Exception {
         init(args);
     }
 
@@ -62,7 +62,7 @@ public class HqlBuilder {
 
     protected ConfigurableApplicationContext getContext() {
         if (context == null) {
-            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/demo/spring-http-client-config.xml");
+            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/demo/spring-http-client-demo-config.xml");
         }
         return context;
     }
