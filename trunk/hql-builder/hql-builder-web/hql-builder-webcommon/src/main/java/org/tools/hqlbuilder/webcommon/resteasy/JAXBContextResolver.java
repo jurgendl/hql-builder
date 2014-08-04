@@ -10,7 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 /**
- * <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder.test"/>
+ * <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder..."/>
  */
 @Provider
 @Produces({ "text/*+xml", "application/*+xml" })

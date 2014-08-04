@@ -23,7 +23,7 @@
 	</bean>
 
 	<bean id="jaxbContextResolver" class="org.tools.hqlbuilder.webcommon.resteasy.JAXBContextResolver">
-		<constructor-arg><list><value>org.tools.hqlbuilder.test</value></list></constructor-arg>
+		<constructor-arg><list><value>org.tools.hqlbuilder.demo</value></list></constructor-arg>
 	</bean>
 
 	<bean id="resteasyProvidersBean" class="org.tools.hqlbuilder.webcommon.ResteasyProvidersBean" init-method="register" scope="singleton" lazy-init="false">
