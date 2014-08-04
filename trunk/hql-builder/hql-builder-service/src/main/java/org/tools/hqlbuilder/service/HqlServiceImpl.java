@@ -247,7 +247,9 @@ public class HqlServiceImpl implements HqlService {
                     }
                     zf.close();
                 }
-                modelVersion.toString();
+                if (modelVersion == null) {
+                    modelVersion = "";
+                }
             } catch (Exception ex) {
                 modelVersion = "";
             }

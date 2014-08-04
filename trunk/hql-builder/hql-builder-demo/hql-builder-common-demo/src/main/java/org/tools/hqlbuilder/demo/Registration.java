@@ -9,11 +9,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.LocalDateTime;
-import org.tools.hqlbuilder.common.EntityExtAdapter;
+import org.tools.hqlbuilder.common.EntityERHAdapter;
 
 @XmlRootElement
 @Entity
-public class Registration extends EntityExtAdapter implements RegistrationProperties {
+public class Registration extends EntityERHAdapter implements RegistrationProperties {
     private static final long serialVersionUID = -78719256082799222L;
 
     @Column(updatable = false)
