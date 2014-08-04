@@ -8,12 +8,12 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.tools.hqlbuilder.common.EntityExtAdapter;
+import org.tools.hqlbuilder.common.EntityERHAdapter;
 
 @XmlRootElement
 @Entity
 @Table(name = "authorities")
-public class Authority extends EntityExtAdapter implements AuthorityProperties {
+public class Authority extends EntityERHAdapter implements AuthorityProperties {
     private static final long serialVersionUID = -5692615727091910274L;
 
     @NotNull

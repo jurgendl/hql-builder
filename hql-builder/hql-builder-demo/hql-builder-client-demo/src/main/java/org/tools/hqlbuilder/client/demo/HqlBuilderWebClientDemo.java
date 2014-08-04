@@ -62,7 +62,7 @@ public class HqlBuilderWebClientDemo {
 
     protected ConfigurableApplicationContext getContext() {
         if (context == null) {
-            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/demo/spring-http-client-demo-config.xml");
+            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/demo/spring-http-webclient-demo-config.xml");
         }
         return context;
     }

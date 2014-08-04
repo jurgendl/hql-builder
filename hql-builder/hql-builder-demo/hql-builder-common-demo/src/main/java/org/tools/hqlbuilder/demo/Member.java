@@ -8,22 +8,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.tools.hqlbuilder.common.EntityI;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
+import org.tools.hqlbuilder.common.ERHAdapter;
 
 @XmlRootElement
 @Entity
 @Table(name = "group_members")
-public class Member implements EntityI, MemberProperties {
+public class Member extends ERHAdapter implements EntityI, MemberProperties {
     private static final long serialVersionUID = -6012619912508524393L;
-
-    @Transient
-    protected transient final EntityRelationHelper erh;
 
     @Version
     private Integer version;

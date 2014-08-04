@@ -3,11 +3,11 @@ package org.tools.hqlbuilder.demo;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.tools.hqlbuilder.common.EntityExtAdapter;
+import org.tools.hqlbuilder.common.EntityERHAdapter;
 
 @XmlRootElement
 @Entity
-public class Lang extends EntityExtAdapter implements LangProperties {
+public class Lang extends EntityERHAdapter implements LangProperties {
     private static final long serialVersionUID = 762036304624420098L;
 
     private String code;
