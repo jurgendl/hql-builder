@@ -4,7 +4,7 @@ body {
 	/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
 	/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
 	/*GillSans, Calibri, Trebuchet, sans-serif*/
-	font: 12px, Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif;
+	font: 12px, Baskerville, ‘Times New Roman’, Times, serif;
 	background-color: #d9dee2;
 	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
 		to(#d9dee2));

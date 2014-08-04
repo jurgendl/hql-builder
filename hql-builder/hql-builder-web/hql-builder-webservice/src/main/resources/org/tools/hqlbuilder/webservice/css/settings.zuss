@@ -73,15 +73,19 @@
 @form_required: #000000;
 @form_required_border: #cccccc;
 @form_required_background: #ffffff;
-@form_error: #000000;
-@form_error_border: #cccccc;
-@form_error_background: #ffffff;
+
+@form_error: #cd0a0a;
+@form_error_border: #cd0a0a;
+@form_error_background: #fef1ec;
+
 @form_required: #000000;
 @form_required_border: #cccccc;
 @form_required_background: #ffffff;
+
 @form_valid: #000000;
 @form_valid_border: #cccccc;
 @form_valid_background: #ffffff;
+
 @form_invalid: #000000;
 @form_invalid_border: #rgb(205, 10, 10);
 @form_invalid_background: rgb(254, 241, 236);
