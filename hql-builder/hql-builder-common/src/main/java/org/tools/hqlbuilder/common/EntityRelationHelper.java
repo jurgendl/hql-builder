@@ -8,13 +8,20 @@ import java.util.SortedSet;
 
 import javax.persistence.Transient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SuppressWarnings("unchecked")
 public class EntityRelationHelper {
     @Transient
     protected final transient Object bean;
 
+    @Transient
+    protected final transient Logger logger;
+
     public EntityRelationHelper(Object bean) {
         this.bean = bean;
+        this.logger = LoggerFactory.getLogger(toString());
     }
 
     @Override
@@ -40,6 +47,7 @@ public class EntityRelationHelper {
 
     public <C> void mmAdd(String property, C target, String backprop) {
         if (target == null) {
+            logger.warn("not permitted to mm.add " + property + " <null>");
             return;
         }
         getInstance().mmAdd(bean, property, target, backprop);
@@ -47,6 +55,7 @@ public class EntityRelationHelper {
 
     public <C> void mmRemove(String property, C target, String backprop) {
         if (target == null) {
+            logger.warn("not permitted to mm.remove " + property + " <null>");
             return;
         }
         getInstance().mmRemove(bean, property, target, backprop);
@@ -54,6 +63,7 @@ public class EntityRelationHelper {
 
     public <C> void mmSet(String property, Collection<C> targets, String backprop) {
         if (targets == null) {
+            logger.warn("not permitted to mm.clear " + property + " <null>");
             return;
         }
         getInstance().mmReplace(bean, property, targets, backprop);
@@ -65,6 +75,7 @@ public class EntityRelationHelper {
 
     public <C> void omRemove(String property, C target, String backprop) {
         if (target == null) {
+            logger.warn("not permitted to om.remove " + property + " <null>");
             return;
         }
         getInstance().omRemove(bean, property, target, backprop);
@@ -72,6 +83,7 @@ public class EntityRelationHelper {
 
     public <C> void omAdd(String property, C target, String backprop) {
         if (target == null) {
+            logger.warn("not permitted to om.add " + property + " <null>");
             return;
         }
         getInstance().omAdd(bean, property, target, backprop);
@@ -79,6 +91,7 @@ public class EntityRelationHelper {
 
     public <C> void omSet(String property, Collection<C> targets, String backprop) {
         if (targets == null) {
+            logger.warn("not permitted to om.set " + property + " <null>");
             return;
         }
         getInstance().omReplace(bean, property, targets, backprop);
@@ -98,6 +111,7 @@ public class EntityRelationHelper {
 
     public <C> void mmAdd(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to mm.add " + property + " <null>");
             return;
         }
         getInstance().mmAdd(bean, property, target);
@@ -105,6 +119,7 @@ public class EntityRelationHelper {
 
     public <C> void mmRemove(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to mm.remove " + property + " <null>");
             return;
         }
         getInstance().mmRemove(bean, property, target);
@@ -112,6 +127,7 @@ public class EntityRelationHelper {
 
     public <C> void mmSet(String property, Collection<C> targets) {
         if (targets == null) {
+            logger.warn("not permitted to mm.set " + property + " <null>");
             return;
         }
         getInstance().mmReplace(bean, property, targets);
@@ -123,6 +139,7 @@ public class EntityRelationHelper {
 
     public <C> void omRemove(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to om.remove " + property + " <null>");
             return;
         }
         getInstance().omRemove(bean, property, target);
@@ -130,6 +147,7 @@ public class EntityRelationHelper {
 
     public <C> void omAdd(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to om.add " + property + " <null>");
             return;
         }
         getInstance().omAdd(bean, property, target);
@@ -137,6 +155,7 @@ public class EntityRelationHelper {
 
     public <C> void omSet(String property, Collection<C> targets) {
         if (targets == null) {
+            logger.warn("not permitted to om.set " + property + " <null>");
             return;
         }
         getInstance().omReplace(bean, property, targets);
@@ -144,6 +163,7 @@ public class EntityRelationHelper {
 
     public <C> void add(String property, C target, String backprop) {
         if (target == null) {
+            logger.warn("not permitted to add " + property + " <null>");
             return;
         }
         getInstance().add(bean, property, target, backprop);
@@ -155,6 +175,7 @@ public class EntityRelationHelper {
 
     public <C> void remove(String property, C target, String backprop) {
         if (target == null) {
+            logger.warn("not permitted to remove " + property + " <null>");
             return;
         }
         getInstance().remove(bean, property, target, backprop);
@@ -162,6 +183,7 @@ public class EntityRelationHelper {
 
     public <C> void replace(String property, Collection<C> targets, String backprop) {
         if (targets == null) {
+            logger.warn("not permitted to replace " + property + " <null>");
             return;
         }
         getInstance().replace(bean, property, targets, backprop);
@@ -177,6 +199,7 @@ public class EntityRelationHelper {
 
     public <C> void remove(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to remove " + property + " <null>");
             return;
         }
         getInstance().remove(bean, property, target);
@@ -184,6 +207,7 @@ public class EntityRelationHelper {
 
     public <C> void replace(String property, Collection<C> targets) {
         if (targets == null) {
+            logger.warn("not permitted to replace " + property + " <null>");
             return;
         }
         getInstance().replace(bean, property, targets);
@@ -195,6 +219,7 @@ public class EntityRelationHelper {
 
     public <C> void simpleAdd(String property, Collection<C> targets) {
         if (targets == null) {
+            logger.warn("not permitted to add " + property + " <null>");
             return;
         }
         Collection<C> cast = (Collection<C>) getCollection(property);
@@ -203,6 +228,7 @@ public class EntityRelationHelper {
 
     public <C> void simpleAdd(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to add " + property + " <null>");
             return;
         }
         Collection<C> cast = (Collection<C>) getCollection(property);
@@ -211,6 +237,7 @@ public class EntityRelationHelper {
 
     public <C> void simpleRemove(String property, Collection<C> targets) {
         if (targets == null) {
+            logger.warn("not permitted to remove " + property + " <null>");
             return;
         }
         Collection<C> cast = (Collection<C>) getCollection(property);
@@ -219,6 +246,7 @@ public class EntityRelationHelper {
 
     public <C> void simpleRemove(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to remove " + property + " <null>");
             return;
         }
         Collection<C> cast = (Collection<C>) getCollection(property);
@@ -227,6 +255,7 @@ public class EntityRelationHelper {
 
     public <C> void simpleReplace(String property, Collection<C> targets) {
         if (targets == null) {
+            logger.warn("not permitted to replace " + property + " <null>");
             return;
         }
         Collection<C> cast = (Collection<C>) getCollection(property);
@@ -236,6 +265,7 @@ public class EntityRelationHelper {
 
     public <C> void simpleReplace(String property, C target) {
         if (target == null) {
+            logger.warn("not permitted to replace " + property + " <null>");
             return;
         }
         Collection<C> cast = (Collection<C>) getCollection(property);

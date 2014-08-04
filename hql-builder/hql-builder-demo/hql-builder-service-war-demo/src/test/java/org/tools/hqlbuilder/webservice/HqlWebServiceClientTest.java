@@ -21,7 +21,7 @@ import org.apache.http.util.EntityUtils;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tools.hqlbuilder.common.QueryParameter;
-import org.tools.hqlbuilder.test.User;
+import org.tools.hqlbuilder.demo.User;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webclient.ServiceUrlBuilder;
 import org.tools.hqlbuilder.webcommon.ResteasyProvidersBean;
