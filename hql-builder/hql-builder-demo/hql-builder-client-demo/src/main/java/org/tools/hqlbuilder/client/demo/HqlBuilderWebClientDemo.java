@@ -103,6 +103,8 @@ public class HqlBuilderWebClientDemo {
         String rnd = UUID.randomUUID().toString();
         Group group = new Group("group_" + rnd);
         group = service.get(Group.class, service.save(group));
+        group = (Group) service.execute(new QueryParameters("from Group g left outer join fetch g.members where g.id=" + group.getId())).getResults()
+                .getValue().get(0);
         Member member = new Member("member_" + rnd, group);
         member = service.get(Member.class, service.save(member));
     }
