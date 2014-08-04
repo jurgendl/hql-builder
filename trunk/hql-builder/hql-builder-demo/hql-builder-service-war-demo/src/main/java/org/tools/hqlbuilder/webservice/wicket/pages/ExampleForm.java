@@ -84,7 +84,7 @@ public class ExampleForm extends FormPanel<Example> {
         };
 
         boolean dont = false;
-        addTextField(proxy.getText(), fset);
+        addTextField(proxy.getText(), fset.clone().setRequired(true));
         addEmailTextField(proxy.getEmail(), fset);
         if (dont) {
             addHidden(proxy.getHidden1());
@@ -113,83 +113,83 @@ public class ExampleForm extends FormPanel<Example> {
         {
             addFilePicker(proxy.getFiles(), new FilePickerSettings().setMimeType("application/pdf").setMultiple(true).setConsistentLook(true),
                     new FilePickerHook() {
-                @Override
-                public void write(Collection<FileUpload> files) {
-                    Example example = Example.class.cast(getFormModel().getObject());
-                    example.getFiles().clear();
-                    for (FileUpload fileUpload : files) {
-                        MemFile mf = new MemFile();
-                        example.getFiles().add(mf);
-                        mf.setData(fileUpload.getBytes());
-                        mf.setFilename(fileUpload.getClientFileName());
-                    }
-                    System.out.println(example.hashCode() + "/" + this.hashCode() + " write " + example.getFiles());
-                }
-
-                @Override
-                public Collection<String> getCurrentFilenames() {
-                    Example example = Example.class.cast(getFormModel().getObject());
-                    List<String> list = new ArrayList<String>();
-                    for (MemFile mf : example.getFiles()) {
-                        list.add(mf.getFilename());
-                    }
-                    System.out.println(example.hashCode() + "/" + this.hashCode() + " getCurrentFilenames " + list);
-                    return list;
-                }
-
-                @Override
-                public IResourceStream download(String currentFileName) {
-                    final Example example = Example.class.cast(getFormModel().getObject());
-                    MemFile pick = new MemFile();
-                    for (MemFile mf : example.getFiles()) {
-                        if (currentFileName.equals(mf.getFilename())) {
-                            pick = mf;
-                            break;
-                        }
-                    }
-                    final MemFile picked = pick;
-                    System.out.println(example.hashCode() + "/" + this.hashCode() + " download " + picked);
-                    return new AbstractResourceStream() {
                         @Override
-                        public Time lastModifiedTime() {
-                            return Time.now();
+                        public void write(Collection<FileUpload> files) {
+                            Example example = Example.class.cast(getFormModel().getObject());
+                            example.getFiles().clear();
+                            for (FileUpload fileUpload : files) {
+                                MemFile mf = new MemFile();
+                                example.getFiles().add(mf);
+                                mf.setData(fileUpload.getBytes());
+                                mf.setFilename(fileUpload.getClientFileName());
+                            }
+                            System.out.println(example.hashCode() + "/" + this.hashCode() + " write " + example.getFiles());
                         }
 
                         @Override
-                        public Bytes length() {
-                            return Bytes.bytes(picked.getData().length);
+                        public Collection<String> getCurrentFilenames() {
+                            Example example = Example.class.cast(getFormModel().getObject());
+                            List<String> list = new ArrayList<String>();
+                            for (MemFile mf : example.getFiles()) {
+                                list.add(mf.getFilename());
+                            }
+                            System.out.println(example.hashCode() + "/" + this.hashCode() + " getCurrentFilenames " + list);
+                            return list;
                         }
 
                         @Override
-                        public InputStream getInputStream() throws ResourceStreamNotFoundException {
-                            return new ByteArrayInputStream(picked.getData());
+                        public IResourceStream download(String currentFileName) {
+                            final Example example = Example.class.cast(getFormModel().getObject());
+                            MemFile pick = new MemFile();
+                            for (MemFile mf : example.getFiles()) {
+                                if (currentFileName.equals(mf.getFilename())) {
+                                    pick = mf;
+                                    break;
+                                }
+                            }
+                            final MemFile picked = pick;
+                            System.out.println(example.hashCode() + "/" + this.hashCode() + " download " + picked);
+                            return new AbstractResourceStream() {
+                                @Override
+                                public Time lastModifiedTime() {
+                                    return Time.now();
+                                }
+
+                                @Override
+                                public Bytes length() {
+                                    return Bytes.bytes(picked.getData().length);
+                                }
+
+                                @Override
+                                public InputStream getInputStream() throws ResourceStreamNotFoundException {
+                                    return new ByteArrayInputStream(picked.getData());
+                                }
+
+                                @Override
+                                public String getContentType() {
+                                    String contentType = URLConnection.getFileNameMap().getContentTypeFor(picked.getFilename());
+                                    System.out.println("|" + contentType);
+                                    return contentType;
+                                }
+
+                                @Override
+                                public void close() throws IOException {
+                                    //
+                                }
+                            };
                         }
 
                         @Override
-                        public String getContentType() {
-                            String contentType = URLConnection.getFileNameMap().getContentTypeFor(picked.getFilename());
-                            System.out.println("|" + contentType);
-                            return contentType;
+                        public void clear(Collection<String> filenames) {
+                            Example example = Example.class.cast(getFormModel().getObject());
+                            for (MemFile mf : example.getFiles().toArray(new MemFile[example.getFiles().size()])) {
+                                if (filenames.contains(mf.getFilename())) {
+                                    example.getFiles().remove(mf);
+                                }
+                            }
+                            System.out.println(example.hashCode() + "/" + this.hashCode() + " clear " + example.getFiles());
                         }
-
-                        @Override
-                        public void close() throws IOException {
-                            //
-                        }
-                    };
-                }
-
-                @Override
-                public void clear(Collection<String> filenames) {
-                    Example example = Example.class.cast(getFormModel().getObject());
-                    for (MemFile mf : example.getFiles().toArray(new MemFile[example.getFiles().size()])) {
-                        if (filenames.contains(mf.getFilename())) {
-                            example.getFiles().remove(mf);
-                        }
-                    }
-                    System.out.println(example.hashCode() + "/" + this.hashCode() + " clear " + example.getFiles());
-                }
-            });
+                    });
         }
     }
 }

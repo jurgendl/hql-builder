@@ -19,6 +19,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
 import org.tools.hqlbuilder.webservice.resources.validation.JQueryValidation;
 import org.tools.hqlbuilder.webservice.wicket.components.AJAXDownload;
@@ -47,6 +50,8 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     public static final String FILE_PRESENT_CONTAINER_ID = "filePresentContainer";
 
     public static final String BUTTON_TEXT_ID = "buttonText";
+
+    public static final String MIMETYPE_INVALID_MSG = "mimetype.invalid";
 
     // protected FileItemFactory fileItemFactory;
 
@@ -182,6 +187,27 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
                 tag(tag, "multiple", Boolean.TRUE.equals(filePickerSettings.getMultiple()) ? "multiple" : null);
             }
         };
+
+        comp.add(new IValidator<List<FileUpload>>() {
+            private static final long serialVersionUID = -3197676261666493500L;
+
+            @Override
+            public void validate(IValidatable<List<FileUpload>> validatable) {
+                FilePickerSettings settings = getFilePickerSettings();
+                if (settings.getMimeType() != null && validatable.getValue() != null) {
+                    for (FileUpload fileUpload : validatable.getValue()) {
+                        if (!fileUpload.getContentType().equals(settings.getMimeType())) {
+                            ValidationError error = new ValidationError(this);
+                            error.addKey(MIMETYPE_INVALID_MSG);
+                            error.setMessage(MIMETYPE_INVALID_MSG);
+                            validatable.error(error);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
         return comp;
     }
 
@@ -235,7 +261,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
 
     @Override
     public void onBeforeSubmit() {
-        List<FileUpload> fileUploads = getComponent().getFileUploads();
+        Collection<FileUpload> fileUploads = getComponent().getFileUploads();
         System.out.println("onBeforeSubmit " + fileUploads);
         if (fileUploads == null || fileUploads.size() == 0) {
             hook.clear(hook.getCurrentFilenames());

@@ -134,6 +134,7 @@ class EntityRelationCache<P> {
 
         if (wrapCache == null) {
             wrapCache = new EntityRelationCache<C>(clazz);
+            EntityRelationCache.cache.put(clazz, wrapCache);
         }
 
         return wrapCache;

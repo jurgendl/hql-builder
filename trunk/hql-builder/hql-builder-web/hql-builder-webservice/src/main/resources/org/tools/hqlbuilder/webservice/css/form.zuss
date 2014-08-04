@@ -1,3 +1,8 @@
+form {
+	font-family: Baskerville, ‘Times New Roman’, Times, serif;
+	font-size: 14px;
+}
+
 form .ui-datepicker-append {
 	color: @form_label;
 	font-style: bold;
@@ -18,7 +23,6 @@ form input[type='text'],input[type='search'],input[type='password'],input[type='
 	color: @form_element;
 	border: 1px solid @form_element_border;
 	background-color: @form_element_background;
-	font: 12px, Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif;
 	padding: 3px 10px 3px 10px;
 	margin: 0px 0px 0px 0px;
 	-moz-border-radius: 5px;
@@ -284,15 +288,13 @@ form input[type='range']::-moz-range-thumb {
 	padding-right: 3px;
 }
 
-.feedbackPanelERROR {
-	font-size: small;
+.feedbackPanel {
 	color: @form_error;
-	vertical-align: top;
+	border: 1px solid @form_error_border;
+	background-color: @form_error_background;
+	font-size: small;
 	padding-left: 3px;
 	padding-right: 3px;
-}
-
-.feedbackPanel {
 	margin: 0px 0px 0px 0px;
 	padding: 0px 0px 0px 15px;
 	display: inline-block;

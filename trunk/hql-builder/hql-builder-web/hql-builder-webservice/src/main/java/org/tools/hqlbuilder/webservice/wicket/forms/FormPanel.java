@@ -428,17 +428,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
 
         protected void setupRequired(ComponentTag tag) {
-            tag(tag, REQUIRED, isRequired() ? "true" : null);
-        }
-
-        public boolean isRequired() {
-            return componentSettings.isRequired() && formSettings.isClientsideRequiredValidation();
+            tag(tag, REQUIRED, (componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) ? REQUIRED : null);
         }
 
         protected void setupRequired(C component) {
-            component.setRequired(isRequired());
+            component.setRequired(componentSettings.isRequired());
             if (StringUtils.isNotBlank(formSettings.getRequiredClass())) {
-                if (isRequired()) {
+                if (componentSettings.isRequired()) {
                     component.add(new CssClassNameAppender(formSettings.getRequiredClass()));
                 } else {
                     component.add(new CssClassNameRemover(formSettings.getRequiredClass()));

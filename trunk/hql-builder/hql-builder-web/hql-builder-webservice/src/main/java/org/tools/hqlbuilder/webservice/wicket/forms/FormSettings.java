@@ -21,6 +21,13 @@ public class FormSettings implements Serializable {
     /** show label */
     protected boolean showLabel = true;
 
+    /** requires ajax = true */
+    protected boolean liveValidation = false;
+
+    protected boolean cancelable = false;
+
+    protected boolean inheritId = false;
+
     /** css class for required fields */
     protected String requiredClass = "required";
 
@@ -29,13 +36,6 @@ public class FormSettings implements Serializable {
     protected String invalidClass = "invalid";
 
     protected String requiredMarkerClass = "requiredMarker";
-
-    /** requires ajax = true */
-    protected boolean liveValidation = false;
-
-    protected boolean cancelable = false;
-
-    protected boolean inheritId = false;
 
     public FormSettings() {
         super();
@@ -55,14 +55,6 @@ public class FormSettings implements Serializable {
 
     public boolean isLiveValidation() {
         return this.liveValidation;
-    }
-
-    protected String getClassInvalid() {
-        return "invalid";
-    }
-
-    protected String getClassValid() {
-        return "valid";
     }
 
     public String getValidClass() {
@@ -160,7 +152,7 @@ public class FormSettings implements Serializable {
     }
 
     protected boolean skipForExport(String propertyName) {
-        return propertyName != null;
+        return propertyName == null;
     }
 
     public FormSettings setCancelable(boolean cancelable) {
@@ -184,5 +176,29 @@ public class FormSettings implements Serializable {
     public FormSettings setInheritId(boolean inheritId) {
         this.inheritId = inheritId;
         return this;
+    }
+
+    public boolean getClientsideRequiredValidation() {
+        return this.clientsideRequiredValidation;
+    }
+
+    public boolean getAjax() {
+        return this.ajax;
+    }
+
+    public boolean getShowLabel() {
+        return this.showLabel;
+    }
+
+    public boolean getLiveValidation() {
+        return this.liveValidation;
+    }
+
+    public boolean getCancelable() {
+        return this.cancelable;
+    }
+
+    public boolean getInheritId() {
+        return this.inheritId;
     }
 }
