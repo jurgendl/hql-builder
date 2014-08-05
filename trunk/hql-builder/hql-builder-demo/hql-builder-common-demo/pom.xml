@@ -20,6 +20,7 @@
 			<artifactId>hql-builder-annotations</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>
+			<scope>import</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.tools.hql-builder</groupId>
@@ -74,10 +75,10 @@
 						</goals>
 					</execution> -->
 					<execution>
-						<!-- <id>compile-props</id>
+						<id>compile-props</id>
 						<goals>
 							<goal>compile</goal>
-						</goals> -->
+						</goals>
 						<configuration>
 							<verbose>true</verbose>
 							<annotationProcessors>
@@ -90,6 +91,13 @@
 						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.tools.hql-builder</groupId>
+						<artifactId>hql-builder-annotations</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
