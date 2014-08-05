@@ -25,12 +25,17 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import ch.lambdaj.Lambda;
+import ch.lambdaj.function.argument.Argument;
 
 public class CommonUtils {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommonUtils.class);
@@ -161,7 +166,7 @@ public class CommonUtils {
     }
 
     public static char[] whitespace_chars = ( //
-    "\u0009" // CHARACTER TABULATION
+            "\u0009" // CHARACTER TABULATION
             + "\n" // LINE FEED (LF)
             + "\u000B" // LINE TABULATION
             + "\u000C" // FORM FEED (FF)
@@ -187,7 +192,7 @@ public class CommonUtils {
             + "\u202F" // NARROW NO-BREAK SPACE
             + "\u205F" // MEDIUM MATHEMATICAL SPACE
             + "\u3000" // IDEOGRAPHIC SPACE
-    ).toCharArray();
+            ).toCharArray();
 
     public static String removeUnnecessaryWhiteSpaces(String s) {
         StringBuilder sb = new StringBuilder();
@@ -276,12 +281,12 @@ public class CommonUtils {
             logger.debug(String.valueOf(value));
             return value;
         } catch (RuntimeException ex) {
-            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
+            logger.error("call(Object, String, Class<T>, Object...)");
             logger.error(ex.getClass().getName());
             logger.error(String.valueOf(ex));
             throw ex;
         } catch (Exception ex) {
-            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.call(Object, String, Class<T>, Object...)");
+            logger.error("call(Object, String, Class<T>, Object...)");
             logger.error(ex.getClass().getName());
             logger.error(String.valueOf(ex));
             throw new RuntimeException(ex);
@@ -323,5 +328,33 @@ public class CommonUtils {
             return null;
         }
         return value;
+    }
+
+    public static <A> Argument<A> arg(A arg) {
+        return Lambda.argument(arg);
+    }
+
+    public static <T> T proxy(Class<T> type) {
+        return Lambda.on(type);
+    }
+
+    public static <A> String name(A arg) {
+        return arg(arg).getInkvokedPropertyName();
+    }
+
+    public static <A> Class<A> type(A arg) {
+        return Lambda.argument(arg).getReturnType();
+    }
+
+    public static <A> A get(A arg, Object value) {
+        return Lambda.argument(arg).evaluate(value);
+    }
+
+    public static <T> T create(Class<T> modelType) {
+        return BeanUtils.instantiate(modelType);
+    }
+
+    public static <A> void set(Object bean, A arg, Object value) {
+        PropertyAccessorFactory.forBeanPropertyAccess(bean).setPropertyValue(Lambda.argument(arg).getInkvokedPropertyName(), value);
     }
 }
