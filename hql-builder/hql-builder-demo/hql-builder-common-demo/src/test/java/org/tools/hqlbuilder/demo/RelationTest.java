@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.demo;
 import java.util.Collections;
 
 import org.junit.Test;
+import org.tools.hqlbuilder.common.EntityRelationException;
 
 public class RelationTest extends org.junit.Assert {
     @Test
@@ -16,9 +17,30 @@ public class RelationTest extends org.junit.Assert {
         mm.removeManyToManyBack(mb);
         assertFalse(mb.getManyToMany().contains(mm));
 
+        mm.setManyToManyBack(Collections.singleton(mb));
+        assertTrue(mb.getManyToMany().contains(mm));
+
         mm.addManyToManyBack(mb);
         mm.clearManyToManyBack();
         assertFalse(mb.getManyToMany().contains(mm));
+
+        ManyToManyBack mbe = new ManyToManyBack();
+        mm.addManyToManyBack(mb);
+        mm.addManyToManyBack(mbe);
+        assertEquals(mm.getManyToManyBack().size(), 2);
+        assertEquals(mb.getManyToMany().size(), 1);
+        assertEquals(mbe.getManyToMany().size(), 1);
+
+        mm.removeManyToManyBack(mbe);
+        assertEquals(mm.getManyToManyBack().size(), 1);
+        assertEquals(mb.getManyToMany().size(), 1);
+        assertEquals(mbe.getManyToMany().size(), 0);
+
+        mm.addManyToManyBack(mbe);
+        mm.clearManyToManyBack();
+        assertEquals(mm.getManyToManyBack().size(), 0);
+        assertEquals(mb.getManyToMany().size(), 0);
+        assertEquals(mbe.getManyToMany().size(), 0);
     }
 
     @Test
@@ -32,9 +54,30 @@ public class RelationTest extends org.junit.Assert {
         mb.removeManyToMany(mm);
         assertFalse(mm.getManyToManyBack().contains(mb));
 
+        mb.setManyToMany(Collections.singleton(mm));
+        assertTrue(mm.getManyToManyBack().contains(mb));
+
         mb.addManyToMany(mm);
-        mb.clearFromManyToMany();
+        mb.clearManyToMany();
         assertFalse(mm.getManyToManyBack().contains(mb));
+
+        ManyToMany mme = new ManyToMany();
+        mb.addManyToMany(mm);
+        mb.addManyToMany(mme);
+        assertEquals(mb.getManyToMany().size(), 2);
+        assertEquals(mm.getManyToManyBack().size(), 1);
+        assertEquals(mme.getManyToManyBack().size(), 1);
+
+        mb.removeManyToMany(mme);
+        assertEquals(mb.getManyToMany().size(), 1);
+        assertEquals(mm.getManyToManyBack().size(), 1);
+        assertEquals(mme.getManyToManyBack().size(), 0);
+
+        mb.addManyToMany(mme);
+        mb.clearManyToMany();
+        assertEquals(mb.getManyToMany().size(), 0);
+        assertEquals(mm.getManyToManyBack().size(), 0);
+        assertEquals(mme.getManyToManyBack().size(), 0);
     }
 
     @Test
@@ -49,7 +92,7 @@ public class RelationTest extends org.junit.Assert {
         assertEquals(mo.getOneToMany(), null);
 
         om.addManyToOne(mo);
-        om.clearFromManyToOne();
+        om.clearManyToOne();
         assertEquals(mo.getOneToMany(), null);
 
         om.setManyToOne(Collections.singleton(mo));
@@ -69,6 +112,16 @@ public class RelationTest extends org.junit.Assert {
         assertTrue(om.getManyToOne().size() == 0);
     }
 
+    @Test(expected = EntityRelationException.class)
+    public void testOneToManyInversInvalid() {
+        ManyToOne mo = new ManyToOne();
+        OneToMany om = new OneToMany();
+        OneToMany omX = new OneToMany();
+
+        mo.setOneToMany(om);
+        mo.setOneToMany(omX);
+    }
+
     @Test
     public void testOneToOne() {
         OneToOne oo = new OneToOne();
@@ -81,6 +134,16 @@ public class RelationTest extends org.junit.Assert {
         assertEquals(ob.getOneToOne(), null);
     }
 
+    @Test(expected = EntityRelationException.class)
+    public void testOneToOneInvalid() {
+        OneToOne oo = new OneToOne();
+        OneToOneBack ob = new OneToOneBack();
+        OneToOneBack obX = new OneToOneBack();
+
+        oo.setOneToOneBack(ob);
+        oo.setOneToOneBack(obX);
+    }
+
     @Test
     public void testOneToOneInvers() {
         OneToOneBack ob = new OneToOneBack();
@@ -91,5 +154,15 @@ public class RelationTest extends org.junit.Assert {
 
         ob.setOneToOne(null);
         assertEquals(oo.getOneToOneBack(), null);
+    }
+
+    @Test(expected = EntityRelationException.class)
+    public void testOneToOneInversInvalid() {
+        OneToOneBack ob = new OneToOneBack();
+        OneToOne oo = new OneToOne();
+        OneToOne ooX = new OneToOne();
+
+        ob.setOneToOne(oo);
+        ob.setOneToOne(ooX);
     }
 }
