@@ -3,7 +3,6 @@ package org.tools.hqlbuilder.demo;
 import java.util.Collections;
 
 import org.junit.Test;
-import org.tools.hqlbuilder.common.EntityRelationException;
 
 public class RelationTest extends org.junit.Assert {
     @Test
@@ -112,14 +111,21 @@ public class RelationTest extends org.junit.Assert {
         assertTrue(om.getManyToOne().size() == 0);
     }
 
-    @Test(expected = EntityRelationException.class)
-    public void testOneToManyInversInvalid() {
+    @Test
+    public void testOneToManyInversAuto() {
         ManyToOne mo = new ManyToOne();
         OneToMany om = new OneToMany();
         OneToMany omX = new OneToMany();
 
         mo.setOneToMany(om);
+        assertEquals(mo.getOneToMany(), om);
+        assertTrue(om.getManyToOne().contains(mo));
+        assertFalse(omX.getManyToOne().contains(mo));
+
         mo.setOneToMany(omX);
+        assertEquals(mo.getOneToMany(), omX);
+        assertFalse(om.getManyToOne().contains(mo));
+        assertTrue(omX.getManyToOne().contains(mo));
     }
 
     @Test
@@ -134,14 +140,19 @@ public class RelationTest extends org.junit.Assert {
         assertEquals(ob.getOneToOne(), null);
     }
 
-    @Test(expected = EntityRelationException.class)
-    public void testOneToOneInvalid() {
+    @Test
+    public void testOneToOneAuto() {
         OneToOne oo = new OneToOne();
         OneToOneBack ob = new OneToOneBack();
         OneToOneBack obX = new OneToOneBack();
 
         oo.setOneToOneBack(ob);
+        assertEquals(ob.getOneToOne(), oo);
+        assertEquals(obX.getOneToOne(), null);
+
         oo.setOneToOneBack(obX);
+        assertEquals(ob.getOneToOne(), null);
+        assertEquals(obX.getOneToOne(), oo);
     }
 
     @Test
@@ -156,13 +167,18 @@ public class RelationTest extends org.junit.Assert {
         assertEquals(oo.getOneToOneBack(), null);
     }
 
-    @Test(expected = EntityRelationException.class)
-    public void testOneToOneInversInvalid() {
+    @Test
+    public void testOneToOneInversAuto() {
         OneToOneBack ob = new OneToOneBack();
         OneToOne oo = new OneToOne();
         OneToOne ooX = new OneToOne();
 
         ob.setOneToOne(oo);
+        assertEquals(oo.getOneToOneBack(), ob);
+        assertEquals(ooX.getOneToOneBack(), null);
+
         ob.setOneToOne(ooX);
+        assertEquals(oo.getOneToOneBack(), null);
+        assertEquals(ooX.getOneToOneBack(), ob);
     }
 }
