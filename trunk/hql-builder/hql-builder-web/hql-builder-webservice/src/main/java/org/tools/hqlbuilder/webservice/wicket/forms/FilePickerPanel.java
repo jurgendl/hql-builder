@@ -64,7 +64,10 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         super(propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
         this.hook = hook;
         this.parentModel = parentModel;
-        setPropertyType((Class<List<FileUpload>>) (new ArrayList<FileUpload>().getClass()));
+        @SuppressWarnings("rawtypes")
+        Class tmpc = new ArrayList<FileUpload>().getClass();
+        Class<List<FileUpload>> pt = tmpc;
+        setPropertyType(pt);
     }
 
     @Override

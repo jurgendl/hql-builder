@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.xml.DOMConfigurator;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,9 +25,19 @@ import org.tools.hqlbuilder.demo.Member;
 import org.tools.hqlbuilder.demo.User;
 
 public class HqlBuilderWebClientDemo {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderWebClientDemo.class);
+    protected static org.slf4j.Logger logger;
+
+    static {
+        try {
+            DOMConfigurator.configure(HqlBuilderWebClientDemo.class.getClassLoader().getResource("org/tools/hqlbuilder/common/log4j.xml"));
+        } catch (RuntimeException e) {
+            //
+        }
+        logger = LoggerFactory.getLogger(HqlBuilderWebClientDemo.class);
+    }
 
     public static void main(final String[] args) {
+        logger.debug("started");
         try {
             new HqlBuilderWebClientDemo(args);
         } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
@@ -39,8 +50,10 @@ public class HqlBuilderWebClientDemo {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         } catch (Exception ex) {
+            logger.error("exception ", ex);
             ex.printStackTrace(System.out);
         }
+        logger.debug("stopped");
     }
 
     public HqlBuilderWebClientDemo(final String[] args) throws Exception {
@@ -103,8 +116,9 @@ public class HqlBuilderWebClientDemo {
         String rnd = UUID.randomUUID().toString();
         Group group = new Group("group_" + rnd);
         group = service.get(Group.class, service.save(group));
-        group = (Group) service.execute(new QueryParameters("from Group g left outer join fetch g.members where g.id=" + group.getId())).getResults()
-                .getValue().get(0);
+        // group = (Group) service.execute(new QueryParameters("from Group g left outer join fetch g.members where g.id=" +
+        // group.getId())).getResults()
+        // .getValue().get(0);
         Member member = new Member("member_" + rnd, group);
         member = service.get(Member.class, service.save(member));
     }

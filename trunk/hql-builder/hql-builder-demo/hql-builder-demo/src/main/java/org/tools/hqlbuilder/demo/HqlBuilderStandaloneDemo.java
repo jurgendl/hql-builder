@@ -5,11 +5,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class HqlBuilderStandaloneDemo extends org.tools.hqlbuilder.client.demo.HqlBuilderWebClientDemo {
     public static void main(String[] args) {
+        logger.debug("started");
         try {
             new HqlBuilderStandaloneDemo(args);
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
+        logger.debug("stopped");
     }
 
     public HqlBuilderStandaloneDemo(String[] args) throws Exception {
