@@ -32,7 +32,7 @@ public class ManyToManyBack extends EntityERHAdapter {
         erh.mmRemove(MANY_TO_MANY, manyToMany);
     }
 
-    public void clearFromManyToMany() {
+    public void clearManyToMany() {
         erh.mmClear(MANY_TO_MANY);
     }
 }

@@ -32,7 +32,7 @@ public class OneToMany extends EntityERHAdapter {
         erh.omRemove(MANY_TO_ONE, manyToOne);
     }
 
-    public void clearFromManyToOne() {
+    public void clearManyToOne() {
         erh.omClear(MANY_TO_ONE);
     }
 }

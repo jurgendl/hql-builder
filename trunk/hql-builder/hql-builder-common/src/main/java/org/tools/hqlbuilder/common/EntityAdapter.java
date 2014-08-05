@@ -56,12 +56,18 @@ public abstract class EntityAdapter implements EntityI {
             return false;
         }
         EntityAdapter castOther = (EntityAdapter) other;
-        return new EqualsBuilder().append(id, castOther.id).isEquals();
+        if (id != null && castOther.id != null) {
+            return new EqualsBuilder().append(id, castOther.id).isEquals();
+        }
+        return super.equals(other);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).toHashCode();
+        if (id != null) {
+            return new HashCodeBuilder().append(id).toHashCode();
+        }
+        return super.hashCode();
     }
 
     @Override
