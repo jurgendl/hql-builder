@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,15 +15,20 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("unchecked")
 class EntityRelationCache<P> {
+    protected boolean throwLazy = false;
+
     @Transient
     protected static final transient Map<Class<?>, EntityRelationCache<?>> cache = new HashMap<Class<?>, EntityRelationCache<?>>();
 
@@ -59,8 +65,12 @@ class EntityRelationCache<P> {
     @Transient
     private final transient Object NULL = "NULL";
 
+    @Transient
+    protected final transient Logger logger;
+
     public EntityRelationCache(Class<P> clazz) {
         this.clazz = clazz;
+        this.logger = LoggerFactory.getLogger(toString());
     }
 
     /**
@@ -241,12 +251,6 @@ class EntityRelationCache<P> {
      * one-to-one set, mappedby moet op deze relatie staan
      */
     public <C> void ooSet(P bean, String property, C target) {
-        // @javax.persistence.OneToOne(mappedBy = "centralObject")
-        // private OneToOne oneToOne;
-        //
-        // @javax.persistence.OneToOne
-        // private CentralObject centralObject;
-        //
         ooSet(bean, property, target, ooMappedBy(property));
     }
 
@@ -254,12 +258,6 @@ class EntityRelationCache<P> {
      * one-to-one set
      */
     public <C> void ooSet(P bean, String property, C target, String backprop) {
-        // @javax.persistence.OneToOne(mappedBy = "centralObject")
-        // private OneToOne oneToOne;
-        //
-        // @javax.persistence.OneToOne
-        // private CentralObject centralObject;
-        //
         C child = (C) invokeGet(bean, property);
 
         if ((child == null) && (target == null)) {
@@ -340,13 +338,6 @@ class EntityRelationCache<P> {
      * many-to-many remove all, mappedby moet op deze relatie staan
      */
     public <C> void mmClear(P bean, String property) {
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         mmClear(bean, property, mmMappedBy(property));
     }
 
@@ -354,26 +345,9 @@ class EntityRelationCache<P> {
      * many-to-many remove all
      */
     public <C> void mmClear(P bean, String property, String backprop) {
-        // @javax.persistence.ManyToMany
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "manyToManys")
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
-        // OF
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         Collection<C> collection = (Collection<C>) invokeGet(bean, property);
         if (collection == null) {
             collection = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         C[] array = (C[]) collection.toArray();
@@ -387,13 +361,6 @@ class EntityRelationCache<P> {
      * many-to-many add, mappedby moet op deze relatie staan
      */
     public <C> void mmAdd(P bean, String property, C target) {
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         mmAdd(bean, property, target, mmMappedBy(property));
     }
 
@@ -401,39 +368,15 @@ class EntityRelationCache<P> {
      * many-to-many add
      */
     public <C> void mmAdd(P bean, String property, C target, String backprop) {
-        // @javax.persistence.ManyToMany
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "manyToManys")
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
-        // OF
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
         if (children == null) {
             children = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         mmAdd(bean, property, children, target, backprop);
     }
 
     protected <C> void mmRemove(P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target, String backprop) {
-        // @javax.persistence.ManyToMany
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "manyToManys")
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         if (target == null) {
             return;
         }
@@ -442,7 +385,6 @@ class EntityRelationCache<P> {
         Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
         if (parents == null) {
             parents = targetWrapper.invokeCreateCollection(target, backprop);
-            // throw new CollectionNeedsInitException(target, backprop);
         }
 
         if (parents.contains(bean) && children.contains(target)) {
@@ -472,37 +414,40 @@ class EntityRelationCache<P> {
      * voegt toe aan collection
      */
     protected <C> void invokeCollectionAdd(Collection<C> children, C child) {
-        resolve(children).add(child);
+        try {
+            resolve(children).add(child);
+        } catch (org.hibernate.LazyInitializationException ex) {
+            if (throwLazy) {
+                throw ex;
+            }
+        }
     }
 
     /**
      * verwijdert uit collection
      */
     protected <C> void invokeCollectionRemove(Collection<C> children, C child) {
-        resolve(children).remove(child);
+        try {
+            resolve(children).remove(child);
+        } catch (org.hibernate.LazyInitializationException ex) {
+            if (throwLazy) {
+                throw ex;
+            }
+        }
     }
 
     /**
      * intern gebruik
      */
     protected <C> void mmAdd(P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target, String backprop) {
-        // @javax.persistence.ManyToMany
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "manyToManys")
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         if (target == null) {
             return;
         }
 
         EntityRelationCache<C> targetWrapper = (EntityRelationCache<C>) getInstance(target.getClass());
         Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
-
         if (parents == null) {
             parents = targetWrapper.invokeCreateCollection(target, backprop);
-            // throw new CollectionNeedsInitException(target, backprop);
         }
 
         if (!parents.contains(bean) && !children.contains(target)) {
@@ -519,13 +464,6 @@ class EntityRelationCache<P> {
      * many-to-many remove, mappedby moet op deze relatie staan
      */
     public <C> void mmRemove(P bean, String property, C target) {
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         mmRemove(bean, property, target, mmMappedBy(property));
     }
 
@@ -533,26 +471,9 @@ class EntityRelationCache<P> {
      * many-to-many remove
      */
     public <C> void mmRemove(P bean, String property, C target, String backprop) {
-        // @javax.persistence.ManyToMany
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "manyToManys")
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
-        // OF
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
         if (children == null) {
             children = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         mmRemove(bean, property, children, target, backprop);
@@ -562,26 +483,9 @@ class EntityRelationCache<P> {
      * many-to-many replace all
      */
     public <C> void mmReplace(P bean, String property, Collection<C> targets, String backprop) {
-        // @javax.persistence.ManyToMany
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "manyToManys")
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
-        // OF
-        //
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
         if (children == null) {
             children = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         for (C child : (C[]) children.toArray()) {
@@ -601,13 +505,6 @@ class EntityRelationCache<P> {
      * many-to-many replace all, mappedby moet op deze relatie staan
      */
     public <C> void mmReplace(P bean, String property, Collection<C> targets) {
-        // @javax.persistence.ManyToMany(mappedBy = "centralObjects")
-        // private Set<ManyToMany> manyToManys = new HashSet<ManyToMany>();
-        //
-        // @javax.persistence.ManyToMany
-        // private Set<CentralObject> centralObjects = new
-        // HashSet<CentralObject>();
-        //
         mmReplace(bean, property, targets, mmMappedBy(property));
     }
 
@@ -615,12 +512,6 @@ class EntityRelationCache<P> {
      * one-to-many remove all
      */
     public <C> void omClear(P bean, String property, String backprop) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         Collection<C> collection = (Collection<C>) invokeGet(bean, property);
 
         if (collection == null) {
@@ -638,12 +529,6 @@ class EntityRelationCache<P> {
      * one-to-many remove all, mappedby moet op deze relatie staan
      */
     public <C> void omClear(P bean, String property) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         omClear(bean, property, omMappedBy(property));
     }
 
@@ -651,12 +536,6 @@ class EntityRelationCache<P> {
      * one-to-many add
      */
     public <C> void omAdd(P bean, String property, C target, String backprop) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         if (target == null) {
             return;
         }
@@ -664,7 +543,6 @@ class EntityRelationCache<P> {
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
         if (children == null) {
             children = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         omAdd(bean, property, children, target, backprop);
@@ -674,23 +552,11 @@ class EntityRelationCache<P> {
      * one-to-many add, mappedby moet op deze relatie staan
      */
     public <C> void omAdd(P bean, String property, C target) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         omAdd(bean, property, target, omMappedBy(property));
     }
 
     protected <C> void omRemove(@SuppressWarnings("unused") P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target,
             String backprop) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         if (!children.contains(target)) {
             return;
         }
@@ -707,14 +573,14 @@ class EntityRelationCache<P> {
     }
 
     protected <C> void omAdd(P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target, String backprop) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
-        if (children.contains(target)) {
-            return;
+        try {
+            if (children.contains(target)) {
+                return;
+            }
+        } catch (org.hibernate.LazyInitializationException ex) {
+            if (throwLazy) {
+                throw ex;
+            }
         }
 
         EntityRelationCache<C> targetCache = (EntityRelationCache<C>) getInstance(target.getClass());
@@ -733,12 +599,6 @@ class EntityRelationCache<P> {
      * one-to-many remove
      */
     public <C> void omRemove(P bean, String property, C target, String backprop) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         if (target == null) {
             return;
         }
@@ -746,7 +606,6 @@ class EntityRelationCache<P> {
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
         if (children == null) {
             children = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         omRemove(bean, property, children, target, backprop);
@@ -756,12 +615,6 @@ class EntityRelationCache<P> {
      * one-to-many remove, mappedby moet op deze relatie staan
      */
     public <C> void omRemove(P bean, String property, C target) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         omRemove(bean, property, target, omMappedBy(property));
     }
 
@@ -769,12 +622,6 @@ class EntityRelationCache<P> {
      * one-to-many replace all, mappedby moet op deze relatie staan
      */
     public <C> void omReplace(P bean, String property, Collection<C> targets) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         omReplace(bean, property, targets, omMappedBy(property));
     }
 
@@ -782,16 +629,9 @@ class EntityRelationCache<P> {
      * one-to-many replace all
      */
     public <C> void omReplace(P bean, String property, Collection<C> targets, String backprop) {
-        // @javax.persistence.OneToMany(mappedBy = "centralObject")
-        // private Set<OneToMany> oneToManys = new HashSet<OneToMany>();
-        //
-        // @ManyToOne
-        // private CentralObject centralObject;
-        //
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
         if (children == null) {
             children = invokeCreateCollection(bean, property);
-            // throw new CollectionNeedsInitException(bean, property);
         }
 
         for (C child : (C[]) children.toArray()) {
@@ -819,60 +659,171 @@ class EntityRelationCache<P> {
             throw new NullPointerException();
         }
 
-        if (object instanceof String && object.toString().trim().equals("")) {
+        if (object instanceof String && StringUtils.isBlank(String.class.cast(object))) {
             throw new NullPointerException();
         }
 
         return object;
     }
 
+    protected Annotation anyAnnotation(Field field) {
+        Annotation annotation = null;
+
+        annotation = field.getAnnotation(ManyToMany.class);
+        if (annotation != null) {
+            return annotation;
+        }
+
+        annotation = field.getAnnotation(OneToOne.class);
+        if (annotation != null) {
+            return annotation;
+        }
+
+        annotation = field.getAnnotation(OneToMany.class);
+        if (annotation != null) {
+            return annotation;
+        }
+
+        annotation = field.getAnnotation(ManyToOne.class);
+        if (annotation != null) {
+            return annotation;
+        }
+
+        return null;
+    }
+
+    protected String mappedBy(Annotation relationAnnotation) {
+        if (relationAnnotation == null) {
+            return null;
+        }
+
+        if (relationAnnotation instanceof ManyToMany) {
+            return ManyToMany.class.cast(relationAnnotation).mappedBy();
+        }
+
+        if (relationAnnotation instanceof OneToOne) {
+            return OneToOne.class.cast(relationAnnotation).mappedBy();
+        }
+
+        if (relationAnnotation instanceof OneToMany) {
+            return OneToMany.class.cast(relationAnnotation).mappedBy();
+        }
+
+        if (relationAnnotation instanceof ManyToOne) {
+            return null;// ManyToOne.class.cast(relationAnnotation).mappedBy();
+        }
+
+        return null;
+    }
+
+    protected String mappedBy(String property) {
+        String mb = mappedBy.get(property);
+        if (mb == null) {
+            Annotation mappedByAnno = mappedByAnything(property);
+            mb = mappedBy(mappedByAnno);
+            if (StringUtils.isBlank(mb)) {
+                mb = mappedByInvers(property, mappedByAnno);
+            }
+            mappedBy.put(property, nn(mb));
+        }
+        return mb;
+    }
+
     /**
      * one-to-one mapped by?
      */
     protected String ooMappedBy(String property) {
-        String mb = mappedBy.get(property);
-
-        if (mb == null) {
-            mb = nn(mappedBy(property, OneToOne.class).mappedBy());
-            mappedBy.put(property, mb);
-        }
-
-        return mb;
+        return mappedBy(property);
     }
 
     /**
      * many-to-many mapped by?
      */
     protected String mmMappedBy(String property) {
-        String mb = mappedBy.get(property);
-
-        if (mb == null) {
-            mb = nn(mappedBy(property, ManyToMany.class).mappedBy());
-            mappedBy.put(property, mb);
-        }
-
-        return mb;
+        return mappedBy(property);
     }
 
     /**
-     * one-to-manye mapped by?
+     * one-to-many mapped by?
      */
     protected String omMappedBy(String property) {
-        String mb = mappedBy.get(property);
-
-        if (mb == null) {
-            mb = nn(mappedBy(property, OneToMany.class).mappedBy());
-            mappedBy.put(property, mb);
-        }
-
-        return mb;
+        return mappedBy(property);
     }
 
-    /**
-     * relatie mapped by?
-     */
-    protected <T> T mappedBy(String property, Class<T> annotationClass) {
-        return annotationClass.cast(nn(findField(property).getAnnotation(annotationClass.asSubclass(Annotation.class))));
+    protected String mappedByInvers(String property, Annotation relationAnnotation) {
+        Class<?> targetEntity = targetEntityAndResolve(property, relationAnnotation);
+        Class<?> currentEntity = targetEntity;
+        while (!Object.class.equals(currentEntity)) {
+            for (Field field : currentEntity.getDeclaredFields()) {
+                if (property.equals(mappedBy(anyAnnotation(field)))) {
+                    return field.getName();
+                }
+            }
+            currentEntity = currentEntity.getSuperclass();
+        }
+        return null;
+    }
+
+    protected Annotation mappedByAnything(String property) {
+        Field field = findField(property);
+        Annotation relationAnnotation = null;
+
+        relationAnnotation = field.getAnnotation(ManyToMany.class);
+        if (relationAnnotation != null) {
+            return relationAnnotation;
+        }
+
+        relationAnnotation = field.getAnnotation(OneToOne.class);
+        if (relationAnnotation != null) {
+            return relationAnnotation;
+        }
+
+        relationAnnotation = field.getAnnotation(OneToMany.class);
+        if (relationAnnotation != null) {
+            return relationAnnotation;
+        }
+
+        relationAnnotation = field.getAnnotation(ManyToOne.class);
+        if (relationAnnotation != null) {
+            return relationAnnotation;
+        }
+
+        return null;
+    }
+
+    protected Class<?> targetEntity(Annotation relationAnnotation) {
+        if (relationAnnotation instanceof ManyToMany) {
+            return ManyToMany.class.cast(relationAnnotation).targetEntity();
+        }
+
+        if (relationAnnotation instanceof OneToOne) {
+            return OneToOne.class.cast(relationAnnotation).targetEntity();
+        }
+
+        if (relationAnnotation instanceof OneToMany) {
+            return OneToMany.class.cast(relationAnnotation).targetEntity();
+        }
+
+        if (relationAnnotation instanceof ManyToOne) {
+            return ManyToOne.class.cast(relationAnnotation).targetEntity();
+        }
+
+        return null;
+    }
+
+    protected Class<?> targetEntityAndResolve(String property, Annotation relationAnnotation) {
+        Class<?> targetEntity = targetEntity(relationAnnotation);
+        if (targetEntity != null && !void.class.equals(targetEntity)) {
+            return targetEntity;
+        }
+        return resolve(findField(property));
+    }
+
+    protected Class<?> resolve(Field field) {
+        if (Collection.class.isAssignableFrom(field.getType())) {
+            return Class.class.cast(ParameterizedType.class.cast(field.getGenericType()).getActualTypeArguments()[0]);
+        }
+        return field.getType();
     }
 
     /**
@@ -885,7 +836,7 @@ class EntityRelationCache<P> {
             omAdd(bean, property, target, backprop);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -898,7 +849,7 @@ class EntityRelationCache<P> {
             omClear(bean, property, backprop);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -911,7 +862,7 @@ class EntityRelationCache<P> {
             omRemove(bean, property, target, backprop);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -924,7 +875,7 @@ class EntityRelationCache<P> {
             omReplace(bean, property, targets, backprop);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -937,7 +888,7 @@ class EntityRelationCache<P> {
             moSet(bean, property, target, backprop);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -950,7 +901,7 @@ class EntityRelationCache<P> {
             omClear(bean, property);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -963,7 +914,7 @@ class EntityRelationCache<P> {
             omRemove(bean, property, target);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     /**
@@ -976,7 +927,7 @@ class EntityRelationCache<P> {
             omReplace(bean, property, targets);
         }
 
-        throw new IllegalArgumentException();
+        throw new EntityRelationException();
     }
 
     protected String moInverseProp(P bean, String property) {
@@ -997,7 +948,7 @@ class EntityRelationCache<P> {
             }
 
             if (backProp == null) {
-                throw new IllegalArgumentException("inverse property not found: " + beanClass.getName() + "#" + property);
+                throw new EntityRelationException("inverse property not found: " + beanClass.getName() + "#" + property);
             }
 
             mappedBy.put(property, backProp);
@@ -1023,7 +974,7 @@ class EntityRelationCache<P> {
         } else if (Set.class.equals(type)) {
             collection = new HashSet<T>();
         } else {
-            throw new IllegalArgumentException("creation of collection not supported: " + type.getName());
+            throw new EntityRelationException("creation of collection not supported: " + type.getName());
         }
         invokeSet(bean, property, collection);
         return collection;
