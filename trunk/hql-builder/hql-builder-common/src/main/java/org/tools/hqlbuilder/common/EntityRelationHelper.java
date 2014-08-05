@@ -11,7 +11,6 @@ import javax.persistence.Transient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings({ "unchecked", "unused" })
 public class EntityRelationHelper {
     @Transient
     private final transient Object bean;
@@ -29,21 +28,21 @@ public class EntityRelationHelper {
         return "RelationWrapper[" + bean.getClass().getSimpleName() + "]";
     }
 
-    private <C> void moSet(String property, C target, String backprop) {
-        getInstance().moSet(bean, property, target, backprop);
-    }
+    // private <C> void moSet(String property, C target, String backprop) {
+    // getInstance().moSet(bean, property, target, backprop);
+    // }
 
     public <C> void moSet(String property, C target) {
         getInstance().moSet(bean, property, target);
     }
 
-    private <C> void ooSet(String property, C target, String backprop) {
-        getInstance().ooSet(bean, property, target, backprop);
-    }
+    // private <C> void ooSet(String property, C target, String backprop) {
+    // getInstance().ooSet(bean, property, target, backprop);
+    // }
 
-    private <C> void mmClear(String property, String backprop) {
-        getInstance().mmClear(bean, property, backprop);
-    }
+    // private <C> void mmClear(String property, String backprop) {
+    // getInstance().mmClear(bean, property, backprop);
+    // }
 
     // private <C> void mmAdd(String property, C target, String backprop) {
     // if (target == null) {
@@ -97,6 +96,7 @@ public class EntityRelationHelper {
     // getInstance().omReplace(bean, property, targets, backprop);
     // }
 
+    @SuppressWarnings("unchecked")
     private <P> EntityRelationCache<P> getInstance() {
         return (EntityRelationCache<P>) EntityRelationCache.getInstance(this.bean.getClass());
     }
@@ -193,90 +193,90 @@ public class EntityRelationHelper {
     // getInstance().set(bean, property, target, backprop);
     // }
 
-    private <C> void clear(String property) {
-        getInstance().clear(bean, property);
-    }
+    // private <C> void clear(String property) {
+    // getInstance().clear(bean, property);
+    // }
 
-    private <C> void remove(String property, C target) {
-        if (target == null) {
-            logger.warn("not permitted to remove " + property + " <null>");
-            return;
-        }
-        getInstance().remove(bean, property, target);
-    }
+    // private <C> void remove(String property, C target) {
+    // if (target == null) {
+    // logger.warn("not permitted to remove " + property + " <null>");
+    // return;
+    // }
+    // getInstance().remove(bean, property, target);
+    // }
 
-    private <C> void replace(String property, Collection<C> targets) {
-        if (targets == null) {
-            logger.warn("not permitted to replace " + property + " <null>");
-            return;
-        }
-        getInstance().replace(bean, property, targets);
-    }
+    // private <C> void replace(String property, Collection<C> targets) {
+    // if (targets == null) {
+    // logger.warn("not permitted to replace " + property + " <null>");
+    // return;
+    // }
+    // getInstance().replace(bean, property, targets);
+    // }
 
-    private void simpleClear(String property) {
-        getCollection(property).clear();
-    }
+    // private void simpleClear(String property) {
+    // getCollection(property).clear();
+    // }
 
-    private <C> void simpleAdd(String property, Collection<C> targets) {
-        if (targets == null) {
-            logger.warn("not permitted to add " + property + " <null>");
-            return;
-        }
-        Collection<C> cast = (Collection<C>) getCollection(property);
-        cast.addAll(targets);
-    }
+    // private <C> void simpleAdd(String property, Collection<C> targets) {
+    // if (targets == null) {
+    // logger.warn("not permitted to add " + property + " <null>");
+    // return;
+    // }
+    // Collection<C> cast = (Collection<C>) getCollection(property);
+    // cast.addAll(targets);
+    // }
 
-    private <C> void simpleAdd(String property, C target) {
-        if (target == null) {
-            logger.warn("not permitted to add " + property + " <null>");
-            return;
-        }
-        Collection<C> cast = (Collection<C>) getCollection(property);
-        cast.add(target);
-    }
+    // private <C> void simpleAdd(String property, C target) {
+    // if (target == null) {
+    // logger.warn("not permitted to add " + property + " <null>");
+    // return;
+    // }
+    // Collection<C> cast = (Collection<C>) getCollection(property);
+    // cast.add(target);
+    // }
 
-    private <C> void simpleRemove(String property, Collection<C> targets) {
-        if (targets == null) {
-            logger.warn("not permitted to remove " + property + " <null>");
-            return;
-        }
-        Collection<C> cast = (Collection<C>) getCollection(property);
-        cast.removeAll(targets);
-    }
+    // private <C> void simpleRemove(String property, Collection<C> targets) {
+    // if (targets == null) {
+    // logger.warn("not permitted to remove " + property + " <null>");
+    // return;
+    // }
+    // Collection<C> cast = (Collection<C>) getCollection(property);
+    // cast.removeAll(targets);
+    // }
 
-    private <C> void simpleRemove(String property, C target) {
-        if (target == null) {
-            logger.warn("not permitted to remove " + property + " <null>");
-            return;
-        }
-        Collection<C> cast = (Collection<C>) getCollection(property);
-        cast.remove(target);
-    }
+    // private <C> void simpleRemove(String property, C target) {
+    // if (target == null) {
+    // logger.warn("not permitted to remove " + property + " <null>");
+    // return;
+    // }
+    // Collection<C> cast = (Collection<C>) getCollection(property);
+    // cast.remove(target);
+    // }
 
-    private <C> void simpleReplace(String property, Collection<C> targets) {
-        if (targets == null) {
-            logger.warn("not permitted to replace " + property + " <null>");
-            return;
-        }
-        Collection<C> cast = (Collection<C>) getCollection(property);
-        cast.clear();
-        cast.addAll(targets);
-    }
+    // private <C> void simpleReplace(String property, Collection<C> targets) {
+    // if (targets == null) {
+    // logger.warn("not permitted to replace " + property + " <null>");
+    // return;
+    // }
+    // Collection<C> cast = (Collection<C>) getCollection(property);
+    // cast.clear();
+    // cast.addAll(targets);
+    // }
 
-    private <C> void simpleReplace(String property, C target) {
-        if (target == null) {
-            logger.warn("not permitted to replace " + property + " <null>");
-            return;
-        }
-        Collection<C> cast = (Collection<C>) getCollection(property);
-        cast.clear();
-        cast.add(target);
-    }
+    // private <C> void simpleReplace(String property, C target) {
+    // if (target == null) {
+    // logger.warn("not permitted to replace " + property + " <null>");
+    // return;
+    // }
+    // Collection<C> cast = (Collection<C>) getCollection(property);
+    // cast.clear();
+    // cast.add(target);
+    // }
 
-    private Collection<?> getCollection(String property) {
-        EntityRelationCache<Object> instance = getInstance();
-        return getInstance().resolve(Collection.class.cast(instance.invokeGet(bean, property)));
-    }
+    // private Collection<?> getCollection(String property) {
+    // EntityRelationCache<Object> instance = getInstance();
+    // return getInstance().resolve(Collection.class.cast(instance.invokeGet(bean, property)));
+    // }
 
     public <T> Set<T> omGet(Set<T> set) {
         return simpleGet(set);
@@ -294,7 +294,7 @@ public class EntityRelationHelper {
         return list == null ? null : Collections.unmodifiableList(list);
     }
 
-    private <T> SortedSet<T> omGet(SortedSet<T> set) {
+    public <T> SortedSet<T> omGet(SortedSet<T> set) {
         return set == null ? null : Collections.unmodifiableSortedSet(set);
     }
 
@@ -302,11 +302,11 @@ public class EntityRelationHelper {
         return set == null ? null : Collections.unmodifiableSet(set);
     }
 
-    private <T> List<T> mmGet(List<T> list) {
+    public <T> List<T> mmGet(List<T> list) {
         return list == null ? null : Collections.unmodifiableList(list);
     }
 
-    private <T> SortedSet<T> mmGet(SortedSet<T> set) {
+    public <T> SortedSet<T> mmGet(SortedSet<T> set) {
         return set == null ? null : Collections.unmodifiableSortedSet(set);
     }
 }

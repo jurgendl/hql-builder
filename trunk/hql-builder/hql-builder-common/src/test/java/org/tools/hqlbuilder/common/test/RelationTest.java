@@ -181,4 +181,32 @@ public class RelationTest extends org.junit.Assert {
         assertEquals(oo.getOneToOneBack(), null);
         assertEquals(ooX.getOneToOneBack(), ob);
     }
+
+    @Test
+    public void testManyToManyNull() {
+        ManyToMany mm = new ManyToMany();
+        mm.setManyToManyBack(null);
+        mm.addManyToManyBack(null);
+        mm.removeManyToManyBack(null);
+    }
+
+    @Test
+    public void testOneToOneNull() {
+        OneToOne oo = new OneToOne();
+        oo.setOneToOneBack(null);
+    }
+
+    @Test
+    public void testOneToManyNull() {
+        OneToMany om = new OneToMany();
+        om.setManyToOne(null);
+        om.addManyToOne(null);
+        om.removeManyToOne(null);
+    }
+
+    @Test
+    public void testManyToOneNull() {
+        ManyToOne mo = new ManyToOne();
+        mo.setOneToMany(null);
+    }
 }
