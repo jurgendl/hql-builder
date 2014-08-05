@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.demo;
+package org.tools.hqlbuilder.common.test;
 
 import javax.persistence.Entity;
 
