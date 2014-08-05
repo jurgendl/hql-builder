@@ -24,6 +24,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.exceptions.EntityRelationException;
+import org.tools.hqlbuilder.common.exceptions.MethodNotFoundException;
 
 @SuppressWarnings("unchecked")
 class EntityRelationCache<P> {
@@ -313,7 +315,8 @@ class EntityRelationCache<P> {
             childWrapper.invokeSet(child, parentPropertyName, null);
             invokeSet(bean, childProperty, null);
         } else {
-            throw new RefException("!oldParent.equals(parent) || !oldChild.equals(child");
+            throw new EntityRelationException(EntityRelationException.EntityRelationExceptionType.REFERENCE,
+                    "!oldParent.equals(parent) || !oldChild.equals(child");
         }
     }
 
@@ -330,7 +333,8 @@ class EntityRelationCache<P> {
             childWrapper.invokeSet(child, parentPropertyName, bean);
             invokeSet(bean, childProperty, child);
         } else {
-            throw new RefException("parentWrapper.get(childProperty) != null || childWrapper.get(parentPropertyName) != null");
+            throw new EntityRelationException(EntityRelationException.EntityRelationExceptionType.REFERENCE,
+                    "parentWrapper.get(childProperty) != null || childWrapper.get(parentPropertyName) != null");
         }
     }
 
@@ -391,9 +395,9 @@ class EntityRelationCache<P> {
             targetWrapper.invokeCollectionRemove(parents, bean);
             invokeCollectionRemove(children, target);
         } else if (parents.contains(bean) && !children.contains(target)) {
-            throw new MissingRefException(bean, null);
+            throw new EntityRelationException(bean, null);
         } else if (!parents.contains(bean) && children.contains(target)) {
-            throw new MissingRefException(null, target);
+            throw new EntityRelationException(null, target);
         } // else do nothing
     }
 
@@ -454,9 +458,9 @@ class EntityRelationCache<P> {
             targetWrapper.invokeCollectionAdd(parents, bean);
             invokeCollectionAdd(children, target);
         } else if (parents.contains(bean) && !children.contains(target)) {
-            throw new MissingRefException(bean, null);
+            throw new EntityRelationException(bean, null);
         } else if (!parents.contains(bean) && children.contains(target)) {
-            throw new MissingRefException(null, target);
+            throw new EntityRelationException(null, target);
         } // else do nothing
     }
 
@@ -565,7 +569,7 @@ class EntityRelationCache<P> {
         P currentParent = (P) targetCache.invokeGet(target, backprop);
 
         if (currentParent == null) {
-            throw new MissingRefException(null, target);
+            throw new EntityRelationException(null, target);
         }
 
         targetCache.invokeSet(target, backprop, null);
@@ -587,7 +591,7 @@ class EntityRelationCache<P> {
         P currentParent = (P) targetCache.invokeGet(target, backprop);
         if (bean != null && !bean.equals(currentParent)) {
             if (currentParent != null) {
-                throw new ExistingParentChildRefException(currentParent, bean, target);
+                throw new EntityRelationException(currentParent, bean, target);
             }
 
             targetCache.invokeSet(target, backprop, bean);
@@ -836,7 +840,7 @@ class EntityRelationCache<P> {
             omAdd(bean, property, target, backprop);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -849,7 +853,7 @@ class EntityRelationCache<P> {
             omClear(bean, property, backprop);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -862,7 +866,7 @@ class EntityRelationCache<P> {
             omRemove(bean, property, target, backprop);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -875,7 +879,7 @@ class EntityRelationCache<P> {
             omReplace(bean, property, targets, backprop);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -888,7 +892,7 @@ class EntityRelationCache<P> {
             moSet(bean, property, target, backprop);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -901,7 +905,7 @@ class EntityRelationCache<P> {
             omClear(bean, property);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -914,7 +918,7 @@ class EntityRelationCache<P> {
             omRemove(bean, property, target);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -927,7 +931,7 @@ class EntityRelationCache<P> {
             omReplace(bean, property, targets);
         }
 
-        throw new EntityRelationException();
+        throw new EntityRelationException("unsupported");
     }
 
     protected String moInverseProp(P bean, String property) {
