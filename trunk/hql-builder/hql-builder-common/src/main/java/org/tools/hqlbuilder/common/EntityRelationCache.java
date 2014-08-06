@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -484,17 +485,19 @@ public class EntityRelationCache<P> {
             children = invokeCreateCollection(bean, property);
         }
 
+        if (targets == null) {
+            targets = Collections.EMPTY_SET;
+        }
+
         for (C child : (C[]) children.toArray()) {
             if (!targets.contains(child)) {
                 mmRemove(bean, property, children, child, backprop);
             }
         }
 
-        if (targets != null) {
-            for (C child : targets) {
-                if (!children.contains(child)) {
-                    mmAdd(bean, property, children, child, backprop);
-                }
+        for (C child : targets) {
+            if (!children.contains(child)) {
+                mmAdd(bean, property, children, child, backprop);
             }
         }
     }
@@ -632,17 +635,19 @@ public class EntityRelationCache<P> {
             children = invokeCreateCollection(bean, property);
         }
 
+        if (targets == null) {
+            targets = Collections.EMPTY_SET;
+        }
+
         for (C child : (C[]) children.toArray()) {
             if (!targets.contains(child)) {
                 omRemove(bean, property, children, child, backprop);
             }
         }
 
-        if (targets != null) {
-            for (C child : targets) {
-                if (!children.contains(child)) {
-                    omAdd(bean, property, children, child, backprop);
-                }
+        for (C child : targets) {
+            if (!children.contains(child)) {
+                omAdd(bean, property, children, child, backprop);
             }
         }
     }

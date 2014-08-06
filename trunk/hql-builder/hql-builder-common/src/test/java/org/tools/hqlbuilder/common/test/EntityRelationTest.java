@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+@SuppressWarnings("unchecked")
 public class EntityRelationTest extends org.junit.Assert {
     @Test
     public void testManyToMany() {
@@ -15,6 +16,8 @@ public class EntityRelationTest extends org.junit.Assert {
 
         mm.removeManyToManyBack(mb);
         assertFalse(mb.getManyToMany().contains(mm));
+
+        mm.removeManyToManyBack(mb);
 
         mm.setManyToManyBack(Collections.singleton(mb));
         assertTrue(mb.getManyToMany().contains(mm));
@@ -40,6 +43,18 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(mm.getManyToManyBack().size(), 0);
         assertEquals(mb.getManyToMany().size(), 0);
         assertEquals(mbe.getManyToMany().size(), 0);
+
+        mm.addManyToManyBack(mb);
+        mm.addManyToManyBack(mb);
+        assertTrue(mb.getManyToMany().contains(mm));
+        assertEquals(mb.getManyToMany().size(), 1);
+
+        mm.setManyToManyBack(null);
+        assertEquals(mb.getManyToMany().size(), 0);
+
+        mm.addManyToManyBack(mb);
+        mm.setManyToManyBack(Collections.EMPTY_SET);
+        assertEquals(mb.getManyToMany().size(), 0);
     }
 
     @Test
@@ -52,6 +67,8 @@ public class EntityRelationTest extends org.junit.Assert {
 
         mb.removeManyToMany(mm);
         assertFalse(mm.getManyToManyBack().contains(mb));
+
+        mb.removeManyToMany(mm);
 
         mb.setManyToMany(Collections.singleton(mm));
         assertTrue(mm.getManyToManyBack().contains(mb));
@@ -77,6 +94,18 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(mb.getManyToMany().size(), 0);
         assertEquals(mm.getManyToManyBack().size(), 0);
         assertEquals(mme.getManyToManyBack().size(), 0);
+
+        mb.addManyToMany(mm);
+        mb.addManyToMany(mm);
+        assertTrue(mb.getManyToMany().contains(mm));
+        assertEquals(mb.getManyToMany().size(), 1);
+
+        mb.setManyToMany(null);
+        assertEquals(mb.getManyToMany().size(), 0);
+
+        mb.addManyToMany(mm);
+        mb.setManyToMany(Collections.EMPTY_SET);
+        assertEquals(mb.getManyToMany().size(), 0);
     }
 
     @Test
@@ -90,12 +119,26 @@ public class EntityRelationTest extends org.junit.Assert {
         mo.removeOneToMany(om);
         assertEquals(om.getManyToOne(), null);
 
+        mo.removeOneToMany(om);
+
         mo.addOneToMany(om);
         mo.clearOneToMany();
         assertEquals(om.getManyToOne(), null);
 
         mo.setOneToMany(Collections.singleton(om));
         assertEquals(om.getManyToOne(), mo);
+
+        mo.addOneToMany(om);
+        mo.addOneToMany(om);
+        assertEquals(om.getManyToOne(), mo);
+        assertEquals(mo.getOneToMany().size(), 1);
+
+        mo.setOneToMany(null);
+        assertEquals(mo.getOneToMany().size(), 0);
+
+        mo.addOneToMany(om);
+        mo.setOneToMany(Collections.EMPTY_SET);
+        assertEquals(mo.getOneToMany().size(), 0);
     }
 
     @Test
@@ -203,7 +246,7 @@ public class EntityRelationTest extends org.junit.Assert {
         ManyToOne mo = new ManyToOne();
 
         mo.setOneToMany(null);
-        mo.setOneToMany(null);
+        mo.addOneToMany(null);
         mo.removeOneToMany(null);
     }
 
