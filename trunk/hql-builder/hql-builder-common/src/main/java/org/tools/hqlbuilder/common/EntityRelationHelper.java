@@ -8,11 +8,11 @@ import java.util.SortedSet;
 
 import javax.persistence.Transient;
 
-public class EntityRelationHelper {
+public class EntityRelationHelper<O> {
     @Transient
-    private final transient Object bean;
+    private final transient O bean;
 
-    public EntityRelationHelper(Object bean) {
+    public EntityRelationHelper(O bean) {
         this.bean = bean;
     }
 
@@ -21,161 +21,48 @@ public class EntityRelationHelper {
         return "RelationWrapper[" + bean.getClass().getSimpleName() + "]";
     }
 
-    // private <C> void moSet(String property, C target, String backprop) {
-    // getInstance().moSet(bean, property, target, backprop);
-    // }
-
-    // private <C> void ooSet(String property, C target, String backprop) {
-    // getInstance().ooSet(bean, property, target, backprop);
-    // }
-
-    // private <C> void mmClear(String property, String backprop) {
-    // getInstance().mmClear(bean, property, backprop);
-    // }
-
-    // private <C> void mmAdd(String property, C target, String backprop) {
-    // getInstance().mmAdd(bean, property, target, backprop);
-    // }
-
-    // private <C> void mmRemove(String property, C target, String backprop) {
-    // getInstance().mmRemove(bean, property, target, backprop);
-    // }
-
-    // private <C> void mmSet(String property, Collection<C> targets, String backprop) {
-    // getInstance().mmReplace(bean, property, targets, backprop);
-    // }
-
-    // private <C> void omClear(String property, String backprop) {
-    // getInstance().omClear(bean, property, backprop);
-    // }
-
-    // private <C> void omRemove(String property, C target, String backprop) {
-    // getInstance().omRemove(bean, property, target, backprop);
-    // }
-
-    // private <C> void omAdd(String property, C target, String backprop) {
-    // getInstance().omAdd(bean, property, target, backprop);
-    // }
-
-    // private <C> void omSet(String property, Collection<C> targets, String backprop) {
-    // getInstance().omReplace(bean, property, targets, backprop);
-    // }
-
-    // private <C> void add(String property, C target, String backprop) {
-    // getInstance().add(bean, property, target, backprop);
-    // }
-
-    // private <C> void clear(String property, String backprop) {
-    // getInstance().clear(bean, property, backprop);
-    // }
-
-    // private <C> void remove(String property, C target, String backprop) {
-    // getInstance().remove(bean, property, target, backprop);
-    // }
-
-    // private <C> void replace(String property, Collection<C> targets, String backprop) {
-    // getInstance().replace(bean, property, targets, backprop);
-    // }
-
-    // private <C> void set(String property, C target, String backprop) {
-    // getInstance().set(bean, property, target, backprop);
-    // }
-
-    // private <C> void clear(String property) {
-    // getInstance().clear(bean, property);
-    // }
-
-    // private <C> void remove(String property, C target) {
-    // getInstance().remove(bean, property, target);
-    // }
-
-    // private <C> void replace(String property, Collection<C> targets) {
-    // getInstance().replace(bean, property, targets);
-    // }
-
-    // private void simpleClear(String property) {
-    // getCollection(property).clear();
-    // }
-
-    // private <C> void simpleAdd(String property, Collection<C> targets) {
-    // Collection<C> cast = (Collection<C>) getCollection(property);
-    // cast.addAll(targets);
-    // }
-
-    // private <C> void simpleAdd(String property, C target) {
-    // Collection<C> cast = (Collection<C>) getCollection(property);
-    // cast.add(target);
-    // }
-
-    // private <C> void simpleRemove(String property, Collection<C> targets) {
-    // Collection<C> cast = (Collection<C>) getCollection(property);
-    // cast.removeAll(targets);
-    // }
-
-    // private <C> void simpleRemove(String property, C target) {
-    // Collection<C> cast = (Collection<C>) getCollection(property);
-    // cast.remove(target);
-    // }
-
-    // private <C> void simpleReplace(String property, Collection<C> targets) {
-    // Collection<C> cast = (Collection<C>) getCollection(property);
-    // cast.clear();
-    // cast.addAll(targets);
-    // }
-
-    // private <C> void simpleReplace(String property, C target) {
-    // Collection<C> cast = (Collection<C>) getCollection(property);
-    // cast.clear();
-    // cast.add(target);
-    // }
-
-    // private Collection<?> getCollection(String property) {
-    // EntityRelationCache<Object> instance = getInstance();
-    // return getInstance().resolve(Collection.class.cast(instance.invokeGet(bean, property)));
-    // }
-
     @SuppressWarnings("unchecked")
-    private <P> EntityRelationCache<P> getInstance() {
-        return (EntityRelationCache<P>) EntityRelationCache.getInstance(this.bean.getClass());
+    private EntityRelationCache<O> getInstance() {
+        return EntityRelationCache.getInstance((Class<O>) this.bean.getClass());
     }
 
-    public <C> void moSet(String property, C target) {
+    public <T> void moSet(String property, T target) {
         getInstance().set(bean, property, target);
     }
 
-    public <C> void ooSet(String property, C target) {
+    public <T> void ooSet(String property, T target) {
         getInstance().set(bean, property, target);
     }
 
-    public <C> void mmClear(String property) {
+    public <T> void mmClear(String property) {
         getInstance().clear(bean, property);
     }
 
-    public <C> void mmAdd(String property, C target) {
+    public <T> void mmAdd(String property, T target) {
         getInstance().add(bean, property, target);
     }
 
-    public <C> void mmRemove(String property, C target) {
+    public <T> void mmRemove(String property, T target) {
         getInstance().remove(bean, property, target);
     }
 
-    public <C> void mmSet(String property, Collection<C> targets) {
+    public <T> void mmSet(String property, Collection<T> targets) {
         getInstance().replace(bean, property, targets);
     }
 
-    public <C> void omClear(String property) {
+    public <T> void omClear(String property) {
         getInstance().clear(bean, property);
     }
 
-    public <C> void omRemove(String property, C target) {
+    public <T> void omRemove(String property, T target) {
         getInstance().remove(bean, property, target);
     }
 
-    public <C> void omAdd(String property, C target) {
+    public <T> void omAdd(String property, T target) {
         getInstance().add(bean, property, target);
     }
 
-    public <C> void omSet(String property, Collection<C> targets) {
+    public <T> void omSet(String property, Collection<T> targets) {
         getInstance().replace(bean, property, targets);
     }
 
@@ -187,11 +74,11 @@ public class EntityRelationHelper {
         return simpleGet(list);
     }
 
-    private <T> Set<T> simpleGet(Set<T> set) {
+    public <T> Set<T> simpleGet(Set<T> set) {
         return set == null ? null : Collections.unmodifiableSet(set);
     }
 
-    private <T> List<T> simpleGet(List<T> list) {
+    public <T> List<T> simpleGet(List<T> list) {
         return list == null ? null : Collections.unmodifiableList(list);
     }
 
@@ -209,5 +96,51 @@ public class EntityRelationHelper {
 
     public <T> SortedSet<T> mmGet(SortedSet<T> set) {
         return set == null ? null : Collections.unmodifiableSortedSet(set);
+    }
+
+    public void simpleClear(String property) {
+        getCollection(property).clear();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void simpleAdd(String property, Collection<T> targets) {
+        ((Collection<T>) getCollection(property)).addAll(targets);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void simpleAdd(String property, T target) {
+        ((Collection<T>) getCollection(property)).add(target);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void simpleRemove(String property, Collection<T> targets) {
+        ((Collection<T>) getCollection(property)).removeAll(targets);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void simpleRemove(String property, T target) {
+        ((Collection<T>) getCollection(property)).remove(target);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Collection<?> getCollection(String property) {
+        return getInstance().resolve(Collection.class.cast(getInstance().invokeGet(bean, property)));
+    }
+
+    public <T> void simpleSet(String property, T target) {
+        getInstance().invokeSet(bean, property, target);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void simpleSet(String property, Collection<T> targets) {
+        Collection<T> cast = (Collection<T>) getCollection(property);
+        cast.clear();
+        if (targets != null) {
+            cast.addAll(targets);
+        }
+    }
+
+    public <T> T simpleGet(T target) {
+        return target;
     }
 }
