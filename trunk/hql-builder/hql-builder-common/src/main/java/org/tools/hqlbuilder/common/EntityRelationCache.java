@@ -65,9 +65,6 @@ public class EntityRelationCache<P> {
     private final transient Map<String, Field> setters = new HashMap<String, Field>();
 
     @Transient
-    private final transient Object NULL = "NULL";
-
-    @Transient
     private final transient Logger logger;
 
     private EntityRelationCache(Class<P> clazz) {
@@ -80,22 +77,17 @@ public class EntityRelationCache<P> {
      */
     private <A extends Annotation> A getFieldAnnotation(Field field, Class<A> type) {
         Object annotation = this.annotations.get(field);
-
         if (annotation == null) {
             annotation = field.getAnnotation(type);
-
-            if (annotation == null) {
-                annotation = NULL;
-            }
-
             this.annotations.put(field, annotation);
         }
-
-        if (NULL.equals(annotation)) {
+        if (annotation == null) {
             return null;
         }
-
-        return (A) annotation;
+        if (type.isAssignableFrom(annotation.getClass())) {
+            return type.cast(annotation);
+        }
+        return null;
     }
 
     /**
@@ -105,12 +97,12 @@ public class EntityRelationCache<P> {
         return null != getFieldAnnotation(findField(property), ManyToMany.class);
     }
 
-    // /**
-    // * is de relatie op de property many-to-one?
-    // */
-    // private boolean isManyToOne(String property) {
-    // return null != getFieldAnnotation(findField(property), OneToMany.class);
-    // }
+    /**
+     * is de relatie op de property many-to-one?
+     */
+    private boolean isManyToOne(String property) {
+        return null != getFieldAnnotation(findField(property), OneToMany.class);
+    }
 
     /**
      * is de relatie op de property one-to-many?
@@ -119,12 +111,12 @@ public class EntityRelationCache<P> {
         return null != getFieldAnnotation(findField(property), OneToMany.class);
     }
 
-    // /**
-    // * is de relatie op de property one-to-one?
-    // */
-    // private boolean isOneToOne(String property) {
-    // return null != getFieldAnnotation(findField(property), OneToOne.class);
-    // }
+    /**
+     * is de relatie op de property one-to-one?
+     */
+    private boolean isOneToOne(String property) {
+        return null != getFieldAnnotation(findField(property), OneToOne.class);
+    }
 
     /**
      * @see java.lang.Object#toString()
@@ -238,7 +230,7 @@ public class EntityRelationCache<P> {
     /**
      * set value
      */
-    private <T> void invokeSet(P bean, String property, T object) {
+    <T> void invokeSet(P bean, String property, T object) {
         try {
             if (bean instanceof HibernateProxy) {
                 bean = (P) ((HibernateProxy) bean).getHibernateLazyInitializer().getImplementation();
@@ -498,9 +490,11 @@ public class EntityRelationCache<P> {
             }
         }
 
-        for (C child : targets) {
-            if (!children.contains(child)) {
-                mmAdd(bean, property, children, child, backprop);
+        if (targets != null) {
+            for (C child : targets) {
+                if (!children.contains(child)) {
+                    mmAdd(bean, property, children, child, backprop);
+                }
             }
         }
     }
@@ -644,14 +638,12 @@ public class EntityRelationCache<P> {
             }
         }
 
-        try {
+        if (targets != null) {
             for (C child : targets) {
                 if (!children.contains(child)) {
                     omAdd(bean, property, children, child, backprop);
                 }
             }
-        } catch (NullPointerException ex) {
-            throw ex;
         }
     }
 
@@ -830,70 +822,31 @@ public class EntityRelationCache<P> {
         return field.getType();
     }
 
-    // /**
-    // * delegatie naar functie op basis van gevonden relatietype-annotatie
-    // */
-    // private <C> void add(P bean, String property, C target, String backprop) {
-    // if (isManyToMany(property)) {
-    // mmAdd(bean, property, target, backprop);
-    // } else if (isOneToMany(property)) {
-    // omAdd(bean, property, target, backprop);
-    // }
-    //
-    // throw new EntityRelationException("unsupported");
-    // }
+    /**
+     * delegatie naar functie op basis van gevonden relatietype-annotatie
+     */
+    <C> void add(P bean, String property, C target) {
+        if (isManyToMany(property)) {
+            mmAdd(bean, property, target);
+        } else if (isOneToMany(property)) {
+            omAdd(bean, property, target);
+        } else {
+            throw new EntityRelationException("unsupported");
+        }
+    }
 
-    // /**
-    // * delegatie naar functie op basis van gevonden relatietype-annotatie
-    // */
-    // private <C> void clear(P bean, String property, String backprop) {
-    // if (isManyToMany(property)) {
-    // mmClear(bean, property, backprop);
-    // } else if (isOneToMany(property)) {
-    // omClear(bean, property, backprop);
-    // }
-    //
-    // throw new EntityRelationException("unsupported");
-    // }
-
-    // /**
-    // * delegatie naar functie op basis van gevonden relatietype-annotatie
-    // */
-    // private <C> void remove(P bean, String property, C target, String backprop) {
-    // if (isManyToMany(property)) {
-    // mmRemove(bean, property, target, backprop);
-    // } else if (isOneToMany(property)) {
-    // omRemove(bean, property, target, backprop);
-    // }
-    //
-    // throw new EntityRelationException("unsupported");
-    // }
-
-    // /**
-    // * delegatie naar functie op basis van gevonden relatietype-annotatie
-    // */
-    // private <C> void replace(P bean, String property, Collection<C> targets, String backprop) {
-    // if (isManyToMany(property)) {
-    // mmReplace(bean, property, targets, backprop);
-    // } else if (isOneToMany(property)) {
-    // omReplace(bean, property, targets, backprop);
-    // }
-    //
-    // throw new EntityRelationException("unsupported");
-    // }
-
-    // /**
-    // * delegatie naar functie op basis van gevonden relatietype-annotatie
-    // */
-    // private <C> void set(P bean, String property, C target, String backprop) {
-    // if (isOneToOne(property)) {
-    // ooSet(bean, property, target, backprop);
-    // } else if (isManyToOne(property)) {
-    // moSet(bean, property, target, backprop);
-    // }
-    //
-    // throw new EntityRelationException("unsupported");
-    // }
+    /**
+     * delegatie naar functie op basis van gevonden relatietype-annotatie
+     */
+    <C> void set(P bean, String property, C target) {
+        if (isOneToOne(property)) {
+            ooSet(bean, property, target);
+        } else if (isManyToOne(property)) {
+            moSet(bean, property, target);
+        } else {
+            throw new EntityRelationException("unsupported");
+        }
+    }
 
     /**
      * delegatie naar functie op basis van gevonden relatietype-annotatie
@@ -903,9 +856,9 @@ public class EntityRelationCache<P> {
             mmClear(bean, property);
         } else if (isOneToMany(property)) {
             omClear(bean, property);
+        } else {
+            throw new EntityRelationException("unsupported");
         }
-
-        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -916,9 +869,9 @@ public class EntityRelationCache<P> {
             mmRemove(bean, property, target);
         } else if (isOneToMany(property)) {
             omRemove(bean, property, target);
+        } else {
+            throw new EntityRelationException("unsupported");
         }
-
-        throw new EntityRelationException("unsupported");
     }
 
     /**
@@ -929,9 +882,9 @@ public class EntityRelationCache<P> {
             mmReplace(bean, property, targets);
         } else if (isOneToMany(property)) {
             omReplace(bean, property, targets);
+        } else {
+            throw new EntityRelationException("unsupported");
         }
-
-        throw new EntityRelationException("unsupported");
     }
 
     private String moInverseProp(P bean, String property) {
