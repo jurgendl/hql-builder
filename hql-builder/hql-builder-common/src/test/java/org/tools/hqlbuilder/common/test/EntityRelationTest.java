@@ -11,6 +11,10 @@ public class EntityRelationTest extends org.junit.Assert {
         ManyToMany mm = new ManyToMany();
         ManyToManyBack mb = new ManyToManyBack();
 
+        mm.setManyToManyBack(null);
+        mm.addManyToManyBack(null);
+        mm.removeManyToManyBack(null);
+
         mm.addManyToManyBack(mb);
         assertTrue(mb.getManyToMany().contains(mm));
 
@@ -62,6 +66,10 @@ public class EntityRelationTest extends org.junit.Assert {
         ManyToManyBack mb = new ManyToManyBack();
         ManyToMany mm = new ManyToMany();
 
+        mb.setManyToMany(null);
+        mb.addManyToMany(null);
+        mb.removeManyToMany(null);
+
         mb.addManyToMany(mm);
         assertTrue(mm.getManyToManyBack().contains(mb));
 
@@ -112,6 +120,12 @@ public class EntityRelationTest extends org.junit.Assert {
     public void testOneToMany() {
         ManyToOne mo = new ManyToOne();
         OneToMany om = new OneToMany();
+
+        om.setManyToOne(null);
+
+        mo.setOneToMany(null);
+        mo.addOneToMany(null);
+        mo.removeOneToMany(null);
 
         mo.addOneToMany(om);
         assertEquals(om.getManyToOne(), mo);
@@ -176,6 +190,8 @@ public class EntityRelationTest extends org.junit.Assert {
         OneToOne oo = new OneToOne();
         OneToOneBack ob = new OneToOneBack();
 
+        oo.setOneToOneBack(null);
+
         oo.setOneToOneBack(ob);
         assertEquals(ob.getOneToOne(), oo);
 
@@ -203,6 +219,8 @@ public class EntityRelationTest extends org.junit.Assert {
         OneToOneBack ob = new OneToOneBack();
         OneToOne oo = new OneToOne();
 
+        ob.setOneToOne(null);
+
         ob.setOneToOne(oo);
         assertEquals(oo.getOneToOneBack(), ob);
 
@@ -226,34 +244,95 @@ public class EntityRelationTest extends org.junit.Assert {
     }
 
     @Test
-    public void testManyToManyNull() {
-        ManyToMany mm = new ManyToMany();
+    public void testSimpleManyToMany() {
+        SimpleManyToMany smm = new SimpleManyToMany();
+        Dummy d = new Dummy();
 
-        mm.setManyToManyBack(null);
-        mm.addManyToManyBack(null);
-        mm.removeManyToManyBack(null);
+        smm.addDummy(d);
+        assertTrue(smm.getDummy().contains(d));
+        assertEquals(smm.getDummy().size(), 1);
+
+        smm.removeDummy(d);
+        assertEquals(smm.getDummy().size(), 0);
+
+        smm.removeDummy(d);
+
+        smm.addDummy(d);
+        assertTrue(smm.getDummy().contains(d));
+        assertEquals(smm.getDummy().size(), 1);
+
+        smm.addDummy(d);
+        smm.clearDummy();
+        assertEquals(smm.getDummy().size(), 0);
+
+        smm.addDummy(d);
+        smm.setDummy(Collections.EMPTY_LIST);
+        assertEquals(smm.getDummy().size(), 0);
+
+        smm.addDummy(d);
+        smm.setDummy(null);
+        assertEquals(smm.getDummy().size(), 0);
     }
 
     @Test
-    public void testOneToOneNull() {
-        OneToOne oo = new OneToOne();
+    public void testSimpleManyToOne() {
+        SimpleManyToOne smo = new SimpleManyToOne();
+        Dummy d = new Dummy();
 
-        oo.setOneToOneBack(null);
+        smo.setDummy(d);
+        assertEquals(smo.getDummy(), d);
+
+        smo.setDummy(d);
+        assertEquals(smo.getDummy(), d);
+
+        smo.setDummy(null);
+        assertEquals(smo.getDummy(), null);
     }
 
     @Test
-    public void testOneToManyNull() {
-        ManyToOne mo = new ManyToOne();
+    public void testSimpleOneToMany() {
+        SimpleOneToMany som = new SimpleOneToMany();
+        Dummy d = new Dummy();
 
-        mo.setOneToMany(null);
-        mo.addOneToMany(null);
-        mo.removeOneToMany(null);
+        som.addDummy(d);
+        assertTrue(som.getDummy().contains(d));
+        assertEquals(som.getDummy().size(), 1);
+
+        som.removeDummy(d);
+        assertEquals(som.getDummy().size(), 0);
+
+        som.removeDummy(d);
+
+        som.addDummy(d);
+        assertTrue(som.getDummy().contains(d));
+        assertEquals(som.getDummy().size(), 1);
+
+        som.addDummy(d);
+        som.clearDummy();
+        assertEquals(som.getDummy().size(), 0);
+
+        som.addDummy(d);
+        som.setDummy(Collections.EMPTY_LIST);
+        assertEquals(som.getDummy().size(), 0);
+
+        som.addDummy(d);
+        som.setDummy(null);
+        assertEquals(som.getDummy().size(), 0);
+
     }
 
     @Test
-    public void testManyToOneNull() {
-        OneToMany om = new OneToMany();
+    public void testSimpleOneToOne() {
+        SimpleOneToOne soo = new SimpleOneToOne();
+        Dummy d = new Dummy();
 
-        om.setManyToOne(null);
+        soo.setDummy(d);
+        assertEquals(soo.getDummy(), d);
+
+        soo.setDummy(d);
+        assertEquals(soo.getDummy(), d);
+
+        soo.setDummy(null);
+        assertEquals(soo.getDummy(), null);
     }
 }
