@@ -101,7 +101,7 @@ public class EntityRelationCache<P> {
      * is de relatie op de property many-to-one?
      */
     private boolean isManyToOne(String property) {
-        return null != getFieldAnnotation(findField(property), OneToMany.class);
+        return null != getFieldAnnotation(findField(property), ManyToOne.class);
     }
 
     /**
