@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.common.test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -14,10 +13,10 @@ public class SimpleManyToMany extends EntityERHAdapter {
     public static final String DUMMY = "dummy";
 
     @javax.persistence.ManyToMany
-    private List<Dummy> dummy = new ArrayList<Dummy>();
+    private List<Dummy> dummy;
 
     public List<Dummy> getDummy() {
-        return erh.simpleGet(this.dummy);
+        return erh.simpleGet(DUMMY, this.dummy);
     }
 
     public void setDummy(List<Dummy> dummy) {

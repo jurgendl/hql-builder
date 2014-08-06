@@ -66,40 +66,26 @@ public class EntityRelationHelper<O> {
         getInstance().replace(bean, property, targets);
     }
 
-    public <T> Set<T> omGet(Set<T> set) {
-        return simpleGet(set);
+    public <C extends Collection<E>, E> C omGet(String property, C collection) {
+        return simpleGet(property, collection);
     }
 
-    public <T> List<T> omGet(List<T> list) {
-        return simpleGet(list);
+    @SuppressWarnings("unchecked")
+    public <C extends Collection<E>, E> C simpleGet(String property, C collection) {
+        if (collection == null) {
+            collection = (C) getInstance().createCollection(bean, property);
+        }
+        if (collection instanceof SortedSet) {
+            return (C) Collections.unmodifiableSortedSet((SortedSet<E>) collection);
+        } else if (collection instanceof Set) {
+            return (C) Collections.unmodifiableSet((Set<E>) collection);
+        }
+        // can only be a List at this point
+        return (C) Collections.unmodifiableList((List<E>) collection);
     }
 
-    public <T> SortedSet<T> simpleGet(SortedSet<T> set) {
-        return set == null ? null : Collections.unmodifiableSortedSet(set);
-    }
-
-    public <T> Set<T> simpleGet(Set<T> set) {
-        return set == null ? null : Collections.unmodifiableSet(set);
-    }
-
-    public <T> List<T> simpleGet(List<T> list) {
-        return list == null ? null : Collections.unmodifiableList(list);
-    }
-
-    public <T> SortedSet<T> omGet(SortedSet<T> set) {
-        return simpleGet(set);
-    }
-
-    public <T> Set<T> mmGet(Set<T> set) {
-        return simpleGet(set);
-    }
-
-    public <T> List<T> mmGet(List<T> list) {
-        return simpleGet(list);
-    }
-
-    public <T> SortedSet<T> mmGet(SortedSet<T> set) {
-        return simpleGet(set);
+    public <C extends Collection<E>, E> C mmGet(String property, C collection) {
+        return simpleGet(property, collection);
     }
 
     public void simpleClear(String property) {
@@ -116,9 +102,8 @@ public class EntityRelationHelper<O> {
         ((Collection<T>) getCollection(property)).remove(target);
     }
 
-    @SuppressWarnings("unchecked")
     private Collection<?> getCollection(String property) {
-        return getInstance().resolve(Collection.class.cast(getInstance().invokeGet(bean, property)));
+        return getInstance().getOrCreateCollection(bean, property);
     }
 
     public <T> void simpleSet(String property, T target) {
