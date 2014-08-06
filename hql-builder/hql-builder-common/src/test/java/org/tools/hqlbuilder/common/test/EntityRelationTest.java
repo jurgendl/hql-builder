@@ -4,7 +4,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-public class RelationTest extends org.junit.Assert {
+public class EntityRelationTest extends org.junit.Assert {
     @Test
     public void testManyToMany() {
         ManyToMany mm = new ManyToMany();
@@ -81,51 +81,51 @@ public class RelationTest extends org.junit.Assert {
 
     @Test
     public void testOneToMany() {
-        OneToMany om = new OneToMany();
         ManyToOne mo = new ManyToOne();
+        OneToMany om = new OneToMany();
 
-        om.addManyToOne(mo);
-        assertEquals(mo.getOneToMany(), om);
+        mo.addOneToMany(om);
+        assertEquals(om.getManyToOne(), mo);
 
-        om.removeManyToOne(mo);
-        assertEquals(mo.getOneToMany(), null);
+        mo.removeOneToMany(om);
+        assertEquals(om.getManyToOne(), null);
 
-        om.addManyToOne(mo);
-        om.clearManyToOne();
-        assertEquals(mo.getOneToMany(), null);
+        mo.addOneToMany(om);
+        mo.clearOneToMany();
+        assertEquals(om.getManyToOne(), null);
 
-        om.setManyToOne(Collections.singleton(mo));
-        assertEquals(mo.getOneToMany(), om);
+        mo.setOneToMany(Collections.singleton(om));
+        assertEquals(om.getManyToOne(), mo);
     }
 
     @Test
     public void testOneToManyInvers() {
-        ManyToOne mo = new ManyToOne();
         OneToMany om = new OneToMany();
+        ManyToOne mo = new ManyToOne();
 
-        mo.setOneToMany(om);
-        assertTrue(om.getManyToOne().contains(mo));
-        assertTrue(om.getManyToOne().size() == 1);
+        om.setManyToOne(mo);
+        assertTrue(mo.getOneToMany().contains(om));
+        assertTrue(mo.getOneToMany().size() == 1);
 
-        mo.setOneToMany(null);
-        assertTrue(om.getManyToOne().size() == 0);
+        om.setManyToOne(null);
+        assertTrue(mo.getOneToMany().size() == 0);
     }
 
     @Test
     public void testOneToManyInversAuto() {
-        ManyToOne mo = new ManyToOne();
         OneToMany om = new OneToMany();
-        OneToMany omX = new OneToMany();
+        ManyToOne mo = new ManyToOne();
+        ManyToOne moX = new ManyToOne();
 
-        mo.setOneToMany(om);
-        assertEquals(mo.getOneToMany(), om);
-        assertTrue(om.getManyToOne().contains(mo));
-        assertFalse(omX.getManyToOne().contains(mo));
+        om.setManyToOne(mo);
+        assertEquals(om.getManyToOne(), mo);
+        assertTrue(mo.getOneToMany().contains(om));
+        assertFalse(moX.getOneToMany().contains(om));
 
-        mo.setOneToMany(omX);
-        assertEquals(mo.getOneToMany(), omX);
-        assertFalse(om.getManyToOne().contains(mo));
-        assertTrue(omX.getManyToOne().contains(mo));
+        om.setManyToOne(moX);
+        assertEquals(om.getManyToOne(), moX);
+        assertFalse(mo.getOneToMany().contains(om));
+        assertTrue(moX.getOneToMany().contains(om));
     }
 
     @Test
@@ -185,6 +185,7 @@ public class RelationTest extends org.junit.Assert {
     @Test
     public void testManyToManyNull() {
         ManyToMany mm = new ManyToMany();
+
         mm.setManyToManyBack(null);
         mm.addManyToManyBack(null);
         mm.removeManyToManyBack(null);
@@ -193,20 +194,23 @@ public class RelationTest extends org.junit.Assert {
     @Test
     public void testOneToOneNull() {
         OneToOne oo = new OneToOne();
+
         oo.setOneToOneBack(null);
     }
 
     @Test
     public void testOneToManyNull() {
-        OneToMany om = new OneToMany();
-        om.setManyToOne(null);
-        om.addManyToOne(null);
-        om.removeManyToOne(null);
+        ManyToOne mo = new ManyToOne();
+
+        mo.setOneToMany(null);
+        mo.setOneToMany(null);
+        mo.removeOneToMany(null);
     }
 
     @Test
     public void testManyToOneNull() {
-        ManyToOne mo = new ManyToOne();
-        mo.setOneToMany(null);
+        OneToMany om = new OneToMany();
+
+        om.setManyToOne(null);
     }
 }
