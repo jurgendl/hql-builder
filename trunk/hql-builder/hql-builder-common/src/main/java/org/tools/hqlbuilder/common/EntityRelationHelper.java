@@ -74,6 +74,10 @@ public class EntityRelationHelper<O> {
         return simpleGet(list);
     }
 
+    public <T> SortedSet<T> simpleGet(SortedSet<T> set) {
+        return set == null ? null : Collections.unmodifiableSortedSet(set);
+    }
+
     public <T> Set<T> simpleGet(Set<T> set) {
         return set == null ? null : Collections.unmodifiableSet(set);
     }
@@ -83,19 +87,19 @@ public class EntityRelationHelper<O> {
     }
 
     public <T> SortedSet<T> omGet(SortedSet<T> set) {
-        return set == null ? null : Collections.unmodifiableSortedSet(set);
+        return simpleGet(set);
     }
 
     public <T> Set<T> mmGet(Set<T> set) {
-        return set == null ? null : Collections.unmodifiableSet(set);
+        return simpleGet(set);
     }
 
     public <T> List<T> mmGet(List<T> list) {
-        return list == null ? null : Collections.unmodifiableList(list);
+        return simpleGet(list);
     }
 
     public <T> SortedSet<T> mmGet(SortedSet<T> set) {
-        return set == null ? null : Collections.unmodifiableSortedSet(set);
+        return simpleGet(set);
     }
 
     public void simpleClear(String property) {
@@ -103,18 +107,8 @@ public class EntityRelationHelper<O> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> void simpleAdd(String property, Collection<T> targets) {
-        ((Collection<T>) getCollection(property)).addAll(targets);
-    }
-
-    @SuppressWarnings("unchecked")
     public <T> void simpleAdd(String property, T target) {
         ((Collection<T>) getCollection(property)).add(target);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> void simpleRemove(String property, Collection<T> targets) {
-        ((Collection<T>) getCollection(property)).removeAll(targets);
     }
 
     @SuppressWarnings("unchecked")
