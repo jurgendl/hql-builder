@@ -49,7 +49,7 @@ public class Group extends EntityERHAdapter implements GroupProperties {
     }
 
     public List<Member> getMembers() {
-        return erh.omGet(this.members);
+        return erh.omGet(MEMBERS, this.members);
     }
 
     public void addMember(Member member) {
@@ -65,7 +65,7 @@ public class Group extends EntityERHAdapter implements GroupProperties {
     }
 
     public List<GroupAuthority> getAuthorities() {
-        return erh.omGet(this.authorities);
+        return erh.omGet(AUTHORITIES, this.authorities);
     }
 
     public void setAuthorities(List<GroupAuthority> authorities) {

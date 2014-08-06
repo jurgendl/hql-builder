@@ -12,7 +12,7 @@ public abstract class EntityERHAdapter extends EntityAdapter {
     private static final long serialVersionUID = -7883758465742148428L;
 
     @Transient
-    protected transient EntityRelationHelper<EntityERHAdapter> erh;
+    protected transient EntityRelationHelper<? extends EntityERHAdapter> erh;
 
     public EntityERHAdapter(Long id, Integer version) {
         super(id, version);

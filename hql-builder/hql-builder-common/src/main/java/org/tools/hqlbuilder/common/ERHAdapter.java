@@ -11,7 +11,7 @@ public abstract class ERHAdapter implements Serializable {
     private static final long serialVersionUID = 1068663389042116818L;
 
     @Transient
-    protected transient EntityRelationHelper<ERHAdapter> erh;
+    protected transient EntityRelationHelper<? extends ERHAdapter> erh;
 
     public ERHAdapter() {
         initERH();

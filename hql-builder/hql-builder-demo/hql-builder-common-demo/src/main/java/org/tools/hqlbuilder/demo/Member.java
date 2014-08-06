@@ -12,9 +12,9 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.tools.hqlbuilder.common.ERHAdapter;
 import org.tools.hqlbuilder.common.EntityI;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
-import org.tools.hqlbuilder.common.ERHAdapter;
 
 @XmlRootElement
 @Entity
@@ -37,7 +37,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     private List<Authority> authorities;
 
     public Member() {
-        erh = new EntityRelationHelper(this);
+        erh = new EntityRelationHelper<Member>(this);
     }
 
     public Member(String username, Group group) {
@@ -68,7 +68,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     }
 
     public List<Authority> getAuthorities() {
-        return erh.omGet(this.authorities);
+        return erh.omGet(AUTHORITIES, this.authorities);
     }
 
     public void setAuthorities(List<Authority> authorities) {

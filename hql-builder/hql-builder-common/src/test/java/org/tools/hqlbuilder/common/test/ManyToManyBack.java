@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.common.test;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -14,10 +13,10 @@ public class ManyToManyBack extends EntityERHAdapter {
     public static final String MANY_TO_MANY = "manyToMany";
 
     @javax.persistence.ManyToMany(mappedBy = ManyToMany.MANY_TO_MANY_BACK)
-    private Set<ManyToMany> manyToMany = new HashSet<ManyToMany>();
+    private Set<ManyToMany> manyToMany;
 
     public Set<ManyToMany> getManyToMany() {
-        return erh.mmGet(this.manyToMany);
+        return erh.mmGet(MANY_TO_MANY, this.manyToMany);
     }
 
     public void setManyToMany(Set<ManyToMany> manyToMany) {

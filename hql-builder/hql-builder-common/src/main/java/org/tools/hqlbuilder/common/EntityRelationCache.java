@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -153,15 +155,9 @@ public class EntityRelationCache<P> {
             return beanClass.getDeclaredField(property);
         } catch (java.lang.NoSuchFieldException ex) {
             Class<?> superClass = beanClass.getSuperclass();
-
             if (!Object.class.equals(superClass)) {
                 return findField(superClass, property);
             }
-
-            throw new EntityRelationException(ex);
-        } catch (SecurityException ex) {
-            throw new EntityRelationException(ex);
-        } catch (RuntimeException ex) {
             throw new EntityRelationException(ex);
         }
     }
@@ -172,8 +168,6 @@ public class EntityRelationCache<P> {
     private static Method findGetMethod(Class<?> beanClass, String property) throws MethodNotFoundException {
         try {
             return beanClass.getMethod("get" + StringUtils.capitalize(property));
-        } catch (RuntimeException ex) {
-            throw new MethodNotFoundException(ex);
         } catch (NoSuchMethodException ex) {
             throw new MethodNotFoundException(ex);
         }
@@ -207,13 +201,6 @@ public class EntityRelationCache<P> {
 
         return method;
     }
-
-    // /**
-    // * get value
-    // */
-    // private <T> T invokeGet(P bean, String property, Class<T> type) {
-    // return type.cast(invokeGet(bean, property));
-    // }
 
     /**
      * get value
@@ -255,17 +242,27 @@ public class EntityRelationCache<P> {
     <C> void ooSet(P bean, String property, C target, String backprop) {
         C child = (C) invokeGet(bean, property);
 
-        if ((child == null) && (target == null)) {
-            return;
-        } else if (child == null) { // nieuwChild!=null
-            ooSet0(bean, property, target, backprop);
-        } else if (target == null) { // huidigChild!=null
-            ooUnset(bean, property, child, backprop);
-        } else if (!target.equals(child)) { // nieuwChild!=null &&
-            // huidigChild!=null
-            ooUnset(bean, property, child, backprop);
-            ooSet0(bean, property, target, backprop);
-        } // else => no action required
+        if (child == null) {
+            if (target == null) {
+                // no action required
+            } else {
+                // nieuwChild!=null
+                ooSet0(bean, property, target, backprop);
+            }
+        } else {
+            if (target == null) {
+                // huidigChild!=null
+                ooUnset(bean, property, child, backprop);
+            } else {
+                if (!target.equals(child)) {
+                    // nieuwChild!=null && huidigChild!=null
+                    ooUnset(bean, property, child, backprop);
+                    ooSet0(bean, property, target, backprop);
+                } else {
+                    // no action required
+                }
+            }
+        }
     }
 
     /**
@@ -288,7 +285,6 @@ public class EntityRelationCache<P> {
             EntityRelationCache<C> targetCache = (EntityRelationCache<C>) EntityRelationCache.getInstance(currentValue.getClass());
             targetCache.omRemove(currentValue, backprop, bean, property);
         }
-
         if (target != null) {
             EntityRelationCache<C> targetCache = (EntityRelationCache<C>) EntityRelationCache.getInstance(target.getClass());
             targetCache.omAdd(target, backprop, bean, property);
@@ -343,13 +339,11 @@ public class EntityRelationCache<P> {
      */
     <C> void mmClear(P bean, String property, String backprop) {
         Collection<C> collection = (Collection<C>) invokeGet(bean, property);
-        if (collection == null) {
-            collection = invokeCreateCollection(bean, property);
-        }
+        // if (collection == null) {// never null because getter creates when needed
+        // return;
+        // }
 
-        C[] array = (C[]) collection.toArray();
-
-        for (C child : array) {
+        for (C child : (C[]) collection.toArray()) {
             mmRemove(bean, property, collection, child, backprop);
         }
     }
@@ -366,10 +360,9 @@ public class EntityRelationCache<P> {
      */
     private <C> void mmAdd(P bean, String property, C target, String backprop) {
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
-        if (children == null) {
-            children = invokeCreateCollection(bean, property);
-        }
-
+        // if (children == null) { // never null because getter creates when needed
+        // children = createCollection(bean, property);
+        // }
         mmAdd(bean, property, children, target, backprop);
     }
 
@@ -380,9 +373,9 @@ public class EntityRelationCache<P> {
 
         EntityRelationCache<C> targetWrapper = (EntityRelationCache<C>) getInstance(target.getClass());
         Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
-        if (parents == null) {
-            parents = targetWrapper.invokeCreateCollection(target, backprop);
-        }
+        // if (parents == null) { // never null because getter creates when needed
+        // parents = targetWrapper.createCollection(target, backprop);
+        // }
 
         if (parents.contains(bean) && children.contains(target)) {
             targetWrapper.invokeCollectionRemove(parents, bean);
@@ -443,9 +436,9 @@ public class EntityRelationCache<P> {
 
         EntityRelationCache<C> targetWrapper = (EntityRelationCache<C>) getInstance(target.getClass());
         Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
-        if (parents == null) {
-            parents = targetWrapper.invokeCreateCollection(target, backprop);
-        }
+        // if (parents == null) { // never null because getter creates when needed
+        // parents = targetWrapper.createCollection(target, backprop);
+        // }
 
         if (!parents.contains(bean) && !children.contains(target)) {
             targetWrapper.invokeCollectionAdd(parents, bean);
@@ -469,10 +462,9 @@ public class EntityRelationCache<P> {
      */
     private <C> void mmRemove(P bean, String property, C target, String backprop) {
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
-        if (children == null) {
-            children = invokeCreateCollection(bean, property);
-        }
-
+        // if (children == null) { // never null because getter creates when needed
+        // children = createCollection(bean, property);
+        // }
         mmRemove(bean, property, children, target, backprop);
     }
 
@@ -481,10 +473,9 @@ public class EntityRelationCache<P> {
      */
     private <C> void mmReplace(P bean, String property, Collection<C> targets, String backprop) {
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
-        if (children == null) {
-            children = invokeCreateCollection(bean, property);
-        }
-
+        // if (children == null) { // never null because getter creates when needed
+        // children = createCollection(bean, property);
+        // }
         if (targets == null) {
             targets = Collections.EMPTY_SET;
         }
@@ -514,14 +505,11 @@ public class EntityRelationCache<P> {
      */
     private <C> void omClear(P bean, String property, String backprop) {
         Collection<C> collection = (Collection<C>) invokeGet(bean, property);
+        // if (collection == null) { // never null because getter creates when needed
+        // return;
+        // }
 
-        if (collection == null) {
-            return;
-        }
-
-        C[] array = (C[]) collection.toArray();
-
-        for (C child : array) {
+        for (C child : (C[]) collection.toArray()) {
             omRemove(bean, property, collection, child, backprop);
         }
     }
@@ -542,9 +530,9 @@ public class EntityRelationCache<P> {
         }
 
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
-        if (children == null) {
-            children = invokeCreateCollection(bean, property);
-        }
+        // if (children == null) {// never null because getter creates when needed
+        // children = createCollection(bean, property);
+        // }
 
         omAdd(bean, property, children, target, backprop);
     }
@@ -605,9 +593,9 @@ public class EntityRelationCache<P> {
         }
 
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
-        if (children == null) {
-            children = invokeCreateCollection(bean, property);
-        }
+        // if (children == null) { // never null because getter creates when needed
+        // children = createCollection(bean, property);
+        // }
 
         omRemove(bean, property, children, target, backprop);
     }
@@ -631,9 +619,9 @@ public class EntityRelationCache<P> {
      */
     private <C> void omReplace(P bean, String property, Collection<C> targets, String backprop) {
         Collection<C> children = (Collection<C>) invokeGet(bean, property);
-        if (children == null) {
-            children = invokeCreateCollection(bean, property);
-        }
+        // if (children == null) { // never null because getter creates when needed
+        // children = createCollection(bean, property);
+        // }
 
         if (targets == null) {
             targets = Collections.EMPTY_SET;
@@ -650,21 +638,6 @@ public class EntityRelationCache<P> {
                 omAdd(bean, property, children, child, backprop);
             }
         }
-    }
-
-    /**
-     * not null check
-     */
-    private <U> U nn(U object) {
-        if (object == null) {
-            throw new NullPointerException();
-        }
-
-        if (object instanceof String && StringUtils.isBlank(String.class.cast(object))) {
-            throw new NullPointerException();
-        }
-
-        return object;
     }
 
     private Annotation anyAnnotation(Field field) {
@@ -694,26 +667,15 @@ public class EntityRelationCache<P> {
     }
 
     private String mappedBy(Annotation relationAnnotation) {
-        if (relationAnnotation == null) {
-            return null;
-        }
-
         if (relationAnnotation instanceof ManyToMany) {
             return ManyToMany.class.cast(relationAnnotation).mappedBy();
-        }
-
-        if (relationAnnotation instanceof OneToOne) {
+        } else if (relationAnnotation instanceof OneToOne) {
             return OneToOne.class.cast(relationAnnotation).mappedBy();
-        }
-
-        if (relationAnnotation instanceof OneToMany) {
+        } else if (relationAnnotation instanceof OneToMany) {
             return OneToMany.class.cast(relationAnnotation).mappedBy();
         }
 
-        if (relationAnnotation instanceof ManyToOne) {
-            return null;// ManyToOne.class.cast(relationAnnotation).mappedBy();
-        }
-
+        // ManyToOne does not have mappedBy
         return null;
     }
 
@@ -725,7 +687,7 @@ public class EntityRelationCache<P> {
             if (StringUtils.isBlank(mb)) {
                 mb = mappedByInvers(property, mappedByAnno);
             }
-            mappedBy.put(property, nn(mb));
+            mappedBy.put(property, mb.toString());
         }
         return mb;
     }
@@ -919,7 +881,7 @@ public class EntityRelationCache<P> {
         return backProp;
     }
 
-    private <T> Collection<T> invokeCreateCollection(P bean, String property) {
+    <T> Collection<T> createCollection(P bean, String property) {
         Class<T> type = (Class<T>) findField(bean.getClass(), property).getType();
         int modifiers = type.getModifiers();
         Collection<T> collection;
@@ -933,12 +895,25 @@ public class EntityRelationCache<P> {
             }
         } else if (List.class.equals(type)) {
             collection = new ArrayList<T>();
+        } else if (SortedSet.class.equals(type)) {
+            collection = new TreeSet<T>();
         } else if (Set.class.equals(type)) {
             collection = new HashSet<T>();
         } else {
             throw new EntityRelationException("creation of collection not supported: " + type.getName());
         }
         invokeSet(bean, property, collection);
+        return collection;
+    }
+
+    Collection<?> getOrCreateCollection(P bean, String property) {
+        Object object = invokeGet(bean, property);
+        Collection<?> collection;
+        if (object == null) {
+            collection = createCollection(bean, property);
+        } else {
+            collection = resolve(Collection.class.cast(object));
+        }
         return collection;
     }
 }

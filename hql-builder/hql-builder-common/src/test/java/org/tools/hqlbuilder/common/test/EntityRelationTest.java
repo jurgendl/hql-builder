@@ -3,9 +3,16 @@ package org.tools.hqlbuilder.common.test;
 import java.util.Collections;
 
 import org.junit.Test;
+import org.tools.hqlbuilder.common.EntityRelationHelper;
+import org.tools.hqlbuilder.common.exceptions.EntityRelationException;
 
 @SuppressWarnings("unchecked")
 public class EntityRelationTest extends org.junit.Assert {
+    @Test
+    public void test() {
+        new EntityRelationHelper<Dummy>(new Dummy()).toString();
+    }
+
     @Test
     public void testManyToMany() {
         ManyToMany mm = new ManyToMany();
@@ -156,7 +163,7 @@ public class EntityRelationTest extends org.junit.Assert {
     }
 
     @Test
-    public void testOneToManyInvers() {
+    public void testManyToOne() {
         OneToMany om = new OneToMany();
         ManyToOne mo = new ManyToOne();
 
@@ -164,12 +171,14 @@ public class EntityRelationTest extends org.junit.Assert {
         assertTrue(mo.getOneToMany().contains(om));
         assertTrue(mo.getOneToMany().size() == 1);
 
+        om.setManyToOne(mo);
+
         om.setManyToOne(null);
         assertTrue(mo.getOneToMany().size() == 0);
     }
 
     @Test
-    public void testOneToManyInversAuto() {
+    public void testManyToOneAuto() {
         OneToMany om = new OneToMany();
         ManyToOne mo = new ManyToOne();
         ManyToOne moX = new ManyToOne();
@@ -197,6 +206,13 @@ public class EntityRelationTest extends org.junit.Assert {
 
         oo.setOneToOneBack(null);
         assertEquals(ob.getOneToOne(), null);
+
+        OneToOneBack obb = new OneToOneBack();
+        oo.setOneToOneBack(ob);
+        oo.setOneToOneBack(obb);
+        assertEquals(ob.getOneToOne(), null);
+        assertEquals(obb.getOneToOne(), oo);
+        assertEquals(oo.getOneToOneBack(), obb);
     }
 
     @Test
@@ -334,5 +350,31 @@ public class EntityRelationTest extends org.junit.Assert {
 
         soo.setDummy(null);
         assertEquals(soo.getDummy(), null);
+    }
+
+    @Test
+    public void testSortedSet() {
+        WithSortedSet wss = new WithSortedSet();
+        wss.setDummy(null);
+    }
+
+    @Test
+    public void testIllegalField() {
+        IllegalField err = new IllegalField();
+        Dummy dummy = new Dummy();
+
+        try {
+            err.setDummy(dummy);
+            fail("expected EntityRelationException");
+        } catch (EntityRelationException ex) {
+            assertTrue(true);
+        }
+
+        try {
+            err.setDummys(Collections.singleton(dummy));
+            fail("expected EntityRelationException");
+        } catch (EntityRelationException ex) {
+            assertTrue(true);
+        }
     }
 }
