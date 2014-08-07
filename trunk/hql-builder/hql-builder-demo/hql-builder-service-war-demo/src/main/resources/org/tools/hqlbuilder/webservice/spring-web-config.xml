@@ -16,7 +16,7 @@
 
 	<!-- <import resource="classpath:org/tools/hqlbuilder/webservice/security/spring-security-config.xml"/> -->
 
-	<import resource="classpath:org/tools/hqlbuilder/test/spring-service-config.xml"/>
+	<import resource="classpath:org/tools/hqlbuilder/service/demo/spring-service-demo-context.xml"/>
 
 	<bean id="hqlWebService" class="org.tools.hqlbuilder.webservice.HqlWebServiceImpl" scope="singleton" lazy-init="false">
 		<property name="hqlService" ref="hqlService" />

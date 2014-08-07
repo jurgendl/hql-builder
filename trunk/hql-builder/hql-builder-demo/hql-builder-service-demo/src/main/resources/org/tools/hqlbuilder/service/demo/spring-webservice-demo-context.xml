@@ -11,10 +11,20 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<import resource="classpath:org/tools/hqlbuilder/service/demo/spring-webservice-demo-context.xml" />
+	<import resource="classpath:org/tools/hqlbuilder/service/demo/spring-service-demo-context.xml" />
 
-	<bean id="hqlServiceClient" class="org.tools.hqlbuilder.client.HqlServiceClientImpl" scope="singleton" lazy-init="false">
-		<property name="hqlService" ref="hqlService"/>
+	<bean name="hqlServiceExporter" class="org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter">
+		<property name="service" ref="hqlService" />
+		<property name="serviceInterface" value="org.tools.hqlbuilder.common.HqlService" />
+	</bean>
+
+	<bean id="httpServer" class="org.springframework.remoting.support.SimpleHttpServerFactoryBean">
+		<property name="contexts">
+			<util:map>
+				<entry key="/hqlbuilder/bin" value-ref="hqlServiceExporter" />
+			</util:map>
+		</property>
+		<property name="port" value="80" />
 	</bean>
 
 </beans>
