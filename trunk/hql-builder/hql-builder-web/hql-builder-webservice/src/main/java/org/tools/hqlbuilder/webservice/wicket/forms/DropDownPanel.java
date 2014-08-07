@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -7,7 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
-public class DropDownPanel<T> extends DefaultFormRowPanel<T, DropDownChoice<T>> {
+public class DropDownPanel<T extends Serializable> extends DefaultFormRowPanel<T, DropDownChoice<T>> {
     private static final long serialVersionUID = -4693793144091792295L;
 
     protected ListModel<T> choices;
