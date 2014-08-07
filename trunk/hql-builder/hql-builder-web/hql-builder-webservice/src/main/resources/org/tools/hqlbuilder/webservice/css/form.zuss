@@ -293,10 +293,8 @@ form input[type='range']::-moz-range-thumb {
 	border: 1px solid @form_error_border;
 	background-color: @form_error_background;
 	font-size: small;
-	padding-left: 3px;
-	padding-right: 3px;
 	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 15px;
+	padding: 3px 3px 3px 15px;
 	display: inline-block;
 }
 
