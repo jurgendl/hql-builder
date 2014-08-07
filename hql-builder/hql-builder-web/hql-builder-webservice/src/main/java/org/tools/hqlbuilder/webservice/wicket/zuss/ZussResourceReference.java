@@ -75,8 +75,32 @@ public class ZussResourceReference extends StreamResourceReference implements IR
     @Override
     public InputStream getInputStream() throws ResourceStreamNotFoundException {
         try {
-            if (css == null || getZussStyle().getLastModified() == null || lastModifiedTime() == null
-                    || lastModifiedTime().getMilliseconds() < getZussStyle().getLastModified()) {
+            boolean rebuild = false;
+            String fullPath = getResourcePath() + '/' + getZussName();
+            if (css == null) {
+                logger.info("building " + fullPath + " because is new");
+                rebuild = true;
+            } else if (lastModifiedTime() == null) {
+                logger.info("building " + fullPath + " because out of date");
+                rebuild = true;
+            } else if (getZussStyle().getLastModified() == null) {
+                logger.info("building " + fullPath + " because style is new");
+                rebuild = true;
+            } else if (lastModifiedTime().getMilliseconds() < getZussStyle().getLastModified()) {
+                logger.info("building " + fullPath + " because style out of date");
+                rebuild = true;
+            } else if (WicketApplication.get().usesDevelopmentConfig()) {
+                try {
+                    if (lastModifiedTime().getMilliseconds() < getClass().getClassLoader().getResource(fullPath).openConnection().getLastModified()) {
+                        logger.info("building " + fullPath + " because template out of date");
+                        rebuild = true;
+                    }
+                } catch (IOException ex1) {
+                    logger.info("building " + fullPath + " because of exception: " + ex1);
+                    rebuild = true;
+                }
+            }
+            if (rebuild) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {
                     write(out);
@@ -86,7 +110,6 @@ public class ZussResourceReference extends StreamResourceReference implements IR
                 length = Bytes.bytes(out.size());
                 lastModified = Time.now();
                 css = new String(out.toByteArray(), charset);
-                logger.info(getZussName() + " - building");
             }
             return new ByteArrayInputStream(css.getBytes(charset));
         } catch (UnsupportedEncodingException ex) {
