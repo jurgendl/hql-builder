@@ -47,6 +47,6 @@ public class BasePage extends DefaultWebPage {
             }
         };
         add(menu);
-        menu.setVisible(false);
+        // menu.setVisible(false);
     }
 }

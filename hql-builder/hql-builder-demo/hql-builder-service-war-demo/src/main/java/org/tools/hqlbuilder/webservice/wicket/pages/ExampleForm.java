@@ -80,7 +80,7 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
 
-        boolean dont = false;
+        boolean dont = true;
         addTextField(proxy.getText(), fset.clone().setRequired(true));
         addEmailTextField(proxy.getEmail(), fset);
         if (dont) {
