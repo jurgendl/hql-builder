@@ -294,8 +294,9 @@ form input[type='range']::-moz-range-thumb {
 	background-color: @form_error_background;
 	font-size: small;
 	margin: 0px 0px 0px 0px;
-	padding: 3px 3px 3px 15px;
+	padding: 2px 3px 2px 3px;
 	display: inline-block;
+	list-style-type: none;
 }
 
 .valid {
