@@ -38,7 +38,7 @@ public class ZussResourceReference extends StreamResourceReference implements IR
 
     protected transient String css = "";
 
-    protected transient Time lastModified = Time.millis(0l);
+    protected transient Time lastModified = null;
 
     protected transient Resolver resolver = null;
 
@@ -58,6 +58,13 @@ public class ZussResourceReference extends StreamResourceReference implements IR
 
     @Override
     public Time lastModifiedTime() {
+        if (lastModified == null) {
+            try {
+                getInputStream();
+            } catch (ResourceStreamNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         logger.info(getZussName() + " - sending lastModifiedTime: " + lastModified);
         return lastModified;
     }
@@ -80,18 +87,18 @@ public class ZussResourceReference extends StreamResourceReference implements IR
             if (css == null) {
                 logger.info("building " + fullPath + " because is new");
                 rebuild = true;
-            } else if (lastModifiedTime() == null) {
+            } else if (lastModified == null) {
                 logger.info("building " + fullPath + " because out of date");
                 rebuild = true;
             } else if (getZussStyle().getLastModified() == null) {
                 logger.info("building " + fullPath + " because style is new");
                 rebuild = true;
-            } else if (lastModifiedTime().getMilliseconds() < getZussStyle().getLastModified()) {
+            } else if (lastModified.getMilliseconds() < getZussStyle().getLastModified()) {
                 logger.info("building " + fullPath + " because style out of date");
                 rebuild = true;
             } else if (WicketApplication.get().usesDevelopmentConfig()) {
                 try {
-                    if (lastModifiedTime().getMilliseconds() < getClass().getClassLoader().getResource(fullPath).openConnection().getLastModified()) {
+                    if (lastModified.getMilliseconds() < getClass().getClassLoader().getResource(fullPath).openConnection().getLastModified()) {
                         logger.info("building " + fullPath + " because template out of date");
                         rebuild = true;
                     }
