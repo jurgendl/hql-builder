@@ -111,8 +111,8 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         fileComponentContainer.add(filePresentContainer);
         filePresentContainer.setOutputMarkupId(true);
         filePresentContainer.add(getFilePresentLabel());
-        filePresentContainer.add(getDownloadFile());
-        filePresentContainer.add(getRemoveFile());
+        filePresentContainer.add(getDownloadFile()); // FIXME can only download first file
+        filePresentContainer.add(getRemoveFile()); // FIXME can only remove all files
 
         this.add(getFeedback());
     }
@@ -246,7 +246,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
             StringBuilder initScript = new StringBuilder();
             initScript.append("$(\"#" + formId + "\").validate();").append("\n");
             initScript.append("$(\"#" + getComponent().getMarkupId() + "\").rules('add', { accept: \"" + filePickerSettings.getMimeType() + "\" })")
-            .append("\n");
+                    .append("\n");
             response.render(OnLoadHeaderItem.forScript(initScript));
         }
     }
@@ -265,10 +265,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     @Override
     public void onBeforeSubmit() {
         Collection<FileUpload> fileUploads = getComponent().getFileUploads();
-        System.out.println("onBeforeSubmit " + fileUploads);
-        if (fileUploads == null || fileUploads.size() == 0) {
-            hook.clear(hook.getCurrentFilenames());
-        } else {
+        if (fileUploads != null) {
             hook.write(fileUploads);
         }
     }
