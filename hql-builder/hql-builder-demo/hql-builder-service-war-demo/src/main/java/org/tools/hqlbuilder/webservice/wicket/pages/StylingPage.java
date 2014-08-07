@@ -19,7 +19,7 @@ public class StylingPage extends BasePage {
 
         ExampleForm stylingform = new ExampleForm("stylingform");
 
-        boolean dont = true;
+        boolean dont = false;
         if (dont) {
             ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
             colorPickerSettings.setClickoutFiresChange(true);

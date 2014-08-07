@@ -1,11 +1,13 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
-public class TextFieldPanel<T> extends DefaultFormRowPanel<T, TextField<T>> {
+public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>> {
     private static final long serialVersionUID = -7993592150932306594L;
 
     public TextFieldPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {

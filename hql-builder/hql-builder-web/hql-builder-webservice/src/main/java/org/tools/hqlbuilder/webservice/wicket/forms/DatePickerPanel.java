@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +31,7 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  * @see http://stackoverflow.com/questions/1452681/jquery-datepicker-localization
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class DatePickerPanel<X> extends DefaultFormRowPanel {
+public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel {
     private static final long serialVersionUID = -5807168584242557542L;
 
     public static final String DATE_FORMAT = "dateFormat";

@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Date;
 import java.util.MissingResourceException;
@@ -25,6 +27,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
@@ -53,14 +56,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected Form<T> form;
 
     public FormPanel(String id) {
+        this(id, new DefaultFormActions<T>(), new FormSettings());
+    }
+
+    public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
         setRenderBodyOnly(false);
         setOutputMarkupId(true);
-    }
-
-    public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
-        this(id);
         setFormActions(formActions);
         setFormSettings(formSettings);
     }
@@ -296,16 +299,17 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
-    public <PropertyType, ComponentType extends FormComponent<PropertyType>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType>> RowPanel addDefaultRow(
+    public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType>> RowPanel addDefaultRow(
             RowPanel rowpanel) {
-        rowpanel.addComponents();
-        rowpanel.addThisTo(repeater);
-        setupRequiredBehavior(rowpanel);
-        setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
-        return rowpanel;
+        return addRow(rowpanel);
     }
 
     public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addCustomRow(
+            RowPanel rowpanel) {
+        return addRow(rowpanel);
+    }
+
+    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addRow(
             RowPanel rowpanel) {
         rowpanel.addComponents();
         rowpanel.addThisTo(repeater);
@@ -491,7 +495,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
         public String getPropertyName() {
             if (propertyName == null) {
-                propertyName = WebHelper.name(propertyPath);
+                try {
+                    propertyName = WebHelper.name(propertyPath);
+                } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
+                    propertyName = propertyPath.toString();
+                }
             }
             return this.propertyName;
         }
@@ -523,9 +531,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
-    protected static abstract class DefaultFormRowPanel<T, C extends FormComponent<T>> extends FormRowPanel<T, T, C> {
+    protected static abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>> extends FormRowPanel<T, T, C> {
         public DefaultFormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
             super(model, propertyPath, formSettings, componentSettings);
+        }
+
+        public void setValueModel(Model<T> model) {
+            valueModel = model;
+            getComponent().setModel(model);
         }
 
         @Override
@@ -536,16 +549,27 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             return valueModel;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public Class<T> getPropertyType() {
             if (propertyType == null) {
-                this.propertyType = WebHelper.type(propertyPath);
+                try {
+                    this.propertyType = WebHelper.type(propertyPath);
+                } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
+                    Type genericSuperclass = getClass().getGenericSuperclass();
+                    ParameterizedType parameterizedType = ParameterizedType.class.cast(genericSuperclass);
+                    try {
+                        this.propertyType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
+                    } catch (ClassCastException ex2) {
+                        this.propertyType = (Class<T>) Serializable.class;
+                    }
+                }
             }
             return this.propertyType;
         }
     }
 
-    public <F> HiddenFieldPanel<F> addHidden(F propertyPath) {
+    public <F extends Serializable> HiddenFieldPanel<F> addHidden(F propertyPath) {
         return addDefaultRow(new HiddenFieldPanel<F>(getFormModel(), propertyPath));
     }
 
@@ -553,25 +577,26 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDefaultRow(new ColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
-    public <F> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
+    public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
         return addDefaultRow(new RadioButtonsPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
-    public <F> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath, FormElementSettings componentSettings,
-            ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+    public <F extends Serializable> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath,
+            FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
+        return addCustomRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
-    public <F> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
+    public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
+            IChoiceRenderer<F> renderer) {
         return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
-    public <F> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
+    public <F extends Serializable> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
         return addDefaultRow(new TextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
-    public <F> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
+    public <F extends Serializable> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
         return addDefaultRow(new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
@@ -603,7 +628,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     @SuppressWarnings("unchecked")
-    public <F> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings, Converter<F, Date> dateConverter) {
+    public <F extends Serializable> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings,
+            Converter<F, Date> dateConverter) {
         return addDefaultRow(new DatePickerPanel<F>(getFormModel(), propertyPath, dateConverter, getFormSettings(), componentSettings));
     }
 
