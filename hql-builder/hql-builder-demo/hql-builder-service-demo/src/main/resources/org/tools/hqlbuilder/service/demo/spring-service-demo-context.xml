@@ -15,18 +15,4 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/service/spring-service4-context.xml" />
 
-	<bean name="hqlServiceExporter" class="org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter">
-		<property name="service" ref="hqlService" />
-		<property name="serviceInterface" value="org.tools.hqlbuilder.common.HqlService" />
-	</bean>
-
-	<bean id="httpServer" class="org.springframework.remoting.support.SimpleHttpServerFactoryBean">
-		<property name="contexts">
-			<util:map>
-				<entry key="/hqlbuilder/bin" value-ref="hqlServiceExporter" />
-			</util:map>
-		</property>
-		<property name="port" value="80" />
-	</bean>
-
 </beans>

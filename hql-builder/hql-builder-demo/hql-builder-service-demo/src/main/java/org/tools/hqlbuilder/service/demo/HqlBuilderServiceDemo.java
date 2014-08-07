@@ -32,7 +32,7 @@ public class HqlBuilderServiceDemo implements Runnable {
     public HqlService getHqlService() {
         @SuppressWarnings("resource")
         HqlService hqlService = HqlService.class.cast(new org.springframework.context.support.ClassPathXmlApplicationContext(
-                "org/tools/hqlbuilder/service/demo/spring-service-demo-context.xml").getBean("hqlService"));
+                "org/tools/hqlbuilder/service/demo/spring-webservice-demo-context.xml").getBean("hqlService"));
         return hqlService;
     }
 

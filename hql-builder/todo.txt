@@ -1,0 +1,3 @@
+http://diveintohtml5.info/detect.html#storage
+http://modernizr.com/
+http://mislav.uniqpath.com/2011/10/dive-into-html5/
