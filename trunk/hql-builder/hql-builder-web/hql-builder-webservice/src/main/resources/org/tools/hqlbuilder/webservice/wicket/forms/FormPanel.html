@@ -3,10 +3,8 @@
 
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
 	<form wicket:id="form">
-		<span>
-			<fieldset class="formheader">
-			</fieldset>
-		</span>
+		<fieldset class="formheader" wicket:id="form.header">
+		</fieldset>
 		<span class="formbody" wicket:id="form.body">
 			<span wicket:id="form.repeater">
 				<span wicket:id="form.row"></span>
@@ -19,6 +17,8 @@
 				<input wicket:id="form.cancel" type="button" value="[Cancel]" wicket:message="value:cancel.label"></input>
 			</fieldset>
 		</span>
+		<fieldset class="formfooter" wicket:id="form.footer">
+		</fieldset>
 	</form>
 </wicket:panel>
 

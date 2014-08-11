@@ -50,7 +50,6 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.resources.colors.Colors;
-import org.tools.hqlbuilder.webservice.resources.purecss.PureCss;
 import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
 import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
@@ -211,8 +210,6 @@ public class WicketApplication extends WebApplication {
         // css.add(WicketCSSRoot.NORMALIZE); // included in purecss
         // css.add(WicketCSSRoot.RESET);
 
-        css.add(PureCss.FULL);
-
         // general css
         css.add(Colors.COLORS_CSS);
         css.add(WeLoveIcons.WE_LOVE_ICONS_CSS);
@@ -321,7 +318,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-                //
+        //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //

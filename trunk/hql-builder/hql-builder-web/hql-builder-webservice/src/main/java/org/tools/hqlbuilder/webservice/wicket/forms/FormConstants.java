@@ -27,6 +27,10 @@ public interface FormConstants {
 
     public static final String FORM_BODY = "form.body";
 
+    public static final String FORM_HEADER = "form.header";
+
+    public static final String FORM_FOOTER = "form.footer";
+
     public static final String FORM_RESET = "form.reset";
 
     public static final String FORM_CANCEL = "form.cancel";
