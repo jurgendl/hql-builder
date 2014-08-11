@@ -30,6 +30,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
 import org.apache.wicket.settings.IJavaScriptLibrarySettings;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.apache.wicket.util.time.Duration;
@@ -49,6 +50,7 @@ import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.resources.colors.Colors;
+import org.tools.hqlbuilder.webservice.resources.purecss.PureCss;
 import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
 import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
@@ -67,7 +69,7 @@ public class WicketApplication extends WebApplication {
 
     protected final ZussStyle zussStyle = new ZussStyle();
 
-    // @SpringBean(name = "webProperties", required = false)
+    @SpringBean(name = "webProperties", required = false)
     protected transient Properties webProperties;
 
     protected boolean diskStore = false;
@@ -205,11 +207,18 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void addToCssBundle(List<ResourceReference> css) {
-        // css.add(WicketCSSRoot.NORMALIZE);
+        // reset css
+        // css.add(WicketCSSRoot.NORMALIZE); // included in purecss
         // css.add(WicketCSSRoot.RESET);
-        css.add(WicketCSSRoot.GENERAL);
+
+        css.add(PureCss.FULL);
+
+        // general css
         css.add(Colors.COLORS_CSS);
         css.add(WeLoveIcons.WE_LOVE_ICONS_CSS);
+        css.add(WicketCSSRoot.GENERAL);
+
+        // generated with zuss css (moved)
         // css.add(WicketCSSRoot.HORIZONTAL_MENU);
         // css.add(WicketCSSRoot.FORMS);
         // css.add(WicketCSSRoot.TABLES);
@@ -312,7 +321,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
