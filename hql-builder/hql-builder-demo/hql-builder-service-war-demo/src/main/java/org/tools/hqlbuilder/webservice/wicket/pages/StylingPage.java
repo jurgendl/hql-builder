@@ -1,9 +1,12 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.tools.hqlbuilder.webservice.resources.PocketGrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel;
@@ -74,5 +77,13 @@ public class StylingPage extends BasePage {
         }
 
         add(stylingform);
+    }
+
+    @Override
+    protected void addPageResources(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
+        response.render(CssHeaderItem
+                .forCSS(".block-group .block:nth-child(1) { width: 10%; } .block-group .block:nth-child(2) { width: 40%; } .block-group .block:nth-child(3) { width: 10%; } .block-group .block:nth-child(4) { width: 40%; }",
+                        "col2form"));
     }
 }

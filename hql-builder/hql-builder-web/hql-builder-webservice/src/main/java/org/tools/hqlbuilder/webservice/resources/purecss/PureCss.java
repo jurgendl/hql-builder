@@ -30,6 +30,8 @@ public class PureCss {
 
     private static final String BASE_CSS = "base.css";
 
+    private static final String GRIDS_RESPONSIVE_CSS = "grids-responsive.css";
+
     public static CssResourceReference BASE = new CssResourceReference(WicketCSSRoot.class, PATH + BASE_CSS);
 
     public static UrlResourceReference CDN_BASE = new UrlResourceReference(Url.parse(CDN + BASE_CSS));
@@ -45,6 +47,10 @@ public class PureCss {
     public static CssResourceReference GRIDS = new CssResourceReference(WicketCSSRoot.class, PATH + GRIDS_CSS);
 
     public static UrlResourceReference CDN_GRIDS = new UrlResourceReference(Url.parse(CDN + GRIDS_CSS));
+
+    public static CssResourceReference GRIDS_RESPONSIVE = new CssResourceReference(WicketCSSRoot.class, PATH + GRIDS_RESPONSIVE_CSS);
+
+    public static UrlResourceReference CDN_GRIDS_RESPONSIVE = new UrlResourceReference(Url.parse(CDN + GRIDS_RESPONSIVE_CSS));
 
     public static CssResourceReference MENUS = new CssResourceReference(WicketCSSRoot.class, PATH + MENUS_CSS);
 

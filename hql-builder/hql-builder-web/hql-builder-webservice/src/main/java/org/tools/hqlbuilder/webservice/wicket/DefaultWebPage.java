@@ -53,6 +53,7 @@ public class DefaultWebPage extends WebPage {
         if (!isEnabledInHierarchy()) {
             return;
         }
+
         addDefaultResources(response);
         addThemeResources(response);
         addPageResources(response);

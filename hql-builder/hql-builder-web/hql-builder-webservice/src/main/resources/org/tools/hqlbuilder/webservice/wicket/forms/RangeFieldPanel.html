@@ -1,10 +1,10 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<div class="formrow">
-		<label class="formlabel" for="value" wicket:id="label">Label</label>
-		<span class="forminput">
+	<div class="formrow block-group">
+		<div class="block"><label class="formlabel" for="value" wicket:id="label">Label</label></div>
+		<div class="forminput block">
 			<input type="range" wicket:id="value" min="0" max="100" step="1" list="rangelist" oninput="outputUpdate('valueoutput',value)"></input>
 			<output for="value" wicket:id="valueoutput"></output>
-		</span>
-		<span wicket:id="componentFeedback"></span>
+			<div wicket:id="componentFeedback"></div>
+		</div>
 	</div>
 </wicket:panel>

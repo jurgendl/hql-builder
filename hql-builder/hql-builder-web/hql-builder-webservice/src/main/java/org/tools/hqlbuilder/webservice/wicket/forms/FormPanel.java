@@ -125,6 +125,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             add(form);
 
+            WebMarkupContainer formHeader = new WebMarkupContainer(FORM_HEADER);
+            form.add(formHeader);
+
             WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
             form.add(formBody);
             repeater = createRepeater();
@@ -196,6 +199,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             formActionsContainer.add(submit);
             formActionsContainer.add(reset);
             formActionsContainer.add(cancel);
+
+            WebMarkupContainer formFooter = new WebMarkupContainer(FORM_FOOTER);
+            form.add(formFooter);
         }
         return form;
     }

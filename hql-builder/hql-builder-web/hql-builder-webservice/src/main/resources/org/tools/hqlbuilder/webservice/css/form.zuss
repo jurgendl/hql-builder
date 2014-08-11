@@ -276,8 +276,8 @@ form input[type='range']::-moz-range-thumb {
 	color: transparent;
 	text-align: center;
 	vertical-align: middle;
-	padding-left: 3px;
-	padding-right: 3px;
+	/*padding-left: 3px;*/
+	/*padding-right: 3px;*/
 }
 
 .requiredMakeup {
@@ -346,19 +346,16 @@ form input[type='range']::-moz-range-thumb {
 
 .formlabel {
 	color: @form_label;
-	float: left;
+	/*float: left;*/
 	text-align: right;
-	display: inline-block;
+	/*display: inline-block;*/
+	display: block;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
 	font-weight: bold;
-	width: 14em;
-}
-
-label {
-	color: @form_label;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
+	/*width: 14em;*/
+	vertical-align: middle;
+	height: 24px;
 }
 
 fieldset {
@@ -368,14 +365,8 @@ fieldset {
 	vertical-align: baseline;
 }
 
-.formheader {
-	padding: 9px 14px 9px;
-	text-align: center;
-	background-color: @form_header_background;
-	background-image: -moz-linear-gradient(100% 20% 90deg, @form_header_background, @form_header_background_gradient);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 20%, from(@form_header_background), to(@form_header_background));
-}
-
+.formheader,
+.formfooter,
 .formactions {
 	padding: 9px 14px 9px;
 	text-align: center;
