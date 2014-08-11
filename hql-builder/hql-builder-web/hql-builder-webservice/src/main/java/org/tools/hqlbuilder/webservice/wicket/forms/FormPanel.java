@@ -109,7 +109,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             this.form = new Form<T>(FORM, formModel) {
                 @Override
                 protected void onSubmit() {
-                    System.out.println("SUBMITTING");
                     onBeforeSubmit();
                     getFormActions().submitModel(getFormModel());
                     onAfterSubmit();
