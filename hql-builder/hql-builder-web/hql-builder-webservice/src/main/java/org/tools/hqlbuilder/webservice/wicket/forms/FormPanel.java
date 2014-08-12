@@ -28,10 +28,12 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.resources.PocketGrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
@@ -64,6 +66,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
         response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
         renderColumnsCss(response);
@@ -74,14 +77,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         if (formSettings.getVariation() == FormPanelVariation.label) {
             for (int i = 0; i < formSettings.getColumns(); i++) {
                 sb.append(".block-group .block:nth-child(").append((i * 2) + 1).append(") { width: ").append(20 / formSettings.getColumns())
-                .append("%; } ");
+                        .append("%; } ");
                 sb.append(".block-group .block:nth-child(").append((i * 2) + 2).append(") { width: ").append((100 - 20) / formSettings.getColumns())
-                .append("%; } ");
+                        .append("%; } ");
             }
         } else {
             for (int i = 0; i < formSettings.getColumns(); i++) {
                 sb.append(".block-group .block:nth-child(").append(i + 1).append(") { width: ").append(100 / formSettings.getColumns())
-                .append("%; } ");
+                        .append("%; } ");
             }
         }
         response.render(CssHeaderItem.forCSS(sb.toString(),//

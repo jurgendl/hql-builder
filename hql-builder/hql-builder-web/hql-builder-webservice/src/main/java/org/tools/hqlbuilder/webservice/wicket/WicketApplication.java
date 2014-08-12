@@ -48,8 +48,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
-import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
-import org.tools.hqlbuilder.webservice.resources.colors.Colors;
 import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
@@ -183,8 +181,8 @@ public class WicketApplication extends WebApplication {
     protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
 
     protected void addToJsBundle(List<ResourceReference> js) {
-        js.add(Colors.COLORS_JS);
-        js.add(WicketJSRoot.FLOATING_BAR);
+        // js.add(Colors.COLORS_JS);
+        // js.add(WicketJSRoot.FLOATING_BAR);
     }
 
     protected void addToJsResources(List<ResourceReference> js) {
@@ -210,7 +208,7 @@ public class WicketApplication extends WebApplication {
         // css.add(WicketCSSRoot.RESET);
 
         // general css
-        css.add(Colors.COLORS_CSS);
+        // css.add(Colors.COLORS_CSS);
         // css.add(WeLoveIcons.WE_LOVE_ICONS_CSS); // moved to places where used
         css.add(WicketCSSRoot.GENERAL);
 
