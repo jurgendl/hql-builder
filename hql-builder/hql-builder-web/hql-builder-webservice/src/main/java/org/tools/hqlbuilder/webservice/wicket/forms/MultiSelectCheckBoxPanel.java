@@ -9,7 +9,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
 
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>> {
     private static final long serialVersionUID = -637534401267056720L;

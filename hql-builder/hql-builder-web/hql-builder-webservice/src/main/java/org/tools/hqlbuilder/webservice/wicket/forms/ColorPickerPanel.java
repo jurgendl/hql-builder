@@ -9,7 +9,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.resources.spectrum.Spectrum;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 /**
  * @see http://bgrins.github.io/spectrum

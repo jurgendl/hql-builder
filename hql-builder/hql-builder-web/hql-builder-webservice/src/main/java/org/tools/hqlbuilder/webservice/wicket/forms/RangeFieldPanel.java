@@ -8,7 +8,6 @@ import org.apache.wicket.markup.html.form.RangeTextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 /**
  * @see http://demosthenes.info/blog/757/Playing-With-The-HTML5-range-Slider-Input

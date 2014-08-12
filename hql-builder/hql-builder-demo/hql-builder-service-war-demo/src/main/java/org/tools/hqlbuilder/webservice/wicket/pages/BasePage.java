@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -15,7 +13,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.tools.hqlbuilder.webservice.resources.PocketGrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 
 @SuppressWarnings("serial")
@@ -52,13 +49,5 @@ public class BasePage extends DefaultWebPage {
         };
         add(menu);
         // menu.setVisible(false);
-    }
-
-    @Override
-    protected void addPageResources(IHeaderResponse response) {
-        super.addPageResources(response);
-        response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
-        response.render(CssHeaderItem.forCSS(".block-group .block:nth-child(1) { width: 10%; } .block-group .block:nth-child(2) { width: 90%; }",
-                "col2form"));
     }
 }

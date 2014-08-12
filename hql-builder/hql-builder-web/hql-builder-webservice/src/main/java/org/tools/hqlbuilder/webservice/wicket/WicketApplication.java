@@ -51,7 +51,6 @@ import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.tools.hqlbuilder.webservice.resources.colors.Colors;
 import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
-import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
@@ -212,7 +211,7 @@ public class WicketApplication extends WebApplication {
 
         // general css
         css.add(Colors.COLORS_CSS);
-        css.add(WeLoveIcons.WE_LOVE_ICONS_CSS);
+        // css.add(WeLoveIcons.WE_LOVE_ICONS_CSS); // moved to places where used
         css.add(WicketCSSRoot.GENERAL);
 
         // generated with zuss css (moved)

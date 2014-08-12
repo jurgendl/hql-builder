@@ -35,6 +35,7 @@
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.connection.pool_size">1</prop>
 				<prop key="net.sf.ehcache.configurationResourceName">hqlbuilder-ehcache.xml</prop>
+				<prop key="hibernate.use_sql_comments">true</prop>
 			</props>
 		</property>
 	</bean>

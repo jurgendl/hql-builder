@@ -1,34 +1,26 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Date;
-import java.util.MissingResourceException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.Response;
@@ -36,15 +28,17 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.webservice.resources.PocketGrid.PocketGrid;
+import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
-import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
-@SuppressWarnings({ "serial", "unused" })
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
+    private static final long serialVersionUID = -6387604067134639316L;
+
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
 
     protected RepeatingView repeater;
@@ -66,6 +60,32 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         setOutputMarkupId(true);
         setFormActions(formActions);
         setFormSettings(formSettings);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+        renderColumnsCss(response);
+    }
+
+    protected void renderColumnsCss(IHeaderResponse response) {
+        StringBuilder sb = new StringBuilder();
+        if (formSettings.getVariation() == FormPanelVariation.label) {
+            for (int i = 0; i < formSettings.getColumns(); i++) {
+                sb.append(".block-group .block:nth-child(").append((i * 2) + 1).append(") { width: ").append(20 / formSettings.getColumns())
+                .append("%; } ");
+                sb.append(".block-group .block:nth-child(").append((i * 2) + 2).append(") { width: ").append((100 - 20) / formSettings.getColumns())
+                .append("%; } ");
+            }
+        } else {
+            for (int i = 0; i < formSettings.getColumns(); i++) {
+                sb.append(".block-group .block:nth-child(").append(i + 1).append(") { width: ").append(100 / formSettings.getColumns())
+                .append("%; } ");
+            }
+        }
+        response.render(CssHeaderItem.forCSS(sb.toString(),//
+                "css_form_" + getId()));//
     }
 
     protected FormActions<T> getFormActions() {
@@ -101,12 +121,16 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             getFormActions();
             getFormSettings();
             IModel<T> formModel = new LoadableDetachableModel<T>() {
+                private static final long serialVersionUID = -5489467484161698560L;
+
                 @Override
                 protected T load() {
                     return getFormActions().loadObject();
                 }
             };
             this.form = new Form<T>(FORM, formModel) {
+                private static final long serialVersionUID = -5899425422548211723L;
+
                 @Override
                 protected void onSubmit() {
                     onBeforeSubmit();
@@ -141,6 +165,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             if (getFormSettings().isAjax()) {
                 submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
+                    private static final long serialVersionUID = 1046494045754727027L;
+
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
@@ -174,6 +200,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             Component cancel;
             if (getFormSettings().isAjax()) {
                 cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
+                    private static final long serialVersionUID = -8816675271842238444L;
+
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
@@ -234,14 +262,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         });
     }
 
-    protected static WebMarkupContainer createContainer(RepeatingView repeater) {
-        WebMarkupContainer container = new WebMarkupContainer(repeater.newChildId());
-        container.setOutputMarkupPlaceholderTag(false);
-        container.setRenderBodyOnly(true);
-        container.setOutputMarkupId(false);
-        return container;
-    }
-
     protected RepeatingView createRepeater() {
         RepeatingView repeatingView = new RepeatingView(FORM_REPEATER);
         repeatingView.setOutputMarkupPlaceholderTag(true);
@@ -264,6 +284,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupDynamicRequiredBehavior(
             final RowPanel row) {
         return new AjaxFormComponentUpdatingBehavior(HtmlFormEvent.BLUR) {
+            private static final long serialVersionUID = -2678991525434409884L;
+
             @Override
             protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
                 ComponentType component = row.getComponent();
@@ -283,8 +305,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupStaticRequiredBehavior(
-            RowPanel row) {
+            @SuppressWarnings("unused") RowPanel row) {
         return new Behavior() {
+            private static final long serialVersionUID = -4284643075110091322L;
+
             @SuppressWarnings("rawtypes")
             @Override
             public void afterRender(Component c) {
@@ -321,257 +345,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         setupRequiredBehavior(rowpanel);
         setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
         return rowpanel;
-    }
-
-    public static interface FormSubmitInterceptor {
-        public void onBeforeSubmit();
-
-        public void onAfterSubmit();
-    }
-
-    protected static abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Panel implements FormConstants {
-        protected Label label;
-
-        protected IModel<String> labelModel;
-
-        protected IModel<T> valueModel;
-
-        /** lambda path */
-        protected transient P propertyPath;
-
-        protected Class<T> propertyType;
-
-        protected String propertyName;
-
-        protected FeedbackPanel feedbackPanel;
-
-        protected WebMarkupContainer container;
-
-        protected C component;
-
-        protected transient FormSettings formSettings;
-
-        protected FormElementSettings componentSettings;
-
-        public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
-            this(valueModel, propertyPath, formSettings, componentSettings);
-            this.valueModel = valueModel;
-        }
-
-        protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-            super(FORM_ROW, model);
-            this.formSettings = formSettings;
-            this.componentSettings = componentSettings;
-            this.propertyPath = propertyPath;
-            setOutputMarkupPlaceholderTag(false);
-            setRenderBodyOnly(true);
-            setOutputMarkupId(false);
-        }
-
-        protected Label getLabel() {
-            if (label == null) {
-                label = new Label(LABEL, getLabelModel()) {
-                    @Override
-                    public boolean isVisible() {
-                        return super.isVisible() && formSettings.isShowLabel();
-                    }
-
-                    @Override
-                    protected void onComponentTag(ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        tag.getAttributes().put(FOR, getPropertyName());
-                    }
-                };
-            }
-            return label;
-        }
-
-        protected C getComponent() {
-            if (component == null) {
-                component = createComponent(getValueModel(), getPropertyType());
-                setupRequired(component);
-            }
-            return this.component;
-        }
-
-        protected abstract C createComponent(IModel<T> model, Class<T> valueType);
-
-        protected FeedbackPanel getFeedback() {
-            if (feedbackPanel == null) {
-                feedbackPanel = new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component));
-                feedbackPanel.setOutputMarkupId(true);
-            }
-            return feedbackPanel;
-        }
-
-        protected WebMarkupContainer getContainer(RepeatingView repeater) {
-            if (container == null) {
-                container = createContainer(repeater);
-            }
-            return container;
-        }
-
-        protected void addComponents() {
-            this.add(getLabel());
-            this.add(getComponent());
-            this.add(getFeedback());
-        }
-
-        protected WebMarkupContainer addThisTo(RepeatingView repeater) {
-            WebMarkupContainer rowContainer = getContainer(repeater);
-            repeater.add(rowContainer);
-            rowContainer.add(this);
-            return rowContainer;
-        }
-
-        protected void tag(ComponentTag tag, String tagId, Object value) {
-            if (value == null || (value instanceof String && StringUtils.isBlank(String.class.cast(value)))) {
-                tag.getAttributes().remove(tagId);
-            } else {
-                tag.getAttributes().put(tagId, value);
-            }
-        }
-
-        protected void setupPlaceholder(ComponentTag tag) {
-            tag(tag, PLACEHOLDER, getPlaceholderText());
-        }
-
-        protected void setupRequired(ComponentTag tag) {
-            tag(tag, REQUIRED, (componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) ? REQUIRED : null);
-        }
-
-        protected void setupRequired(C component) {
-            component.setRequired(componentSettings.isRequired());
-            if (StringUtils.isNotBlank(formSettings.getRequiredClass())) {
-                if (componentSettings.isRequired()) {
-                    component.add(new CssClassNameAppender(formSettings.getRequiredClass()));
-                } else {
-                    component.add(new CssClassNameRemover(formSettings.getRequiredClass()));
-                }
-            }
-        }
-
-        /**
-         * call this in overridden method:<br>
-         * org.tools.hqlbuilder.webservice.wicket.forms.[Component]Panel.createComponent().new [Component]() {...}.onComponentTag(ComponentTag)
-         */
-        protected void onFormComponentTag(ComponentTag tag) {
-            setupPlaceholder(tag);
-            setupRequired(tag);
-        }
-
-        protected String getLabelText() {
-            try {
-                return getString(getPropertyName());
-            } catch (MissingResourceException ex) {
-                logger.info("no translation for " + getPropertyName());
-                return "[" + getPropertyName() + "]";
-            }
-        }
-
-        protected String getPlaceholderText() {
-            try {
-                return getString(PLACEHOLDER);
-            } catch (MissingResourceException ex) {
-                logger.info("no translation for " + PLACEHOLDER);
-                return null;
-            }
-        }
-
-        protected FormElementSettings getComponentSettings() {
-            return this.componentSettings;
-        }
-
-        public IModel<String> getLabelModel() {
-            if (labelModel == null) {
-                labelModel = new LoadableDetachableModel<String>() {
-                    @Override
-                    protected String load() {
-                        return getLabelText();
-                    }
-                };
-            }
-            return labelModel;
-        }
-
-        public void setLabelModel(IModel<String> labelModel) {
-            this.labelModel = labelModel;
-        }
-
-        public String getPropertyName() {
-            if (propertyName == null) {
-                try {
-                    propertyName = WebHelper.name(propertyPath);
-                } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
-                    propertyName = propertyPath.toString();
-                }
-            }
-            return this.propertyName;
-        }
-
-        public void setPropertyName(String propertyName) {
-            this.propertyName = propertyName;
-        }
-
-        public IModel<T> getValueModel() {
-            if (valueModel == null) {
-                throw new NullPointerException();
-            }
-            return this.valueModel;
-        }
-
-        public void setValueModel(IModel<T> valueModel) {
-            this.valueModel = valueModel;
-        }
-
-        public Class<T> getPropertyType() {
-            if (propertyType == null) {
-                throw new NullPointerException();
-            }
-            return this.propertyType;
-        }
-
-        public void setPropertyType(Class<T> propertyType) {
-            this.propertyType = propertyType;
-        }
-    }
-
-    protected static abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>> extends FormRowPanel<T, T, C> {
-        public DefaultFormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-            super(model, propertyPath, formSettings, componentSettings);
-        }
-
-        public void setValueModel(Model<T> model) {
-            valueModel = model;
-            getComponent().setModel(model);
-        }
-
-        @Override
-        public IModel<T> getValueModel() {
-            if (valueModel == null) {
-                valueModel = new PropertyModel<T>(getDefaultModel(), getPropertyName());
-            }
-            return valueModel;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public Class<T> getPropertyType() {
-            if (propertyType == null) {
-                try {
-                    this.propertyType = WebHelper.type(propertyPath);
-                } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
-                    Type genericSuperclass = getClass().getGenericSuperclass();
-                    ParameterizedType parameterizedType = ParameterizedType.class.cast(genericSuperclass);
-                    try {
-                        this.propertyType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
-                    } catch (ClassCastException ex2) {
-                        this.propertyType = (Class<T>) Serializable.class;
-                    }
-                }
-            }
-            return this.propertyType;
-        }
     }
 
     public <F extends Serializable> HiddenFieldPanel<F> addHidden(F propertyPath) {
