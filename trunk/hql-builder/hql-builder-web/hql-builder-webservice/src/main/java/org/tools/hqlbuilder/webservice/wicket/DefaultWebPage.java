@@ -19,14 +19,16 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.WicketJQueryRoot;
-import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
 
     protected transient final Logger logger;
+
+    protected Duration defaultCacheDuration = Duration.ONE_DAY;
+
+    protected boolean debugbar = false;
 
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
@@ -34,8 +36,6 @@ public class DefaultWebPage extends WebPage {
         Injector.get().inject(this);
         addComponents();
     }
-
-    boolean debugbar = false;
 
     protected void addComponents() {
         if (debugbar && WicketApplication.get().usesDevelopmentConfig()) {
@@ -96,16 +96,13 @@ public class DefaultWebPage extends WebPage {
         }
     }
 
-    protected void addDynamicResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "table.css")));
+    protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {
+        //
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
-
         statelessCheck();
     }
 
@@ -133,8 +130,6 @@ public class DefaultWebPage extends WebPage {
             disableCaching(response);
         }
     }
-
-    protected Duration defaultCacheDuration = Duration.ONE_DAY;
 
     protected void disableCaching(WebResponse response) {
         response.disableCaching();

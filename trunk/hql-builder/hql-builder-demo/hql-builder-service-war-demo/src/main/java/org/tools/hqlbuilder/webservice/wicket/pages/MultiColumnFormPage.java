@@ -18,7 +18,8 @@ public class MultiColumnFormPage extends DefaultWebPage {
     public MultiColumnFormPage(PageParameters parameters) {
         super(parameters);
 
-        FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", new DefaultFormActions<Serializable>(), new FormSettings());
+        FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", new DefaultFormActions<Serializable>(),
+                new FormSettings().setColumns(2));
         add(multicolform);
 
         for (int i = 0; i < 10; i++) {

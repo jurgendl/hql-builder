@@ -210,15 +210,17 @@ public class FormSettings implements Serializable {
         return this.variation;
     }
 
-    public void setVariation(FormPanelVariation variation) {
+    public FormSettings setVariation(FormPanelVariation variation) {
         this.variation = variation;
+        return this;
     }
 
     public int getColumns() {
         return this.columns;
     }
 
-    public void setColumns(int columns) {
+    public FormSettings setColumns(int columns) {
         this.columns = columns;
+        return this;
     }
 }
