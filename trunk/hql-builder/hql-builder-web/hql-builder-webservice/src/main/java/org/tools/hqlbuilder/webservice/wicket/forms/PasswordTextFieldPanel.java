@@ -3,7 +3,6 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, PasswordTextField> {
     private static final long serialVersionUID = -7993592150932306594L;

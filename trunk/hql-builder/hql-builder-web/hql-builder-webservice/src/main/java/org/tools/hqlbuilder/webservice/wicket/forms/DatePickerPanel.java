@@ -18,7 +18,6 @@ import org.tools.hqlbuilder.common.icons.WicketIconsResources;
 import org.tools.hqlbuilder.webservice.resources.datepicker.JQueryDatePicker;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.DefaultFormRowPanel;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;

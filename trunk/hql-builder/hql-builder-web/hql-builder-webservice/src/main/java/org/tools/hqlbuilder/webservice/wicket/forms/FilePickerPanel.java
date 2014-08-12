@@ -25,8 +25,6 @@ import org.apache.wicket.validation.ValidationError;
 import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
 import org.tools.hqlbuilder.webservice.resources.validation.JQueryValidation;
 import org.tools.hqlbuilder.webservice.wicket.components.AJAXDownload;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormRowPanel;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel.FormSubmitInterceptor;
 
 /**
  * based on markusslima bootstrap-filestyle version 1.1.0

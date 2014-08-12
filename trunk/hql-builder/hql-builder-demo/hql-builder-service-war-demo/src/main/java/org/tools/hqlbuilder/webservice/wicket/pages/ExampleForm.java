@@ -107,7 +107,7 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
             addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
         }
-        {
+        if (dont) {
             FilePickerHook hook = new FilePickerHook() {
                 @Override
                 public void write(Collection<FileUpload> files) {
