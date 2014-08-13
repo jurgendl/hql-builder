@@ -32,6 +32,11 @@ public class DefaultWebPage extends WebPage {
 
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
+
+        if (getClass().equals(DefaultWebPage.class)) {
+            setResponsePage(EmptyPage.class, parameters);
+        }
+
         logger = LoggerFactory.getLogger(getClass());
         Injector.get().inject(this);
         addComponents();

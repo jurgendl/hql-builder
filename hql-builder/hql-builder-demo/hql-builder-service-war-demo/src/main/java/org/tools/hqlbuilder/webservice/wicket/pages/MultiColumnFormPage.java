@@ -17,6 +17,8 @@ public class MultiColumnFormPage extends DefaultWebPage {
     public MultiColumnFormPage(PageParameters parameters) {
         super(parameters);
 
+        setStatelessHint(false);
+
         FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", null, new FormSettings().setColumns(2));
         multicolform.getForm();
         add(multicolform);
