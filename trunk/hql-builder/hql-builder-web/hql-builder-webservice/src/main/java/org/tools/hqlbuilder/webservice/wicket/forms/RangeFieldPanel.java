@@ -27,12 +27,12 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
 
     protected Output output;
 
-    public RangeFieldPanel(IModel<?> model, N propertyPath, FormSettings formSettings, RangeFieldSettings<N> rangeFieldSettings) {
-        super(model, propertyPath, formSettings, rangeFieldSettings);
+    public RangeFieldPanel(String id, IModel<?> model, N propertyPath, FormSettings formSettings, RangeFieldSettings<N> rangeFieldSettings) {
+        super(id, model, propertyPath, formSettings, rangeFieldSettings);
     }
 
     @Override
-    protected void addComponents() {
+    protected FormRowPanel<N, N, RangeTextField<N>> addComponents() {
         output = new Output(VALUE_OUTPUT, getValueModel()) {
             private static final long serialVersionUID = 2019925551669937151L;
 
@@ -44,6 +44,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
         };
         add(output);
         super.addComponents();
+        return this;
     }
 
     @Override

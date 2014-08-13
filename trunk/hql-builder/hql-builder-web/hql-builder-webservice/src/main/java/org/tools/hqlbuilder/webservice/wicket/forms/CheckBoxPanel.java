@@ -6,8 +6,8 @@ import org.apache.wicket.model.IModel;
 public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox> {
     private static final long serialVersionUID = 7669787482921703670L;
 
-    public CheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public CheckBoxPanel(String id, IModel<?> model, Boolean propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(id, model, propertyPath, formSettings, componentSettings);
     }
 
     @Override

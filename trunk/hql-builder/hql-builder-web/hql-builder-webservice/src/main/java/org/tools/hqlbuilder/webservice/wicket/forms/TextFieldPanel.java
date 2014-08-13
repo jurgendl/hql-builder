@@ -9,8 +9,8 @@ import org.apache.wicket.model.IModel;
 public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public TextFieldPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public TextFieldPanel(String id, final IModel<?> model, final T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(id, model, propertyPath, formSettings, componentSettings);
     }
 
     @Override

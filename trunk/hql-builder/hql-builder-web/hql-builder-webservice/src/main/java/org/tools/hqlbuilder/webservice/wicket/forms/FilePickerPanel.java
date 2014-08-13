@@ -58,8 +58,9 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     protected FilePickerHook hook;
 
     @SuppressWarnings("unchecked")
-    public FilePickerPanel(IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings, FilePickerHook hook) {
-        super(propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
+    public FilePickerPanel(String id, IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings,
+            FilePickerHook hook) {
+        super(id, propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
         this.hook = hook;
         this.parentModel = parentModel;
         @SuppressWarnings("rawtypes")
@@ -69,7 +70,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     }
 
     @Override
-    protected void addComponents() {
+    protected FormRowPanel<P, List<FileUpload>, FileUploadField> addComponents() {
         this.add(getLabel());
 
         WebMarkupContainer fileComponentContainer = new WebMarkupContainer(FILE_COMPONENT_CONTAINER_ID);
@@ -113,6 +114,8 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         filePresentContainer.add(getRemoveFile()); // FIXME can only remove all files
 
         this.add(getFeedback());
+
+        return this;
     }
 
     protected Component getFilePresentLabel() {

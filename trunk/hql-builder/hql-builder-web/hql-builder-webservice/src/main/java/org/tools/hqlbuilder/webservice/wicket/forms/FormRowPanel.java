@@ -5,18 +5,22 @@ import java.util.MissingResourceException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -42,27 +46,84 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
 
     protected FeedbackPanel feedbackPanel;
 
-    protected WebMarkupContainer container;
-
     protected C component;
 
-    protected transient FormSettings formSettings;
+    protected final transient FormSettings formSettings;
 
-    protected FormElementSettings componentSettings;
+    protected final FormElementSettings componentSettings;
 
-    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
-        this(valueModel, propertyPath, formSettings, componentSettings);
+    public FormRowPanel(String id, P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
+        this(id, valueModel, propertyPath, formSettings, componentSettings);
         this.valueModel = valueModel;
     }
 
-    protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(FORM_ROW, model);
+    protected FormRowPanel(String id, IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(id, model);
+        if (formSettings == null) {
+            throw new NullPointerException("formSettings");
+        }
+        if (componentSettings == null) {
+            throw new NullPointerException("componentSettings");
+        }
         this.formSettings = formSettings;
         this.componentSettings = componentSettings;
         this.propertyPath = propertyPath;
-        setOutputMarkupPlaceholderTag(false);
-        setRenderBodyOnly(true);
-        setOutputMarkupId(false);
+        WebHelper.show(this);
+    }
+
+    protected void setupRequiredBehavior() {
+        C c = getComponent();
+        if (formSettings.isAjax() && formSettings.isLiveValidation() && !(c instanceof PasswordTextField)
+                && !(c instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
+            c.add(setupDynamicRequiredBehavior());
+        } else {
+            c.add(setupStaticRequiredBehavior());
+        }
+    }
+
+    protected Behavior setupDynamicRequiredBehavior() {
+        return new AjaxFormComponentUpdatingBehavior(HtmlFormEvent.BLUR) {
+            private static final long serialVersionUID = -2678991525434409884L;
+
+            @Override
+            protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
+                C c = FormRowPanel.this.getComponent();
+                c.add(new CssClassNameRemover(formSettings.validClass));
+                c.add(new CssClassNameAppender(formSettings.invalidClass));
+                ajaxRequestTarget.add(c, getFeedback());
+            }
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
+                C c = FormRowPanel.this.getComponent();
+                c.add(new CssClassNameRemover(formSettings.invalidClass));
+                c.add(new CssClassNameAppender(formSettings.validClass));
+                ajaxRequestTarget.add(c, getFeedback());
+            }
+        };
+    }
+
+    protected Behavior setupStaticRequiredBehavior() {
+        return new Behavior() {
+            private static final long serialVersionUID = -4284643075110091322L;
+
+            @SuppressWarnings("rawtypes")
+            @Override
+            public void afterRender(Component c) {
+                Response response = c.getResponse();
+                StringBuffer asterisktHtml = new StringBuffer(200);
+                if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
+                    asterisktHtml.append("<span class=\"fontawesome-asterisk " + formSettings.getRequiredMarkerClass() + "\"/>");
+                }
+                response.write(asterisktHtml);
+            }
+        };
+    }
+
+    protected void setupId() {
+        if (formSettings.isInheritId()) {
+            getComponent().setMarkupId(getPropertyName());
+        }
     }
 
     protected Label getLabel() {
@@ -103,25 +164,17 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
         return feedbackPanel;
     }
 
-    protected WebMarkupContainer getContainer(RepeatingView repeater) {
-        if (container == null) {
-            container = createContainer(repeater);
-        }
-        return container;
-    }
-
-    protected static WebMarkupContainer createContainer(RepeatingView repeater) {
-        WebMarkupContainer container = new WebMarkupContainer(repeater.newChildId());
-        container.setOutputMarkupPlaceholderTag(false);
-        container.setRenderBodyOnly(true);
-        container.setOutputMarkupId(false);
-        return container;
-    }
-
-    protected void addComponents() {
+    protected FormRowPanel<P, T, C> addComponents() {
         this.add(getLabel());
         this.add(getComponent());
         this.add(getFeedback());
+        return this;
+    }
+
+    protected FormRowPanel<P, T, C> afterAddComponents() {
+        setupRequiredBehavior();
+        setupId();
+        return this;
     }
 
     @Override
@@ -130,13 +183,6 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
             return this;
         }
         return super.add(childs);
-    }
-
-    protected WebMarkupContainer addThisTo(RepeatingView repeater) {
-        WebMarkupContainer rowContainer = getContainer(repeater);
-        repeater.add(rowContainer);
-        rowContainer.add(this);
-        return rowContainer;
     }
 
     protected void tag(ComponentTag tag, String tagId, Object value) {

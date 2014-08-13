@@ -8,8 +8,9 @@ import org.apache.wicket.model.IModel;
 public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextField> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public EmailTextFieldPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public EmailTextFieldPanel(String id, final IModel<?> model, final String propertyPath, FormSettings formSettings,
+            FormElementSettings componentSettings) {
+        super(id, model, propertyPath, formSettings, componentSettings);
     }
 
     @Override
