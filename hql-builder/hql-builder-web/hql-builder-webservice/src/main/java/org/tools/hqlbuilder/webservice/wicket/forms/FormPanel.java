@@ -6,9 +6,7 @@ import java.util.Date;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -16,14 +14,12 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
@@ -31,19 +27,18 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.resources.PocketGrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
-import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
+import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -6387604067134639316L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
 
-    protected RepeatingView repeater;
+    protected RepeatingView rowRepeater;
+
+    protected RepeatingView componentRepeater;
 
     protected FormSettings formSettings;
 
@@ -51,17 +46,17 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected Form<T> form;
 
+    protected int count = 0;
+
     public FormPanel(String id) {
-        this(id, new DefaultFormActions<T>(), new FormSettings());
+        this(id, null, null);
     }
 
     public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
         super(id);
-        setOutputMarkupPlaceholderTag(true);
-        setRenderBodyOnly(false);
-        setOutputMarkupId(true);
-        setFormActions(formActions);
-        setFormSettings(formSettings);
+        WebHelper.show(this);
+        setFormActions(formActions == null ? new DefaultFormActions<T>() : formActions);
+        setFormSettings(formSettings == null ? new FormSettings() : formSettings);
     }
 
     @Override
@@ -77,14 +72,14 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         if (formSettings.getVariation() == FormPanelVariation.label) {
             for (int i = 0; i < formSettings.getColumns(); i++) {
                 sb.append(".block-group .block:nth-child(").append((i * 2) + 1).append(") { width: ").append(20 / formSettings.getColumns())
-                        .append("%; } ");
+                .append("%; } ");
                 sb.append(".block-group .block:nth-child(").append((i * 2) + 2).append(") { width: ").append((100 - 20) / formSettings.getColumns())
-                        .append("%; } ");
+                .append("%; } ");
             }
         } else {
             for (int i = 0; i < formSettings.getColumns(); i++) {
                 sb.append(".block-group .block:nth-child(").append(i + 1).append(") { width: ").append(100 / formSettings.getColumns())
-                        .append("%; } ");
+                .append("%; } ");
             }
         }
         response.render(CssHeaderItem.forCSS(sb.toString(),//
@@ -146,10 +141,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 form.setMarkupId(form.getId());
             }
 
-            form.setOutputMarkupPlaceholderTag(true);
-            form.setRenderBodyOnly(false);
-            form.setOutputMarkupId(true);
-
+            WebHelper.show(form);
             add(form);
 
             WebMarkupContainer formHeader = new WebMarkupContainer(FORM_HEADER);
@@ -157,8 +149,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
             form.add(formBody);
-            repeater = createRepeater();
-            formBody.add(repeater);
+
+            formBody.add(getRowRepeater());
 
             ResourceModel submitModel = new ResourceModel(SUBMIT_LABEL);
             ResourceModel resetModel = new ResourceModel(RESET_LABEL);
@@ -174,22 +166,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     @Override
                     protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
                         getFormActions().afterSubmit(target, (Form<T>) f, getFormModel());
-                    }
-
-                    @Override
-                    protected void onAfterRender() {
-                        super.onAfterRender();
-                        // possible fix ajax validation on password fields (unsafe?)
-                        // for now validation on password fields is disabled
-                        // pass.setResetPassword(false);
-                    }
-
-                    @Override
-                    protected void onBeforeRender() {
-                        super.onBeforeRender();
-                        // possible fix ajax validation on password fields (unsafe?)
-                        // for now validation on password fields is disabled
-                        // pass.setResetPassword(true);
                     }
                 };
                 submit.setDefaultModel(submitModel);
@@ -243,7 +219,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     @SuppressWarnings("rawtypes")
     protected void onBeforeSubmit() {
-        repeater.visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
+        getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
             @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
@@ -255,7 +231,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     @SuppressWarnings("rawtypes")
     protected void onAfterSubmit() {
-        repeater.visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
+        getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
             @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
@@ -263,72 +239,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 }
             }
         });
-    }
-
-    protected RepeatingView createRepeater() {
-        RepeatingView repeatingView = new RepeatingView(FORM_REPEATER);
-        repeatingView.setOutputMarkupPlaceholderTag(true);
-        repeatingView.setRenderBodyOnly(false);
-        repeatingView.setOutputMarkupId(true);
-        return repeatingView;
-    }
-
-    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, Rowpanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> void setupRequiredBehavior(
-            Rowpanel row) {
-        ComponentType component = row.getComponent();
-        if (getFormSettings().isAjax() && getFormSettings().isLiveValidation() && !(component instanceof PasswordTextField)
-                && !(component instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
-            component.add(setupDynamicRequiredBehavior(row));
-        } else {
-            component.add(setupStaticRequiredBehavior(row));
-        }
-    }
-
-    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupDynamicRequiredBehavior(
-            final RowPanel row) {
-        return new AjaxFormComponentUpdatingBehavior(HtmlFormEvent.BLUR) {
-            private static final long serialVersionUID = -2678991525434409884L;
-
-            @Override
-            protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
-                ComponentType component = row.getComponent();
-                component.add(new CssClassNameRemover(getFormSettings().validClass));
-                component.add(new CssClassNameAppender(getFormSettings().invalidClass));
-                ajaxRequestTarget.add(component, row.getFeedback());
-            }
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
-                ComponentType component = row.getComponent();
-                component.add(new CssClassNameRemover(getFormSettings().invalidClass));
-                component.add(new CssClassNameAppender(getFormSettings().validClass));
-                ajaxRequestTarget.add(component, row.getFeedback());
-            }
-        };
-    }
-
-    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> Behavior setupStaticRequiredBehavior(
-            @SuppressWarnings("unused") RowPanel row) {
-        return new Behavior() {
-            private static final long serialVersionUID = -4284643075110091322L;
-
-            @SuppressWarnings("rawtypes")
-            @Override
-            public void afterRender(Component c) {
-                Response response = c.getResponse();
-                StringBuffer asterisktHtml = new StringBuffer(200);
-                if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
-                    asterisktHtml.append("<span class=\"fontawesome-asterisk " + getFormSettings().getRequiredMarkerClass() + "\"/>");
-                }
-                response.write(asterisktHtml);
-            }
-        };
-    }
-
-    protected <F extends FormComponent<?>> void setupId(String property, F component) {
-        if (getFormSettings().isInheritId()) {
-            component.setMarkupId(property);
-        }
     }
 
     public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType>> RowPanel addDefaultRow(
@@ -341,77 +251,114 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addRow(rowpanel);
     }
 
+    protected RepeatingView getRowRepeater() {
+        if (rowRepeater == null) {
+            rowRepeater = WebHelper.show(new RepeatingView(FORM_ROW_REPEATER));
+        }
+        return this.rowRepeater;
+    }
+
+    protected RepeatingView getComponentRepeater() {
+        // only create a new row when needed
+        if (componentRepeater == null) {
+            WebMarkupContainer rowContainer = new WebMarkupContainer(getRowRepeater().newChildId());
+            getRowRepeater().add(rowContainer);
+
+            componentRepeater = WebHelper.show(new RepeatingView(FORM_ELEMENT_REPEATER));
+            rowContainer.add(componentRepeater);
+        }
+        return this.componentRepeater;
+    }
+
     protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addRow(
             RowPanel rowpanel) {
+        getForm();
+
+        WebMarkupContainer elementContainer = new WebMarkupContainer(getComponentRepeater().newChildId());
+        getComponentRepeater().add(elementContainer);
+
+        // rowpanel is already created
+        elementContainer.add(rowpanel);
+
+        // components are created in "rowpanel.addComponents" method
         rowpanel.addComponents();
-        rowpanel.addThisTo(repeater);
-        setupRequiredBehavior(rowpanel);
-        setupId(rowpanel.getPropertyName(), rowpanel.getComponent());
+
+        // some post creation stuff
+        rowpanel.afterAddComponents();
+
+        count++;
+        if (count == formSettings.getColumns()) {
+            count = 0; // reset count
+            componentRepeater = null; // so that a new one is created when needed
+        }
+
         return rowpanel;
     }
 
     public <F extends Serializable> HiddenFieldPanel<F> addHidden(F propertyPath) {
-        return addDefaultRow(new HiddenFieldPanel<F>(getFormModel(), propertyPath));
+        return addDefaultRow(new HiddenFieldPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath));
     }
 
     public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
-        return addDefaultRow(new ColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new ColorPickerPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new RadioButtonsPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+        return addDefaultRow(new RadioButtonsPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings, choices,
+                renderer));
     }
 
     public <F extends Serializable> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath,
             FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addCustomRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+        return addCustomRow(new MultiSelectCheckBoxPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings,
+                choices, renderer));
     }
 
     public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+        return addDefaultRow(new DropDownPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new TextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new TextFieldPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F extends Serializable> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
-        return addDefaultRow(new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new TextAreaPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
-        return addDefaultRow(new NumberFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new NumberFieldPanel<N>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
-        return addDefaultRow(new RangeFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new RangeFieldPanel<N>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new CheckBoxPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new CheckBoxPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new EmailTextFieldPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new EmailTextFieldPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new PasswordTextFieldPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new PasswordTextFieldPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     /**
      * also "form.setMultiPart(true);" and "form.setMaxSize(Bytes.megabytes(1));"
      */
     public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings, FilePickerHook hook) {
-        return addCustomRow(new FilePickerPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, hook));
+        return addCustomRow(new FilePickerPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings, hook));
     }
 
     @SuppressWarnings("unchecked")
     public <F extends Serializable> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings,
             Converter<F, Date> dateConverter) {
-        return addDefaultRow(new DatePickerPanel<F>(getFormModel(), propertyPath, dateConverter, getFormSettings(), componentSettings));
+        return addDefaultRow(new DatePickerPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, dateConverter, getFormSettings(), componentSettings));
     }
 
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {

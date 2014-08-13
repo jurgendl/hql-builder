@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" xml:lang="en" lang="en">
 
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
+
 	<form wicket:id="form">
 		<fieldset class="formheader" wicket:id="form.header">
 		</fieldset>
 		<span class="formbody" wicket:id="form.body">
-			<span wicket:id="form.repeater">
-				<span wicket:id="form.row"></span>
-			</span>
+			<div class="formrow block-group" wicket:id="form.row.repeater">
+				<span wicket:id="form.element.repeater">
+					<span wicket:id="form.element"></span>
+				</span>
+			</div>
 		</span>
 		<span wicket:id="form.actions">
 			<fieldset class="formactions">

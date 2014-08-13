@@ -7,8 +7,8 @@ import org.apache.wicket.model.IModel;
 public class NumberFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, NumberTextField<N>> {
     private static final long serialVersionUID = -3037822852757814685L;
 
-    public NumberFieldPanel(IModel<?> model, N propertyPath, FormSettings formSettings, NumberFieldSettings<N> componentSettings) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public NumberFieldPanel(String id, IModel<?> model, N propertyPath, FormSettings formSettings, NumberFieldSettings<N> componentSettings) {
+        super(id, model, propertyPath, formSettings, componentSettings);
     }
 
     @Override

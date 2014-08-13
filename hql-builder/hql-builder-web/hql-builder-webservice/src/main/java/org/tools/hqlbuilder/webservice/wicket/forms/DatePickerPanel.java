@@ -43,14 +43,14 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
 
     protected Converter<X, Date> dateConverter;
 
-    public DatePickerPanel(IModel<?> model, Date propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public DatePickerPanel(String id, IModel<?> model, Date propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(id, model, propertyPath, formSettings, componentSettings);
         this.dateConverter = null;
     }
 
-    public DatePickerPanel(IModel<?> model, X propertyPath, Converter<X, Date> dateConverter, FormSettings formSettings,
+    public DatePickerPanel(String id, IModel<?> model, X propertyPath, Converter<X, Date> dateConverter, FormSettings formSettings,
             FormElementSettings componentSettings) {
-        super(model, propertyPath, formSettings, componentSettings);
+        super(id, model, propertyPath, formSettings, componentSettings);
         this.dateConverter = dateConverter;
     }
 

@@ -15,9 +15,9 @@ public class DropDownPanel<T extends Serializable> extends DefaultFormRowPanel<T
 
     protected IChoiceRenderer<T> renderer;
 
-    public DropDownPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings, ListModel<T> choices,
-            IChoiceRenderer<T> renderer) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public DropDownPanel(String id, IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings,
+            ListModel<T> choices, IChoiceRenderer<T> renderer) {
+        super(id, model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;
     }

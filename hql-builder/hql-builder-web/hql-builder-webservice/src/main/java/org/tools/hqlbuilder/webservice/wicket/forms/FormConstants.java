@@ -1,7 +1,11 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 public interface FormConstants {
-    public static final String FORM_REPEATER = "form.repeater";
+    public static final String FORM_ROW_REPEATER = "form.row.repeater";
+
+    public static final String FORM_ELEMENT_REPEATER = "form.element.repeater";
+
+    public static final String FORM_ELEMENT = "form.element";
 
     public static final String FORM_PANEL = "form.panel";
 
@@ -20,8 +24,6 @@ public interface FormConstants {
     public static final String LABEL = "label";
 
     public static final String FOR = "for";
-
-    public static final String FORM_ROW = "form.row";
 
     public static final String FORM_ACTIONS = "form.actions";
 

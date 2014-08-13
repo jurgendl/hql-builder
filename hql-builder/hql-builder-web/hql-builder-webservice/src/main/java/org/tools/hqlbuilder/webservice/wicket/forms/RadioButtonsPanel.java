@@ -14,9 +14,9 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
 
     protected IChoiceRenderer<T> renderer;
 
-    public RadioButtonsPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings, ListModel<T> choices,
-            IChoiceRenderer<T> renderer) {
-        super(model, propertyPath, formSettings, componentSettings);
+    public RadioButtonsPanel(String id, IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings,
+            ListModel<T> choices, IChoiceRenderer<T> renderer) {
+        super(id, model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;
     }
