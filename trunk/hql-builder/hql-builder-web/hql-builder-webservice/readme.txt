@@ -13,3 +13,16 @@ https://github.com/carhartl/jquery-cookie
 enable gzip in Tomcat
 
 <connector ... compression="on" compressionMinSize="128" compressableMimeType="text/html,text/xml,text/css,text/javascript,application/javascript,application/css,application/x-java-serialized-object" .../>
+
+http://diveintohtml5.info/detect.html#storage
+http://modernizr.com/
+http://mislav.uniqpath.com/2011/10/dive-into-html5/
+
+http://stackoverflow.com/questions/1775532/css-grid-system-for-forms-multi-column
+http://codecondo.com/minimal-css-frameworks-grid-systems/
+http://arnaudleray.github.io/pocketgrid/docs/
+https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Media_queries
+http://purecss.io/
+(http://knacss.com/)
+
+http://fortawesome.github.io/Font-Awesome/examples/#basic

@@ -1,13 +1,12 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 public abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>> extends FormRowPanel<T, T, C> {
@@ -30,20 +29,20 @@ public abstract class DefaultFormRowPanel<T extends Serializable, C extends Form
         return valueModel;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Class<T> getPropertyType() {
         if (propertyType == null) {
             try {
                 this.propertyType = WebHelper.type(propertyPath);
             } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
-                Type genericSuperclass = getClass().getGenericSuperclass();
-                ParameterizedType parameterizedType = ParameterizedType.class.cast(genericSuperclass);
-                try {
-                    this.propertyType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
-                } catch (ClassCastException ex2) {
-                    this.propertyType = (Class<T>) Serializable.class;
-                }
+                this.propertyType = CommonUtils.<T> getImplementation(this, DefaultFormRowPanel.class);
+                // Type genericSuperclass = getClass().getGenericSuperclass();
+                // ParameterizedType parameterizedType = ParameterizedType.class.cast(genericSuperclass);
+                // try {
+                // this.propertyType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
+                // } catch (ClassCastException ex2) {
+                // this.propertyType = (Class<T>) Serializable.class;
+                // }
             }
         }
         return this.propertyType;

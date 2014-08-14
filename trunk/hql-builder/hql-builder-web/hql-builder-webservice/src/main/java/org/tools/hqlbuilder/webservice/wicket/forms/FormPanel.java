@@ -26,6 +26,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.resources.PocketGrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
@@ -63,7 +64,16 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
         super(id);
         WebHelper.show(this);
-        setFormActions(formActions == null ? new DefaultFormActions<T>() : formActions);
+        setFormActions(formActions != null ? formActions : new DefaultFormActions<T>() {
+            private static final long serialVersionUID = -6135914559717102175L;
+
+            @Override
+            public Class<T> forObjectClass() {
+                return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
+                // Class<? extends FormPanel<T>> clazz = (Class<? extends FormPanel<T>>) FormPanel.this.getClass();
+                // return (Class<T>) ((java.lang.reflect.ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0];
+            }
+        });
         setFormSettings(formSettings == null ? new FormSettings() : formSettings);
     }
 
