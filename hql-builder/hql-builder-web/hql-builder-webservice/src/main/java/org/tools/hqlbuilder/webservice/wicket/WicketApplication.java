@@ -211,6 +211,7 @@ public class WicketApplication extends WebApplication {
         // css.add(Colors.COLORS_CSS);
         // css.add(WeLoveIcons.WE_LOVE_ICONS_CSS); // moved to places where used
         css.add(WicketCSSRoot.GENERAL);
+        css.add(WicketCSSRoot.CLEARFIX);
 
         // generated with zuss css (moved)
         // css.add(WicketCSSRoot.HORIZONTAL_MENU);
@@ -315,7 +316,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //

@@ -3,6 +3,8 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,6 +33,8 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -6387604067134639316L;
 
@@ -47,6 +51,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected Form<T> form;
 
     protected int count = 0;
+
+    protected StringBuilder sbColumnsCss = new StringBuilder();
+
+    protected Set<String> sbColumnsCssIds = new HashSet<String>();
 
     public FormPanel(String id) {
         this(id, null, null);
@@ -68,22 +76,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
-        StringBuilder sb = new StringBuilder();
-        if (formSettings.getVariation() == FormPanelVariation.label) {
-            for (int i = 0; i < formSettings.getColumns(); i++) {
-                sb.append(".block-group .block:nth-child(").append((i * 2) + 1).append(") { width: ").append(20 / formSettings.getColumns())
-                .append("%; } ");
-                sb.append(".block-group .block:nth-child(").append((i * 2) + 2).append(") { width: ").append((100 - 20) / formSettings.getColumns())
-                .append("%; } ");
-            }
-        } else {
-            for (int i = 0; i < formSettings.getColumns(); i++) {
-                sb.append(".block-group .block:nth-child(").append(i + 1).append(") { width: ").append(100 / formSettings.getColumns())
-                .append("%; } ");
-            }
-        }
-        response.render(CssHeaderItem.forCSS(sb.toString(),//
-                "css_form_" + getId()));//
+        response.render(CssHeaderItem.forCSS(sbColumnsCss.toString(),//
+                "css_form_" + getId() + "_" + System.currentTimeMillis()));//
     }
 
     protected FormActions<T> getFormActions() {
@@ -251,20 +245,72 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addRow(rowpanel);
     }
 
+    /**
+     * single lazy creation
+     */
     protected RepeatingView getRowRepeater() {
         if (rowRepeater == null) {
-            rowRepeater = WebHelper.show(new RepeatingView(FORM_ROW_REPEATER));
+            RepeatingView repeater = new RepeatingView(FORM_ROW_REPEATER);
+            rowRepeater = WebHelper.show(repeater);
         }
         return this.rowRepeater;
+    }
+
+    protected void renderColumnsCss(String cssname, FormPanelVariation variation, int cols) {
+        if (sbColumnsCssIds.contains(cssname)) {
+            return;
+        }
+        sbColumnsCssIds.add(cssname);
+        if (variation == FormPanelVariation.label) {
+            {
+                for (int i = 0; i < cols; i++) {
+                    sbColumnsCss.append(".").append(cssname).append(" ");
+                    sbColumnsCss.append(".block:nth-child(").append((i * 2) + 1).append(")");
+                    if (i < cols - 1) {
+                        sbColumnsCss.append(",");
+                    }
+                }
+                sbColumnsCss.append("{width:").append(20 / formSettings.getColumns()).append("%;}");
+                sbColumnsCss.append("\n");
+            }
+            {
+                for (int i = 0; i < cols; i++) {
+                    sbColumnsCss.append(".").append(cssname).append(" ");
+                    sbColumnsCss.append(".block:nth-child(").append((i * 2) + 2).append(")");
+                    if (i < cols - 1) {
+                        sbColumnsCss.append(",");
+                    }
+                }
+                sbColumnsCss.append("{width:").append((100 - 20) / formSettings.getColumns()).append("%;}");
+                sbColumnsCss.append("\n");
+            }
+        } else {
+            for (int i = 0; i < cols; i++) {
+                sbColumnsCss.append(".").append(cssname).append(" ");
+                sbColumnsCss.append(".block:nth-child(").append(i + 1).append(")");
+                if (i < cols - 1) {
+                    sbColumnsCss.append(",");
+                }
+            }
+            sbColumnsCss.append("{width:").append(100 / formSettings.getColumns()).append("%;}");
+            sbColumnsCss.append("\n");
+        }
     }
 
     protected RepeatingView getComponentRepeater() {
         // only create a new row when needed
         if (componentRepeater == null) {
             WebMarkupContainer rowContainer = new WebMarkupContainer(getRowRepeater().newChildId());
+            // create and set cssclass for these rows
+            {
+                String cssname = getId() + getFormSettings().getColumns() + (getFormSettings().getVariation() == FormPanelVariation.label ? "l" : "");
+                renderColumnsCss(cssname, getFormSettings().getVariation(), getFormSettings().getColumns());
+                rowContainer.add(new CssClassNameAppender(cssname));
+            }
             getRowRepeater().add(rowContainer);
 
-            componentRepeater = WebHelper.show(new RepeatingView(FORM_ELEMENT_REPEATER));
+            RepeatingView repeater = new RepeatingView(FORM_ELEMENT_REPEATER);
+            componentRepeater = WebHelper.show(repeater);
             rowContainer.add(componentRepeater);
         }
         return this.componentRepeater;

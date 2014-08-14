@@ -69,21 +69,20 @@ tr:last-child td.last {
 }
 
 /* wicket ordering */
-table tr th.wicket_orderDown {
+table tr th.wicket_orderDown, table tr th.wicket_orderUp, table tr th.wicket_orderNone {
 	background-position: right;
 	background-repeat: no-repeat;
+}
+
+table tr th.wicket_orderDown {
 	background-image: url("images/arrow_up.png");
 }
 
 table tr th.wicket_orderUp {
-	background-position: right;
-	background-repeat: no-repeat;
 	background-image: url("images/arrow_down.png");
 }
 
 table tr th.wicket_orderNone {
-	background-position: right;
-	background-repeat: no-repeat;
 	background-image: url("images/arrow_off.png");
 }
 
