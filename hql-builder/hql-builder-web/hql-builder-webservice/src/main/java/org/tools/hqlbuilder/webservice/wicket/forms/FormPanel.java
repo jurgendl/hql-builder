@@ -280,7 +280,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                         sbColumnsCss.append(",");
                     }
                 }
-                sbColumnsCss.append("{width:").append(20 / formSettings.getColumns()).append("%;}");
+                // sbColumnsCss.append("{width:").append("calc(").append(getFormSettings().getLabelWidth()).append(" / ")
+                // .append(formSettings.getColumns()).append(")").append(";}");
+                sbColumnsCss.append("{width:").append(getFormSettings().getLabelWidth()).append(";}");
                 sbColumnsCss.append("\n");
             }
             {
@@ -291,7 +293,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                         sbColumnsCss.append(",");
                     }
                 }
-                sbColumnsCss.append("{width:").append((100 - 20) / formSettings.getColumns()).append("%;}");
+                // sbColumnsCss.append("{width:").append("calc((100% - ").append(getFormSettings().getLabelWidth()).append(") / ")
+                // .append(formSettings.getColumns()).append(")").append(";}");
+                sbColumnsCss.append("{width:").append("calc((100% - (").append(getFormSettings().getLabelWidth()).append(" * ").append(cols)
+                .append(")) / ").append(formSettings.getColumns()).append(")").append(";}");
                 sbColumnsCss.append("\n");
             }
         } else {
@@ -302,7 +307,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append(",");
                 }
             }
-            sbColumnsCss.append("{width:").append(100 / formSettings.getColumns()).append("%;}");
+            sbColumnsCss.append("{width:").append("calc(100% / ").append(formSettings.getColumns()).append(")").append(";}");
             sbColumnsCss.append("\n");
         }
     }
@@ -352,69 +357,67 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public <F extends Serializable> HiddenFieldPanel<F> addHidden(F propertyPath) {
-        return addDefaultRow(new HiddenFieldPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath));
+        return addDefaultRow(new HiddenFieldPanel<F>(getFormModel(), propertyPath));
     }
 
     public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
-        return addDefaultRow(new ColorPickerPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new ColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new RadioButtonsPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings, choices,
-                renderer));
+        return addDefaultRow(new RadioButtonsPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath,
             FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
-        return addCustomRow(new MultiSelectCheckBoxPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings,
-                choices, renderer));
+        return addCustomRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
             IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new DropDownPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+        return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new TextFieldPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new TextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F extends Serializable> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
-        return addDefaultRow(new TextAreaPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
-        return addDefaultRow(new NumberFieldPanel<N>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new NumberFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
-        return addDefaultRow(new RangeFieldPanel<N>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new RangeFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new CheckBoxPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new CheckBoxPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new EmailTextFieldPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new EmailTextFieldPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
-        return addDefaultRow(new PasswordTextFieldPanel(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings));
+        return addDefaultRow(new PasswordTextFieldPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     /**
      * also "form.setMultiPart(true);" and "form.setMaxSize(Bytes.megabytes(1));"
      */
     public <F> FilePickerPanel<F> addFilePicker(F propertyPath, FilePickerSettings componentSettings, FilePickerHook hook) {
-        return addCustomRow(new FilePickerPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, getFormSettings(), componentSettings, hook));
+        return addCustomRow(new FilePickerPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, hook));
     }
 
     @SuppressWarnings("unchecked")
     public <F extends Serializable> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings,
             Converter<F, Date> dateConverter) {
-        return addDefaultRow(new DatePickerPanel<F>(FORM_ELEMENT, getFormModel(), propertyPath, dateConverter, getFormSettings(), componentSettings));
+        return addDefaultRow(new DatePickerPanel<F>(getFormModel(), propertyPath, dateConverter, getFormSettings(), componentSettings));
     }
 
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
