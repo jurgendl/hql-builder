@@ -19,11 +19,26 @@ public class MultiColumnFormPage extends DefaultWebPage {
 
         setStatelessHint(false);
 
-        FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", null, new FormSettings().setColumns(2));
+        FormSettings formSettings = new FormSettings();
+        FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", null, formSettings);
         multicolform.getForm();
         add(multicolform);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i <= 5; i++) {
+            TextFieldPanel<String> textField = multicolform.addTextField("label " + (i + 1), new FormElementSettings());
+            textField.setValueModel(new Model<String>("value " + (i + 1)));
+        }
+
+        formSettings.setColumns(2);
+
+        for (int i = 6; i <= 16; i++) {
+            TextFieldPanel<String> textField = multicolform.addTextField("label " + (i + 1), new FormElementSettings());
+            textField.setValueModel(new Model<String>("value " + (i + 1)));
+        }
+
+        formSettings.setColumns(3);
+
+        for (int i = 17; i <= 29; i++) {
             TextFieldPanel<String> textField = multicolform.addTextField("label " + (i + 1), new FormElementSettings());
             textField.setValueModel(new Model<String>("value " + (i + 1)));
         }

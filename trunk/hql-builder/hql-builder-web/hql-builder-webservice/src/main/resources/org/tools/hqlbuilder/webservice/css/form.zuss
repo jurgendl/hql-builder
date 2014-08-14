@@ -105,7 +105,10 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	font: bold 15px Arial, Helvetica;
 }
 
-form input[type='submit'],input[type='reset'],input[type='button'],input[type='image'] {
+form input[type='submit'],input[type='reset'],input[type='button'],input[type='image'],
+.btn,
+.likebutton,
+button {
 	margin-left: 3px;
 	margin-right: 3px;
 	border-width: 1px;
@@ -117,17 +120,6 @@ form input[type='submit'],input[type='reset'],input[type='button'],input[type='i
 	display: inline-block;
 	text-decoration: none;
 	text-align: center;
-	margin-left: 3px;
-	margin-right: 3px;
-	border-width: 1px;
-	padding: 3px 10px 3px 10px;
-}
-
-button {
-	margin-left: 3px;
-	margin-right: 3px;
-	border-width: 1px;
-	padding: 3px 10px 3px 10px;
 }
 
 .btn.disabled,

@@ -8,4 +8,6 @@ public class WicketCSSRoot {
     public static CssResourceReference NORMALIZE = new CssResourceReference(WicketCSSRoot.class, "normalize.css");
 
     public static CssResourceReference GENERAL = new CssResourceReference(WicketCSSRoot.class, "general.css");
+
+    public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
 }
