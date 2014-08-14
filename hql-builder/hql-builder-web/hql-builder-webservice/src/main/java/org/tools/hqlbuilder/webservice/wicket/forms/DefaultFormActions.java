@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 public class DefaultFormActions<T> implements FormActions<T> {
@@ -77,8 +78,8 @@ public class DefaultFormActions<T> implements FormActions<T> {
      * @see org.tools.hqlbuilder.webservice.wicket.forms.FormActions#forObjectClass()
      */
     @Override
-    @SuppressWarnings("unchecked")
     public Class<T> forObjectClass() {
-        return (Class<T>) ((java.lang.reflect.ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        return CommonUtils.<T> getImplementation(this, DefaultFormActions.class);
+        // return (Class<T>) ((java.lang.reflect.ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 }

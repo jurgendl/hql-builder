@@ -4,6 +4,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -166,7 +168,7 @@ public class CommonUtils {
     }
 
     public static char[] whitespace_chars = ( //
-            "\u0009" // CHARACTER TABULATION
+    "\u0009" // CHARACTER TABULATION
             + "\n" // LINE FEED (LF)
             + "\u000B" // LINE TABULATION
             + "\u000C" // FORM FEED (FF)
@@ -192,7 +194,7 @@ public class CommonUtils {
             + "\u202F" // NARROW NO-BREAK SPACE
             + "\u205F" // MEDIUM MATHEMATICAL SPACE
             + "\u3000" // IDEOGRAPHIC SPACE
-            ).toCharArray();
+    ).toCharArray();
 
     public static String removeUnnecessaryWhiteSpaces(String s) {
         StringBuilder sb = new StringBuilder();
@@ -356,5 +358,104 @@ public class CommonUtils {
 
     public static <A> void set(Object bean, A arg, Object value) {
         PropertyAccessorFactory.forBeanPropertyAccess(bean).setPropertyValue(Lambda.argument(arg).getInkvokedPropertyName(), value);
+    }
+
+    /**
+     * @see #getImplementation(Object, Class, int) met index=-1
+     */
+    public static <G> Class<G> getImplementation(Object object, Class<?> classOrInterfaceWithGenericType) throws IllegalArgumentException {
+        return _getImplementation(object, classOrInterfaceWithGenericType, -1, null);
+    }
+
+    /**
+     * @see #getImplementation(Object, Class, int)
+     */
+    public static <G> Class<G> getImplementation(Object object, Class<?> classOrInterfaceWithGenericType, int genericTypeIndex)
+            throws IllegalArgumentException {
+        return _getImplementation(object, classOrInterfaceWithGenericType, genericTypeIndex, null);
+    }
+
+    /**
+     * @see #getImplementation(Object, Class, int)
+     */
+    public static <P, G extends P> Class<G> getImplementation(Object object, Class<?> classOrInterfaceWithGenericType, Class<P> requiredGenericType)
+            throws IllegalArgumentException {
+        return _getImplementation(object, classOrInterfaceWithGenericType, -1, requiredGenericType);
+    }
+
+    /**
+     * welke generic type implementatie heeft een class implementatie (werkt ook op anonymous inner classes)
+     *
+     * @param object de implementatie class (this waar opgeroepen)
+     * @param classOrInterfaceWithGenericType class of interface waardat de generic type naam op gedeclareerd staat
+     * @param genericTypeIndex de index binnen de &lt; en &gt; waar de generic type naam op gedeclareerd staat; als er maar 1 is wordt die zowiezo
+     *            genomen (maw index 0)
+     * @param requiredGenericType vereiste class (alternatief voor index)
+     *
+     * @return de effectieve implementatie
+     *
+     * @throws IllegalArgumentException wanneer index niet gevonden wordt of geen implementatie van class c
+     */
+    @SuppressWarnings("unchecked")
+    private static <P, G extends P> Class<G> _getImplementation(Object object, Class<?> classOrInterfaceWithGenericType, int genericTypeIndex,
+            Class<P> requiredGenericType) throws IllegalArgumentException {
+        if (object == null || classOrInterfaceWithGenericType == null) {
+            throw new NullPointerException();
+        }
+
+        Class<?> clazz = object instanceof Class ? Class.class.cast(object) : object.getClass();
+        ParameterizedType parameterizedType = null;
+
+        while (parameterizedType == null && clazz != null) {
+            for (Type type : clazz.getGenericInterfaces()) {
+                if (type instanceof ParameterizedType && ParameterizedType.class.cast(type).getRawType().equals(classOrInterfaceWithGenericType)) {
+                    parameterizedType = ParameterizedType.class.cast(type);
+                }
+            }
+
+            if (parameterizedType == null) {
+                Type type = clazz.getGenericSuperclass();
+                if (type instanceof ParameterizedType && ParameterizedType.class.cast(type).getRawType().equals(classOrInterfaceWithGenericType)) {
+                    parameterizedType = ParameterizedType.class.cast(clazz.getGenericSuperclass());
+                }
+            }
+
+            if (parameterizedType == null) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+
+        if (parameterizedType == null) {
+            throw new IllegalArgumentException("no implementation");
+        }
+
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+
+        if (genericTypeIndex == -1 && actualTypeArguments.length == 1) {
+            return (Class<G>) actualTypeArguments[0];
+        }
+
+        if (genericTypeIndex == -1) {
+            if (requiredGenericType == null) {
+                throw new IllegalArgumentException("requiredGenericType", new NullPointerException());
+            }
+
+            for (Type actualTypeArgument : actualTypeArguments) {
+                if (requiredGenericType.isAssignableFrom((Class<?>) actualTypeArgument)) {
+                    return (Class<G>) actualTypeArgument;
+                }
+            }
+            throw new IllegalArgumentException(Arrays.toString(actualTypeArguments) + "<>" + requiredGenericType);
+        }
+
+        try {
+            Type type = actualTypeArguments[genericTypeIndex];
+            if (type instanceof ParameterizedType) {
+                return (Class<G>) ((ParameterizedType) type).getRawType();
+            }
+            return (Class<G>) type;
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            throw new IllegalArgumentException(Arrays.toString(actualTypeArguments), ex);
+        }
     }
 }
