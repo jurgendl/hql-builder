@@ -226,11 +226,11 @@ public class FormSettings implements Serializable {
         return this;
     }
 
-    protected String getLabelWidth() {
+    public String getLabelWidth() {
         return this.labelWidth;
     }
 
-    protected FormSettings setLabelWidth(String labelWidth) {
+    public FormSettings setLabelWidth(String labelWidth) {
         this.labelWidth = labelWidth;
         return this;
     }
