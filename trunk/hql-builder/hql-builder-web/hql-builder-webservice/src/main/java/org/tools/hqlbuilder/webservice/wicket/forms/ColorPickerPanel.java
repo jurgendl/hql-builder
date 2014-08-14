@@ -16,9 +16,8 @@ import org.tools.hqlbuilder.webservice.resources.spectrum.Spectrum;
 public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<String>> {
     private static final long serialVersionUID = 3920158103962799959L;
 
-    public ColorPickerPanel(String id, final IModel<?> model, final String propertyPath, FormSettings formSettings,
-            ColorPickerSettings colorPickerSettings) {
-        super(id, model, propertyPath, formSettings, colorPickerSettings);
+    public ColorPickerPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, ColorPickerSettings colorPickerSettings) {
+        super(model, propertyPath, formSettings, colorPickerSettings);
     }
 
     @Override

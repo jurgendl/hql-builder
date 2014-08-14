@@ -17,9 +17,9 @@ public class MultiSelectCheckBoxPanel<T extends Serializable> extends FormRowPan
 
     protected IChoiceRenderer<T> renderer;
 
-    public MultiSelectCheckBoxPanel(String id, IModel<?> model, Collection<T> propertyPath, FormSettings formSettings,
-            FormElementSettings componentSettings, ListModel<T> choices, IChoiceRenderer<T> renderer) {
-        super(id, model, propertyPath, formSettings, componentSettings);
+    public MultiSelectCheckBoxPanel(IModel<?> model, Collection<T> propertyPath, FormSettings formSettings, FormElementSettings componentSettings,
+            ListModel<T> choices, IChoiceRenderer<T> renderer) {
+        super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;
     }

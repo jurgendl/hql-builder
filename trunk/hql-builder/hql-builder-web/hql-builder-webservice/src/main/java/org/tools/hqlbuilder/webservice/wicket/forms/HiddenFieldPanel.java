@@ -8,8 +8,8 @@ import org.apache.wicket.model.IModel;
 public class HiddenFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, HiddenField<T>> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    public HiddenFieldPanel(String id, final IModel<?> model, final T propertyPath) {
-        super(id, model, propertyPath, new FormSettings(), new FormElementSettings());
+    public HiddenFieldPanel(final IModel<?> model, final T propertyPath) {
+        super(model, propertyPath, new FormSettings(), new FormElementSettings());
     }
 
     @Override

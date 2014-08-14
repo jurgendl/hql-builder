@@ -52,13 +52,13 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
 
     protected final FormElementSettings componentSettings;
 
-    public FormRowPanel(String id, P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
-        this(id, valueModel, propertyPath, formSettings, componentSettings);
+    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
+        this(valueModel, propertyPath, formSettings, componentSettings);
         this.valueModel = valueModel;
     }
 
-    protected FormRowPanel(String id, IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(id, model);
+    protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(FORM_ELEMENT, model);
         if (formSettings == null) {
             throw new NullPointerException("formSettings");
         }

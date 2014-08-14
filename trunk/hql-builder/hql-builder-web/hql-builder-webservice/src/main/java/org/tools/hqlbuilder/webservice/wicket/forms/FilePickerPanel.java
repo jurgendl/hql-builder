@@ -58,9 +58,8 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     protected FilePickerHook hook;
 
     @SuppressWarnings("unchecked")
-    public FilePickerPanel(String id, IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings,
-            FilePickerHook hook) {
-        super(id, propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
+    public FilePickerPanel(IModel<?> parentModel, P propertyPath, FormSettings formSettings, FilePickerSettings componentSettings, FilePickerHook hook) {
+        super(propertyPath, new ListModel<FileUpload>(), formSettings, componentSettings);
         this.hook = hook;
         this.parentModel = parentModel;
         @SuppressWarnings("rawtypes")

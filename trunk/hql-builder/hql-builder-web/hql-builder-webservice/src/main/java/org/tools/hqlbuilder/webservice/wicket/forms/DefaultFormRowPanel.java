@@ -12,8 +12,8 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 public abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>> extends FormRowPanel<T, T, C> {
     private static final long serialVersionUID = -3609764520190287373L;
 
-    public DefaultFormRowPanel(String id, IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
-        super(id, model, propertyPath, formSettings, componentSettings);
+    public DefaultFormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+        super(model, propertyPath, formSettings, componentSettings);
     }
 
     public void setValueModel(Model<T> model) {

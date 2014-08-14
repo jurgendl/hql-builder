@@ -41,6 +41,8 @@ public class FormSettings implements Serializable {
 
     protected int columns = 1;
 
+    protected String labelWidth = "12em";
+
     public FormSettings() {
         super();
     }
@@ -221,6 +223,15 @@ public class FormSettings implements Serializable {
 
     public FormSettings setColumns(int columns) {
         this.columns = columns;
+        return this;
+    }
+
+    protected String getLabelWidth() {
+        return this.labelWidth;
+    }
+
+    protected FormSettings setLabelWidth(String labelWidth) {
+        this.labelWidth = labelWidth;
         return this;
     }
 }

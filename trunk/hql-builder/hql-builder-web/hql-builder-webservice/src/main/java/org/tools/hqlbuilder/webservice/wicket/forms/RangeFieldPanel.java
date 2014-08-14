@@ -27,8 +27,8 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
 
     protected Output output;
 
-    public RangeFieldPanel(String id, IModel<?> model, N propertyPath, FormSettings formSettings, RangeFieldSettings<N> rangeFieldSettings) {
-        super(id, model, propertyPath, formSettings, rangeFieldSettings);
+    public RangeFieldPanel(IModel<?> model, N propertyPath, FormSettings formSettings, RangeFieldSettings<N> rangeFieldSettings) {
+        super(model, propertyPath, formSettings, rangeFieldSettings);
     }
 
     @Override

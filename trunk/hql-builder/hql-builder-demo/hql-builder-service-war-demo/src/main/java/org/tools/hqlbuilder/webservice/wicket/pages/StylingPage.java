@@ -19,8 +19,10 @@ public class StylingPage extends BasePage {
 
         ExampleForm stylingform = new ExampleForm("stylingform");
 
-        boolean dont = false;
+        boolean dont = true;
         if (dont) {
+            stylingform.getFormSettings().setColumns(4);
+
             ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
             colorPickerSettings.setClickoutFiresChange(true);
             colorPickerSettings.setPreferredFormat(ColorFormat.hsl);
@@ -30,7 +32,7 @@ public class StylingPage extends BasePage {
             colorPickerSettings.setShowInput(true);
             for (String _key_ : WicketApplication.get().getZussStyle().keys()) {
                 final String property = _key_.toString().substring(1);
-                ColorPickerPanel cpp = new ColorPickerPanel("", stylingform.getDefaultModel(), property, stylingform.getFormSettings(),
+                ColorPickerPanel cpp = new ColorPickerPanel(stylingform.getDefaultModel(), property, stylingform.getFormSettings(),
                         ColorPickerSettings.class.cast(colorPickerSettings.clone())) {
                     @Override
                     public IModel<String> getLabelModel() {

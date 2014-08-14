@@ -33,6 +33,8 @@ public class DefaultWebPage extends WebPage {
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
 
+        setStatelessHint(false);
+
         if (getClass().equals(DefaultWebPage.class)) {
             setResponsePage(EmptyPage.class, parameters);
         }
