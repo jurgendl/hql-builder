@@ -1,12 +1,15 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import java.io.Serializable;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
-public class DefaultFormActions<T> implements FormActions<T> {
+public class DefaultFormActions<T extends Serializable> implements FormActions<T> {
     private static final long serialVersionUID = 555158530492799693L;
 
     public DefaultFormActions() {
@@ -43,7 +46,11 @@ public class DefaultFormActions<T> implements FormActions<T> {
      */
     @Override
     public void submitModel(IModel<T> model) {
-        submitObject(model.getObject());
+        try {
+            submitObject(model.getObject());
+        } catch (UnsupportedOperationException ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 
     /**
@@ -61,7 +68,12 @@ public class DefaultFormActions<T> implements FormActions<T> {
      */
     @Override
     public IModel<T> loadModel() {
-        return WebHelper.model(loadObject());
+        try {
+            return WebHelper.model(loadObject());
+        } catch (UnsupportedOperationException ex) {
+            ex.printStackTrace(System.out);
+            return Model.<T> of();
+        }
     }
 
     /**
@@ -70,7 +82,11 @@ public class DefaultFormActions<T> implements FormActions<T> {
      */
     @Override
     public T loadObject() {
-        return WebHelper.create(forObjectClass());
+        try {
+            return WebHelper.create(forObjectClass());
+        } catch (org.springframework.beans.BeanInstantiationException ex) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**

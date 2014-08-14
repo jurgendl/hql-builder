@@ -29,13 +29,18 @@ public abstract class DefaultFormRowPanel<T extends Serializable, C extends Form
         return valueModel;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Class<T> getPropertyType() {
         if (propertyType == null) {
             try {
                 this.propertyType = WebHelper.type(propertyPath);
             } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
-                this.propertyType = CommonUtils.<T> getImplementation(this, DefaultFormRowPanel.class);
+                try {
+                    this.propertyType = CommonUtils.<T> getImplementation(this, DefaultFormRowPanel.class);
+                } catch (IllegalArgumentException ex2) {
+                    this.propertyType = (Class<T>) Serializable.class;
+                }
                 // Type genericSuperclass = getClass().getGenericSuperclass();
                 // ParameterizedType parameterizedType = ParameterizedType.class.cast(genericSuperclass);
                 // try {

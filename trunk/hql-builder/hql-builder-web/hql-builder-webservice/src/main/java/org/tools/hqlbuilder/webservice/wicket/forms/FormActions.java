@@ -6,8 +6,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-public interface FormActions<T> extends Serializable {
-    public abstract T loadObject();
+public interface FormActions<T extends Serializable> extends Serializable {
+    public abstract T loadObject() throws UnsupportedOperationException;
 
     public abstract IModel<T> loadModel();
 
@@ -15,7 +15,7 @@ public interface FormActions<T> extends Serializable {
 
     public abstract void submitModel(IModel<T> model);
 
-    public abstract void submitObject(T object);
+    public abstract void submitObject(T object) throws UnsupportedOperationException;
 
     public abstract void afterSubmit(AjaxRequestTarget target, Form<T> form, IModel<T> model);
 
