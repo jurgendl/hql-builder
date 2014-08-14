@@ -21,7 +21,7 @@ import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;
-import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
+import com.googlecode.wicket.jquery.ui.form.datepicker.AjaxDatePicker;
 
 /**
  * @see http://api.jqueryui.com/datepicker/
@@ -71,7 +71,7 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         dateFormatClient = dateFormat.toLowerCase().replaceAll("yyyy", "yy");
         options.set(DATE_FORMAT, Options.asString(dateFormatClient));
         // options.set(APPEND_TEXT, Options.asString(new SimpleDateFormat(dateFormat, locale).format(new Date())));
-        return new DatePicker(VALUE, model, dateFormat, options) {
+        return new AjaxDatePicker(VALUE, model, dateFormat, options) {
             private static final long serialVersionUID = 7118431260383127661L;
 
             @Override
@@ -107,6 +107,10 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         String initScript = ";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '" + dateFormatClient + "', " + "'"
                 + urlForIcon + "');";
         response.render(OnLoadHeaderItem.forScript(initScript));
+
+        /* http://stackoverflow.com/questions/4580727/override-jquery-ui-datepicker-div-visible-strangely-on-first-page-load */
+        // response.render(CssHeaderItem.forCSS("#ui-datepicker-div {display: none !important;} .ui-datepicker-inline {display: none !important;}",
+        // "datepickercssfix"));
     }
 
     @Override
