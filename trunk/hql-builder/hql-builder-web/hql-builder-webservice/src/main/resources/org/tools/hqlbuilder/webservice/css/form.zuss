@@ -15,6 +15,10 @@ form input[type='radio'],input[type='checkbox'] {
 	vertical-align: middle;
 }
 
+.likeinput {
+	display: inline-block;
+}
+
 .likeinput,
 form output,
 form select,
@@ -372,4 +376,5 @@ fieldset {
 	background: @form_row_background;
 	background-image: -moz-linear-gradient(100% 25% 90deg, @form_row_background, @form_row_background_gradient);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 25%, from(@form_row_background_gradient), to(@form_row_background));
+	height: 28px;
 }
