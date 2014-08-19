@@ -87,6 +87,7 @@ public class ExampleForm extends FormPanel<Example> {
         addTextField(proxy.getText(), fset.clone().setRequired(true));
         addEmailTextField(proxy.getEmail(), fset);
         if (dont) {
+            addHidden(proxy.getHidden1());
             addCheckBox(proxy.getCheck(), fset);
             addRadioButtons(proxy.getRadio(), fset, optsChoices, optsRenderer);
             addDropDown(proxy.getCombo(), fset, optsChoices, optsRenderer);
@@ -107,6 +108,7 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
             addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
+            addHidden(proxy.getHidden2());
         }
         if (dont) {
             FilePickerHook hook = new FilePickerHook() {

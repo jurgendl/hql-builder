@@ -362,10 +362,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         // some post creation stuff
         rowpanel.afterAddComponents();
 
-        count++;
-        if (count == formSettings.getColumns()) {
-            count = 0; // reset count
-            componentRepeater = null; // so that a new one is created when needed
+        if (rowpanel.takesUpSpace()) {
+            count++;
+            if (count == formSettings.getColumns()) {
+                count = 0; // reset count
+                componentRepeater = null; // so that a new one is created when needed
+            }
         }
 
         return rowpanel;
@@ -437,5 +439,21 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
         return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
+    }
+
+    public void nextRow() {
+        getForm();
+
+        while (count != 0) {
+            WebMarkupContainer elementContainer = new WebMarkupContainer(getComponentRepeater().newChildId());
+            getComponentRepeater().add(elementContainer);
+            elementContainer.add(new EmptyFormPanel());
+
+            count++;
+            if (count == formSettings.getColumns()) {
+                count = 0; // reset count
+                componentRepeater = null; // so that a new one is created when needed
+            }
+        }
     }
 }
