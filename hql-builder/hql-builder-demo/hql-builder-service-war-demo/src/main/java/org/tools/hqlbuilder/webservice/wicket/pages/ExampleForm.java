@@ -43,7 +43,10 @@ public class ExampleForm extends FormPanel<Example> {
 
     public ExampleForm(String id) {
         super(id);
-        setFormSettings(new FormSettings().setClientsideRequiredValidation(false));
+        FormSettings fs = new FormSettings().setClientsideRequiredValidation(false);
+        fs.setLabelWidth("22em");
+        fs.setColumns(2);
+        setFormSettings(fs);
         setFormActions(new DefaultFormActions<Example>() {
             @Override
             public void submitObject(Example example) {
@@ -84,8 +87,6 @@ public class ExampleForm extends FormPanel<Example> {
         addTextField(proxy.getText(), fset.clone().setRequired(true));
         addEmailTextField(proxy.getEmail(), fset);
         if (dont) {
-            addHidden(proxy.getHidden1());
-            addHidden(proxy.getHidden2());
             addCheckBox(proxy.getCheck(), fset);
             addRadioButtons(proxy.getRadio(), fset, optsChoices, optsRenderer);
             addDropDown(proxy.getCombo(), fset, optsChoices, optsRenderer);

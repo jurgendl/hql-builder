@@ -21,7 +21,6 @@ public class StylingPage extends BasePage {
 
         boolean dont = true;
         if (dont) {
-            stylingform.getFormSettings().setLabelWidth("22em");
             stylingform.getFormSettings().setColumns(4);
 
             ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
