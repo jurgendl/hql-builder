@@ -302,4 +302,8 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
     public String getVariation() {
         return formSettings == null ? null : formSettings.getVariation().toString();
     }
+
+    public boolean takesUpSpace() {
+        return true;
+    }
 }

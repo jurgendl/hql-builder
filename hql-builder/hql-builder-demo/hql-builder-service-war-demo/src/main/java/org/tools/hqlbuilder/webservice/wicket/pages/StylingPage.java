@@ -18,6 +18,7 @@ public class StylingPage extends BasePage {
         setStatelessHint(false);
 
         ExampleForm stylingform = new ExampleForm("stylingform");
+        stylingform.nextRow();
 
         boolean dont = true;
         if (dont) {

@@ -21,12 +21,16 @@ public class HiddenFieldPanel<T extends Serializable> extends DefaultFormRowPane
     protected FormRowPanel<T, T, HiddenField<T>> addComponents() {
         HiddenField<T> comp = getComponent();
         this.add(comp);
-
         return this;
     }
 
     @Override
     protected void setupRequired(HiddenField<T> component) {
         //
+    }
+
+    @Override
+    public boolean takesUpSpace() {
+        return false;
     }
 }

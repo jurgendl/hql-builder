@@ -342,16 +342,14 @@ form input[type='range']::-moz-range-thumb {
 
 .formlabel {
 	color: @form_label;
-	/*float: left;*/
 	text-align: right;
-	/*display: inline-block;*/
 	display: block;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
 	font-weight: bold;
-	/*width: 14em;*/
 	vertical-align: middle;
 	height: 24px;
+	line-height: 24px;
 }
 
 fieldset {
