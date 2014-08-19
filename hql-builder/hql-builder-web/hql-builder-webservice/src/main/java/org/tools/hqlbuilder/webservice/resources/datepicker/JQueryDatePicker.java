@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.tools.hqlbuilder.common.icons.WicketIconsResources;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
+
+import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 
 public class JQueryDatePicker {
     public static final String RESOURCE_I18N_PATH = "jquery/ui/datepicker/i18n/";
@@ -54,5 +58,10 @@ public class JQueryDatePicker {
         JavaScriptResourceReference resourceReference = get(locale);
         cache.put(locale, resourceReference);
         return resourceReference;
+    }
+
+    public static String initJavaScript(DatePicker datepicker, String dateFormatClient) {
+        return ";initJQDatepicker('" + datepicker.getMarkupId() + "', '" + datepicker.getLocale().getCountry() + "', '" + dateFormatClient + "', "
+                + "'" + datepicker.urlFor(WicketIconsResources.REF_CALENDER, new PageParameters()) + "');";
     }
 }

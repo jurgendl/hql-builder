@@ -13,8 +13,6 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.tools.hqlbuilder.common.icons.WicketIconsResources;
 import org.tools.hqlbuilder.webservice.resources.datepicker.JQueryDatePicker;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
@@ -22,6 +20,7 @@ import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;
 import com.googlecode.wicket.jquery.ui.form.datepicker.AjaxDatePicker;
+import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
 
 /**
  * @see http://api.jqueryui.com/datepicker/
@@ -102,15 +101,7 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
 
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.cached(getLocale())));
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
-
-        CharSequence urlForIcon = urlFor(WicketIconsResources.REF_CALENDER, new PageParameters());
-        String initScript = ";initJQDatepicker('" + getMarkupId() + "', '" + getLocale().getCountry() + "', '" + dateFormatClient + "', " + "'"
-                + urlForIcon + "');";
-        response.render(OnLoadHeaderItem.forScript(initScript));
-
-        /* http://stackoverflow.com/questions/4580727/override-jquery-ui-datepicker-div-visible-strangely-on-first-page-load */
-        // response.render(CssHeaderItem.forCSS("#ui-datepicker-div {display: none !important;} .ui-datepicker-inline {display: none !important;}",
-        // "datepickercssfix"));
+        response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
     }
 
     @Override
