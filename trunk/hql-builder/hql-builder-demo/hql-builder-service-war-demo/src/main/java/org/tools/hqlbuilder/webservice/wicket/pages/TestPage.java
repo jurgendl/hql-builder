@@ -17,7 +17,7 @@ public class TestPage extends DefaultWebPage {
 
         setStatelessHint(false);
 
-        FormSettings formSettings = new FormSettings().setAjax(false).setClientsideRequiredValidation(false);
+        FormSettings formSettings = new FormSettings().setColumns(2).setShowLabel(false).setAjax(false).setClientsideRequiredValidation(false);
         DefaultFormActions<Example> actions = new DefaultFormActions<Example>() {
             Example example = new Example();
 
