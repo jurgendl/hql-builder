@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
@@ -74,11 +75,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             @Override
             public Class<T> forObjectClass() {
                 return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
-                // Class<? extends FormPanel<T>> clazz = (Class<? extends FormPanel<T>>) FormPanel.this.getClass();
-                // return (Class<T>) ((java.lang.reflect.ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0];
             }
         });
         setFormSettings(formSettings == null ? new FormSettings() : formSettings);
+        // add(new Notification(FORM_NOTIFICATION));
     }
 
     @Override
@@ -90,8 +90,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
-        response.render(CssHeaderItem.forCSS(css.toString(),//
-                "css_form_" + getId() + "_" + System.currentTimeMillis()));//
+        response.render(CssHeaderItem.forCSS(css.toString(), "pocketgrid_" + getId() + "_" + System.currentTimeMillis()));
     }
 
     protected FormActions<T> getFormActions() {
@@ -183,7 +182,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             Button reset = new Button(FORM_RESET, resetModel);
 
-            // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons
+            /* https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons */
             Component cancel;
             if (getFormSettings().isAjax()) {
                 cancel = new AjaxSubmitLink(FORM_CANCEL, form) {
@@ -217,6 +216,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             WebMarkupContainer formFooter = new WebMarkupContainer(FORM_FOOTER);
             form.add(formFooter);
+
+            formFooter.add(new FeedbackPanel("allMessages"));
         }
         return form;
     }
@@ -304,7 +305,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append("))").append(" / ")
-                    .append(columnCount).append(")");
+                            .append(columnCount).append(")");
                 }
                 sbColumnsCss.append(";}");
                 sbColumnsCss.append("\n");
@@ -458,4 +459,24 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
         return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
     }
+
+    // public void notificationSuccess(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
+    // getNotification().success(message);
+    // }
+    //
+    // public void notificationInfo(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
+    // getNotification().info(message);
+    // }
+    //
+    // public void notificationError(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
+    // getNotification().error(message);
+    // }
+    //
+    // public void notificationWarn(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
+    // getNotification().warn(message);
+    // }
+    //
+    // protected com.googlecode.wicket.kendo.ui.widget.notification.Notification getNotification() {
+    // return com.googlecode.wicket.kendo.ui.widget.notification.Notification.class.cast(get(FORM_NOTIFICATION));
+    // }
 }

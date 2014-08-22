@@ -1,6 +1,11 @@
 <wicket:panel>
-	<div class="block">
-		<label class="formlabel" for="value" wicket:id="label">[Label]</label>
+	<wicket:enclosure child="label">
+		<div class="block">
+			<label class="formlabel" for="value" wicket:id="label">[Label]</label>
+		</div>
+	</wicket:enclosure>
+	<div class="block forminput">
+		<wicket:child>[Component]</wicket:child>
+		<div wicket:id="componentFeedback" style="display:inline-block"></div>
 	</div>
-	<div class="forminput block"><wicket:child>[Component]</wicket:child><div wicket:id="componentFeedback"></div></div>
 </wicket:panel>
