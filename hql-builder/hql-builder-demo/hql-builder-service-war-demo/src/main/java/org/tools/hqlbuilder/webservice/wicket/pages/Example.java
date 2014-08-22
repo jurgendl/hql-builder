@@ -58,11 +58,15 @@ public class Example implements Serializable {
 
     private String text;
 
+    private String textExtra;
+
     private String longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.";
 
     private ExampleOpts radio = ExampleOpts.OPT1;
 
     private ExampleOpts combo = ExampleOpts.OPT1;
+
+    private ExampleOpts list = ExampleOpts.OPT1;
 
     private Boolean check = Boolean.FALSE;
 
@@ -322,5 +326,21 @@ public class Example implements Serializable {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public ExampleOpts getList() {
+        return this.list;
+    }
+
+    public void setList(ExampleOpts list) {
+        this.list = list;
+    }
+
+    public String getTextExtra() {
+        return this.textExtra;
+    }
+
+    public void setTextExtra(String textExtra) {
+        this.textExtra = textExtra;
     }
 }

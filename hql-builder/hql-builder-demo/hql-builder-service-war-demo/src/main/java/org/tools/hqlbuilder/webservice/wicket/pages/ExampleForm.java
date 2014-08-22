@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
@@ -28,11 +31,13 @@ import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.forms.AutoCompleteTextFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
+import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerHook;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
@@ -46,6 +51,7 @@ public class ExampleForm extends FormPanel<Example> {
     @SpringBean(name = "exampleService")
     private ServiceInterface exampleService;
 
+    @SuppressWarnings("unchecked")
     public ExampleForm(String id) {
         super(id);
         setFormSettings(new FormSettings().setClientsideRequiredValidation(false).setColumns(2));
@@ -71,7 +77,18 @@ public class ExampleForm extends FormPanel<Example> {
         getForm().setMaxSize(Bytes.megabytes(100));
 
         FormElementSettings fset = new FormElementSettings();
-        IChoiceRenderer<ExampleOpts> optsRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
+        final IChoiceRenderer<ExampleOpts> choiceRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
+        IOptionRenderer<ExampleOpts> optionRenderer = new IOptionRenderer<ExampleOpts>() {
+            @Override
+            public String getDisplayValue(ExampleOpts object) {
+                return String.valueOf(choiceRenderer.getDisplayValue(object));
+            }
+
+            @Override
+            public IModel<ExampleOpts> getModel(ExampleOpts value) {
+                return Model.of(value);
+            }
+        };
         ListModel<ExampleOpts> optsChoices = new ListModel<ExampleOpts>(Arrays.asList(ExampleOpts.values()));
         Converter<Long, Date> dateConverter = new Converter<Long, Date>() {
             @Override
@@ -91,8 +108,8 @@ public class ExampleForm extends FormPanel<Example> {
             addEmailTextField(proxy.getEmail(), fset);
             addHidden(proxy.getHidden1());
             addCheckBox(proxy.getCheck(), fset);
-            addRadioButtons(proxy.getRadio(), fset, optsChoices, optsRenderer);
-            addDropDown(proxy.getCombo(), fset, optsChoices, optsRenderer);
+            addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
+            addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
             addDatePicker(proxy.getDate1(), fset);
             addDatePicker(proxy.getDate2(), fset, dateConverter);
             addPasswordTextField(proxy.getPassword(), new FormElementSettings());
@@ -108,7 +125,7 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
             addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
-            addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
+            addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
             addAutoCompleteTextField(proxy.getLocale(), new AutoCompleteTextFieldSettings(),
                     new ListModel<Locale>(Arrays.asList(Locale.getAvailableLocales())), new ITextRenderer<Locale>() {
                         @Override
@@ -134,6 +151,12 @@ public class ExampleForm extends FormPanel<Example> {
         if (dont) {
             nextRow();
             addTextArea(proxy);
+        }
+        if (dont) {
+            nextRow();
+            ListModel<ExampleOpts>[] optsChoices2 = new ListModel[] { optsChoices, optsChoices };
+            IModel<String>[] lbls = new IModel[] { Model.of("options 1"), Model.of("options 2") };
+            addList(proxy.getList(), new ListSettings().setSize(5), optionRenderer, optsChoices2, lbls);
         }
     }
 

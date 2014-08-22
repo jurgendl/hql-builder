@@ -10,6 +10,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -303,7 +304,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append("))").append(" / ")
-                            .append(columnCount).append(")");
+                    .append(columnCount).append(")");
                 }
                 sbColumnsCss.append(";}");
                 sbColumnsCss.append("\n");
@@ -388,9 +389,24 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addCustomRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
-    public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
-            IChoiceRenderer<F> renderer) {
-        return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+    public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, DropDownSettings componentSettings, IOptionRenderer<F> renderer,
+            ListModel<F> choices) {
+        return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices));
+    }
+
+    public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, DropDownSettings componentSettings, IOptionRenderer<F> renderer,
+            ListModel<F>[] choices, IModel<String>[] groupLabels) {
+        return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices, groupLabels));
+    }
+
+    public <F extends Serializable> ListPanel<F> addList(F propertyPath, ListSettings componentSettings, IOptionRenderer<F> renderer,
+            ListModel<F> choices) {
+        return addDefaultRow(new ListPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices));
+    }
+
+    public <F extends Serializable> ListPanel<F> addList(F propertyPath, ListSettings componentSettings, IOptionRenderer<F> renderer,
+            ListModel<F>[] choices, IModel<String>[] groupLabels) {
+        return addDefaultRow(new ListPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices, groupLabels));
     }
 
     public <F extends Serializable> TextFieldPanel<F> addTextField(F propertyPath, FormElementSettings componentSettings) {
