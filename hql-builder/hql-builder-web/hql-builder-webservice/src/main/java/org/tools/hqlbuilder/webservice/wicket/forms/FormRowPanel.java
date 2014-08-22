@@ -127,7 +127,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     }
 
     protected Label getLabel() {
-        if (formSettings.getVariation() == FormPanelVariation.label && label == null) {
+        if (label == null) {
             label = new Label(LABEL, getLabelModel()) {
                 private static final long serialVersionUID = 8512361193054906821L;
 
@@ -296,11 +296,6 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     public void setPropertyType(Class<T> propertyType) {
         this.propertyType = propertyType;
-    }
-
-    @Override
-    public String getVariation() {
-        return formSettings == null ? null : formSettings.getVariation().toString();
     }
 
     public boolean takesUpSpace() {

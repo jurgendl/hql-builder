@@ -37,8 +37,6 @@ public class FormSettings implements Serializable {
 
     protected String requiredMarkerClass = "requiredMarker";
 
-    protected FormPanelVariation variation = FormPanelVariation.label;
-
     protected int columns = 1;
 
     protected String labelWidth = "12em";
@@ -214,15 +212,6 @@ public class FormSettings implements Serializable {
 
     public boolean getInheritId() {
         return this.inheritId;
-    }
-
-    public FormPanelVariation getVariation() {
-        return this.variation;
-    }
-
-    public FormSettings setVariation(FormPanelVariation variation) {
-        this.variation = variation;
-        return this;
     }
 
     public int getColumns() {

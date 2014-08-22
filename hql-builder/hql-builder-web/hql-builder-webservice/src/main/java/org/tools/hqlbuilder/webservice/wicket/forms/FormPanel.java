@@ -285,15 +285,15 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.rowRepeater;
     }
 
-    protected String renderColumnsCss(FormPanelVariation variation, int columnCount, String labelWidth) {
-        String mapKey = getId() + '_' + columnCount + '_' + variation + '_' + labelWidth;
+    protected String renderColumnsCss(boolean showLabel, int columnCount, String labelWidth) {
+        String mapKey = getId() + '_' + columnCount + '_' + showLabel + '_' + labelWidth;
         String cssClass = cssTypes.get(mapKey);
         if (cssClass == null) {
             cssClass = "pocketgrid_" + getId() + '_' + getFormSettings().getColumns() + '_'
-                    + (getFormSettings().getVariation() == FormPanelVariation.label ? new String(Hex.encodeHex(labelWidth.getBytes())) : "");
+                    + (showLabel ? new String(Hex.encodeHex(labelWidth.getBytes())) : "");
             cssTypes.put(mapKey, cssClass);
             StringBuilder sbColumnsCss = new StringBuilder();
-            if (variation == FormPanelVariation.label) {
+            if (showLabel) {
                 sbColumnsCss.append(".").append(cssClass).append(" ");
                 sbColumnsCss.append(".block:nth-child(2n+1)");
                 sbColumnsCss.append("{width:").append(labelWidth).append(";}");
@@ -305,7 +305,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append("))").append(" / ")
-                            .append(columnCount).append(")");
+                    .append(columnCount).append(")");
                 }
                 sbColumnsCss.append(";}");
                 sbColumnsCss.append("\n");
@@ -334,7 +334,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         if (componentRepeater == null) {
             WebMarkupContainer rowContainer = new WebMarkupContainer(getRowRepeater().newChildId());
 
-            rowContainer.add(new CssClassNameAppender(renderColumnsCss(getFormSettings().getVariation(), getFormSettings().getColumns(),
+            rowContainer.add(new CssClassNameAppender(renderColumnsCss(getFormSettings().isShowLabel(), getFormSettings().getColumns(),
                     getFormSettings().getLabelWidth())));
             getRowRepeater().add(rowContainer);
 
