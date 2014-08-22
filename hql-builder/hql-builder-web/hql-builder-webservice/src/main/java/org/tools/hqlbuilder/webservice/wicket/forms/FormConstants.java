@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 public interface FormConstants {
+    public static final String FORM_NOTIFICATION = "formnotification";
+
     public static final String FORM_ROW_REPEATER = "form.row.repeater";
 
     public static final String FORM_ELEMENT_REPEATER = "form.element.repeater";
