@@ -21,9 +21,12 @@ public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                TextAreaSettings textAreaSettings = TextAreaSettings.class.cast(getComponentSettings());
-                tag(tag, "cols", textAreaSettings.getCols());
-                tag(tag, "rows", textAreaSettings.getRows());
+                tag(tag, "cols", getComponentSettings().getCols());
+                tag(tag, "rows", getComponentSettings().getRows());
+                /* http://brett.batie.com/website_development/no-resize-textarea-in-chrome-safari/ */
+                if (!getComponentSettings().isResizable()) {
+                    tag(tag, "style", "resize: none; height: auto;");
+                }
                 onFormComponentTag(tag);
             }
         };

@@ -24,7 +24,8 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
     @Override
     protected RadioChoice<T> createComponent(IModel<T> model, Class<T> valueType) {
         RadioChoice<T> radioChoice = new RadioChoice<T>(VALUE, model, choices, renderer);
-        radioChoice.setSuffix("");
+        radioChoice.setPrefix("<span class=\"multiselectchoice\">");
+        radioChoice.setSuffix("</span>");
         return radioChoice;
     }
 }

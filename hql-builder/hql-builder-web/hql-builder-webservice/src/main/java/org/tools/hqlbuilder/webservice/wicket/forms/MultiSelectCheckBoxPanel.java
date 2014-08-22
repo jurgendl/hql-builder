@@ -11,7 +11,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends
-        FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
+FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -637534401267056720L;
 
     protected ListModel<T> choices;
@@ -28,7 +28,8 @@ public class MultiSelectCheckBoxPanel<T extends Serializable> extends
     @Override
     protected CheckBoxMultipleChoice<T> createComponent(IModel<Collection<T>> model, Class<Collection<T>> valueType) {
         CheckBoxMultipleChoice<T> checkBoxMultipleChoice = new CheckBoxMultipleChoice<T>(VALUE, model, choices, renderer);
-        checkBoxMultipleChoice.setSuffix("");
+        checkBoxMultipleChoice.setPrefix("<span class=\"multiselectchoice\">");
+        checkBoxMultipleChoice.setSuffix("</span>");
         return checkBoxMultipleChoice;
     }
 
