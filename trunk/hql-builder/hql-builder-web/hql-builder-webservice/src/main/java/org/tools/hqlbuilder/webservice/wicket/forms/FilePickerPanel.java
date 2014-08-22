@@ -32,7 +32,7 @@ import org.tools.hqlbuilder.webservice.wicket.components.AJAXDownload;
  * @see http://markusslima.github.io/bootstrap-filestyle/
  * @see http://www.surrealcms.com/blog/whipping-file-inputs-into-shape-with-bootstrap-3
  */
-public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField> implements FormSubmitInterceptor {
+public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUploadField, FilePickerSettings> implements FormSubmitInterceptor {
     private static final long serialVersionUID = -6943635423428119032L;
 
     public static final String REMOVE_FILE_ID = "removeFile";
@@ -69,7 +69,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
     }
 
     @Override
-    protected FormRowPanel<P, List<FileUpload>, FileUploadField> addComponents() {
+    protected FormRowPanel<P, List<FileUpload>, FileUploadField, FilePickerSettings> addComponents() {
         this.add(getLabel());
 
         WebMarkupContainer fileComponentContainer = new WebMarkupContainer(FILE_COMPONENT_CONTAINER_ID);

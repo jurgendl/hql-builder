@@ -4,7 +4,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
 
-public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, PasswordTextField> {
+public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, PasswordTextField, FormElementSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 
     public PasswordTextFieldPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {

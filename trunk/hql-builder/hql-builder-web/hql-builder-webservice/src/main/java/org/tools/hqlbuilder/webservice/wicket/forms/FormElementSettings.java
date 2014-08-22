@@ -18,6 +18,14 @@ public class FormElementSettings implements Serializable, Cloneable {
         super();
     }
 
+    public FormElementSettings(FormElementSettings other) {
+        try {
+            BeanUtils.copyProperties(this, other);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        }
+    }
+
     public FormElementSettings(boolean required) {
         this.required = required;
     }

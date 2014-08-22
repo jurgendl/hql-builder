@@ -3,7 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
 
-public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox> {
+public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormElementSettings> {
     private static final long serialVersionUID = 7669787482921703670L;
 
     public CheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {

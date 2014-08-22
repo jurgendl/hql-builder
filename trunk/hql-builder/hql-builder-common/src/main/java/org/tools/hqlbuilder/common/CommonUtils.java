@@ -8,6 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -168,7 +170,7 @@ public class CommonUtils {
     }
 
     public static char[] whitespace_chars = ( //
-    "\u0009" // CHARACTER TABULATION
+            "\u0009" // CHARACTER TABULATION
             + "\n" // LINE FEED (LF)
             + "\u000B" // LINE TABULATION
             + "\u000C" // FORM FEED (FF)
@@ -194,7 +196,7 @@ public class CommonUtils {
             + "\u202F" // NARROW NO-BREAK SPACE
             + "\u205F" // MEDIUM MATHEMATICAL SPACE
             + "\u3000" // IDEOGRAPHIC SPACE
-    ).toCharArray();
+            ).toCharArray();
 
     public static String removeUnnecessaryWhiteSpaces(String s) {
         StringBuilder sb = new StringBuilder();
@@ -457,5 +459,18 @@ public class CommonUtils {
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new IllegalArgumentException(Arrays.toString(actualTypeArguments), ex);
         }
+    }
+
+    public static String sortable(String string) {
+        if (StringUtils.isBlank(string)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char c : Normalizer.normalize(string, Normalizer.Form.NFKD).toUpperCase().toCharArray()) {
+            if (('A' <= c) && (c <= 'Z')) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }

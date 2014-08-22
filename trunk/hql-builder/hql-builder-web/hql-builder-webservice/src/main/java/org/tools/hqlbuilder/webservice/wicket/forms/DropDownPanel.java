@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 
-public class DropDownPanel<T extends Serializable> extends DefaultFormRowPanel<T, DropDownChoice<T>> {
+public class DropDownPanel<T extends Serializable> extends DefaultFormRowPanel<T, DropDownChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -4693793144091792295L;
 
     protected ListModel<T> choices;

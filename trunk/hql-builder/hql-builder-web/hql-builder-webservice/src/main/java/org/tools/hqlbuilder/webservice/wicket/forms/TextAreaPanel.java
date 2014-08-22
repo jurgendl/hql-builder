@@ -6,7 +6,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 
-public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextArea<T>> {
+public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextArea<T>, TextAreaSettings> {
     private static final long serialVersionUID = 7189330022100675150L;
 
     public TextAreaPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings, TextAreaSettings textAreaSettings) {

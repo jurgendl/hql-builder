@@ -35,6 +35,8 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
+import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
@@ -246,12 +248,26 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         });
     }
 
-    public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType>> RowPanel addDefaultRow(
+    public void nextRow() {
+        getForm();
+        while (count != 0) {
+            WebMarkupContainer elementContainer = new WebMarkupContainer(getComponentRepeater().newChildId());
+            getComponentRepeater().add(elementContainer);
+            elementContainer.add(new EmptyFormPanel());
+            count++;
+            if (count == formSettings.getColumns()) {
+                count = 0; // reset count
+                componentRepeater = null; // so that a new one is created when needed
+            }
+        }
+    }
+
+    public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, ElementSettings extends FormElementSettings, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType, ElementSettings>> RowPanel addDefaultRow(
             RowPanel rowpanel) {
         return addRow(rowpanel);
     }
 
-    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addCustomRow(
+    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, ElementSettings extends FormElementSettings, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType, ElementSettings>> RowPanel addCustomRow(
             RowPanel rowpanel) {
         return addRow(rowpanel);
     }
@@ -271,48 +287,29 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         String mapKey = getId() + '_' + columnCount + '_' + variation + '_' + labelWidth;
         String cssClass = cssTypes.get(mapKey);
         if (cssClass == null) {
-            cssClass = "c_" + getId() + '_' + getFormSettings().getColumns() + '_'
+            cssClass = "pocketgrid_" + getId() + '_' + getFormSettings().getColumns() + '_'
                     + (getFormSettings().getVariation() == FormPanelVariation.label ? new String(Hex.encodeHex(labelWidth.getBytes())) : "");
             cssTypes.put(mapKey, cssClass);
             StringBuilder sbColumnsCss = new StringBuilder();
             if (variation == FormPanelVariation.label) {
-                {
-                    for (int i = 0; i < columnCount; i++) {
-                        sbColumnsCss.append(".").append(cssClass).append(" ");
-                        sbColumnsCss.append(".block:nth-child(").append((i * 2) + 1).append(")");
-                        if (i < columnCount - 1) {
-                            sbColumnsCss.append(",");
-                        }
-                    }
-                    sbColumnsCss.append("{width:").append(labelWidth).append(";}");
-                    sbColumnsCss.append("\n");
+                sbColumnsCss.append(".").append(cssClass).append(" ");
+                sbColumnsCss.append(".block:nth-child(2n+1)");
+                sbColumnsCss.append("{width:").append(labelWidth).append(";}");
+                sbColumnsCss.append("\n");
+                sbColumnsCss.append(".").append(cssClass).append(" ");
+                sbColumnsCss.append(".block:nth-child(2n+2)");
+                sbColumnsCss.append("{width:");
+                if (columnCount == 1) {
+                    sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
+                } else {
+                    sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append("))").append(" / ")
+                            .append(columnCount).append(")");
                 }
-                {
-                    for (int i = 0; i < columnCount; i++) {
-                        sbColumnsCss.append(".").append(cssClass).append(" ");
-                        sbColumnsCss.append(".block:nth-child(").append((i * 2) + 2).append(")");
-                        if (i < columnCount - 1) {
-                            sbColumnsCss.append(",");
-                        }
-                    }
-                    sbColumnsCss.append("{width:");
-                    if (columnCount == 1) {
-                        sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
-                    } else {
-                        sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append("))").append(" / ")
-                        .append(columnCount).append(")");
-                    }
-                    sbColumnsCss.append(";}");
-                    sbColumnsCss.append("\n");
-                }
+                sbColumnsCss.append(";}");
+                sbColumnsCss.append("\n");
             } else {
-                for (int i = 0; i < columnCount; i++) {
-                    sbColumnsCss.append(".").append(cssClass).append(" ");
-                    sbColumnsCss.append(".block:nth-child(").append(i + 1).append(")");
-                    if (i < columnCount - 1) {
-                        sbColumnsCss.append(",");
-                    }
-                }
+                sbColumnsCss.append(".").append(cssClass).append(" ");
+                sbColumnsCss.append(".block:nth-child(n)");
                 sbColumnsCss.append("{width:");
                 if (columnCount == 1) {
                     sbColumnsCss.append("100%");
@@ -322,9 +319,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 sbColumnsCss.append(";}");
                 sbColumnsCss.append("\n");
             }
-            System.out.println(mapKey);
-            System.out.println(cssClass);
-            System.out.println(sbColumnsCss);
+            logger.debug(mapKey);
+            logger.debug(cssClass);
+            logger.debug(sbColumnsCss.toString());
             css.append(sbColumnsCss.toString());
         }
         return cssClass;
@@ -346,7 +343,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.componentRepeater;
     }
 
-    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType>> RowPanel addRow(
+    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, ElementSettings extends FormElementSettings, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType, ElementSettings>> RowPanel addRow(
             RowPanel rowpanel) {
         getForm();
 
@@ -400,6 +397,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDefaultRow(new TextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
+    public <F extends Serializable> AutoCompleteTextFieldPanel<F> addAutoCompleteTextField(F propertyPath,
+            AutoCompleteTextFieldSettings componentSettings, ListModel<F> choices, ITextRenderer<F> renderer) {
+        return addDefaultRow(new AutoCompleteTextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
+    }
+
     public <F extends Serializable> TextAreaPanel<F> addTextArea(F propertyPath, TextAreaSettings componentSettings) {
         return addDefaultRow(new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
@@ -439,21 +441,5 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
         return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
-    }
-
-    public void nextRow() {
-        getForm();
-
-        while (count != 0) {
-            WebMarkupContainer elementContainer = new WebMarkupContainer(getComponentRepeater().newChildId());
-            getComponentRepeater().add(elementContainer);
-            elementContainer.add(new EmptyFormPanel());
-
-            count++;
-            if (count == formSettings.getColumns()) {
-                count = 0; // reset count
-                componentRepeater = null; // so that a new one is created when needed
-            }
-        }
     }
 }

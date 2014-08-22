@@ -13,7 +13,7 @@ import org.tools.hqlbuilder.webservice.resources.spectrum.Spectrum;
 /**
  * @see http://bgrins.github.io/spectrum
  */
-public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<String>> {
+public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<String>, ColorPickerSettings> {
     private static final long serialVersionUID = 3920158103962799959L;
 
     public ColorPickerPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, ColorPickerSettings colorPickerSettings) {
