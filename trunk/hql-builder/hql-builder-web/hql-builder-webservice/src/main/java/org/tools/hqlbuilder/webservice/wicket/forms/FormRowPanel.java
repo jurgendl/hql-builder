@@ -133,7 +133,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
                 @Override
                 public boolean isVisible() {
-                    return super.isVisible() && formSettings.isShowLabel();
+                    return super.isVisible() && (formSettings == null || formSettings.isShowLabel());
                 }
 
                 @Override
@@ -146,7 +146,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return label;
     }
 
-    protected C getComponent() {
+    public C getComponent() {
         if (component == null) {
             component = createComponent(getValueModel(), getPropertyType());
             setupRequired(component);

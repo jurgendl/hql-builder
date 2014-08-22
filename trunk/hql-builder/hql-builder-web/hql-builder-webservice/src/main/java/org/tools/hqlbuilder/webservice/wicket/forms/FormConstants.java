@@ -46,4 +46,6 @@ public interface FormConstants {
     public static final String SUBMIT_LABEL = "submit.label";
 
     public static final String FEEDBACK_ID = "componentFeedback";
+
+    public static final String TITLE = "title";
 }
