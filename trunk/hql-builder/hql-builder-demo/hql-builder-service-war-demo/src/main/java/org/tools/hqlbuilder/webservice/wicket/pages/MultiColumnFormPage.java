@@ -32,6 +32,7 @@ public class MultiColumnFormPage extends DefaultWebPage {
             textField.setValueModel(new Model<String>("value " + (i + 1)));
         }
 
+        multicolform.nextRow();
         formSettings.setColumns(2);
 
         for (int i = 6; i <= 16; i++) {
@@ -39,6 +40,7 @@ public class MultiColumnFormPage extends DefaultWebPage {
             textField.setValueModel(new Model<String>("value " + (i + 1)));
         }
 
+        multicolform.nextRow();
         formSettings.setColumns(3);
 
         for (int i = 17; i <= 29; i++) {

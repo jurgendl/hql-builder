@@ -111,18 +111,18 @@ public class ExampleForm extends FormPanel<Example> {
             addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
             addAutoCompleteTextField(proxy.getLocale(), new AutoCompleteTextFieldSettings(),
                     new ListModel<Locale>(Arrays.asList(Locale.getAvailableLocales())), new ITextRenderer<Locale>() {
-                @Override
-                public String getText(Locale locale) {
-                    String displayCountry = locale.getDisplayCountry(locale);
-                    String displayLanguage = locale.getDisplayLanguage(locale);
-                    return StringUtils.isBlank(displayCountry) ? displayLanguage : displayLanguage + ", " + displayCountry;
-                }
+                        @Override
+                        public String getText(Locale locale) {
+                            String displayCountry = locale.getDisplayCountry(locale);
+                            String displayLanguage = locale.getDisplayLanguage(locale);
+                            return StringUtils.isBlank(displayCountry) ? displayLanguage : displayLanguage + ", " + displayCountry;
+                        }
 
-                @Override
-                public String getText(Locale locale, String expression) {
-                    return getText(locale);
-                }
-            });
+                        @Override
+                        public String getText(Locale locale, String expression) {
+                            return getText(locale);
+                        }
+                    });
         }
         if (dont) {
             addHidden(proxy.getHidden2());
@@ -139,7 +139,7 @@ public class ExampleForm extends FormPanel<Example> {
 
     private void addTextArea(Example proxy) {
         setFormSettings(new FormSettings().setColumns(1));
-        addTextArea(proxy.getLongText(), new TextAreaSettings());
+        addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(80));
         setFormSettings(new FormSettings().setColumns(2));
     }
 

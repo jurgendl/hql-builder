@@ -7,6 +7,8 @@ public class TextAreaSettings extends FormElementSettings {
 
     private Integer cols;
 
+    private boolean resizable = true;
+
     public Integer getRows() {
         return this.rows;
     }
@@ -22,6 +24,15 @@ public class TextAreaSettings extends FormElementSettings {
 
     public TextAreaSettings setCols(Integer cols) {
         this.cols = cols;
+        return this;
+    }
+
+    public boolean isResizable() {
+        return this.resizable;
+    }
+
+    public TextAreaSettings setResizable(boolean resizable) {
+        this.resizable = resizable;
         return this;
     }
 }
