@@ -3,8 +3,8 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.Component;
@@ -60,7 +60,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected StringBuilder css = new StringBuilder();
 
-    protected Map<String, String> cssTypes = new HashMap<String, String>();
+    protected Set<String> cssClasses = new HashSet<String>();
 
     public FormPanel(String id) {
         this(id, null, null);
@@ -286,44 +286,30 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected String renderColumnsCss(boolean showLabel, int columnCount, String labelWidth) {
-        String mapKey = getId() + '_' + columnCount + '_' + showLabel + '_' + labelWidth;
-        String cssClass = cssTypes.get(mapKey);
-        if (cssClass == null) {
-            cssClass = "pocketgrid_" + getId() + '_' + getFormSettings().getColumns() + '_'
-                    + (showLabel ? new String(Hex.encodeHex(labelWidth.getBytes())) : "");
-            cssTypes.put(mapKey, cssClass);
+        String cssClass = "pocketgrid_" + getId() + '_' + columnCount + (showLabel ? '_' + new String(Hex.encodeHex(labelWidth.getBytes())) : "");
+        if (!cssClasses.contains(cssClass)) {
             StringBuilder sbColumnsCss = new StringBuilder();
             if (showLabel) {
-                sbColumnsCss.append(".").append(cssClass).append(" ");
-                sbColumnsCss.append(".block:nth-child(2n+1)");
-                sbColumnsCss.append("{width:").append(labelWidth).append(";}");
-                sbColumnsCss.append("\n");
-                sbColumnsCss.append(".").append(cssClass).append(" ");
-                sbColumnsCss.append(".block:nth-child(2n+2)");
-                sbColumnsCss.append("{width:");
+                sbColumnsCss.append(".").append(cssClass).append(" .block:nth-child(2n+1){width:").append(labelWidth).append(";}\n");
+                sbColumnsCss.append(".").append(cssClass).append(" .block:nth-child(2n+2){width:");
                 if (columnCount == 1) {
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
-                    sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append("))").append(" / ")
-                    .append(columnCount).append(")");
+                    sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
+                    .append(")");
                 }
-                sbColumnsCss.append(";}");
-                sbColumnsCss.append("\n");
+                sbColumnsCss.append(";}\n");
             } else {
-                sbColumnsCss.append(".").append(cssClass).append(" ");
-                sbColumnsCss.append(".block:nth-child(n)");
-                sbColumnsCss.append("{width:");
+                sbColumnsCss.append(".").append(cssClass).append(" .block:nth-child(n){width:");
                 if (columnCount == 1) {
                     sbColumnsCss.append("100%");
                 } else {
-                    sbColumnsCss.append("calc(100%").append(" / ").append(columnCount).append(")");
+                    sbColumnsCss.append("calc(100% / ").append(columnCount).append(")");
                 }
-                sbColumnsCss.append(";}");
-                sbColumnsCss.append("\n");
+                sbColumnsCss.append(";}\n");
             }
-            logger.debug(mapKey);
-            logger.debug(cssClass);
-            logger.debug(sbColumnsCss.toString());
+            // logger.debug(cssClass);
+            // logger.debug(sbColumnsCss.toString());
             css.append(sbColumnsCss.toString());
         }
         return cssClass;
