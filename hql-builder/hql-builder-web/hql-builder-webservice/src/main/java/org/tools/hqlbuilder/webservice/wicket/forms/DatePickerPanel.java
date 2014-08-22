@@ -67,7 +67,7 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         Locale locale = getLocale();
         Options options = new Options();
         dateFormat = dateformat(locale);
-        dateFormatClient = dateFormat.toLowerCase().replaceAll("yyyy", "yy");
+        dateFormatClient = dateFormat.toLowerCase().replaceAll("yy", "y").replaceAll("yy", "y");
         options.set(DATE_FORMAT, Options.asString(dateFormatClient));
         // options.set(APPEND_TEXT, Options.asString(new SimpleDateFormat(dateFormat, locale).format(new Date())));
         return new AjaxDatePicker(VALUE, model, dateFormat, options) {
