@@ -47,6 +47,14 @@ public class FormSettings implements Serializable {
         super();
     }
 
+    public FormSettings(FormSettings other) {
+        try {
+            BeanUtils.copyProperties(this, other);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        }
+    }
+
     public boolean isShowLabel() {
         return this.showLabel;
     }

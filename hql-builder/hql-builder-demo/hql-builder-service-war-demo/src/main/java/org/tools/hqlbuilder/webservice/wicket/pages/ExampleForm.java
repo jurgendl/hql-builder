@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -24,6 +26,7 @@ import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.forms.AutoCompleteTextFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerHook;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerSettings;
@@ -36,6 +39,8 @@ import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
+import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
+
 @SuppressWarnings("serial")
 public class ExampleForm extends FormPanel<Example> {
     @SpringBean(name = "exampleService")
@@ -43,10 +48,7 @@ public class ExampleForm extends FormPanel<Example> {
 
     public ExampleForm(String id) {
         super(id);
-        FormSettings fs = new FormSettings().setClientsideRequiredValidation(false);
-        fs.setLabelWidth("22em");
-        fs.setColumns(2);
-        setFormSettings(fs);
+        setFormSettings(new FormSettings().setClientsideRequiredValidation(false).setColumns(2));
         setFormActions(new DefaultFormActions<Example>() {
             @Override
             public void submitObject(Example example) {
@@ -84,9 +86,9 @@ public class ExampleForm extends FormPanel<Example> {
         };
 
         boolean dont = true;
-        addTextField(proxy.getText(), fset.clone().setRequired(true));
-        addEmailTextField(proxy.getEmail(), fset);
         if (dont) {
+            addTextField(proxy.getText(), fset.clone().setRequired(true));
+            addEmailTextField(proxy.getEmail(), fset);
             addHidden(proxy.getHidden1());
             addCheckBox(proxy.getCheck(), fset);
             addRadioButtons(proxy.getRadio(), fset, optsChoices, optsRenderer);
@@ -94,7 +96,6 @@ public class ExampleForm extends FormPanel<Example> {
             addDatePicker(proxy.getDate1(), fset);
             addDatePicker(proxy.getDate2(), fset, dateConverter);
             addPasswordTextField(proxy.getPassword(), new FormElementSettings());
-            addTextArea(proxy.getLongText(), new TextAreaSettings());
             addNumberField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
             addNumberField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
             addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
@@ -108,81 +109,112 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
             addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, optsRenderer);
+            addAutoCompleteTextField(proxy.getLocale(), new AutoCompleteTextFieldSettings(),
+                    new ListModel<Locale>(Arrays.asList(Locale.getAvailableLocales())), new ITextRenderer<Locale>() {
+                @Override
+                public String getText(Locale locale) {
+                    String displayCountry = locale.getDisplayCountry(locale);
+                    String displayLanguage = locale.getDisplayLanguage(locale);
+                    return StringUtils.isBlank(displayCountry) ? displayLanguage : displayLanguage + ", " + displayCountry;
+                }
+
+                @Override
+                public String getText(Locale locale, String expression) {
+                    return getText(locale);
+                }
+            });
+        }
+        if (dont) {
             addHidden(proxy.getHidden2());
         }
         if (dont) {
-            FilePickerHook hook = new FilePickerHook() {
-                @Override
-                public void write(Collection<FileUpload> files) {
-                    Example example = Example.class.cast(getFormModel().getObject());
-                    for (FileUpload fileUpload : files) {
-                        MemFile mf = new MemFile();
-                        example.getFiles().add(mf);
-                        mf.setData(fileUpload.getBytes());
-                        mf.setFilename(fileUpload.getClientFileName());
-                    }
-                }
-
-                @Override
-                public Collection<String> getCurrentFilenames() {
-                    Example example = Example.class.cast(getFormModel().getObject());
-                    List<String> list = new ArrayList<String>();
-                    for (MemFile mf : example.getFiles()) {
-                        list.add(mf.getFilename());
-                    }
-                    return list;
-                }
-
-                @Override
-                public IResourceStream download(String currentFileName) {
-                    final Example example = Example.class.cast(getFormModel().getObject());
-                    MemFile pick = new MemFile();
-                    for (MemFile mf : example.getFiles()) {
-                        if (currentFileName.equals(mf.getFilename())) {
-                            pick = mf;
-                            break;
-                        }
-                    }
-                    final MemFile picked = pick;
-                    return new AbstractResourceStream() {
-                        @Override
-                        public Time lastModifiedTime() {
-                            return Time.now();
-                        }
-
-                        @Override
-                        public Bytes length() {
-                            return Bytes.bytes(picked.getData().length);
-                        }
-
-                        @Override
-                        public InputStream getInputStream() throws ResourceStreamNotFoundException {
-                            return new ByteArrayInputStream(picked.getData());
-                        }
-
-                        @Override
-                        public String getContentType() {
-                            return URLConnection.getFileNameMap().getContentTypeFor(picked.getFilename());
-                        }
-
-                        @Override
-                        public void close() throws IOException {
-                            //
-                        }
-                    };
-                }
-
-                @Override
-                public void clear(Collection<String> filenames) {
-                    Example example = Example.class.cast(getFormModel().getObject());
-                    for (MemFile mf : example.getFiles().toArray(new MemFile[example.getFiles().size()])) {
-                        if (filenames.contains(mf.getFilename())) {
-                            example.getFiles().remove(mf);
-                        }
-                    }
-                }
-            };
-            addFilePicker(proxy.getFiles(), new FilePickerSettings().setMimeType("application/pdf").setMultiple(true).setConsistentLook(true), hook);
+            nextRow();
+            addFilepicker(proxy);
         }
+        if (dont) {
+            nextRow();
+            addTextArea(proxy);
+        }
+    }
+
+    private void addTextArea(Example proxy) {
+        setFormSettings(new FormSettings().setColumns(1));
+        addTextArea(proxy.getLongText(), new TextAreaSettings());
+        setFormSettings(new FormSettings().setColumns(2));
+    }
+
+    private void addFilepicker(Example proxy) {
+        FilePickerHook hook = new FilePickerHook() {
+            @Override
+            public void write(Collection<FileUpload> files) {
+                Example example = Example.class.cast(getFormModel().getObject());
+                for (FileUpload fileUpload : files) {
+                    MemFile mf = new MemFile();
+                    example.getFiles().add(mf);
+                    mf.setData(fileUpload.getBytes());
+                    mf.setFilename(fileUpload.getClientFileName());
+                }
+            }
+
+            @Override
+            public Collection<String> getCurrentFilenames() {
+                Example example = Example.class.cast(getFormModel().getObject());
+                List<String> list = new ArrayList<String>();
+                for (MemFile mf : example.getFiles()) {
+                    list.add(mf.getFilename());
+                }
+                return list;
+            }
+
+            @Override
+            public IResourceStream download(String currentFileName) {
+                final Example example = Example.class.cast(getFormModel().getObject());
+                MemFile pick = new MemFile();
+                for (MemFile mf : example.getFiles()) {
+                    if (currentFileName.equals(mf.getFilename())) {
+                        pick = mf;
+                        break;
+                    }
+                }
+                final MemFile picked = pick;
+                return new AbstractResourceStream() {
+                    @Override
+                    public Time lastModifiedTime() {
+                        return Time.now();
+                    }
+
+                    @Override
+                    public Bytes length() {
+                        return Bytes.bytes(picked.getData().length);
+                    }
+
+                    @Override
+                    public InputStream getInputStream() throws ResourceStreamNotFoundException {
+                        return new ByteArrayInputStream(picked.getData());
+                    }
+
+                    @Override
+                    public String getContentType() {
+                        return URLConnection.getFileNameMap().getContentTypeFor(picked.getFilename());
+                    }
+
+                    @Override
+                    public void close() throws IOException {
+                        //
+                    }
+                };
+            }
+
+            @Override
+            public void clear(Collection<String> filenames) {
+                Example example = Example.class.cast(getFormModel().getObject());
+                for (MemFile mf : example.getFiles().toArray(new MemFile[example.getFiles().size()])) {
+                    if (filenames.contains(mf.getFilename())) {
+                        example.getFiles().remove(mf);
+                    }
+                }
+            }
+        };
+        addFilePicker(proxy.getFiles(), new FilePickerSettings().setMimeType("application/pdf").setMultiple(true).setConsistentLook(true), hook);
     }
 }

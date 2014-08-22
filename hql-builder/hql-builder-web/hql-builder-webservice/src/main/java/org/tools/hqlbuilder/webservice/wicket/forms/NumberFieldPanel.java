@@ -4,7 +4,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.model.IModel;
 
-public class NumberFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, NumberTextField<N>> {
+public class NumberFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, NumberTextField<N>, FormElementSettings> {
     private static final long serialVersionUID = -3037822852757814685L;
 
     public NumberFieldPanel(IModel<?> model, N propertyPath, FormSettings formSettings, NumberFieldSettings<N> componentSettings) {

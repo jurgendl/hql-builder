@@ -35,7 +35,25 @@ form input[type='text'],input[type='search'],input[type='password'],input[type='
 	-moz-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_border_gradient;
 	-webkit-box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_border_gradient;
 	box-shadow: 0 1px 1px @form_element_border inset, 0 1px 0 @form_element_border_gradient;
+}
+
+form output {
+	height: 16px;
+}
+
+.likeinput,
+form select,
+form textarea,
+form input[type='text'],input[type='search'],input[type='password'],input[type='date'],input[type='datetime-local'],input[type='datetime'],input[type='email'],input[type='month'],input[type='number'],input[type='tel'],input[type='time'],input[type='url'],input[type='week'] {
 	height: 24px;
+}
+
+form select {
+	width: 172px;
+}
+
+form input[type='number'] {
+	width: 172px;
 }
 
 form select:focus,

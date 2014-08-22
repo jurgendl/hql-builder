@@ -6,7 +6,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
-public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>> {
+public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>, FormElementSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 
     public TextFieldPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
@@ -15,7 +15,7 @@ public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<
 
     @Override
     protected TextField<T> createComponent(IModel<T> model, Class<T> valueType) {
-        return new TextField<T>(VALUE, model, valueType) {
+        TextField<T> textField = new TextField<T>(VALUE, model, valueType) {
             private static final long serialVersionUID = -3231896888772971388L;
 
             @Override
@@ -24,5 +24,6 @@ public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<
                 onFormComponentTag(tag);
             }
         };
+        return textField;
     }
 }

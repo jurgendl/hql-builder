@@ -5,7 +5,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.model.IModel;
 
-public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextField> {
+public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextField, FormElementSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 
     public EmailTextFieldPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {

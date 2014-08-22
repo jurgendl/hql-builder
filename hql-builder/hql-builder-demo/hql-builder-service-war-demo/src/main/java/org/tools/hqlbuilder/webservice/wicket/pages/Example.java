@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Example implements Serializable {
     private static final long serialVersionUID = 8505173683889617800L;
@@ -94,6 +95,8 @@ public class Example implements Serializable {
     private Float floatr = 50f;
 
     private Byte byter = (byte) 50;
+
+    private Locale locale = Locale.getDefault();
 
     public String getPassword() {
         return this.password;
@@ -311,5 +314,13 @@ public class Example implements Serializable {
 
     public void setId(Serializable id) {
         this.id = id;
+    }
+
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

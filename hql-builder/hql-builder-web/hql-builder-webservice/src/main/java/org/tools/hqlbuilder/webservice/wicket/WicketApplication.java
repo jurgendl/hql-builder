@@ -29,7 +29,6 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
-import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.converter.DateConverter;
@@ -48,14 +47,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
-import org.tools.hqlbuilder.webservice.resources.velocity.Velocity;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
-
-import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
-import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 
 import de.agilecoders.wicket.core.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
 import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
@@ -147,6 +141,7 @@ public class WicketApplication extends WebApplication {
         }
 
         // library resources
+        this.setJavaScriptLibrarySettings(new WicketResourceReferences());
         initDefaultResources();
 
         // to put javascript down on the page (DefaultWebPage.html must contain wicket:id='footer-bucket'
@@ -186,19 +181,19 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void addToJsResources(List<ResourceReference> js) {
-        IJavaScriptLibrarySettings javaScriptLibrarySettings = getJavaScriptLibrarySettings();
-        js.add(javaScriptLibrarySettings.getJQueryReference());
-        js.add(javaScriptLibrarySettings.getWicketAjaxReference());
-        js.add(javaScriptLibrarySettings.getWicketEventReference());
-        if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
-            IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
-            js.add(javaScriptSettings.getJQueryGlobalizeReference());
-            js.add(javaScriptSettings.getJQueryUIReference());
-        }
-        if (WicketApplication.get().usesDevelopmentConfig()) {
-            js.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
-        }
-        js.add(Velocity.VELOCITY_JS);
+        // IJavaScriptLibrarySettings javaScriptLibrarySettings = getJavaScriptLibrarySettings();
+        // js.add(javaScriptLibrarySettings.getJQueryReference());
+        // js.add(javaScriptLibrarySettings.getWicketAjaxReference());
+        // js.add(javaScriptLibrarySettings.getWicketEventReference());
+        // if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
+        // IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
+        // js.add(javaScriptSettings.getJQueryGlobalizeReference());
+        // js.add(javaScriptSettings.getJQueryUIReference());
+        // }
+        // if (WicketApplication.get().usesDevelopmentConfig()) {
+        // js.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
+        // }
+        // js.add(Velocity.VELOCITY_JS);
         addToJsBundle(js);
     }
 
@@ -224,10 +219,6 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void initDefaultResources() {
-        IJQueryLibrarySettings settings = new JQueryLibrarySettings();
-        settings.setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get()); // not set by default
-        this.setJavaScriptLibrarySettings(settings);
-
         // disable bundling: css image url bug?
 
         // addToJsBundle(jsResources);

@@ -12,7 +12,7 @@ import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 /**
  * @see http://demosthenes.info/blog/757/Playing-With-The-HTML5-range-Slider-Input
  */
-public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, RangeTextField<N>> {
+public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, RangeTextField<N>, RangeFieldSettings<N>> {
     public static final String STEP = "step";
 
     public static final String MAX = "max";
@@ -32,7 +32,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
     }
 
     @Override
-    protected FormRowPanel<N, N, RangeTextField<N>> addComponents() {
+    protected FormRowPanel<N, N, RangeTextField<N>, RangeFieldSettings<N>> addComponents() {
         output = new Output(VALUE_OUTPUT, getValueModel()) {
             private static final long serialVersionUID = 2019925551669937151L;
 
@@ -56,8 +56,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 onFormComponentTag(tag);
-                @SuppressWarnings("unchecked")
-                RangeFieldSettings<N> settings = (RangeFieldSettings<N>) getComponentSettings();
+                RangeFieldSettings<N> settings = getComponentSettings();
                 tag(tag, MIN, settings.getMinimum());
                 tag(tag, MAX, settings.getMaximum());
                 tag(tag, STEP, settings.getStep());
@@ -82,8 +81,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(RANGEFIELD_REFERENCE));
-        @SuppressWarnings("unchecked")
-        RangeFieldSettings<N> settings = (RangeFieldSettings<N>) getComponentSettings();
+        RangeFieldSettings<N> settings = getComponentSettings();
         if (settings.getTickStep() != null) {
             response.render(OnLoadHeaderItem.forScript("ticks('" + getComponent().getMarkupId() + "'," + settings.getTickStep() + ")"));
         }

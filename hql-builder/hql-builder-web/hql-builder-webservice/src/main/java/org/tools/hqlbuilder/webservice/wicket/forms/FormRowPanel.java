@@ -26,7 +26,7 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
-public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Panel implements FormConstants {
+public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends FormElementSettings> extends Panel implements FormConstants {
     private static final long serialVersionUID = 5258950770053560483L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormRowPanel.class);
@@ -50,14 +50,14 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
 
     protected final transient FormSettings formSettings;
 
-    protected final FormElementSettings componentSettings;
+    protected final S componentSettings;
 
-    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, FormElementSettings componentSettings) {
+    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, S componentSettings) {
         this(valueModel, propertyPath, formSettings, componentSettings);
         this.valueModel = valueModel;
     }
 
-    protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+    protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, S componentSettings) {
         super(FORM_ELEMENT, model);
         if (formSettings == null) {
             throw new NullPointerException("formSettings");
@@ -164,14 +164,14 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
         return feedbackPanel;
     }
 
-    protected FormRowPanel<P, T, C> addComponents() {
+    protected FormRowPanel<P, T, C, S> addComponents() {
         this.add(getLabel());
         this.add(getComponent());
         this.add(getFeedback());
         return this;
     }
 
-    protected FormRowPanel<P, T, C> afterAddComponents() {
+    protected FormRowPanel<P, T, C, S> afterAddComponents() {
         setupRequiredBehavior();
         setupId();
         return this;
@@ -239,7 +239,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>> extends Pan
         }
     }
 
-    protected FormElementSettings getComponentSettings() {
+    protected S getComponentSettings() {
         return this.componentSettings;
     }
 
