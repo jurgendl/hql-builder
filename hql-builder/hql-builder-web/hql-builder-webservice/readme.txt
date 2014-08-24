@@ -37,7 +37,7 @@ http://plugins.jquery.com/colorbox/
 http://harvesthq.github.io/chosen/
 http://www.position-relative.net/creation/formValidator/
 http://xdsoft.net/jqplugins/datetimepicker/
-
+http://vanderlee.github.io/colorpicker/#chapter Examples
 
 
 
