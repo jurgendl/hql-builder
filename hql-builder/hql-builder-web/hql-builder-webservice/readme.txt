@@ -38,6 +38,8 @@ http://harvesthq.github.io/chosen/
 http://www.position-relative.net/creation/formValidator/
 http://xdsoft.net/jqplugins/datetimepicker/
 http://vanderlee.github.io/colorpicker/#chapter Examples
-
-
+http://plugins.adchsm.me/slidebars/usage.php
+http://www.runningcoder.org/jquerytypeahead/demo/
+http://designmodo.com/jquery-ui-framework-plugins/
+http://www.inqbation.com/css3-and-html5-social-media-icons/
 
