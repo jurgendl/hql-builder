@@ -47,6 +47,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
+import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
@@ -307,7 +308,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
@@ -330,6 +331,7 @@ public class WicketApplication extends WebApplication {
                 ex.printStackTrace();
             }
         }
+        PrimeUI.mountImages(this);
     }
 
     public Properties getWebProperties() {

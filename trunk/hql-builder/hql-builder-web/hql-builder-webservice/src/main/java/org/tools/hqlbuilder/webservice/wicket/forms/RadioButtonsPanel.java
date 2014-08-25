@@ -2,6 +2,8 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
@@ -27,5 +29,15 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
         radioChoice.setPrefix("<span class=\"multiselectchoice\">");
         radioChoice.setSuffix("</span>");
         return radioChoice;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).buttonset(); });", "js_"
+                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
     }
 }

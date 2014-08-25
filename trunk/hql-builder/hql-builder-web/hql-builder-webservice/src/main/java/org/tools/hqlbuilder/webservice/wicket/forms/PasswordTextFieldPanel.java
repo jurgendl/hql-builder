@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
 
@@ -22,5 +24,15 @@ public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, Password
                 onFormComponentTag(tag);
             }
         };
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puipassword(); });", "js_"
+                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
     }
 }

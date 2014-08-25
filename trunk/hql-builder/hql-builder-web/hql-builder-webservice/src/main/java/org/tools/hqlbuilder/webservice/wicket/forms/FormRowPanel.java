@@ -10,6 +10,9 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -20,8 +23,12 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
+import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
+
+import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
@@ -111,11 +118,13 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
             @Override
             public void afterRender(Component c) {
                 Response response = c.getResponse();
-                StringBuffer asterisktHtml = new StringBuffer(200);
-                if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
-                    asterisktHtml.append("<span class=\"fontawesome-asterisk " + formSettings.getRequiredMarkerClass() + "\"/>");
+                if (formSettings != null) {
+                    StringBuffer asterisktHtml = new StringBuffer(200);
+                    if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
+                        asterisktHtml.append("<span class=\"fontawesome-asterisk " + formSettings.getRequiredMarkerClass() + "\"/>");
+                    }
+                    response.write(asterisktHtml);
                 }
-                response.write(asterisktHtml);
             }
         };
     }
@@ -139,7 +148,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
                 @Override
                 protected void onComponentTag(ComponentTag tag) {
                     super.onComponentTag(tag);
-                    tag.getAttributes().put(FOR, getPropertyName());
+                    tag.getAttributes().put(FOR, getComponent().getMarkupId());
                 }
             };
         }
@@ -198,7 +207,8 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     }
 
     protected void setupRequired(ComponentTag tag) {
-        tag(tag, REQUIRED, (componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) ? REQUIRED : null);
+        tag(tag, REQUIRED, (componentSettings != null && componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) ? REQUIRED
+                : null);
     }
 
     protected void setupRequired(C component) {
@@ -300,5 +310,17 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     public boolean takesUpSpace() {
         return true;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(JavaScriptHeaderItem.forReference(((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings())
+                .getJQueryUIReference()));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+        response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
     }
 }

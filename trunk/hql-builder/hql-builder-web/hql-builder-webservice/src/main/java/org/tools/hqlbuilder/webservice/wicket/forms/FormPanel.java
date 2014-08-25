@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,6 +31,8 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.webservice.resources.pocketgrid.PocketGrid;
+import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 
@@ -79,10 +82,23 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
         // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
-        // response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
-        // response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+        response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
         renderColumnsCss(response);
+        Component formActionsContainer = getForm().get(FORM_ACTIONS);
+        String[] buttonIds = {
+                formActionsContainer.get(FORM_SUBMIT).getMarkupId(),
+                formActionsContainer.get(FORM_RESET).getMarkupId(),
+                formActionsContainer.get(FORM_CANCEL).getMarkupId() };
+        for (String buttonId : buttonIds) {
+            response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + buttonId + "\" ).button(); });", "js_" + buttonId + "_"
+                    + System.currentTimeMillis(), null));
+        }
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
@@ -284,6 +300,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected String renderColumnsCss(boolean showLabel, int columnCount, String labelWidth) {
         String cssClass = "pocketgrid_" + getId() + '_' + columnCount + (showLabel ? '_' + new String(Hex.encodeHex(labelWidth.getBytes())) : "");
         if (!cssClasses.contains(cssClass)) {
+            cssClasses.add(cssClass);
             StringBuilder sbColumnsCss = new StringBuilder();
             if (showLabel) {
                 sbColumnsCss.append(".").append(cssClass).append(" .block:nth-child(2n+1){width:").append(labelWidth).append(";}\n");
@@ -292,7 +309,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -407,6 +424,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
         return addDefaultRow(new NumberFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+    }
+
+    public <N extends Number & Comparable<N>> NumberTextFieldPanel<N> addNumberTextField(N propertyPath, NumberFieldSettings<N> componentSettings) {
+        return addDefaultRow(new NumberTextFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {

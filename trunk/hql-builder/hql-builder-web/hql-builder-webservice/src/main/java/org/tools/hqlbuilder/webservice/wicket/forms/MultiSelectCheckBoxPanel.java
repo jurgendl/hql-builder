@@ -3,6 +3,8 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
@@ -11,7 +13,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends
-FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
+        FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -637534401267056720L;
 
     protected ListModel<T> choices;
@@ -47,5 +49,15 @@ FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElemen
             this.propertyType = WebHelper.type(propertyPath);
         }
         return this.propertyType;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).buttonset(); });", "js_"
+                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
     }
 }
