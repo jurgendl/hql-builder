@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -100,7 +101,12 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         }
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.cached(getLocale())));
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
+
+        // http://stackoverflow.com/questions/13824355/how-to-change-jquery-ui-datepicker-z-index-value
+        response.render(CssHeaderItem.forCSS("#ui-datepicker-div {z-index: 9999 !important;};", "datepicker_z_index_fix"));
+
         response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
+
         response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext(); });", "js_"
                 + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
     }
