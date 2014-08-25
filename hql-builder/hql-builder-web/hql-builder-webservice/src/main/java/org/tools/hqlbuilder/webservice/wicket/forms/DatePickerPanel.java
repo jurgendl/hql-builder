@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -94,14 +95,14 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
         if (!isEnabledInHierarchy()) {
             return;
         }
-
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.cached(getLocale())));
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
         response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
+        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext(); });", "js_"
+                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
     }
 
     @Override

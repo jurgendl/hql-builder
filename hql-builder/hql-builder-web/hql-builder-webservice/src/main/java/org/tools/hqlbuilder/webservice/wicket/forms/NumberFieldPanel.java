@@ -25,6 +25,7 @@ public class NumberFieldPanel<N extends Number & Comparable<N>> extends DefaultF
                 tag(tag, "min", settings.getMinimum());
                 tag(tag, "max", settings.getMaximum());
                 tag(tag, "step", settings.getStep());
+                tag(tag, "size", String.valueOf(settings.getMaximum()).length() + 2);
             }
         };
     }

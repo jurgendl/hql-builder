@@ -10,7 +10,7 @@ import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 public abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>, S extends FormElementSettings> extends
-        FormRowPanel<T, T, C, S> {
+FormRowPanel<T, T, C, S> {
     private static final long serialVersionUID = -3609764520190287373L;
 
     public DefaultFormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, S componentSettings) {
@@ -42,13 +42,6 @@ public abstract class DefaultFormRowPanel<T extends Serializable, C extends Form
                 } catch (IllegalArgumentException ex2) {
                     this.propertyType = (Class<T>) Serializable.class;
                 }
-                // Type genericSuperclass = getClass().getGenericSuperclass();
-                // ParameterizedType parameterizedType = ParameterizedType.class.cast(genericSuperclass);
-                // try {
-                // this.propertyType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
-                // } catch (ClassCastException ex2) {
-                // this.propertyType = (Class<T>) Serializable.class;
-                // }
             }
         }
         return this.propertyType;
