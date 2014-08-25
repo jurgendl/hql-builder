@@ -43,3 +43,14 @@ http://www.runningcoder.org/jquerytypeahead/demo/
 http://designmodo.com/jquery-ui-framework-plugins/
 http://www.inqbation.com/css3-and-html5-social-media-icons/
 
+
+http://www.99points.info/2011/01/recaptcha-style-captcha-with-jquery-and-php/
+https://developers.google.com/recaptcha/docs/java
+https://code.google.com/p/recaptcha4j/
+
+http://syddev.com/jquery.shadow/
+
+
+
+
+
