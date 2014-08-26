@@ -1,8 +1,8 @@
 package org.tools.hqlbuilder.webservice.resources.weloveicons;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +17,8 @@ public class WeLoveIcons {
 
     public static void main(String[] args) {
         try {
-            InputStream in = URI.create("http://weloveiconfonts.com/").toURL().openStream();
+            InputStream in = // URI.create("http://weloveiconfonts.com/").toURL().openStream();
+            new FileInputStream("C:/Users/jdlandsh/Desktop/We Love Icon Fonts.htm");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024 * 8];
             int read;
@@ -37,9 +38,10 @@ public class WeLoveIcons {
             // openwebicons
             // typicons
             // zocial
-            Matcher matcher = Pattern.compile("class=\"brandico-[^\"]+\"").matcher(html);
+            Matcher matcher = Pattern.compile("class=\"zocial-[^\"]+\"").matcher(html);
             while (matcher.find()) {
-                System.out.println(matcher.group());
+                System.out.println("." + matcher.group().replaceAll("\"", "").replaceAll("zocial-", "").replaceAll("class=", "")
+                        + "-color{background:#000}");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
