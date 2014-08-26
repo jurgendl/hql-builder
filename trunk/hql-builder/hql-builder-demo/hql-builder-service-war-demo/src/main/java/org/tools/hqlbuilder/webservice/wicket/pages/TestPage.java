@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
@@ -17,7 +19,9 @@ public class TestPage extends DefaultWebPage {
 
         setStatelessHint(false);
 
-        FormSettings formSettings = new FormSettings().setColumns(2).setShowLabel(false).setAjax(false).setClientsideRequiredValidation(false);
+        add(new BookmarkablePageLink<String>("link", TestPage.class));
+
+        FormSettings formSettings = new FormSettings().setAjax(false).setClientsideRequiredValidation(false);
         DefaultFormActions<Example> actions = new DefaultFormActions<Example>() {
             Example example = new Example();
 
@@ -64,7 +68,16 @@ public class TestPage extends DefaultWebPage {
         // form.addDropDown(WebHelper.proxy(Example.class).getText(), new DropDownSettings().setNullValid(true), optionRenderer, opt, groupLabels);
         // form.addList(WebHelper.proxy(Example.class).getTextExtra(), new ListSettings().setSize(10), optionRenderer, opt, groupLabels);
 
-        form.addTextField(WebHelper.proxy(Example.class).getText(), new FormElementSettings(true));
-        form.addTextField(WebHelper.proxy(Example.class).getTextExtra(), new FormElementSettings(true));
+        // form.addTextField(WebHelper.proxy(Example.class).getText(), new FormElementSettings(true));
+        // form.addTextField(WebHelper.proxy(Example.class).getTextExtra(), new FormElementSettings(true));
+
+        form.addCheckBox(WebHelper.proxy(Example.class).getCheck(), new FormElementSettings(true));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        // response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+        // response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
     }
 }

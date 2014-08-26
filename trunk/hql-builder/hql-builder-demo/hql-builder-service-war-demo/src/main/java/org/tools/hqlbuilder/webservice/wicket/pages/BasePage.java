@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -15,12 +15,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
-import org.tools.hqlbuilder.webservice.wicket.zuss.ZussResourceReference;
 
 @SuppressWarnings("serial")
 public class BasePage extends DefaultWebPage {
+    protected WebMarkupContainer menu;
+
     public BasePage(final PageParameters parameters) {
         super(parameters);
 
@@ -36,21 +36,26 @@ public class BasePage extends DefaultWebPage {
                 return pages;
             }
         };
-        ListView<Class<? extends DefaultWebPage>> menu = new ListView<Class<? extends DefaultWebPage>>("menu", pagesModel) {
+
+        menu = new WebMarkupContainer("menu");
+        add(menu);
+
+        ListView<Class<? extends DefaultWebPage>> menuitem = new ListView<Class<? extends DefaultWebPage>>("menuitem", pagesModel) {
             @Override
             protected void populateItem(ListItem<Class<? extends DefaultWebPage>> item) {
-                WebMarkupContainer menuitem = new WebMarkupContainer("menuitem");
-                menuitem.add(new AttributeModifier("title", new Model<String>(item.getModelObject().getSimpleName())));
+                item.add(new AttributeModifier("title", new Model<String>(item.getModelObject().getSimpleName())));
                 boolean active = item.getModelObject().equals(BasePage.this);
                 if (active) {
-                    menuitem.add(new AttributeModifier("class", "active"));
+                    item.add(new AttributeModifier("class", "active"));
                 }
-                item.add(menuitem);
                 BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("menulink", item.getModelObject());
-                menuitem.add(link);
+                item.add(link);
                 link.add(new Label("menulinklabel", new Model<String>(item.getModelObject().getSimpleName())));
             }
         };
+        menu.add(menuitem);
+
+        menu.setOutputMarkupId(true);
         add(menu);
         // menu.setVisible(false);
     }
@@ -58,6 +63,11 @@ public class BasePage extends DefaultWebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + menu.getMarkupId() + "\" ).puimenubar(); });", "js_"
+                + menu.getMarkupId() + "_" + System.currentTimeMillis(), null));
+        // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
     }
 }

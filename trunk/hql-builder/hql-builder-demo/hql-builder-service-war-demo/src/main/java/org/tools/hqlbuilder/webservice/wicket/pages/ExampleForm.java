@@ -119,6 +119,12 @@ public class ExampleForm extends FormPanel<Example> {
             addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
             addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
             addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
+            addNumberTextField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
+            addNumberTextField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
+            addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+            addNumberTextField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
+            addNumberTextField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
+            addNumberTextField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
             addRangeField(proxy.getByter(), new RangeFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
             addRangeField(proxy.getShortr(), new RangeFieldSettings<Short>((short) 0, (short) 100, (short) 1));
             addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
@@ -154,9 +160,30 @@ public class ExampleForm extends FormPanel<Example> {
         }
         if (dont) {
             nextRow();
-            ListModel<ExampleOpts>[] optsChoices2 = new ListModel[] { optsChoices, optsChoices };
-            IModel<String>[] lbls = new IModel[] { Model.of("options 1"), Model.of("options 2") };
-            addList(proxy.getList(), new ListSettings().setSize(5), optionRenderer, optsChoices2, lbls);
+            List<String> opt1 = new ArrayList<String>();
+            for (int i = 1; i <= 10; i++) {
+                opt1.add("option " + (i == 10 ? 0 : i));
+            }
+            List<String> opt2 = new ArrayList<String>();
+            for (int i = 0; i < 26; i++) {
+                opt2.add("option " + (char) ('A' + i));
+            }
+            IModel<String>[] groupLabels = new IModel[] { Model.of("numbers"), Model.of("letters") };
+            IOptionRenderer<String> optionRenderer2 = new IOptionRenderer<String>() {
+                @Override
+                public String getDisplayValue(String object) {
+                    return object;
+                }
+
+                @Override
+                public IModel<String> getModel(String value) {
+                    return Model.of(value);
+                }
+            };
+            groupLabels = null;
+            ListModel<String>[] opt = new ListModel[] { new ListModel<String>(opt1), new ListModel<String>(opt2) };
+            addDropDown(WebHelper.proxy(Example.class).getText(), new DropDownSettings().setNullValid(true), optionRenderer2, opt, groupLabels);
+            addList(WebHelper.proxy(Example.class).getTextExtra(), new ListSettings().setSize(10), optionRenderer2, opt, groupLabels);
         }
     }
 

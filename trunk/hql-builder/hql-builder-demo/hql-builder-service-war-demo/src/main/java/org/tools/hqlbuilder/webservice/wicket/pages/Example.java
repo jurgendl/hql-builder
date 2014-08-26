@@ -70,11 +70,9 @@ public class Example implements Serializable {
 
     private Boolean check = Boolean.FALSE;
 
-    @SuppressWarnings("deprecation")
-    private Date date1 = new Date(2000, 4, 4);
+    private Date date1 = new Date();
 
-    @SuppressWarnings("deprecation")
-    private Long date2 = new Date(2000, 4, 4).getTime();
+    private Long date2 = new Date().getTime();
 
     private Integer integerv = 50;
 
