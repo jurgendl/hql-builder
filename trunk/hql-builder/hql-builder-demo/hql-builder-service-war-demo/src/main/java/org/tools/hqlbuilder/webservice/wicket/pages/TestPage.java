@@ -1,27 +1,29 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import org.apache.wicket.behavior.AttributeAppender;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.TreeSet;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
-import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
+import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel;
+import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel.Social;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-
-@SuppressWarnings({ "serial", "unchecked" })
 @MountedPage("/test")
 public class TestPage extends DefaultWebPage {
+    private static final long serialVersionUID = 1679221119306658924L;
+
     public TestPage(PageParameters parameters) {
         super(parameters);
 
@@ -31,6 +33,8 @@ public class TestPage extends DefaultWebPage {
 
         FormSettings formSettings = new FormSettings().setAjax(false).setClientsideRequiredValidation(false);
         DefaultFormActions<Example> actions = new DefaultFormActions<Example>() {
+            private static final long serialVersionUID = -7243583927279090086L;
+
             Example example = new Example();
 
             @Override
@@ -82,30 +86,23 @@ public class TestPage extends DefaultWebPage {
 
         // form.addCheckBox(WebHelper.proxy(Example.class).getCheck(), new FormElementSettings(true));
 
-        Button button = new Button("googleplusbutton");
-        button.add(new CssClassNameAppender("zocial-googleplus"));
-        button.add(new AttributeAppender("data-text", "googleplus"));
-        add(button);
+        ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
+        add(new ListView<Social>("repeater1", options) {
+            private static final long serialVersionUID = -7495456081110874114L;
 
-        Link<String> link = new Link<String>("googlepluslink") {
             @Override
-            public void onClick() {
-                //
+            protected void populateItem(ListItem<Social> item) {
+                item.add(new SocialPanel("sb1", item.getModel()));
             }
-        };
-        link.add(new CssClassNameAppender("zocial-googleplus"));
-        link.add(new AttributeAppender("data-text", "googleplus"));
-        add(link);
+        });
+        add(new ListView<Social>("repeater2", options) {
+            private static final long serialVersionUID = -2422255718832136362L;
 
-        WebMarkupContainer div = new WebMarkupContainer("googleplusdiv");
-        div.add(new CssClassNameAppender("zocial-googleplus"));
-        div.add(new AttributeAppender("data-text", "googleplus"));
-        add(div);
-
-        WebMarkupContainer span = new WebMarkupContainer("googleplusspan");
-        span.add(new CssClassNameAppender("zocial-googleplus"));
-        span.add(new AttributeAppender("data-text", "googleplus"));
-        add(span);
+            @Override
+            protected void populateItem(ListItem<Social> item) {
+                item.add(new SocialPanel("sb2", item.getModel(), true));
+            }
+        });
     }
 
     @Override
@@ -113,6 +110,5 @@ public class TestPage extends DefaultWebPage {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
         response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
-        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));
     }
 }
