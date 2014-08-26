@@ -1,0 +1,39 @@
+[class*="zocial-"] {
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0px 1px 3px #666666;
+	-moz-box-shadow: 0px 1px 3px #666666;
+	box-shadow: 0px 1px 3px #666666;
+	color: #ffffff;
+	padding: .5em;
+	margin: .2em;
+	text-decoration: none;
+	background: #a3a3a3;
+	text-align: center;
+	vertical-align: middle;
+	width: 1em;
+	height: 1em;
+}
+.zocial-google{background:rgb(36,116,243)}
+.zocial-googleplay{background:rgb(88,225,200)}
+.zocial-googleplus{background:#DD4B39}
+.zocial-appnet{background:#D87A68}
+.zocial-bitbucket{background:#205081}
+.zocial-dropbox{background:#1087DD}
+.zocial-facebook{background:#3B5998}
+.zocial-foursquare{background:#0072B1}
+.zocial-github{background:#444444}
+.zocial-instagram{background:#3F729B}
+.zocial-openid{background:#F7931E}
+.zocial-reddit{background:#EFF7FF;color:black;}
+.zocial-soundcloud{background:#FF5500}
+.zocial-tumblr{background:#CB2027}
+.zocial-twitter{background:#55ACEE}
+.zocial-vimeo{background:#1AB7EA}
+.zocial-vk{background:#587EA3}
+.zocial-yahoo{background:#720E9E}
+.zocial-youtube{background:rgb(229,45,39)}/*https://www.youtube.com/yt/brand/nl/color.html*/
+.zocial-gmail{background:rgb(201,44,25)}
+.zocial-flickr{background:#2BA9E1}
+.zocial-linkedin{background:007BB6}
