@@ -12,6 +12,9 @@ import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 public class WeLoveIcons {
     public static CssResourceReference WE_LOVE_ICONS_CSS = new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts.css");
 
+    public static CssResourceReference WE_LOVE_ICONS_SOCIAL_CSS = new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts-social.css")
+            .addCssResourceReferenceDependency(WE_LOVE_ICONS_CSS);
+
     public static void main(String[] args) {
         try {
             InputStream in = URI.create("http://weloveiconfonts.com/").toURL().openStream();

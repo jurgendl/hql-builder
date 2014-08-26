@@ -1,15 +1,23 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
+import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
-import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
-import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 @SuppressWarnings({ "serial", "unchecked" })
 @MountedPage("/test")
@@ -39,6 +47,7 @@ public class TestPage extends DefaultWebPage {
         final FormPanel<Example> form = new FormPanel<Example>("testform", actions, formSettings);
         form.getForm();
         add(form);
+        form.setVisible(false);
 
         // List<String> opt1 = new ArrayList<String>();
         // for (int i = 1; i <= 10; i++) {
@@ -71,13 +80,39 @@ public class TestPage extends DefaultWebPage {
         // form.addTextField(WebHelper.proxy(Example.class).getText(), new FormElementSettings(true));
         // form.addTextField(WebHelper.proxy(Example.class).getTextExtra(), new FormElementSettings(true));
 
-        form.addCheckBox(WebHelper.proxy(Example.class).getCheck(), new FormElementSettings(true));
+        // form.addCheckBox(WebHelper.proxy(Example.class).getCheck(), new FormElementSettings(true));
+
+        Button button = new Button("googleplusbutton");
+        button.add(new CssClassNameAppender("zocial-googleplus"));
+        button.add(new AttributeAppender("data-text", "googleplus"));
+        add(button);
+
+        Link<String> link = new Link<String>("googlepluslink") {
+            @Override
+            public void onClick() {
+                //
+            }
+        };
+        link.add(new CssClassNameAppender("zocial-googleplus"));
+        link.add(new AttributeAppender("data-text", "googleplus"));
+        add(link);
+
+        WebMarkupContainer div = new WebMarkupContainer("googleplusdiv");
+        div.add(new CssClassNameAppender("zocial-googleplus"));
+        div.add(new AttributeAppender("data-text", "googleplus"));
+        add(div);
+
+        WebMarkupContainer span = new WebMarkupContainer("googleplusspan");
+        span.add(new CssClassNameAppender("zocial-googleplus"));
+        span.add(new AttributeAppender("data-text", "googleplus"));
+        add(span);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        // response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-        // response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+        response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));
     }
 }

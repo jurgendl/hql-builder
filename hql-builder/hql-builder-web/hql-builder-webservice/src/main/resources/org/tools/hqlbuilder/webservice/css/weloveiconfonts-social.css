@@ -6,14 +6,23 @@
 	-moz-box-shadow: 0px 1px 3px #666666;
 	box-shadow: 0px 1px 3px #666666;
 	color: #ffffff;
-	padding: .5em;
+	padding: 0px;
 	margin: .2em;
 	text-decoration: none;
 	background: #a3a3a3;
 	text-align: center;
 	vertical-align: middle;
-	width: 1em;
-	height: 1em;
+	outline: none;
+	border: none;
+	width: 2.2em;
+	height: 2.2em;
+	line-height: 2.2em;
+	font-size: 1em;
+	display: block;
+}
+[class*="zocial-"]:hover {
+	border: none;
+	cursor: pointer; cursor: hand;
 }
 .zocial-google{background:rgb(36,116,243)}
 .zocial-googleplay{background:rgb(88,225,200)}
