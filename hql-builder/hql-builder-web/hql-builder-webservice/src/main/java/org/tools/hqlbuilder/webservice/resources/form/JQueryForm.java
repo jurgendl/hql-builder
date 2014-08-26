@@ -16,7 +16,7 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
  * @see http://malsup.com/jquery/form/
  */
 public class JQueryForm {
-    public static final String PATH = "ui/form/";
+    public static final String PATH = "ui/form-3.51.0/";
 
     public static final String URL = "http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.50/";
 
