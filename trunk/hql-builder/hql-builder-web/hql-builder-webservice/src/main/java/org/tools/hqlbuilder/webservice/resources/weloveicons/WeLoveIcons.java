@@ -15,7 +15,9 @@ public class WeLoveIcons {
     public static CssResourceReference WE_LOVE_ICONS_SOCIAL_CSS = new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts-social.css")
             .addCssResourceReferenceDependency(WE_LOVE_ICONS_CSS);
 
-    public static CssResourceReference WE_LOVE_ICONS_SOCIAL_COLORS_CSS = new CssResourceReference(WicketCSSRoot.class, "socialcolors.css");
+    public static CssResourceReference SOCIAL_COLORS_CSS = new CssResourceReference(WicketCSSRoot.class, "socialcolors.css");
+
+    public static CssResourceReference SOCIAL_COLORS_HOVER_CSS = new CssResourceReference(WicketCSSRoot.class, "socialcolorshover.css");
 
     public static void main(String[] args) {
         try {

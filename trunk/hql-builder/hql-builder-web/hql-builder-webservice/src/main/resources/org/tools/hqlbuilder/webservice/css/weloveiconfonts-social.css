@@ -2,10 +2,9 @@
 	-webkit-border-radius: .5em;
 	-moz-border-radius: .5em;
 	border-radius: .5em;
-	-webkit-box-shadow: 0px 1px 3px #666666;
-	-moz-box-shadow: 0px 1px 3px #666666;
-	box-shadow: 0px 1px 3px #666666;
-	color: #fff;
+	-webkit-box-shadow: 2px 2px 3px #666666;
+	-moz-box-shadow: 2px 2px 3px #666666;
+	box-shadow: 2px 2px 3px #666666;
 	padding: 0px;
 	margin: .2em;
 	text-decoration: none;
@@ -16,7 +15,14 @@
 	line-height: 2.2em;
 	display: block;
 	float: left;
-	font-size: 1em;
+	font-size: 1.3em;
+	background:rgb(100,100,100);
+	color: rgb(255,255,255);
+	-webkit-transition: background-color 500ms linear, color 500ms linear;
+	-moz-transition: background-color 500ms linear, color 500ms linear;
+	-o-transition: background-color 500ms linear, color 500ms linear;
+	-ms-transition: background-color 500ms linear, color 500ms linear;
+	transition: background-color 500ms linear, color 500ms linear;
 }
 .socialbtn,
 .socialbar > :first-child {
@@ -30,6 +36,14 @@
 	border: none;
 	cursor: pointer;
 	cursor: hand;
+}
+.socialbtn:active , .socialbar:active {
+	position: relative;
+	top: 2px;
+	left: 2px;
+	-webkit-box-shadow: 1px 1px 2px #666666;
+	-moz-box-shadow: 1px 1px 2px #666666;
+	box-shadow: 1px 1px 2px #666666;
 }
 .socialbar > :nth-child(n) {
 	display: inline-block;

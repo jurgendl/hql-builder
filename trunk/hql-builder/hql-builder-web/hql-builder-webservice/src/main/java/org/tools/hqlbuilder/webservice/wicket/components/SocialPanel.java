@@ -18,16 +18,19 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 public class SocialPanel extends Panel {
     private static final long serialVersionUID = -298324858422498953L;
 
+    private SocialPanelSettings settings;
+
     public SocialPanel(String id, IModel<Social> model) {
-        this(id, model, null, null, false);
+        this(id, model, null, null, new SocialPanelSettings());
     }
 
-    public SocialPanel(String id, IModel<Social> model, boolean barForm) {
-        this(id, model, null, null, barForm);
+    public SocialPanel(String id, IModel<Social> model, SocialPanelSettings settings) {
+        this(id, model, null, null, settings);
     }
 
-    public SocialPanel(String panelId, IModel<Social> model, IModel<String> title, IModel<String> url, boolean barForm) {
+    public SocialPanel(String panelId, IModel<Social> model, IModel<String> title, IModel<String> url, SocialPanelSettings settings) {
         super(panelId, model);
+        this.settings = settings;
 
         setRenderBodyOnly(true);
 
@@ -62,14 +65,14 @@ public class SocialPanel extends Panel {
             }
         }
 
-        socialbutton.add(new CssClassNameAppender(barForm ? "socialbar" : "socialbtn"));
+        socialbutton.add(new CssClassNameAppender(settings.isBarForm() ? "socialbar" : "socialbtn"));
         socialbutton.add(new CssClassNameAppender(socialId + "-color"));
 
         WebMarkupContainer icon = new WebMarkupContainer("icon");
         socialbutton.add(icon);
         WebComponent label = new Label("label", titleString);
         socialbutton.add(label);
-        if (barForm) {
+        if (settings.isBarForm()) {
             icon.add(new CssClassNameAppender("zocial-" + socialId));
             icon.add(new AttributeAppender("data-text", socialId));
         } else {
@@ -84,7 +87,7 @@ public class SocialPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));
-        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_COLORS_CSS));
+        response.render(CssHeaderItem.forReference(settings.isFading() ? WeLoveIcons.SOCIAL_COLORS_HOVER_CSS : WeLoveIcons.SOCIAL_COLORS_CSS));
     }
 
     public static enum Social {
@@ -110,7 +113,7 @@ public class SocialPanel extends Panel {
         amazon("http://www.amazon.com", "Amazon"), //
         android("http://www.android.com", "Android"), //
         angellist("http://angel.co", "AngelList"), //
-        aol("http://www.aol.com", "AOL"), //
+        aol("https://www.aim.com", "AIM"), //
         appnet("http://app.net", "App.net"), //
         // appstore("http://http://store.apple.com", "Apple Store"), //
         bitbucket("http://bitbucket.org", "Bitbucket"), //
