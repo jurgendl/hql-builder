@@ -10,7 +10,7 @@
 	text-decoration: none;
 	vertical-align: middle;
 	outline: none;
-	border: none;
+	text-decoration: none;
 	height: 2.2em;
 	line-height: 2.2em;
 	display: block;
@@ -23,6 +23,7 @@
 	-o-transition: background-color 500ms linear, color 500ms linear;
 	-ms-transition: background-color 500ms linear, color 500ms linear;
 	transition: background-color 500ms linear, color 500ms linear;
+	border: 1px solid #666666;
 }
 .socialbtn,
 .socialbar > :first-child {
@@ -33,7 +34,7 @@
 	width: 16em;
 }
 .socialbtn:hover , .socialbar:hover {
-	border: none;
+	border: 1px solid #666666;
 	cursor: pointer;
 	cursor: hand;
 }
@@ -56,7 +57,5 @@
 	padding-right: .7em;
 }
 .socialbar > :not(:last-child) {
-	border-right-style: solid;
-	border-right-width: 1px;
-	border-right-color: #888;
+	border-right: 1px solid #888;
 }
