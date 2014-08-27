@@ -1,4 +1,10 @@
-.guest-color,.cal-color,.call-color,.cart-color,.email-color,.podcast-color,.print-color{background:rgb(100,100,100)}
+.guest-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.cal-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.call-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.cart-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.email-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.podcast-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.print-color{background:rgb(255,255,255);color:rgb(0,0,0)}
 .rss-color{background:rgb(209,93,28)}
 .google-color{background:rgb(36,116,243)}
 .googleplay-color{background:rgb(88,225,200);color:rgb(0,0,0)}
@@ -45,7 +51,7 @@
 .xing-color{background:rgb(11,104,105)}
 .scribd-color{background:rgb(255,255,255);color:rgb(0,0,0)}
 .angellist-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.aol-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.aol-color{background:rgb(242,206,4);color:rgb(0,0,0)}
 .delicious-color{background:#0b79e5}
 .drupal-color{background:rgb(4,116,188)}
 .disqus-color{background:#2e9fff}
