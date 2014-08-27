@@ -15,10 +15,12 @@ public class WeLoveIcons {
     public static CssResourceReference WE_LOVE_ICONS_SOCIAL_CSS = new CssResourceReference(WicketCSSRoot.class, "weloveiconfonts-social.css")
             .addCssResourceReferenceDependency(WE_LOVE_ICONS_CSS);
 
+    public static CssResourceReference WE_LOVE_ICONS_SOCIAL_COLORS_CSS = new CssResourceReference(WicketCSSRoot.class, "socialcolors.css");
+
     public static void main(String[] args) {
         try {
             InputStream in = // URI.create("http://weloveiconfonts.com/").toURL().openStream();
-            new FileInputStream("C:/Users/jdlandsh/Desktop/We Love Icon Fonts.htm");
+                    new FileInputStream("C:/Users/jdlandsh/Desktop/We Love Icon Fonts.htm");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024 * 8];
             int read;

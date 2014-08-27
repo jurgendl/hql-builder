@@ -80,6 +80,13 @@ public class SocialPanel extends Panel {
         }
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_COLORS_CSS));
+    }
+
     public static enum Social {
         // generic
         guest(null, "guest"), //
@@ -99,19 +106,19 @@ public class SocialPanel extends Panel {
         ninetyninedesigns("http://99designs.com", "99designs"), //
         html5("http://www.w3.org/TR/html5", "HTML5"), //
         ie("http://www.microsoft.com/windows/ie", "Internet Explorer"), //
-        acrobat("http://www.adobe.com/Acrobat", "Acrobat"), //
+        // acrobat("http://www.adobe.com/Acrobat", "Acrobat"), //
         amazon("http://www.amazon.com", "Amazon"), //
         android("http://www.android.com", "Android"), //
         angellist("http://angel.co", "AngelList"), //
         aol("http://www.aol.com", "AOL"), //
         appnet("http://app.net", "App.net"), //
-        appstore("http://http://store.apple.com", "Apple Store"), //
+        // appstore("http://http://store.apple.com", "Apple Store"), //
         bitbucket("http://bitbucket.org", "Bitbucket"), //
         bitcoin("http://bitcoin.org", "Bitcoin"), //
         blogger("http://www.blogger.com", "Blogger"), //
         buffer("http://bufferapp.com", "Buffer"), //
         chrome("http://chrome.google.com", "Chrome"), //
-        cloudapp("http://www.apple.com/icloud", "iCloud"), //
+        // cloudapp("http://www.apple.com/icloud", "iCloud"), //
         creativecommons("http://creativecommons.org", "Creative Commons"), //
         delicious("http://delicious.com", "Delicious"), //
         digg("http://digg.com", "Digg"), //
@@ -138,12 +145,12 @@ public class SocialPanel extends Panel {
         instagram("http://instagram.com", "Instagram"), //
         instapaper("http://www.instapaper.com", "Instapaper"), //
         intensedebate("http://www.intensedebate.com", "IntenseDebate"), //
-        itunes("http://www.apple.com/itunes", "iTunes‎"), //
+        // itunes("http://www.apple.com/itunes", "iTunes‎"), //
         klout("http://klout.com", "Klout"), //
         lanyrd("http://lanyrd.com", "Lanyrd"), //
         lastfm("htpp://www.last.fm", "Last.fm"), //
         linkedin("http://www.linkedin.com", "LinkedIn"), //
-        macstore("http://www.apple.com/mac", "Apple - Mac"), //
+        // macstore("http://www.apple.com/mac", "Apple - Mac"), //
         meetup("http://www.meetup.com", "Meetup"), //
         myspace("http://myspace.com", "Myspace"), //
         openid("http://openid.net", "OpenID"), //
@@ -194,11 +201,5 @@ public class SocialPanel extends Panel {
         public String getName() {
             return this.name;
         }
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));
     }
 }

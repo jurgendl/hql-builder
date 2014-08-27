@@ -18,7 +18,8 @@
 	float: left;
 	font-size: 1em;
 }
-.socialbtn {
+.socialbtn,
+.socialbar > :first-child {
 	text-align: center;
 	width: 2.2em;
 }
@@ -36,110 +37,12 @@
 	cursor: hand;
 	position: relative;
 }
-.socialbar > :first-child {
-	text-align: center;
-	width: 2.2em;
+.socialbar > :not(:first-child) {
+	padding-left: .7em;
+	padding-right: .7em;
+}
+.socialbar > :not(:last-child) {
 	border-right-style: solid;
 	border-right-width: 1px;
 	border-right-color: #888;
 }
-.socialbar > :not(:first-child):not(:last-child) {
-	padding-left: .7em;
-	padding-right: .7em;
-	border-right-style: solid;
-	border-right-width: 1px;
-	border-right-color: #888;
-}
-.socialbar > :last-child {
-	padding-left: .7em;
-	padding-right: .7em;
-}
-
-.guest-color,.cal-color,.call-color,.cart-color,.email-color,.podcast-color,.print-color,.rss-color{background:rgb(100,100,100)}
-.google-color{background:rgb(36,116,243)}
-.googleplay-color{background:rgb(88,225,200)}
-.googleplus-color{background:#DD4B39}
-.appnet-color{background:#D87A68}
-.bitbucket-color{background:#205081}
-.dropbox-color{background:#1087DD}
-.facebook-color{background:#3B5998}
-.foursquare-color{background:#0072B1}
-.github-color{background:#444444}
-.instagram-color{background:#3F729B}
-.openid-color{background:#F7931E}
-.reddit-color{background:#EFF7FF;color:black;}
-.soundcloud-color{background:#FF5500}
-.tumblr-color{background:#CB2027}
-.twitter-color{background:#55ACEE}
-.vimeo-color{background:#1AB7EA}
-.vk-color{background:#587EA3}
-.yahoo-color{background:#720E9E}
-.youtube-color{background:rgb(229,45,39)}/*https://www.youtube.com/yt/brand/nl/color.html*/
-.gmail-color{background:rgb(201,44,25)}
-.flickr-color{background:#2BA9E1}
-.linkedin-color{background:#007BB6}
-
-.acrobat-color{background:#000}
-.amazon-color{background:#000}
-.android-color{background:#000}
-.angellist-color{background:#000}
-.aol-color{background:#000}
-.appstore-color{background:#000}
-.bitcoin-color{background:#000}
-.blogger-color{background:#000}
-.buffer-color{background:#000}
-.chrome-color{background:#000}
-.cloudapp-color{background:#000}
-.creativecommons-color{background:#000}
-.delicious-color{background:#000}
-.digg-color{background:#000}
-.disqus-color{background:#000}
-.dribbble-color{background:#000}
-.drupal-color{background:#000}
-.dwolla-color{background:#000}
-.eventasaurus-color{background:#000}
-.eventbrite-color{background:#000}
-.eventful-color{background:#000}
-.evernote-color{background:#000}
-.fivehundredpx-color{background:#000}
-.flattr-color{background:#000}
-.forrst-color{background:#000}
-.gowalla-color{background:#000}
-.grooveshark-color{background:#000}
-.html5-color{background:#000}
-.ie-color{background:#000}
-.instapaper-color{background:#000}
-.intensedebate-color{background:#000}
-.itunes-color{background:#000}
-.klout-color{background:#000}
-.lanyrd-color{background:#000}
-.lastfm-color{background:#000}
-.macstore-color{background:#000}
-.meetup-color{background:#000}
-.myspace-color{background:#000}
-.ninetyninedesigns-color{background:#000}
-.opentable-color{background:#000}
-.paypal-color{background:#000}
-.pinboard-color{background:#000}
-.pinterest-color{background:#000}
-.plancast-color{background:#000}
-.plurk-color{background:#000}
-.pocket-color{background:#000}
-.posterous-color{background:#000}
-.quora-color{background:#000}
-.scribd-color{background:#000}
-.skype-color{background:#000}
-.smashing-color{background:#000}
-.songkick-color{background:#000}
-.spotify-color{background:#000}
-.statusnet-color{background:#000}
-.steam-color{background:#000}
-.stripe-color{background:#000}
-.stumbleupon-color{background:#000}
-.viadeo-color{background:#000}
-.weibo-color{background:#000}
-.wikipedia-color{background:#000}
-.windows-color{background:#000}
-.wordpress-color{background:#000}
-.xing-color{background:#000}
-.yelp-color{background:#000}
