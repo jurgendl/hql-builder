@@ -107,8 +107,7 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
 
         response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
 
-        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext(); });", "js_"
-                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext();"));
     }
 
     @Override

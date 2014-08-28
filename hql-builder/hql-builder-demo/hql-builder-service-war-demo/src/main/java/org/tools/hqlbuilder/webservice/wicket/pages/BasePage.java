@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -66,8 +66,7 @@ public class BasePage extends DefaultWebPage {
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + menu.getMarkupId() + "\" ).puimenubar(); });", "js_"
-                + menu.getMarkupId() + "_" + System.currentTimeMillis(), null));
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + menu.getMarkupId() + "\" ).puimenubar();"));
         // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
     }
 }

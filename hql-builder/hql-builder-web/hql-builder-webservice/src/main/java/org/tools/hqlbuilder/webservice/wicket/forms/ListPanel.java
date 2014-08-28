@@ -6,7 +6,7 @@ import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 
@@ -55,7 +55,6 @@ public class ListPanel<T extends Serializable> extends SelectPanel<T, Select<T>,
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puilistbox(); });", "js_"
-                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puilistbox();"));
     }
 }

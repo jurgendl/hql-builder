@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 
@@ -41,7 +41,6 @@ public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puiinputtextarea(); });",
-                "js_" + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtextarea();"));
     }
 }

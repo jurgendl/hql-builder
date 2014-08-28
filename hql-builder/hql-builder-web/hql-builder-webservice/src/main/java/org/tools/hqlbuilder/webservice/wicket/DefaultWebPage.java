@@ -19,6 +19,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.WicketJQueryRoot;
 import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
 
@@ -56,6 +57,9 @@ public class DefaultWebPage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
+        // response.render(CssHeaderItem.forReference(WicketCSSRoot.RESET));
+
         super.renderHead(response);
 
         if (!isEnabledInHierarchy()) {

@@ -13,7 +13,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -96,8 +96,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 formActionsContainer.get(FORM_RESET).getMarkupId(),
                 formActionsContainer.get(FORM_CANCEL).getMarkupId() };
         for (String buttonId : buttonIds) {
-            response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + buttonId + "\" ).button(); });", "js_" + buttonId + "_"
-                    + System.currentTimeMillis(), null));
+            response.render(OnLoadHeaderItem.forScript("$( \"#" + buttonId + "\" ).button();"));
         }
     }
 
@@ -309,7 +308,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
