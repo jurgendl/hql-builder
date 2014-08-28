@@ -8,6 +8,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -53,6 +54,8 @@ public class DefaultWebPage extends WebPage {
             add(new EmptyPanel("debug").setVisible(false));
         }
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
+        add(new Label("notifytop"));
+        add(new Label("notifybottom"));
     }
 
     @Override

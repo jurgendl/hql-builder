@@ -159,9 +159,8 @@ h1, h2, h3, h4, h5 {
 a {
 	outline: none;
 	text-decoration: none;
-	/*color: #0077dd;*/
-	border-bottom: 1px dashed;
-	padding: 2px 0px 0px 0px;
+	color: #1E608E;
+	border-bottom: none;
 }
 
 .ui-widget a {
@@ -170,27 +169,27 @@ a {
 
 /* the normal state of a hyperlink */
 a:link {
-	/* */
+	color: #1E608E;
 }
 
 /* when the link has been visited before */
 a:visited {
-	/*color: #0055bb;*/
+	color: #1E608E;
 }
 
 /* when the user hovers their mouse over a link */
 a:hover {
-	/*color: #00aaff;*/
+	color: #1E608E;
 	border-bottom: 1px solid;
 }
 
 /* when the user clicks on the link (or presses the Enter key on a focused link) */
 a:active {
-	/*padding-top: 4px;*/
+	color: #1E608E;
 }
 
 /* when the user uses the Tab key to navigate to hyperlinks */
 a:focus {
-	/*color: #00aaff;*/
+	color: #1E608E;
 	border-bottom: 1px solid;
 }
