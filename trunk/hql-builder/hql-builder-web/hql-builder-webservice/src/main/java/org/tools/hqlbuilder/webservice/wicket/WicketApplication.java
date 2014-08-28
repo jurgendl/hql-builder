@@ -199,10 +199,6 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void addToCssBundle(List<ResourceReference> css) {
-        // reset css
-        // css.add(WicketCSSRoot.NORMALIZE); // included in purecss
-        // css.add(WicketCSSRoot.RESET);
-
         // general css
         // css.add(Colors.COLORS_CSS);
         // css.add(WeLoveIcons.WE_LOVE_ICONS_CSS); // moved to places where used
@@ -308,7 +304,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //

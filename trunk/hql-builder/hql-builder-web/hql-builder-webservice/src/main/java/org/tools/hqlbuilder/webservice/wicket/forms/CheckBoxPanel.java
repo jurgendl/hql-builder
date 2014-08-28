@@ -2,7 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
@@ -68,7 +68,6 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).button(); });", "js_"
-                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).button();"));
     }
 }

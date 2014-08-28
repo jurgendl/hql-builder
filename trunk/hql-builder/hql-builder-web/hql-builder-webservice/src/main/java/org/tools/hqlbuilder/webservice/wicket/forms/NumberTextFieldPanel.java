@@ -2,7 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
@@ -42,7 +42,6 @@ public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends Defa
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(new JavaScriptContentHeaderItem("$(function() { $( \"#" + getComponent().getMarkupId() + "\" ).puispinner(); });", "js_"
-                + getComponent().getMarkupId() + "_" + System.currentTimeMillis(), null));
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puispinner();"));
     }
 }
