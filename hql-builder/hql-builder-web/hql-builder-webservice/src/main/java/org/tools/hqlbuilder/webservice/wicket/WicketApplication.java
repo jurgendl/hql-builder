@@ -176,7 +176,7 @@ public class WicketApplication extends WebApplication {
     /** only add JavaScriptResourceReference */
     protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
 
-    protected void addToJsBundle(List<ResourceReference> js) {
+    protected void addToJsBundle(@SuppressWarnings("unused") List<ResourceReference> js) {
         // js.add(Colors.COLORS_JS);
         // js.add(WicketJSRoot.FLOATING_BAR);
     }
@@ -304,7 +304,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-                //
+        //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
