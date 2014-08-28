@@ -20,7 +20,6 @@
 			<artifactId>hql-builder-annotations</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>
-			<scope>import</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.tools.hql-builder</groupId>
@@ -68,12 +67,12 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<executions>
-					<!-- <execution>
+					<execution>
 						<id>default-compile</id>
 						<goals>
 							<goal>compile</goal>
 						</goals>
-					</execution> -->
+					</execution>
 					<execution>
 						<id>compile-props</id>
 						<goals>
@@ -84,7 +83,6 @@
 							<annotationProcessors>
 								<annotationProcessor>org.tools.hqlbuilder.annotations.JaxBIndexEntityProcessor</annotationProcessor>
 								<annotationProcessor>org.tools.hqlbuilder.annotations.HibernateCfgEntityProcessor</annotationProcessor>
-								<!-- <annotationProcessor>org.tools.hqlbuilder.annotations.HibernateEntityPropertiesProcessor</annotationProcessor> -->
 							</annotationProcessors>
 							<generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
 							<proc>only</proc>
