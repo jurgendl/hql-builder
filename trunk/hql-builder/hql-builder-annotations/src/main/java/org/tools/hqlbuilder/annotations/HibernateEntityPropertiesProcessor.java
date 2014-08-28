@@ -34,48 +34,53 @@ public class HibernateEntityPropertiesProcessor extends AbstractProcessor {
             if (!run) {
                 run = true;
                 for (Element elem : roundEnv.getElementsAnnotatedWith(javax.persistence.Entity.class)) {
-                    if (elem.getKind() == ElementKind.CLASS) {
-                        TypeElement classElement = (TypeElement) elem;
-                        PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
-                        String className = classElement.getQualifiedName() + "Properties";
-                        log(className);
-                        FileObject fileObject = processingEnv.getFiler().createSourceFile(className);
-                        BufferedWriter bw = new BufferedWriter(fileObject.openWriter());
-                        bw.append("package ");
-                        bw.append(packageElement.getQualifiedName().toString());
-                        bw.append(";");
-                        bw.newLine();
-                        bw.append("public interface ");
-                        bw.append(classElement.getSimpleName() + "Properties");
-                        bw.append("{");
-                        bw.newLine();
-
-                        for (Field field : Class.forName(classElement.getQualifiedName().toString()).getDeclaredFields()) {
-                            if (field.isSynthetic()) {
-                                continue;
-                            }
-                            int modifiers = field.getModifiers();
-                            if (Modifier.isStatic(modifiers)) {
-                                continue;
-                            }
-                            if (Modifier.isTransient(modifiers)) {
-                                continue;
-                            }
-                            if (field.getAnnotation(Transient.class) != null) {
-                                continue;
-                            }
-
-                            bw.append("public static final String ");
-                            bw.append(field.getName().toUpperCase());
-                            bw.append(" = \"");
-                            bw.append(field.getName());
-                            bw.append("\";");
+                    try {
+                        if (elem.getKind() == ElementKind.CLASS) {
+                            TypeElement classElement = (TypeElement) elem;
+                            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+                            String className = classElement.getQualifiedName() + "Properties";
+                            log(className);
+                            FileObject fileObject = processingEnv.getFiler().createSourceFile(className);
+                            BufferedWriter bw = new BufferedWriter(fileObject.openWriter());
+                            bw.append("package ");
+                            bw.append(packageElement.getQualifiedName().toString());
+                            bw.append(";");
                             bw.newLine();
-                        }
+                            bw.append("public interface ");
+                            bw.append(classElement.getSimpleName() + "Properties");
+                            bw.append("{");
+                            bw.newLine();
 
-                        bw.append("}");
-                        bw.newLine();
-                        bw.close();
+                            Class<?> forName = Class.forName(classElement.getQualifiedName().toString());
+                            for (Field field : forName.getDeclaredFields()) {
+                                if (field.isSynthetic()) {
+                                    continue;
+                                }
+                                int modifiers = field.getModifiers();
+                                if (Modifier.isStatic(modifiers)) {
+                                    continue;
+                                }
+                                if (Modifier.isTransient(modifiers)) {
+                                    continue;
+                                }
+                                if (field.getAnnotation(Transient.class) != null) {
+                                    continue;
+                                }
+
+                                bw.append("public static final String ");
+                                bw.append(field.getName().toUpperCase());
+                                bw.append(" = \"");
+                                bw.append(field.getName());
+                                bw.append("\";");
+                                bw.newLine();
+                            }
+
+                            bw.append("}");
+                            bw.newLine();
+                            bw.close();
+                        }
+                    } catch (Exception ex) {
+                        log(String.valueOf(ex));
                     }
                 }
             }

@@ -32,6 +32,7 @@ public class SocialPanel extends Panel {
         super(panelId, model);
         this.settings = settings;
 
+        setOutputMarkupPlaceholderTag(false);
         setRenderBodyOnly(true);
 
         Social socialId = model.getObject();
