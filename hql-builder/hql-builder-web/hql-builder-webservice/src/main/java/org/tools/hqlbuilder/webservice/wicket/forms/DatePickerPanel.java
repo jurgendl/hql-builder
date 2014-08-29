@@ -29,6 +29,7 @@ import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
  * @see https://github.com/jquery/jquery-ui
  * @see http://stackoverflow.com/questions/1452681/jquery-datepicker-localization
  * @see http://www.primefaces.org/primeui/inputtext.html
+ * @see http://jqueryui.com/datepicker/
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel {

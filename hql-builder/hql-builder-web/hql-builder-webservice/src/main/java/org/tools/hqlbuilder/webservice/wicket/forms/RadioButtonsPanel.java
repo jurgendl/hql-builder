@@ -9,6 +9,9 @@ import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 
+/**
+ * @see http://jqueryui.com/button/
+ */
 public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPanel<T, RadioChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = 1409542083276399035L;
 
