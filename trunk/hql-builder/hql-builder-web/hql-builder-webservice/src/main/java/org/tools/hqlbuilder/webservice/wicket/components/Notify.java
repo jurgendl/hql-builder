@@ -11,6 +11,8 @@ import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
 
 /**
  * <span wicket:id="notify"></span>
+ *
+ * @see http://www.primefaces.org/primeui/notify.html
  */
 public class Notify extends Panel {
     private static final long serialVersionUID = 8477795062120562100L;
@@ -43,16 +45,14 @@ public class Notify extends Panel {
     }
 
     public void bottomMessage(AjaxRequestTarget target, String message) {
-        String js = "$(function() { " + "\n";
-        js += "$('#" + Notify.this.get(NOTIFY_BOTTOM).getMarkupId() + "').puinotify('show','" + message + "');" + "\n";
-        js += "});" + "\n";
-        target.appendJavaScript(";" + js);
+        message(target, NOTIFY_BOTTOM, message);
     }
 
     public void topMessage(AjaxRequestTarget target, String message) {
-        String js = "$(function() { " + "\n";
-        js += "$('#" + Notify.this.get(NOTIFY_TOP).getMarkupId() + "').puinotify('show','" + message + "');" + "\n";
-        js += "});" + "\n";
-        target.appendJavaScript(";" + js);
+        message(target, NOTIFY_TOP, message);
+    }
+
+    protected void message(AjaxRequestTarget target, String id, String message) {
+        target.appendJavaScript(";$('#" + Notify.this.get(id).getMarkupId() + "').puinotify('show','" + message + "');");
     }
 }
