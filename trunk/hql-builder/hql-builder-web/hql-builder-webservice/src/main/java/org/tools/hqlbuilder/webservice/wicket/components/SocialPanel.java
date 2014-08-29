@@ -152,7 +152,7 @@ public class SocialPanel extends Panel {
         // itunes("http://www.apple.com/itunes", "iTunes‎"), //
         klout("http://klout.com", "Klout"), //
         lanyrd("http://lanyrd.com", "Lanyrd"), //
-        lastfm("htpp://www.last.fm", "Last.fm"), //
+        lastfm("http://www.last.fm", "Last.fm"), //
         linkedin("http://www.linkedin.com", "LinkedIn"), //
         // macstore("http://www.apple.com/mac", "Apple - Mac"), //
         meetup("http://www.meetup.com", "Meetup"), //
