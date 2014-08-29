@@ -45,7 +45,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     protected IModel<T> valueModel;
 
     /** normally a lambda path */
-    protected transient P propertyPath;
+    protected P propertyPath;
 
     protected Class<T> propertyType;
 
@@ -55,7 +55,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     protected C component;
 
-    protected final transient FormSettings formSettings;
+    protected final FormSettings formSettings;
 
     protected final S componentSettings;
 
@@ -207,7 +207,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     }
 
     protected void setupRequired(ComponentTag tag) {
-        tag(tag, REQUIRED, (componentSettings != null && componentSettings.isRequired() && formSettings.isClientsideRequiredValidation()) ? REQUIRED
+        tag(tag, REQUIRED, (componentSettings != null && componentSettings.isRequired() && formSettings!=null && formSettings.isClientsideRequiredValidation()) ? REQUIRED
                 : null);
     }
 
