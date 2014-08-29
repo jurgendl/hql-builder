@@ -15,8 +15,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -26,7 +24,6 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -143,7 +140,6 @@ public class WicketApplication extends WebApplication {
 
         // library resources
         this.setJavaScriptLibrarySettings(new WicketResourceReferences());
-        initDefaultResources();
 
         // to put javascript down on the page (DefaultWebPage.html must contain wicket:id='footer-bucket'
         setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator("footer-bucket"));
@@ -164,75 +160,6 @@ public class WicketApplication extends WebApplication {
 
         getMarkupSettings().setDefaultBeforeDisabledLink("");
         getMarkupSettings().setDefaultAfterDisabledLink("");
-    }
-
-    protected JavaScriptReferenceHeaderItem jsBundleReference = null;
-
-    protected CssReferenceHeaderItem cssBundleReference = null;
-
-    /** only add CssResourceReference */
-    protected List<ResourceReference> jsResources = new ArrayList<ResourceReference>();
-
-    /** only add JavaScriptResourceReference */
-    protected List<ResourceReference> cssResources = new ArrayList<ResourceReference>();
-
-    protected void addToJsBundle(@SuppressWarnings("unused") List<ResourceReference> js) {
-        // js.add(Colors.COLORS_JS);
-        // js.add(WicketJSRoot.FLOATING_BAR);
-    }
-
-    protected void addToJsResources(List<ResourceReference> js) {
-        // IJavaScriptLibrarySettings javaScriptLibrarySettings = getJavaScriptLibrarySettings();
-        // js.add(javaScriptLibrarySettings.getJQueryReference());
-        // js.add(javaScriptLibrarySettings.getWicketAjaxReference());
-        // js.add(javaScriptLibrarySettings.getWicketEventReference());
-        // if (javaScriptLibrarySettings instanceof IJQueryLibrarySettings) {
-        // IJQueryLibrarySettings javaScriptSettings = (IJQueryLibrarySettings) javaScriptLibrarySettings;
-        // js.add(javaScriptSettings.getJQueryGlobalizeReference());
-        // js.add(javaScriptSettings.getJQueryUIReference());
-        // }
-        // if (WicketApplication.get().usesDevelopmentConfig()) {
-        // js.add(javaScriptLibrarySettings.getWicketAjaxDebugReference());
-        // }
-        // js.add(Velocity.VELOCITY_JS);
-        addToJsBundle(js);
-    }
-
-    protected void addToCssBundle(List<ResourceReference> css) {
-        // general css
-        // css.add(Colors.COLORS_CSS);
-        // css.add(WeLoveIcons.WE_LOVE_ICONS_CSS); // moved to places where used
-        css.add(WicketCSSRoot.GENERAL);
-        // css.add(WicketCSSRoot.CLEARFIX);
-
-        // generated with zuss css (moved)
-        // css.add(WicketCSSRoot.HORIZONTAL_MENU);
-        // css.add(WicketCSSRoot.FORMS);
-        // css.add(WicketCSSRoot.TABLES);
-    }
-
-    protected void addToCssResources(List<ResourceReference> css) {
-        addToCssBundle(css);
-    }
-
-    protected void initDefaultResources() {
-        // disable bundling: css image url bug?
-
-        // addToJsBundle(jsResources);
-        // if (WicketApplication.get().usesDeploymentConfig() && !jsResources.isEmpty()) {
-        // jsBundleReference = getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "jsbundle.js", // virtual name
-        // jsResources.toArray(new JavaScriptResourceReference[jsResources.size()]));
-        // jsResources.clear();
-        // }
-        addToJsResources(jsResources);
-
-        // addToCssBundle(cssResources);
-        // if (WicketApplication.get().usesDeploymentConfig() && !cssResources.isEmpty()) {
-        // cssBundleReference = getResourceBundles().addCssBundle(WicketCSSRoot.class, "cssbundle.css", // virtual name
-        // cssResources.toArray(new CssResourceReference[cssResources.size()]));
-        // cssResources.clear();
-        // }
-        addToCssResources(cssResources);
     }
 
     protected void initStore() {
@@ -304,7 +231,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
@@ -358,38 +285,6 @@ public class WicketApplication extends WebApplication {
         public DateFormat getDateFormat(Locale locale) {
             return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
         }
-    }
-
-    public JavaScriptReferenceHeaderItem getJsBundleReference() {
-        return this.jsBundleReference;
-    }
-
-    public CssReferenceHeaderItem getCssBundleReference() {
-        return this.cssBundleReference;
-    }
-
-    public void setJsBundleReference(JavaScriptReferenceHeaderItem jsBundleReference) {
-        this.jsBundleReference = jsBundleReference;
-    }
-
-    public void setCssBundleReference(CssReferenceHeaderItem cssBundleReference) {
-        this.cssBundleReference = cssBundleReference;
-    }
-
-    public List<ResourceReference> getJsResources() {
-        return this.jsResources;
-    }
-
-    public List<ResourceReference> getCssResources() {
-        return this.cssResources;
-    }
-
-    public void setJsResources(List<ResourceReference> jsResources) {
-        this.jsResources = jsResources;
-    }
-
-    public void setCssResources(List<ResourceReference> cssResources) {
-        this.cssResources = cssResources;
     }
 
     public ZussStyle getZussStyle() {

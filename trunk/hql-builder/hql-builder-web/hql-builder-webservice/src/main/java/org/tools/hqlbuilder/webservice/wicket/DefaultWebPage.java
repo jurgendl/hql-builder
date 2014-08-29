@@ -5,16 +5,14 @@ import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -29,6 +27,7 @@ public class DefaultWebPage extends WebPage {
 
     protected transient final Logger logger;
 
+    /** default cache duration when deployed: 1 day */
     protected Duration defaultCacheDuration = Duration.ONE_DAY;
 
     protected boolean debugbar = false;
@@ -54,8 +53,8 @@ public class DefaultWebPage extends WebPage {
             add(new EmptyPanel("debug").setVisible(false));
         }
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
-        add(new Label("notifytop"));
-        add(new Label("notifybottom"));
+        add(new Label("notifytop", Model.of("")));
+        add(new Label("notifybottom", Model.of("")));
     }
 
     @Override
@@ -68,6 +67,8 @@ public class DefaultWebPage extends WebPage {
         if (!isEnabledInHierarchy()) {
             return;
         }
+
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
 
         addDefaultResources(response);
         addThemeResources(response);
@@ -85,7 +86,7 @@ public class DefaultWebPage extends WebPage {
     }
 
     /**
-     * add jquery theme resources
+     * add jquery-ui/prime-ui theme resources
      *
      * @see {@link WicketSession#getJQueryUITheme()}
      */
@@ -98,19 +99,8 @@ public class DefaultWebPage extends WebPage {
         response.render(CssHeaderItem.forReference(PrimeUI.forJQueryUITheme(WicketSession.get().getJQueryUITheme())));
     }
 
-    protected void addDefaultResources(IHeaderResponse response) {
-        for (ResourceReference resource : WicketApplication.get().getCssResources()) {
-            response.render(CssHeaderItem.forReference(CssResourceReference.class.cast(resource)));
-        }
-        for (ResourceReference resource : WicketApplication.get().getJsResources()) {
-            response.render(JavaScriptHeaderItem.forReference(JavaScriptResourceReference.class.cast(resource)));
-        }
-        if (WicketApplication.get().getJsBundleReference() != null) {
-            response.render(WicketApplication.get().getJsBundleReference());
-        }
-        if (WicketApplication.get().getCssBundleReference() != null) {
-            response.render(WicketApplication.get().getCssBundleReference());
-        }
+    protected void addDefaultResources(@SuppressWarnings("unused") IHeaderResponse response) {
+        //
     }
 
     protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {
