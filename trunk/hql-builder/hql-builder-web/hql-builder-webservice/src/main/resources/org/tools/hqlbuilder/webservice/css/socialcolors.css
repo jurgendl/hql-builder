@@ -1,13 +1,13 @@
-.guest-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.cal-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.call-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.cart-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.email-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.podcast-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.print-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.guest-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.cal-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.call-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.cart-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.email-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.podcast-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.print-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
 .rss-color{background:rgb(209,93,28)}
 .google-color{background:rgb(36,116,243)}
-.googleplay-color{background:rgb(88,225,200);color:rgb(0,0,0)}
+.googleplay-color{background:rgb(88,225,200);color:rgb(0,0,0) !important}
 .googleplus-color{background:#DD4B39}
 .appnet-color{background:#D87A68}
 .bitbucket-color{background:#205081}
@@ -17,7 +17,7 @@
 .github-color{background:#444444}
 .instagram-color{background:#3F729B}
 .openid-color{background:#F7931E}
-.reddit-color{background:#EFF7FF;color:rgb(0,0,0)}
+.reddit-color{background:#EFF7FF;color:rgb(0,0,0) !important}
 .soundcloud-color{background:#FF5500}
 .tumblr-color{background:#CB2027}
 .twitter-color{background:#55ACEE}
@@ -32,7 +32,7 @@
 .android-color{background:rgb(146,188,72)}
 .amazon-color{background:rgb(250,152,11)}
 .bitcoin-color{background:rgb(244,149,30)}
-.chrome-color{background:rgb(240,207,24);color:rgb(0,0,0)}
+.chrome-color{background:rgb(240,207,24);color:rgb(0,0,0) !important}
 .flattr-color{background:rgb(241,153,36)}
 .html5-color{background:rgb(228,76,36)}
 .paypal-color{background:#253B80}
@@ -47,11 +47,11 @@
 .stumbleupon-color{background:rgb(248,84,36)}
 .windows-color{background:#0072c6}
 .myspace-color{background:rgb(5,51,155)}
-.wikipedia-color{background:rgb(218,218,218);color:rgb(0,0,0)}
+.wikipedia-color{background:rgb(218,218,218);color:rgb(0,0,0) !important}
 .xing-color{background:rgb(11,104,105)}
-.scribd-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.angellist-color{background:rgb(255,255,255);color:rgb(0,0,0)}
-.aol-color{background:rgb(242,206,4);color:rgb(0,0,0)}
+.scribd-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.angellist-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
+.aol-color{background:rgb(242,206,4);color:rgb(0,0,0) !important}
 .delicious-color{background:#0b79e5}
 .drupal-color{background:rgb(4,116,188)}
 .disqus-color{background:#2e9fff}
@@ -61,15 +61,15 @@
 .eventful-color{background:rgb(68,172,20)}
 .evernote-color{background:rgb(124,195,68)}
 .fivehundredpx-color{background:rgb(8,172,236)}
-.gowalla-color{background:rgb(252,226,114);color:rgb(0,0,0)}
+.gowalla-color{background:rgb(252,226,114);color:rgb(0,0,0) !important}
 .grooveshark-color{background:#f86f05}
-.instapaper-color{background:rgb(255,255,255);color:rgb(0,0,0)}
+.instapaper-color{background:rgb(255,255,255);color:rgb(0,0,0) !important}
 .intensedebate-color{background:rgb(31,168,221)}
 .lanyrd-color{background:rgb(39,91,167)}
 .lastfm-color{background:rgb(212,20,4)}
 .meetup-color{background:rgb(228,28,52)}
 .ninetyninedesigns-color{background:rgb(216,110,68)}
-.opentable-color{background:rgb(202,201,153);color:rgb(0,0,0)}
+.opentable-color{background:rgb(202,201,153);color:rgb(0,0,0) !important}
 .pinboard-color{background:rgb(114,155,244)}
 .plancast-color{background:rgb(40,28,28)}
 .plurk-color{background:#cf682f}
