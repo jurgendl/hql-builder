@@ -26,9 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
-import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
-
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
@@ -45,7 +42,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     protected IModel<T> valueModel;
 
     /** normally a lambda path */
-    protected P propertyPath;
+    protected transient P propertyPath;
 
     protected Class<T> propertyType;
 
@@ -318,8 +315,6 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings())
-                .getJQueryUIReference()));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
         response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
     }

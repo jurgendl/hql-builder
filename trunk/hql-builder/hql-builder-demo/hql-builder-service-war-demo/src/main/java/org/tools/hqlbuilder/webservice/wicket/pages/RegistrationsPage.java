@@ -85,7 +85,7 @@ public class RegistrationsPage extends BasePage {
             @Override
             public void edit(AjaxRequestTarget target, Registration object) {
                 formPanel.setVisible(true);
-                formPanel.setDefaultModelObject(object);
+                formPanel.getFormModel().setObject(object);
                 if (target != null) {
                     target.add(formPanel);
                 }
@@ -94,7 +94,7 @@ public class RegistrationsPage extends BasePage {
             @Override
             public void add(AjaxRequestTarget target) {
                 formPanel.setVisible(true);
-                formPanel.setDefaultModelObject(new Registration());
+                formPanel.getFormModel().setObject(new Registration());
                 if (target != null) {
                     target.add(formPanel);
                     @SuppressWarnings({ "unused", "unchecked" })
@@ -129,7 +129,7 @@ public class RegistrationsPage extends BasePage {
 
             @Override
             public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
-                formPanel.setDefaultModelObject(new Registration());
+                formPanel.getFormModel().setObject(new Registration());
                 formPanel.setVisible(false);
                 table.setVisible(true);
                 if (target != null) {
