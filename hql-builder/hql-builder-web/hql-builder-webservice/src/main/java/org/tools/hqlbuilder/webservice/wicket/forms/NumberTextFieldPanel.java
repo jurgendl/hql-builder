@@ -6,6 +6,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/spinner.html
+ */
 public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, TextField<N>, FormElementSettings> {
     private static final long serialVersionUID = 2490571767214451220L;
 
