@@ -8,6 +8,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/inputtext.html
+ */
 public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>, FormElementSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 
