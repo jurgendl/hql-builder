@@ -10,6 +10,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/listbox.html
+ */
 public class ListPanel<T extends Serializable> extends SelectPanel<T, Select<T>, ListSettings> {
     private static final long serialVersionUID = 6519523561212631975L;
 

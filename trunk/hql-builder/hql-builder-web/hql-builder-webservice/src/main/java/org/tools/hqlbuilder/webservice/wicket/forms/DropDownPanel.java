@@ -10,6 +10,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/dropdown.html
+ */
 public class DropDownPanel<T extends Serializable> extends SelectPanel<T, Select<T>, DropDownSettings> {
     private static final long serialVersionUID = -4693793144091792295L;
 
