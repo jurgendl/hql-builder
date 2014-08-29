@@ -8,6 +8,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/inputtextarea.html
+ */
 public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextArea<T>, TextAreaSettings> {
     private static final long serialVersionUID = 7189330022100675150L;
 

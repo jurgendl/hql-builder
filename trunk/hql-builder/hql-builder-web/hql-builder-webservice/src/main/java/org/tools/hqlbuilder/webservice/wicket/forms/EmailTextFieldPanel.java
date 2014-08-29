@@ -7,6 +7,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.model.IModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/inputtext.html
+ */
 public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextField, FormElementSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 

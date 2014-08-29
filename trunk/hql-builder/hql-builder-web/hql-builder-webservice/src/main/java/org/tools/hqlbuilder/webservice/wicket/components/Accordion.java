@@ -19,6 +19,10 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
+/**
+ * @see http://jqueryui.com/accordion/
+ * @see http://www.primefaces.org/primeui/accordion.html
+ */
 public class Accordion extends Panel {
     private static final long serialVersionUID = -1117839412897961353L;
 

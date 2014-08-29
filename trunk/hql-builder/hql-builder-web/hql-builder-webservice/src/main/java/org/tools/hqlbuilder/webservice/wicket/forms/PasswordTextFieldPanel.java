@@ -6,6 +6,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
 
+/**
+ * @see http://www.primefaces.org/primeui/password.html
+ */
 public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, PasswordTextField, FormElementSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 

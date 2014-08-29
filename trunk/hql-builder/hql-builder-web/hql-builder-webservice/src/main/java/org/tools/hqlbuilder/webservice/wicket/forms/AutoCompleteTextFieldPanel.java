@@ -16,6 +16,9 @@ import org.tools.hqlbuilder.common.CommonUtils;
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 import com.googlecode.wicket.jquery.ui.form.autocomplete.AutoCompleteTextField;
 
+/**
+ * @see http://www.primefaces.org/primeui/inputtext.html
+ */
 public class AutoCompleteTextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>, AutoCompleteTextFieldSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 
