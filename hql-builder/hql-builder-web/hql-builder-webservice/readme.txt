@@ -42,7 +42,7 @@ http://plugins.adchsm.me/slidebars/usage.php
 http://www.runningcoder.org/jquerytypeahead/demo/
 http://designmodo.com/jquery-ui-framework-plugins/
 http://www.inqbation.com/css3-and-html5-social-media-icons/
-
+http://css-tricks.com/css-animation-tricks/
 
 http://www.99points.info/2011/01/recaptcha-style-captcha-with-jquery-and-php/
 https://developers.google.com/recaptcha/docs/java
