@@ -43,14 +43,14 @@ http://www.runningcoder.org/jquerytypeahead/demo/
 http://designmodo.com/jquery-ui-framework-plugins/
 http://www.inqbation.com/css3-and-html5-social-media-icons/
 http://css-tricks.com/css-animation-tricks/
-
+http://www.famfamfam.com/lab/icons/flags/
 http://www.99points.info/2011/01/recaptcha-style-captcha-with-jquery-and-php/
 https://developers.google.com/recaptcha/docs/java
 https://code.google.com/p/recaptcha4j/
-
+http://fancyapps.com/fancybox/#examples
 http://syddev.com/jquery.shadow/
 http://css-tricks.com/frosting-glass-css-filters/
-
+http://www.enable-javascript.com/
 
 
 
