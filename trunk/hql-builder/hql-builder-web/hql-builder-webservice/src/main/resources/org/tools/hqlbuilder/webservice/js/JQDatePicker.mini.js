@@ -1,0 +1,1 @@
+function initJQDatepicker(b,c,a,e){var d=$.datepicker.regional;d.buttonImage=e;d.dateFormat=a;d.changeMonth=true;d.changeYear=true;d.showOn="button";d.buttonImageOnly=true;$("#"+b).datepicker(d)};

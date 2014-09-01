@@ -51,6 +51,6 @@ http://fancyapps.com/fancybox/#examples
 http://syddev.com/jquery.shadow/
 http://css-tricks.com/frosting-glass-css-filters/
 http://www.enable-javascript.com/
-
+http://css-tricks.com/favicon-quiz/
 
 

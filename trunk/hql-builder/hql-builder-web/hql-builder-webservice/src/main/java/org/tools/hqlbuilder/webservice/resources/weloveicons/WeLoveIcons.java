@@ -43,7 +43,7 @@ public class WeLoveIcons {
                     "maki",
                     "openwebicons",
                     "typicons",
-            "zocial" };
+                    "zocial" };
             for (String t : type) {
                 System.out.println("public static enum " + Character.toUpperCase(t.charAt(0)) + t.substring(1) + " {");
                 Matcher matcher = Pattern.compile("class=\"" + t + "-[^\"]+\"").matcher(html);
@@ -60,7 +60,7 @@ public class WeLoveIcons {
                 System.out.println(";");
                 System.out.println("private final String code;");
                 System.out.println(Character.toUpperCase(t.charAt(0)) + t.substring(1) + "(String code) { this.code = code; }");
-                System.out.println("public String getUrl() { return this.code; }");
+                System.out.println("public String getCode() { return this.code; }");
                 System.out.println("}");
             }
         } catch (Exception ex) {
@@ -68,7 +68,34 @@ public class WeLoveIcons {
         }
     }
 
-    public static enum Brandico {
+    public static interface WLIFIcons {
+        public String getCode();
+    }
+
+    public static enum WLIFont {
+        brandico(Brandico.values()), //
+        entypo(Entypo.values()), //
+        fontawesome(Fontawesome.values()), //
+        fontelico(Fontelico.values()), //
+        iconicfill(Iconicfill.values()), //
+        iconicstroke(Iconicstroke.values()), //
+        maki(Maki.values()), //
+        openwebicons(Openwebicons.values()), //
+        typicons(Typicons.values()), //
+        zocial(Zocial.values());//
+
+        final WLIFIcons[] icons;
+
+        WLIFont(WLIFIcons[] icons) {
+            this.icons = icons;
+        }
+
+        public WLIFIcons[] getIcons() {
+            return this.icons;
+        }
+    }
+
+    public static enum Brandico implements WLIFIcons {
         blogger("brandico-blogger") //
         , blogger_rect("brandico-blogger-rect") //
         , deviantart("brandico-deviantart") //
@@ -108,12 +135,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Entypo {
+    public static enum Entypo implements WLIFIcons {
         address("entypo-address") //
         , adjust("entypo-adjust") //
         , air("entypo-air") //
@@ -406,12 +434,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Fontawesome {
+    public static enum Fontawesome implements WLIFIcons {
         heart("fontawesome-heart") //
         , adjust("fontawesome-adjust") //
         , align_center("fontawesome-align-center") //
@@ -668,12 +697,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Fontelico {
+    public static enum Fontelico implements WLIFIcons {
         chrome("fontelico-chrome") //
         , emo_angry("fontelico-emo-angry") //
         , emo_beer("fontelico-emo-beer") //
@@ -711,12 +741,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Iconicfill {
+    public static enum Iconicfill implements WLIFIcons {
         aperture("iconicfill-aperture") //
         , aperture_alt("iconicfill-aperture-alt") //
         , arrow_down("iconicfill-arrow-down") //
@@ -875,12 +906,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Iconicstroke {
+    public static enum Iconicstroke implements WLIFIcons {
         aperture("iconicstroke-aperture") //
         , aperture_alt("iconicstroke-aperture-alt") //
         , arrow_down("iconicstroke-arrow-down") //
@@ -1039,12 +1071,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Maki {
+    public static enum Maki implements WLIFIcons {
         aboveground_rail("maki-aboveground-rail") //
         , airfield("maki-airfield") //
         , airport("maki-airport") //
@@ -1115,12 +1148,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Openwebicons {
+    public static enum Openwebicons implements WLIFIcons {
         activity("openwebicons-activity") //
         , apml("openwebicons-apml") //
         , browserid("openwebicons-browserid") //
@@ -1176,12 +1210,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Typicons {
+    public static enum Typicons implements WLIFIcons {
         anchor("typicons-anchor") //
         , archive("typicons-archive") //
         , back("typicons-back") //
@@ -1276,12 +1311,13 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
 
-    public static enum Zocial {
+    public static enum Zocial implements WLIFIcons {
         acrobat("zocial-acrobat") //
         , amazon("zocial-amazon") //
         , android("zocial-android") //
@@ -1384,9 +1420,9 @@ public class WeLoveIcons {
             this.code = code;
         }
 
-        public String getUrl() {
+        @Override
+        public String getCode() {
             return this.code;
         }
     }
-
 }
