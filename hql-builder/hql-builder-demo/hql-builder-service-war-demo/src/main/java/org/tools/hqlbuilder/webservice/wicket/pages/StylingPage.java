@@ -1,14 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.TreeSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -19,9 +13,6 @@ import org.tools.hqlbuilder.webservice.wicket.components.Growl;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlMessage;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlSeverity;
 import org.tools.hqlbuilder.webservice.wicket.components.Notify;
-import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel;
-import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel.Social;
-import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings.ColorFormat;
@@ -111,26 +102,6 @@ public class StylingPage extends BasePage {
                 };
                 stylingform.addDefaultRow(cpp);
             }
-        }
-
-        if (true) {
-            ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
-            add(new ListView<Social>("socialbuttons", options) {
-                private static final long serialVersionUID = -7495456081110874114L;
-
-                @Override
-                protected void populateItem(ListItem<Social> item) {
-                    item.add(new SocialPanel("socialbutton", item.getModel(), new SocialPanelSettings().setBarForm(false)));
-                }
-            });
-            add(new ListView<Social>("socialbars", options) {
-                private static final long serialVersionUID = -2422255718832136362L;
-
-                @Override
-                protected void populateItem(ListItem<Social> item) {
-                    item.add(new SocialPanel("socialbar", item.getModel(), new SocialPanelSettings().setBarForm(true)));
-                }
-            });
         }
 
         add(stylingform);

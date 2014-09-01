@@ -33,6 +33,7 @@ public class BasePage extends DefaultWebPage {
                 pages.add(SettingsPage.class);
                 pages.add(StylingPage.class);
                 pages.add(MultiColumnFormPage.class);
+                pages.add(SocialPage.class);
                 return pages;
             }
         };
