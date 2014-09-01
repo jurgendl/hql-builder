@@ -5,8 +5,6 @@ import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
-
 /**
  * @see http://bgrins.github.io/spectrum/#why
  */
@@ -26,9 +24,7 @@ public class Spectrum {
 
     static {
         try {
-            SPECTRUM_CSS.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference())
-                    .addJavaScriptResourceReferenceDependency(
-                            ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings()).getJQueryUIReference());
+            SPECTRUM_JS.addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
