@@ -30,7 +30,6 @@ public class BasePage extends DefaultWebPage {
                 List<Class<? extends DefaultWebPage>> pages = new ArrayList<Class<? extends DefaultWebPage>>();
                 pages.add(RegistrationPage.class);
                 pages.add(RegistrationsPage.class);
-                pages.add(SettingsPage.class);
                 pages.add(StylingPage.class);
                 pages.add(MultiColumnFormPage.class);
                 pages.add(SocialPage.class);
