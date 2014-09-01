@@ -100,8 +100,8 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.i18n(getLocale())));
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
+        response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_I18N_JS));
 
         // http://stackoverflow.com/questions/13824355/how-to-change-jquery-ui-datepicker-z-index-value
         response.render(CssHeaderItem.forCSS("#ui-datepicker-div {z-index: 9999 !important;};", "datepicker_z_index_fix"));
