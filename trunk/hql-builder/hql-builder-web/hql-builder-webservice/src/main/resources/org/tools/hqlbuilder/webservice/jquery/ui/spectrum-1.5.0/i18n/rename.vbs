@@ -3,7 +3,7 @@ Set Folder = objFSO.GetFolder(".")
 
 For Each File In Folder.Files
     sNewFile = File.Name
-    sNewFile = LCase(Replace(sNewFile,"-","_"))
+    sNewFile = Replace(sNewFile,"-","_")
     if (sNewFile<>File.Name) then 
         File.Move(File.ParentFolder+"\"+sNewFile)
     end if
