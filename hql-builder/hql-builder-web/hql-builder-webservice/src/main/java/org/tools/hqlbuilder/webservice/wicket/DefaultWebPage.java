@@ -65,6 +65,7 @@ public class DefaultWebPage extends WebPage {
         }
 
         response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
 
         addDefaultResources(response);
         addThemeResources(response);

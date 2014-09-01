@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5 {
 	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
 	/*Tahoma, Verdana, Geneva*/
 	/*Trebuchet, Tahoma, Arial, sans-serif*/
-	font: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif;
+	font-family: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif;
 }
 
 .centeredvertical, .centeredhorizontal {
