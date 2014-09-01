@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -24,6 +27,10 @@ public class StylingPage extends BasePage {
     public StylingPage(PageParameters parameters) {
         super(parameters);
         setStatelessHint(false);
+
+        add(new LocalesPanel("localespanel", Arrays.asList(Locale.ENGLISH, new Locale("nl"))));
+
+        add(new ThemesPanel("themespanel"));
 
         Example proxy = WebHelper.proxy(Example.class);
 
