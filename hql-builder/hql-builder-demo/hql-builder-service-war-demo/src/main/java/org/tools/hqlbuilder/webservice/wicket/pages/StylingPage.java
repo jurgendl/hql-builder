@@ -48,7 +48,7 @@ public class StylingPage extends BasePage {
         ExampleForm stylingform = new ExampleForm("stylingform");
         stylingform.nextRow();
 
-        boolean dont = false;
+        boolean dont = true;
         if (dont) {
             stylingform.getFormSettings().setColumns(3).setLabelWidth("22em");
 

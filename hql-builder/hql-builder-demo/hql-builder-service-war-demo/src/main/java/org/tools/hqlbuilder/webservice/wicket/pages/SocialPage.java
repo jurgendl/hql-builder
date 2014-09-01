@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons.WLIFIcons;
+import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons.WLIFont;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel;
@@ -20,19 +25,30 @@ public class SocialPage extends DefaultWebPage {
         super(parameters);
         ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
         add(new ListView<Social>("socialbuttons", options) {
-            private static final long serialVersionUID = -7495456081110874114L;
-
             @Override
             protected void populateItem(ListItem<Social> item) {
                 item.add(new SocialPanel("socialbutton", item.getModel(), new SocialPanelSettings().setBarForm(false)));
             }
         });
         add(new ListView<Social>("socialbars", options) {
-            private static final long serialVersionUID = -2422255718832136362L;
-
             @Override
             protected void populateItem(ListItem<Social> item) {
                 item.add(new SocialPanel("socialbar", item.getModel(), new SocialPanelSettings().setBarForm(true)));
+            }
+        });
+        add(new ListView<WLIFont>("icongroupparent", Arrays.asList(WLIFont.values())) {
+            @Override
+            protected void populateItem(ListItem<WLIFont> icongroupparent) {
+                icongroupparent.add(new Label("icongroupname", icongroupparent.getModel().getObject().toString()));
+                WebMarkupContainer icongroup = new WebMarkupContainer("icongroup");
+                icongroupparent.add(icongroup);
+                icongroup.add(new ListView<WLIFIcons>("icon", Arrays.asList(icongroupparent.getModel().getObject().getIcons())) {
+                    @Override
+                    protected void populateItem(ListItem<WLIFIcons> icon) {
+                        icon.add(new AttributeModifier("class", icon.getModel().getObject().getCode()));
+                        icon.add(new AttributeModifier("title", icon.getModel().getObject().toString()));
+                    }
+                });
             }
         });
     }

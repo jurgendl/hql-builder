@@ -19,9 +19,9 @@ public class JQueryDatePicker {
 
     public static final JavaScriptResourceReference DATEPICKER_JS = new JavaScriptResourceReference(WicketJSRoot.class, "JQDatePicker.js");
 
-    public static final Map<Locale, JavaScriptResourceReference> cache = new HashMap<Locale, JavaScriptResourceReference>();
+    private static final Map<Locale, JavaScriptResourceReference> cache = new HashMap<Locale, JavaScriptResourceReference>();
 
-    public static JavaScriptResourceReference get(Locale locale) {
+    private static JavaScriptResourceReference get(Locale locale) {
         String language = locale.getLanguage();
         JavaScriptResourceReference uiRef = new JavaScriptResourceReference(WicketRoot.class, RESOURCE_I18N_PATH + "datepicker-" + language + "-"
                 + locale.getCountry().toUpperCase() + ".js");
@@ -51,7 +51,7 @@ public class JQueryDatePicker {
         return DEFAULT;
     }
 
-    public static JavaScriptResourceReference cached(Locale locale) {
+    public static JavaScriptResourceReference i18n(Locale locale) {
         if (cache.containsKey(locale)) {
             return cache.get(locale);
         }

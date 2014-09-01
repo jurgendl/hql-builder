@@ -9,6 +9,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.resources.spectrum.Spectrum;
+import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
 /**
  * @see http://bgrins.github.io/spectrum
@@ -54,6 +55,10 @@ public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<Stri
 
         response.render(CssHeaderItem.forReference(Spectrum.SPECTRUM_CSS));
         response.render(JavaScriptHeaderItem.forReference(Spectrum.SPECTRUM_JS));
+        JavaScriptResourceReference i18n = Spectrum.i18n(getLocale());
+        if (i18n != null) {
+            response.render(JavaScriptHeaderItem.forReference(i18n));
+        }
         response.render(OnDomReadyHeaderItem.forScript(createLoadScript()));
     }
 
