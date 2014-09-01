@@ -8,6 +8,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
+import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlMessage;
@@ -24,7 +25,9 @@ public class StylingPage extends BasePage {
         super(parameters);
         setStatelessHint(false);
 
-        if (true) {
+        Example proxy = WebHelper.proxy(Example.class);
+
+        {
             final Notify notify = new Notify();
             add(notify);
             add(new AjaxFallbackLink<String>("testnotify", Model.of("testnotify")) {
@@ -34,6 +37,8 @@ public class StylingPage extends BasePage {
                     notify.bottomMessage(target, "bottommessage");
                 }
             });
+        }
+        {
             final Growl growl = new Growl();
             add(growl);
             add(new AjaxFallbackLink<String>("testgrowl", Model.of("testgrowl")) {
@@ -48,8 +53,18 @@ public class StylingPage extends BasePage {
         ExampleForm stylingform = new ExampleForm("stylingform");
         stylingform.nextRow();
 
-        boolean dont = true;
-        if (dont) {
+        {
+            ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
+            colorPickerSettings.setClickoutFiresChange(true);
+            colorPickerSettings.setPreferredFormat(ColorFormat.hsl);
+            colorPickerSettings.setShowButtons(true);
+            colorPickerSettings.setShowPalette(true);
+            colorPickerSettings.setShowInitial(true);
+            colorPickerSettings.setShowInput(true);
+            stylingform.addColorPicker(proxy.getColor(), colorPickerSettings);
+        }
+
+        if (false) {
             stylingform.getFormSettings().setColumns(3).setLabelWidth("22em");
 
             ColorPickerSettings colorPickerSettings = new ColorPickerSettings();

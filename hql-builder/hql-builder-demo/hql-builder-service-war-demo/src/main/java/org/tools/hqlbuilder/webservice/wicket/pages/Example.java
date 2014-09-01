@@ -100,6 +100,8 @@ public class Example implements Serializable {
 
     private Locale locale = Locale.getDefault();
 
+    private String color = "#005599";
+
     public String getPassword() {
         return this.password;
     }
@@ -340,5 +342,13 @@ public class Example implements Serializable {
 
     public void setTextExtra(String textExtra) {
         this.textExtra = textExtra;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
