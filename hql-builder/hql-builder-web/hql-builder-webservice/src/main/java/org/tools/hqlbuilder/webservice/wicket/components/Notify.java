@@ -7,7 +7,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 /**
  * <span wicket:id="notify"></span>

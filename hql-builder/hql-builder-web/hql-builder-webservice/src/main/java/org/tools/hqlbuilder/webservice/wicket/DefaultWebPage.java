@@ -10,15 +10,14 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
-import org.tools.hqlbuilder.webservice.jquery.WicketJQueryRoot;
-import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -88,11 +87,7 @@ public class DefaultWebPage extends WebPage {
      * @see {@link WicketSession#getJQueryUITheme()}
      */
     protected void addThemeResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketJQueryRoot.class, "ui/jquery-ui-themes-1.10.4/themes/"
-                + WicketSession.get().getJQueryUITheme() + "/jquery-ui.css")));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(WicketJQueryRoot.class, "ui/jquery-ui-themes-1.10.4/themes/"
-                + WicketSession.get().getJQueryUITheme() + "/jquery.ui.theme.css")));
-
+        response.render(CssHeaderItem.forReference(JQueryUIThemes.theme(WicketSession.get().getJQueryUITheme())));
         response.render(CssHeaderItem.forReference(PrimeUI.forJQueryUITheme(WicketSession.get().getJQueryUITheme())));
     }
 

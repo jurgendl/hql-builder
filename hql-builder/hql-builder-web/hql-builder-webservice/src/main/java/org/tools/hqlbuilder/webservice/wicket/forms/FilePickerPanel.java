@@ -22,8 +22,8 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.tools.hqlbuilder.webservice.resources.filestyle.FileStyle;
-import org.tools.hqlbuilder.webservice.resources.validation.JQueryValidation;
+import org.tools.hqlbuilder.webservice.jquery.ui.filestyle.FileStyle;
+import org.tools.hqlbuilder.webservice.jquery.ui.validation.JQueryValidation;
 import org.tools.hqlbuilder.webservice.wicket.components.AJAXDownload;
 
 /**

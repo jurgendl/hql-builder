@@ -31,8 +31,8 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
-import org.tools.hqlbuilder.webservice.resources.pocketgrid.PocketGrid;
-import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
+import org.tools.hqlbuilder.webservice.jquery.ui.pocketgrid.PocketGrid;
+import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 

@@ -7,7 +7,6 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.RangeTextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 
 /**
  * @see http://demosthenes.info/blog/757/Playing-With-The-HTML5-range-Slider-Input
@@ -23,7 +22,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
 
     private static final long serialVersionUID = 317764716316092786L;
 
-    public static final JavaScriptResourceReference RANGEFIELD_REFERENCE = new JavaScriptResourceReference(WicketJSRoot.class, "RangeField.js");
+    public static final JavaScriptResourceReference RANGEFIELD_REFERENCE = new JavaScriptResourceReference(RangeFieldPanel.class, "RangeField.js");
 
     protected Output output;
 

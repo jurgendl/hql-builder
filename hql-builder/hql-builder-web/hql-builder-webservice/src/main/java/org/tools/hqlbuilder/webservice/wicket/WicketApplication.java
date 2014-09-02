@@ -44,7 +44,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
-import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;

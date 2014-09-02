@@ -7,7 +7,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
-import org.tools.hqlbuilder.webservice.resources.kendo.KendoUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.kendoui.KendoUI;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.resource.JQueryUIResourceReference;

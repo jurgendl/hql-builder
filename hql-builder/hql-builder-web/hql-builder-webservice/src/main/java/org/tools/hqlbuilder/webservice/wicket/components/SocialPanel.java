@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.tools.hqlbuilder.webservice.resources.weloveicons.WeLoveIcons;
+import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
