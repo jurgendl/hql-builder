@@ -14,7 +14,7 @@ public class JQueryUIThemes {
     }
 
     public static CssResourceReference theme(String theme) {
-        return new CssResourceReference(JQueryUIThemes.class, theme + "/jquery.ui.css").addCssResourceReferenceDependency(base(theme));
+        return new CssResourceReference(JQueryUIThemes.class, theme + "/jquery-ui.css").addCssResourceReferenceDependency(base(theme));
     }
 
     protected static List<String> themes = null;
@@ -23,8 +23,8 @@ public class JQueryUIThemes {
         if (themes == null) {
             themes = new ArrayList<String>();
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(JQueryUIThemes.class.getClassLoader().getResourceAsStream(
-                        JQueryUIThemes.class.getPackage().getName().replace('\\', '/').replace('.', '/') + "/themes.list")));
+                String name = JQueryUIThemes.class.getPackage().getName().replace('\\', '/').replace('.', '/') + "/themes.list";
+                BufferedReader in = new BufferedReader(new InputStreamReader(JQueryUIThemes.class.getClassLoader().getResourceAsStream(name)));
                 String theme;
                 while ((theme = in.readLine()) != null) {
                     themes.add(theme);
