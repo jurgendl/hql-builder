@@ -1,1 +1,0 @@
-dir themes /w /b /on > themes/themes.list

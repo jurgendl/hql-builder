@@ -14,7 +14,7 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.tools.hqlbuilder.webservice.resources.datepicker.JQueryDatePicker;
+import org.tools.hqlbuilder.webservice.jquery.ui.datepicker.JQueryDatePicker;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 

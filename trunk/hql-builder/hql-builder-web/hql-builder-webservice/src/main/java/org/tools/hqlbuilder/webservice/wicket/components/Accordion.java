@@ -14,7 +14,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.tools.hqlbuilder.webservice.resources.prime.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;

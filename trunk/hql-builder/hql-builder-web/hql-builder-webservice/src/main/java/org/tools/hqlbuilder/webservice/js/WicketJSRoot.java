@@ -5,8 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.tools.hqlbuilder.webservice.jquery.WicketJQueryRoot;
-import org.tools.hqlbuilder.webservice.resources.spectrum.Spectrum;
+import org.tools.hqlbuilder.webservice.jquery.ui.spectrum.Spectrum;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
@@ -27,7 +26,7 @@ public class WicketJSRoot {
 
     public static void main(String[] args) {
         minify(WicketJSRoot.class, "", new String[] { "colors", "JQDatePicker", "RangeField", "floatingbar" });
-        minify(WicketJQueryRoot.class, Spectrum.PATH, new String[] { "spectrum" });
+        minify(Spectrum.class, "", new String[] { "spectrum" });
     }
 
     protected static void minify(Class<?> base, String path, String[] sources) {
