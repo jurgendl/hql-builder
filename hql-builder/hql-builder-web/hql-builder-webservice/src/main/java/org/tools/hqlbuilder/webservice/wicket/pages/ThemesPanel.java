@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -51,5 +53,14 @@ public class ThemesPanel extends Panel {
         };
         themeForm.setMarkupId(themeForm.getId());
         add(themeForm.add(changeTheme));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(OnLoadHeaderItem.forScript("$( \"#" + changeTheme.getMarkupId() + "\" ).puidropdown();"));
     }
 }
