@@ -82,7 +82,7 @@
 	</logger>
 
 	<logger name="org.apache.wicket.core.util.resource.locator.ResourceStreamLocator">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<root>
