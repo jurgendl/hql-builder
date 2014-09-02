@@ -5,6 +5,8 @@ import java.util.Locale;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
+import org.tools.hqlbuilder.webservice.wicket.components.LocalesPanel;
+import org.tools.hqlbuilder.webservice.wicket.components.ThemesPanel;
 
 @SuppressWarnings("serial")
 @MountedPage("/settings")

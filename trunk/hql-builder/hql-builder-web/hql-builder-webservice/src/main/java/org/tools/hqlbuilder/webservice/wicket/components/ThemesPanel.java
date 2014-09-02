@@ -1,4 +1,4 @@
-package org.tools.hqlbuilder.webservice.wicket.pages;
+package org.tools.hqlbuilder.webservice.wicket.components;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;

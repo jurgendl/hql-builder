@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
@@ -100,8 +101,8 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
+        response.render(CssHeaderItem.forReference(JQueryDatePicker.DATEPICKER_CSS));
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.i18n(getLocale())));
-        response.render(JQueryDatePicker.getCssFix());
         response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
         response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext();"));
     }
