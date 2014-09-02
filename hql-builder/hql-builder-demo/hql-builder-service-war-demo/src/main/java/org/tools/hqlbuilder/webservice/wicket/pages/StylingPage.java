@@ -11,6 +11,8 @@ import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl;
+import org.tools.hqlbuilder.webservice.wicket.components.LocalesPanel;
+import org.tools.hqlbuilder.webservice.wicket.components.ThemesPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlMessage;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlSeverity;
 import org.tools.hqlbuilder.webservice.wicket.components.Notify;
