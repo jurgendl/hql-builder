@@ -11,15 +11,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://jqueryui.com/button/
  */
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends
-FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
+        FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -637534401267056720L;
 
     protected ListModel<T> choices;
@@ -38,7 +37,6 @@ FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElemen
         CheckBoxMultipleChoice<T> checkBoxMultipleChoice = new CheckBoxMultipleChoice<T>(VALUE, model, choices, renderer);
         checkBoxMultipleChoice.setPrefix("<span class=\"multiselectchoice\">");
         checkBoxMultipleChoice.setSuffix("</span>");
-        checkBoxMultipleChoice.add(new CssClassNameAppender(JQueryUI.jquibuttonset));
         return checkBoxMultipleChoice;
     }
 
@@ -64,6 +62,14 @@ FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElemen
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
+        if (formSettings.isPreferPrime()) {
+            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+            response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId()
+                    + " input[type=\"checkbox\"]').puicheckbox(); });", getComponent().getMarkupId()));
+        } else {
+            response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
+            response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId() + "').buttonset(); });",
+                    getComponent().getMarkupId()));
+        }
     }
 }

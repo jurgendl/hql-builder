@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
@@ -23,7 +24,11 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
     @Override
     protected CheckBox createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
         CheckBox checkBox = new CheckBox(VALUE, model);
-        checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+        if (formSettings.isPreferPrime()) {
+            checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
+        } else {
+            checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+        }
         return checkBox;
     }
 
@@ -76,6 +81,10 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
+        if (formSettings.isPreferPrime()) {
+            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
+        } else {
+            response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
+        }
     }
 }

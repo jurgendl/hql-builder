@@ -30,11 +30,11 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
         @Override
         public int compare(Locale o1, Locale o2) {
             return new CompareToBuilder()//
-            .append(o1.getDisplayLanguage(o1).toLowerCase(), o2.getDisplayLanguage(o2).toLowerCase())//
-            .append(o1.getDisplayCountry(o1).toLowerCase(), o2.getDisplayCountry(o2).toLowerCase())//
-            .append(o1.getDisplayVariant(o1).toLowerCase(), o2.getDisplayVariant(o2).toLowerCase())//
-            .append(o1.getDisplayScript(o1).toLowerCase(), o2.getDisplayScript(o2).toLowerCase())//
-            .toComparison();//
+                    .append(o1.getDisplayLanguage(o1).toLowerCase(), o2.getDisplayLanguage(o2).toLowerCase())//
+                    .append(o1.getDisplayCountry(o1).toLowerCase(), o2.getDisplayCountry(o2).toLowerCase())//
+                    .append(o1.getDisplayVariant(o1).toLowerCase(), o2.getDisplayVariant(o2).toLowerCase())//
+                    .append(o1.getDisplayScript(o1).toLowerCase(), o2.getDisplayScript(o2).toLowerCase())//
+                    .toComparison();//
         }
     }
 
@@ -120,7 +120,6 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-        response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
         response.render(CssHeaderItem.forReference(FLAGS_CSS));
         {
             StringBuilder script = new StringBuilder("var options_").append(getMarkupId()).append(" = new Array(\n");
@@ -132,7 +131,7 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
                     add = true;
                 }
                 script.append("{ label: '").append(getLabel(locale)).append("' , value: '").append(getId(locale)).append("' , country: '")
-                .append(locale.getCountry().toLowerCase()).append("' }");
+                        .append(locale.getCountry().toLowerCase()).append("' }");
                 script.append("\n");
             }
             script.append(");\n");
@@ -142,9 +141,9 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
             StringBuilder script = new StringBuilder();
             script.append("$('#").append(getMarkupId()).append("').text('');\n");
             script.append("$('#").append(getMarkupId()).append("').puidropdown({ filter: true, filterMatchMode: 'contains', data: options_")
-            .append(getMarkupId())
-            .append(", content: function(option) { return '<img class=\"flag flag-' + option['country'] + '\"/> ' + option['label']; } ")
-            .append("});\n");
+                    .append(getMarkupId())
+                    .append(", content: function(option) { return '<img class=\"flag flag-' + option['country'] + '\"/> ' + option['label']; } ")
+                    .append("});\n");
             response.render(OnLoadHeaderItem.forScript(script.toString()));
         }
     }

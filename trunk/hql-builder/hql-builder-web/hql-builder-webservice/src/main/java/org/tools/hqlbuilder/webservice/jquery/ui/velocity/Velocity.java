@@ -1,9 +1,7 @@
 package org.tools.hqlbuilder.webservice.jquery.ui.velocity;
 
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
-import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
-
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
 /**
  * Velocity animation framework version 0.11.9
@@ -12,7 +10,13 @@ import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
  * @see http://julian.com/research/velocity/
  */
 public class Velocity {
-    public static JavaScriptResourceReference VELOCITY_JS = new JavaScriptResourceReference(Velocity.class, "jquery.velocity.js")
-            .addJavaScriptResourceReferenceDependency(((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings())
-                    .getJQueryUIReference());
+    public static JavaScriptResourceReference VELOCITY_JS = new JavaScriptResourceReference(Velocity.class, "jquery.velocity.js");
+
+    static {
+        try {
+            VELOCITY_JS.addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
+        } catch (Exception ex) {
+            //
+        }
+    }
 }

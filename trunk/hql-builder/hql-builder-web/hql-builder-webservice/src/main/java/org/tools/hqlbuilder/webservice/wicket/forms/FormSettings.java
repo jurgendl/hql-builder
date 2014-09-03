@@ -41,6 +41,8 @@ public class FormSettings implements Serializable {
 
     protected String labelWidth = "12em";
 
+    protected boolean preferPrime = true;
+
     public FormSettings() {
         super();
     }
@@ -229,6 +231,15 @@ public class FormSettings implements Serializable {
 
     public FormSettings setLabelWidth(String labelWidth) {
         this.labelWidth = labelWidth;
+        return this;
+    }
+
+    public boolean isPreferPrime() {
+        return this.preferPrime;
+    }
+
+    public FormSettings setPreferPrime(boolean preferPrime) {
+        this.preferPrime = preferPrime;
         return this;
     }
 }
