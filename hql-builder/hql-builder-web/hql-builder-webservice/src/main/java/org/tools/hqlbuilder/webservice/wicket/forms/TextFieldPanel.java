@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/inputtext.html
@@ -29,6 +32,7 @@ public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<
                 onFormComponentTag(tag);
             }
         };
+        textField.add(new CssClassNameAppender(PrimeUI.puiinputtext));
         return textField;
     }
 
@@ -38,6 +42,6 @@ public class TextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

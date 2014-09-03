@@ -2,9 +2,12 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/password.html
@@ -18,7 +21,7 @@ public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, Password
 
     @Override
     protected PasswordTextField createComponent(IModel<String> model, Class<String> valueType) {
-        return new PasswordTextField(VALUE, model) {
+        PasswordTextField passwordTextField = new PasswordTextField(VALUE, model) {
             private static final long serialVersionUID = -7265008846653720072L;
 
             @Override
@@ -27,6 +30,8 @@ public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, Password
                 onFormComponentTag(tag);
             }
         };
+        passwordTextField.add(new CssClassNameAppender(PrimeUI.puipassword));
+        return passwordTextField;
     }
 
     @Override
@@ -35,6 +40,6 @@ public class PasswordTextFieldPanel extends DefaultFormRowPanel<String, Password
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puipassword();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

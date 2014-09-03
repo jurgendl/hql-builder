@@ -2,9 +2,12 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/spinner.html
@@ -18,7 +21,7 @@ public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends Defa
 
     @Override
     protected TextField<N> createComponent(IModel<N> model, Class<N> valueType) {
-        return new TextField<N>(VALUE, model, valueType) {
+        TextField<N> textField = new TextField<N>(VALUE, model, valueType) {
             private static final long serialVersionUID = -8892429029495702023L;
 
             @Override
@@ -32,6 +35,8 @@ public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends Defa
                 tag(tag, "step", settings.getStep());
             }
         };
+        textField.add(new CssClassNameAppender(PrimeUI.puispinner));
+        return textField;
     }
 
     @Override
@@ -45,6 +50,6 @@ public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends Defa
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puispinner();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

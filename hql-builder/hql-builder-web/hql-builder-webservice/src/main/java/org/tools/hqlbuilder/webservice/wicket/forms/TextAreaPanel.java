@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/inputtextarea.html
@@ -35,6 +38,7 @@ public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T
                 onFormComponentTag(tag);
             }
         };
+        textArea.add(new CssClassNameAppender(PrimeUI.puiinputtextarea));
         return textArea;
     }
 
@@ -44,6 +48,6 @@ public class TextAreaPanel<T extends Serializable> extends DefaultFormRowPanel<T
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtextarea();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

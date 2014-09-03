@@ -1,14 +1,17 @@
 package org.tools.hqlbuilder.webservice.wicket.components;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 @SuppressWarnings("serial")
 public class ThemesPanel extends Panel {
@@ -52,6 +55,7 @@ public class ThemesPanel extends Panel {
             }
         };
         themeForm.setMarkupId(themeForm.getId());
+        changeTheme.add(new CssClassNameAppender(PrimeUI.puidropdown));
         add(themeForm.add(changeTheme));
     }
 
@@ -61,6 +65,6 @@ public class ThemesPanel extends Panel {
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + changeTheme.getMarkupId() + "\" ).puidropdown();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

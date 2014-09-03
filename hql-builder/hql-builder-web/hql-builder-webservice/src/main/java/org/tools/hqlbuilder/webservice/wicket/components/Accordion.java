@@ -19,6 +19,8 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+
 /**
  * @see http://jqueryui.com/accordion/
  * @see http://www.primefaces.org/primeui/accordion.html
@@ -44,6 +46,7 @@ public class Accordion extends Panel {
         this.prime = prime;
 
         WebMarkupContainer accordionparent = new WebMarkupContainer(ACCORDION_ID);
+        accordionparent.add(new CssClassNameAppender(PrimeUI.puiaccordion));
         accordionparent.setOutputMarkupId(true);
         add(accordionparent);
 
@@ -83,9 +86,8 @@ public class Accordion extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         if (prime) {
-            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
             response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
-            response.render(OnDomReadyHeaderItem.forScript("$('#" + get(ACCORDION_ID).getMarkupId() + "').puiaccordion();"));
+            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         } else {
             response.render(JavaScriptHeaderItem.forReference(((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings())
                     .getJQueryUIReference()));
