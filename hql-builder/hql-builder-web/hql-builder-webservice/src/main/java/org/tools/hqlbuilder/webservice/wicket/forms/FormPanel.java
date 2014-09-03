@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.pocketgrid.PocketGrid;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
@@ -93,12 +94,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
         response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         renderColumnsCss(response);
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
-        response.render(CssHeaderItem.forCSS(css.toString(), "pocketgrid_" + getId() + "_" + System.currentTimeMillis()));
+        response.render(CssHeaderItem.forCSS(css.toString(), "js_pocketgrid_" + getId()));
     }
 
     protected FormActions<T> getFormActions() {
@@ -307,7 +309,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {

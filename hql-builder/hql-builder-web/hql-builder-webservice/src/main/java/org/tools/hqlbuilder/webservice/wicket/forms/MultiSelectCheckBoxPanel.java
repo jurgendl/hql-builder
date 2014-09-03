@@ -68,8 +68,8 @@ public class MultiSelectCheckBoxPanel<T extends Serializable> extends
                     + " input[type=\"checkbox\"]').puicheckbox(); });", getComponent().getMarkupId()));
         } else {
             response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
-            response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId() + "').buttonset(); });",
-                    getComponent().getMarkupId()));
+            response.render(JavaScriptHeaderItem.forScript("$(function() { $('.multiselectchoice').buttonset(); });", "js_"
+                    + getComponent().getMarkupId()));
         }
     }
 }
