@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -29,7 +27,6 @@ import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
-import org.tools.hqlbuilder.webservice.wicket.forms.AutoCompleteTextFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerHook;
@@ -44,8 +41,6 @@ import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
-import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
-
 @SuppressWarnings("serial")
 public class ExampleForm extends FormPanel<Example> {
     @SpringBean(name = "exampleService")
@@ -59,6 +54,7 @@ public class ExampleForm extends FormPanel<Example> {
             @Override
             public void submitObject(Example example) {
                 exampleService.save(getInstanceId(), example);
+                WicketSession.get().setLocale(example.getLocale());
             }
 
             public String getInstanceId() {
@@ -67,7 +63,11 @@ public class ExampleForm extends FormPanel<Example> {
 
             @Override
             public Example loadObject() {
-                return exampleService.getExample(getInstanceId());
+                Example example = exampleService.getExample(getInstanceId());
+                if (example.getLocale() == null) {
+                    example.setLocale(WicketSession.get().getLocale());
+                }
+                return example;
             }
         });
 
@@ -132,20 +132,7 @@ public class ExampleForm extends FormPanel<Example> {
             addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
             addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
             addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
-            addAutoCompleteTextField(proxy.getLocale(), new AutoCompleteTextFieldSettings(),
-                    new ListModel<Locale>(Arrays.asList(Locale.getAvailableLocales())), new ITextRenderer<Locale>() {
-                        @Override
-                        public String getText(Locale locale) {
-                            String displayCountry = locale.getDisplayCountry(locale);
-                            String displayLanguage = locale.getDisplayLanguage(locale);
-                            return StringUtils.isBlank(displayCountry) ? displayLanguage : displayLanguage + ", " + displayCountry;
-                        }
-
-                        @Override
-                        public String getText(Locale locale, String expression) {
-                            return getText(locale);
-                        }
-                    });
+            addLocalesDropDown(proxy.getLocale(), fset, null, null);
         }
         if (dont) {
             addHidden(proxy.getHidden2());

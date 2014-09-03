@@ -52,9 +52,9 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     protected C component;
 
-    protected final FormSettings formSettings;
+    protected FormSettings formSettings;
 
-    protected final S componentSettings;
+    protected S componentSettings;
 
     public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, S componentSettings) {
         this(valueModel, propertyPath, formSettings, componentSettings);
@@ -204,8 +204,8 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     }
 
     protected void setupRequired(ComponentTag tag) {
-        tag(tag, REQUIRED, (componentSettings != null && componentSettings.isRequired() && formSettings!=null && formSettings.isClientsideRequiredValidation()) ? REQUIRED
-                : null);
+        tag(tag, REQUIRED, (componentSettings != null && componentSettings.isRequired() && formSettings != null && formSettings
+                .isClientsideRequiredValidation()) ? REQUIRED : null);
     }
 
     protected void setupRequired(C component) {
@@ -233,7 +233,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
             return getString(getPropertyName());
         } catch (MissingResourceException ex) {
             logger.info("no translation for " + getPropertyName());
-            return "[" + getPropertyName() + "]";
+            return "[" + getPropertyName() + "_" + getLocale() + "]";
         }
     }
 

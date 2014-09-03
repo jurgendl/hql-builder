@@ -11,11 +11,10 @@ import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl;
-import org.tools.hqlbuilder.webservice.wicket.components.LocalesPanel;
-import org.tools.hqlbuilder.webservice.wicket.components.ThemesPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlMessage;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlSeverity;
 import org.tools.hqlbuilder.webservice.wicket.components.Notify;
+import org.tools.hqlbuilder.webservice.wicket.components.ThemesPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings.ColorFormat;
@@ -26,8 +25,6 @@ public class StylingPage extends BasePage {
     public StylingPage(PageParameters parameters) {
         super(parameters);
         setStatelessHint(false);
-
-        add(new LocalesPanel("localespanel"));
 
         add(new ThemesPanel("themespanel"));
 

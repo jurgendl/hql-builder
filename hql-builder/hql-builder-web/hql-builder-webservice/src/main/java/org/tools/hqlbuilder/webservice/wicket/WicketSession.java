@@ -9,7 +9,7 @@ public class WicketSession extends WebSession {
     private static final long serialVersionUID = 5401902370873451702L;
 
     /** default "smoothness" */
-    private String jqueryUITheme = "smoothness";
+    protected String jqueryUITheme = "smoothness";
 
     public WicketSession(Request request) {
         super(request);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Hex;
@@ -394,6 +395,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, DropDownSettings componentSettings, IOptionRenderer<F> renderer,
             ListModel<F> choices) {
         return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices));
+    }
+
+    public LocaleDropDownPanel addLocalesDropDown(Locale propertyPath, FormElementSettings componentSettings, IChoiceRenderer<Locale> renderer,
+            ListModel<Locale> choices) {
+        return addCustomRow(new LocaleDropDownPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, DropDownSettings componentSettings, IOptionRenderer<F> renderer,

@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.name;
+import static org.tools.hqlbuilder.common.CommonUtils.name;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -131,7 +131,7 @@ public class EnhancedTable<T extends Serializable> extends Panel {
             label = parent.getString(property);
         } catch (MissingResourceException ex) {
             logger.error(parent.getClass().getName() + ": no translation for " + property);
-            label = "[" + property + "]";
+            label = "[" + property + "_" + parent.getLocale() + "]";
         }
         return new Model<String>(label);
     }
