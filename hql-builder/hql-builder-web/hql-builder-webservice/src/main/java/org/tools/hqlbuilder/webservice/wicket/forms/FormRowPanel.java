@@ -10,7 +10,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
@@ -316,6 +315,5 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-        response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
     }
 }

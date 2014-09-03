@@ -1,17 +1,28 @@
 package org.tools.hqlbuilder.webservice.jquery.ui.jqueryui;
 
+import org.apache.wicket.request.resource.ResourceReference;
 import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
-import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
+import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
+
+import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 
 /**
  * version 1.11.1
  */
 public class JQueryUI {
+    /**
+     * do not include directly: use "getJQueryUIReference()"
+     */
     public static JavaScriptResourceReference JQUERY_UI_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-1.11.1.js")
             .addJavaScriptResourceReferenceDependency(JQuery.JQUERY_JS);
 
-    public static JavaScriptResourceReference JQUERY_UI_FACTORY_JS = new JavaScriptResourceReference(PrimeUI.class, "jquery-ui-factory.js")
+    public static ResourceReference getJQueryUIReference() {
+        IJQueryLibrarySettings javaScriptLibrarySettings = (IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings();
+        return javaScriptLibrarySettings.getJQueryUIReference();
+    }
+
+    public static JavaScriptResourceReference JQUERY_UI_FACTORY_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-factory.js")
     .addJavaScriptResourceReferenceDependency(JQUERY_UI_JS);
 
     public static final String jquiaccordion = "jquiaccordion";
