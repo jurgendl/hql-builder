@@ -193,3 +193,10 @@ a:focus {
 	color: #1E608E;
 	border-bottom: 1px solid;
 }
+
+.feedbackPanel {
+	margin: 0px 0px 0px 0px;
+	padding: 2px 3px 2px 3px;
+	display: inline-block;
+	list-style-type: none;
+}

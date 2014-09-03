@@ -105,6 +105,7 @@ public class ExampleForm extends FormPanel<Example> {
         boolean dont = true;
         if (dont) {
             addTextField(proxy.getText(), fset.clone().setRequired(true));
+            addTextField(proxy.getTextAdd(), fset.clone().setRequired(true));
             addEmailTextField(proxy.getEmail(), fset);
             addHidden(proxy.getHidden1());
             addCheckBox(proxy.getCheck(), fset);
