@@ -30,7 +30,8 @@ public class Growl extends Panel {
         setOutputMarkupPlaceholderTag(false);
         setOutputMarkupId(false);
         Label growler = new Label(GROWL_MESSAGE, Model.of(""));
-        growler.add(new CssClassNameAppender(PrimeUI.puiinputtext));
+        growler.setMarkupId(GROWL_MESSAGE);
+        growler.add(new CssClassNameAppender(PrimeUI.puigrowl));
         add(growler);
     }
 
@@ -45,7 +46,7 @@ public class Growl extends Panel {
         for (int i = 0; i < message.length; i++) {
             msg.append(message[i].toString()).append(",");
         }
-        target.appendJavaScript(";$('#" + Growl.this.get(GROWL_MESSAGE).getMarkupId() + "').puigrowl('show',["
+        target.appendJavaScript(";$('#" + get(GROWL_MESSAGE).getOutputMarkupId() + "').puigrowl('show',["
                 + msg.delete(msg.length(), msg.length()).toString() + "]);");
     }
 
