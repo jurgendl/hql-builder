@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.webservice.jquery.ui.primeui;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
@@ -16,7 +15,7 @@ public class PrimeUI {
 
     static {
         try {
-            PRIME_UI_JS.addJavaScriptResourceReferenceDependency(JQuery.JQUERY_MIGRATE_JS);
+            // PRIME_UI_JS.addJavaScriptResourceReferenceDependency(JQuery.JQUERY_MIGRATE_JS);
             PRIME_UI_JS.addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
         } catch (Exception ex) {
             //
@@ -27,10 +26,10 @@ public class PrimeUI {
             "plugins/cursorposition.js").addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static JavaScriptResourceReference PRIME_UI_PLUGIN_RANGY_INPUT_JS = new JavaScriptResourceReference(PrimeUI.class, "plugins/rangyinput.js")
-    .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
+            .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static JavaScriptResourceReference PRIME_UI_FACTORY_JS = new JavaScriptResourceReference(PrimeUI.class, "primeui-factory.js")
-            .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
+    .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static CssResourceReference PRIME_UI_CSS = new CssResourceReference(PrimeUI.class, "primeui-1.1.css");
 
