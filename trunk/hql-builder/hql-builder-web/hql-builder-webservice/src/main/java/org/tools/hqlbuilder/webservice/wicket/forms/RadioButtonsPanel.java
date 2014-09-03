@@ -3,11 +3,14 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import java.io.Serializable;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://jqueryui.com/button/
@@ -31,6 +34,7 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
         RadioChoice<T> radioChoice = new RadioChoice<T>(VALUE, model, choices, renderer);
         radioChoice.setPrefix("<span class=\"multiselectchoice\">");
         radioChoice.setSuffix("</span>");
+        radioChoice.add(new CssClassNameAppender(JQueryUI.jquibuttonset));
         return radioChoice;
     }
 
@@ -40,6 +44,6 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).buttonset();"));
+        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
     }
 }

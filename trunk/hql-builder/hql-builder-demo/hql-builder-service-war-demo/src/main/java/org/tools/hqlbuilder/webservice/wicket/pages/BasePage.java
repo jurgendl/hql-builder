@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -15,7 +15,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 @SuppressWarnings("serial")
 public class BasePage extends DefaultWebPage {
@@ -54,7 +57,7 @@ public class BasePage extends DefaultWebPage {
             }
         };
         menu.add(menuitem);
-
+        menu.add(new CssClassNameAppender(PrimeUI.puimenubar));
         menu.setOutputMarkupId(true);
         add(menu);
         // menu.setVisible(false);
@@ -66,7 +69,7 @@ public class BasePage extends DefaultWebPage {
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + menu.getMarkupId() + "\" ).puimenubar();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
     }
 }
