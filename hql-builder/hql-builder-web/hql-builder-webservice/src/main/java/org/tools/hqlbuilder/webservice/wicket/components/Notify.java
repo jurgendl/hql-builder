@@ -29,8 +29,20 @@ public class Notify extends Panel {
         setRenderBodyOnly(true);
         setOutputMarkupPlaceholderTag(false);
         setOutputMarkupId(false);
-        add(new Label(NOTIFY_TOP, Model.of("")).add(new CssClassNameAppender(PrimeUI.puinotifytop)));
-        add(new Label(NOTIFY_BOTTOM, Model.of("")).add(new CssClassNameAppender(PrimeUI.puinotifybottom)));
+        {
+            Label notifytop = new Label(NOTIFY_TOP, Model.of(""));
+            notifytop.setMarkupId(NOTIFY_TOP);
+            notifytop.setOutputMarkupId(true);
+            notifytop.add(new CssClassNameAppender(PrimeUI.puinotifytop));
+            add(notifytop);
+        }
+        {
+            Label notifybottom = new Label(NOTIFY_BOTTOM, Model.of(""));
+            notifybottom.setMarkupId(NOTIFY_BOTTOM);
+            notifybottom.setOutputMarkupId(true);
+            notifybottom.add(new CssClassNameAppender(PrimeUI.puinotifybottom));
+            add(notifybottom);
+        }
     }
 
     @Override
