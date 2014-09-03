@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" xml:lang="en" lang="en">
-
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
 
 	<form wicket:id="form">
 		<fieldset class="formheader" wicket:id="form.header">
+			<div wicket:id="allMessagesTop" class="ui-state-highlight ui-corner-all ui-state-error-text"></div>
 		</fieldset>
 		<span class="formbody" wicket:id="form.body">
 			<div class="formrow block-group" wicket:id="form.row.repeater">
@@ -13,6 +13,9 @@
 				</span>
 			</div>
 		</span>
+		<fieldset class="formfooter" wicket:id="form.footer">
+			<div wicket:id="allMessagesBottom" class="ui-state-highlight ui-corner-all ui-state-error-text"></div>
+		</fieldset>
 		<span wicket:id="form.actions">
 			<fieldset class="formactions">
 				<input wicket:id="form.submit" type="submit" value="[Submit]" wicket:message="value:submit.label"></input>
@@ -20,13 +23,7 @@
 				<input wicket:id="form.cancel" type="button" value="[Cancel]" wicket:message="value:cancel.label"></input>
 			</fieldset>
 		</span>
-		<fieldset class="formfooter" wicket:id="form.footer">
-			<div wicket:id="allMessages"></div>
-		</fieldset>
 	</form>
 
-	<!-- <div wicket:id="formnotification"></div> -->
-
 </wicket:panel>
-
 </html>

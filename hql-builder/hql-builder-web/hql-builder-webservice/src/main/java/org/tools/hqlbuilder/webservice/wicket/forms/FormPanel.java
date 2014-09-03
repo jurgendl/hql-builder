@@ -229,7 +229,22 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             WebMarkupContainer formFooter = new WebMarkupContainer(FORM_FOOTER);
             form.add(formFooter);
 
-            formFooter.add(new FeedbackPanel("allMessages"));
+            formHeader.add(new FeedbackPanel("allMessagesTop") {
+                private static final long serialVersionUID = -8111670292045284274L;
+
+                @Override
+                public boolean isVisible() {
+                    return super.isVisible() && anyMessage();
+                }
+            });
+            formFooter.add(new FeedbackPanel("allMessagesBottom") {
+                private static final long serialVersionUID = 5678584511310860629L;
+
+                @Override
+                public boolean isVisible() {
+                    return super.isVisible() && anyMessage();
+                }
+            });
         }
         return form;
     }
@@ -309,7 +324,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {

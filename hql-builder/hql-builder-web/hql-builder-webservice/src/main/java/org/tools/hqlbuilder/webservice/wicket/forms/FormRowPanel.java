@@ -117,7 +117,9 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
                 if (formSettings != null) {
                     StringBuffer asterisktHtml = new StringBuffer(200);
                     if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
-                        asterisktHtml.append("<span class=\"fontawesome-asterisk " + formSettings.getRequiredMarkerClass() + "\"/>");
+                        asterisktHtml
+                                .append("&nbsp;<span class=\"ui-state-highlight ui-corner-all ui-state-error-text\"><span class=\"fontawesome-exclamation-sign "
+                                        + formSettings.getRequiredMarkerClass() + "\"></span></span>");
                     }
                     response.write(asterisktHtml);
                 }
