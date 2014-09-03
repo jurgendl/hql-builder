@@ -98,7 +98,7 @@ public class Example implements Serializable {
 
     private Byte byter = (byte) 50;
 
-    private Locale locale = Locale.getDefault();
+    private Locale locale = null;
 
     private String color = "#005599";
 
