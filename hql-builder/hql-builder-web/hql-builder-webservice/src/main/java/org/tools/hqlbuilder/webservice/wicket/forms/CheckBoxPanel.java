@@ -2,10 +2,13 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://jqueryui.com/button/
@@ -19,7 +22,9 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
 
     @Override
     protected CheckBox createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
-        return new CheckBox(VALUE, model);
+        CheckBox checkBox = new CheckBox(VALUE, model);
+        checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+        return checkBox;
     }
 
     @Override
@@ -71,6 +76,6 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).button();"));
+        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
     }
 }

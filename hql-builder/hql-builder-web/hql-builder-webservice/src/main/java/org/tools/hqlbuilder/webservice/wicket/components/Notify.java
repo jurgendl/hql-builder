@@ -9,6 +9,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+
 /**
  * <span wicket:id="notify"></span>
  *
@@ -28,20 +30,15 @@ public class Notify extends Panel {
         setRenderBodyOnly(true);
         setOutputMarkupPlaceholderTag(false);
         setOutputMarkupId(false);
-        add(new Label(NOTIFY_TOP, Model.of("")));
-        add(new Label(NOTIFY_BOTTOM, Model.of("")));
+        add(new Label(NOTIFY_TOP, Model.of("")).add(new CssClassNameAppender(PrimeUI.puinotifytop)));
+        add(new Label(NOTIFY_BOTTOM, Model.of("")).add(new CssClassNameAppender(PrimeUI.puinotifybottom)));
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
         response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
-        String js = "$(function() { " + "\n";
-        js += "$('#" + Notify.this.get(NOTIFY_TOP).getMarkupId() + "').puinotify({easing: 'easeInOutCirc', position: 'top'});" + "\n";
-        js += "$('#" + Notify.this.get(NOTIFY_BOTTOM).getMarkupId() + "').puinotify({easing: 'easeInOutCirc', position: 'bottom'});" + "\n";
-        js += "});" + "\n";
-        response.render(JavaScriptHeaderItem.forScript(js, getClass().getName()));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 
     public void bottomMessage(AjaxRequestTarget target, String message) {

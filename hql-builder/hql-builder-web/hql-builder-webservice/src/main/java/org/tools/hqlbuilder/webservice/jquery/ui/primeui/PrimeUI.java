@@ -100,4 +100,10 @@ public class PrimeUI {
     public static final String puisticky = "puisticky";
 
     public static final String puitabview = "puitabview";
+
+    public static final String puigrowl = "puigrowl";
+
+    public static final String puinotifytop = "puinotifytop";
+
+    public static final String puinotifybottom = "puinotifybottom";
 }

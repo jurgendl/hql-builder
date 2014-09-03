@@ -4,19 +4,22 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://jqueryui.com/button/
  */
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends
-        FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
+FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -637534401267056720L;
 
     protected ListModel<T> choices;
@@ -35,6 +38,7 @@ public class MultiSelectCheckBoxPanel<T extends Serializable> extends
         CheckBoxMultipleChoice<T> checkBoxMultipleChoice = new CheckBoxMultipleChoice<T>(VALUE, model, choices, renderer);
         checkBoxMultipleChoice.setPrefix("<span class=\"multiselectchoice\">");
         checkBoxMultipleChoice.setSuffix("</span>");
+        checkBoxMultipleChoice.add(new CssClassNameAppender(JQueryUI.jquibuttonset));
         return checkBoxMultipleChoice;
     }
 
@@ -60,6 +64,6 @@ public class MultiSelectCheckBoxPanel<T extends Serializable> extends
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).buttonset();"));
+        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
     }
 }

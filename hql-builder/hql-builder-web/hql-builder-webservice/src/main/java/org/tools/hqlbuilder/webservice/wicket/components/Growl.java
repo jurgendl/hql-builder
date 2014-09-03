@@ -11,6 +11,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+
 /**
  * <span wicket:id="growl"></span>
  *
@@ -28,18 +30,16 @@ public class Growl extends Panel {
         setRenderBodyOnly(true);
         setOutputMarkupPlaceholderTag(false);
         setOutputMarkupId(false);
-        add(new Label(GROWL_MESSAGE, Model.of("")));
+        Label growler = new Label(GROWL_MESSAGE, Model.of(""));
+        growler.add(new CssClassNameAppender(PrimeUI.puiinputtext));
+        add(growler);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
         response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
-        String js = "$(function() { " + "\n";
-        js += "$('#" + Growl.this.get(GROWL_MESSAGE).getMarkupId() + "').puigrowl();" + "\n";
-        js += "});" + "\n";
-        response.render(JavaScriptHeaderItem.forScript(js, "puigrowl"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 
     public void message(AjaxRequestTarget target, GrowlMessage... message) {

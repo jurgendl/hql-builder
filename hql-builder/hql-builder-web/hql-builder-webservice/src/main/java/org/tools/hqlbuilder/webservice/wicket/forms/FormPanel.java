@@ -14,7 +14,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -32,6 +32,7 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.pocketgrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
@@ -92,15 +93,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
         response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         renderColumnsCss(response);
-        Component formActionsContainer = getForm().get(FORM_ACTIONS);
-        String[] buttonIds = {
-                formActionsContainer.get(FORM_SUBMIT).getMarkupId(),
-                formActionsContainer.get(FORM_RESET).getMarkupId(),
-                formActionsContainer.get(FORM_CANCEL).getMarkupId() };
-        for (String buttonId : buttonIds) {
-            response.render(OnLoadHeaderItem.forScript("$( \"#" + buttonId + "\" ).button();"));
-        }
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
@@ -178,7 +172,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             ResourceModel cancelModel = new ResourceModel(CANCEL_LABEL);
 
             Component submit;
-
             if (getFormSettings().isAjax()) {
                 submit = new AjaxSubmitLink(FORM_SUBMIT, form) {
                     private static final long serialVersionUID = 1046494045754727027L;
@@ -193,8 +186,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             } else {
                 submit = new Button(FORM_SUBMIT, submitModel);
             }
+            submit.add(new CssClassNameAppender(JQueryUI.jquibutton));
 
             Button reset = new Button(FORM_RESET, resetModel);
+            reset.add(new CssClassNameAppender(JQueryUI.jquibutton));
 
             /* https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit+buttons */
             Component cancel;
@@ -214,6 +209,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 cancel = new Button(FORM_CANCEL, cancelModel);
                 ((Button) cancel).setDefaultFormProcessing(false);
             }
+            cancel.add(new CssClassNameAppender(JQueryUI.jquibutton));
             cancel.setVisible(getFormSettings().isCancelable());
 
             if (getFormSettings().isInheritId()) {
