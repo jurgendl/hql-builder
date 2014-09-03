@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.datepicker.JQueryDatePicker;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.converter.ModelConverter;
 
@@ -22,6 +23,8 @@ import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.core.utils.LocaleUtils;
 import com.googlecode.wicket.jquery.ui.form.datepicker.AjaxDatePicker;
 import com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://api.jqueryui.com/datepicker/
@@ -73,7 +76,7 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         dateFormatClient = dateFormat.toLowerCase().replaceAll("yy", "y").replaceAll("yy", "y");
         options.set(DATE_FORMAT, Options.asString(dateFormatClient));
         // options.set(APPEND_TEXT, Options.asString(new SimpleDateFormat(dateFormat, locale).format(new Date())));
-        return new AjaxDatePicker(VALUE, model, dateFormat, options) {
+        AjaxDatePicker ajaxDatePicker = new AjaxDatePicker(VALUE, model, dateFormat, options) {
             private static final long serialVersionUID = 7118431260383127661L;
 
             @Override
@@ -82,6 +85,8 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
                 onFormComponentTag(tag);
             }
         };
+        ajaxDatePicker.add(new CssClassNameAppender(PrimeUI.puiinputtext));
+        return ajaxDatePicker;
     }
 
     public static String dateformat(Locale locale) {
@@ -104,7 +109,7 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         response.render(CssHeaderItem.forReference(JQueryDatePicker.DATEPICKER_CSS));
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.i18n(getLocale())));
         response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 
     @Override

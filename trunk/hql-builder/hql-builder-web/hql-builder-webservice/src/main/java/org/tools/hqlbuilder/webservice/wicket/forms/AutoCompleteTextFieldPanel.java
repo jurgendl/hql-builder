@@ -7,14 +7,17 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 import com.googlecode.wicket.jquery.ui.form.autocomplete.AutoCompleteTextField;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/inputtext.html
@@ -72,7 +75,7 @@ public class AutoCompleteTextFieldPanel<T extends Serializable> extends DefaultF
                 return show;
             }
         };
-
+        textField.add(new CssClassNameAppender(PrimeUI.puiinputtext));
         return textField;
     }
 
@@ -82,6 +85,6 @@ public class AutoCompleteTextFieldPanel<T extends Serializable> extends DefaultF
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

@@ -6,9 +6,12 @@ import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/dropdown.html
@@ -28,7 +31,7 @@ public class DropDownPanel<T extends Serializable> extends SelectPanel<T, Select
 
     @Override
     protected Select<T> createComponent(IModel<T> model) {
-        return new Select<T>(VALUE, model) {
+        Select<T> select = new Select<T>(VALUE, model) {
             private static final long serialVersionUID = 1143647284311142999L;
 
             @Override
@@ -37,6 +40,8 @@ public class DropDownPanel<T extends Serializable> extends SelectPanel<T, Select
                 onFormComponentTag(tag);
             }
         };
+        select.add(new CssClassNameAppender(PrimeUI.puidropdown));
+        return select;
     }
 
     @Override
@@ -50,6 +55,6 @@ public class DropDownPanel<T extends Serializable> extends SelectPanel<T, Select
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puidropdown();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

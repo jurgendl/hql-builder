@@ -3,9 +3,12 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.model.IModel;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://www.primefaces.org/primeui/inputtext.html
@@ -19,7 +22,7 @@ public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextFi
 
     @Override
     protected EmailTextField createComponent(IModel<String> model, Class<String> valueType) {
-        return new EmailTextField(VALUE, model, RfcCompliantEmailAddressValidator.getInstance()) {
+        EmailTextField emailTextField = new EmailTextField(VALUE, model, RfcCompliantEmailAddressValidator.getInstance()) {
             private static final long serialVersionUID = -8333366326586690978L;
 
             @Override
@@ -28,6 +31,8 @@ public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextFi
                 onFormComponentTag(tag);
             }
         };
+        emailTextField.add(new CssClassNameAppender(PrimeUI.puiinputtext));
+        return emailTextField;
     }
 
     @Override
@@ -36,6 +41,6 @@ public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextFi
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(OnLoadHeaderItem.forScript("$( \"#" + getComponent().getMarkupId() + "\" ).puiinputtext();"));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 }

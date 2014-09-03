@@ -81,7 +81,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             }
         });
         setFormSettings(formSettings == null ? new FormSettings() : formSettings);
-        // add(new Notification(FORM_NOTIFICATION));
     }
 
     @Override
@@ -312,7 +311,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -470,24 +469,4 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public DatePickerPanel<Date> addDatePicker(Date propertyPath, FormElementSettings componentSettings) {
         return addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
     }
-
-    // public void notificationSuccess(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
-    // getNotification().success(message);
-    // }
-    //
-    // public void notificationInfo(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
-    // getNotification().info(message);
-    // }
-    //
-    // public void notificationError(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
-    // getNotification().error(message);
-    // }
-    //
-    // public void notificationWarn(@SuppressWarnings("unused") AjaxRequestTarget target, String message) {
-    // getNotification().warn(message);
-    // }
-    //
-    // protected com.googlecode.wicket.kendo.ui.widget.notification.Notification getNotification() {
-    // return com.googlecode.wicket.kendo.ui.widget.notification.Notification.class.cast(get(FORM_NOTIFICATION));
-    // }
 }

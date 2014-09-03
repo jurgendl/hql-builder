@@ -39,7 +39,7 @@ public class Growl extends Panel {
         String js = "$(function() { " + "\n";
         js += "$('#" + Growl.this.get(GROWL_MESSAGE).getMarkupId() + "').puigrowl();" + "\n";
         js += "});" + "\n";
-        response.render(JavaScriptHeaderItem.forScript(js, getClass().getName()));
+        response.render(JavaScriptHeaderItem.forScript(js, "puigrowl"));
     }
 
     public void message(AjaxRequestTarget target, GrowlMessage... message) {
