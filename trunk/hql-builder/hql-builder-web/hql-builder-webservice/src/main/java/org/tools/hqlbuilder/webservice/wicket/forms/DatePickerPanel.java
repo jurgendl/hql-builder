@@ -107,9 +107,9 @@ public class DatePickerPanel<X extends Serializable> extends DefaultFormRowPanel
         }
         response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.DATEPICKER_JS));
         response.render(CssHeaderItem.forReference(JQueryDatePicker.DATEPICKER_CSS));
-        response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.i18n(getLocale())));
-        response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), dateFormatClient)));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
+        response.render(JavaScriptHeaderItem.forReference(JQueryDatePicker.i18n(getLocale())));
+        response.render(OnLoadHeaderItem.forScript(JQueryDatePicker.initJavaScript((DatePicker) getComponent(), "js_" + getComponent().getMarkupId())));
     }
 
     @Override

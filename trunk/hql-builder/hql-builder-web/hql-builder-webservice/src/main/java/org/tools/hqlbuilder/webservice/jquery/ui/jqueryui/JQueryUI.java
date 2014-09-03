@@ -15,15 +15,22 @@ public class JQueryUI {
      * do not include directly: use "getJQueryUIReference()"
      */
     public static JavaScriptResourceReference JQUERY_UI_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-1.11.1.js")
-            .addJavaScriptResourceReferenceDependency(JQuery.JQUERY_JS);
+    .addJavaScriptResourceReferenceDependency(JQuery.JQUERY_JS);
 
     public static ResourceReference getJQueryUIReference() {
         IJQueryLibrarySettings javaScriptLibrarySettings = (IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings();
         return javaScriptLibrarySettings.getJQueryUIReference();
     }
 
-    public static JavaScriptResourceReference JQUERY_UI_FACTORY_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-factory.js")
-    .addJavaScriptResourceReferenceDependency(JQUERY_UI_JS);
+    public static JavaScriptResourceReference JQUERY_UI_FACTORY_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-factory.js");
+
+    static {
+        try {
+            JQUERY_UI_FACTORY_JS.addJavaScriptResourceReferenceDependency(getJQueryUIReference());
+        } catch (Exception ex) {
+            //
+        }
+    }
 
     public static final String jquiaccordion = "jquiaccordion";
 

@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.webservice.jquery.ui.primeui;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
@@ -15,6 +16,7 @@ public class PrimeUI {
 
     static {
         try {
+            PRIME_UI_JS.addJavaScriptResourceReferenceDependency(JQuery.JQUERY_MIGRATE_JS);
             PRIME_UI_JS.addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
         } catch (Exception ex) {
             //

@@ -9,8 +9,7 @@ import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 /**
  * @see http://jqueryui.com/button/
@@ -34,7 +33,6 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
         RadioChoice<T> radioChoice = new RadioChoice<T>(VALUE, model, choices, renderer);
         radioChoice.setPrefix("<span class=\"multiselectchoice\">");
         radioChoice.setSuffix("</span>");
-        radioChoice.add(new CssClassNameAppender(JQueryUI.jquibuttonset));
         return radioChoice;
     }
 
@@ -44,6 +42,14 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
+        if (formSettings.isPreferPrime()) {
+            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+            response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId()
+                    + " input[type=\"radio\"]').puiradiobutton(); });", getComponent().getMarkupId()));
+        } else {
+            response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
+            response.render(JavaScriptHeaderItem.forScript("$(function() { $('.multiselectchoice').buttonset(); });", "js_"
+                    + getComponent().getMarkupId()));
+        }
     }
 }
