@@ -35,8 +35,6 @@ public class FormSettings implements Serializable {
 
     protected String invalidClass = "invalid";
 
-    protected String requiredMarkerClass = "requiredMarker";
-
     protected int columns = 1;
 
     protected String labelWidth = "12em";
@@ -79,10 +77,6 @@ public class FormSettings implements Serializable {
         return this.invalidClass;
     }
 
-    public String getRequiredMarkerClass() {
-        return this.requiredMarkerClass;
-    }
-
     public FormSettings setRequiredClass(String requiredClass) {
         this.requiredClass = requiredClass;
         return this;
@@ -95,11 +89,6 @@ public class FormSettings implements Serializable {
 
     public FormSettings setInvalidClass(String invalidClass) {
         this.invalidClass = invalidClass;
-        return this;
-    }
-
-    public FormSettings setRequiredMarkerClass(String requiredMarkerClass) {
-        this.requiredMarkerClass = requiredMarkerClass;
         return this;
     }
 

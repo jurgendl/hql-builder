@@ -54,18 +54,6 @@ public class StylingPage extends BasePage {
         }
 
         ExampleForm stylingform = new ExampleForm("stylingform");
-        stylingform.nextRow();
-
-        {
-            ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
-            colorPickerSettings.setClickoutFiresChange(true);
-            colorPickerSettings.setPreferredFormat(ColorFormat.hsl);
-            colorPickerSettings.setShowButtons(true);
-            colorPickerSettings.setShowPalette(true);
-            colorPickerSettings.setShowInitial(true);
-            colorPickerSettings.setShowInput(true);
-            stylingform.addColorPicker(proxy.getColor(), colorPickerSettings);
-        }
 
         if (false) {
             stylingform.getFormSettings().setColumns(3).setLabelWidth("22em");

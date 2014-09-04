@@ -27,6 +27,8 @@ import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings.ColorFormat;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerHook;
@@ -102,52 +104,49 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
 
-        boolean dont = true;
-        if (dont) {
-            addTextField(proxy.getText(), fset.clone().setRequired(true));
-            addTextField(proxy.getTextAdd(), fset.clone().setRequired(true));
-            addEmailTextField(proxy.getEmail(), fset);
-            addHidden(proxy.getHidden1());
-            addCheckBox(proxy.getCheck(), fset);
-            addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
-            addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
-            addDatePicker(proxy.getDate1(), fset);
-            addDatePicker(proxy.getDate2(), fset, dateConverter);
-            addPasswordTextField(proxy.getPassword(), new FormElementSettings());
-            addNumberField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
-            addNumberField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
-            addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-            addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
-            addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
-            addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
-            addNumberTextField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
-            addNumberTextField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
-            addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-            addNumberTextField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
-            addNumberTextField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
-            addNumberTextField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
-            addRangeField(proxy.getByter(), new RangeFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
-            addRangeField(proxy.getShortr(), new RangeFieldSettings<Short>((short) 0, (short) 100, (short) 1));
-            addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
-            addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
-            addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
-            addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
-            addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
-            addLocalesDropDown(proxy.getLocale(), fset, null, null);
+        addTextField(proxy.getText(), fset.clone().setRequired(true));
+        addTextField(proxy.getTextAdd(), fset.clone().setRequired(true));
+        addEmailTextField(proxy.getEmail(), fset);
+        addHidden(proxy.getHidden1());
+        addCheckBox(proxy.getCheck(), fset);
+        addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
+        addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
+        addDatePicker(proxy.getDate1(), fset);
+        addDatePicker(proxy.getDate2(), fset, dateConverter);
+        addPasswordTextField(proxy.getPassword(), new FormElementSettings());
+        addNumberField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
+        addNumberField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
+        addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
+        addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
+        addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
+        addNumberTextField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
+        addNumberTextField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
+        addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        addNumberTextField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
+        addNumberTextField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
+        addNumberTextField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
+        addRangeField(proxy.getByter(), new RangeFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
+        addRangeField(proxy.getShortr(), new RangeFieldSettings<Short>((short) 0, (short) 100, (short) 1));
+        addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
+        addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
+        addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
+        addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
+        addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
+        addLocalesDropDown(proxy.getLocale(), fset, null, null);
+        addHidden(proxy.getHidden2());
+        addFilepicker(proxy);
+        {
+            ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
+            colorPickerSettings.setClickoutFiresChange(true);
+            colorPickerSettings.setPreferredFormat(ColorFormat.hsl);
+            colorPickerSettings.setShowButtons(true);
+            colorPickerSettings.setShowPalette(true);
+            colorPickerSettings.setShowInitial(true);
+            colorPickerSettings.setShowInput(true);
+            addColorPicker(proxy.getColor(), colorPickerSettings);
         }
-        if (dont) {
-            addHidden(proxy.getHidden2());
-        }
-        if (dont) {
-            nextRow();
-            addFilepicker(proxy);
-        }
-        if (dont) {
-            nextRow();
-            addTextArea(proxy);
-        }
-        if (dont) {
-            nextRow();
+        {
             List<String> opt1 = new ArrayList<String>();
             for (int i = 1; i <= 10; i++) {
                 opt1.add("option " + (i == 10 ? 0 : i));
@@ -170,14 +169,18 @@ public class ExampleForm extends FormPanel<Example> {
             };
             groupLabels = null;
             ListModel<String>[] opt = new ListModel[] { new ListModel<String>(opt1), new ListModel<String>(opt2) };
+
             addDropDown(WebHelper.proxy(Example.class).getText(), new DropDownSettings().setNullValid(true), optionRenderer2, opt, groupLabels);
+            nextRow();
             addList(WebHelper.proxy(Example.class).getTextExtra(), new ListSettings().setSize(10), optionRenderer2, opt, groupLabels);
         }
+        nextRow();
+        addTextArea(proxy);
     }
 
     private void addTextArea(Example proxy) {
         setFormSettings(new FormSettings().setColumns(1));
-        addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(80));
+        addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
         setFormSettings(new FormSettings().setColumns(2));
     }
 

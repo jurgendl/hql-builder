@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
-import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 /**
  * @see http://jqueryui.com/button/
@@ -42,14 +41,14 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
         if (!isEnabledInHierarchy()) {
             return;
         }
-        if (formSettings.isPreferPrime()) {
-            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-            response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId()
-                    + " input[type=\"radio\"]').puiradiobutton(); });", getComponent().getMarkupId()));
-        } else {
-            response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
-            response.render(JavaScriptHeaderItem.forScript("$(function() { $('.multiselectchoice').buttonset(); });", "js_"
-                    + getComponent().getMarkupId()));
-        }
+        // if ( formSettings.isPreferPrime()) {
+        // response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+        // response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId()
+        // + " input[type=\"radio\"]').puiradiobutton(); });", getComponent().getMarkupId()));
+        // } else {
+        response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
+        response.render(JavaScriptHeaderItem.forScript("$(function() { $('.multiselectchoice').buttonset(); });", "js_"
+                + getComponent().getMarkupId()));
+        // }
     }
 }

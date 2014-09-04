@@ -70,6 +70,5 @@ public class BasePage extends DefaultWebPage {
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
-        // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "horizontalmenu.css")));
     }
 }

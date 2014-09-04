@@ -53,7 +53,6 @@ public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<Stri
         }
 
         response.render(CssHeaderItem.forReference(Spectrum.SPECTRUM_CSS));
-        response.render(JavaScriptHeaderItem.forReference(Spectrum.SPECTRUM_JS));
         response.render(JavaScriptHeaderItem.forReference(Spectrum.SPECTRUM_I18N_JS));
         response.render(OnDomReadyHeaderItem.forScript(createLoadScript()));
     }
@@ -63,7 +62,8 @@ public class ColorPickerPanel extends DefaultFormRowPanel<String, TextField<Stri
         if (!(getValueModel() == null || StringUtils.isBlank(getValueModel().getObject()))) {
             colorPickerSettings.setColor(getValueModel().getObject());
         }
-        return "$(\"#" + getComponent().getMarkupId() + "\").spectrum( " + getComponentSettings() + " );";
+        return "$(\"#" + getComponent().getMarkupId() + "\").spectrum( " + getComponentSettings()
+                + " ); $('.sp-replacer.sp-light').addClass('ui-corner-all');";
     }
 
     @Override
