@@ -31,7 +31,6 @@ public class EmailTextFieldPanel extends DefaultFormRowPanel<String, EmailTextFi
                 onFormComponentTag(tag);
             }
         };
-        emailTextField.add(RfcCompliantEmailAddressValidator.getInstance());
         emailTextField.add(new CssClassNameAppender(PrimeUI.puiinputtext));
         return emailTextField;
     }
