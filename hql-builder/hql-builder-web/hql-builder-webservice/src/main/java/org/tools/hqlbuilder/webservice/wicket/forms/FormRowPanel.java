@@ -118,7 +118,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
                     StringBuffer asterisktHtml = new StringBuffer(200);
                     if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
                         asterisktHtml
-                        .append("&nbsp;<span class=\"ui-state-error-text\"><span style=\"font-size: 1.4em\" class=\"fontawesome-exclamation-sign\"></span></span>");
+                                .append("&nbsp;<span style=\"font-size: 1.4em\" class=\"ui-state-error ui-corner-all ui-state-error-text\"><span class=\"fontawesome-exclamation-sign\"></span></span>");
                     }
                     response.write(asterisktHtml);
                 }
@@ -164,7 +164,14 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     protected FeedbackPanel getFeedback() {
         if (feedbackPanel == null) {
-            feedbackPanel = new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component));
+            feedbackPanel = new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component)) {
+                private static final long serialVersionUID = 211849904711387432L;
+
+                @Override
+                public boolean isVisible() {
+                    return super.isVisible() && anyMessage();
+                }
+            };
             feedbackPanel.setOutputMarkupId(true);
         }
         return feedbackPanel;
