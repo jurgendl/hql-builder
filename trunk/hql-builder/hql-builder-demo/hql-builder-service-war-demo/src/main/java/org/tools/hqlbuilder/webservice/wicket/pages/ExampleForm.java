@@ -83,7 +83,7 @@ public class ExampleForm extends FormPanel<Example> {
         IOptionRenderer<ExampleOpts> optionRenderer = new IOptionRenderer<ExampleOpts>() {
             @Override
             public String getDisplayValue(ExampleOpts object) {
-                return String.valueOf(choiceRenderer.getDisplayValue(object));
+                return object == null ? "-" : String.valueOf(choiceRenderer.getDisplayValue(object));
             }
 
             @Override
@@ -159,7 +159,7 @@ public class ExampleForm extends FormPanel<Example> {
             IOptionRenderer<String> optionRenderer2 = new IOptionRenderer<String>() {
                 @Override
                 public String getDisplayValue(String object) {
-                    return object;
+                    return object == null ? "-" : object;
                 }
 
                 @Override

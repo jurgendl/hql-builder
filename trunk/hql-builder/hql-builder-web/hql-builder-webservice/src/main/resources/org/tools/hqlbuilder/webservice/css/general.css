@@ -5,7 +5,7 @@ body {
 	/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
 	/*GillSans, Calibri, Trebuchet, sans-serif*/
 	font-size: 12px;
-	font-family: Baskerville, ‘Times New Roman’, Times, serif; 
+	font-family: Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif; 
 	/*background-color: #d9dee2;
 	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
 		to(#d9dee2));
@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5 {
 	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
 	/*Tahoma, Verdana, Geneva*/
 	/*Trebuchet, Tahoma, Arial, sans-serif*/
-	font-family: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif;
+	font-family: Trebuchet, Tahoma, Arial, sans-serif;
 }
 
 ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
@@ -192,5 +192,5 @@ fieldset {
 }
 
 /* spectrum */
-.sp-preview { height: 14px; }
-.sp-dd { height: 14px; line-height: 14px; vertical-align: top; padding: 0px; }
+.sp-preview { height: 18px; }
+.sp-dd { height: 18px; line-height: 18px; vertical-align: top; padding: 0px; }
