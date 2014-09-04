@@ -93,8 +93,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
         response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
-        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         renderColumnsCss(response);
     }
 

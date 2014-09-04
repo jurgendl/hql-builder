@@ -6,11 +6,11 @@ import org.apache.wicket.ajax.WicketEventJQueryResourceReference;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
-import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.tools.hqlbuilder.webservice.jquery.ui.kendoui.KendoUI;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
+import com.googlecode.wicket.jquery.core.resource.JQueryUIResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 import com.googlecode.wicket.jquery.ui.calendar.settings.CalendarLibrarySettings;
 import com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings;
@@ -41,7 +41,7 @@ import com.googlecode.wicket.kendo.ui.settings.KendoUILibrarySettings;
  * combination of resource references with public getters and setters
  */
 public class WicketResourceReferences implements IJQueryLibrarySettings, IKendoUILibrarySettings, ICalendarLibrarySettings,
-        ISuperfishLibrarySettings, IConsoleLibrarySettings, IFixedHeaderTableLibrarySettings, IWysiwygLibrarySettings, IEmoticonsLibrarySettings {
+ISuperfishLibrarySettings, IConsoleLibrarySettings, IFixedHeaderTableLibrarySettings, IWysiwygLibrarySettings, IEmoticonsLibrarySettings {
     protected static WicketResourceReferences instance;
 
     public static synchronized WicketResourceReferences get() {
@@ -106,8 +106,8 @@ public class WicketResourceReferences implements IJQueryLibrarySettings, IKendoU
 
     public WicketResourceReferences(boolean init) {
         if (init) {
-            setJQueryUIReference(JQueryUI.JQUERY_UI_JS); // instead of default JQueryUIResourceReference.get()
-            setJQueryReference(JQuery.JQUERY_JS);// instead of default JQueryResourceReference.get()
+            setJQueryUIReference(JQueryUIResourceReference.get());// redirect to default
+            setJQueryReference(JQueryResourceReference.get());// redirect to default
             setWicketEventReference(WicketEventJQueryResourceReference.get());// redirect to default
             setWicketAjaxReference(WicketAjaxJQueryResourceReference.get());// redirect to default
             setWicketAjaxDebugReference(WicketAjaxDebugJQueryResourceReference.get());// redirect to default

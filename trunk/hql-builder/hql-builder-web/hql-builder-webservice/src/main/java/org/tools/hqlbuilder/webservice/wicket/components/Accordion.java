@@ -86,6 +86,9 @@ public class Accordion extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
         if (preferPrime) {
             response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         } else {
