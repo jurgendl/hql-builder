@@ -118,7 +118,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
                     StringBuffer asterisktHtml = new StringBuffer(200);
                     if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
                         asterisktHtml
-                                .append("&nbsp;<span style=\"font-size: 1.4em\" class=\"ui-state-error ui-corner-all ui-state-error-text\"><span class=\"fontawesome-exclamation-sign\"></span></span>");
+                        .append("&nbsp;<span style=\"font-size: 1.4em\" class=\"feedbackPanel\"><span class=\"fontawesome-exclamation-sign\"></span></span>");
                     }
                     response.write(asterisktHtml);
                 }
@@ -184,7 +184,9 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     protected FormRowPanel<P, T, C, S> afterAddComponents() {
+        getComponent().setLabel((IModel<String>) getLabel().getDefaultModel());
         setupRequiredBehavior();
         setupId();
         return this;

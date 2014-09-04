@@ -156,6 +156,10 @@ a:focus {
 	height: 24px;
 	line-height: 24px;
 }
+.formheader .feedbackPanel,
+.formfooter .feedbackPanel {
+	display: block;
+}
 
 /* fileupload */
 .fileupload {

@@ -14,5 +14,5 @@ $('.jquislider').slider();
 $('.jquispinner').spinner();
 $('.jquitabs').tabs();
 /* added in newer version *//*$('.jquiselectmenu').selectmenu();*/
-
+$('.feedbackPanel').addClass('ui-state-highlight').addClass('ui-corner-all').addClass('ui-state-error').addClass('ui-state-error-text');
 });
