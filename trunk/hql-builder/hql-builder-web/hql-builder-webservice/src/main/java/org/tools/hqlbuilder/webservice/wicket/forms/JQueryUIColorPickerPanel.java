@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -63,10 +62,10 @@ public class JQueryUIColorPickerPanel extends DefaultFormRowPanel<String, TextFi
     }
 
     protected String createLoadScript() {
-        ColorPickerSettings colorPickerSettings = ColorPickerSettings.class.cast(getComponentSettings());
-        if (!(getValueModel() == null || StringUtils.isBlank(getValueModel().getObject()))) {
-            colorPickerSettings.setColor(getValueModel().getObject());
-        }
+        JQueryUIColorPickerSettings colorPickerSettings = JQueryUIColorPickerSettings.class.cast(getComponentSettings());
+        // if (!(getValueModel() == null || StringUtils.isBlank(getValueModel().getObject()))) {
+        // colorPickerSettings.setColor(getValueModel().getObject());
+        // }
         return "$(\"#" + getComponent().getMarkupId() + "\").colorpicker(" + colorPickerSettings + ");";
     }
 

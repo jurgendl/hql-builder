@@ -137,7 +137,7 @@ public class ExampleForm extends FormPanel<Example> {
         addHidden(proxy.getHidden2());
         addFilepicker(proxy);
         addColorPicker(proxy.getColor(), new ColorPickerSettings());
-        addColorPicker(proxy.getColor(), new JQueryUIColorPickerSettings());
+        addColorPicker(proxy.getColor2(), new JQueryUIColorPickerSettings());
 
         {
             List<String> opt1 = new ArrayList<String>();
