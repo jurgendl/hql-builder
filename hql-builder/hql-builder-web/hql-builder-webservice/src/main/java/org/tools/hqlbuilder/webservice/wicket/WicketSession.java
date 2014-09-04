@@ -8,8 +8,8 @@ import org.apache.wicket.request.Request;
 public class WicketSession extends WebSession {
     private static final long serialVersionUID = 5401902370873451702L;
 
-    /** default "smoothness" */
-    protected String jqueryUITheme = "smoothness";
+    /** default "overcast" */
+    protected String jqueryUITheme = "overcast";
 
     public WicketSession(Request request) {
         super(request);

@@ -23,6 +23,9 @@ import org.zkoss.zuss.Zuss;
 import org.zkoss.zuss.impl.out.BuiltinResolver;
 import org.zkoss.zuss.metainfo.ZussDefinition;
 
+/**
+ * response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "table.css")));
+ */
 public class ZussResourceReference extends StreamResourceReference implements IResourceStream, Resolver {
     private static final long serialVersionUID = 6384603768717480808L;
 

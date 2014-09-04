@@ -28,7 +28,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -66,12 +65,6 @@ class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<T, Stri
     public Table(Form<?> form, String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
         super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
         setOutputMarkupId(true);
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "table.css")));
     }
 
     public DataProvider<T> getDataprovider() {
