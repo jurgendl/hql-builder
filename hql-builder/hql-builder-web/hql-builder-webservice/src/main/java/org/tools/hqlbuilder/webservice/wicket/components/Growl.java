@@ -38,6 +38,9 @@ public class Growl extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 

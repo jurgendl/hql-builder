@@ -84,7 +84,7 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
         if (formSettings.isPreferPrime()) {
             response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         } else {
-            response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
+            response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
         }
     }
 }

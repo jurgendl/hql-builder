@@ -10,9 +10,9 @@ $('.jquidatepicker').datepicker();
 $('.jquidialog').dialog();
 $('.jquimenu').menu();
 $('.jquiprogressbar').progressbar();
-$('.jquiselectmenu').selectmenu();
 $('.jquislider').slider();
 $('.jquispinner').spinner();
 $('.jquitabs').tabs();
+/* added in newer version *//*$('.jquiselectmenu').selectmenu();*/
 
 });
