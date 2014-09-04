@@ -14,12 +14,18 @@ public class JQueryUI {
     /**
      * do not include directly: use "getJQueryUIReference()"
      */
-    public static JavaScriptResourceReference JQUERY_UI_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-1.11.1.js")
-    .addJavaScriptResourceReferenceDependency(JQuery.JQUERY_JS);
+    public static JavaScriptResourceReference JQUERY_UI_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-1.11.1.js");
+
+    static {
+        try {
+            JQUERY_UI_JS.addJavaScriptResourceReferenceDependency(JQuery.getJQueryReference());
+        } catch (Exception ex) {
+            //
+        }
+    }
 
     public static ResourceReference getJQueryUIReference() {
-        IJQueryLibrarySettings javaScriptLibrarySettings = (IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings();
-        return javaScriptLibrarySettings.getJQueryUIReference();
+        return ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings()).getJQueryUIReference();
     }
 
     public static JavaScriptResourceReference JQUERY_UI_FACTORY_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-factory.js");

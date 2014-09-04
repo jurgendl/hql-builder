@@ -28,7 +28,6 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
-import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings.ColorFormat;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerHook;
@@ -36,6 +35,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FilePickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.JQueryUIColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
@@ -136,16 +136,9 @@ public class ExampleForm extends FormPanel<Example> {
         addLocalesDropDown(proxy.getLocale(), fset, null, null);
         addHidden(proxy.getHidden2());
         addFilepicker(proxy);
-        {
-            ColorPickerSettings colorPickerSettings = new ColorPickerSettings();
-            colorPickerSettings.setClickoutFiresChange(true);
-            colorPickerSettings.setPreferredFormat(ColorFormat.hsl);
-            colorPickerSettings.setShowButtons(true);
-            colorPickerSettings.setShowPalette(true);
-            colorPickerSettings.setShowInitial(true);
-            colorPickerSettings.setShowInput(true);
-            addColorPicker(proxy.getColor(), colorPickerSettings);
-        }
+        addColorPicker(proxy.getColor(), new ColorPickerSettings());
+        addColorPicker(proxy.getColor(), new JQueryUIColorPickerSettings());
+
         {
             List<String> opt1 = new ArrayList<String>();
             for (int i = 1; i <= 10; i++) {
