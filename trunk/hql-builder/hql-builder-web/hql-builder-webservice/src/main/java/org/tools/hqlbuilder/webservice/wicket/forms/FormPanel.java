@@ -91,7 +91,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         if (!isEnabledInHierarchy()) {
             return;
         }
-        // response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "form.css")));
         response.render(CssHeaderItem.forReference(PocketGrid.POCKET_GRID));
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
@@ -324,7 +323,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {

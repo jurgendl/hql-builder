@@ -4,7 +4,7 @@ body {
 	/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
 	/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
 	/*GillSans, Calibri, Trebuchet, sans-serif*/
-	font-size: 13px;
+	font-size: 12px;
 	font-family: Baskerville, ‘Times New Roman’, Times, serif; 
 	/*background-color: #d9dee2;
 	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
@@ -51,45 +51,6 @@ h1, h2, h3, h4, h5 {
 	font-family: Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif;
 }
 
-.centeredvertical, .centeredhorizontal {
-	position: absolute;
-	left: 45%;
-}
-
-.centeredvertical {
-	margin-top: -100px;
-}
-
-.centeredhorizontal {
-	margin-left: -200px;
-}
-
-.topbar {
-	color: #919191;
-	font-style: bold;
-	position: absolute;
-	top: 0px;
-	padding-top: 0px;
-	margin-top: 5px;
-	padding-bottom: 0px;
-	margin-bottom: 0px;
-	border-bottom: solid 1px #b7b7b7;
-	width: 100%;
-}
-
-.topbarfloating, .bottombarfloating {
-	background-color: #d9dee2;
-	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2), to(#d9dee2));
-	background-image: -webkit-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: -moz-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: linear-gradient(left, #ebeef2, #d9dee2);
-	position: fixed;
-	width: 100%;
-	border-top: solid 1px #b7b7b7;
-}
-
 ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
 	padding: 0px;
 	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
@@ -99,7 +60,6 @@ h1, h2, h3, h4, h5 {
 .tooltip {
 	position: relative;
 }
-
 .tooltip:before,.tooltip:after {
 	position: absolute;
 	transition: All 0.5s ease;
@@ -113,7 +73,6 @@ h1, h2, h3, h4, h5 {
 	color: #000;
 	opacity: 0;
 }
-
 .tooltip:before {
 	content: attr(title);
 	border: solid 1px #0088cc;
@@ -125,7 +84,6 @@ h1, h2, h3, h4, h5 {
 	line-height: 18px;
 	padding: 5px;
 }
-
 .tooltip:after {
 	content: '\25c6';
 	margin-left: 0;
@@ -137,7 +95,6 @@ h1, h2, h3, h4, h5 {
 	color: #0088cc;
 	font-size: 20px;
 }
-
 .tooltip:hover:before,.tooltip:hover:after {
 	bottom: 150%;
 	opacity: 1;
@@ -182,13 +139,13 @@ a:focus {
 	border-bottom: 1px solid;
 }
 
+/* default form */
 .feedbackPanel {
 	margin: 0px 0px 0px 0px;
 	padding: 2px 3px 2px 3px;
 	display: inline-block;
 	list-style-type: none;
 }
-
 .formlabel {
 	text-align: right;
 	display: block;
@@ -200,11 +157,11 @@ a:focus {
 	line-height: 24px;
 }
 
+/* fileupload */
 .fileupload {
 	overflow: hidden;
 	position: relative;
 }
-
 .fileupload input[type='file'] {
 	cursor: pointer;
 	display: block;
@@ -218,18 +175,22 @@ a:focus {
 	text-align: right;
 	top: 0;
 }
-
 .fileupload input[type='file']:focus {
 }
-
 .fileupload input[type='file']:hover {
 }
 
+/* overrides default padding and font size radiobuttonset and multiselectset of jquerui */
 .multiselectchoice.ui-buttonset .ui-button-text {
-	padding: 2px 5px 2px 5px;
+	padding: 3px 5px 3px 5px;
 	font-size: 0.8em;
 }
 
+/* overrides reset.css */
 fieldset {
 	border: 0;
 }
+
+/* spectrum */
+.sp-preview { height: 14px; }
+.sp-dd { height: 14px; line-height: 14px; vertical-align: top; padding: 0px; }

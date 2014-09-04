@@ -11,8 +11,6 @@ import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-
 @SuppressWarnings("serial")
 public class ThemesPanel extends Panel {
     protected StatelessForm<Object> themeForm;
@@ -55,7 +53,7 @@ public class ThemesPanel extends Panel {
             }
         };
         themeForm.setMarkupId(themeForm.getId());
-        changeTheme.add(new CssClassNameAppender(PrimeUI.puidropdown));
+        // changeTheme.add(new CssClassNameAppender(PrimeUI.puidropdown));
         add(themeForm.add(changeTheme));
     }
 
