@@ -323,7 +323,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -391,6 +391,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public ColorPickerPanel addColorPicker(String propertyPath, ColorPickerSettings componentSettings) {
         return addDefaultRow(new ColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+    }
+
+    public JQueryUIColorPickerPanel addColorPicker(String propertyPath, JQueryUIColorPickerSettings componentSettings) {
+        return addDefaultRow(new JQueryUIColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,

@@ -104,6 +104,8 @@ public class Example implements Serializable {
 
     private String color = "#005599";
 
+    private String color2 = "#995500";
+
     public String getPassword() {
         return this.password;
     }
@@ -296,16 +298,6 @@ public class Example implements Serializable {
         this.multi = multi;
     }
 
-    @Override
-    public String toString() {
-        return "Example[" + hashCode() + ",id=" + id + ",files=" + getFiles() + ", hidden1=" + this.hidden1 + ", hidden2=" + this.hidden2
-                + ", password=" + this.password + ", text=" + this.text + ", email=" + this.email + ", longText?=" + (this.longText != null)
-                + ", radio=" + this.radio + ", combo=" + this.combo + ", check=" + this.check + ", date1=" + this.date1 + ", date2=" + this.date2
-                + ", integerv=" + this.integerv + ", longv=" + this.longv + ", shortv=" + this.shortv + ", doublev=" + this.doublev + ", floatv="
-                + this.floatv + ", bytev=" + this.bytev + ", integerr=" + this.integerr + ", longr=" + this.longr + ", shortr=" + this.shortr
-                + ", doubler=" + this.doubler + ", floatr=" + this.floatr + ", byter=" + this.byter + ", multi=" + this.multi + "]";
-    }
-
     public List<MemFile> getFiles() {
         return this.files;
     }
@@ -360,5 +352,13 @@ public class Example implements Serializable {
 
     public void setTextAdd(String textAdd) {
         this.textAdd = textAdd;
+    }
+
+    public String getColor2() {
+        return this.color2;
+    }
+
+    public void setColor2(String color2) {
+        this.color2 = color2;
     }
 }

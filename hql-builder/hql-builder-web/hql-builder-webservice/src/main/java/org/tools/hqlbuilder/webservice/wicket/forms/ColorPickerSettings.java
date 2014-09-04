@@ -19,21 +19,21 @@ public class ColorPickerSettings extends FormElementSettings {
 
     protected String color;
 
-    protected ColorFormat preferredFormat;
+    protected ColorFormat preferredFormat = ColorFormat.hsl;
 
     protected Boolean allowEmpty;
 
-    protected Boolean showInput;
+    protected Boolean showInput = true;
 
-    protected Boolean showAlpha;
+    protected Boolean showAlpha = true;
 
     protected Boolean disabled;
 
-    protected Boolean showPalette;
+    protected Boolean showPalette = true;
 
     protected Boolean showPaletteOnly;
 
-    protected Boolean showSelectionPalette;
+    protected Boolean showSelectionPalette = true;
 
     protected List<List<String>> palette;
 
@@ -47,7 +47,7 @@ public class ColorPickerSettings extends FormElementSettings {
 
     protected String cancelText;
 
-    protected Boolean showButtons;
+    protected Boolean showButtons = true;
 
     protected Boolean flat;
 
