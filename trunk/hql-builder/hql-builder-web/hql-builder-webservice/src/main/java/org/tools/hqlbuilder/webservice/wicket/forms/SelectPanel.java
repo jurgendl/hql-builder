@@ -102,7 +102,7 @@ public abstract class SelectPanel<T extends Serializable, C extends Select<T>, S
 
             @Override
             protected SelectOption<T> newOption(final String text, final IModel<? extends T> optModel) {
-                final String textF = StringUtils.isBlank(text) ? "-" : text;
+                final String textF = StringUtils.isBlank(text) ? getString("null") : text;
                 SelectOption<T> selectOption = createSelectOption(text, optModel, textF);
                 return selectOption;
             }
