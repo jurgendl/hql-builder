@@ -16,6 +16,7 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
@@ -55,7 +56,6 @@ public class DefaultWebPage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
-        // response.render(CssHeaderItem.forReference(WicketCSSRoot.RESET));
 
         super.renderHead(response);
 
@@ -87,8 +87,16 @@ public class DefaultWebPage extends WebPage {
      * @see {@link WicketSession#getJQueryUITheme()}
      */
     protected void addThemeResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(JQueryUIThemes.theme(WicketSession.get().getJQueryUITheme())));
-        response.render(CssHeaderItem.forReference(PrimeUI.forJQueryUITheme(WicketSession.get().getJQueryUITheme())));
+        String jQueryUITheme = WicketSession.get().getJQueryUITheme();
+        if (jQueryUITheme != null && JQueryUIThemes.getThemes().contains(jQueryUITheme)) {
+            response.render(CssHeaderItem.forReference(JQueryUIThemes.base(jQueryUITheme)));
+            response.render(CssHeaderItem.forReference(JQueryUIThemes.theme(jQueryUITheme)));
+        } else {
+            response.render(CssHeaderItem.forReference(JQueryUI.JQUERY_UI_CSS));
+            response.render(CssHeaderItem.forReference(JQueryUI.JQUERY_UI_THEME_CSS));
+        }
+        response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
+        response.render(CssHeaderItem.forReference(PrimeUI.forJQueryUITheme(jQueryUITheme)));
     }
 
     protected void addDefaultResources(@SuppressWarnings("unused") IHeaderResponse response) {

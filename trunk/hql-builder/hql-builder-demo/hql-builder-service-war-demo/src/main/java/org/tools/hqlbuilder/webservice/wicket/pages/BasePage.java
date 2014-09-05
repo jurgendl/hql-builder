@@ -17,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
+import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
@@ -53,7 +54,7 @@ public class BasePage extends DefaultWebPage {
                 }
                 BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("menulink", item.getModelObject());
                 item.add(link);
-                link.add(new Label("menulinklabel", new Model<String>(item.getModelObject().getSimpleName())));
+                link.add(WebHelper.hide(new Label("menulinklabel", new Model<String>(item.getModelObject().getSimpleName()))));
             }
         };
         menu.add(menuitem);

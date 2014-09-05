@@ -9,7 +9,6 @@ import org.tools.hqlbuilder.webservice.wicket.components.Growl;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlMessage;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlSeverity;
 import org.tools.hqlbuilder.webservice.wicket.components.Notify;
-import org.tools.hqlbuilder.webservice.wicket.components.ThemesPanel;
 
 @SuppressWarnings("serial")
 @MountedPage("/styling")
@@ -17,8 +16,6 @@ public class StylingPage extends BasePage {
     public StylingPage(PageParameters parameters) {
         super(parameters);
         setStatelessHint(false);
-
-        add(new ThemesPanel("themespanel"));
 
         {
             final Notify notify = new Notify();

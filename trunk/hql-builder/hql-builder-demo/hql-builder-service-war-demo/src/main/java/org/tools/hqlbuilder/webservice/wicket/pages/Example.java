@@ -106,6 +106,8 @@ public class Example implements Serializable {
 
     private String color2 = "#995500";
 
+    private String theme;
+
     public String getPassword() {
         return this.password;
     }
@@ -360,5 +362,13 @@ public class Example implements Serializable {
 
     public void setColor2(String color2) {
         this.color2 = color2;
+    }
+
+    public String getTheme() {
+        return this.theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }

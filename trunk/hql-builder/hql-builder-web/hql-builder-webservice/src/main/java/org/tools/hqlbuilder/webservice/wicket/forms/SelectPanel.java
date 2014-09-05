@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
@@ -37,15 +38,34 @@ public abstract class SelectPanel<T extends Serializable, C extends Select<T>, S
             ListModel<T> choices) {
         super(model, propertyPath, formSettings, componentSettings);
         this.choices = new ListModel[] { choices };
-        this.renderer = renderer;
+        this.renderer = fallback(renderer);
     }
 
     public SelectPanel(IModel<?> model, T propertyPath, FormSettings formSettings, S componentSettings, IOptionRenderer<T> renderer,
             ListModel<T>[] choices, IModel<String>[] groupLabels) {
         super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
-        this.renderer = renderer;
+        this.renderer = fallback(renderer);
         this.groupLabels = groupLabels;
+    }
+
+    protected IOptionRenderer<T> fallback(IOptionRenderer<T> r) {
+        if (r == null) {
+            r = new IOptionRenderer<T>() {
+                private static final long serialVersionUID = 3093280303783185203L;
+
+                @Override
+                public String getDisplayValue(T object) {
+                    return String.valueOf(object);
+                }
+
+                @Override
+                public IModel<T> getModel(T value) {
+                    return Model.of(value);
+                }
+            };
+        }
+        return r;
     }
 
     @Override
