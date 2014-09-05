@@ -70,8 +70,8 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
                 super.onComponentTag(tag);
                 tag.getAttributes().put(FOR, getComponent().getMarkupId());
             }
-        });
-        this.add(getRequiredMarker());
+        }.add(new CssClassNameAppender(PrimeUI.puibutton)));
+        this.add(getRequiredMarker().setVisible(false));
         this.add(getFeedback());
         return this;
     }

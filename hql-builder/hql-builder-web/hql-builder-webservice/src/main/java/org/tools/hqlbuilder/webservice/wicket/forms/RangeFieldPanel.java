@@ -7,6 +7,9 @@ import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.form.RangeTextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://demosthenes.info/blog/757/Playing-With-The-HTML5-range-Slider-Input
@@ -41,14 +44,14 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
                 tag.getAttributes().put(FOR, getPropertyName());
             }
         };
-        add(output);
+        add(output.add(new CssClassNameAppender(PrimeUI.puiinputtext)));
         super.addComponents();
         return this;
     }
 
     @Override
     protected RangeTextField<N> createComponent(IModel<N> model, Class<N> valueType) {
-        return new RangeTextField<N>(VALUE, model, valueType) {
+        RangeTextField<N> rangeTextField = new RangeTextField<N>(VALUE, model, valueType) {
             private static final long serialVersionUID = 5507304679724490593L;
 
             @Override
@@ -66,6 +69,7 @@ public class RangeFieldPanel<N extends Number & Comparable<N>> extends DefaultFo
                 }
             }
         };
+        return rangeTextField;
     }
 
     @Override

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
@@ -13,7 +12,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.TextFieldPanel;
 
 @SuppressWarnings("serial")
 @MountedPage("/multi")
-public class MultiColumnFormPage extends DefaultWebPage {
+public class MultiColumnFormPage extends BasePage {
     public MultiColumnFormPage(PageParameters parameters) {
         super(parameters);
 

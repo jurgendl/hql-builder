@@ -7,5 +7,5 @@ function initJQDatepicker(inputId, countryIsoCode, dateFormat, calendarIcon) {
 	localizedArray['changeYear'] = true;
 	localizedArray['showOn'] = 'button';
 	localizedArray['buttonImageOnly'] = true;
-	$("#" + inputId).datepicker(localizedArray);
+	$("#" + inputId).datepicker(localizedArray).datepicker("option", "disabled", false);
 };
