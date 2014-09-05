@@ -71,6 +71,7 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
                 tag.getAttributes().put(FOR, getComponent().getMarkupId());
             }
         });
+        this.add(getRequiredMarker());
         this.add(getFeedback());
         return this;
     }
