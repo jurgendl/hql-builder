@@ -24,6 +24,7 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
@@ -58,6 +59,7 @@ public class ExampleForm extends FormPanel<Example> {
             public void submitObject(Example example) {
                 exampleService.save(getInstanceId(), example);
                 WicketSession.get().setLocale(example.getLocale());
+                WicketSession.get().setJQueryUITheme(example.getTheme());
             }
 
             public String getInstanceId() {
@@ -67,9 +69,8 @@ public class ExampleForm extends FormPanel<Example> {
             @Override
             public Example loadObject() {
                 Example example = exampleService.getExample(getInstanceId());
-                if (example.getLocale() == null) {
-                    example.setLocale(WicketSession.get().getLocale());
-                }
+                example.setLocale(WicketSession.get().getLocale());
+                example.setTheme(WicketSession.get().getJQueryUITheme());
                 return example;
             }
         });
@@ -105,6 +106,8 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
 
+        addLocalesDropDown(proxy.getLocale(), fset, null, null);
+        addDropDown(proxy.getTheme(), new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes()));
         addTextField(proxy.getText(), fset.clone().setRequired(true));
         addTextField(proxy.getTextAdd(), fset.clone().setRequired(true));
         addEmailTextField(proxy.getEmail(), fset);
@@ -134,7 +137,6 @@ public class ExampleForm extends FormPanel<Example> {
         addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
         addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
         addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
-        addLocalesDropDown(proxy.getLocale(), fset, null, null);
         addHidden(proxy.getHidden2());
         addFilepicker(proxy);
         addColorPicker(proxy.getColor(), new ColorPickerSettings());

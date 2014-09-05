@@ -1,8 +1,15 @@
 package org.tools.hqlbuilder.webservice.jquery.ui.primeui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.VirtualPackageResourceReference;
@@ -26,15 +33,35 @@ public class PrimeUI {
             "plugins/cursorposition.js").addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static JavaScriptResourceReference PRIME_UI_PLUGIN_RANGY_INPUT_JS = new JavaScriptResourceReference(PrimeUI.class, "plugins/rangyinput.js")
-            .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
+    .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static JavaScriptResourceReference PRIME_UI_FACTORY_JS = new JavaScriptResourceReference(PrimeUI.class, "primeui-factory.js")
-    .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
+            .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static CssResourceReference PRIME_UI_CSS = new CssResourceReference(PrimeUI.class, "primeui-1.1.css");
 
     public static CssResourceReference forJQueryUITheme(String name) {
         return new CssResourceReference(PrimeUI.class, "themes/" + name + "/theme.css").addCssResourceReferenceDependency(PRIME_UI_CSS);
+    }
+
+    protected static List<String> themes = null;
+
+    public static List<String> getThemes() {
+        if (themes == null) {
+            themes = new ArrayList<String>();
+            try {
+                String name = PrimeUI.class.getPackage().getName().replace('\\', '/').replace('.', '/') + "/themes/themes.list";
+                BufferedReader in = new BufferedReader(new InputStreamReader(JQueryUIThemes.class.getClassLoader().getResourceAsStream(name)));
+                String theme;
+                while ((theme = in.readLine()) != null) {
+                    themes.add(theme);
+                }
+                in.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        return themes;
     }
 
     public static void mountImages(WebApplication webApplication) {

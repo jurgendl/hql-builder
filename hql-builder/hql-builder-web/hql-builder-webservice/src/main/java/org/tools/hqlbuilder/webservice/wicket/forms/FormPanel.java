@@ -352,7 +352,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             getRowRepeater().add(rowContainer);
 
             RepeatingView repeater = new RepeatingView(FORM_ELEMENT_REPEATER);
-            componentRepeater = WebHelper.show(repeater);
+            componentRepeater = WebHelper.hide(repeater);
             rowContainer.add(componentRepeater);
         }
         return this.componentRepeater;
@@ -362,7 +362,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             RowPanel rowpanel) {
         getForm();
 
-        WebMarkupContainer elementContainer = new WebMarkupContainer(getComponentRepeater().newChildId());
+        WebMarkupContainer elementContainer = WebHelper.hide(new WebMarkupContainer(getComponentRepeater().newChildId()));
         getComponentRepeater().add(elementContainer);
 
         // rowpanel is already created

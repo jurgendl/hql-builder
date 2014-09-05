@@ -20,4 +20,11 @@ public class WebHelper extends CommonUtils {
         component.setOutputMarkupId(true);
         return component;
     }
+
+    public static <C extends Component> C hide(C component) {
+        component.setOutputMarkupPlaceholderTag(false);
+        component.setRenderBodyOnly(true);
+        component.setOutputMarkupId(false);
+        return component;
+    }
 }

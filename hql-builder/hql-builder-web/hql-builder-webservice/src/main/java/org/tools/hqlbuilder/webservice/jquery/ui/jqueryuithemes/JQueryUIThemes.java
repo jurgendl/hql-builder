@@ -10,11 +10,11 @@ import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 
 public class JQueryUIThemes {
     public static CssResourceReference base(String theme) {
-        return new CssResourceReference(JQueryUIThemes.class, theme + "/jquery.ui.theme.css");
+        return new CssResourceReference(JQueryUIThemes.class, theme + "/jquery-ui.css");
     }
 
     public static CssResourceReference theme(String theme) {
-        return new CssResourceReference(JQueryUIThemes.class, theme + "/jquery-ui.css").addCssResourceReferenceDependency(base(theme));
+        return new CssResourceReference(JQueryUIThemes.class, theme + "/theme.css").addCssResourceReferenceDependency(base(theme));
     }
 
     protected static List<String> themes = null;

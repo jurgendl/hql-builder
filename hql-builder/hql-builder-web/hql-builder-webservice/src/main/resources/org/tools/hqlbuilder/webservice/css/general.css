@@ -1,21 +1,15 @@
+/* https://www.google.com/fonts */
+/*@import url(http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext);*/
+
+/* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
+/*Baskerville, ‘Times New Roman’, Times, serif*/
+/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
+/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
+/*GillSans, Calibri, Trebuchet, sans-serif*/
+
 body {
-	/* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
-	/*Baskerville, ‘Times New Roman’, Times, serif*/
-	/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
-	/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
-	/*GillSans, Calibri, Trebuchet, sans-serif*/
 	font-size: 12px;
-	font-family: Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif; 
-	/*background-color: #d9dee2;
-	background-image: -webkit-gradient(linear, left top, right top, from(#ebeef2),
-		to(#d9dee2));
-	background-image: -webkit-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: -moz-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: -ms-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: -o-linear-gradient(left, #ebeef2, #d9dee2);
-	background-image: linear-gradient(left, #ebeef2, #d9dee2);*/
-	margin: 8px;
-	/*background-repeat: repeat;*/
+	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
 }
 
 * {
@@ -44,7 +38,6 @@ body {
 }
 
 /* http://css-tricks.com/universal-overflow-auto */
-* { overflow: auto; }
 
 h1, h2, h3, h4, h5 {
 	/*Georgia, Times, ‘Times New Roman’, serif*/
