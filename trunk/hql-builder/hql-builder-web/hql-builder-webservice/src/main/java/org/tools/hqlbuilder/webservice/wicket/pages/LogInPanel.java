@@ -16,6 +16,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.springframework.security.core.Authentication;
 import org.tools.hqlbuilder.webservice.wicket.UserData;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
+import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 
 public class LogInPanel extends Panel {
     private static final long serialVersionUID = -3020334357804419643L;
@@ -30,7 +31,7 @@ public class LogInPanel extends Panel {
     public LogInPanel(final String id, final IModel<UserData> model) {
         super(id, model);
         Properties webProperties = WicketApplication.get().getWebProperties();
-        Authentication authentication = WicketApplication.getSecurityContext().getAuthentication();
+        Authentication authentication = WicketSession.getSecurityContext().getAuthentication();
         add(new LogInForm(authentication, webProperties));
         setVisible(authentication == null || authentication.getPrincipal().equals(webProperties.getProperty("anonymous.user")));
     }
@@ -82,11 +83,11 @@ public class LogInPanel extends Panel {
         @Override
         protected CharSequence getActionUrl() {
             return getRequest().getContextPath() + webProperties.getProperty("login")
-            // + "?"
-            // + webProperties.getProperty("returnto.propertyname") + "="
-            // + ((org.apache.wicket.protocol.http.servlet.ServletWebRequest) getRequest()).getContainerRequest().getRequestURL()
-            // + super.getActionUrl()
-            ;
+                    // + "?"
+                    // + webProperties.getProperty("returnto.propertyname") + "="
+                    // + ((org.apache.wicket.protocol.http.servlet.ServletWebRequest) getRequest()).getContainerRequest().getRequestURL()
+                    // + super.getActionUrl()
+                    ;
         }
     }
 }

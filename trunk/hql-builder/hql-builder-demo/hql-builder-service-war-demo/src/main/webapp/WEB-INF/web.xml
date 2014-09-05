@@ -127,6 +127,7 @@
 	</servlet-mapping>
 
 	<session-config>
+		<!-- in minutes, '-1' never expires -->
 		<session-timeout>30</session-timeout>
 	</session-config>
 
