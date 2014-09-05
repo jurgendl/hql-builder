@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons.WLIFIcons;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons.WLIFont;
-import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
 import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel.Social;
@@ -20,7 +19,7 @@ import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 
 @MountedPage("/social")
 @SuppressWarnings("serial")
-public class SocialPage extends DefaultWebPage {
+public class SocialPage extends BasePage {
     public SocialPage(PageParameters parameters) {
         super(parameters);
         ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));

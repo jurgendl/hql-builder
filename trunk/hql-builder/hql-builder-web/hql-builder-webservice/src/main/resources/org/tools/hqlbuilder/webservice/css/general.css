@@ -183,10 +183,6 @@ a.link:focus {
 	text-align: right;
 	top: 0;
 }
-.fileupload input[type='file']:focus {
-}
-.fileupload input[type='file']:hover {
-}
 
 /* overrides default padding and font size radiobuttonset and multiselectset of jquerui */
 .multiselectchoice.ui-buttonset .ui-button-text,
@@ -201,8 +197,15 @@ fieldset {
 }
 
 /* spectrum */
-.sp-preview { height: 18px; }
-.sp-dd { height: 18px; line-height: 18px; vertical-align: top; padding: 0px; }
+.sp-preview {
+	height: 18px;
+}
+.sp-dd {
+	height: 18px;
+	line-height: 18px;
+	vertical-align: top;
+	padding: 0px;
+}
 
 /* bootstrap theme fix */
 .puispinner.pui-inputtext {
@@ -212,4 +215,10 @@ fieldset {
 /* Prime dropdown arrow fix */
 .pui-dropdown.ui-widget > .pui-dropdown-trigger {
 	padding: 0px;
+}
+
+/* pocketgrid form */
+.block-group {
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
