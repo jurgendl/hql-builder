@@ -112,6 +112,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
         filePresentContainer.add(getDownloadFile()); // FIXME can only download first file
         filePresentContainer.add(getRemoveFile()); // FIXME can only remove all files
 
+        this.add(getRequiredMarker());
         this.add(getFeedback());
 
         return this;

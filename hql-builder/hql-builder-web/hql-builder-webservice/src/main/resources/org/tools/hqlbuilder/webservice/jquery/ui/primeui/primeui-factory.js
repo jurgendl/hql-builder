@@ -1,7 +1,5 @@
 $(function() {
 
-$(document).puitooltip();
-
 $('.puiinputtext').puiinputtext();
 $('.puiinputtextarea').puiinputtextarea();
 $('.puidropdown').puidropdown();

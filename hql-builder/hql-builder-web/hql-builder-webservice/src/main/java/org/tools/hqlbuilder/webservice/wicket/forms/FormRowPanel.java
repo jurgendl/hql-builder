@@ -12,6 +12,7 @@ import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -19,7 +20,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.request.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
@@ -78,9 +78,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         C c = getComponent();
         if (formSettings.isAjax() && formSettings.isLiveValidation() && !(c instanceof PasswordTextField)
                 && !(c instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
-            c.add(setupDynamicRequiredBehavior());
-        } else {
-            c.add(setupStaticRequiredBehavior());
+            // c.add(setupDynamicRequiredBehavior());
         }
     }
 
@@ -102,26 +100,6 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
                 c.add(new CssClassNameRemover(formSettings.invalidClass));
                 c.add(new CssClassNameAppender(formSettings.validClass));
                 ajaxRequestTarget.add(c, getFeedback());
-            }
-        };
-    }
-
-    protected Behavior setupStaticRequiredBehavior() {
-        return new Behavior() {
-            private static final long serialVersionUID = -4284643075110091322L;
-
-            @SuppressWarnings("rawtypes")
-            @Override
-            public void afterRender(Component c) {
-                Response response = c.getResponse();
-                if (formSettings != null) {
-                    StringBuffer asterisktHtml = new StringBuffer(200);
-                    if (c instanceof FormComponent && ((FormComponent) c).isRequired()) {
-                        asterisktHtml
-                        .append("&nbsp;<span style=\"font-size: 1.4em\" class=\"feedbackPanel\"><span class=\"fontawesome-exclamation-sign\"></span></span>");
-                    }
-                    response.write(asterisktHtml);
-                }
             }
         };
     }
@@ -180,8 +158,21 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     protected FormRowPanel<P, T, C, S> addComponents() {
         this.add(getLabel());
         this.add(getComponent());
+        this.add(getRequiredMarker());
         this.add(getFeedback());
         return this;
+    }
+
+    protected WebMarkupContainer getRequiredMarker() {
+        WebMarkupContainer requiredMarker = new WebMarkupContainer("requiredMarker") {
+            private static final long serialVersionUID = -6386826366809908431L;
+
+            @Override
+            public boolean isVisible() {
+                return super.isVisible() && componentSettings.isRequired();
+            }
+        };
+        return requiredMarker;
     }
 
     @SuppressWarnings("unchecked")
