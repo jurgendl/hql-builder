@@ -39,8 +39,6 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
@@ -64,14 +62,6 @@ public class WicketApplication extends WebApplication {
 
     public static WicketApplication get() {
         return WicketApplication.class.cast(WebApplication.get());
-    }
-
-    public static SecurityContext getSecurityContext() {
-        return SecurityContextHolder.getContext();
-    }
-
-    public static WicketSession getWebSession() {
-        return WicketSession.get();
     }
 
     /**
@@ -231,7 +221,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-                //
+        //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
