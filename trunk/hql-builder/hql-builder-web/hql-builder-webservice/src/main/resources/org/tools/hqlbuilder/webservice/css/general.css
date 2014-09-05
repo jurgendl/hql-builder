@@ -43,6 +43,9 @@ body {
 	background-color : transparent !important;
 }
 
+/* http://css-tricks.com/universal-overflow-auto */
+* { overflow: auto; }
+
 h1, h2, h3, h4, h5 {
 	/*Georgia, Times, ‘Times New Roman’, serif*/
 	/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
