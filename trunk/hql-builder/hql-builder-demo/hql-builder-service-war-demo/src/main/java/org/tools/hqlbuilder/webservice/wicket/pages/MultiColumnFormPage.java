@@ -20,7 +20,7 @@ public class MultiColumnFormPage extends DefaultWebPage {
         setStatelessHint(false);
 
         FormSettings formSettings = new FormSettings();
-        formSettings.setLabelWidth("6em");
+        formSettings.setLabelWidth("12em");
         FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", null, formSettings) {
             /***/
         };

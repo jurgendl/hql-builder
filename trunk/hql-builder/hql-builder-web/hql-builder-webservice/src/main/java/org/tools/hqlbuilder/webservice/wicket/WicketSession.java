@@ -24,8 +24,7 @@ public class WicketSession extends WebSession {
 
     public static final String THEME = "theme";
 
-    /** default "overcast" */
-    protected String jqueryUITheme = "overcast";
+    protected String jqueryUITheme;
 
     protected boolean pushToCookies = true;
 
@@ -38,7 +37,7 @@ public class WicketSession extends WebSession {
     protected void init() {
         try {
             pushToCookies = false;
-            jqueryUITheme = loadCookie(THEME, "overcast");
+            jqueryUITheme = loadCookie(THEME, null);
             String localeCookieValue = loadCookie(LOCALE, null);
             if (StringUtils.isNotBlank(localeCookieValue)) {
                 String[] tmp = localeCookieValue.split("_");
