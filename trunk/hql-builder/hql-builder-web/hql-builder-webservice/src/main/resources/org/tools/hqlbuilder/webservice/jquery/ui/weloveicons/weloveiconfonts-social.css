@@ -6,7 +6,7 @@
 	-moz-box-shadow: 2px 2px 3px #666666;
 	box-shadow: 2px 2px 3px #666666;
 	padding: 0px;
-	margin: .2em;
+	margin: 4px;
 	text-decoration: none;
 	vertical-align: middle;
 	outline: none;
@@ -53,6 +53,7 @@
 	position: relative;
 }
 .socialbar > :not(:first-child) {
+	font-weight: bolder;
 	padding-left: .7em;
 	padding-right: .7em;
 }
