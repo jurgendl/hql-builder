@@ -26,6 +26,7 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
+import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.converter.DateConverter;
@@ -150,6 +151,13 @@ public class WicketApplication extends WebApplication {
 
         getMarkupSettings().setDefaultBeforeDisabledLink("");
         getMarkupSettings().setDefaultAfterDisabledLink("");
+        
+        if (!inDevelopment) {
+        	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_NO_EXCEPTION_PAGE);
+//            getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
+//            getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
+//            getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
+        }
     }
 
     protected void initStore() {
