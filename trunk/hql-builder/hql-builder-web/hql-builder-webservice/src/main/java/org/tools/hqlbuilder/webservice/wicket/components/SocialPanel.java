@@ -144,7 +144,7 @@ public class SocialPanel extends Panel {
         google("http://www.google.com", "Google"), //
         googleplay("http://play.google.com", "Google Play"), //
         googleplus("http://plus.google.com", "Google+"), //
-        gowalla("htpp://blog.gowalla.com", "Gowalla"), //
+        gowalla("http://blog.gowalla.com", "Gowalla"), //
         grooveshark("http://grooveshark.com", "Grooveshark"), //
         instagram("http://instagram.com", "Instagram"), //
         instapaper("http://www.instapaper.com", "Instapaper"), //
@@ -166,7 +166,7 @@ public class SocialPanel extends Panel {
         quora("http://www.quora.com", "Quora"), //
         reddit("http://www.reddit.com", "reddit"), //
         scribd("http://www.scribd.com", "Scribd"), //
-        skype("htpp://www.skype.com", "Skype"), //
+        skype("http://www.skype.com", "Skype"), //
         songkick("http://www.songkick.com", "Songkick"), //
         soundcloud("http://soundcloud.com", "SoundCloud"), //
         spotify("http://www.spotify.com", "Spotify"), //
