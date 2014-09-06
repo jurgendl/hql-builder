@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons.WLIFIcons;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons.WLIFont;
@@ -22,6 +23,10 @@ import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 public class SocialPage extends BasePage {
     public SocialPage(PageParameters parameters) {
         super(parameters);
+        for (int i = 1; i <= 4; i++) {
+            add(new SocialPanel("socialbutton"+i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(false)));
+            add(new SocialPanel("socialbar"+i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(true)));
+		}
         ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
         add(new ListView<Social>("socialbuttons", options) {
             @Override

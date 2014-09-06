@@ -72,6 +72,7 @@ public class SocialPanel extends Panel {
         WebMarkupContainer icon = new WebMarkupContainer("icon");
         socialbutton.add(icon);
         WebComponent label = new Label("label", titleString);
+        label.setEscapeModelStrings(false);
         socialbutton.add(label);
         if (settings.isBarForm()) {
             icon.add(new CssClassNameAppender("zocial-" + socialId));
@@ -135,7 +136,7 @@ public class SocialPanel extends Panel {
         eventful("http://eventful.com", "Eventful"), //
         evernote("http://www.evernote.com", "Evernote"), //
         facebook("http://www.facebook.com", "Facebook"), //
-        fivehundredpx("http://500px.com", "500px"), //
+        fivehundredpx("http://500px.com", "5&infin;px"), //
         flattr("http://flattr.com", "Flattr"), //
         flickr("http://www.flickr.com", "Flickr"), //
         foursquare("http://foursquare.com", "Foursquare"), //
