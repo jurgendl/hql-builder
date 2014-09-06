@@ -13,6 +13,7 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
+	<!-- https://cwiki.apache.org/confluence/display/WICKET/Error+Pages+and+Feedback+Messages -->
 	<error-page>
 		<error-code>400</error-code>
 		<location>/400.html</location>
@@ -37,7 +38,7 @@
 	<context-param>
 		<param-name>configuration</param-name>
 		<param-value>development</param-value> 
-		<!-- <param-value>deployment</param-value> -->
+		<!--	deployment		development	-->
 	</context-param>
 	<context-param>
 		<param-name>resteasy.servlet.mapping.prefix</param-name>

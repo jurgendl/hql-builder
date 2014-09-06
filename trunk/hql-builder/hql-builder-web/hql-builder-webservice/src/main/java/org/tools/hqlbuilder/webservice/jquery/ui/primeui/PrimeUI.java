@@ -69,8 +69,8 @@ public class PrimeUI {
         for (String image : images) {
             String relPath = "images/" + image;
             PackageResourceReference reference = new VirtualPackageResourceReference(PrimeUI.class, relPath, PrimeUI.class, relPath);
-            webApplication.getSharedResources().add(relPath, reference.getResource());
-            webApplication.mountResource(relPath, reference);
+            webApplication.getSharedResources().add("wicket/"+relPath, reference.getResource());
+            webApplication.mountResource("wicket/"+relPath, reference);
         }
     }
 

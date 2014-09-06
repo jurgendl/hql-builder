@@ -109,6 +109,11 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
 
     public static List<Locale> getAvailableLocales() {
         List<Locale> locales = new ArrayList<Locale>(Arrays.asList(Locale.getAvailableLocales()));
+        for(Locale locale : locales.toArray(new Locale[locales.size()])     		) {
+        	if(StringUtils.isBlank(locale.getLanguage())) {
+        		locales.remove(locale);
+        	}
+        }
         Collections.sort(locales, new LocaleComparator());
         return locales;
     }
