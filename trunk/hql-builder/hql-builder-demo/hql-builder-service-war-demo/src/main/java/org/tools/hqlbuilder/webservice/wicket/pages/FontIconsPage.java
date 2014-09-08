@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,15 +19,15 @@ import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel.Social;
 import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 
-@MountedPage("/social")
+@MountedPage("/fonticons")
 @SuppressWarnings("serial")
-public class SocialPage extends BasePage {
-    public SocialPage(PageParameters parameters) {
+public class FontIconsPage extends BasePage {
+    public FontIconsPage(PageParameters parameters) {
         super(parameters);
         for (int i = 1; i <= 4; i++) {
-            add(new SocialPanel("socialbutton"+i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(false)));
-            add(new SocialPanel("socialbar"+i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(true)));
-		}
+            add(new SocialPanel("socialbutton" + i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(false)));
+            add(new SocialPanel("socialbar" + i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(true)));
+        }
         ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
         add(new ListView<Social>("socialbuttons", options) {
             @Override
@@ -55,5 +56,10 @@ public class SocialPage extends BasePage {
                 });
             }
         });
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
     }
 }
