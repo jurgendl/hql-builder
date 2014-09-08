@@ -85,6 +85,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         setFormSettings(formSettings == null ? new FormSettings() : formSettings);
     }
 
+    public T proxy() {
+        return WebHelper.proxy(getFormActions().forObjectClass());
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -323,7 +327,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {

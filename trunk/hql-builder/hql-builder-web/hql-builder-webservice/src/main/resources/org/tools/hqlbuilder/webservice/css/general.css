@@ -1,5 +1,5 @@
 /* https://www.google.com/fonts */
-/*@import url(http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext);*/
+@import url(http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext);
 
 /* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 /*Baskerville, ‘Times New Roman’, Times, serif*/
@@ -49,6 +49,62 @@ h1, h2, h3, h4, h5 {
 ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
 	padding: 0px;
 	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+}
+
+/* rotation animation */
+@-webkit-keyframes rotate {
+  from { -webkit-transform:rotate(0deg); }
+  to { -webkit-transform:rotate(360deg); }
+}
+@-moz-keyframes rotate {
+  from { -moz-transform:rotate(0deg); }
+  to { -moz-transform:rotate(360deg); }
+}
+@-ms-keyframes rotate {
+  from { -ms-transform:rotate(0deg); }
+  to { -ms-transform:rotate(360deg); }
+}
+@-o-keyframes rotate {
+  from { -o-transform:rotate(0deg); }
+  to { -o-transform:rotate(360deg); }
+}
+.rotatingslower,
+.rotating,
+.rotatingfaster {
+  -webkit-transform-origin: 50% 50%;
+  -webkit-animation-name: rotate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-transform-origin: 50% 50%;
+  -moz-animation-name: rotate;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  -ms-transform-origin: 50% 50%;
+  -ms-animation-name: rotate;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+  -o-transform-origin: 50% 50%;
+  -o-animation-name: rotate;
+  -o-animation-iteration-count: infinite;
+  -o-animation-timing-function: linear;
+}
+.rotatingfaster {
+  -webkit-animation-duration: 0.75s;
+  -moz-animation-duration: 0.75s;
+  -ms-animation-duration: 0.75s;
+  -o-animation-duration: 0.75s;
+}
+.rotating {
+  -webkit-animation-duration: 1.5s;
+  -moz-animation-duration: 1.5s;
+  -ms-animation-duration: 1.5s;
+  -o-animation-duration: 1.5s;
+}
+.rotatingslower {
+  -webkit-animation-duration: 3s;
+  -moz-animation-duration: 3s;
+  -ms-animation-duration: 3s;
+  -o-animation-duration: 3s;
 }
 
 /* class="tooltip" title="tooltiptext" */
@@ -223,65 +279,11 @@ fieldset {
 	margin-bottom: 2px;
 }
 
-/* rotation animation */
-@-webkit-keyframes rotate {
-  from { -webkit-transform:rotate(0deg); }
-  to { -webkit-transform:rotate(360deg); }
+/* jqueryui colorpicker */
+.jquicolorpicker + button.ui-button.ui-widget.ui-button-text-only {
+	padding: 2px;
 }
-
-@-moz-keyframes rotate {
-  from { -moz-transform:rotate(0deg); }
-  to { -moz-transform:rotate(360deg); }
-}
-
-@-ms-keyframes rotate {
-  from { -ms-transform:rotate(0deg); }
-  to { -ms-transform:rotate(360deg); }
-}
-
-@-o-keyframes rotate {
-  from { -o-transform:rotate(0deg); }
-  to { -o-transform:rotate(360deg); }
-}
-
-.rotatingslower,
-.rotating,
-.rotatingfaster {
-  -webkit-transform-origin: 50% 50%;
-  -webkit-animation-name: rotate;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  -moz-transform-origin: 50% 50%;
-  -moz-animation-name: rotate;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: linear;
-  -ms-transform-origin: 50% 50%;
-  -ms-animation-name: rotate;
-  -ms-animation-iteration-count: infinite;
-  -ms-animation-timing-function: linear;
-  -o-transform-origin: 50% 50%;
-  -o-animation-name: rotate;
-  -o-animation-iteration-count: infinite;
-  -o-animation-timing-function: linear;
-}
-
-.rotatingfaster {
-  -webkit-animation-duration: 0.75s;
-  -moz-animation-duration: 0.75s;
-  -ms-animation-duration: 0.75s;
-  -o-animation-duration: 0.75s;
-}
-
-.rotating {
-  -webkit-animation-duration: 1.5s;
-  -moz-animation-duration: 1.5s;
-  -ms-animation-duration: 1.5s;
-  -o-animation-duration: 1.5s;
-}
-
-.rotatingslower {
-  -webkit-animation-duration: 3s;
-  -moz-animation-duration: 3s;
-  -ms-animation-duration: 3s;
-  -o-animation-duration: 3s;
+.jquerycolorpickerbuttonimage {
+	width: 16px;
+	height: 16px;
 }
