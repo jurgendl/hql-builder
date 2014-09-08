@@ -18,6 +18,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 public class JQueryUIColorPickerPanel extends DefaultFormRowPanel<String, TextField<String>, JQueryUIColorPickerSettings> {
     private static final long serialVersionUID = 6138233201045557179L;
 
+    protected Output output;
+
     public JQueryUIColorPickerPanel(final IModel<?> model, final String propertyPath, FormSettings formSettings,
             JQueryUIColorPickerSettings colorPickerSettings) {
         super(model, propertyPath, formSettings, colorPickerSettings);
@@ -37,7 +39,7 @@ public class JQueryUIColorPickerPanel extends DefaultFormRowPanel<String, TextFi
     @Override
     protected TextField<String> createComponent(IModel<String> model, Class<String> valueType) {
         TextField<String> textField = new TextField<String>(VALUE, model, valueType) {
-            private static final long serialVersionUID = -5452605210495634502L;
+            private static final long serialVersionUID = 56917009106322008L;
 
             @Override
             protected void onComponentTag(ComponentTag tag) {
@@ -45,7 +47,7 @@ public class JQueryUIColorPickerPanel extends DefaultFormRowPanel<String, TextFi
                 onFormComponentTag(tag);
             }
         };
-        textField.add(new CssClassNameAppender(PrimeUI.puiinputtext));
+        textField.add(new CssClassNameAppender(PrimeUI.puiinputtext + " " + JQueryUIColorPicker.jquicolorpicker));
         return textField;
     }
 

@@ -34,7 +34,7 @@ FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElemen
     @Override
     protected CheckBoxMultipleChoice<T> createComponent(IModel<Collection<T>> model, Class<Collection<T>> valueType) {
         CheckBoxMultipleChoice<T> checkBoxMultipleChoice = new CheckBoxMultipleChoice<T>(VALUE, model, choices, renderer);
-        checkBoxMultipleChoice.setPrefix("<span class=\"multiselectchoice\">");
+        checkBoxMultipleChoice.setPrefix("<span class=\"jquibuttonset\">");
         checkBoxMultipleChoice.setSuffix("</span>");
         return checkBoxMultipleChoice;
     }
@@ -53,22 +53,5 @@ FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElemen
             this.propertyType = WebHelper.type(propertyPath);
         }
         return this.propertyType;
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
-            return;
-        }
-        // if (formSettings.isPreferPrime()) {
-        // response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-        // response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId()
-        // + " input[type=\"checkbox\"]').puicheckbox(); });", getComponent().getMarkupId()));
-        // } else {
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
-        response.render(JavaScriptHeaderItem.forScript("$(function() { $('.multiselectchoice').buttonset(); });", "js_"
-                + getComponent().getMarkupId()));
-        // }
     }
 }

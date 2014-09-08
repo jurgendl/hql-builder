@@ -30,25 +30,8 @@ public class RadioButtonsPanel<T extends Serializable> extends DefaultFormRowPan
     @Override
     protected RadioChoice<T> createComponent(IModel<T> model, Class<T> valueType) {
         RadioChoice<T> radioChoice = new RadioChoice<T>(VALUE, model, choices, renderer);
-        radioChoice.setPrefix("<span class=\"multiselectchoice\">");
+        radioChoice.setPrefix("<span class=\"jquibuttonset\">");
         radioChoice.setSuffix("</span>");
         return radioChoice;
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
-            return;
-        }
-        // if ( formSettings.isPreferPrime()) {
-        // response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-        // response.render(JavaScriptHeaderItem.forScript("$(function() { $('#" + getComponent().getMarkupId()
-        // + " input[type=\"radio\"]').puiradiobutton(); });", getComponent().getMarkupId()));
-        // } else {
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
-        response.render(JavaScriptHeaderItem.forScript("$(function() { $('.multiselectchoice').buttonset(); });", "js_"
-                + getComponent().getMarkupId()));
-        // }
     }
 }

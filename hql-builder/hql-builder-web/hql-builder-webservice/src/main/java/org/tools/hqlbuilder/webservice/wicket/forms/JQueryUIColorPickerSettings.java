@@ -52,7 +52,7 @@ public class JQueryUIColorPickerSettings extends FormElementSettings {
     protected Boolean autoOpen;
 
     /** If this option is set to a string, the button will be assigned the class specified. */
-    protected String buttonClass;
+    protected String buttonClass = "jquerycolorpickerbuttonimage";
 
     /**
      * null > false<br>
@@ -61,7 +61,7 @@ public class JQueryUIColorPickerSettings extends FormElementSettings {
     protected Boolean buttonColorize = true;
 
     /** null > 'images/ui-colorpicker.png' */
-    protected String buttonImage;
+    protected String buttonImage = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
     /** null > false */
     protected Boolean buttonImageOnly;
@@ -100,7 +100,7 @@ public class JQueryUIColorPickerSettings extends FormElementSettings {
      * NAME Closest color name<br>
      * EXACT Exact name if possible, otherwise false.<br>
      */
-    protected String colorFormat;
+    protected String colorFormat = "#HEX";
 
     /**
      * null > true<br>
@@ -201,7 +201,7 @@ public class JQueryUIColorPickerSettings extends FormElementSettings {
      * button When clicking on the button created if this event is specified.<br>
      * both selects all possible triggers<br>
      */
-    protected String showOn;
+    protected String showOn = "both";
 
     /**
      * null > 84<br>

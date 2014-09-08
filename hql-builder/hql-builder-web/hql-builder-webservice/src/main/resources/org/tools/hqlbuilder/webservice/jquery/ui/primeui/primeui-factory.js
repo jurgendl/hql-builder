@@ -1,4 +1,4 @@
-$(function() {
+$( document ).ready(function() {
 
 $('.puiinputtext').puiinputtext();
 $('.puiinputtextarea').puiinputtextarea();
