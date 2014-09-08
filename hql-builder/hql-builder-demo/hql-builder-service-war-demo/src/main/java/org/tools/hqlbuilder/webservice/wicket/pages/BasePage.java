@@ -36,7 +36,7 @@ public class BasePage extends DefaultWebPage {
                 pages.add(RegistrationsPage.class);
                 pages.add(StylingPage.class);
                 pages.add(MultiColumnFormPage.class);
-                pages.add(SocialPage.class);
+                pages.add(FontIconsPage.class);
                 return pages;
             }
         };
