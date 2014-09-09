@@ -8,9 +8,6 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
  * version 1.11.1
  */
 public class JQuery {
-    /** do not use directly, use "getJQueryReference()" instead */
-    public static JavaScriptResourceReference JQUERY_JS = new JavaScriptResourceReference(JQuery.class, "jquery-1.11.1.js");
-
     public static ResourceReference getJQueryReference() {
         return WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference();
     }

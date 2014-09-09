@@ -189,4 +189,38 @@
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<!-- <plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.4</version>
+				<executions>
+					<execution>
+						<id>minify</id>
+						<configuration>
+							<charset>${project.build.sourceEncoding}</charset>
+							<cssSourceDir>src/main/resources</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>org/tools/hqlbuilder/webservice/css/general.css</cssSourceFile>
+								<cssSourceFile>org/tools/hqlbuilder/webservice/jquery/ui/weloveicons/socialcolors.css</cssSourceFile>
+								<cssSourceFile>org/tools/hqlbuilder/webservice/jquery/ui/weloveicons/socialcolorshover.css</cssSourceFile>
+								<cssSourceFile>org/tools/hqlbuilder/webservice/jquery/ui/weloveicons/weloveiconfonts-social.css</cssSourceFile>
+							</cssSourceFiles>
+							<cssFinalFile>cssbundle.css</cssFinalFile>
+							<jsSourceDir>src/main/resources</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile></jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>jsbundle.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+						</configuration>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>-->
+		</plugins>
+	</build>
 </project>
