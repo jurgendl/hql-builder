@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
@@ -24,11 +25,11 @@ import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 public class FontIconsPage extends BasePage {
     public FontIconsPage(PageParameters parameters) {
         super(parameters);
+        Social soc = Social.values()[new Random().nextInt(Social.values().length)];
         for (int i = 1; i <= 4; i++) {
-            add(new SocialPanel("socialbutton" + i, Model.of(Social.eventbrite),
-                    new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
-            add(new SocialPanel("socialbar" + i, Model.of(Social.eventbrite),
-                    new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
+            add(new SocialPanel("socialbutton" + i, Model.of(soc), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
+            add(new SocialPanel("socialpin" + i, Model.of(soc), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.pin)));
+            add(new SocialPanel("socialbar" + i, Model.of(soc), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.bar)));
         }
         ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
         add(new ListView<Social>("socialbuttons", options) {
