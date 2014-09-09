@@ -287,3 +287,11 @@ fieldset {
 	width: 16px;
 	height: 16px;
 }
+
+/* jquery slider replacing input slider */
+.slider.ui-slider-horizontal {
+	width: 150px;
+	display: inline-block;
+	margin-left: 6px;
+	margin-right: 10px;
+}
