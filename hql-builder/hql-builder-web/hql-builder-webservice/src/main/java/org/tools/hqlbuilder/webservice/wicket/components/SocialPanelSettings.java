@@ -5,25 +5,29 @@ import java.io.Serializable;
 public class SocialPanelSettings implements Serializable {
     private static final long serialVersionUID = 1091881462422787495L;
 
-    private boolean barForm = false;
+    public static enum SocialForm {
+        button, bar, pin;
+    }
+
+    private SocialForm form = SocialForm.button;
 
     private boolean fading = false;
-
-    public boolean isBarForm() {
-        return this.barForm;
-    }
 
     public boolean isFading() {
         return this.fading;
     }
 
-    public SocialPanelSettings setBarForm(boolean barForm) {
-        this.barForm = barForm;
+    public SocialPanelSettings setFading(boolean fading) {
+        this.fading = fading;
         return this;
     }
 
-    public SocialPanelSettings setFading(boolean fading) {
-        this.fading = fading;
+    public SocialForm getForm() {
+        return this.form;
+    }
+
+    public SocialPanelSettings setForm(SocialForm form) {
+        this.form = form;
         return this;
     }
 }

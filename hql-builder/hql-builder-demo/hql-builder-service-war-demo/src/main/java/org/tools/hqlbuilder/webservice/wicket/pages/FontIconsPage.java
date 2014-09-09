@@ -25,20 +25,28 @@ public class FontIconsPage extends BasePage {
     public FontIconsPage(PageParameters parameters) {
         super(parameters);
         for (int i = 1; i <= 4; i++) {
-            add(new SocialPanel("socialbutton" + i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(false)));
-            add(new SocialPanel("socialbar" + i, Model.of(Social.eventbrite), new SocialPanelSettings().setBarForm(true)));
+            add(new SocialPanel("socialbutton" + i, Model.of(Social.eventbrite),
+                    new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
+            add(new SocialPanel("socialbar" + i, Model.of(Social.eventbrite),
+                    new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
         }
         ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
         add(new ListView<Social>("socialbuttons", options) {
             @Override
             protected void populateItem(ListItem<Social> item) {
-                item.add(new SocialPanel("socialbutton", item.getModel(), new SocialPanelSettings().setBarForm(false)));
+                item.add(new SocialPanel("socialbutton", item.getModel(), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
             }
         });
         add(new ListView<Social>("socialbars", options) {
             @Override
             protected void populateItem(ListItem<Social> item) {
-                item.add(new SocialPanel("socialbar", item.getModel(), new SocialPanelSettings().setBarForm(true)));
+                item.add(new SocialPanel("socialbar", item.getModel(), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.bar)));
+            }
+        });
+        add(new ListView<Social>("socialpins", options) {
+            @Override
+            protected void populateItem(ListItem<Social> item) {
+                item.add(new SocialPanel("socialpin", item.getModel(), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.pin)));
             }
         });
         add(new ListView<WLIFont>("icongroupparent", Arrays.asList(WLIFont.values())) {
