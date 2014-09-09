@@ -118,24 +118,10 @@ public class ExampleForm extends FormPanel<Example> {
         addDatePicker(proxy.getDate1(), fset);
         addDatePicker(proxy.getDate2(), fset, dateConverter);
         addPasswordTextField(proxy.getPassword(), new FormElementSettings());
-        // addNumberField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
-        // addNumberField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
-        // addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-        // addNumberField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
-        // addNumberField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
-        // addNumberField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
-        addNumberTextField(proxy.getBytev(), new NumberFieldSettings<Byte>(Byte.MIN_VALUE, Byte.MAX_VALUE, (byte) 1));
-        addNumberTextField(proxy.getShortv(), new NumberFieldSettings<Short>(Short.MIN_VALUE, Short.MAX_VALUE, (short) 1));
-        addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-        addNumberTextField(proxy.getLongv(), new NumberFieldSettings<Long>(Long.MIN_VALUE, Long.MAX_VALUE, 1l));
-        addNumberTextField(proxy.getFloatv(), new NumberFieldSettings<Float>(Float.MIN_VALUE, Float.MAX_VALUE, 1f));
-        addNumberTextField(proxy.getDoublev(), new NumberFieldSettings<Double>((double) Float.MIN_VALUE, (double) Float.MAX_VALUE, 1d));
-        addRangeField(proxy.getByter(), new RangeFieldSettings<Byte>((byte) 0, (byte) 100, (byte) 1));
-        addRangeField(proxy.getShortr(), new RangeFieldSettings<Short>((short) 0, (short) 100, (short) 1));
-        addRangeField(proxy.getIntegerr(), new RangeFieldSettings<Integer>(0, 100, 1).setTickStep(10));
-        addRangeField(proxy.getLongr(), new RangeFieldSettings<Long>(0l, 100l, 1l));
-        addRangeField(proxy.getFloatr(), new RangeFieldSettings<Float>(0f, 100f, 1f));
-        addRangeField(proxy.getDoubler(), new RangeFieldSettings<Double>(0d, 100d, 1d));
+        // addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1)); // because ugly/inconsistent look
+        addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
+        addSliderField(proxy.getIntegerv(), new RangeFieldSettings<Integer>(0, 100, 1));
+        // addRangeField(proxy.getIntegerv(), new RangeFieldSettings<Integer>(0, 100, 1)); // because ugly/inconsistent look
         addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
         addHidden(proxy.getHidden2());
         addFilepicker(proxy);

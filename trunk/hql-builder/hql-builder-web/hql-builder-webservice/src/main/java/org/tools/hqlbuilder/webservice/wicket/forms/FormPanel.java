@@ -327,7 +327,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -455,6 +455,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public <N extends Number & Comparable<N>> NumberTextFieldPanel<N> addNumberTextField(N propertyPath, NumberFieldSettings<N> componentSettings) {
         return addDefaultRow(new NumberTextFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+    }
+
+    public <N extends Number & Comparable<N>> SliderPanel<N> addSliderField(N propertyPath, NumberFieldSettings<N> componentSettings) {
+        return addDefaultRow(new SliderPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> RangeFieldPanel<N> addRangeField(N propertyPath, RangeFieldSettings<N> componentSettings) {
