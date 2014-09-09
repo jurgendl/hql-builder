@@ -151,12 +151,12 @@ public class WicketApplication extends WebApplication {
 
         getMarkupSettings().setDefaultBeforeDisabledLink("");
         getMarkupSettings().setDefaultAfterDisabledLink("");
-        
+
         if (!inDevelopment) {
-        	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_NO_EXCEPTION_PAGE);
-//            getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
-//            getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
-//            getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
+            getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_NO_EXCEPTION_PAGE);
+            // getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
+            // getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
+            // getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
         }
     }
 
@@ -229,7 +229,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //

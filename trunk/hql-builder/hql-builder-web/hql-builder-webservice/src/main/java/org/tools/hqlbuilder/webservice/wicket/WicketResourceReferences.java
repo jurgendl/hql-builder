@@ -1,5 +1,9 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.apache.wicket.ajax.WicketAjaxDebugJQueryResourceReference;
 import org.apache.wicket.ajax.WicketAjaxJQueryResourceReference;
 import org.apache.wicket.ajax.WicketEventJQueryResourceReference;
@@ -40,8 +44,33 @@ import com.googlecode.wicket.kendo.ui.settings.KendoUILibrarySettings;
 /**
  * combination of resource references with public getters and setters
  */
-public class WicketResourceReferences implements IJQueryLibrarySettings, IKendoUILibrarySettings, ICalendarLibrarySettings,
-ISuperfishLibrarySettings, IConsoleLibrarySettings, IFixedHeaderTableLibrarySettings, IWysiwygLibrarySettings, IEmoticonsLibrarySettings {
+public class WicketResourceReferences implements //
+        IJQueryLibrarySettings,//
+        IKendoUILibrarySettings, //
+        ICalendarLibrarySettings,//
+        ISuperfishLibrarySettings,//
+        IConsoleLibrarySettings, //
+        IFixedHeaderTableLibrarySettings,//
+        IWysiwygLibrarySettings,//
+        IEmoticonsLibrarySettings //
+{
+    /** if possible load resources from CDN when they match any of the patterns in this list */
+    protected final List<Pattern> acceptedCDNPatterns = new ArrayList<Pattern>();
+
+    public List<Pattern> getAcceptedCDNPatterns() {
+        return this.acceptedCDNPatterns;
+    }
+
+    public void addAcceptedCDNPattern(Pattern acceptedCDNPattern) {
+        this.acceptedCDNPatterns.add(acceptedCDNPattern);
+    }
+
+    public void setAcceptedCDNPatterns(List<String> acceptedCDNPatterns) {
+        for (String acceptedCDNPattern : acceptedCDNPatterns) {
+            addAcceptedCDNPattern(Pattern.compile(acceptedCDNPattern));
+        }
+    }
+
     protected static WicketResourceReferences instance;
 
     public static synchronized WicketResourceReferences get() {
