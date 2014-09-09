@@ -66,7 +66,19 @@ public class SocialPanel extends Panel {
             }
         }
 
-        socialbutton.add(new CssClassNameAppender(settings.isBarForm() ? "socialbar" : "socialbtn"));
+        switch (settings.getForm()) {
+            case bar:
+                socialbutton.add(new CssClassNameAppender("socialbar"));
+                break;
+            case pin:
+                socialbutton.add(new CssClassNameAppender("socialpin"));
+                break;
+            default:
+            case button:
+                socialbutton.add(new CssClassNameAppender("socialbtn"));
+                break;
+        }
+
         socialbutton.add(new CssClassNameAppender(socialId + "-color"));
 
         WebMarkupContainer icon = new WebMarkupContainer("icon");
@@ -74,14 +86,24 @@ public class SocialPanel extends Panel {
         WebComponent label = new Label("label", titleString);
         label.setEscapeModelStrings(false);
         socialbutton.add(label);
-        if (settings.isBarForm()) {
-            icon.add(new CssClassNameAppender("zocial-" + socialId));
-            icon.add(new AttributeAppender("data-text", socialId));
-        } else {
-            socialbutton.add(new CssClassNameAppender("zocial-" + socialId));
-            socialbutton.add(new AttributeAppender("data-text", socialId));
-            socialbutton.add(icon.setVisible(false));
-            socialbutton.add(label.setVisible(false));
+        switch (settings.getForm()) {
+            case bar:
+                icon.add(new CssClassNameAppender("zocial-" + socialId));
+                icon.add(new AttributeAppender("data-text", socialId));
+                break;
+            case pin:
+                socialbutton.add(new CssClassNameAppender("zocial-" + socialId));
+                socialbutton.add(new AttributeAppender("data-text", socialId));
+                socialbutton.add(icon.setVisible(false));
+                socialbutton.add(label.setVisible(false));
+                break;
+            default:
+            case button:
+                socialbutton.add(new CssClassNameAppender("zocial-" + socialId));
+                socialbutton.add(new AttributeAppender("data-text", socialId));
+                socialbutton.add(icon.setVisible(false));
+                socialbutton.add(label.setVisible(false));
+                break;
         }
     }
 

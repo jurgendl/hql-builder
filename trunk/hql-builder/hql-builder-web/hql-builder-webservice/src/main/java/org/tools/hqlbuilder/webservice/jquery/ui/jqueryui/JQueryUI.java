@@ -3,16 +3,16 @@ package org.tools.hqlbuilder.webservice.jquery.ui.jqueryui;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
-import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
+import com.googlecode.wicket.jquery.ui.settings.JQueryUILibrarySettings;
 
 /**
  * version 1.11.1
  */
 public class JQueryUI {
     public static ResourceReference getJQueryUIReference() {
-        return ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings()).getJQueryUIReference();
+        return JQueryUILibrarySettings.get().getJavaScriptReference();
+        // return ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings()).getJQueryUIReference();
     }
 
     public static JavaScriptResourceReference JQUERY_UI_FACTORY_JS = new JavaScriptResourceReference(JQueryUI.class, "jquery-ui-factory.js");

@@ -2,13 +2,10 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
-import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 
 /**
  * @see http://jqueryui.com/button/

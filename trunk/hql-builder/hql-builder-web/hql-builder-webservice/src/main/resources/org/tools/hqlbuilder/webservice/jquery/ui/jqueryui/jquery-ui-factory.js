@@ -11,7 +11,8 @@ $('.jquiprogressbar').progressbar();
 $('.jquislider').slider();
 $('.jquispinner').spinner();
 $('.jquitabs').tabs();
-$('.jquiselectmenu').selectmenu();
+
+$('.jquiselectmenu').selectmenu(); /* added in 6.16 */
 
 $('.feedbackPanel').addClass('ui-state-highlight').addClass('ui-corner-all').addClass('ui-state-error').addClass('ui-state-error-text');
 

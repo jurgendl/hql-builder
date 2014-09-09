@@ -1,7 +1,6 @@
-.socialbtn , .socialbar {
-	-webkit-border-radius: .5em;
-	-moz-border-radius: .5em;
-	border-radius: .5em;
+.socialbtn,
+.socialbar,
+.socialpin {
 	-webkit-box-shadow: 2px 2px 3px #666666;
 	-moz-box-shadow: 2px 2px 3px #666666;
 	box-shadow: 2px 2px 3px #666666;
@@ -25,7 +24,23 @@
 	transition: background-color 500ms linear, color 500ms linear;
 	border: 1px solid #666666;
 }
+.socialbtn {
+	-webkit-border-radius: 15%;
+	-moz-border-radius: 15%;
+	border-radius: 15%;
+}
+.socialbar {
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+}
+.socialpin {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+}
 .socialbtn,
+.socialpin,
 .socialbar > :first-child {
 	text-align: center;
 	width: 2.2em;
@@ -33,12 +48,16 @@
 .socialbar {
 	width: 16em;
 }
-.socialbtn:hover , .socialbar:hover {
+.socialbtn:hover,
+.socialbar:hover,
+.socialpin:hover {
 	border: 1px solid #666666;
 	cursor: pointer;
 	cursor: hand;
 }
-.socialbtn:active , .socialbar:active {
+.socialbtn:active,
+.socialbtn:active,
+.socialpin:active {
 	position: relative;
 	top: 2px;
 	left: 2px;

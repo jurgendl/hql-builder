@@ -11,10 +11,10 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
+import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 import org.tools.hqlbuilder.webservice.jquery.ui.kendoui.KendoUI;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
-import com.googlecode.wicket.jquery.core.resource.JQueryUIResourceReference;
 import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
 import com.googlecode.wicket.jquery.ui.calendar.settings.CalendarLibrarySettings;
 import com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings;
@@ -35,6 +35,7 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.EditorStyleSheet
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.JQueryHotKeysJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.PrettifyJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings;
+import com.googlecode.wicket.jquery.ui.resource.JQueryUIResourceReference;
 import com.googlecode.wicket.kendo.ui.resource.ConsoleJavaScriptResourceReference;
 import com.googlecode.wicket.kendo.ui.resource.ConsoleStyleSheetResourceReference;
 import com.googlecode.wicket.kendo.ui.settings.IConsoleLibrarySettings;
@@ -44,7 +45,9 @@ import com.googlecode.wicket.kendo.ui.settings.KendoUILibrarySettings;
 /**
  * combination of resource references with public getters and setters
  */
+@SuppressWarnings("deprecation")
 public class WicketResourceReferences implements //
+        IJavaScriptLibrarySettings, //
         IJQueryLibrarySettings,//
         IKendoUILibrarySettings, //
         ICalendarLibrarySettings,//
@@ -143,9 +146,9 @@ public class WicketResourceReferences implements //
             setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get()); // this one is not set by default
             setKendoUICommonStyleSheetReference(KendoUI.KENDO_COMMON_CSS); // this one is not set by default
             setKendoUIThemeStyleSheetReference(KendoUI.KENDO_DEFAULT_CSS); // this one is not set by default
-            setKendoUIJavaScriptReference(KendoUILibrarySettings.get().getKendoUIJavaScriptReference()); // redirect to default
-            setCalendarJavaScriptReference(CalendarLibrarySettings.get().getCalendarJavaScriptReference()); // redirect to default
-            setCalendarStyleSheetReference(CalendarLibrarySettings.get().getCalendarStyleSheetReference()); // redirect to default
+            setKendoUIJavaScriptReference(KendoUILibrarySettings.get().getJavaScriptReference()); // redirect to default
+            setCalendarJavaScriptReference(CalendarLibrarySettings.get().getJavaScriptReference()); // redirect to default
+            setCalendarStyleSheetReference(CalendarLibrarySettings.get().getStyleSheetReference()); // redirect to default
             setGCalJavaScriptReference(CalendarLibrarySettings.get().getGCalJavaScriptReference()); // redirect to default
             setSuperfishStyleSheetReference(SuperfishStyleSheetResourceReference.get());// redirect to default
             setSuperfishVerticalStyleSheetReference(SuperfishVerticalStyleSheetResourceReference.get());// redirect to default
@@ -165,7 +168,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings#getKendoUICommonStyleSheetReference()
      */
-    @Override
+
     public ResourceReference getKendoUICommonStyleSheetReference() {
         return kendoUICommonStyleSheetReference;
     }
@@ -173,7 +176,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings#getKendoUIThemeStyleSheetReference()
      */
-    @Override
+
     public ResourceReference getKendoUIThemeStyleSheetReference() {
         return kendoUIThemeStyleSheetReference;
     }
@@ -181,7 +184,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings#getKendoUIJavaScriptReference()
      */
-    @Override
+
     public ResourceReference getKendoUIJavaScriptReference() {
         return kendoUIJavaScriptReference;
     }
@@ -189,7 +192,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings#getCalendarJavaScriptReference()
      */
-    @Override
+
     public ResourceReference getCalendarJavaScriptReference() {
         return calendarJavaScriptReference;
     }
@@ -197,7 +200,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings#getCalendarStyleSheetReference()
      */
-    @Override
+
     public ResourceReference getCalendarStyleSheetReference() {
         return calendarStyleSheetReference;
     }
@@ -205,7 +208,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings#getGCalJavaScriptReference()
      */
-    @Override
+
     public ResourceReference getGCalJavaScriptReference() {
         return gCalJavaScriptReference;
     }
@@ -269,7 +272,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings#getJQueryUIReference()
      */
-    @Override
+
     public ResourceReference getJQueryUIReference() {
         return this.jQueryUIReference;
     }
@@ -277,7 +280,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings#getJQueryGlobalizeReference()
      */
-    @Override
+
     public ResourceReference getJQueryGlobalizeReference() {
         return this.jQueryGlobalizeReference;
     }
@@ -317,7 +320,6 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings#setJQueryUIReference(org.apache.wicket.request.resource.ResourceReference)
      */
-    @Override
     public void setJQueryUIReference(ResourceReference jQueryUIReference) {
         this.jQueryUIReference = jQueryUIReference;
     }
@@ -325,7 +327,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings#setJQueryGlobalizeReference(org.apache.wicket.request.resource.ResourceReference)
      */
-    @Override
+
     public void setJQueryGlobalizeReference(ResourceReference jQueryGlobalizeReference) {
         this.jQueryGlobalizeReference = jQueryGlobalizeReference;
     }
@@ -333,7 +335,6 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.sfmenu.settings.ISuperfishLibrarySettings#getSuperfishStyleSheetReference()
      */
-    @Override
     public ResourceReference getSuperfishStyleSheetReference() {
         return superfishStyleSheetReference;
     }
@@ -341,7 +342,6 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.sfmenu.settings.ISuperfishLibrarySettings#getSuperfishVerticalStyleSheetReference()
      */
-    @Override
     public ResourceReference getSuperfishVerticalStyleSheetReference() {
         return superfishVerticalStyleSheetReference;
     }
@@ -357,7 +357,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IConsoleLibrarySettings#getConsoleStyleSheetReference()
      */
-    @Override
+
     public ResourceReference getConsoleStyleSheetReference() {
         return consoleStyleSheetReference;
     }
@@ -365,7 +365,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IConsoleLibrarySettings#getConsoleJavaScriptReference()
      */
-    @Override
+
     public ResourceReference getConsoleJavaScriptReference() {
         return consoleJavaScriptReference;
     }
@@ -382,7 +382,7 @@ public class WicketResourceReferences implements //
      *
      * @see com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.settings.IFixedHeaderTableLibrarySettings#getFixedHeaderTableStyleSheetReference()
      */
-    @Override
+
     public ResourceReference getFixedHeaderTableStyleSheetReference() {
         return fixedHeaderTableStyleSheetReference;
     }
@@ -391,7 +391,7 @@ public class WicketResourceReferences implements //
      *
      * @see com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.settings.IFixedHeaderTableLibrarySettings#getFixedHeaderTableJavaScriptReference()
      */
-    @Override
+
     public ResourceReference getFixedHeaderTableJavaScriptReference() {
         return fixedHeaderTableJavaScriptReference;
     }
@@ -407,7 +407,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getBootstrapCombinedNoIconsStyleSheetReference()
      */
-    @Override
+
     public CssResourceReference getBootstrapCombinedNoIconsStyleSheetReference() {
         return BootstrapCombinedNoIconsStyleSheetResourceReference.get();
     }
@@ -415,7 +415,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getBootstrapResponsiveStyleSheetReference()
      */
-    @Override
+
     public CssResourceReference getBootstrapResponsiveStyleSheetReference() {
         return BootstrapResponsiveStyleSheetResourceReference.get();
     }
@@ -423,7 +423,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getEditorStyleSheetReference()
      */
-    @Override
+
     public CssResourceReference getEditorStyleSheetReference() {
         return EditorStyleSheetResourceReference.get();
     }
@@ -431,7 +431,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getBootstrapDropDownJavaScriptReference()
      */
-    @Override
+
     public JavaScriptResourceReference getBootstrapDropDownJavaScriptReference() {
         return bootstrapDropDownJavaScriptReference;
     }
@@ -439,7 +439,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getBootstrapWysiwygJavaScriptReference()
      */
-    @Override
+
     public JavaScriptResourceReference getBootstrapWysiwygJavaScriptReference() {
         return bootstrapWysiwygJavaScriptReference;
     }
@@ -447,7 +447,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getJQueryHotKeysJavaScriptReference()
      */
-    @Override
+
     public JavaScriptResourceReference getJQueryHotKeysJavaScriptReference() {
         return jQueryHotKeysJavaScriptReference;
     }
@@ -455,7 +455,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings#getPrettifyJavaScriptReference()
      */
-    @Override
+
     public JavaScriptResourceReference getPrettifyJavaScriptReference() {
         return prettifyJavaScriptReference;
     }
@@ -479,7 +479,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.emoticons.settings.IEmoticonsLibrarySettings#getEmoticonsStyleSheetReference()
      */
-    @Override
+
     public ResourceReference getEmoticonsStyleSheetReference() {
         return emoticonsStyleSheetReference;
     }
@@ -487,7 +487,7 @@ public class WicketResourceReferences implements //
     /**
      * @see com.googlecode.wicket.jquery.ui.plugins.emoticons.settings.IEmoticonsLibrarySettings#getEmoticonsJavaScriptReference()
      */
-    @Override
+
     public ResourceReference getEmoticonsJavaScriptReference() {
         return emoticonsJavaScriptReference;
     }
