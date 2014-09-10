@@ -268,12 +268,12 @@ fieldset {
 }
 
 /* bootstrap theme fix */
-.puispinner.pui-inputtext {
+.formbody .puispinner.pui-inputtext {
 	padding-right: 18px;
 }
 
 /* Prime dropdown arrow fix */
-.pui-dropdown.ui-widget > .pui-dropdown-trigger {
+.formbody .pui-dropdown.ui-widget > .pui-dropdown-trigger {
 	padding: 0px;
 }
 
@@ -295,7 +295,7 @@ fieldset {
 }
 
 /* jquery slider replacing input slider */
-.slider.ui-slider-horizontal {
+.formbody .slider.ui-slider-horizontal {
 	width: 150px;
 	height: 1.6em;
 	line-height: 1.6em;
@@ -305,18 +305,24 @@ fieldset {
 	vertical-align: bottom;
 	margin-top: 3px;
 }
-.slider.ui-slider-horizontal .ui-slider-handle {
-	height: 1.6em;
+.formbody .slider.ui-slider-horizontal .ui-slider-handle {
+	height: 1.8em;
 	top: -1px;
 }
 
 /* primeui checkbox */
-.pui-chkbox.ui-widget {
+.formbody .pui-chkbox.ui-widget {
 	vertical-align: middle;
 	width: 19px;
 	height: 19px;
 }
-.pui-chkbox-box.ui-widget {
+.formbody .pui-chkbox-box.ui-widget {
 	width: 16px;
 	height: 16px;
+}
+
+.formbody select,
+.formbody .pui-inputtext:not(textarea),
+.formbody input:not([type=submit]):not([type=reset]):not([type=button]) {
+	width: 260px;
 }
