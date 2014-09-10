@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<!-- 
-<meta name="description" content="HqlBuilder">
-<meta name="keywords" content="HqlBuilder">
-<meta name="author" content="HqlBuilder">
- -->
+<meta name="description" content="" wicket:message="content:page.description">
+<meta name="keywords" content="" wicket:message="content:page.keywords">
+<meta name="author" content="" wicket:message="content:page.author">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title></title>
+<title><wicket:message key="page.title"/></title>
 <!-- 
-<title>HqlBuilder</title>
 <link rel="shortcut icon" type="image/x-icon" href="bricks-icon.png" />
  -->
 <meta http-equiv="imagetoolbar" content="no" />
@@ -19,9 +16,12 @@
 </head>
 <body>
 
-	<noscript><wicket:message key="noscript" /></noscript>
+	<noscript><div class="ui-state-error ui-corner-all" style="margin:20px"><strong><wicket:message key="noscript"/></strong></div></noscript>
+
 	<span wicket:id="debug" />
+
 	<wicket:child />
+
 	<wicket:container wicket:id="footer-container"/>
 
 </body>
