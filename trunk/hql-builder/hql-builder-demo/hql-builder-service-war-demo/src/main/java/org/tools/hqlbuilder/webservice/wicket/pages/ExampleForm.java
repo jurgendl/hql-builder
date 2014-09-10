@@ -53,7 +53,7 @@ public class ExampleForm extends FormPanel<Example> {
     @SuppressWarnings("unchecked")
     public ExampleForm(String id) {
         super(id);
-        setFormSettings(new FormSettings().setClientsideRequiredValidation(false).setColumns(2));
+        setFormSettings(new FormSettings().setClientsideRequiredValidation(false));
         setFormActions(new DefaultFormActions<Example>() {
             @Override
             public void submitObject(Example example) {
@@ -115,7 +115,7 @@ public class ExampleForm extends FormPanel<Example> {
         addCheckBox(proxy.getCheck(), fset);
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
         addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
-        addDatePicker(proxy.getDate1(), fset);
+        // addDatePicker(proxy.getDate1(), fset);
         addDatePicker(proxy.getDate2(), fset, dateConverter);
         addPasswordTextField(proxy.getPassword(), new FormElementSettings());
         // addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1)); // because ugly/inconsistent look
@@ -157,13 +157,7 @@ public class ExampleForm extends FormPanel<Example> {
             addList(WebHelper.proxy(Example.class).getTextExtra(), new ListSettings().setSize(10), optionRenderer2, opt, groupLabels);
         }
         nextRow();
-        addTextArea(proxy);
-    }
-
-    private void addTextArea(Example proxy) {
-        setFormSettings(new FormSettings().setColumns(1));
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
-        setFormSettings(new FormSettings().setColumns(2));
     }
 
     private void addFilepicker(Example proxy) {

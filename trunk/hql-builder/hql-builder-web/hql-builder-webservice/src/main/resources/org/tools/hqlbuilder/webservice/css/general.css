@@ -8,7 +8,7 @@
 /*GillSans, Calibri, Trebuchet, sans-serif*/
 
 body {
-	font-size: 12px;
+	font-size: 14px;
 	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
 }
 
@@ -190,6 +190,11 @@ a.link:focus {
 	border-bottom: 1px solid;
 }
 
+/* fix unreadable blur */
+.ui-state-error {
+	text-shadow: none !important;
+}
+
 /* default form */
 .feedbackPanel.ui-state-error {
 	font-size: 0.8em;
@@ -197,7 +202,6 @@ a.link:focus {
 	padding: 2px 3px 2px 3px;
 	display: inline-block;
 	list-style-type: none;
-	text-shadow: none;
 }
 .feedbackPanel.requiredMarker {
 	font-size: 1.4em;
@@ -275,13 +279,15 @@ fieldset {
 
 /* pocketgrid form */
 .block-group {
-	margin-top: 2px;
-	margin-bottom: 2px;
+	margin-top: 0.4em;
+	margin-bottom: 0.4em;
 }
 
 /* jqueryui colorpicker */
 .jquicolorpicker + button.ui-button.ui-widget.ui-button-text-only {
 	padding: 2px;
+	vertical-align: middle;
+	margin: 2px;
 }
 .jquerycolorpickerbuttonimage {
 	width: 16px;
@@ -291,7 +297,26 @@ fieldset {
 /* jquery slider replacing input slider */
 .slider.ui-slider-horizontal {
 	width: 150px;
+	height: 1.6em;
+	line-height: 1.6em;
 	display: inline-block;
 	margin-left: 6px;
-	margin-right: 10px;
+	margin-right: 8px;
+	vertical-align: bottom;
+	margin-top: 3px;
+}
+.slider.ui-slider-horizontal .ui-slider-handle {
+	height: 1.6em;
+	top: -1px;
+}
+
+/* primeui checkbox */
+.pui-chkbox.ui-widget {
+	vertical-align: middle;
+	width: 19px;
+	height: 19px;
+}
+.pui-chkbox-box.ui-widget {
+	width: 16px;
+	height: 16px;
 }
