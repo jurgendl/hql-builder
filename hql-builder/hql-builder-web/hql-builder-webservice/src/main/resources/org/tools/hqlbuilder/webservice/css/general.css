@@ -321,8 +321,23 @@ fieldset {
 	height: 16px;
 }
 
+/* default form element width */
 .formbody select,
 .formbody .pui-inputtext:not(textarea),
 .formbody input:not([type=submit]):not([type=reset]):not([type=button]) {
 	width: 260px;
+}
+
+/* sort arrows on tables */
+a.wicket_orderUp div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0dd";
+}
+a.wicket_orderDown div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0de";
+}
+a.wicket_orderNone div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0dc";
 }

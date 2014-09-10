@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.proxy;
+import static org.tools.hqlbuilder.common.CommonUtils.proxy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,6 +49,11 @@ public class RegistrationsPage extends BasePage {
 
     protected DefaultDataProvider<Registration> initDataProvider() {
         DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
+            @Override
+            public int getRowsPerPage() {
+                return 2;
+            }
+
             @Override
             @SuppressWarnings("unchecked")
             public Iterator<Registration> select(long first, long count, Map<String, SortOrder> sorting) {
