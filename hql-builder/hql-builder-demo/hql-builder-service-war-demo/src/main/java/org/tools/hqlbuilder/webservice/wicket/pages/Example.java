@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import org.tools.hqlbuilder.demo.Registration;
 
 public class Example implements Serializable {
     private static final long serialVersionUID = 8505173683889617800L;
@@ -52,9 +53,7 @@ public class Example implements Serializable {
 
     private Integer hidden2 = 10;
 
-    private String password = null;
-
-    private String email = "test@gmail.com";
+    private Registration registration = new Registration();
 
     private String text;
 
@@ -100,21 +99,9 @@ public class Example implements Serializable {
 
     private Byte byter = (byte) 50;
 
-    private Locale locale = null;
-
     private String color = "#005599";
 
     private String color2 = "#995500";
-
-    private String theme;
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public ExampleOpts getRadio() {
         return this.radio;
@@ -136,16 +123,8 @@ public class Example implements Serializable {
         return this.text;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Boolean getCheck() {
@@ -316,14 +295,6 @@ public class Example implements Serializable {
         this.id = id;
     }
 
-    public Locale getLocale() {
-        return this.locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
     public ExampleOpts getList() {
         return this.list;
     }
@@ -364,11 +335,11 @@ public class Example implements Serializable {
         this.color2 = color2;
     }
 
-    public String getTheme() {
-        return this.theme;
+    public Registration getRegistration() {
+        return this.registration;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
+    public void setRegistration(Registration registration) {
+        this.registration = registration;
     }
 }

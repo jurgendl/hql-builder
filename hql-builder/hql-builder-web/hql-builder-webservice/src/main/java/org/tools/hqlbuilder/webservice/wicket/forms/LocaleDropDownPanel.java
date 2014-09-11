@@ -30,9 +30,9 @@ public class LocaleDropDownPanel extends FormRowPanel<Locale, Locale, LocalesDro
     }
 
     @Override
-    public void setValueModel(IModel<Locale> model) {
-        valueModel = model;
+    public FormRowPanel<Locale, Locale, LocalesDropDown, FormElementSettings> setValueModel(IModel<Locale> model) {
         getComponent().setModel(model);
+        return super.setValueModel(model);
     }
 
     @Override

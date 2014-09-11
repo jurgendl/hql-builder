@@ -17,15 +17,16 @@ public abstract class DefaultFormRowPanel<T extends Serializable, C extends Form
     }
 
     @Override
-    public void setValueModel(IModel<T> model) {
-        valueModel = model;
+    public FormRowPanel<T, T, C, S> setValueModel(IModel<T> model) {
         getComponent().setModel(model);
+        return super.setValueModel(model);
     }
 
     @Override
     public IModel<T> getValueModel() {
         if (valueModel == null) {
-            valueModel = new PropertyModel<T>(getDefaultModel(), getPropertyName());
+            String property = getPropertyName();
+            valueModel = property == null ? null : new PropertyModel<T>(getDefaultModel(), property);
         }
         return valueModel;
     }
