@@ -7,8 +7,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
@@ -28,7 +28,6 @@ import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
-import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
@@ -58,8 +57,6 @@ public class ExampleForm extends FormPanel<Example> {
             @Override
             public void submitObject(Example example) {
                 exampleService.save(getInstanceId(), example);
-                WicketSession.get().setLocale(example.getLocale());
-                WicketSession.get().setJQueryUITheme(example.getTheme());
             }
 
             public String getInstanceId() {
@@ -68,10 +65,7 @@ public class ExampleForm extends FormPanel<Example> {
 
             @Override
             public Example loadObject() {
-                Example example = exampleService.getExample(getInstanceId());
-                example.setLocale(WicketSession.get().getLocale());
-                example.setTheme(WicketSession.get().getJQueryUITheme());
-                return example;
+                return exampleService.getExample(getInstanceId());
             }
         });
 
@@ -94,36 +88,75 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
         ListModel<ExampleOpts> optsChoices = new ListModel<ExampleOpts>(Arrays.asList(ExampleOpts.values()));
-        Converter<Long, Date> dateConverter = new Converter<Long, Date>() {
+        addLocalesDropDown(null, fset, null, null).setPropertyName("locale").setValueModel(new IModel<Locale>() {
             @Override
-            public Date toType(Long object) {
-                return new Date(object == null ? 0l : object);
+            public void detach() {
+                //
             }
 
             @Override
-            public Long fromType(Date object) {
-                return object == null ? 0l : object.getTime();
+            public Locale getObject() {
+                return WicketSession.get().getLocale();
             }
-        };
 
-        addLocalesDropDown(proxy.getLocale(), fset, null, null);
-        addDropDown(proxy.getTheme(), new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes()));
+            @Override
+            public void setObject(Locale locale) {
+                WicketSession.get().setLocale(locale);
+            }
+        });
+        addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
+        .setValueModel(new IModel<String>() {
+            @Override
+            public void detach() {
+                //
+            }
+
+            @Override
+            public String getObject() {
+                return WicketSession.get().getJQueryUITheme();
+            }
+
+            @Override
+            public void setObject(String theme) {
+                WicketSession.get().setJQueryUITheme(theme);
+            }
+        });
+        addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
+            @Override
+            public void detach() {
+                //
+            }
+
+            @Override
+            public Boolean getObject() {
+                return WicketSession.get().getCookies().getUserAllowedCookies();
+            }
+
+            @Override
+            public void setObject(Boolean userAllowedCookies) {
+                WicketSession.get().getCookies().setUserAllowedCookies(userAllowedCookies);
+            }
+        });
+        nextRow();
+
+        addEmailTextField(proxy.getRegistration().getFirstName(), fset).inheritId();
+        addEmailTextField(proxy.getRegistration().getLastName(), fset).inheritId();
+        addEmailTextField(proxy.getRegistration().getUsername(), fset).inheritId();
+        addEmailTextField(proxy.getRegistration().getEmail(), fset).inheritId();
+        addPasswordTextField(proxy.getRegistration().getPassword(), new FormElementSettings()).inheritId();
+        addDatePicker(proxy.getRegistration().getDateOfBirth(), fset).inheritId();
+        nextRow();
+
+        addHidden(proxy.getHidden1());
+        addHidden(proxy.getHidden2());
+
         addTextField(proxy.getText(), fset.clone().setRequired(true));
         addTextField(proxy.getTextAdd(), fset.clone().setRequired(true));
-        addEmailTextField(proxy.getEmail(), fset);
-        addHidden(proxy.getHidden1());
-        addCheckBox(proxy.getCheck(), fset);
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
         addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
-        // addDatePicker(proxy.getDate1(), fset);
-        addDatePicker(proxy.getDate2(), fset, dateConverter);
-        addPasswordTextField(proxy.getPassword(), new FormElementSettings());
-        // addNumberField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1)); // because ugly/inconsistent look
         addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
         addSliderField(proxy.getIntegerv(), new RangeFieldSettings<Integer>(0, 100, 1));
-        // addRangeField(proxy.getIntegerv(), new RangeFieldSettings<Integer>(0, 100, 1)); // because ugly/inconsistent look
         addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
-        addHidden(proxy.getHidden2());
         addFilepicker(proxy);
         addColorPicker(proxy.getColor(), new ColorPickerSettings());
         addColorPicker(proxy.getColor2(), new JQueryUIColorPickerSettings());

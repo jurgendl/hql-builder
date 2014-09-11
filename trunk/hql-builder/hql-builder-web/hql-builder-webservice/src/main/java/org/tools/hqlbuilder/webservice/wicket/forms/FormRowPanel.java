@@ -106,7 +106,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     protected void setupId() {
         if (formSettings.isInheritId()) {
-            getComponent().setMarkupId(getPropertyName());
+            inheritId();
         }
     }
 
@@ -264,8 +264,9 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return labelModel;
     }
 
-    public void setLabelModel(IModel<String> labelModel) {
+    public FormRowPanel<P, T, C, S> setLabelModel(IModel<String> labelModel) {
         this.labelModel = labelModel;
+        return this;
     }
 
     public String getPropertyName() {
@@ -273,14 +274,15 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
             try {
                 propertyName = WebHelper.name(propertyPath);
             } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
-                propertyName = propertyPath.toString();
+                propertyName = propertyPath == null ? null : propertyPath.toString();
             }
         }
         return this.propertyName;
     }
 
-    public void setPropertyName(String propertyName) {
+    public FormRowPanel<P, T, C, S> setPropertyName(String propertyName) {
         this.propertyName = propertyName;
+        return this;
     }
 
     public IModel<T> getValueModel() {
@@ -290,8 +292,9 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return this.valueModel;
     }
 
-    public void setValueModel(IModel<T> valueModel) {
+    public FormRowPanel<P, T, C, S> setValueModel(IModel<T> valueModel) {
         this.valueModel = valueModel;
+        return this;
     }
 
     public Class<T> getPropertyType() {
@@ -301,8 +304,9 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return this.propertyType;
     }
 
-    public void setPropertyType(Class<T> propertyType) {
+    public FormRowPanel<P, T, C, S> setPropertyType(Class<T> propertyType) {
         this.propertyType = propertyType;
+        return this;
     }
 
     public boolean takesUpSpace() {
@@ -316,5 +320,10 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+    }
+
+    public FormRowPanel<P, T, C, S> inheritId() {
+        getComponent().setMarkupId(getPropertyName().toString());
+        return this;
     }
 }
