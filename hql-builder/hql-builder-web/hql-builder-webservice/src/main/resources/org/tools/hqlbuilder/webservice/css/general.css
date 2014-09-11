@@ -1,5 +1,5 @@
 /* https://www.google.com/fonts */
-@import url(http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic|Droid+Serif:400,700,400italic,700italic&subset=latin,latin-ext);
 
 /* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 /*Baskerville, ‘Times New Roman’, Times, serif*/
@@ -10,6 +10,7 @@
 body {
 	font-size: 14px;
 	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
+	font-weight: 400;
 }
 
 * {
@@ -44,6 +45,8 @@ body {
 /*Trebuchet, Tahoma, Arial, sans-serif*/
 h1, h2, h3, h4, h5 {
 	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
+	font-weight: normal;
+	font-weight: 700;
 }
 
 ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
@@ -191,7 +194,8 @@ a.link:focus {
 }
 
 /* fix unreadable blur */
-.ui-state-error {
+.ui-state-error,
+.ui-state-highlight {
 	text-shadow: none !important;
 }
 
