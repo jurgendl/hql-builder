@@ -33,15 +33,15 @@ public class PrimeUI {
             "plugins/cursorposition.js").addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static JavaScriptResourceReference PRIME_UI_PLUGIN_RANGY_INPUT_JS = new JavaScriptResourceReference(PrimeUI.class, "plugins/rangyinput.js")
-            .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
+    .addJavaScriptResourceReferenceDependency(PRIME_UI_JS);
 
     public static JavaScriptResourceReference PRIME_UI_FACTORY_JS = new JavaScriptResourceReference(PrimeUI.class, "primeui-factory.js")
-            .addJavaScriptResourceReferenceDependency(PRIME_UI_JS).addJavaScriptResourceReferenceDependency(JQueryUI.JQUERY_UI_FACTORY_JS);
+    .addJavaScriptResourceReferenceDependency(PRIME_UI_JS).addJavaScriptResourceReferenceDependency(JQueryUI.JQUERY_UI_FACTORY_JS);
 
     public static CssResourceReference PRIME_UI_CSS = new CssResourceReference(PrimeUI.class, "primeui-1.1.css");
 
     public static CssResourceReference forJQueryUITheme(String name) {
-        return new CssResourceReference(PrimeUI.class, "themes/" + name + "/theme.css").addCssResourceReferenceDependency(PRIME_UI_CSS);
+        return new CssResourceReference(PrimeUI.class, "themes/" + name.toString() + "/theme.css").addCssResourceReferenceDependency(PRIME_UI_CSS);
     }
 
     protected static List<String> themes = null;

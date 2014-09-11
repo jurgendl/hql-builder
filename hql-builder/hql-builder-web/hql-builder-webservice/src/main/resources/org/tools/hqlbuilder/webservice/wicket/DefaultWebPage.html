@@ -8,21 +8,15 @@
 <meta name="author" content="" wicket:message="content:page.author">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><wicket:message key="page.title"/></title>
-<!-- 
-<link rel="shortcut icon" type="image/x-icon" href="bricks-icon.png" />
- -->
+<!-- <link rel="shortcut icon" type="image/x-icon" href="bricks-icon.png" /> -->
 <meta http-equiv="imagetoolbar" content="no" />
 <wicket:header-items/>
 </head>
 <body>
-
-	<noscript><div class="ui-state-error ui-corner-all" style="margin:20px"><strong><wicket:message key="noscript"/></strong></div></noscript>
-
+	<noscript><div class="ui-state-error ui-corner-all" style="margin:20px;font-weight:bold" wicket:id="noscript"></div></noscript>
+	<div class="ui-state-highlight ui-corner-all" style="margin:20px;font-weight:bold" wicket:id="nocookies"></div>
 	<span wicket:id="debug" />
-
 	<wicket:child />
-
 	<wicket:container wicket:id="footer-container"/>
-
 </body>
 </html>

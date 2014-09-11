@@ -1,13 +1,16 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
@@ -28,43 +31,40 @@ public class DefaultWebPage extends WebPage {
     /** default cache duration when deployed: 1 day */
     protected Duration defaultCacheDuration = Duration.ONE_DAY;
 
-    protected boolean debugbar = false;
-
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
-
         setStatelessHint(false);
-
+        logger = LoggerFactory.getLogger(getClass());
+        Injector.get().inject(this);
         if (getClass().equals(DefaultWebPage.class)) {
             setResponsePage(EmptyPage.class, parameters);
         }
-
-        logger = LoggerFactory.getLogger(getClass());
-        Injector.get().inject(this);
         addComponents();
     }
 
     protected void addComponents() {
-        if (debugbar && WicketApplication.get().usesDevelopmentConfig()) {
-            add(new DebugBar("debug"));
-        } else {
-            add(new EmptyPanel("debug").setVisible(false));
-        }
+        // noscript
+        add(new WebMarkupContainer("noscript", Model.of(getString("noscript"))));
+        // site uses cookies info
+        add(new WebMarkupContainer("nocookies").setVisible(false));
+        // wicket/ajav debug bars
+        add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug") : new EmptyPanel(
+                "debug").setVisible(false));
+        // add header response (javascript) down below on page
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
-
         super.renderHead(response);
 
         if (!isEnabledInHierarchy()) {
             return;
         }
 
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
         response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
 
         addDefaultResources(response);
         addThemeResources(response);
@@ -88,15 +88,19 @@ public class DefaultWebPage extends WebPage {
      */
     protected void addThemeResources(IHeaderResponse response) {
         String jQueryUITheme = WicketSession.get().getJQueryUITheme();
-        if (jQueryUITheme != null && JQueryUIThemes.getThemes().contains(jQueryUITheme)) {
+        if (StringUtils.isNotBlank(jQueryUITheme) && JQueryUIThemes.getThemes().contains(jQueryUITheme)) {
             response.render(CssHeaderItem.forReference(JQueryUIThemes.base(jQueryUITheme)));
             response.render(CssHeaderItem.forReference(JQueryUIThemes.theme(jQueryUITheme)));
         } else {
             response.render(CssHeaderItem.forReference(JQueryUI.JQUERY_UI_CSS));
             response.render(CssHeaderItem.forReference(JQueryUI.JQUERY_UI_THEME_CSS));
         }
-        response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
-        response.render(CssHeaderItem.forReference(PrimeUI.forJQueryUITheme(jQueryUITheme)));
+        {
+            response.render(CssHeaderItem.forReference(PrimeUI.PRIME_UI_CSS));
+            if (StringUtils.isNotBlank(jQueryUITheme)) {
+                response.render(CssHeaderItem.forReference(PrimeUI.forJQueryUITheme(jQueryUITheme)));
+            }
+        }
     }
 
     protected void addDefaultResources(@SuppressWarnings("unused") IHeaderResponse response) {
