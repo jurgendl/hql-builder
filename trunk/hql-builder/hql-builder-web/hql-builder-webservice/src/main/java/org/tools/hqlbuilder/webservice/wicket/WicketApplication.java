@@ -61,6 +61,8 @@ public class WicketApplication extends WebApplication {
 
     protected boolean diskStore = false;
 
+    protected boolean showDebugbars = true;
+
     public static WicketApplication get() {
         return WicketApplication.class.cast(WebApplication.get());
     }
@@ -113,7 +115,7 @@ public class WicketApplication extends WebApplication {
         getRequestLoggerSettings().setRequestLoggerEnabled(inDevelopment);
 
         // debug settings
-        getDebugSettings().setAjaxDebugModeEnabled(inDevelopment);
+        getDebugSettings().setAjaxDebugModeEnabled(showDebugbars && inDevelopment);
         getDebugSettings().setComponentUseCheck(inDevelopment);
         getDebugSettings().setDevelopmentUtilitiesEnabled(inDevelopment);
         // getDebugSettings().setOutputComponentPath(inDevelopment);
@@ -229,7 +231,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-                //
+        //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
@@ -287,5 +289,13 @@ public class WicketApplication extends WebApplication {
 
     public ZussStyle getZussStyle() {
         return this.zussStyle;
+    }
+
+    public boolean isShowDebugbars() {
+        return this.showDebugbars;
+    }
+
+    public void setShowDebugbars(boolean showDebugbars) {
+        this.showDebugbars = showDebugbars;
     }
 }

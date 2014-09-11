@@ -60,11 +60,11 @@ public class WicketSession extends WebSession {
         return WicketSession.class.cast(Session.get());
     }
 
-    public String getJQueryUITheme() {
+    public synchronized String getJQueryUITheme() {
         return this.jqueryUITheme;
     }
 
-    public void setJQueryUITheme(String theme) {
+    public synchronized void setJQueryUITheme(String theme) {
         this.jqueryUITheme = theme;
         if (pushToCookies) {
             saveCookie(THEME, theme, 365);
