@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.proxy;
+import static org.tools.hqlbuilder.common.CommonUtils.proxy;
 
 import java.io.Serializable;
 
@@ -40,7 +40,7 @@ public class RegistrationPage extends BasePage {
                 model.setObject(object);
             }
         };
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings());
+        FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setInheritId(true));
         add(formPanel);
 
         Registration proxy = proxy(Registration.class);

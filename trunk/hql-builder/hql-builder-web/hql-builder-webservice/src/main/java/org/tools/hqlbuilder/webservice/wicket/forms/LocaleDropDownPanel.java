@@ -43,7 +43,8 @@ public class LocaleDropDownPanel extends FormRowPanel<Locale, Locale, LocalesDro
     @Override
     public IModel<Locale> getValueModel() {
         if (valueModel == null) {
-            valueModel = new PropertyModel<Locale>(getDefaultModel(), getPropertyName());
+            String property = getPropertyName();
+            valueModel = property == null ? null : new PropertyModel<Locale>(getDefaultModel(), property);
         }
         return valueModel;
     }

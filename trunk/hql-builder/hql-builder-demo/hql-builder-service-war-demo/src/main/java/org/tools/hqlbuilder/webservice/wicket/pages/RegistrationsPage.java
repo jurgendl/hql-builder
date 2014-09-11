@@ -148,7 +148,8 @@ public class RegistrationsPage extends BasePage {
     }
 
     protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
-        formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setLiveValidation(true).setAjax(true));
+        formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setLiveValidation(true).setAjax(true)
+                .setInheritId(true));
         formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
         formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
         formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));

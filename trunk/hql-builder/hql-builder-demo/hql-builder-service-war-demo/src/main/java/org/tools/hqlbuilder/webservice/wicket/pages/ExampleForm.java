@@ -105,22 +105,22 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-        .setValueModel(new IModel<String>() {
-            @Override
-            public void detach() {
-                //
-            }
+                .setValueModel(new IModel<String>() {
+                    @Override
+                    public void detach() {
+                        //
+                    }
 
-            @Override
-            public String getObject() {
-                return WicketSession.get().getJQueryUITheme();
-            }
+                    @Override
+                    public String getObject() {
+                        return WicketSession.get().getJQueryUITheme();
+                    }
 
-            @Override
-            public void setObject(String theme) {
-                WicketSession.get().setJQueryUITheme(theme);
-            }
-        });
+                    @Override
+                    public void setObject(String theme) {
+                        WicketSession.get().setJQueryUITheme(theme);
+                    }
+                });
         addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -139,9 +139,9 @@ public class ExampleForm extends FormPanel<Example> {
         });
         nextRow();
 
-        addEmailTextField(proxy.getRegistration().getFirstName(), fset).inheritId();
-        addEmailTextField(proxy.getRegistration().getLastName(), fset).inheritId();
-        addEmailTextField(proxy.getRegistration().getUsername(), fset).inheritId();
+        addTextField(proxy.getRegistration().getFirstName(), fset).inheritId();
+        addTextField(proxy.getRegistration().getLastName(), fset).inheritId();
+        addTextField(proxy.getRegistration().getUsername(), fset).inheritId();
         addEmailTextField(proxy.getRegistration().getEmail(), fset).inheritId();
         addPasswordTextField(proxy.getRegistration().getPassword(), new FormElementSettings()).inheritId();
         addDatePicker(proxy.getRegistration().getDateOfBirth(), fset).inheritId();
