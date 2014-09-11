@@ -9,8 +9,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
@@ -43,10 +43,27 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
-        // noscript
-        add(new WebMarkupContainer("noscript", Model.of(getString("noscript"))));
-        // site uses cookies info
-        add(new WebMarkupContainer("nocookies").setVisible(false));
+        // site uses cookies info (asked when user choice not known)
+        WebMarkupContainer cookiesQ = new WebMarkupContainer("nocookies");
+        cookiesQ.add(new Link<String>("allowCookies") {
+            private static final long serialVersionUID = -8778073423020169707L;
+
+            @Override
+            public void onClick() {
+                WicketSession.get().getCookies().setUserAllowedCookies(true);
+                DefaultWebPage.this.get("nocookies").setVisible(false);
+            }
+        });
+        cookiesQ.add(new Link<String>("disallowCookies") {
+            private static final long serialVersionUID = 4600682011663940306L;
+
+            @Override
+            public void onClick() {
+                WicketSession.get().getCookies().setUserAllowedCookies(false);
+                DefaultWebPage.this.get("nocookies").setVisible(false);
+            }
+        });
+        add(cookiesQ.setVisible(WicketSession.get().getCookies().getUserAllowedCookies() == null));
         // wicket/ajav debug bars
         add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug") : new EmptyPanel(
                 "debug").setVisible(false));
