@@ -13,8 +13,25 @@
 <wicket:header-items/>
 </head>
 <body>
-	<noscript><div class="ui-state-error ui-corner-all" style="margin:20px;font-weight:bold" wicket:id="noscript"></div></noscript>
-	<div class="ui-state-highlight ui-corner-all" style="margin:20px;font-weight:bold" wicket:id="nocookies"></div>
+	<noscript>
+		<div class="ui-state-error ui-corner-all" style="margin:14px;padding-left:20px;padding-right:20px;z-index:250">
+			<p><wicket:message key="noscript"></wicket:message></p>
+		</div>
+	</noscript>
+	<div class="ui-state-highlight ui-corner-all" style="margin:14px;padding-left:20px;padding-right:20px;z-index:250" wicket:id="nocookies">
+		<p>
+			<wicket:message key="nocookies"></wicket:message>
+			<a href="#" wicket:id="allowCookies"><wicket:message key="allowcookies">allow cookies</wicket:message></a>,
+			<a href="#" wicket:id="disallowCookies"><wicket:message key="disallowcookies">disallow cookies</wicket:message></a>.
+			<a href="#" onclick="if(showhide('nocookies_more_information')){this.innerHTML='Less information'}else{this.innerHTML='More information'};return false;">More information</a>
+		</p>
+		<div id="nocookies_more_information">
+			<p>
+				<wicket:message key="cookiesfull"></wicket:message>
+			</p>
+		</div>
+		<script type="text/javascript" id="more_information_js">/*<![CDATA[*/ function showhide(layer_ref) { var el = document.getElementById(layer_ref); var visible = el.style.display == 'block'; el.style.display = visible ? 'none' : 'block'; return !visible; }; document.getElementById('nocookies_more_information').style.display = 'none'; /*]]>*/</script>
+	</div>
 	<span wicket:id="debug" />
 	<wicket:child />
 	<wicket:container wicket:id="footer-container"/>

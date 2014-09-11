@@ -61,7 +61,7 @@ public class WicketApplication extends WebApplication {
 
     protected boolean diskStore = false;
 
-    protected boolean showDebugbars = true;
+    protected boolean showDebugbars = false;
 
     public static WicketApplication get() {
         return WicketApplication.class.cast(WebApplication.get());
@@ -231,7 +231,7 @@ public class WicketApplication extends WebApplication {
     protected void mountImages() {
         String cssImages = "css/images/";
         String[] mountedImages = { //
-        //
+                //
                 "arrow_off.png", //
                 "arrow_up.png",//
                 "arrow_down.png" //
