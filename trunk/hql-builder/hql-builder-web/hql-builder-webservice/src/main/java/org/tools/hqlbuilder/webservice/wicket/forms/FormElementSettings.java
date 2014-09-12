@@ -14,6 +14,10 @@ public class FormElementSettings implements Serializable, Cloneable {
 
     protected boolean required = false;
 
+    protected boolean showPlaceholder = false;
+
+    protected boolean inheritId = false;
+
     public FormElementSettings() {
         super();
     }
@@ -83,6 +87,24 @@ public class FormElementSettings implements Serializable, Cloneable {
     }
 
     protected boolean skipForExport(String propertyName) {
-        return "required".equals(propertyName);
+        return "required".equals(propertyName) || "showPlaceholder".equals(propertyName) || "inheritId".equals(propertyName);
+    }
+
+    public boolean isShowPlaceholder() {
+        return this.showPlaceholder;
+    }
+
+    public FormElementSettings setShowPlaceholder(boolean showPlaceholder) {
+        this.showPlaceholder = showPlaceholder;
+        return this;
+    }
+
+    public boolean isInheritId() {
+        return this.inheritId;
+    }
+
+    public FormElementSettings setInheritId(boolean inheritId) {
+        this.inheritId = inheritId;
+        return this;
     }
 }

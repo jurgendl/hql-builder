@@ -11,6 +11,10 @@ public interface FormConstants {
 
     public static final String FORM_PANEL = "form.panel";
 
+    public static final String FORM_FIELDSET = "form.fieldset";
+
+    public static final String FORM_FIELDSET_LEGEND = "form.fieldset.legend";
+
     public static final String FORM = "form";
 
     public static final String VALUE = "value";

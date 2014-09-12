@@ -16,6 +16,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -32,12 +33,14 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.pocketgrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
+import org.tools.hqlbuilder.webservice.wicket.less.LessResourceReference;
 
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 
@@ -89,6 +92,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return WebHelper.proxy(getFormActions().forObjectClass());
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -100,6 +104,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         renderColumnsCss(response);
+        response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "form.less")
+                .addCssResourceReferenceDependency(WicketCSSRoot.GENERAL)));
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
@@ -164,13 +170,29 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             WebHelper.show(form);
             add(form);
 
-            WebMarkupContainer formHeader = new WebMarkupContainer(FORM_HEADER);
+            WebMarkupContainer formHeader = new WebMarkupContainer(FORM_HEADER) {
+                private static final long serialVersionUID = 6548216685529936996L;
+
+                @Override
+                public boolean isVisible() {
+                    for (int i = 0; i < size(); i++) {
+                        if (!get(i).isVisible()) {
+                            return false;
+                        }
+                    }
+                    return super.isVisible();
+                }
+            };
             form.add(formHeader);
 
             WebMarkupContainer formBody = new WebMarkupContainer(FORM_BODY);
             form.add(formBody);
 
-            formBody.add(getRowRepeater());
+            WebMarkupContainer formFieldSet = new WebMarkupContainer(FORM_FIELDSET);
+            formBody.add(formFieldSet);
+            Label formFieldSetLegend = new Label(FORM_FIELDSET_LEGEND);
+            formFieldSet.add(formFieldSetLegend);
+            formFieldSet.add(getRowRepeater());
 
             ResourceModel submitModel = new ResourceModel(SUBMIT_LABEL);
             ResourceModel resetModel = new ResourceModel(RESET_LABEL);
@@ -229,7 +251,19 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             formActionsContainer.add(reset);
             formActionsContainer.add(cancel);
 
-            WebMarkupContainer formFooter = new WebMarkupContainer(FORM_FOOTER);
+            WebMarkupContainer formFooter = new WebMarkupContainer(FORM_FOOTER) {
+                private static final long serialVersionUID = -8111670292045284274L;
+
+                @Override
+                public boolean isVisible() {
+                    for (int i = 0; i < size(); i++) {
+                        if (!get(i).isVisible()) {
+                            return false;
+                        }
+                    }
+                    return super.isVisible();
+                }
+            };
             form.add(formFooter);
 
             formHeader.add(new FeedbackPanel("allMessagesTop") {
@@ -327,7 +361,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
