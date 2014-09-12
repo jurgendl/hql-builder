@@ -118,8 +118,9 @@ public class WicketApplication extends WebApplication {
         getDebugSettings().setAjaxDebugModeEnabled(showDebugbars && inDevelopment);
         getDebugSettings().setComponentUseCheck(inDevelopment);
         getDebugSettings().setDevelopmentUtilitiesEnabled(inDevelopment);
-        // getDebugSettings().setOutputComponentPath(inDevelopment);
         getDebugSettings().setOutputMarkupContainerClassName(inDevelopment);
+        getDebugSettings().setDevelopmentUtilitiesEnabled(inDevelopment);
+        // getDebugSettings().setOutputComponentPath(inDevelopment);
 
         // resource settings
         getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
