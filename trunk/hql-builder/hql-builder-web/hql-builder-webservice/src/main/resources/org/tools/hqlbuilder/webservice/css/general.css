@@ -54,7 +54,7 @@ h1, h2, h3, h4, h5 {
 	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
 }
 
-/* rotation animation */
+/* ======================== rotation animation ======================== */
 @-webkit-keyframes rotate {
   from { -webkit-transform:rotate(0deg); }
   to { -webkit-transform:rotate(360deg); }
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5 {
   -o-animation-duration: 3s;
 }
 
-/* class="tooltip" title="tooltiptext" */
+/* ======================== class="tooltip" title="tooltiptext" ======================== */
 .tooltip {
 	position: relative;
 }
@@ -154,18 +154,43 @@ h1, h2, h3, h4, h5 {
 	opacity: 1;
 }
 
-/* hyperlink */
+/* ======================== sort arrows on tables ======================== */
+a.wicket_orderUp div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0dd";
+}
+a.wicket_orderDown div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0de";
+}
+a.wicket_orderNone div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0dc";
+}
+
+/* ======================== centering ======================== */
+/* http://css-tricks.com/centering-css-complete-guide */
+
+/* inline, inline-block, inline-table, inline-flex in block-level parent element */
+.center-children-hor {
+	text-align: center;
+}
+/* block-level element */
+.center-me-hor {
+	margin: 0 auto;
+	width: ; /* needs to set width */ 
+}
+
+/* ======================== hyperlink ======================== */
 a.link {
 	outline: none;
 	text-decoration: none;
 	color: #1E608E;
 	border-bottom: none;
 }
-
 .ui-widget a {
 	border: none;
 }
-
 /* the normal state of a hyperlink */
 a.link:link {
 	color: #1E608E;
@@ -175,23 +200,34 @@ a.link:link {
 a.link:visited {
 	color: #1E608E;
 }
-
 /* when the user hovers their mouse over a link */
 a.link:hover {
 	color: #1E608E;
 	border-bottom: 1px solid;
 }
-
 /* when the user clicks on the link (or presses the Enter key on a focused link) */
 a.link:active {
 	color: #1E608E;
 }
-
 /* when the user uses the Tab key to navigate to hyperlinks */
 a.link:focus {
 	color: #1E608E;
 	border-bottom: 1px solid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* fix unreadable blur */
 .ui-state-error,
@@ -288,12 +324,12 @@ fieldset {
 }
 
 /* jqueryui colorpicker */
-.jquicolorpicker + button.ui-button.ui-widget.ui-button-text-only {
+.formbody .jquicolorpicker + button.ui-button.ui-widget.ui-button-text-only {
 	padding: 2px;
 	vertical-align: middle;
 	margin: 2px;
 }
-.jquerycolorpickerbuttonimage {
+.formbody .jquerycolorpickerbuttonimage {
 	width: 16px;
 	height: 16px;
 }
@@ -332,16 +368,4 @@ fieldset {
 	width: 260px;
 }
 
-/* sort arrows on tables */
-a.wicket_orderUp div::after { 
-	font-family: 'FontAwesome';
-	content: "\f0dd";
-}
-a.wicket_orderDown div::after { 
-	font-family: 'FontAwesome';
-	content: "\f0de";
-}
-a.wicket_orderNone div::after { 
-	font-family: 'FontAwesome';
-	content: "\f0dc";
-}
+

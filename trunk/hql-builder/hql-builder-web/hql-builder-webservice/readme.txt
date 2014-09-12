@@ -55,3 +55,13 @@ http://css-tricks.com/favicon-quiz/
 http://css-tricks.com/stackicons-icon-fonts/
 http://www.jquery2dotnet.com/2013/05/jquery-ui-themes-collection.html
 http://ionicons.com/
+http://css-tricks.com/glitch-effect-text-images-svg/
+
+
+
+
+
+
+
+
+
