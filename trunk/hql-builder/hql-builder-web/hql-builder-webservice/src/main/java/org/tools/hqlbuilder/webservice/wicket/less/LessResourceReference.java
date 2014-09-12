@@ -5,18 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.PackageResource;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -27,8 +20,8 @@ import org.tools.hqlbuilder.webservice.wicket.StreamResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 import ro.isdc.wro.extensions.processor.css.RhinoLessCssProcessor;
-
-import com.google.common.collect.Lists;
+import ro.isdc.wro.model.resource.processor.ResourcePreProcessor;
+import ro.isdc.wro.model.resource.processor.impl.css.CssCompressorProcessor;
 
 /**
  * response.render(CssHeaderItem.forReference(new
@@ -36,6 +29,7 @@ import com.google.common.collect.Lists;
  *
  * @see http://less-lang.com/
  * @see https://code.google.com/p/wro4j/
+ * @see http://lesscss.org/features
  */
 public class LessResourceReference extends StreamResourceReference implements
 		IResourceStream {
@@ -54,7 +48,9 @@ public class LessResourceReference extends StreamResourceReference implements
 
 	protected transient Time lastModified = null;
 
-	protected transient RhinoLessCssProcessor lessCssProcessor;
+	protected transient ResourcePreProcessor lessCssProcessor;
+
+	protected transient ResourcePreProcessor cssCompressorProcessor;
 
 	public LessResourceReference(Class<?> scope, String name) {
 		super(scope, name);
@@ -105,15 +101,6 @@ public class LessResourceReference extends StreamResourceReference implements
 			} else if (lastModified == null) {
 				logger.info("building " + fullPath + " because out of date");
 				rebuild = true;
-				// } else if (getlessStyle().getLastModified() == null) {
-				// logger.info("building " + fullPath +
-				// " because style is new");
-				// rebuild = true;
-				// } else if (lastModified.getMilliseconds() <
-				// getlessStyle().getLastModified()) {
-				// logger.info("building " + fullPath +
-				// " because style out of date");
-				// rebuild = true;
 			} else if (WicketApplication.get().usesDevelopmentConfig()) {
 				try {
 					if (lastModified.getMilliseconds() < getClass()
@@ -130,9 +117,18 @@ public class LessResourceReference extends StreamResourceReference implements
 				}
 			}
 			if (rebuild) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ByteArrayOutputStream out;
 				try {
-					write(out);
+					out = new ByteArrayOutputStream();
+					getLessCssProcessor().process(null,
+							new InputStreamReader(read()),
+							new OutputStreamWriter(out));
+					// ByteArrayInputStream in = new ByteArrayInputStream(
+					// out.toByteArray());
+					// out = new ByteArrayOutputStream();
+					// getCssCompressorProcessor().process(null,
+					// new InputStreamReader(in),
+					// new OutputStreamWriter(out));
 				} catch (IOException ex) {
 					throw new ResourceStreamNotFoundException(ex);
 				}
@@ -179,55 +175,26 @@ public class LessResourceReference extends StreamResourceReference implements
 				getResourcePath() + '/' + getLessName());
 	}
 
-	protected void write(OutputStream out) throws IOException {
-		getLessCssProcessor().process(new InputStreamReader(read()),
-				new OutputStreamWriter(out));
-	}
-
-	public RhinoLessCssProcessor getLessCssProcessor() {
+	public ResourcePreProcessor getLessCssProcessor() {
 		if (lessCssProcessor == null) {
 			lessCssProcessor = new RhinoLessCssProcessor();
 		}
 		return this.lessCssProcessor;
 	}
 
-	public void setLessCssProcessor(RhinoLessCssProcessor lessCssProcessor) {
+	public void setLessCssProcessor(ResourcePreProcessor lessCssProcessor) {
 		this.lessCssProcessor = lessCssProcessor;
 	}
 
-	protected final List<HeaderItem> dependencies = new ArrayList<>();
-
-	protected final List<ResourceReference> dependenciesJavaScript = new ArrayList<>();
-
-	protected final List<ResourceReference> dependenciesCss = new ArrayList<>();
-
-	public LessResourceReference addDependency(HeaderItem dependency) {
-		dependencies.add(dependency);
-		return this;
+	public ResourcePreProcessor getCssCompressorProcessor() {
+		if (cssCompressorProcessor == null)
+			cssCompressorProcessor = new CssCompressorProcessor();
+		return cssCompressorProcessor;
 	}
 
-	public LessResourceReference addJavaScriptResourceReferenceDependency(
-			ResourceReference dependency) {
-		dependenciesJavaScript.add(dependency);
-		return this;
+	public void setCssCompressorProcessor(
+			ResourcePreProcessor cssCompressorProcessor) {
+		this.cssCompressorProcessor = cssCompressorProcessor;
 	}
 
-	public LessResourceReference addCssResourceReferenceDependency(
-			ResourceReference dependency) {
-		dependenciesCss.add(dependency);
-		return this;
-	}
-
-	@Override
-	public Iterable<? extends HeaderItem> getDependencies() {
-		List<HeaderItem> l = Lists.newArrayList(super.getDependencies());
-		l.addAll(dependencies);
-		for (ResourceReference dependency : dependenciesJavaScript) {
-			l.add(JavaScriptHeaderItem.forReference(dependency));
-		}
-		for (ResourceReference dependency : dependenciesCss) {
-			l.add(CssHeaderItem.forReference(dependency));
-		}
-		return l;
-	}
 }

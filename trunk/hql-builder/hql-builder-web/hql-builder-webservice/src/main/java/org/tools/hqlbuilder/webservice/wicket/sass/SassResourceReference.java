@@ -8,15 +8,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.PackageResource;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -27,8 +21,8 @@ import org.tools.hqlbuilder.webservice.wicket.StreamResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
 import ro.isdc.wro.extensions.processor.css.SassCssProcessor;
-
-import com.google.common.collect.Lists;
+import ro.isdc.wro.model.resource.processor.ResourcePreProcessor;
+import ro.isdc.wro.model.resource.processor.impl.css.CssCompressorProcessor;
 
 /**
  * response.render(CssHeaderItem.forReference(new
@@ -54,7 +48,9 @@ public class SassResourceReference extends StreamResourceReference implements
 
 	protected transient Time lastModified = null;
 
-	protected transient SassCssProcessor sassCssProcessor;
+	protected transient ResourcePreProcessor sassCssProcessor;
+
+	protected transient ResourcePreProcessor cssCompressorProcessor;
 
 	public SassResourceReference(Class<?> scope, String name) {
 		super(scope, name);
@@ -105,15 +101,6 @@ public class SassResourceReference extends StreamResourceReference implements
 			} else if (lastModified == null) {
 				logger.info("building " + fullPath + " because out of date");
 				rebuild = true;
-				// } else if (getSassStyle().getLastModified() == null) {
-				// logger.info("building " + fullPath +
-				// " because style is new");
-				// rebuild = true;
-				// } else if (lastModified.getMilliseconds() <
-				// getSassStyle().getLastModified()) {
-				// logger.info("building " + fullPath +
-				// " because style out of date");
-				// rebuild = true;
 			} else if (WicketApplication.get().usesDevelopmentConfig()) {
 				try {
 					if (lastModified.getMilliseconds() < getClass()
@@ -130,9 +117,18 @@ public class SassResourceReference extends StreamResourceReference implements
 				}
 			}
 			if (rebuild) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ByteArrayOutputStream out;
 				try {
-					write(out);
+					out = new ByteArrayOutputStream();
+					getSassCssProcessor().process(null,
+							new InputStreamReader(read()),
+							new OutputStreamWriter(out));
+					// ByteArrayInputStream in = new ByteArrayInputStream(
+					// out.toByteArray());
+					// out = new ByteArrayOutputStream();
+					// getCssCompressorProcessor().process(null,
+					// new InputStreamReader(in),
+					// new OutputStreamWriter(out));
 				} catch (IOException ex) {
 					throw new ResourceStreamNotFoundException(ex);
 				}
@@ -180,54 +176,29 @@ public class SassResourceReference extends StreamResourceReference implements
 	}
 
 	protected void write(OutputStream out) throws IOException {
-		getSassCssProcessor().process(new InputStreamReader(read()),
+		getSassCssProcessor().process(null, new InputStreamReader(read()),
 				new OutputStreamWriter(out));
 	}
 
-	public SassCssProcessor getSassCssProcessor() {
+	public ResourcePreProcessor getSassCssProcessor() {
 		if (sassCssProcessor == null) {
 			sassCssProcessor = new SassCssProcessor();
 		}
 		return this.sassCssProcessor;
 	}
 
-	public void setSassCssProcessor(SassCssProcessor sassCssProcessor) {
+	public void setSassCssProcessor(ResourcePreProcessor sassCssProcessor) {
 		this.sassCssProcessor = sassCssProcessor;
 	}
 
-	protected final List<HeaderItem> dependencies = new ArrayList<>();
-
-	protected final List<ResourceReference> dependenciesJavaScript = new ArrayList<>();
-
-	protected final List<ResourceReference> dependenciesCss = new ArrayList<>();
-
-	public SassResourceReference addDependency(HeaderItem dependency) {
-		dependencies.add(dependency);
-		return this;
+	public ResourcePreProcessor getCssCompressorProcessor() {
+		if (cssCompressorProcessor == null)
+			cssCompressorProcessor = new CssCompressorProcessor();
+		return cssCompressorProcessor;
 	}
 
-	public SassResourceReference addJavaScriptResourceReferenceDependency(
-			ResourceReference dependency) {
-		dependenciesJavaScript.add(dependency);
-		return this;
-	}
-
-	public SassResourceReference addCssResourceReferenceDependency(
-			ResourceReference dependency) {
-		dependenciesCss.add(dependency);
-		return this;
-	}
-
-	@Override
-	public Iterable<? extends HeaderItem> getDependencies() {
-		List<HeaderItem> l = Lists.newArrayList(super.getDependencies());
-		l.addAll(dependencies);
-		for (ResourceReference dependency : dependenciesJavaScript) {
-			l.add(JavaScriptHeaderItem.forReference(dependency));
-		}
-		for (ResourceReference dependency : dependenciesCss) {
-			l.add(CssHeaderItem.forReference(dependency));
-		}
-		return l;
+	public void setCssCompressorProcessor(
+			ResourcePreProcessor cssCompressorProcessor) {
+		this.cssCompressorProcessor = cssCompressorProcessor;
 	}
 }

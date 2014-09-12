@@ -38,7 +38,10 @@
 	<context-param>
 		<param-name>configuration</param-name>
 		<param-value>development</param-value> 
-		<!--	deployment		development	-->
+		<!--
+			deployment
+			development
+		-->
 	</context-param>
 	<context-param>
 		<param-name>resteasy.servlet.mapping.prefix</param-name>
