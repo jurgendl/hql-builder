@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.common.CommonUtils;
@@ -26,5 +28,17 @@ public class WebHelper extends CommonUtils {
         component.setRenderBodyOnly(true);
         component.setOutputMarkupId(false);
         return component;
+    }
+
+    public static void untag(ComponentTag tag, String tagId) {
+        tag(tag, tagId, null);
+    }
+
+    public static void tag(ComponentTag tag, String tagId, Object value) {
+        if (value == null || (value instanceof String && StringUtils.isBlank(String.class.cast(value)))) {
+            tag.getAttributes().remove(tagId);
+        } else {
+            tag.getAttributes().put(tagId, value);
+        }
     }
 }

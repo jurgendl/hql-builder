@@ -41,6 +41,8 @@ public class FormSettings implements Serializable {
 
     protected boolean preferPrime = true;
 
+    protected boolean showPlaceholder = true;
+
     public FormSettings() {
         super();
     }
@@ -229,6 +231,15 @@ public class FormSettings implements Serializable {
 
     public FormSettings setPreferPrime(boolean preferPrime) {
         this.preferPrime = preferPrime;
+        return this;
+    }
+
+    public boolean isShowPlaceholder() {
+        return this.showPlaceholder;
+    }
+
+    public FormSettings setShowPlaceholder(boolean showPlaceholder) {
+        this.showPlaceholder = showPlaceholder;
         return this;
     }
 }

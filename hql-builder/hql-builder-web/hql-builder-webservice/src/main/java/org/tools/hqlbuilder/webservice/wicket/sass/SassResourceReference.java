@@ -1,12 +1,13 @@
-package org.tools.hqlbuilder.webservice.wicket.zuss;
+package org.tools.hqlbuilder.webservice.wicket.sass;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -24,20 +25,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.wicket.StreamResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
-import org.zkoss.zuss.Resolver;
-import org.zkoss.zuss.Zuss;
-import org.zkoss.zuss.impl.out.BuiltinResolver;
-import org.zkoss.zuss.metainfo.ZussDefinition;
+
+import ro.isdc.wro.extensions.processor.css.SassCssProcessor;
 
 import com.google.common.collect.Lists;
 
 /**
- * response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "table.css")));
+ * response.render(CssHeaderItem.forReference(new SassResourceReference(WicketCSSRoot.class, "table.sass")));
+ *
+ * @see http://sass-lang.com/
+ * @see https://code.google.com/p/wro4j/
  */
-public class ZussResourceReference extends StreamResourceReference implements IResourceStream, Resolver {
+public class SassResourceReference extends StreamResourceReference implements IResourceStream {
     private static final long serialVersionUID = 6384603768717480808L;
 
-    protected static final Logger logger = LoggerFactory.getLogger(ZussResourceReference.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SassResourceReference.class);
 
     protected final String charset = "utf-8";
 
@@ -45,15 +47,13 @@ public class ZussResourceReference extends StreamResourceReference implements IR
 
     protected transient Bytes length = null;
 
-    protected transient ZussStyle zussStyle = null;
-
     protected transient String css = "";
 
     protected transient Time lastModified = null;
 
-    protected transient Resolver resolver = null;
+    protected transient SassCssProcessor sassCssProcessor;
 
-    public ZussResourceReference(Class<?> scope, String name) {
+    public SassResourceReference(Class<?> scope, String name) {
         super(scope, name);
     }
 
@@ -76,7 +76,7 @@ public class ZussResourceReference extends StreamResourceReference implements IR
                 throw new RuntimeException(ex);
             }
         }
-        logger.info(getZussName() + " - sending lastModifiedTime: " + lastModified);
+        logger.info(getSassName() + " - sending lastModifiedTime: " + lastModified);
         return lastModified;
     }
 
@@ -94,19 +94,19 @@ public class ZussResourceReference extends StreamResourceReference implements IR
     public InputStream getInputStream() throws ResourceStreamNotFoundException {
         try {
             boolean rebuild = false;
-            String fullPath = getResourcePath() + '/' + getZussName();
+            String fullPath = getResourcePath() + '/' + getSassName();
             if (css == null) {
                 logger.info("building " + fullPath + " because is new");
                 rebuild = true;
             } else if (lastModified == null) {
                 logger.info("building " + fullPath + " because out of date");
                 rebuild = true;
-            } else if (getZussStyle().getLastModified() == null) {
-                logger.info("building " + fullPath + " because style is new");
-                rebuild = true;
-            } else if (lastModified.getMilliseconds() < getZussStyle().getLastModified()) {
-                logger.info("building " + fullPath + " because style out of date");
-                rebuild = true;
+                // } else if (getSassStyle().getLastModified() == null) {
+                // logger.info("building " + fullPath + " because style is new");
+                // rebuild = true;
+                // } else if (lastModified.getMilliseconds() < getSassStyle().getLastModified()) {
+                // logger.info("building " + fullPath + " because style out of date");
+                // rebuild = true;
             } else if (WicketApplication.get().usesDevelopmentConfig()) {
                 try {
                     if (lastModified.getMilliseconds() < getClass().getClassLoader().getResource(fullPath).openConnection().getLastModified()) {
@@ -155,8 +155,8 @@ public class ZussResourceReference extends StreamResourceReference implements IR
         //
     }
 
-    protected String getZussName() {
-        return getName().replaceAll("\\.css", ".zuss");
+    protected String getSassName() {
+        return getName().replaceAll("\\.css", ".sass");
     }
 
     protected String getResourcePath() {
@@ -164,67 +164,22 @@ public class ZussResourceReference extends StreamResourceReference implements IR
     }
 
     protected InputStream read() throws IOException {
-        return getClass().getClassLoader().getResourceAsStream(getResourcePath() + '/' + getZussName());
+        return getClass().getClassLoader().getResourceAsStream(getResourcePath() + '/' + getSassName());
     }
 
     protected void write(OutputStream out) throws IOException {
-        ZussDefinition parsed = Zuss.parse(read(), charset, null, getZussName());
-        Zuss.translate(parsed, out, charset, getResolver());
+        getSassCssProcessor().process(new InputStreamReader(read()), new OutputStreamWriter(out));
     }
 
-    @Override
-    public Object getVariable(String name) {
-        String value = getZussStyle().getStyling().get("@" + name);
-        if (value == null) {
-            return null;
+    public SassCssProcessor getSassCssProcessor() {
+        if (sassCssProcessor == null) {
+            sassCssProcessor = new SassCssProcessor();
         }
-        value = value.trim();
-        return value.substring(0, value.length() - 1);
+        return this.sassCssProcessor;
     }
 
-    @Override
-    public Method getMethod(String name) {
-        return null;
-    }
-
-    protected ZussStyle getZussStyle() {
-        if (zussStyle == null) {
-            zussStyle = WicketApplication.get().getZussStyle();
-        }
-        return this.zussStyle;
-    }
-
-    protected void setZussStyle(ZussStyle zussStyle) {
-        this.zussStyle = zussStyle;
-    }
-
-    protected Resolver getResolver() {
-        if (resolver == null) {
-            resolver = new BuiltinResolver() {
-                @Override
-                public Object getVariable(String name) {
-                    Object variable = ZussResourceReference.this.getVariable(name);
-                    if (variable == null) {
-                        variable = super.getVariable(name);
-                    }
-                    return variable;
-                }
-
-                @Override
-                public Method getMethod(String name) {
-                    Method method = ZussResourceReference.this.getMethod(name);
-                    if (method == null) {
-                        method = super.getMethod(name);
-                    }
-                    return method;
-                };
-            };
-        }
-        return this.resolver;
-    }
-
-    protected void setResolver(Resolver resolver) {
-        this.resolver = resolver;
+    public void setSassCssProcessor(SassCssProcessor sassCssProcessor) {
+        this.sassCssProcessor = sassCssProcessor;
     }
 
     protected final List<HeaderItem> dependencies = new ArrayList<>();
@@ -233,17 +188,17 @@ public class ZussResourceReference extends StreamResourceReference implements IR
 
     protected final List<ResourceReference> dependenciesCss = new ArrayList<>();
 
-    public ZussResourceReference addDependency(HeaderItem dependency) {
+    public SassResourceReference addDependency(HeaderItem dependency) {
         dependencies.add(dependency);
         return this;
     }
 
-    public ZussResourceReference addJavaScriptResourceReferenceDependency(ResourceReference dependency) {
+    public SassResourceReference addJavaScriptResourceReferenceDependency(ResourceReference dependency) {
         dependenciesJavaScript.add(dependency);
         return this;
     }
 
-    public ZussResourceReference addCssResourceReferenceDependency(ResourceReference dependency) {
+    public SassResourceReference addCssResourceReferenceDependency(ResourceReference dependency) {
         dependenciesCss.add(dependency);
         return this;
     }

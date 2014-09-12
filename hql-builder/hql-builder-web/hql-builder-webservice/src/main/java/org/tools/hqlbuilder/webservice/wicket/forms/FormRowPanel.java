@@ -105,7 +105,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     }
 
     protected void setupId() {
-        if (formSettings.isInheritId()) {
+        if (formSettings.isInheritId() || componentSettings.isInheritId()) {
             inheritId();
         }
     }
@@ -124,6 +124,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
                 protected void onComponentTag(ComponentTag tag) {
                     super.onComponentTag(tag);
                     tag.getAttributes().put(FOR, getComponent().getMarkupId());
+                    tag.getAttributes().put(TITLE, getLabelModel().getObject());
                 }
             };
         }
@@ -191,21 +192,20 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return super.add(childs);
     }
 
-    protected void tag(ComponentTag tag, String tagId, Object value) {
-        if (value == null || (value instanceof String && StringUtils.isBlank(String.class.cast(value)))) {
-            tag.getAttributes().remove(tagId);
+    protected void setupPlaceholder(ComponentTag tag) {
+        if ((formSettings != null && formSettings.isShowPlaceholder()) || (componentSettings != null && componentSettings.isShowPlaceholder())) {
+            WebHelper.tag(tag, PLACEHOLDER, getPlaceholderText());
         } else {
-            tag.getAttributes().put(tagId, value);
+            WebHelper.untag(tag, PLACEHOLDER);
         }
     }
 
-    protected void setupPlaceholder(ComponentTag tag) {
-        tag(tag, PLACEHOLDER, getPlaceholderText());
-    }
-
     protected void setupRequired(ComponentTag tag) {
-        tag(tag, REQUIRED, (componentSettings != null && componentSettings.isRequired() && formSettings != null && formSettings
-                .isClientsideRequiredValidation()) ? REQUIRED : null);
+        if (formSettings != null && formSettings.isClientsideRequiredValidation() && componentSettings != null && componentSettings.isRequired()) {
+            WebHelper.tag(tag, REQUIRED, REQUIRED);
+        } else {
+            WebHelper.untag(tag, REQUIRED);
+        }
     }
 
     protected void setupRequired(C component) {

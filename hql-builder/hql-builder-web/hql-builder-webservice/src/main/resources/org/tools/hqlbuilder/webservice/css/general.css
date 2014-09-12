@@ -1,6 +1,10 @@
 /* https://www.google.com/fonts */
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic|Droid+Serif:400,700,400italic,700italic&subset=latin,latin-ext);
 
+.feedbackPanel.requiredMarker {
+	margin: 0px;
+}
+
 /* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 /*Baskerville, ‘Times New Roman’, Times, serif*/
 /*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
@@ -178,7 +182,7 @@ a.wicket_orderNone div::after {
 /* block-level element */
 .center-me-hor {
 	margin: 0 auto;
-	width: ; /* needs to set width */ 
+	width: auto; /* needs to set fixed width */ 
 }
 
 /* ======================== hyperlink ======================== */
@@ -292,8 +296,19 @@ a.link:focus {
 }
 
 /* overrides reset.css */
-fieldset {
-	border: 0;
+.defaultform fieldset {
+	margin: 2px;
+	padding: 0.4em;
+}
+.defaultform fieldset.formheader,
+.defaultform fieldset.formfooter {
+	padding: 0px;
+	border: none;
+}
+.defaultform .formbody fieldset legend {
+	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
+	font-weight: 700;
+	font-size: 1.2em;
 }
 
 /* spectrum */

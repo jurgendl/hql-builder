@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.tag;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -247,7 +249,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
             StringBuilder initScript = new StringBuilder();
             initScript.append("$(\"#" + formId + "\").validate();").append("\n");
             initScript.append("$(\"#" + getComponent().getMarkupId() + "\").rules('add', { accept: \"" + filePickerSettings.getMimeType() + "\" })")
-                    .append("\n");
+            .append("\n");
             response.render(OnLoadHeaderItem.forScript(initScript));
         }
     }

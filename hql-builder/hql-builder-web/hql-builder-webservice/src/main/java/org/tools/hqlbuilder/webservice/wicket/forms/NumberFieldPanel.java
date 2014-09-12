@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import static org.tools.hqlbuilder.webservice.wicket.WebHelper.tag;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.model.IModel;
