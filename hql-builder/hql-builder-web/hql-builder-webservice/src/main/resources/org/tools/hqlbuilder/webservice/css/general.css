@@ -13,7 +13,7 @@
 
 body {
 	font-size: 14px;
-	font-family: Arial,Helvetica,sans-serif;
+	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
 	font-weight: 400;
 }
 
@@ -60,58 +60,58 @@ h1, h2, h3, h4, h5 {
 
 /* ======================== rotation animation ======================== */
 @-webkit-keyframes rotate {
-  from { -webkit-transform:rotate(0deg); }
-  to { -webkit-transform:rotate(360deg); }
+	from { -webkit-transform:rotate(0deg); }
+	to { -webkit-transform:rotate(360deg); }
 }
 @-moz-keyframes rotate {
-  from { -moz-transform:rotate(0deg); }
-  to { -moz-transform:rotate(360deg); }
+	from { -moz-transform:rotate(0deg); }
+	to { -moz-transform:rotate(360deg); }
 }
 @-ms-keyframes rotate {
-  from { -ms-transform:rotate(0deg); }
-  to { -ms-transform:rotate(360deg); }
+	from { -ms-transform:rotate(0deg); }
+	to { -ms-transform:rotate(360deg); }
 }
 @-o-keyframes rotate {
-  from { -o-transform:rotate(0deg); }
-  to { -o-transform:rotate(360deg); }
+	from { -o-transform:rotate(0deg); }
+	to { -o-transform:rotate(360deg); }
 }
 .rotatingslower,
 .rotating,
 .rotatingfaster {
-  -webkit-transform-origin: 50% 50%;
-  -webkit-animation-name: rotate;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  -moz-transform-origin: 50% 50%;
-  -moz-animation-name: rotate;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: linear;
-  -ms-transform-origin: 50% 50%;
-  -ms-animation-name: rotate;
-  -ms-animation-iteration-count: infinite;
-  -ms-animation-timing-function: linear;
-  -o-transform-origin: 50% 50%;
-  -o-animation-name: rotate;
-  -o-animation-iteration-count: infinite;
-  -o-animation-timing-function: linear;
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation-name: rotate;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation-name: rotate;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: linear;
+	-ms-transform-origin: 50% 50%;
+	-ms-animation-name: rotate;
+	-ms-animation-iteration-count: infinite;
+	-ms-animation-timing-function: linear;
+	-o-transform-origin: 50% 50%;
+	-o-animation-name: rotate;
+	-o-animation-iteration-count: infinite;
+	-o-animation-timing-function: linear;
 }
 .rotatingfaster {
-  -webkit-animation-duration: 0.75s;
-  -moz-animation-duration: 0.75s;
-  -ms-animation-duration: 0.75s;
-  -o-animation-duration: 0.75s;
+	-webkit-animation-duration: 0.75s;
+	-moz-animation-duration: 0.75s;
+	-ms-animation-duration: 0.75s;
+	-o-animation-duration: 0.75s;
 }
 .rotating {
-  -webkit-animation-duration: 1.5s;
-  -moz-animation-duration: 1.5s;
-  -ms-animation-duration: 1.5s;
-  -o-animation-duration: 1.5s;
+	-webkit-animation-duration: 1.5s;
+	-moz-animation-duration: 1.5s;
+	-ms-animation-duration: 1.5s;
+	-o-animation-duration: 1.5s;
 }
 .rotatingslower {
-  -webkit-animation-duration: 3s;
-  -moz-animation-duration: 3s;
-  -ms-animation-duration: 3s;
-  -o-animation-duration: 3s;
+	-webkit-animation-duration: 3s;
+	-moz-animation-duration: 3s;
+	-ms-animation-duration: 3s;
+	-o-animation-duration: 3s;
 }
 
 /* ======================== class="tooltip" title="tooltiptext" ======================== */
@@ -186,7 +186,7 @@ a.wicket_orderNone div::after {
 }
 
 /* ======================== hyperlink ======================== */
-a.link {
+a:not(.ui-state-default) {
 	outline: none;
 	text-decoration: none;
 	color: #1E608E;
@@ -196,25 +196,25 @@ a.link {
 	border: none;
 }
 /* the normal state of a hyperlink */
-a.link:link {
+a:link:not(.ui-state-default) {
 	color: #1E608E;
 }
 
 /* when the link has been visited before */
-a.link:visited {
+a:visited:not(.ui-state-default) {
 	color: #1E608E;
 }
 /* when the user hovers their mouse over a link */
-a.link:hover {
+a:hover:not(.ui-state-default) {
 	color: #1E608E;
 	border-bottom: 1px solid;
 }
 /* when the user clicks on the link (or presses the Enter key on a focused link) */
-a.link:active {
+a:active:not(.ui-state-default) {
 	color: #1E608E;
 }
 /* when the user uses the Tab key to navigate to hyperlinks */
-a.link:focus {
+a:focus:not(.ui-state-default) {
 	color: #1E608E;
 	border-bottom: 1px solid;
 }
