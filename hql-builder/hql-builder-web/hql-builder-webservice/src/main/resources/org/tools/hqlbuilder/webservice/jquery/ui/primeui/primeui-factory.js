@@ -29,5 +29,6 @@ $('.puitabview').puitabview();
 $('.puigrowl').puigrowl();
 $('.puinotifytop').puinotify({easing: 'easeInOutCirc', position: 'top'});
 $('.puinotifybottom').puinotify({easing: 'easeInOutCirc', position: 'bottom'});
+$('.puidropdownfiltered').puidropdown({ filter: true, filterMatchMode: 'contains'});
 
 });
