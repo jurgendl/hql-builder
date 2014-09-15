@@ -186,37 +186,37 @@ a.wicket_orderNone div::after {
 }
 
 /* ======================== hyperlink ======================== */
-a:not(.ui-state-default) {
+a:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	outline: none;
 	text-decoration: none;
 	color: #1E608E;
 	border-bottom: none;
 }
-.ui-widget a {
-	border: none;
-}
 /* the normal state of a hyperlink */
-a:link:not(.ui-state-default) {
+a:link:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	color: #1E608E;
 }
 
 /* when the link has been visited before */
-a:visited:not(.ui-state-default) {
+a:visited:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	color: #1E608E;
 }
 /* when the user hovers their mouse over a link */
-a:hover:not(.ui-state-default) {
+a:hover:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	color: #1E608E;
 	border-bottom: 1px solid;
 }
 /* when the user clicks on the link (or presses the Enter key on a focused link) */
-a:active:not(.ui-state-default) {
+a:active:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	color: #1E608E;
 }
 /* when the user uses the Tab key to navigate to hyperlinks */
-a:focus:not(.ui-state-default) {
+a:focus:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	color: #1E608E;
 	border-bottom: 1px solid;
+}
+.ui-widget a {
+	border: none;
 }
 
 /* fix unreadable blur */
