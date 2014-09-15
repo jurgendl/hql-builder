@@ -1,61 +1,42 @@
+/* ======================== default font ======================== */
 /* https://www.google.com/fonts */
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic|Droid+Serif:400,700,400italic,700italic&subset=latin,latin-ext);
-
-.feedbackPanel.requiredMarker {
-	margin: 0px;
-}
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic);
+@import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic&subset=latin,latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
 
 /* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
-/*Baskerville, ‘Times New Roman’, Times, serif*/
-/*Garamond, ‘Hoefler Text’, ‘Times New Roman’, Times, serif*/
-/*Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif*/
+/*Baskerville, 'Times New Roman', Times, serif*/
+/*Garamond, 'Hoefler Text', 'Times New Roman', Times, serif*/
+/*Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif*/
 /*GillSans, Calibri, Trebuchet, sans-serif*/
-
 body {
 	font-size: 14px;
-	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
+	font-family: Lato, Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
 	font-weight: 400;
 }
 
+/* ======================== box sizing ======================== */
 * {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
-/*
-* {
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
-}
-*/
-
-/*
-* {
-	background-repeat: no-repeat;
-}
-*/
-
-.transparentbg {
-	background-color : transparent !important;
-}
-
-/* http://css-tricks.com/universal-overflow-auto */
-/*Georgia, Times, ‘Times New Roman’, serif*/
-/*Palatino, ‘Palatino Linotype’, ‘Hoefler Text’, Times, ‘Times New Roman’, serif*/
+/* ======================== titles ======================== */
+/*Georgia, Times, 'Times New Roman', serif*/
+/*Palatino, 'Palatino Linotype', 'Hoefler Text', Times, 'Times New Roman', serif*/
 /*Tahoma, Verdana, Geneva*/
 /*Trebuchet, Tahoma, Arial, sans-serif*/
 h1, h2, h3, h4, h5 {
-	font-family: Lato, Geneva, ‘Lucida Sans’, ‘Lucida Grande’, ‘Lucida Sans Unicode’, Verdana, sans-serif;
-	font-weight: normal;
+	font-family: 'Droid Serif', 'Baskerville', 'Times New Roman', Times, serif;
 	font-weight: 700;
 }
 
+/* ======================== placeholder ======================== */
 ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
 	padding: 0px;
-	font: 10px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;
+	font-family: Lato, Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+	font-size: 10px;
 }
 
 /* ======================== rotation animation ======================== */
@@ -114,6 +95,11 @@ h1, h2, h3, h4, h5 {
 	-o-animation-duration: 3s;
 }
 
+/* ======================== icon fonts ======================== */
+.transparentbg {
+	background-color : transparent !important;
+}
+
 /* ======================== class="tooltip" title="tooltiptext" ======================== */
 .tooltip {
 	position: relative;
@@ -158,74 +144,40 @@ h1, h2, h3, h4, h5 {
 	opacity: 1;
 }
 
-/* ======================== sort arrows on tables ======================== */
-a.wicket_orderUp div::after { 
-	font-family: 'FontAwesome';
-	content: "\f0dd";
-}
-a.wicket_orderDown div::after { 
-	font-family: 'FontAwesome';
-	content: "\f0de";
-}
-a.wicket_orderNone div::after { 
-	font-family: 'FontAwesome';
-	content: "\f0dc";
-}
-
-/* ======================== centering ======================== */
-/* http://css-tricks.com/centering-css-complete-guide */
-
-/* inline, inline-block, inline-table, inline-flex in block-level parent element */
-.center-children-hor {
-	text-align: center;
-}
-/* block-level element */
-.center-me-hor {
-	margin: 0 auto;
-	width: auto; /* needs to set fixed width */ 
-}
-
 /* ======================== hyperlink ======================== */
-a:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
+/* link: the normal state of a hyperlink */
+/* visited: when the link has been visited before */
+/* hover: when the user hovers their mouse over a link */
+/* active: when the user clicks on the link (or presses the Enter key on a focused link) */
+/* focus: when the user uses the Tab key to navigate to hyperlinks */
+a,
+a:link,
+a:visited,
+a:hover,
+a:active,
+a:focus {
 	outline: none;
 	text-decoration: none;
 	color: #1E608E;
-	border-bottom: none;
 }
-/* the normal state of a hyperlink */
-a:link:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
-	color: #1E608E;
+a,
+a:link,
+a:visited {
+	border-bottom: .1em solid rgba(0,0,0,.1);
 }
-
-/* when the link has been visited before */
-a:visited:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
-	color: #1E608E;
-}
-/* when the user hovers their mouse over a link */
-a:hover:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
-	color: #1E608E;
-	border-bottom: 1px solid;
-}
-/* when the user clicks on the link (or presses the Enter key on a focused link) */
-a:active:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
-	color: #1E608E;
-}
-/* when the user uses the Tab key to navigate to hyperlinks */
-a:focus:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
-	color: #1E608E;
-	border-bottom: 1px solid;
-}
-.ui-widget a {
-	border: none;
+a:hover,
+a:active,
+a:focus {
+	border-bottom: .1em solid #1E608E;
 }
 
-/* fix unreadable blur */
+/* ======================== ui-state-* fix unreadable blur ======================== */
 .ui-state-error,
 .ui-state-highlight {
 	text-shadow: none !important;
 }
 
-/* fileupload */
+/* ======================== fileupload ======================== */
 .fileupload {
 	overflow: hidden;
 	position: relative;
@@ -242,4 +194,132 @@ a:focus:not(.ui-state-default):not(.ui-widget):not(.ui-corner-*) {
 	right: 0;
 	text-align: right;
 	top: 0;
+}
+
+/* ======================== centering ======================== */
+/* http://css-tricks.com/centering-css-complete-guide */
+/* inline, inline-block, inline-table, inline-flex in block-level parent element */
+.center-children-hor {
+	text-align: center;
+}
+/* block-level element */
+.center-me-hor {
+	margin: 0 auto;
+	width: auto; /* needs to set fixed width */ 
+}
+
+/* ======================== sort arrows on tables ======================== */
+a.wicket_orderUp div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0dd";
+}
+a.wicket_orderDown div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0de";
+}
+a.wicket_orderNone div::after { 
+	font-family: 'FontAwesome';
+	content: "\f0dc";
+}
+
+/* ======================== html tags ======================== */
+abbr[title],
+acronym[title] {
+	border-bottom: .1em dotted;
+}
+article {
+	
+}
+aside {
+	
+}
+b {
+	
+}
+big {
+	
+}
+blockquote {
+	
+}
+cite {
+	
+}
+del {
+	
+}
+ins {
+	
+}
+details {
+	
+}
+details summary {
+	
+}
+dfn {
+	
+}
+em {
+	
+}
+figure img {
+	
+}
+figure figcaption {
+	
+}
+i {
+	
+}
+mark {
+	
+}
+pre {
+	
+}
+q {
+	
+}
+small {
+	
+}
+s,
+strike {
+	
+}
+strong {
+	
+}
+sub {
+	
+}
+sup {
+	
+}
+tt {
+	
+}
+u {
+	
+}
+code {
+	
+}
+samp {
+	
+}
+var {
+	
+}
+kbd {
+	font-family: 'Droid Sans Mono', 'Courier New', Courier, monospace;
+	color: white;
+	border: solid 1px #909090;
+	background-color: #909090;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding-left: .2em;
+	padding-right: .2em;
 }
