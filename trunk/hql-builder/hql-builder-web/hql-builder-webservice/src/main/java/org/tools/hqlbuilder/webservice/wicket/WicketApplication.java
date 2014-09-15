@@ -231,18 +231,6 @@ public class WicketApplication extends WebApplication {
 
     protected void mountImages() {
         String cssImages = "css/images/";
-        String[] mountedImages = { //
-                //
-                "arrow_off.png", //
-                "arrow_up.png",//
-                "arrow_down.png" //
-        };//
-        for (String mountedImage : mountedImages) {
-            String fullpath = cssImages + mountedImage;
-            PackageResourceReference reference = new PackageResourceReference(WicketRoot.class, fullpath);
-            mountResource(fullpath, reference);
-            logger.info("mounting image: " + WicketRoot.class.getCanonicalName() + ": " + fullpath);
-        }
         for (Field field : WicketIconsRoot.class.getFields()) {
             try {
                 final String name = String.valueOf(field.get(WicketIconsRoot.class));
