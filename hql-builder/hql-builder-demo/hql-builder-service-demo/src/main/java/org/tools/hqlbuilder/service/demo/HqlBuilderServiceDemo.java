@@ -2,27 +2,12 @@ package org.tools.hqlbuilder.service.demo;
 
 import java.util.Scanner;
 
-import org.apache.log4j.xml.DOMConfigurator;
-import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.demo.User;
 
 public class HqlBuilderServiceDemo implements Runnable {
-    protected static org.slf4j.Logger logger;
-
-    static {
-        try {
-            DOMConfigurator.configure(HqlBuilderServiceDemo.class.getClassLoader().getResource("org/tools/hqlbuilder/common/log4j.xml"));
-        } catch (RuntimeException e) {
-            //
-        }
-        logger = LoggerFactory.getLogger(HqlBuilderServiceDemo.class);
-    }
-
     public static void main(String[] args) {
-        logger.debug("started");
         new Thread(new HqlBuilderServiceDemo()).start();
-        logger.debug("stopped");
     }
 
     public HqlBuilderServiceDemo() {
@@ -32,7 +17,8 @@ public class HqlBuilderServiceDemo implements Runnable {
     public HqlService getHqlService() {
         @SuppressWarnings("resource")
         HqlService hqlService = HqlService.class.cast(new org.springframework.context.support.ClassPathXmlApplicationContext(
-                "org/tools/hqlbuilder/service/demo/spring-webservice-demo-context.xml").getBean("hqlService"));
+                "org/tools/hqlbuilder/common/spring-logback.xml", "org/tools/hqlbuilder/service/demo/spring-webservice-demo-context.xml")
+                .getBean("hqlService"));
         return hqlService;
     }
 

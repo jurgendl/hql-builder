@@ -171,7 +171,7 @@ public class HqlWebServiceClientTest {
         System.out.println(hc.getProperties(User.class.getName()));
         System.out.println(hc.getReservedKeywords());
 
-        // FIXME
+        // FIXME test
         // String hql = "from " + User.class.getSimpleName() + " where id=:id";
         // List<QueryParameter> parameters = hc.findParameters(hql).getValue();
         // System.out.println(parameters);

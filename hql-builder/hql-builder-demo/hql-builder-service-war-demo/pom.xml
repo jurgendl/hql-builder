@@ -11,7 +11,7 @@
 	<description>hql-builder-service-war-demo</description>
 	<packaging>war</packaging>
 	<properties>
-		<contextRoot>hqlbuilder</contextRoot>
+		<contextRoot>app</contextRoot>
 	</properties>
 	<dependencies>
 		<!-- Core -->
@@ -34,14 +34,6 @@
 			<groupId>org.tools.hql-builder.web</groupId>
 			<artifactId>hql-builder-webclient</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

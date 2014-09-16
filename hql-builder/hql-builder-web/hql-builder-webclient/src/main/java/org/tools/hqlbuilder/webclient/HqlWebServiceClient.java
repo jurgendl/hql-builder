@@ -37,7 +37,7 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
 
     @Override
     public String getVersion() {
-        return "?"; // TODO
+        return "?"; // TODO version = "?"
     }
 
     public String ping() {

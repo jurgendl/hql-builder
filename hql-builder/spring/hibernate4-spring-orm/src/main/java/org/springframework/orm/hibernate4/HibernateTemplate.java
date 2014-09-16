@@ -642,7 +642,7 @@ public class HibernateTemplate implements HibernateOperations {
     }
 
     private void checkWriteOperationAllowed(Session session) {
-        // TODO
+        // TODO check write operation allowed?
     }
 
     /**

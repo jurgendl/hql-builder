@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.hibernate.proxy.HibernateProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.service.PersistentCollectionHelper;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -54,7 +55,7 @@ public class DetachedHqlService extends DelegatingHqlService {
 
     private Class baseBeanClass = Object.class;
 
-    private static Logger log = Logger.getLogger(DetachedHqlService.class);
+    private static Logger log = LoggerFactory.getLogger(DetachedHqlService.class);
 
     private PersistentCollectionHelper persistentCollectionHelper = new PersistentCollectionHelper();
 
@@ -64,7 +65,7 @@ public class DetachedHqlService extends DelegatingHqlService {
      * collection
      */
     public void cleanObject(Object listObj, HashSet visitedBeansSet) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException, InvocationTargetException {
+    InstantiationException, InvocationTargetException {
         if (visitedBeansSet == null) {
             visitedBeansSet = new HashSet();
         }
@@ -109,7 +110,7 @@ public class DetachedHqlService extends DelegatingHqlService {
      * Remove the un-initialized proxies from the given object
      */
     private void processBean(Object objBean, HashSet visitedBeans) throws IllegalAccessException, IllegalArgumentException, ClassNotFoundException,
-            InstantiationException, InvocationTargetException {
+    InstantiationException, InvocationTargetException {
         Class tmpClass = objBean.getClass();
         Field[] classFields = null;
         while (tmpClass != null && tmpClass != baseBeanClass && tmpClass != Object.class) {
@@ -120,7 +121,7 @@ public class DetachedHqlService extends DelegatingHqlService {
     }
 
     private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans) throws ClassNotFoundException, IllegalArgumentException,
-            IllegalAccessException, InstantiationException, InvocationTargetException {
+    IllegalAccessException, InstantiationException, InvocationTargetException {
         boolean accessModifierFlag = false;
         for (int z = 0; z < classFields.length; z++) {
             Field field = classFields[z];

@@ -204,7 +204,7 @@ public class HqlWizard {
         while (iterator.hasNext()) {
             Row row = iterator.next();
             if (row.getPath().startsWith("SUB")) {
-                // TODO
+                // TODO "SUB"
                 continue;
             }
             if (row.getInnerjoin()) {
@@ -222,7 +222,7 @@ public class HqlWizard {
 
     private String getNewline() {
         // return HqlBuilderFrame.getNewline();
-        return "\n"; // FIXME
+        return "\n"; // FIXME newline
     }
 
     public List<Row> getRows() {
