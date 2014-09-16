@@ -31,9 +31,9 @@ public class WicketCSSRoot {
         try {
             String ext = "css";
             for (String source : sources) {
-                File css = new File("src/main/resources/" + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source
+                File file = new File("src/main/resources/" + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source
                         + "." + ext);
-                InputStreamReader in = new InputStreamReader(new FileInputStream(css));
+                InputStreamReader in = new InputStreamReader(new FileInputStream(file));
                 YuiCssCompressor compressor = new YuiCssCompressor(in);
                 OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/"
                         + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source + ".mini." + ext)));
