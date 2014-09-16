@@ -6,8 +6,8 @@
 	version="2.5"
 	>
 
-	<display-name>hqlbuilder</display-name>
-	<description>hqlbuilder</description>
+	<display-name>app</display-name>
+	<description>app</description>
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
@@ -51,6 +51,10 @@
 		<param-name>log4jConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/common/log4j.xml</param-value>
 	</context-param>
+	<context-param>
+		<param-name>logback.configurationFile</param-name>
+		<param-value>classpath:org/tools/hqlbuilder/common/logback.xml</param-value>
+	</context-param>
 
 	<filter>
 		<filter-name>char-encoding-filter</filter-name>
@@ -72,6 +76,33 @@
 			<param-value>org.tools.hqlbuilder.webservice.wicket.WicketApplication</param-value>
 		</init-param>
 	</filter>
+	<!-- https://code.google.com/p/wro4j/wiki/SassCssSupport -->
+	<!-- <filter>
+		<filter-name>WebResourceOptimizer</filter-name>
+		<filter-class>
+			ro.isdc.wro.http.WroFilter
+		</filter-class>
+		<init-param>
+			<param-name>configuration</param-name>
+			<param-value>DEPLOYMENT</param-value>
+		</init-param>
+		<init-param>
+			<param-name>managerFactoryClassName</param-name>
+			<param-value>ro.isdc.wro.extensions.manager.ExtensionsConfigurableWroManagerFactory</param-value>
+		</init-param>
+		<init-param>
+			<param-name>uriLocators</param-name>
+			<param-value>servletContext,classpath,url</param-value>
+		</init-param>
+		<init-param>
+			<param-name>preProcessors</param-name>
+			<param-value>cssUrlRewriting,cssImport,bomStripper,semicolonAppender,sassCss</param-value>
+		</init-param>
+		<init-param>
+			<param-name>postProcessors</param-name>
+			<param-value>cssVariables,cssMinJawr,jsMin</param-value>
+		</init-param>
+	</filter>-->
 
 	<filter-mapping>
 		<filter-name>char-encoding-filter</filter-name>
@@ -129,6 +160,10 @@
 			<param-value>classpath:/org/tools/hqlbuilder/webservice/httpinvoker/httpinvoker-servlet.xml</param-value>
 		</init-param>
 	</servlet>
+	<servlet>
+		<servlet-name>ViewStatusMessages</servlet-name>
+		<servlet-class>ch.qos.logback.classic.ViewStatusMessagesServlet</servlet-class>
+	 </servlet>
 
 	<!-- 
 	<servlet-mapping>
@@ -145,6 +180,10 @@
 	<servlet-mapping>
 		<servlet-name>hqlbuilder-servlet</servlet-name>
 		<url-pattern>/bin/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ViewStatusMessages</servlet-name>
+		<url-pattern>/logback</url-pattern>
 	</servlet-mapping>
 
 	<session-config>

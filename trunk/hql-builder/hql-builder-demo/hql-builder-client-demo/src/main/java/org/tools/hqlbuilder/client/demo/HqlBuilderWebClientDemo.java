@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.xml.DOMConfigurator;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,19 +23,7 @@ import org.tools.hqlbuilder.demo.Member;
 import org.tools.hqlbuilder.demo.User;
 
 public class HqlBuilderWebClientDemo {
-    protected static org.slf4j.Logger logger;
-
-    static {
-        try {
-            DOMConfigurator.configure(HqlBuilderWebClientDemo.class.getClassLoader().getResource("org/tools/hqlbuilder/common/log4j.xml"));
-        } catch (RuntimeException e) {
-            //
-        }
-        logger = LoggerFactory.getLogger(HqlBuilderWebClientDemo.class);
-    }
-
     public static void main(final String[] args) {
-        logger.debug("started");
         try {
             new HqlBuilderWebClientDemo(args);
         } catch (org.springframework.remoting.RemoteConnectFailureException ex) {
@@ -50,10 +36,8 @@ public class HqlBuilderWebClientDemo {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         } catch (Exception ex) {
-            logger.error("exception ", ex);
             ex.printStackTrace(System.out);
         }
-        logger.debug("stopped");
     }
 
     public HqlBuilderWebClientDemo(final String[] args) throws Exception {
@@ -63,9 +47,9 @@ public class HqlBuilderWebClientDemo {
     protected void init(final String[] args) throws Exception {
         UIUtils.systemLookAndFeel();
         String v = getHibernateVersion();
-        logger.info("Hibernate " + v + "x");
+        System.out.println("Hibernate " + v + "x");
         HqlServiceClientImpl hqlServiceClient = getService();
-        logger.debug(hqlServiceClient.getConnectionInfo());
+        System.out.println(hqlServiceClient.getConnectionInfo());
         testData(hqlServiceClient);
         randomData(hqlServiceClient);
         HqlBuilderFrame.start(args, new HqlServiceClientLoaderBean(hqlServiceClient));
@@ -75,7 +59,8 @@ public class HqlBuilderWebClientDemo {
 
     protected ConfigurableApplicationContext getContext() {
         if (context == null) {
-            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/client/demo/spring-http-webclient-demo-config.xml");
+            context = new ClassPathXmlApplicationContext("org/tools/hqlbuilder/common/spring-logback.xml",
+                    "org/tools/hqlbuilder/client/demo/spring-http-webclient-demo-config.xml");
         }
         return context;
     }
@@ -102,7 +87,7 @@ public class HqlBuilderWebClientDemo {
             if (hibv == null) {
                 hibv = CommonUtils.readMavenVersion("org.hibernate:hibernate-core");
             }
-            logger.info(hibv);
+            System.out.println(hibv);
             if (hibv.startsWith("4")) {
                 v = "4";
             }
