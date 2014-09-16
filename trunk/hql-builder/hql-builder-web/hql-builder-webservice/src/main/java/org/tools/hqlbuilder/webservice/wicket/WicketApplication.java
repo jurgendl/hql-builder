@@ -61,7 +61,7 @@ public class WicketApplication extends WebApplication {
 
     protected boolean diskStore = false;
 
-    protected boolean showDebugbars = false;
+    protected boolean showDebugbars = true;
 
     public static WicketApplication get() {
         return WicketApplication.class.cast(WebApplication.get());

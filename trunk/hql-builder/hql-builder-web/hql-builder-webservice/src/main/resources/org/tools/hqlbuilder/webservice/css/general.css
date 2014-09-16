@@ -2,7 +2,7 @@
 /* https://www.google.com/fonts */
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic);
 @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic&subset=latin,latin-ext);
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
+@import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
 
 /* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 /*Baskerville, 'Times New Roman', Times, serif*/
@@ -226,6 +226,7 @@ a.wicket_orderNone div::after {
 abbr[title],
 acronym[title] {
 	border-bottom: .1em dotted;
+	cursor: help;
 }
 article {
 	
@@ -303,14 +304,34 @@ tt {
 u {
 	
 }
+code,
+samp,
+var {
+	font-style: normal;
+	font-size: 1.2em;
+	font-family: "Inconsolata", monospace;
+}
 code {
-	
+	display: block;
+	border-left: .5em solid rgba(0,0,0,.1);
+	color: rgba(0,0,0,.6);
+	padding: .1em .1em .1em 1em;
 }
 samp {
-	
+	border-style: outset;
+	border-width: .1em;
+	border-color: rgb(126,126,126);
+	color: rgba(255,255,255,.9);
+	background-color: rgba(0,0,0,.9);
+	font-weight: 700;
+	font-size: .9em;
+	padding: .14em .4em;
+	display: inline-block;
 }
 var {
-	
+	color: brown;
+	font-size: 1em;
+	font-weight: 700;
 }
 
 /**
