@@ -3,13 +3,14 @@ package org.tools.hqlbuilder.webservice.css;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-import org.apache.commons.io.IOUtils;
 import org.tools.hqlbuilder.webservice.jquery.ui.spectrum.Spectrum;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 
-import com.googlecode.htmlcompressor.compressor.YuiCssCompressor;
+import ro.isdc.wro.extensions.processor.support.yui.YuiCssCompressor;
 
 public class WicketCSSRoot {
     public static CssResourceReference RESET = new CssResourceReference(WicketCSSRoot.class, "meyer.reset.css");
@@ -21,7 +22,7 @@ public class WicketCSSRoot {
     public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
 
     public static void main(String[] args) {
-        minify(WicketCSSRoot.class, "", new String[] { "clearfix", "general", "meyer.reset", "normalize" });
+        minify(WicketCSSRoot.class, "", new String[] { "general", "meyer.reset", "normalize" });
         minify(Spectrum.class, "", new String[] { "spectrum" });
         minify(WeLoveIcons.class, "", new String[] { "weloveiconfonts", "weloveiconfonts-social", "socialcolors", "socialcolorshover" });
     }
@@ -29,14 +30,16 @@ public class WicketCSSRoot {
     protected static void minify(Class<?> root, String path, String[] sources) {
         try {
             String ext = "css";
-            YuiCssCompressor compressor = new YuiCssCompressor();
             for (String source : sources) {
                 File css = new File("src/main/resources/" + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source
                         + "." + ext);
-                byte[] buffer = new byte[(int) css.length()];
-                IOUtils.readFully(new FileInputStream(css), buffer);
-                IOUtils.write(compressor.compress(new String(buffer)), new FileOutputStream(new File("src/main/resources/"
+                InputStreamReader in = new InputStreamReader(new FileInputStream(css));
+                YuiCssCompressor compressor = new YuiCssCompressor(in);
+                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/"
                         + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source + ".mini." + ext)));
+                compressor.compress(out, Integer.MAX_VALUE);
+                in.close();
+                out.close();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
