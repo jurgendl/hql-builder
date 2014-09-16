@@ -33,7 +33,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:org/tools/hqlbuilder/webservice/spring-web-config.xml</param-value>
+		<param-value>classpath:org/tools/hqlbuilder/common/spring-logback.xml,classpath:org/tools/hqlbuilder/webservice/spring-web-config.xml</param-value>
 	</context-param>
 	<context-param>
 		<param-name>configuration</param-name>
