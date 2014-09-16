@@ -31,7 +31,7 @@
 	<logger name="org.jboss.resteasy.mock" level="debug" />
 	<logger name="org.apache.wicket.core.util.resource.locator.ResourceStreamLocator" level="debug" />
 
-	<root level="DEBUG">
+	<root level="INFO">
 		<appender-ref ref="CONSOLE" />
 	</root>
 
