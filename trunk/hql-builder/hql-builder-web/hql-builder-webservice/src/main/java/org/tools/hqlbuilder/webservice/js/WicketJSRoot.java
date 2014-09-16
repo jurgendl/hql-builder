@@ -3,15 +3,16 @@ package org.tools.hqlbuilder.webservice.js;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-import org.apache.commons.io.IOUtils;
 import org.tools.hqlbuilder.webservice.jquery.ui.colors.Colors;
 import org.tools.hqlbuilder.webservice.jquery.ui.datepicker.JQueryDatePicker;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.spectrum.Spectrum;
 
-import com.googlecode.htmlcompressor.compressor.YuiJavaScriptCompressor;
+import ro.isdc.wro.extensions.processor.js.UglifyJsProcessor;
 
 public class WicketJSRoot {
     public static void main(String[] args) {
@@ -22,17 +23,19 @@ public class WicketJSRoot {
         minify(JQueryUI.class, "", new String[] { "jquery-ui-factory" });
     }
 
-    protected static void minify(Class<?> base, String path, String[] sources) {
+    protected static void minify(Class<?> root, String path, String[] sources) {
         try {
-            YuiJavaScriptCompressor compressor = new YuiJavaScriptCompressor();
             String ext = "js";
             for (String source : sources) {
-                File css = new File("src/main/resources/" + base.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source
+                File css = new File("src/main/resources/" + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source
                         + "." + ext);
-                byte[] buffer = new byte[(int) css.length()];
-                IOUtils.readFully(new FileInputStream(css), buffer);
-                IOUtils.write(compressor.compress(new String(buffer)), new FileOutputStream(new File("src/main/resources/"
-                        + base.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source + ".mini." + ext)));
+                InputStreamReader in = new InputStreamReader(new FileInputStream(css));
+                UglifyJsProcessor compressor = new UglifyJsProcessor();
+                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/"
+                        + root.getPackage().getName().replace('\\', '/').replace('.', '/') + path + "/" + source + ".mini." + ext)));
+                compressor.process(in, out);
+                in.close();
+                out.close();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
