@@ -47,10 +47,10 @@
 		<param-name>resteasy.servlet.mapping.prefix</param-name>
 		<param-value>/xml</param-value>
 	</context-param>
-	<context-param>
+	<!-- <context-param>
 		<param-name>log4jConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/common/log4j.xml</param-value>
-	</context-param>
+	</context-param> -->
 	<context-param>
 		<param-name>logback.configurationFile</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/common/logback.xml</param-value>
@@ -121,9 +121,9 @@
 		<url-pattern>/pages/*</url-pattern>
 	</filter-mapping>
 
-	<listener>
+	<!-- <listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>
+	</listener> -->
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
