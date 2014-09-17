@@ -44,7 +44,6 @@ import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
-import org.tools.hqlbuilder.webservice.wicket.zuss.ZussStyle;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
@@ -53,8 +52,6 @@ import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
 
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
-
-    protected final ZussStyle zussStyle = new ZussStyle();
 
     @SpringBean(name = "webProperties", required = false)
     protected transient Properties webProperties;
@@ -274,10 +271,6 @@ public class WicketApplication extends WebApplication {
         public DateFormat getDateFormat(Locale locale) {
             return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
         }
-    }
-
-    public ZussStyle getZussStyle() {
-        return this.zussStyle;
     }
 
     public boolean isShowDebugbars() {

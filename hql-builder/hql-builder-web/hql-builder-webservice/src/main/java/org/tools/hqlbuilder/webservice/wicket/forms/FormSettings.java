@@ -43,6 +43,10 @@ public class FormSettings implements Serializable {
 
     protected boolean showPlaceholder = true;
 
+    protected FormMethod method;
+
+    protected boolean stateless = false;
+
     public FormSettings() {
         super();
     }
@@ -240,6 +244,24 @@ public class FormSettings implements Serializable {
 
     public FormSettings setShowPlaceholder(boolean showPlaceholder) {
         this.showPlaceholder = showPlaceholder;
+        return this;
+    }
+
+    public FormMethod getMethod() {
+        return this.method;
+    }
+
+    public FormSettings setMethod(FormMethod method) {
+        this.method = method;
+        return this;
+    }
+
+    public boolean isStateless() {
+        return this.stateless;
+    }
+
+    public FormSettings setStateless(boolean stateless) {
+        this.stateless = stateless;
         return this;
     }
 }
