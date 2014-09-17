@@ -2,8 +2,7 @@
 
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<!-- <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
-			<pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+			<pattern>%-4relative [%thread] %-5level %logger - %msg %n</pattern>
 			<outputPatternAsHeader>true</outputPatternAsHeader>
 		</encoder>
 	</appender>
@@ -29,7 +28,7 @@
 	<logger name="org.jboss.resteasy.plugins.server" level="debug" />
 	<logger name="org.jboss.resteasy.specimpl" level="debug" />
 	<logger name="org.jboss.resteasy.mock" level="debug" />
-	<logger name="org.apache.wicket.core.util.resource.locator.ResourceStreamLocator" level="debug" />
+	<logger name="org.apache.wicket.core.util.resource.locator.ResourceStreamLocator" level="info" />
 
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />

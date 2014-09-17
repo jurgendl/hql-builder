@@ -23,7 +23,9 @@
 		<security:filter-chain-map path-type="ant">
 			<security:filter-chain pattern="/auth/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/resource/**" filters="none"/>
+			<security:filter-chain pattern="/images/**" filters="none"/>
 			<security:filter-chain pattern="/pages/wicket/resource/**" filters="none"/>
+			<security:filter-chain pattern="/pages/wicket/images/**" filters="none"/>
 			<security:filter-chain pattern="/pages/public/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/pages/login/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
 			<security:filter-chain pattern="/pages/logout/**" filters="securityContextFilter, logoutFilter, loginFilter, requestCacheFilter, servletApiFilter, anonAuthenticationFilter, sessionManagementFilter, exceptionTranslator, filterSecurityInterceptor"/>
@@ -37,7 +39,9 @@
 		<property name="securityMetadataSource">
 			<security:filter-security-metadata-source>
 				<security:intercept-url pattern="/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/images/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 				<security:intercept-url pattern="/pages/wicket/resource/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+				<security:intercept-url pattern="/pages/wicket/images/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 				<security:intercept-url pattern="/pages/public/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 				<security:intercept-url pattern="/pages/login/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 				<security:intercept-url pattern="/pages/logout/**" access="IS_AUTHENTICATED_FULLY"/>
@@ -68,8 +72,6 @@
 
 	<bean id="loginFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
 		<property name="filterProcessesUrl" value="${login}"/>
-		<property name="usernameParameter" value="${username.propertyname}"/>
-		<property name="passwordParameter" value="${password.propertyname}"/>
 		<property name="authenticationManager" ref="authenticationManager"/>
 		<property name="authenticationSuccessHandler">
 			<bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
@@ -84,6 +86,8 @@
 				<property name="defaultFailureUrl" value="${wicket.login}"/>
 			</bean>
 		</property>
+		<property name="usernameParameter" value="${username.propertyname}"/>
+		<property name="passwordParameter" value="${password.propertyname}"/>
 	</bean>
 
 	<security:authentication-manager id="authenticationManager" alias="org.springframework.security.authenticationManager">

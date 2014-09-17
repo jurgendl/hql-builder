@@ -9,7 +9,7 @@ import org.apache.wicket.model.Model;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
-public class DefaultFormActions<T extends Serializable> implements FormActions<T> {
+public abstract class DefaultFormActions<T extends Serializable> implements FormActions<T> {
     private static final long serialVersionUID = 555158530492799693L;
 
     public DefaultFormActions() {

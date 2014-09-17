@@ -25,29 +25,24 @@ public class FormElementSettings implements Serializable, Cloneable {
     public FormElementSettings(FormElementSettings other) {
         try {
             BeanUtils.copyProperties(this, other);
-        } catch (IllegalAccessException | InvocationTargetException ex) {
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        } catch (InvocationTargetException ex) {
             throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
         }
-    }
-
-    public FormElementSettings(boolean required) {
-        this.required = required;
-    }
-
-    public boolean isRequired() {
-        return this.required;
-    }
-
-    public FormElementSettings setRequired(boolean required) {
-        this.required = required;
-        return this;
     }
 
     @Override
     public FormElementSettings clone() {
         try {
             return getClass().cast(BeanUtils.cloneBean(this));
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        } catch (InstantiationException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        } catch (NoSuchMethodException ex) {
             throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
         }
     }
@@ -81,9 +76,26 @@ public class FormElementSettings implements Serializable, Cloneable {
                 return "{}";
             }
             return builder.deleteCharAt(builder.length() - 1).append("}").toString();
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(ex);
+        } catch (NoSuchMethodException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public FormElementSettings(boolean required) {
+        this.required = required;
+    }
+
+    public boolean isRequired() {
+        return this.required;
+    }
+
+    public FormElementSettings setRequired(boolean required) {
+        this.required = required;
+        return this;
     }
 
     protected boolean skipForExport(String propertyName) {
