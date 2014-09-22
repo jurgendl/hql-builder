@@ -4,14 +4,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlMessage;
 import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlSeverity;
 import org.tools.hqlbuilder.webservice.wicket.components.Notify;
+import org.wicketstuff.annotation.mount.MountPath;
 
 @SuppressWarnings("serial")
-@MountedPage("/styling")
+@MountPath("/styling")
 public class StylingPage extends BasePage {
     public StylingPage(PageParameters parameters) {
         super(parameters);
@@ -26,7 +26,7 @@ public class StylingPage extends BasePage {
                     notify.topMessage(target, "topmessage");
                     notify.bottomMessage(target, "bottommessage");
                 }
-            });
+            }.setMarkupId("testnotify"));
         }
         {
             final Growl growl = new Growl();
@@ -34,10 +34,13 @@ public class StylingPage extends BasePage {
             add(new AjaxFallbackLink<String>("testgrowl", Model.of("testgrowl")) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    growl.message(target, new GrowlMessage(GrowlSeverity.error, "error", "error"), new GrowlMessage(GrowlSeverity.info, "info",
-                            "info"), new GrowlMessage(GrowlSeverity.warn, "warn", "warn"));
+                    growl.message(target, //
+                            new GrowlMessage(GrowlSeverity.error, "error", "error"), //
+                            new GrowlMessage(GrowlSeverity.info, "info", "info"),//
+                            new GrowlMessage(GrowlSeverity.warn, "warn", "warn")//
+                    );
                 }
-            });
+            }.setMarkupId("testgrowl"));
         }
 
         ExampleForm stylingform = new ExampleForm("stylingform");

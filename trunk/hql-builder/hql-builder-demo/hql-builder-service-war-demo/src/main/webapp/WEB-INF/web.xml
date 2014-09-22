@@ -49,8 +49,12 @@
 		<param-value>/xml</param-value>
 	</context-param>
 	<context-param>
-		<param-name>logback.configurationFile</param-name>
+		<param-name>logbackConfigLocation</param-name>
 		<param-value>classpath:org/tools/hqlbuilder/common/logback.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>logbackConfigContextPathKey</param-name>
+		<param-value>contextPath</param-value>
 	</context-param>
 
 	<filter>
@@ -121,6 +125,9 @@
 	</listener>
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.wicketstuff.logback.LogbackConfigListener</listener-class>
 	</listener>
 	<!-- <listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>

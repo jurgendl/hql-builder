@@ -47,6 +47,8 @@ public class FormSettings implements Serializable {
 
     protected boolean stateless = false;
 
+    protected Boolean autocomplete;
+
     public FormSettings() {
         super();
     }
@@ -262,6 +264,15 @@ public class FormSettings implements Serializable {
 
     public FormSettings setStateless(boolean stateless) {
         this.stateless = stateless;
+        return this;
+    }
+
+    public Boolean getAutocomplete() {
+        return this.autocomplete;
+    }
+
+    public FormSettings setAutocomplete(Boolean autocomplete) {
+        this.autocomplete = autocomplete;
         return this;
     }
 }

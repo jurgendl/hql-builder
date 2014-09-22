@@ -103,6 +103,8 @@ public class Example implements Serializable {
 
     private String color2 = "#995500";
 
+    private String htmlText = "<u>underline</u> <b>bold</b> <i>italic</i>";
+
     public ExampleOpts getRadio() {
         return this.radio;
     }
@@ -341,5 +343,13 @@ public class Example implements Serializable {
 
     public void setRegistration(Registration registration) {
         this.registration = registration;
+    }
+
+    public String getHtmlText() {
+        return this.htmlText;
+    }
+
+    public void setHtmlText(String htmlText) {
+        this.htmlText = htmlText;
     }
 }
