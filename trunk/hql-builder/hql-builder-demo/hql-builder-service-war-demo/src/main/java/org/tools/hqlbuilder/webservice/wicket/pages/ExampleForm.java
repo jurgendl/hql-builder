@@ -45,6 +45,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.TinyMCETextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
+import wicket.contrib.tinymce.settings.TinyMCESettings;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Theme;
 
 @SuppressWarnings("serial")
@@ -195,7 +196,11 @@ public class ExampleForm extends FormPanel<Example> {
         nextRow();
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
         nextRow();
-        addTinyMCETextArea(proxy.getHtmlText(), new TinyMCETextAreaSettings(Theme.advanced).setResizing(true));
+        addTinyMCETextArea(proxy.getHtmlText(),//
+                new TinyMCETextAreaSettings(Theme.advanced)//
+                        .setResizing(true)//
+                        .setToolbarLocation(TinyMCESettings.Location.top)//
+                );
     }
 
     private void addFilepicker(Example proxy) {
