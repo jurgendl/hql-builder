@@ -11,14 +11,14 @@ import org.joda.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.tools.hqlbuilder.demo.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
-import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
+import org.wicketstuff.annotation.mount.MountPath;
 
 @SuppressWarnings("serial")
-@MountedPage("/form/registration")
+@MountPath("/form/registration")
 public class RegistrationPage extends BasePage {
     @SpringBean
     protected transient HqlWebServiceClient hqlWebClient;

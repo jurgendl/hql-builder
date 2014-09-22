@@ -19,16 +19,16 @@ import org.joda.time.LocalDateTime;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.demo.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
-import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
+import org.wicketstuff.annotation.mount.MountPath;
 
 @SuppressWarnings("serial")
-@MountedPage("/form/registrations")
+@MountPath("/form/registrations")
 public class RegistrationsPage extends BasePage {
     @SpringBean
     private HqlWebServiceClient hqlWebClient;

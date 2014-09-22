@@ -11,10 +11,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.webservice.wicket.DefaultWebPage;
-import org.tools.hqlbuilder.webservice.wicket.MountedPage;
 import org.tools.hqlbuilder.webservice.wicket.UserData;
+import org.wicketstuff.annotation.mount.MountPath;
 
-@MountedPage("/public/register")
+@MountPath("/public/register")
 public class RegisterPage extends DefaultWebPage {
     private static final long serialVersionUID = -5922276325475978620L;
 

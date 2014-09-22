@@ -44,11 +44,12 @@ import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
+import org.wicketstuff.logback.ConfiguratorPage;
 import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
 import de.agilecoders.wicket.core.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
-import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
 
 public class WicketApplication extends WebApplication {
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
@@ -59,6 +60,8 @@ public class WicketApplication extends WebApplication {
     protected boolean diskStore = false;
 
     protected boolean showDebugbars = true;
+
+    protected String pagesPackages = "org.tools.hqlbuilder.webservice.wicket.pages";
 
     public static WicketApplication get() {
         return WicketApplication.class.cast(WebApplication.get());
@@ -124,9 +127,11 @@ public class WicketApplication extends WebApplication {
         getResourceSettings().setUseMinifiedResources(deployed);
         getResourceSettings().setEncodeJSessionId(deployed);
         getResourceSettings().setDefaultCacheDuration(inDevelopment ? Duration.NONE : WebResponse.MAX_CACHE_DURATION);
+
         if (deployed) {
+            // minify your resources on deploy
             // getResourceSettings().setJavaScriptCompressor(new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
-            getResourceSettings().setCssCompressor(new YuiCssCompressor());
+            // getResourceSettings().setCssCompressor(new YuiCssCompressor());
         }
 
         // library resources
@@ -185,6 +190,12 @@ public class WicketApplication extends WebApplication {
     }
 
     protected void mountPages() {
+        // https://github.com/wicketstuff/core/wiki/Logback
+        // also see web.xml and logback.xml
+        mountPage("logback", ConfiguratorPage.class);
+
+        new AnnotatedMountScanner().scanPackage(pagesPackages).mount(this);
+
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         final AnnotationTypeFilter mountedPageFilter = new AnnotationTypeFilter(MountedPage.class);
         final AssignableTypeFilter webPageFilter = new AssignableTypeFilter(WebPage.class);

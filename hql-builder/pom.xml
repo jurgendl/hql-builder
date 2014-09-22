@@ -436,21 +436,6 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-serializer-kryo2</artifactId>
-				<version>${version.wicket.core}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-htmlcompressor</artifactId>
-				<version>${version.wicket.core}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.yahoo.platform.yui</groupId>
-				<artifactId>yuicompressor</artifactId>
-				<version>2.4.7</version>
-			</dependency>
-			<dependency>
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-jquery-ui</artifactId>
 				<version>${version.wicket.jquery.ui}</version>
@@ -474,6 +459,51 @@
 				<groupId>com.googlecode.wicket-jquery-ui</groupId>
 				<artifactId>wicket-kendo-ui</artifactId>
 				<version>${version.wicket.jquery.ui}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-serializer-kryo2</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-htmlcompressor</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-tinymce</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-annotation</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-logback</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-tinymce</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-googlecharts</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wicketstuff</groupId>
+				<artifactId>wicketstuff-inmethod-grid</artifactId>
+				<version>${version.wicket.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.yahoo.platform.yui</groupId>
+				<artifactId>yuicompressor</artifactId>
+				<version>2.4.7</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>

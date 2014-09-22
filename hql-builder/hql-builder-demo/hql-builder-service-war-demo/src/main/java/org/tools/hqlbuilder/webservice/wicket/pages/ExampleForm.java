@@ -41,8 +41,11 @@ import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.TinyMCETextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
+
+import wicket.contrib.tinymce.settings.TinyMCESettings.Theme;
 
 @SuppressWarnings("serial")
 public class ExampleForm extends FormPanel<Example> {
@@ -105,22 +108,22 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-        .setValueModel(new IModel<String>() {
-            @Override
-            public void detach() {
-                //
-            }
+                .setValueModel(new IModel<String>() {
+                    @Override
+                    public void detach() {
+                        //
+                    }
 
-            @Override
-            public String getObject() {
-                return WicketSession.get().getJQueryUITheme();
-            }
+                    @Override
+                    public String getObject() {
+                        return WicketSession.get().getJQueryUITheme();
+                    }
 
-            @Override
-            public void setObject(String theme) {
-                WicketSession.get().setJQueryUITheme(theme);
-            }
-        });
+                    @Override
+                    public void setObject(String theme) {
+                        WicketSession.get().setJQueryUITheme(theme);
+                    }
+                });
         addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -191,6 +194,8 @@ public class ExampleForm extends FormPanel<Example> {
         }
         nextRow();
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
+        nextRow();
+        addTinyMCETextArea(proxy.getHtmlText(), new TinyMCETextAreaSettings(Theme.advanced).setResizing(true));
     }
 
     private void addFilepicker(Example proxy) {
