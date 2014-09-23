@@ -103,33 +103,31 @@ public class ExampleForm extends FormPanel<Example> {
             @Override
             public Locale getObject() {
                 Locale locale = WicketSession.get().getLocale();
-                System.out.println("<<<<<" + locale);
                 return locale;
             }
 
             @Override
             public void setObject(Locale locale) {
                 WicketSession.get().setLocale(locale);
-                System.out.println(">>>>>" + locale);
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-        .setValueModel(new IModel<String>() {
-            @Override
-            public void detach() {
-                //
-            }
+                .setValueModel(new IModel<String>() {
+                    @Override
+                    public void detach() {
+                        //
+                    }
 
-            @Override
-            public String getObject() {
-                return WicketSession.get().getJQueryUITheme();
-            }
+                    @Override
+                    public String getObject() {
+                        return WicketSession.get().getJQueryUITheme();
+                    }
 
-            @Override
-            public void setObject(String theme) {
-                WicketSession.get().setJQueryUITheme(theme);
-            }
-        });
+                    @Override
+                    public void setObject(String theme) {
+                        WicketSession.get().setJQueryUITheme(theme);
+                    }
+                });
         addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -203,9 +201,9 @@ public class ExampleForm extends FormPanel<Example> {
         nextRow();
         addTinyMCETextArea(proxy.getHtmlText(),//
                 new TinyMCETextAreaSettings(Theme.advanced)//
-        .setResizing(true)//
-        .setToolbarLocation(TinyMCESettings.Location.top)//
-                );
+                        .setResizing(true)//
+                        .setToolbarLocation(TinyMCESettings.Location.top)//
+        );
         addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
     }
 

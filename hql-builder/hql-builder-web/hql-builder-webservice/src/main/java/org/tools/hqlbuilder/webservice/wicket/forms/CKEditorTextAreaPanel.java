@@ -38,12 +38,13 @@ public class CKEditorTextAreaPanel<T extends Serializable> extends DefaultFormRo
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(CKEditor.forType(componentSettings.getType())));
+        response.render(JavaScriptHeaderItem.forReference(CKEditor.forLanguage(componentSettings.getType(), getLocale())));
         response.render(OnDomReadyHeaderItem.forScript(createLoadScript()));
     }
 
     protected String createLoadScript() {
-        return "$(\"#" + getComponent().getMarkupId() + "\").ckeditor();";
+        componentSettings.setLanguage(getLocale().getLanguage());
+        return "$(\"#" + getComponent().getMarkupId() + "\").ckeditor(" + componentSettings.toString() + ");";
     }
 
     @Override

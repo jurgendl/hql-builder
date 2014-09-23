@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.jquery.ui.ckeditor;
 
+import java.util.Locale;
+
 import org.apache.wicket.request.Url;
 import org.tools.hqlbuilder.webservice.wicket.UrlResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
@@ -52,14 +54,24 @@ public class CKEditor {
     }
 
     public static UrlResourceReference forType(CKEType type) {
+        UrlResourceReference ref;
         switch (type) {
             case basic:
-                return CDN_CKEDITOR_BASIC_JQUERY_JS;
+                ref = CDN_CKEDITOR_BASIC_JQUERY_JS;
+                break;
             default:
             case standard:
-                return CDN_CKEDITOR_STANDARD_JQUERY_JS;
+                ref = CDN_CKEDITOR_STANDARD_JQUERY_JS;
+                break;
             case full:
-                return CDN_CKEDITOR_FULL_JQUERY_JS;
+                ref = CDN_CKEDITOR_FULL_JQUERY_JS;
+                break;
         }
+        return ref;
+    }
+
+    public static UrlResourceReference forLanguage(CKEType type, Locale locale) {
+        return new UrlResourceReference(Url.parse(URL + type.toString() + "/lang/" + locale.getLanguage() + ".js"))
+                .addJavaScriptResourceReferenceDependency(forType(type));
     }
 }
