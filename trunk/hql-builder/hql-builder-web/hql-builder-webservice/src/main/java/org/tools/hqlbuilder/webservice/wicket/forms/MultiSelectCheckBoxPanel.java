@@ -2,27 +2,27 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 /**
  * @see http://jqueryui.com/button/
  */
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends
-        FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
+FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -637534401267056720L;
 
-    protected ListModel<T> choices;
+    protected IModel<List<T>> choices;
 
     protected IChoiceRenderer<T> renderer;
 
     public MultiSelectCheckBoxPanel(IModel<?> model, Collection<T> propertyPath, FormSettings formSettings, FormElementSettings componentSettings,
-            ListModel<T> choices, IChoiceRenderer<T> renderer) {
+            IModel<List<T>> choices, IChoiceRenderer<T> renderer) {
         super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;

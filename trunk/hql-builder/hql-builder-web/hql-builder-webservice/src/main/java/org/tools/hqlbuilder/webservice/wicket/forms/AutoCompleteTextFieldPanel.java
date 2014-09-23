@@ -10,7 +10,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
@@ -25,12 +24,12 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 public class AutoCompleteTextFieldPanel<T extends Serializable> extends DefaultFormRowPanel<T, TextField<T>, AutoCompleteTextFieldSettings> {
     private static final long serialVersionUID = -7993592150932306594L;
 
-    protected ListModel<T> choices = null;
+    protected IModel<List<T>> choices = null;
 
     protected ITextRenderer<T> renderer = null;
 
     public AutoCompleteTextFieldPanel(final IModel<?> model, final T propertyPath, FormSettings formSettings,
-            AutoCompleteTextFieldSettings componentSettings, ListModel<T> choices, ITextRenderer<T> renderer) {
+            AutoCompleteTextFieldSettings componentSettings, IModel<List<T>> choices, ITextRenderer<T> renderer) {
         super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;

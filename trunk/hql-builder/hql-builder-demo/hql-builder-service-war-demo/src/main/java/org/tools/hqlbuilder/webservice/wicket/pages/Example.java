@@ -105,6 +105,8 @@ public class Example implements Serializable {
 
     private String htmlText = "<u>underline</u> <b>bold</b> <i>italic</i>";
 
+    private String htmlTextExtra = "<u>underline</u> <b>bold</b> <i>italic</i>";
+
     public ExampleOpts getRadio() {
         return this.radio;
     }
@@ -351,5 +353,13 @@ public class Example implements Serializable {
 
     public void setHtmlText(String htmlText) {
         this.htmlText = htmlText;
+    }
+
+    public String getHtmlTextExtra() {
+        return this.htmlTextExtra;
+    }
+
+    public void setHtmlTextExtra(String htmlTextExtra) {
+        this.htmlTextExtra = htmlTextExtra;
     }
 }

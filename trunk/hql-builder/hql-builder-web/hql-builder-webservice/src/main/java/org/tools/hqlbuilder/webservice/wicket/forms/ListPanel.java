@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.tag;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
@@ -10,7 +11,6 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -22,12 +22,12 @@ public class ListPanel<T extends Serializable> extends SelectPanel<T, Select<T>,
     private static final long serialVersionUID = 6519523561212631975L;
 
     public ListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, ListSettings componentSettings, IOptionRenderer<T> renderer,
-            ListModel<T> choices) {
+            IModel<List<T>> choices) {
         super(model, propertyPath, formSettings, componentSettings, renderer, choices);
     }
 
     public ListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, ListSettings componentSettings, IOptionRenderer<T> renderer,
-            ListModel<T>[] choices, IModel<String>[] groupLabels) {
+            IModel<List<T>>[] choices, IModel<String>[] groupLabels) {
         super(model, propertyPath, formSettings, componentSettings, renderer, choices, groupLabels);
     }
 

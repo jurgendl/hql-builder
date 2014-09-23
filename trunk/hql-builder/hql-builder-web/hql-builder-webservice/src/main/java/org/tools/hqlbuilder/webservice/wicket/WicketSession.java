@@ -76,6 +76,12 @@ public class WicketSession extends WebSession {
         cookies.saveCookie(LOCALE, locale == null ? "en" : locale.toString(), 365);
     }
 
+    @Override
+    public Locale getLocale() {
+        Locale locale = super.getLocale();
+        return locale;
+    }
+
     public Cookies getCookies() {
         return this.cookies;
     }
