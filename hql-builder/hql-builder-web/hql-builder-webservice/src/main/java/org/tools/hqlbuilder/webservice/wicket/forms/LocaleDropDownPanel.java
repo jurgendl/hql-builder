@@ -1,29 +1,29 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.util.ListModel;
 import org.tools.hqlbuilder.webservice.wicket.components.LocalesDropDown;
 
 public class LocaleDropDownPanel extends FormRowPanel<Locale, Locale, LocalesDropDown, FormElementSettings> {
     private static final long serialVersionUID = 4721415841417284882L;
 
-    protected ListModel<Locale> choices;
+    protected IModel<List<Locale>> choices;
 
     protected IChoiceRenderer<Locale> renderer;
 
     public LocaleDropDownPanel(Locale propertyPath, IModel<Locale> valueModel, FormSettings formSettings, FormElementSettings componentSettings,
-            ListModel<Locale> choices, IChoiceRenderer<Locale> renderer) {
+            IModel<List<Locale>> choices, IChoiceRenderer<Locale> renderer) {
         super(propertyPath, valueModel, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;
     }
 
     public LocaleDropDownPanel(IModel<?> model, Locale propertyPath, FormSettings formSettings, FormElementSettings componentSettings,
-            ListModel<Locale> choices, IChoiceRenderer<Locale> renderer) {
+            IModel<List<Locale>> choices, IChoiceRenderer<Locale> renderer) {
         super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = renderer;

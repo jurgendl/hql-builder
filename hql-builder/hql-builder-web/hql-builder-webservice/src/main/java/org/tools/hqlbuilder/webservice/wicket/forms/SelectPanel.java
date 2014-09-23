@@ -2,6 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
@@ -27,7 +28,7 @@ public abstract class SelectPanel<T extends Serializable, C extends Select<T>, S
 
     public static final String OPTION_ID = "option";
 
-    protected ListModel<T>[] choices;
+    protected IModel<List<T>>[] choices;
 
     protected IModel<String>[] groupLabels;
 
@@ -35,14 +36,14 @@ public abstract class SelectPanel<T extends Serializable, C extends Select<T>, S
 
     @SuppressWarnings("unchecked")
     public SelectPanel(IModel<?> model, T propertyPath, FormSettings formSettings, S componentSettings, IOptionRenderer<T> renderer,
-            ListModel<T> choices) {
+            IModel<List<T>> choices) {
         super(model, propertyPath, formSettings, componentSettings);
-        this.choices = new ListModel[] { choices };
+        this.choices = new IModel[] { choices };
         this.renderer = fallback(renderer);
     }
 
     public SelectPanel(IModel<?> model, T propertyPath, FormSettings formSettings, S componentSettings, IOptionRenderer<T> renderer,
-            ListModel<T>[] choices, IModel<String>[] groupLabels) {
+            IModel<List<T>>[] choices, IModel<String>[] groupLabels) {
         super(model, propertyPath, formSettings, componentSettings);
         this.choices = choices;
         this.renderer = fallback(renderer);
@@ -116,7 +117,7 @@ public abstract class SelectPanel<T extends Serializable, C extends Select<T>, S
         return (C) choice;
     }
 
-    protected SelectOptions<T> createSelectOptions(String id, ListModel<T> choicesModel) {
+    protected SelectOptions<T> createSelectOptions(String id, IModel<List<T>> choicesModel) {
         SelectOptions<T> options = new SelectOptions<T>(id, choicesModel, renderer) {
             private static final long serialVersionUID = -7724272123559477783L;
 

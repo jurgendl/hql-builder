@@ -38,13 +38,8 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
         }
     }
 
-    public LocalesDropDown(String id, ListModel<Locale> optionsModel, IModel<Locale> valueModel, IChoiceRenderer<Locale> renderer) {
-        super(id, forDefault(valueModel), forDefault(optionsModel), forDefault(renderer));
-        @SuppressWarnings("unchecked")
-        List<Locale> locales = (List<Locale>) getChoices();
-        Locale value = getModel().getObject();
-        locales.remove(value);
-        locales.add(0, value);
+    public LocalesDropDown(String id, IModel<List<Locale>> optionsModel, IModel<Locale> valueModel, IChoiceRenderer<Locale> renderer) {
+        super(id, forDefault(valueModel), forChoicesDefault(optionsModel), forDefault(renderer));
     }
 
     public static IChoiceRenderer<Locale> forDefault(IChoiceRenderer<Locale> renderer) {
@@ -66,7 +61,7 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
         return renderer;
     }
 
-    public static ListModel<Locale> forDefault(ListModel<Locale> optionsModel) {
+    public static IModel<List<Locale>> forChoicesDefault(IModel<List<Locale>> optionsModel) {
         if (optionsModel == null) {
             optionsModel = new ListModel<Locale>(getAvailableLocales());
         }
@@ -109,10 +104,10 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
 
     public static List<Locale> getAvailableLocales() {
         List<Locale> locales = new ArrayList<Locale>(Arrays.asList(Locale.getAvailableLocales()));
-        for(Locale locale : locales.toArray(new Locale[locales.size()])     		) {
-        	if(StringUtils.isBlank(locale.getLanguage())) {
-        		locales.remove(locale);
-        	}
+        for (Locale locale : locales.toArray(new Locale[locales.size()])) {
+            if (StringUtils.isBlank(locale.getLanguage())) {
+                locales.remove(locale);
+            }
         }
         Collections.sort(locales, new LocaleComparator());
         return locales;
@@ -147,7 +142,7 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
             script.append("$('#").append(getMarkupId()).append("').text('').puidropdown({ filter: true, filterMatchMode: 'contains', data: options_")
             .append(getMarkupId())
             .append(", content: function(option) { return '<img class=\"flag flag-' + option['country'] + '\"/> ' + option['label']; } ")
-            .append("});\n");
+            .append("}).puidropdown('selectValue', '" + getId(getModel().getObject()) + "');\n");
             response.render(OnLoadHeaderItem.forScript(script.toString()));
         }
     }

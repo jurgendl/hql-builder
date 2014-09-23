@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -28,7 +29,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
@@ -106,7 +106,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         renderColumnsCss(response);
         response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "form.css")
-        .addCssResourceReferenceDependency(WicketCSSRoot.GENERAL)));
+                .addCssResourceReferenceDependency(WicketCSSRoot.GENERAL)));
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
@@ -332,8 +332,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             count++;
             if (count == formSettings.getColumns()) {
                 count = 0; // reset count
-                componentRepeater = null; // so that a new one is created when
-                // needed
+                // so that a new one is created when needed
+                componentRepeater = null;
             }
         }
     }
@@ -371,7 +371,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -383,8 +383,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 }
                 sbColumnsCss.append(";}\n");
             }
-            // logger.debug(cssClass);
-            // logger.debug(sbColumnsCss.toString());
             css.append(sbColumnsCss.toString());
         }
         return cssClass;
@@ -426,8 +424,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             count++;
             if (count == formSettings.getColumns()) {
                 count = 0; // reset count
-                componentRepeater = null; // so that a new one is created when
-                // needed
+                // so that a new one is created when needed
+                componentRepeater = null;
             }
         }
 
@@ -446,38 +444,38 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDefaultRow(new JQueryUIColorPickerPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
-    public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings, ListModel<F> choices,
-            IChoiceRenderer<F> renderer) {
+    public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings,
+            IModel<List<F>> choices, IChoiceRenderer<F> renderer) {
         return addDefaultRow(new RadioButtonsPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> MultiSelectCheckBoxPanel<F> addMultiSelectCheckBox(Collection<F> propertyPath,
-            FormElementSettings componentSettings, ListModel<F> choices, IChoiceRenderer<F> renderer) {
+            FormElementSettings componentSettings, IModel<List<F>> choices, IChoiceRenderer<F> renderer) {
         return addCustomRow(new MultiSelectCheckBoxPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, DropDownSettings componentSettings, IOptionRenderer<F> renderer,
-            ListModel<F> choices) {
+            IModel<List<F>> choices) {
         return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices));
     }
 
     public LocaleDropDownPanel addLocalesDropDown(Locale propertyPath, FormElementSettings componentSettings, IChoiceRenderer<Locale> renderer,
-            ListModel<Locale> choices) {
+            IModel<List<Locale>> choices) {
         return addCustomRow(new LocaleDropDownPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> DropDownPanel<F> addDropDown(F propertyPath, DropDownSettings componentSettings, IOptionRenderer<F> renderer,
-            ListModel<F>[] choices, IModel<String>[] groupLabels) {
+            IModel<List<F>>[] choices, IModel<String>[] groupLabels) {
         return addDefaultRow(new DropDownPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices, groupLabels));
     }
 
     public <F extends Serializable> ListPanel<F> addList(F propertyPath, ListSettings componentSettings, IOptionRenderer<F> renderer,
-            ListModel<F> choices) {
+            IModel<List<F>> choices) {
         return addDefaultRow(new ListPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices));
     }
 
     public <F extends Serializable> ListPanel<F> addList(F propertyPath, ListSettings componentSettings, IOptionRenderer<F> renderer,
-            ListModel<F>[] choices, IModel<String>[] groupLabels) {
+            IModel<List<F>>[] choices, IModel<String>[] groupLabels) {
         return addDefaultRow(new ListPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, renderer, choices, groupLabels));
     }
 
@@ -485,8 +483,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDefaultRow(new TextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
+    public <F extends Serializable> CKEditorTextAreaPanel<F> addCKEditorTextAreaPanel(F propertyPath, CKEditorTextAreaSettings componentSettings) {
+        return addDefaultRow(new CKEditorTextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+    }
+
     public <F extends Serializable> AutoCompleteTextFieldPanel<F> addAutoCompleteTextField(F propertyPath,
-            AutoCompleteTextFieldSettings componentSettings, ListModel<F> choices, ITextRenderer<F> renderer) {
+            AutoCompleteTextFieldSettings componentSettings, IModel<List<F>> choices, ITextRenderer<F> renderer) {
         return addDefaultRow(new AutoCompleteTextFieldPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings, choices, renderer));
     }
 
@@ -494,17 +496,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDefaultRow(new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
-    /**
-     * @see http://wicket.apache.org/guide/guide/wicketstuff.html#wicketstuff_2
-     */
-    public <F extends Serializable> TextAreaPanel<F> addTinyMCETextArea(F propertyPath, TinyMCETextAreaSettings componentSettings) {
-        TextAreaPanel<F> rowpanel = new TextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings);
-        if (componentSettings.getTinyMCESettings() == null) {
-            rowpanel.getFormComponent().add(new wicket.contrib.tinymce.TinyMceBehavior());
-        } else {
-            rowpanel.getFormComponent().add(new wicket.contrib.tinymce.TinyMceBehavior(componentSettings.getTinyMCESettings()));
-        }
-        return addDefaultRow(rowpanel);
+    public <F extends Serializable> TinyMCETextAreaPanel<F> addTinyMCETextArea(F propertyPath, TinyMCETextAreaSettings componentSettings) {
+        return new TinyMCETextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings);
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {

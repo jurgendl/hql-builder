@@ -24,10 +24,12 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
+import org.tools.hqlbuilder.webservice.jquery.ui.ckeditor.CKEditor.CKEType;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
+import org.tools.hqlbuilder.webservice.wicket.forms.CKEditorTextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
@@ -100,31 +102,34 @@ public class ExampleForm extends FormPanel<Example> {
 
             @Override
             public Locale getObject() {
-                return WicketSession.get().getLocale();
+                Locale locale = WicketSession.get().getLocale();
+                System.out.println("<<<<<" + locale);
+                return locale;
             }
 
             @Override
             public void setObject(Locale locale) {
                 WicketSession.get().setLocale(locale);
+                System.out.println(">>>>>" + locale);
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-                .setValueModel(new IModel<String>() {
-                    @Override
-                    public void detach() {
-                        //
-                    }
+        .setValueModel(new IModel<String>() {
+            @Override
+            public void detach() {
+                //
+            }
 
-                    @Override
-                    public String getObject() {
-                        return WicketSession.get().getJQueryUITheme();
-                    }
+            @Override
+            public String getObject() {
+                return WicketSession.get().getJQueryUITheme();
+            }
 
-                    @Override
-                    public void setObject(String theme) {
-                        WicketSession.get().setJQueryUITheme(theme);
-                    }
-                });
+            @Override
+            public void setObject(String theme) {
+                WicketSession.get().setJQueryUITheme(theme);
+            }
+        });
         addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -154,8 +159,8 @@ public class ExampleForm extends FormPanel<Example> {
         addHidden(proxy.getHidden1());
         addHidden(proxy.getHidden2());
 
-        addTextField(proxy.getText(), fset.clone().setRequired(true));
-        addTextField(proxy.getTextAdd(), fset.clone().setRequired(true));
+        addTextField(proxy.getText(), fset.clone());
+        addTextField(proxy.getTextAdd(), fset.clone());
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
         addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
         addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
@@ -198,9 +203,10 @@ public class ExampleForm extends FormPanel<Example> {
         nextRow();
         addTinyMCETextArea(proxy.getHtmlText(),//
                 new TinyMCETextAreaSettings(Theme.advanced)//
-                        .setResizing(true)//
-                        .setToolbarLocation(TinyMCESettings.Location.top)//
+        .setResizing(true)//
+        .setToolbarLocation(TinyMCESettings.Location.top)//
                 );
+        addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
     }
 
     private void addFilepicker(Example proxy) {
