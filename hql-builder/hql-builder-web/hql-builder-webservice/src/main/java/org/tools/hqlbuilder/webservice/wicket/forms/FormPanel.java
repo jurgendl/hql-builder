@@ -106,7 +106,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         renderColumnsCss(response);
         response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "form.css")
-                .addCssResourceReferenceDependency(WicketCSSRoot.GENERAL)));
+        .addCssResourceReferenceDependency(WicketCSSRoot.GENERAL)));
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {
@@ -371,7 +371,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -497,7 +497,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     public <F extends Serializable> TinyMCETextAreaPanel<F> addTinyMCETextArea(F propertyPath, TinyMCETextAreaSettings componentSettings) {
-        return new TinyMCETextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings);
+        return addDefaultRow(new TinyMCETextAreaPanel<F>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
