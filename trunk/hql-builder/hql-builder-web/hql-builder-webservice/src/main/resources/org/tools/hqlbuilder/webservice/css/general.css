@@ -3,6 +3,7 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic);
 @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic&subset=latin,latin-ext);
 @import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
+@import url(http://fonts.googleapis.com/css?family=Quicksand:300,400,700);
 
 /* http://www.smashingmagazine.com/2009/09/22/complete-guide-to-css-font-stacks/ */
 /*Baskerville, 'Times New Roman', Times, serif*/
@@ -224,11 +225,25 @@ a.wicket_orderNone div::after {
 	content: "\f0dc";
 }
 
+/* ======================== text transformations ======================== */
+.lower {
+	text-transform: lowercase;
+}
+.upper {
+	text-transform: uppercase;
+}
+.cap {
+	text-transform: capitalize;
+}
+
 /* ======================== html tags ======================== */
 abbr[title],
 acronym[title] {
 	border-bottom: .1em dotted;
 	cursor: help;
+}
+address {
+	font-style: normal;
 }
 article {
 	
@@ -243,7 +258,9 @@ big {
 	
 }
 blockquote {
-	
+	border-left: .5em solid rgba(0,0,0,.1);
+	padding: .1em .1em .1em 1em;
+	margin: .1em .1em .1em 1em;
 }
 cite {
 	
@@ -293,7 +310,7 @@ figure:hover figcaption {
   opacity: 1;
 }
 figure:before {
-  content: "…";
+  content: "\2026"; /* http://css-tricks.com/snippets/html/glyphs/ */
   position: absolute;
   font-weight: 800;
   background: black;
