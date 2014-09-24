@@ -93,7 +93,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return WebHelper.proxy(getFormActions().forObjectClass());
     }
 
-    @SuppressWarnings("resource")
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -105,8 +104,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         renderColumnsCss(response);
-        response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "form.css")
-        .addCssResourceReferenceDependency(WicketCSSRoot.GENERAL)));
+        response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "form.css")));
     }
 
     protected void renderColumnsCss(IHeaderResponse response) {

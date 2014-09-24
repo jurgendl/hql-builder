@@ -6,6 +6,13 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 
+import wicket.contrib.tinymce.settings.AutoResizePlugin;
+import wicket.contrib.tinymce.settings.DateTimePlugin;
+import wicket.contrib.tinymce.settings.FullScreenPlugin;
+import wicket.contrib.tinymce.settings.PrintPlugin;
+import wicket.contrib.tinymce.settings.SavePlugin;
+import wicket.contrib.tinymce.settings.SearchReplacePlugin;
+import wicket.contrib.tinymce.settings.SpellCheckPlugin;
 import wicket.contrib.tinymce.settings.TinyMCESettings;
 
 /**
@@ -31,6 +38,14 @@ public class TinyMCETextAreaPanel<T extends Serializable> extends DefaultFormRow
             }
         };
         TinyMCESettings tinyMCESettings = componentSettings.getTinyMCESettings();
+        tinyMCESettings.register(new AutoResizePlugin());
+        tinyMCESettings.register(new FullScreenPlugin());
+        tinyMCESettings.register(new DateTimePlugin());
+        tinyMCESettings.register(new PrintPlugin());
+        tinyMCESettings.register(new SavePlugin());
+        tinyMCESettings.register(new SearchReplacePlugin());
+        tinyMCESettings.register(new SpellCheckPlugin());
+        // tinyMCESettings.register(new WicketSavePlugin());
         textArea.add(new wicket.contrib.tinymce.TinyMceBehavior(tinyMCESettings));
         return textArea;
     }
