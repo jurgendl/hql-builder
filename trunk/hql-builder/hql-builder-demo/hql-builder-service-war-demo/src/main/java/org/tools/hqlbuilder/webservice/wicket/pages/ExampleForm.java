@@ -200,10 +200,12 @@ public class ExampleForm extends FormPanel<Example> {
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
         nextRow();
         addTinyMCETextArea(proxy.getHtmlText(),//
+                //
                 new TinyMCETextAreaSettings(Theme.advanced)//
-                        .setResizing(true)//
-                        .setToolbarLocation(TinyMCESettings.Location.top)//
-        );
+        .setResizing(true)//
+        .setToolbarLocation(TinyMCESettings.Location.top)//
+                );
+        nextRow();
         addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
     }
 
