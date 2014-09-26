@@ -64,7 +64,7 @@ public class DefaultWebPage extends WebPage {
             }
         });
         add(cookiesQ.setVisible(WicketSession.get().getCookies().getUserAllowedCookies() == null));
-        // wicket/ajav debug bars
+        // wicket/ajax debug bars
         add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug") : new EmptyPanel(
                 "debug").setVisible(false));
         // add header response (javascript) down below on page
