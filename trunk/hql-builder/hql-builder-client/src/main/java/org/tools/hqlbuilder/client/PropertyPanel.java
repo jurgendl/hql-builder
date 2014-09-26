@@ -11,13 +11,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -83,7 +81,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
     /**
      * Creates a new PropertyPanel object.
-     * 
+     *
      * @param bean na
      */
 
@@ -93,7 +91,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-                Object value;
+                Object value = null;
                 try {
                     value = getValueAt(row, column);
                     if (!isInitialized(value)) {
@@ -103,6 +101,8 @@ public class PropertyPanel extends PropertySheetPanel {
                     }
                 } catch (org.hibernate.LazyInitializationException ex) {
                     value = LAZY;
+                } catch (Exception ex) {
+                    //
                 }
                 boolean isSelected = isCellSelected(row, column);
                 Component component = renderer.getTableCellRendererComponent(this, value, isSelected, false, row, column);
@@ -123,22 +123,18 @@ public class PropertyPanel extends PropertySheetPanel {
             try {
                 beanInfo = Introspector.getBeanInfo(bean.getClass());
                 for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
-                    propertyDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
-                    Method readMethod = propertyDescriptor.getReadMethod();
-                    if (readMethod != null) {
-                        try {
+                    try {
+                        propertyDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
+                        Method readMethod = propertyDescriptor.getReadMethod();
+                        if (readMethod != null) {
                             Object value = readMethod.invoke(bean);
                             if (!isInitialized(value)) {
                                 throw new NullPointerException();
                             }
-                            try {
-                                String.valueOf(value);
-                            } catch (Exception ex) {
-                                //
-                            }
-                        } catch (Exception ex) {
-                            //
+                            String.valueOf(value);
                         }
+                    } catch (Exception ex) {
+                        //
                     }
                 }
             } catch (IntrospectionException ex) {
@@ -240,15 +236,16 @@ public class PropertyPanel extends PropertySheetPanel {
                 }
 
                 addProperty(property);
-            } catch (RuntimeException ex) {
-                System.err.println(propertyDescriptorEntry.getKey());
-                System.err.println(ex);
-            } catch (IllegalAccessException ex) {
-                System.err.println(propertyDescriptorEntry.getKey());
-                System.err.println(ex);
-            } catch (InvocationTargetException ex) {
-                System.err.println(propertyDescriptorEntry.getKey());
-                System.err.println(ex);
+            } catch (Exception ex) {
+                // } catch (RuntimeException ex) {
+                // System.err.println(propertyDescriptorEntry.getKey());
+                // System.err.println(ex);
+                // } catch (IllegalAccessException ex) {
+                // System.err.println(propertyDescriptorEntry.getKey());
+                // System.err.println(ex);
+                // } catch (InvocationTargetException ex) {
+                // System.err.println(propertyDescriptorEntry.getKey());
+                // System.err.println(ex);
             }
         }
 
@@ -603,7 +600,7 @@ public class PropertyPanel extends PropertySheetPanel {
             while (iterator.hasNext()) {
                 options[i++] = iterator.next();
             }
-            System.out.println(Arrays.asList(options));
+            // System.out.println(Arrays.asList(options));
             setAvailableValues(options);
             ((JComboBox) super.editor).setRenderer(new Renderer() {
                 private static final long serialVersionUID = 4777310242425067779L;

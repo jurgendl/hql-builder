@@ -246,16 +246,12 @@ address {
 	font-style: normal;
 }
 article {
-	
 }
 aside {
-	
 }
 b {
-	
 }
 big {
-	
 }
 blockquote {
 	border-left: .5em solid rgba(0,0,0,.1);
@@ -263,125 +259,43 @@ blockquote {
 	margin: .1em .1em .1em 1em;
 }
 cite {
-	
 }
 del {
-	
 }
 ins {
-	
 }
 details {
-	
 }
 details summary {
-	
 }
 dfn {
-	
 }
 em {
-	
 }
 img {
-	background: gray;
-	background: rgba(0, 0, 0, 0.50);
 }
-/* http://css-tricks.com/slide-in-image-captions/ */
-figure {
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-  margin: 0 20px 20px 0;
-}
-figcaption {
-  position: absolute;
-  background: black;
-  background: rgba(0,0,0,0.75);
-  color: white;
-  padding: 10px 20px;
-  opacity: 0;
-  -webkit-transition: all 0.6s ease;
-  -moz-transition:    all 0.6s ease;
-  -o-transition:      all 0.6s ease;
-  width: 100%;
-}
-figure:hover figcaption {
-  opacity: 1;
-}
-figure:before {
-  content: "\2026"; /* http://css-tricks.com/snippets/html/glyphs/ */
-  position: absolute;
-  font-weight: 800;
-  background: black;
-  background: rgba(255,255,255,0.75);
-  text-shadow: 0 0 5px white;
-  color: black;
-  width: 20px;
-  height: 20px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius:    10px;
-  border-radius:         10px;
-  text-align: center;
-  font-size: 10px;
-  line-height: 20px;
-  -webkit-transition: all 0.6s ease;
-  -moz-transition:    all 0.6s ease;
-  -o-transition:      all 0.6s ease;  
-  opacity: 0.75;
-}
-figure:hover:before {
-  opacity: 0;
-}
-figure.cap-left:before {  bottom: 10px; left: 10px; }
-figure.cap-left figcaption { bottom: 0; left: -30%; }
-figure.cap-left:hover figcaption { left: 0; }
-figure.cap-right:before { bottom: 10px; right: 10px; }
-figure.cap-right figcaption { bottom: 0; right: -30%; }
-figure.cap-right:hover figcaption { right: 0; }
-figure.cap-top:before { top: 10px; left: 10px; }
-figure.cap-top figcaption { left: 0; top: -30%; }
-figure.cap-top:hover figcaption { top: 0; }
-figure.cap-bot:before { bottom: 10px; left: 10px; }
-figure.cap-bot figcaption { left: 0; bottom: -30%;}
-figure.cap-bot:hover figcaption { bottom: 0; }
-figure:before { bottom: 10px; left: 10px; }
-figure figcaption { left: 0; bottom: -30%;}
-figure:hover figcaption { bottom: 0; }
-
 i {
-	
 }
 mark {
-	
 }
 pre {
-	
 }
 q {
-	
 }
 small {
-	
 }
 s,
 strike {
-	
 }
 strong {
-	
 }
 sub {
-	
 }
 sup {
-	
 }
 tt {
-	
 }
 u {
-	
 }
 code,
 samp,
@@ -413,6 +327,124 @@ var {
 	font-weight: 700;
 }
 
+/* ======================== figures/images ======================== */
+/* http://css-tricks.com/slide-in-image-captions/ */
+/* http://www.hongkiat.com/blog/css3-image-captions/ */
+/* common */
+figure,
+.figure {
+	display: block;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	border: 5px solid #fff;
+	margin: 5px;
+	-webkit-box-shadow: 1px 1px 1px 1px #ccc;
+	-moz-box-shadow: 1px 1px 1px 1px #ccc;
+	box-shadow: 1px 1px 1px 1px #ccc;
+}
+figure img,
+.figure img {
+	background: gray;
+	background: rgba(0, 0, 0, 0.50);
+}
+figure figcaption,
+.figure .figcaption {
+	-webkit-transition: all 300ms ease-out;
+	-moz-transition: all 300ms ease-out;
+	-o-transition: all 300ms ease-out;
+	transition: all 300ms ease-out; 
+	position: absolute;
+	z-index: 222;
+	display: block;
+	background-color: rgba(0,0,0,0.8);
+	color: #fff;
+}
+figure figcaption p,
+.figure .figcaption p {
+	margin: 0px;
+	padding: .4em;
+	border: 0px;
+}
+figure:hover figcaption,
+.figure:hover .figcaption {
+	opacity: 1;
+}
+/* slide caption from bottom (default) */
+figure figcaption,
+.figure .figcaption.slidebottom {
+	left: 0;
+	bottom: -100%;
+}
+figure:hover figcaption,
+.figure:hover .figcaption.slidebottom {
+	bottom: 0;
+}
+/* slide caption from top */
+.figure .figcaption.slidetop {
+	left: 0;
+	top: -100%;
+}
+.figure:hover .figcaption.slidetop {
+	top: 0;
+}
+/* slide caption from left */
+.figure .figcaption.slideleft {
+	bottom: 0;
+	width: 100%;
+	left: -100%;
+}
+.figure:hover .figcaption.slideleft {
+	left: 0;
+}
+/* slide caption from right */
+.figure .figcaption.slideright {
+	bottom: 0;
+	width: 100%;
+	right: -100%;
+}
+.figure:hover .figcaption.slideright {
+	right: 0;
+}
+/* full view caption */
+.figure:hover .figcaption.full {
+	width: 100%;
+	height: 100%;
+}
+/* caption centered horizontally */
+.figure .figcaption.center p {
+	text-align: center;
+}
+/* caption centered vertically (only compatible when full view) */
+.figure .figcaption.full.center p {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+/* scale image on hover */
+.figure:hover img.scale {
+	-webkit-transition: all 300ms ease-out;
+	-moz-transition: all 300ms ease-out;
+	-o-transition: all 300ms ease-out;
+	transition: all 300ms ease-out;
+	-moz-transform: scale(1.25);
+	-o-transform: scale(1.25);
+	-webkit-transform: scale(1.25);
+	transform: scale(1.25);
+}
+/* fade caption (not compatible with slide) */
+.figure .figcaption.fade {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+.figure:hover .figcaption.fade {
+	opacity: 1;
+}
+
+/* ======================== kdb ======================== */
 /**
  * KEYS.css
  *
