@@ -45,5 +45,7 @@ public class StylingPage extends BasePage {
 
         ExampleForm stylingform = new ExampleForm("stylingform");
         add(stylingform);
+
+        add(new HtmlTagsPanel("htmltags"));
     }
 }

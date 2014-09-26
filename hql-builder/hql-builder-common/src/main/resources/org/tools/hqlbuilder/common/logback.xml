@@ -4,7 +4,7 @@
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<charset>UTF-8</charset>
-			<pattern>%d|%p|%t|%c|%r|%web|%msg %n</pattern>
+			<pattern>%p|%d|%t|%c|%r|%web|%msg %n</pattern>
 			<outputPatternAsHeader>true</outputPatternAsHeader>
 		</encoder>
 	</appender>
