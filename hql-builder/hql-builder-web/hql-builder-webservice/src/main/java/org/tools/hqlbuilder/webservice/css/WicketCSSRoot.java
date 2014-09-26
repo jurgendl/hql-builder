@@ -24,7 +24,7 @@ public class WicketCSSRoot {
     public static void main(String[] args) {
         minify(WicketCSSRoot.class, "", new String[] { "general", "meyer.reset", "normalize" });
         minify(Spectrum.class, "", new String[] { "spectrum" });
-        minify(WeLoveIcons.class, "", new String[] { "weloveiconfonts", "weloveiconfonts-social", "socialcolors", "socialcolorshover" });
+        minify(WeLoveIcons.class, "", new String[] { "weloveiconfonts", "weloveiconfonts-social" });
     }
 
     protected static void minify(Class<?> root, String path, String[] sources) {

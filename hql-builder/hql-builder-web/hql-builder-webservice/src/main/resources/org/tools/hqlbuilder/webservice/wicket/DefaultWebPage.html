@@ -29,6 +29,21 @@
 		</div>
 		<script type="text/javascript" id="more_information_js">/*<![CDATA[*/ function showhide(layer_ref) { var el = document.getElementById(layer_ref); var visible = el.style.display == 'block'; el.style.display = visible ? 'none' : 'block'; return !visible; }; document.getElementById('nocookies_more_information').style.display = 'none'; /*]]>*/</script>
 	</div>
+	<div id="addscheck"><img src="http://demo.hongkiat.com/jquery-detect-ads-block/images/ads.jpg" height="0" width="0" alt=""></div>
+	<script type="text/javascript" id="add_check_js">
+	/*<![CDATA[*/
+	$(document).ready(function() {
+		function appendMessage(argument) {
+			var div = $('<div>')
+			.attr('class', 'ui-state-highlight ui-corner-all')
+			.attr('style', 'margin:14px;padding-left:20px;padding-right:20px;z-index:250')
+			.html('<p>Ad block is installed and active. Please support us by disabling it</p>');
+			var add = $('#addscheck').append(div);
+		}
+		setTimeout(function(){ if($("#addscheck img").css('display') == "none") { appendMessage(); } }, 500);
+	});
+	/*]]>*/
+	</script>
 	<span wicket:id="debug" />
 	<wicket:child />
 	<wicket:container wicket:id="footer-container"/>
