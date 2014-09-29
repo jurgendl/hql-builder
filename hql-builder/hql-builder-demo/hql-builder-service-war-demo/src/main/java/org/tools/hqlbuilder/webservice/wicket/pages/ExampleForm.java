@@ -24,10 +24,12 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
+import org.tools.hqlbuilder.webservice.jquery.ui.ckeditor.CKEditor.CKEType;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
+import org.tools.hqlbuilder.webservice.wicket.forms.CKEditorTextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
@@ -40,6 +42,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.JQueryUIColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
@@ -189,17 +192,17 @@ public class ExampleForm extends FormPanel<Example> {
             nextRow();
             addList(WebHelper.proxy(Example.class).getTextExtra(), new ListSettings().setSize(10), optionRenderer2, opt, groupLabels);
         }
-        // nextRow();
-        // addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
+        nextRow();
+        addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
         // nextRow();
         // addTinyMCETextArea(proxy.getHtmlText(),//
         // //
-        // new TinyMCETextAreaSettings(Theme.advanced)//
+        // new TinyMCETextAreaSettings(TinyMCESettings.Theme.advanced)//
         // .setResizing(true)//
         // .setToolbarLocation(TinyMCESettings.Location.top)//
         // );
-        // nextRow();
-        // addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
+        nextRow();
+        addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
     }
 
     private void addFilepicker(Example proxy) {
