@@ -45,14 +45,16 @@ public class CheckAdsEnabled extends Panel {
 
     public CheckAdsEnabled() {
         super("check.ads.enabled");
-        add(new Image("check.ads.img") {
+        Image image = new Image("check.ads.img") {
             private static final long serialVersionUID = 9061259704592785374L;
 
             @Override
             protected ResourceReference getImageResourceReference() {
                 return IMG;
             }
-        });
+        };
+        image.setMarkupId(image.getId());
+        add(image);
         setVisible(WicketApplication.get().isCheckAdsEnabled());
     }
 
