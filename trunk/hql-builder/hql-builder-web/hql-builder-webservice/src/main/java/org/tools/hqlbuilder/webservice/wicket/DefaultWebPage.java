@@ -7,9 +7,7 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -43,30 +41,15 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
-        // site uses cookies info (asked when user choice not known)
-        WebMarkupContainer cookiesQ = new WebMarkupContainer("nocookies");
-        cookiesQ.add(new Link<String>("allowCookies") {
-            private static final long serialVersionUID = -8778073423020169707L;
-
-            @Override
-            public void onClick() {
-                WicketSession.get().getCookies().setUserAllowedCookies(true);
-                DefaultWebPage.this.get("nocookies").setVisible(false);
-            }
-        });
-        cookiesQ.add(new Link<String>("disallowCookies") {
-            private static final long serialVersionUID = 4600682011663940306L;
-
-            @Override
-            public void onClick() {
-                WicketSession.get().getCookies().setUserAllowedCookies(false);
-                DefaultWebPage.this.get("nocookies").setVisible(false);
-            }
-        });
-        add(cookiesQ.setVisible(WicketSession.get().getCookies().getUserAllowedCookies() == null));
         // wicket/ajax debug bars
         add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug") : new EmptyPanel(
                 "debug").setVisible(false));
+        // check if javascript is enabled
+        add(new CheckJavaScriptEnabled());
+        // check if cookies are enabled
+        add(new CheckCookiesEnabled());
+        // check if ads are not blocked
+        add(new CheckAdsEnabled());
         // add header response (javascript) down below on page
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }

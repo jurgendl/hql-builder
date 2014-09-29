@@ -61,6 +61,12 @@ public class WicketApplication extends WebApplication {
 
     protected boolean showDebugbars = true;
 
+    protected boolean checkCookiesEnabled = true;
+
+    protected boolean checkJavaScriptEnabled = true;
+
+    protected boolean checkAdsEnabled = true;
+
     protected String pagesPackages = "org.tools.hqlbuilder.webservice.wicket.pages";
 
     public static WicketApplication get() {
@@ -290,5 +296,29 @@ public class WicketApplication extends WebApplication {
 
     public void setShowDebugbars(boolean showDebugbars) {
         this.showDebugbars = showDebugbars;
+    }
+
+    public boolean isCheckCookiesEnabled() {
+        return this.checkCookiesEnabled;
+    }
+
+    public boolean isCheckJavaScriptEnabled() {
+        return this.checkJavaScriptEnabled;
+    }
+
+    public void setCheckCookiesEnabled(boolean checkCookiesEnabled) {
+        this.checkCookiesEnabled = checkCookiesEnabled;
+    }
+
+    public void setCheckJavaScriptEnabled(boolean checkJavaScriptEnabled) {
+        this.checkJavaScriptEnabled = checkJavaScriptEnabled;
+    }
+
+    public boolean isCheckAdsEnabled() {
+        return this.checkAdsEnabled;
+    }
+
+    public void setCheckAdsEnabled(boolean checkAdsEnabled) {
+        this.checkAdsEnabled = checkAdsEnabled;
     }
 }
