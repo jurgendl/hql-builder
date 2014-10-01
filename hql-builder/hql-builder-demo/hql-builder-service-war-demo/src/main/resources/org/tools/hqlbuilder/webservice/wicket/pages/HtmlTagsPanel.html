@@ -1,5 +1,5 @@
 <wicket:panel>
-
+<!-- 
 		<h3><a href="http://www.w3schools.com/tags/tag_a.asp">a</a></h3>
 		<div>
 		<p><a title="Hyperlink" href="#">Hyperlink</a></p>
@@ -33,29 +33,7 @@
 			<abbr title="Phone">P:</abbr> (123) 456-7890
 		</address>
 		</div>
-		
-		<h3><a href="http://www.w3schools.com/tags/tag_article.asp">article</a>, <a href="http://www.w3schools.com/tags/tag_header.asp">header</a>, <a href="http://www.w3schools.com/tags/tag_footer.asp">footer</a></h3>
-		<div>
-			<article>
-				<header>
-					<h4>Internet Explorer 9</h4>
-				</header>
-					<p>Windows Internet Explorer 9 (abbreviated as IE9) was released to the public on <time pubdate datetime="2011-03-14">March 14, 2011</time> at 21:00 PDT.....</p>
-				<footer>
-					<p>Posted by: Hege Refsnes</p>
-					<p>Contact information: <a href="mailto:someone@example.com">someone@example.com</a>.</p>
-				</footer>
-			</article>
-		</div>
-		
-		<h3><a href="http://www.w3schools.com/tags/tag_aside.asp">aside</a></h3>
-		<div>
-		<aside>
-		<h4>Epcot Center</h4>
-		<p>The Epcot Center is a theme park in Disney World, Florida.</p>
-		</aside>
-		</div>
-		
+
 		<h3><a href="http://www.w3schools.com/tags/tag_b.asp">b</a></h3>
 		<div><p>This is normal text - <b>and this is bold text</b>.</p></div>
 	
@@ -106,16 +84,6 @@
 		<h3><a href="http://www.w3schools.com/tags/tag_del.asp">del</a>, <a href="http://www.w3schools.com/tags/tag_ins.asp">ins</a></h3>
 		<div>
 		<p>My favorite color is <del>blue</del> <ins>red</ins>!</p>
-		</div>
-
-		<h3><a href="http://www.w3schools.com/tags/tag_details.asp">details</a>, <a href="http://www.w3schools.com/tags/tag_summary.asp">summary</a></h3>
-		<div>
-			<details>
-				<summary>Copyright 1999-2014.</summary>
-				<p>- by Refsnes Data. All Rights Reserved.</p>
-				<p>All content and graphics on this web site are the property of
-					the company Refsnes Data.</p>
-			</details>
 		</div>
 
 		<h3><a href="http://www.w3schools.com/tags/tag_dfn.asp">dfn</a></h3>
@@ -174,11 +142,6 @@
 				<a href="#">HTML</a> | <a href="#">CSS</a> | <a href="#">JavaScript</a>
 				| <a href="#">jQuery</a>
 			</nav>
-		</div>
-
-		<h3><a href="http://www.w3schools.com/tags/tag_p.asp">p</a></h3>
-		<div>
-		<p>This is some text in a paragraph.</p>
 		</div>
 
 		<h3><a href="http://www.w3schools.com/tags/tag_pre.asp">pre</a></h3>
@@ -272,6 +235,11 @@ line breaks
 		<p>This is a <u>paragraph</u>.</p>
 		</div>
 
+		<h3><a href="http://www.w3schools.com/tags/tag_wbr.asp">wbr</a></h3>
+		<div>
+		<p>To learn AJAX, you must be familiar with the XML<wbr>Http<wbr>Request Object.</p>
+		</div>
+
 		<h3><a href="http://www.w3schools.com/tags/tag_code.asp">code</a>, <a href="http://www.w3schools.com/tags/tag_kbd.asp">kbd</a>, <a href="http://www.w3schools.com/tags/tag_var.asp">var</a>, <a href="http://www.w3schools.com/tags/tag_samp.asp">samp</a></h3>
 		<div>
 			<code>var <var>btype</var> = 'general'; <kbd title="Enter">Enter</kbd></code>
@@ -280,9 +248,14 @@ line breaks
 			<code><kbd title="Alt+F4"><kbd>Alt</kbd>+<kbd>F4</kbd></kbd></code>
 		</div>
 
-		<h3><a href="http://www.w3schools.com/tags/tag_wbr.asp">wbr</a></h3>
+		<h3><a href="http://www.w3schools.com/tags/tag_details.asp">details</a>, <a href="http://www.w3schools.com/tags/tag_summary.asp">summary</a></h3>
 		<div>
-		<p>To learn AJAX, you must be familiar with the XML<wbr>Http<wbr>Request Object.</p>
+			<details>
+				<summary>Copyright 1999-2014.</summary>
+				<p>- by Refsnes Data. All Rights Reserved.</p>
+				<p>All content and graphics on this web site are the property of
+					the company Refsnes Data.</p>
+			</details>
 		</div>
 
 		<h3><a href="http://www.w3schools.com/tags/tag_img.asp">img</a>, <a href="http://www.w3schools.com/tags/tag_figure.asp">figure</a>, <a href="http://www.w3schools.com/tags/tag_figcaption.asp">figcaption</a></h3>
@@ -379,5 +352,69 @@ line breaks
 				</span>
 			</div>
 		</div>
+ -->
+		<h3><a href="http://www.w3schools.com/tags/tag_article.asp">article</a>, <a href="http://www.w3schools.com/tags/tag_section.asp">section</a>, <a href="http://www.w3schools.com/tags/tag_nav.asp">nav</a>, <a href="http://www.w3schools.com/tags/tag_header.asp">header</a>, <a href="http://www.w3schools.com/tags/tag_footer.asp">footer</a>, <a href="http://www.w3schools.com/tags/tag_aside.asp">aside</a>, <a href="http://www.w3schools.com/tags/tag_main.asp">main</a>, <a href="http://www.w3schools.com/tags/tag_p.asp">p</a></h3>
+		<span class="document">
+			<header>
+				<h1>Header</h1>
+				<p>There is a crucial difference between the header element and the general accepted usage of header (or masthead). There’s usually only one header or ‘masthead’ in a page. In HTML5 you can have as many as you want. The spec defines it as “a group of introductory or navigational aids”. You can use a header in any section on your site. In fact, you probably should use a header within most of your sections. The spec describes the section element as “a thematic grouping of content, typically with a heading.”</p>
+			</header>
+			<nav>
+				<h1>Nav</h1>
+				<a href="#">Nav1</a>
+				<a href="#">Nav2</a>
+				<a href="#">Nav3</a>
+				<a href="#">Nav4</a>
+				<p>Intended for major navigation information. A group of links grouped together isn’t enough reason to use the nav element. Site-wide navigation, on the other hand belongs in a nav element.</p>
+			</nav>
+			<main>
+				<article>
+					<header>
+						<h1>Article 1 Header</h1>
+					</header>
+					<p>Article 1</p>
+					<footer>
+						<p>Article 1 Footer</p>
+					</footer>
+				</article>
+				<article>
+					<section>
+						<header>
+							<h1>Article 2 Section 1 Header</h1>
+						</header>
+						<p>Article 2 Section 1</p>
+						<footer>
+							<p>Article 2 Section 1 Footer</p>
+						</footer>
+					</section>
+					<section>
+						<header>
+							<h1>Article 2 Section 2 Header</h1>
+						</header>
+						<p>Article 2 Section 2</p>
+						<footer>
+							<p>Article 2 Section 2 Footer</p>
+						</footer>
+					</section>
+				</article>
+				<article>
+					<header>
+						<h1>Article 3 Header</h1>
+					</header>
+					<p>Article 3</p>
+					<footer>
+						<p>Article 3 Footer</p>
+					</footer>
+				</article>
+			</main>
+			<aside>
+				<h1>Aside</h1>
+				<p>Used for tangentially related content. Just because some content appears to the left or right of the main content isn’t enough reason to use the aside element. Ask yourself if the content within the aside can be removed without reducing the meaning of the main content. Pullquotes are an example of tangentially related content.</p>
+			</aside>
+			<footer>
+				<h1>Footer</h1>
+				<p>Sounds like its a description of the position, but its not. Footer elements contain information about it’s containing element: who wrote it, copyright, links to related content, etc. Whereas we usually have one footer for an entire document, HTML5 allows us to also have footer within sections.</p>
+			</footer>
+		</span>
 
 </wicket:panel>
