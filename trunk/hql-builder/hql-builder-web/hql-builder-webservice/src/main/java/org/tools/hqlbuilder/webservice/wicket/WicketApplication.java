@@ -59,7 +59,7 @@ public class WicketApplication extends WebApplication {
 
     protected boolean diskStore = false;
 
-    protected boolean showDebugbars = true;
+    protected boolean showDebugbars = false;
 
     protected boolean checkCookiesEnabled = true;
 
