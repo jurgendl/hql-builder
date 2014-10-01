@@ -65,7 +65,7 @@ public class WicketApplication extends WebApplication {
 
     protected boolean checkJavaScriptEnabled = true;
 
-    protected boolean checkAdsEnabled = true;
+    protected boolean checkAdsEnabled = false;
 
     protected String pagesPackages = "org.tools.hqlbuilder.webservice.wicket.pages";
 

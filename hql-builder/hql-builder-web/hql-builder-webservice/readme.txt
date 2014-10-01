@@ -59,7 +59,7 @@ http://css-tricks.com/glitch-effect-text-images-svg/
 http://zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba
 http://blog.cloudfour.com/dont-use-picture-most-of-the-time/
 https://html.spec.whatwg.org/multipage/embedded-content.html#embedded-content
-
+http://gsgd.co.uk/sandbox/jquery/easing/
 
 
 
