@@ -27,6 +27,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swingeasy.CustomizableOptionPane;
 import org.swingeasy.ETable;
 import org.swingeasy.ETableConfig;
@@ -44,6 +46,8 @@ import org.tools.hqlbuilder.common.HibernateWebResolver.ClassNode;
  * @author Jurgen
  */
 public class HqlWizard {
+    protected static final Logger logger = LoggerFactory.getLogger(HqlWizard.class);
+
     protected static class Stop extends RuntimeException {
         private static final long serialVersionUID = -8660143360351472707L;
     }
@@ -143,7 +147,7 @@ public class HqlWizard {
                     }
 
                 } catch (Stop ex) {
-                    ClientUtils.log("DONE");
+                    logger.error("{}", ex);
                 }
             }
         });

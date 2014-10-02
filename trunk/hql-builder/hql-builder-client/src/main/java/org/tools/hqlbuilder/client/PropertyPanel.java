@@ -42,6 +42,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.hibernate.Hibernate;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swingeasy.EDateEditor;
 import org.swingeasy.EDateTimeEditor;
 import org.swingeasy.ObjectWrapper;
@@ -66,6 +68,8 @@ import com.l2fprod.common.util.converter.NumberConverters;
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PropertyPanel extends PropertySheetPanel {
+    protected static final Logger logger = LoggerFactory.getLogger(PropertyPanel.class);
+
     private static final String LAZY = "*LAZY*";
 
     private static final long serialVersionUID = -5568670775272022905L;
@@ -114,7 +118,7 @@ public class PropertyPanel extends PropertySheetPanel {
             }
         });
 
-        ClientUtils.log(bean);
+        logger.info("{}", String.valueOf(bean));
 
         this.bean = bean;
         BeanInfo beanInfo;
@@ -176,7 +180,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
         for (final Map.Entry<String, PropertyDescriptor> propertyDescriptorEntry : propertyDescriptors.entrySet()) {
             try {
-                ClientUtils.log(propertyDescriptorEntry.getKey());
+                logger.debug(propertyDescriptorEntry.getKey());
                 PropertyDescriptor propertyDescriptor = propertyDescriptorEntry.getValue();
                 Method readMethod = propertyDescriptor.getReadMethod();
                 if (readMethod == null) {
@@ -223,7 +227,7 @@ public class PropertyPanel extends PropertySheetPanel {
                                     || Map.class.isAssignableFrom(propertyType)) {
                                 //
                             } else {
-                                ClientUtils.log("no editor found for type " + propertyType.getName());
+                                logger.warn("no editor found for type {}", propertyType.getName());
                             }
                             property.setEditable(false);
                         } else {
@@ -639,7 +643,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
             try {
                 if (!new EqualsBuilder().append(evt.getOldValue(), evt.getNewValue()).isEquals()) {
-                    ClientUtils.log("changing value from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
+                    logger.info("changing value from '{}' to '{}'", evt.getOldValue(), evt.getNewValue());
                     writeMethod.invoke(bean, evt.getNewValue());
                     Serializable id = hqlService.save(bean);
                     bean = hqlService.get(bean.getClass(), id);

@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.swingeasy.CustomizableOptionPane;
 import org.swingeasy.EList;
 import org.swingeasy.EListConfig;
@@ -34,7 +33,7 @@ public class ClientUtils extends CommonUtils {
     }
 
     /**
-     * 
+     *
      * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#showDialog(javax.swing.JFrame, java.lang.String, V[])
      */
     static public <V> V showDialog(JFrame parent, String title, V[] options) {
@@ -59,19 +58,19 @@ public class ClientUtils extends CommonUtils {
         ResultType returnValue = CustomizableOptionPane.showCustomDialog(parent, container, title, MessageType.QUESTION, OptionType.OK_CANCEL, null,
                 new ListOptionPaneCustomizer<V>(list) {
 
-                    @Override
-                    public void customize(Component parentComponent, MessageType messageType, OptionType optionType, final JOptionPane pane,
-                            final JDialog dialog) {
-                        super.customize(parentComponent, messageType, optionType, pane, dialog);
-                        dialog.getRootPane().setDefaultButton(null);
-                    }
-                });
+            @Override
+            public void customize(Component parentComponent, MessageType messageType, OptionType optionType, final JOptionPane pane,
+                    final JDialog dialog) {
+                super.customize(parentComponent, messageType, optionType, pane, dialog);
+                dialog.getRootPane().setDefaultButton(null);
+            }
+        });
 
         return returnValue != ResultType.OK ? null : list.getSelectedRecord() == null ? null : list.getSelectedRecord().get();
     }
 
     /**
-     * 
+     *
      * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#getHelpUrl()
      */
 
@@ -100,17 +99,5 @@ public class ClientUtils extends CommonUtils {
 
     public static Font getDefaultFont() {
         return DEFAULT_FONT;
-    }
-
-    /**
-     * 
-     * @see org.tools.hqlbuilder.client.IHqlBuilderHelper#log(java.lang.Object)
-     */
-    static public void log(Object message) {
-        if (message instanceof Exception) {
-            logger.error(ExceptionUtils.getFullStackTrace((Exception) message));
-        } else {
-            logger.debug(String.valueOf(message));
-        }
     }
 }
