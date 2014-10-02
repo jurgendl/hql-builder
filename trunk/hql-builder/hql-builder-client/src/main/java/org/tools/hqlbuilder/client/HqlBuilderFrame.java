@@ -1404,6 +1404,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private String formatSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames, boolean doFormat, boolean doRemoveJoins,
             boolean doReplaceProperties) {
+        if (StringUtils.isBlank(sqlString)) {
+            return sqlString;
+        }
         logger.info(sqlString);
         if (formatSqlAction.isSelected()) {
             sqlString = hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, doReplaceProperties, doFormat, doRemoveJoins);
