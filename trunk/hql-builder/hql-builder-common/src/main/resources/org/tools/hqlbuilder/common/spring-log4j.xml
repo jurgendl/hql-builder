@@ -7,7 +7,7 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
 
-	<bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false" scope="singleton">
+	<bean id="logInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false" scope="singleton">
 		<property name="staticMethod">
 			<value>org.springframework.util.Log4jConfigurer.initLogging</value>
 		</property>

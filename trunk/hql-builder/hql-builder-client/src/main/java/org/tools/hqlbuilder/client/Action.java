@@ -55,13 +55,13 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     public <T> Action(String id, boolean enabled, String name, Icon icon, String shortDescription,
             @SuppressWarnings("unused") String longDescription, Boolean selected, Character mnemonic, String accelerator, boolean persist,
             String parentId, Class<T> type, T defaultValue) {
-        logger.debug(id + " " + value);
+        logger.debug("{} {}", id, value);
         this.id = id;
         if (persist) {
             if (id == null || "null".equals(id)) {
                 throw new NullPointerException();
             }
-            logger.debug("persistent: " + id);
+            logger.debug("persistent: {}", id);
             this.persister = Preferences.userRoot().node(parentId);
             if (Boolean.class.equals(type)) {
                 this.type = Boolean.class;
@@ -122,7 +122,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         } else {
             throw new IllegalArgumentException(String.valueOf(type));
         }
-        logger.debug("persistent: " + id + ": load=" + actualValue);
+        logger.debug("persistent: {}: load={}", id, actualValue);
         return actualValue;
     }
 
@@ -141,7 +141,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
         if (persister == null) {
             return;
         }
-        logger.debug("persistent: " + id + ": save=" + newValue);
+        logger.debug("persistent: {}: save={}", id, newValue);
         if (Color.class.equals(type)) {
             setColorIcon((Color) newValue);
             persister.putInt(id, newValue == null ? Integer.MIN_VALUE : Color.class.cast(newValue).getRGB());

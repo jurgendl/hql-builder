@@ -8,7 +8,7 @@
 	">
 
 	<!-- needs org.logback-extensions:logback-ext-spring -->
-	<bean id="log4jInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false" scope="singleton">
+	<bean id="logInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false" scope="singleton">
 		<property name="staticMethod">
 			<value>ch.qos.logback.ext.spring.LogbackConfigurer.initLogging</value>
 		</property>

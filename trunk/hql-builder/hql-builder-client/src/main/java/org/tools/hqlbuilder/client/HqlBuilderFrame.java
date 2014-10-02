@@ -139,7 +139,6 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.LoggerFactory;
@@ -1015,8 +1014,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 });
             }
         } catch (Exception ex) {
-            logger.error("start(String[], HqlService)");
-            logger.error("{}", ExceptionUtils.getFullStackTrace(ex));
+            logger.error("{}", ex);
             SplashHelper.end();
             ex.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, WordUtils.wrap("" + ex, 100), "Fatal Exception", JOptionPane.ERROR_MESSAGE);
@@ -1174,6 +1172,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private synchronized void executeQuery(final RowProcessor rowProcessor) {
+        logger.debug("start query");
         final long start = System.currentTimeMillis();
 
         if (!startQueryAction.isEnabled()) {
@@ -1246,7 +1245,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void afterQuery(Throwable ex) {
         hql_sql_tabs.setForegroundAt(0, Color.RED);
         hql_sql_tabs.setForegroundAt(1, Color.RED);
-        logger.error("executeQuery(RowProcessor)", ex);
+
         String sqlString = sql.getText();
         if (ex instanceof java.util.concurrent.ExecutionException) {
             ex = ex.getCause();
@@ -1288,6 +1287,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             hilightSyntaxException(se.getType(), se.getWrong(), se.getLine(), se.getCol());
         }
+        logger.debug("end query");
     }
 
     private void afterQuery(long start, ExecutionResult rv, RowProcessor rowProcessor) throws Exception {
@@ -1386,9 +1386,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String d = df.format(rv.getDuration() / 1000.0);
             resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
         }
-        logger.debug("duration (ms): " + rv.getDuration());
-        logger.debug("overhead-server (ms): " + rv.getOverhead());
-        logger.debug("overhead-client (ms): " + (System.currentTimeMillis() - start - rv.getDuration()));
+        logger.debug("duration: {} ms", rv.getDuration());
+        logger.debug("overhead-server: {} ms", rv.getOverhead());
+        logger.debug("overhead-client: {} ms", ((System.currentTimeMillis() - start - rv.getDuration())));
+        logger.debug("end query");
     }
 
     private String formatSql(ExecutionResult rv) {
@@ -1410,8 +1411,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         log(sqlString);
         if (formatSqlAction.isSelected()) {
             sqlString = hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, doReplaceProperties, doFormat, doRemoveJoins);
+            log(sqlString);
         }
-        log(sqlString);
         return sqlString;
     }
 
@@ -1499,7 +1500,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 after.removeAll(before);
                 errorLocs.addAll(after);
             } catch (Exception ex) {
-                logger.error("hilightSyntaxException(SyntaxExceptionType, String, int, int)", ex);
+                logger.error("{}", ex);
             }
         }
     }
@@ -1660,7 +1661,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     } catch (UnsupportedOperationException ex) {
                         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("lucene.unavailable"), "", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
-                        logger.error("$ELabeledTextFieldButtonComponent.doAction()", ex);
+                        logger.error("{}", ex);
                     }
                 }
             };
@@ -1896,7 +1897,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                 for (Locale locale : Locale.getAvailableLocales()) {
                     URL bundle = HqlBuilderFrame.class.getClassLoader().getResource("HqlResourceBundle_" + locale + ".properties");
-                    logger.debug(locale + ">" + bundle);
+                    logger.debug("{}>{}", locale, bundle);
                     if (null != bundle) {
                         locales.add(locale);
                     }
@@ -2241,7 +2242,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                                 log(recordCount + " records");
                             }
                         } catch (Exception ex) {
-                            logger.error("$RowProcessor.process(List<Object>)", ex);
+                            logger.error("{}", ex);
                         }
                     }
                 });
@@ -2250,7 +2251,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 br.close();
             }
         } catch (Exception ex) {
-            logger.error("export data", ex);
+            logger.error("{}", ex);
         } finally {
             if (fout != null) {
                 try {
@@ -2282,7 +2283,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             clipboard.setContents(new StringSelection(sb.toString()), getClipboardOwner());
         } catch (Exception ex) {
-            logger.error("export data", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2291,7 +2292,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             hql.setText(format(hql.getText()));
             hql.setCaret(0);
         } catch (Exception ex) {
-            logger.error("format()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2306,7 +2307,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String string = hql.getDocument().getText(Math.min(start, end), Math.max(start, end) - Math.min(start, end));
             clipboard.setContents(new StringSelection(string), getClipboardOwner());
         } catch (Exception ex) {
-            logger.error("copy()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2321,7 +2322,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     + hql.getDocument().getText(Math.max(start, end), hql.getDocument().getLength() - Math.max(start, end));
             hql.setText(string);
         } catch (Exception ex) {
-            logger.error("paste()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2338,7 +2339,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             hql.setText(sb.toString());
         } catch (Exception ex) {
-            logger.error("import hql", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2377,11 +2378,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (el.contains("=")) {
                     String[] p = el.split("=");
                     Object val = GroovyCompiler.eval(p[1]);
-                    logger.debug(p[0] + "=" + val.getClass() + "=" + val);
+                    logger.debug("{}={}={}", p[0], val.getClass(), val);
                     qps.add(new QueryParameter().setName(p[0]).setValueText(p[1]).setType(val.getClass().getName()).setValue(val));
                 } else {
                     Object val = GroovyCompiler.eval(el);
-                    logger.debug(val.getClass() + "=" + val);
+                    logger.debug("{}={}", val.getClass(), val);
                     qps.add(new QueryParameter().setIndex(i + 1).setValueText(el).setType(val.getClass().getName()).setValue(val));
                 }
             } catch (Exception ex) {
@@ -2490,17 +2491,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void start_query() {
-        logger.debug("start query");
         try {
             query();
         } catch (Exception ex) {
             log(ex);
         }
-        logger.debug("end query");
-    }
-
-    protected void pause_query() {
-        logger.debug("pause_query");
     }
 
     protected void export__copy_hql_as_java_to_clipboard() {
@@ -2519,7 +2514,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             clipboard.setContents(new StringSelection(sb.toString()), getClipboardOwner());
         } catch (Exception ex) {
-            logger.error("export__copy_hql_as_java_to_clipboard()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2541,7 +2536,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             Desktop.getDesktop().browse(URI.create(ClientUtils.getHelpUrl()));
         } catch (Exception ex) {
-            logger.error("help()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2549,7 +2544,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             Desktop.getDesktop().browse(URI.create(hqlService.getHibernateHelpURL()));
         } catch (Exception ex) {
-            logger.error("hibernate_documentation()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2557,7 +2552,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             Desktop.getDesktop().browse(URI.create(hqlService.getHqlHelpURL()));
         } catch (Exception ex) {
-            logger.error("hql_documentation()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -2611,7 +2606,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 x = GroovyCompiler.eval(script, x);
                 resultsEDT.setValueAt(x, row, selectedCol);
             } catch (Exception ex) {
-                logger.error("execute_script_on_column()", ex);
+                logger.error("{}", ex);
                 error = true;
             }
         }
@@ -2932,7 +2927,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             Desktop.getDesktop().browse(URI.create(hqlService.getLuceneHelpURL()));
         } catch (Exception ex) {
-            logger.error("Lucene_query_syntax()", ex);
+            logger.error("{}", ex);
         }
     }
 
@@ -3022,7 +3017,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     this.hql.addHighlight(caret, caret + 1, bracesHighlight);
                     this.hql.addHighlight(match, match + 1, bracesHighlight);
                 } catch (BadLocationException ex) {
-                    logger.error("hilightBraces(String)", ex);
+                    logger.error("{}", ex);
                 }
             }
         } catch (Exception ex) {
@@ -3166,7 +3161,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         "/metadata/versioning/release/text()");
                 latest = o.getData();
             } catch (Exception ex) {
-                logger.error("" + ex);
+                logger.error("{}", ex);
             }
 
             final JDialog d = new JDialog(frame, HqlResourceBundle.getMessage("about"), true);

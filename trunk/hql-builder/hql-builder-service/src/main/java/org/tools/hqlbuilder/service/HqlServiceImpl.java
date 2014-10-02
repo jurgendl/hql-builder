@@ -299,6 +299,7 @@ public class HqlServiceImpl implements HqlService {
 
     @Override
     public ExecutionResult execute(QueryParameters obj) {
+        logger.debug("start query");
         String hql = obj.getHql();
         int max = obj.getMax();
         int first = obj.getFirst();
@@ -306,7 +307,6 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");
         }
-        logger.debug("start query");
         ExecutionResult result = new ExecutionResult();
         try {
             if (hql.contains("$$")) {
@@ -332,7 +332,7 @@ public class HqlServiceImpl implements HqlService {
             result = innerExecute(result, hql, max, first, queryParameters);
             return result;
         } catch (QueryException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex);
+            logger.error("{}", ex);
             String msg = ex.getLocalizedMessage();
 
             if (ex.getClass().getSimpleName().equals("QuerySyntaxException")) {
@@ -380,14 +380,13 @@ public class HqlServiceImpl implements HqlService {
 
             throw new ServiceException(concat(ex), result);
         } catch (SQLGrammarException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex);
+            logger.error("{}", ex);
             throw new SqlException(concat(ex), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex);
+            logger.error("{}", ex);
             throw new ServiceException(concat(ex), result);
         } catch (NullPointerException ex) {
-            logger.error("execute(String, int, QueryParameter)", ex);
-            ex.printStackTrace(System.out);
+            logger.error("{}", ex);
             throw new ServiceException("NullPointerException", result);
         } catch (Exception ex) {
             throw new ServiceException(concat(ex), result);
@@ -415,7 +414,7 @@ public class HqlServiceImpl implements HqlService {
         long start = System.currentTimeMillis();
         QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         String sql = queryTranslator.getSQLString();
-        logger.debug("sql=" + sql);
+        logger.debug("sql={}", sql);
         result.setSql(sql);
         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
         Session session = newSession();
@@ -441,10 +440,10 @@ public class HqlServiceImpl implements HqlService {
                     }
                 } catch (org.hibernate.QueryParameterException ex) {
                     // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
-                    logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
+                    logger.debug("{}", ex); // => whatever
                 } catch (java.lang.IndexOutOfBoundsException ex) {
                     // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
-                    logger.debug("innerExecute(String, int, QueryParameter) - " + ex); // => whatever
+                    logger.debug("{}", ex); // => whatever
                 }
             }
         }
@@ -459,7 +458,7 @@ public class HqlServiceImpl implements HqlService {
                 String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
             }
-            logger.debug("sql=" + sql);
+            logger.debug("sql={}", sql);
             result.setSql(sql);
         }
         if (max != -1) {
@@ -535,12 +534,12 @@ public class HqlServiceImpl implements HqlService {
                         try {
                             node.addPath(propertyNames, resolver.getOrCreateNode(subClassName)).setCollection(true);
                         } catch (IllegalArgumentException ex) {
-                            logger.warn("not a mapped class, ignoring: " + className + "#" + propertyNames + " [collection of " + subClassName + "]");
+                            logger.warn("not a mapped class, ignoring: {}#{} [collection of {}]", className, propertyNames, subClassName);
                         }
                     }
                 }
             } catch (IllegalArgumentException ex) {
-                logger.error("getHibernateWebResolver() - " + className, ex);
+                logger.error("{} {}", className, ex);
             }
         }
         return resolver;
@@ -665,7 +664,7 @@ public class HqlServiceImpl implements HqlService {
         }
         QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter().setName(oid).setValueTypeText(
                 idv));
-        logger.debug("hql=" + hql);
+        logger.debug("hql={}", hql);
         List<Serializable> value = execute(hql).getResults().getValue();
         return (T) (value.isEmpty() ? null : value.get(0));
     }
@@ -691,7 +690,7 @@ public class HqlServiceImpl implements HqlService {
                     }
                 }
             } catch (IOException ex) {
-                logger.error("getReservedKeywords()", ex);
+                logger.error("{}", ex);
             }
         }
         return keywords;
@@ -709,7 +708,7 @@ public class HqlServiceImpl implements HqlService {
             try {
                 namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
             } catch (Exception ex) {
-                logger.error("getNamedQueries: " + ex);
+                logger.error("{}", ex);
             }
         }
         return namedQueriesRv;
@@ -892,7 +891,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public void log() {
         for (Object key : new TreeSet<Object>(hibernateProperties.keySet())) {
-            logger.debug(key + "=" + hibernateProperties.get(key));
+            logger.debug("{}={}", key, hibernateProperties.get(key));
         }
     }
 
@@ -927,9 +926,7 @@ public class HqlServiceImpl implements HqlService {
                 throw new RuntimeException(ex);
             }
         } catch (RuntimeException ex) {
-            logger.error("org.tools.hqlbuilder.service.HqlServiceImpl.createScript()");
-            logger.error(ex.getClass().getName());
-            logger.error(String.valueOf(ex));
+            logger.error("{}", ex);
             return null;
         }
     }
@@ -949,7 +946,7 @@ public class HqlServiceImpl implements HqlService {
     public void sql(final String[] sql) {
         for (String s : sql) {
             try {
-                logger.debug("sql=" + s);
+                logger.debug("sql={}", s);
                 dataSource.getConnection().prepareStatement(s).execute();
             } catch (SQLException ex) {
                 throw new ServiceException(ex.getMessage());

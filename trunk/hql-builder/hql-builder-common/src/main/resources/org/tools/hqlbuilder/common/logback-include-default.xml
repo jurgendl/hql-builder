@@ -1,0 +1,6 @@
+<included>
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="ASYNC_ROLLING_SIZED_FILE" />
+	</root>
+</included>

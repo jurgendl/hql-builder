@@ -1,0 +1,22 @@
+<included>
+	<!-- zelfde als vorige maar wanneer file groter dan 10MB worden wordt er ook een roll-over gedaan  -->
+	<appender name="ROLLING_SIZED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${location}/${file}-RS.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${location}/${file}-RS.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern><!-- daily rollover -->
+			<maxHistory>14</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize><!-- or whenever the file size reaches 10MB -->
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>${pattern}</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+	<!-- async versie -->
+	<appender name="ASYNC_ROLLING_SIZED_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="ROLLING_SIZED_FILE" />
+	</appender>
+</included>

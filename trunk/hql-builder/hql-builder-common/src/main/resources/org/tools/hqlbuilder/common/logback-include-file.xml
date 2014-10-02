@@ -1,0 +1,16 @@
+<included>
+	<!-- hetzelfde bestand wordt elke keer overschreven -->
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>${location}/${file}.log</file>
+		<append>false</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>${pattern}</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+	<!-- async versie -->
+	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE" />
+	</appender>
+</included>

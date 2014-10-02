@@ -170,7 +170,7 @@ public class CommonUtils {
     }
 
     public static char[] whitespace_chars = ( //
-            "\u0009" // CHARACTER TABULATION
+    "\u0009" // CHARACTER TABULATION
             + "\n" // LINE FEED (LF)
             + "\u000B" // LINE TABULATION
             + "\u000C" // FORM FEED (FF)
@@ -196,7 +196,7 @@ public class CommonUtils {
             + "\u202F" // NARROW NO-BREAK SPACE
             + "\u205F" // MEDIUM MATHEMATICAL SPACE
             + "\u3000" // IDEOGRAPHIC SPACE
-            ).toCharArray();
+    ).toCharArray();
 
     public static String removeUnnecessaryWhiteSpaces(String s) {
         StringBuilder sb = new StringBuilder();
@@ -272,9 +272,9 @@ public class CommonUtils {
     }
 
     public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
-        logger.debug(String.valueOf(object));
-        logger.debug(methodName);
-        logger.debug(Arrays.toString(params));
+        // logger.debug(String.valueOf(object));
+        // logger.debug(methodName);
+        // logger.debug(Arrays.toString(params));
         MethodInvokingFactoryBean mi = new MethodInvokingFactoryBean();
         mi.setTargetObject(object);
         mi.setTargetMethod(methodName);
@@ -282,7 +282,7 @@ public class CommonUtils {
         try {
             mi.afterPropertiesSet();
             T value = type.cast(mi.getObject());
-            logger.debug(String.valueOf(value));
+            // logger.debug(String.valueOf(value));
             return value;
         } catch (RuntimeException ex) {
             logger.error("call(Object, String, Class<T>, Object...)");

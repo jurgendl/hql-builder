@@ -119,7 +119,7 @@ public class PathResolver {
             if (!init) {
                 for (Property sub : value.getEdges()) {
                     try {
-                        logger.debug(String.valueOf(sub));
+                        logger.debug("{}", sub);
                         TreeNode c = new TreeNode(sub, exclude, targetNode, this, ClassNode.class.cast(sub.getTarget()));
                         logger.debug(String.valueOf(c));
                         exclude.add(c);
