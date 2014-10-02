@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+
+	<!-- needs org.logback-extensions:logback-ext-spring -->
+	<bean id="logInitializer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false" scope="singleton">
+		<property name="staticMethod">
+			<value>ch.qos.logback.ext.spring.LogbackConfigurer.initLogging</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>classpath:org/tools/hqlbuilder/common/logback.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

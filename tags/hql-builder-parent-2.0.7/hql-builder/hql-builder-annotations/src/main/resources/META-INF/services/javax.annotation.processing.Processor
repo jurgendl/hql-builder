@@ -1,0 +1,2 @@
+org.tools.hqlbuilder.annotations.JaxBIndexEntityProcessor
+org.tools.hqlbuilder.annotations.HibernateCfgEntityProcessor

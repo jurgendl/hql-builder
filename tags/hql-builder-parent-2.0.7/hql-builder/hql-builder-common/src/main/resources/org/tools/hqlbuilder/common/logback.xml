@@ -1,0 +1,8 @@
+<configuration debug="true" scan="true">
+	<include resource="org/tools/hqlbuilder/common/logback-include-location.xml"/>
+	<include resource="org/tools/hqlbuilder/common/logback-include-properties.xml"/>
+	<include resource="org/tools/hqlbuilder/common/logback-include-console.xml"/>
+	<include resource="org/tools/hqlbuilder/common/logback-include-levels.xml"/>
+	<include resource="org/tools/hqlbuilder/common/logback-include-rollingsizedfile.xml"/>
+	<include resource="org/tools/hqlbuilder/common/logback-include-default.xml"/>
+</configuration>

@@ -1,0 +1,143 @@
+// input:-webkit-autofill {
+//    -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */
+//    -webkit-text-fill-color: #333;
+//}
+// input:-webkit-autofill:focus {
+//    -webkit-box-shadow: /*your box-shadow*/,0 0 0 50px white inset;
+//    -webkit-text-fill-color: #333;
+//}
+// background-color: 
+
+.defaultform {
+	// pocketgrid form
+	.block-group {
+		margin-top: 0.4em;
+		margin-bottom: 0.4em;
+	}
+
+	.feedbackPanel.ui-state-error {
+		font-size: 0.8em;
+		margin: 0px;
+		padding: 2px 3px 2px 3px;
+		display: inline-block;
+		list-style-type: none;
+	}
+	.feedbackPanel.requiredMarker {
+		font-size: 1.4em;
+		margin: 0px;
+		padding: 3px;
+		display: inline-block;
+		text-shadow: none;
+	}
+
+	// overrides reset.css 
+	fieldset {
+		margin: 2px;
+		padding: 0.4em;
+		&.formheader,
+		&.formfooter  {
+			padding: 0px;
+			border: none;
+			.feedbackPanel {
+				display: block;
+			}
+		}
+	}
+
+	.formbody {
+		// formbody fieldsets
+		fieldset legend {
+			font-weight: 700;
+			font-size: 1.2em;
+		}
+
+		// form labels
+		.formlabel {
+			text-align: right;
+			display: block;
+			margin-left: 0.5em;
+			margin-right: 0.5em;
+			font-weight: bold;
+			vertical-align: middle;
+			height: 24px;
+			line-height: 24px;
+		}
+
+		// default form element width
+		select,
+		.pui-inputtext:not(textarea),
+		input:not([type=submit]):not([type=reset]):not([type=button]):not([type=radio]):not([type=checkbox]) {
+			width: 260px;
+		}
+		
+		textarea {
+			width: 100%;
+		}
+
+		// overrides default padding and font size radiobuttonset and multiselectset of jquery-ui
+		.multiselectchoice.ui-buttonset .ui-button-text,
+		.multiselectchoice .ui-button {
+			padding: 3px 5px 3px 5px;
+			font-size: 0.8em;
+		}	
+
+		// spectrum
+		.sp-preview {
+			height: 18px;
+		}
+		.sp-dd {
+			height: 18px;
+			line-height: 18px;
+			vertical-align: top;
+			padding: 0px;
+		}
+
+		// bootstrap theme fix
+		.puispinner.pui-inputtext {
+			padding-right: 18px;
+		}
+
+		// Prime dropdown arrow fix
+		.pui-dropdown.ui-widget > .pui-dropdown-trigger {
+			padding: 0px;
+		}
+
+		// jqueryui colorpicker
+		.jquicolorpicker + button.ui-button.ui-widget.ui-button-text-only {
+			padding: 2px;
+			vertical-align: middle;
+			margin: 2px;
+		}
+		.jquerycolorpickerbuttonimage {
+			width: 16px;
+			height: 16px;
+		}
+
+		// jquery slider replacing input slider
+		.slider.ui-slider-horizontal {
+			width: 150px;
+			height: 1.6em;
+			line-height: 1.6em;
+			display: inline-block;
+			margin-left: 6px;
+			margin-right: 8px;
+			vertical-align: bottom;
+			margin-top: 3px;
+		}
+		.slider.ui-slider-horizontal .ui-slider-handle {
+			height: 1.8em;
+			top: -1px;
+		}
+
+		// primeui checkbox
+		.pui-chkbox.ui-widget {
+			vertical-align: middle;
+			width: 19px;
+			height: 19px;
+		}
+		.pui-chkbox-box.ui-widget {
+			width: 16px;
+			height: 16px;
+		}
+	}
+}
