@@ -2,8 +2,6 @@
 	<timestamp key="byDay" datePattern="yyyyMMdd"/>
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
 	<property name="pattern" value="%date{HH:mm:ss.SSS}|%-5level|%thread| \\(%class.java:%line\\) |%message%n"/>
-	<!-- <property name="pattern" value="%date{HH:mm:ss.SSS}|%-5level|%thread|%web| \\(%class.java:%line\\) |%message%n"/>
-	<conversionRule conversionWord="web" converterClass="org.wicketstuff.logback.WicketWebFormattingConverter" /> -->
 
 	<!-- http://logback.qos.ch/manual -->
 	<!--
