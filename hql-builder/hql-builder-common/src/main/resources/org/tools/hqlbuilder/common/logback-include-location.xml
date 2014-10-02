@@ -1,0 +1,4 @@
+<included>
+	<property name="location" value="${user.home}/hqlbuilder/logs/" />
+	<property name="file" value="hqlbuilder" />
+</included>

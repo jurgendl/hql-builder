@@ -37,7 +37,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             "and",
             "or",
             "group by",
-            "order by" };
+    "order by" };
 
     /** when cleaning up HQL: replace key by value */
     private Map<String, String> hqlReplacers = new HashMap<String, String>();
@@ -263,20 +263,30 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             sqlString = CommonUtils
                     .call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class, sqlString);
         } catch (Throwable ex) {
-            logger.warn(String.valueOf(ex));
+            if (!warn1) {
+                warn1 = true;
+                logger.warn("{}", ex);
+            }
         }
 
         try {
             sqlString = CommonUtils.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
                     String.class, sqlString);
         } catch (Throwable ex) {
-            logger.warn(String.valueOf(ex));
+            if (!warn2) {
+                warn2 = true;
+                logger.warn("{}", ex);
+            }
         }
 
         log(sqlString);
 
         return sqlString;
     }
+
+    private boolean warn1 = false;
+
+    private boolean warn2 = false;
 
     /**
      * @see org.tools.hqlbuilder.client.HqlServiceClient#log(java.lang.Object)

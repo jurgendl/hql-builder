@@ -1,0 +1,20 @@
+<included>
+	<!-- per dag wordt er een file aangemaakt, files ouder dan 14 dagen worden verwijderd, files ouder dan 1 dag worden ge-gz-ipped -->
+	<appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${location}/${file}-R.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${location}/${file}-R.%d{yyyy-MM-dd}.log.gz</fileNamePattern><!-- daily rollover -->
+			<maxHistory>14</maxHistory><!-- verwijdert wanneer er meer dan 14 zijn -->
+		</rollingPolicy>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>${pattern}</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender> 
+	<!-- async versie -->
+	<appender name="ASYNC_ROLLING_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="ROLLING_FILE" />
+	</appender>
+</included>

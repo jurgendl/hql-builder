@@ -1,0 +1,16 @@
+<included>
+	<!-- per dag wordt een file aangemaakt, nieuwe runs dezelfde dag wordt toegevoegd, oude files worden niet verwijderd -->
+	<appender name="FILE_BY_DAY" class="ch.qos.logback.core.FileAppender">
+		<file>${location}/${file}-${byDay}.log</file>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>${pattern}</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+	<!-- async versie -->
+	<appender name="ASYNC_FILE_BY_DAY" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE_BY_DAY" />
+	</appender>
+</included>

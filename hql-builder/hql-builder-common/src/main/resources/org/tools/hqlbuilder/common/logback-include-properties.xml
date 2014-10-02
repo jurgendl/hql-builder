@@ -1,0 +1,35 @@
+<included>
+	<timestamp key="byDay" datePattern="yyyyMMdd"/>
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+	<property name="pattern" value="%date{HH:mm:ss.SSS}|%-5level|%thread| \\(%class.java:%line\\) |%message%n"/>
+	<!-- <property name="pattern" value="%date{HH:mm:ss.SSS}|%-5level|%thread|%web| \\(%class.java:%line\\) |%message%n"/>
+	<conversionRule conversionWord="web" converterClass="org.wicketstuff.logback.WicketWebFormattingConverter" /> -->
+
+	<!-- http://logback.qos.ch/manual -->
+	<!--
+	${HOSTNAME}
+	logger{50}
+	class{50}
+	%class:%line
+	contextName
+	date{ISO8601}					2006-10-20 14:06:49,812
+	date{HH:mm:ss.SSS}				14:06:49.812
+	date{dd MMM yyyy;HH:mm:ss.SSS}	20 oct. 2006;14:06:49.812
+	file
+	caller{depth}
+	line
+	message
+	method
+	n			newline
+	level
+	relative 	milliseconds since start
+	thread
+	exception{lines}
+	exception{short}
+	exception{full}
+	XException{lines}
+	XException{short}
+	XException{full}
+	property{key}
+	-->
+</included>
