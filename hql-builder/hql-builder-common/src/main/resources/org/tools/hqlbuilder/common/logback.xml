@@ -1,13 +1,154 @@
 <configuration debug="true" scan="true">
 
+	<property name="location" value="${user.home}/hqlbuilder/logs/" />
+	<property name="file" value="hqlbuilder" />
+	
 	<conversionRule conversionWord="web" converterClass="org.wicketstuff.logback.WicketWebFormattingConverter" />
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+
+	<!-- http://logback.qos.ch/manual -->
+	<!--
+	logger{50}
+	class{50}
+	contextName
+	date{ISO8601}					2006-10-20 14:06:49,812
+	date{HH:mm:ss.SSS}				14:06:49.812
+	date{dd MMM yyyy;HH:mm:ss.SSS}	20 oct. 2006;14:06:49.812
+	file
+	caller{depth}
+	line
+	message
+	method
+	n			newline
+	level
+	relative 	milliseconds since start
+	thread
+	exception{lines}
+	exception{short}
+	exception{full}
+	XException{lines}
+	XException{short}
+	XException{full}
+	property{key}
+	-->
+
+	<timestamp key="byDay" datePattern="yyyyMMdd"/>
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+	<!-- console -->
+	<appender name="CONSOLE" withJansi="true" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<charset>UTF-8</charset>
-			<pattern>%p|%d|%t|%c|%r|%web|%msg %n</pattern>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
 			<outputPatternAsHeader>true</outputPatternAsHeader>
 		</encoder>
 	</appender>
+
+	<!-- hetzelfde bestand wordt elke keer overschreven -->
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>${location}/${file}.log</file>
+		<append>false</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+
+	<!-- async versie -->
+	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE" />
+	</appender>
+
+	<!-- per dag wordt een file aangemaakt, nieuwe runs dezelfde dag wordt toegevoegd, oude files worden niet verwijderd -->
+	<appender name="FILE_BY_DAY" class="ch.qos.logback.core.FileAppender">
+		<file>${location}/${file}-${byDay}.log</file>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+
+	<!-- async versie -->
+	<appender name="ASYNC_FILE_BY_DAY" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE_BY_DAY" />
+	</appender>
+
+	<!-- per run wordt een file aangemaakt, oude files worden niet verwijderd -->
+	<appender name="FILE_BY_RUN" class="ch.qos.logback.core.FileAppender">
+		<file>${location}/${file}-${bySecond}.log</file>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+
+	<!-- async versie -->
+	<appender name="ASYNC_FILE_BY_RUN" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE_BY_RUN" />
+	</appender>
+
+	<!-- per dag wordt er een file aangemaakt, files ouder dan 14 dagen worden verwijderd, files ouder dan 1 dag worden ge-gz-ipped -->
+	<appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${location}/${file}-rolling.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${location}/${file}-rolling.%d{yyyy-MM-dd}.log.gz</fileNamePattern><!-- daily rollover -->
+			<maxHistory>14</maxHistory><!-- verwijdert wanneer er meer dan 14 zijn -->
+		</rollingPolicy>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender> 
+
+	<!-- async versie -->
+	<appender name="ASYNC_ROLLING_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="ROLLING_FILE" />
+	</appender>
+
+
+	<!-- zelfde als vorige maar wanneer file groter dan 10MB worden wordt er ook een roll-over gedaan  -->
+	<appender name="ROLLING_SIZED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${location}/${file}-rolling.%i.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${location}/${file}-rolling.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern><!-- daily rollover -->
+			<maxHistory>14</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize><!-- or whenever the file size reaches 10MB -->
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+
+	<!-- async versie -->
+	<appender name="ASYNC_ROLLING_SIZED_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="ROLLING_SIZED_FILE" />
+	</appender>
+
+	<!--
+	<appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+		<smtpHost>${smtpHost}</smtpHost>
+		<to>${to}</to>
+		<to>${to.extra}</to>
+		<from>${from}</from>
+		<subject>%logger{20} - %m</subject>
+		<layout class="ch.qos.logback.classic.html.HTMLLayout"/>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%date{HH:mm:ss.SSS}|%6level|%thread|%web|%message%n</pattern>
+			<outputPatternAsHeader>true</outputPatternAsHeader>
+		</encoder>
+	</appender>
+	 -->
 
 	<logger name="org.hibernate" level="warn" />
 	<logger name="org.hibernate.id.IdentifierGeneratorFactory" level="error" />
