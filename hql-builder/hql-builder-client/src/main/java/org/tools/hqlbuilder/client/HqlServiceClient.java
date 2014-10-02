@@ -12,8 +12,6 @@ public interface HqlServiceClient extends HqlService {
 
     public abstract String getNewline();
 
-    public abstract void log(Object message);
-
     public abstract String cleanupSql(String sqlString, String[] queryReturnAliases, String[][] scalarColumnNames, boolean replaceProperties,
             boolean formatLines, boolean removeADOJoins);
 
