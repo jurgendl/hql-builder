@@ -6,7 +6,6 @@
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<charset>UTF-8</charset>
 			<pattern>${pattern}</pattern>
-			<outputPatternAsHeader>true</outputPatternAsHeader>
 		</encoder>
 	</appender>
 	<!-- async versie -->
