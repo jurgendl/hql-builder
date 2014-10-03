@@ -2,5 +2,5 @@
 	<timestamp key="byDay" datePattern="yyyyMMdd"/>
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
 	<conversionRule conversionWord="web" converterClass="org.wicketstuff.logback.WicketWebFormattingConverter" />
-	<property name="pattern" value="%date{HH:mm:ss.SSS}|%-5level|%thread|%web| \\(%class.java:%line\\) |%message%n"/>
+	<property name="pattern" value="%date{ISO8601}|%-5level|%thread|%web| \\(%class.java:%line\\) |%message%n"/>
 </included>
