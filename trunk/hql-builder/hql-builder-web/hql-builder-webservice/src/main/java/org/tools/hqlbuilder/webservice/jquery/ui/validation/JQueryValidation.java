@@ -10,7 +10,32 @@ import org.tools.hqlbuilder.webservice.jquery.ui.form.JQueryForm;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
 /**
- * used version 1.13.0
+ * used version 1.13.0<br>
+ *
+ * <pre>
+ * $("#formname").validate({
+ *     rules: {
+ *         fieldname: {
+ *             required: true,
+ *             minlength: 2,
+ *             maxlength: 2,
+ *             email: true
+ *         },
+ *         otherfield {
+ *             equalTo: "#fieldname"
+ *         }
+ *     } ,
+ *     messages: {
+ *         fieldname: {
+ *             required: "",
+ *             email: ""
+ *         },
+ *         otherfield {
+ *             equalTo: ""
+ *         }
+ *     }
+ * });
+ * </pre>
  *
  * @see http://jqueryvalidation.org/
  */
@@ -74,4 +99,26 @@ public class JQueryValidation {
             return Arrays.asList(JavaScriptHeaderItem.forReference(CDN_VALIDATION_LOCALIZATION_JS));
         }
     };
+
+    public static enum ValidationType {
+        required, //
+        remote, //
+        email, //
+        url, //
+        date, //
+        dateISO, //
+        number, //
+        digits, //
+        creditcard, //
+        equalTo, //
+        extension, //
+        maxlength, //
+        minlength, //
+        rangelength, //
+        range, //
+        max, //
+        min, //
+        iban//
+        ;
+    }
 }

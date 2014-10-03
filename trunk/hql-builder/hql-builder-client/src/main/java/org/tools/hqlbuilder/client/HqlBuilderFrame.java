@@ -1407,10 +1407,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (StringUtils.isBlank(sqlString)) {
             return sqlString;
         }
-        logger.info(sqlString);
         if (formatSqlAction.isSelected()) {
             sqlString = hqlService.cleanupSql(sqlString, queryReturnAliases, scalarColumnNames, doReplaceProperties, doFormat, doRemoveJoins);
-            logger.info(sqlString);
         }
         return sqlString;
     }
