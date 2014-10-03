@@ -43,9 +43,6 @@ public class StylingPage extends BasePage {
             }.setMarkupId("testgrowl"));
         }
 
-        ExampleForm stylingform = new ExampleForm("stylingform");
-        add(stylingform);
-
-        add(new HtmlTagsPanel("htmltags"));
+        add(new ExampleForm("stylingform"));
     }
 }

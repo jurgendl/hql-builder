@@ -236,7 +236,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         try {
             return getString(getPropertyName());
         } catch (MissingResourceException ex) {
-            logger.info("no translation for " + getPropertyName());
+            logger.warn("no translation for " + getPropertyName());
             return "[" + getPropertyName() + "_" + getLocale() + "]";
         }
     }
