@@ -13,8 +13,6 @@
 	http://www.springframework.org/schema/security/spring-security.xsd
 	">
 
-DO NOT LOAD
-
 	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
 
 	<security:global-method-security pre-post-annotations="enabled"/>

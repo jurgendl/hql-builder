@@ -21,5 +21,6 @@
 	<logger name="org.jboss.resteasy.specimpl" level="debug" />
 	<logger name="org.jboss.resteasy.mock" level="debug" />
 	<logger name="org.apache.wicket.core.util.resource.locator.ResourceStreamLocator" level="info" />
+	<logger name="org.springframework.core.env.StandardEnvironment" level="info"/>
 	<logger name="org.tools.hqlbuilder" level="debug"/>
 </included>

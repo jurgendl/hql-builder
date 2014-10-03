@@ -6,8 +6,6 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-DO NOT LOAD
-
 	<!-- Enables automatic scan for the class that has Spring annotations In practice, it's used to detect the @Controller annotation defined in controller classes. -->
 	<context:component-scan base-package="org.tools.hqlbuilder.webservice.controller" />
 
