@@ -37,6 +37,7 @@ public class BasePage extends DefaultWebPage {
                 pages.add(StylingPage.class);
                 pages.add(HtmlTagsPage.class);
                 pages.add(MultiColumnFormPage.class);
+                pages.add(LayoutPage.class);
                 pages.add(FontIconsPage.class);
                 return pages;
             }
