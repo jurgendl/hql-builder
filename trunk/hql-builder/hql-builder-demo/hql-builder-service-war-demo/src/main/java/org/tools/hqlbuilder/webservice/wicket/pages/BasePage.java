@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -27,7 +28,10 @@ public class BasePage extends DefaultWebPage {
 
     public BasePage(final PageParameters parameters) {
         super(parameters);
+        addMenu();
+    }
 
+    protected Component addMenu() {
         IModel<? extends List<? extends Class<? extends DefaultWebPage>>> pagesModel = new LoadableDetachableModel<List<? extends Class<? extends DefaultWebPage>>>() {
             @Override
             protected List<? extends Class<? extends DefaultWebPage>> load() {
@@ -63,7 +67,8 @@ public class BasePage extends DefaultWebPage {
         menu.add(new CssClassNameAppender(PrimeUI.puimenubar));
         menu.setOutputMarkupId(true);
         add(menu);
-        // menu.setVisible(false);
+
+        return menu;
     }
 
     @Override

@@ -1,156 +1,93 @@
 <wicket:extend>
-	<style>
-.document {
-	margin: 1.6em;
-	font-size: 1em;
-}
-.demoborder {
-	border: .1em solid rgba(0,0,0,.1);
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;	
-}
-.documentborder {
-	border: .1em solid rgba(0,0,0,.7);
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-}
-.document .documentcontent {
-	padding: .8em;
-}
-.document > header.documentcontent {
-	font-size: 1.2em;
-	padding-bottom: .4em;
-}
-.document nav {
-	margin-top: .8em;
-	margin-bottom: .8em;
-}
-.document main.documentcontent section,
-.document main.documentcontent article {
-	padding: .4em;
-}
-/*.document main.documentcontent > *:not(:last-child) {
-	border-bottom: .1em solid rgba(0,0,0,.2);
-}*/
-.document article,
-.document section {
-	margin-top: .2em;
-	margin-bottom: .2em;
-}
-.document article section {
-	margin-left: 2em;
-}
-.document > header.documentcontent,
-.document > footer.documentcontent {
-	padding-top: .4em;
-	padding-bottom: .4em;
-}
-.document footer {
-	font-size: 0.8em;
-}
-.document .banner {
-	width: 100%;
-	height: 80px;
-	border: .1em solid rgba(0,0,0,.1);
-}
-.document main {
-	float: left;
-	width: 75%;
-}
-.document aside {
-	float: right;
-	width: 25%; /* 100% - main */
-	margin-top: 1.1em; /* .8 padding documentcontent + .2 margin-top article&section + .1 border */
-}
-.document details {
-}
-.document details summary {
-}
-
-	</style>
-
-		<div class="document demoborder">
-			<header class="documentcontent documentborder demoborder">
-				<img class="banner" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" title="header banner image">
-				<p>There is a crucial difference between the header element and the general accepted usage of header (or masthead). There’s usually only one header or ‘masthead’ in a page. In HTML5 you can have as many as you want. The spec defines it as “a group of introductory or navigational aids”. You can use a header in any section on your site. In fact, you probably should use a header within most of your sections. The spec describes the section element as “a thematic grouping of content, typically with a heading.”</p>
-			</header>
-			<nav class="documentcontent documentborder demoborder">
-				<h4>Nav</h4>
-				<a href="#" wicket:id="link">refresh</a>
-				<a href="#">Nav1</a>
-				<a href="#">Nav2</a>
-				<a href="#">Nav3</a>
-				<a href="#">Nav4</a>
-				<p>Intended for major navigation information. A group of links grouped together isn’t enough reason to use the nav element. Site-wide navigation, on the other hand belongs in a nav element.</p>
-			</nav>
-			<span>
-				<main class="documentcontent demoborder">
-					<article class="documentborder demoborder">
+	<div class="document">
+		<header class="documentcontent documentborder">
+			<img class="banner" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" title="header banner image">
+			<p>There is a crucial difference between the header element and the general accepted usage of header (or masthead). There’s usually only one header or ‘masthead’ in a page. In HTML5 you can have as many as you want. The spec defines it as “a group of introductory or navigational aids”. You can use a header in any section on your site. In fact, you probably should use a header within most of your sections. The spec describes the section element as “a thematic grouping of content, typically with a heading.”</p>
+		</header>
+		<nav class="documentcontent documentborder">
+			<h4>Nav</h4>
+			<a href="#" wicket:id="link">refresh</a>
+			<a href="#">Nav1</a>
+			<a href="#">Nav2</a>
+			<a href="#">Nav3</a>
+			<a href="#">Nav4</a>
+			<p>Intended for major navigation information. A group of links grouped together isn’t enough reason to use the nav element. Site-wide navigation, on the other hand belongs in a nav element.</p>
+		</nav>
+		<span>
+			<main class="documentcontent">
+				<article class="documentborder">
+					<header>
+						<h3>Article 1 Header</h3>
+					</header>
+					<p>Article 1 Paragraph</p>
+					<p class="longparagraph"></p>
+					<footer>
+						<p>Article 1 Footer</p>
+					</footer>
+				</article>
+				<article class="documentborder">
+					<header>
+						<h3>Article 2 Header</h3>
+					</header>
+					<p>Article 2 Paragraph</p>
+					<p class="longparagraph"></p>
+					<section>
 						<header>
-							<h3>Article 1 Header</h3>
+							<h4>Article 2 Section 1 Header</h4>
 						</header>
-						<p>Article 1 Paragraph</p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.</p>
+						<p>Article 2 Section 1 Paragraph</p>
+						<p class="longparagraph"></p>
 						<footer>
-							<p>Article 1 Footer</p>
+							<p>Article 2 Section 1 Footer</p>
 						</footer>
-					</article>
-					<article class="documentborder demoborder">
+					</section>
+					<section>
 						<header>
-							<h3>Article 2 Header</h3>
+							<h4>Article 2 Section 2 Header</h4>
 						</header>
-						<p>Article 2 Paragraph</p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.</p>
-						<section class="demoborder">
-							<header>
-								<h4>Article 2 Section 1 Header</h4>
-							</header>
-							<p>Article 2 Section 1 Paragraph</p>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.</p>
-							<footer>
-								<p>Article 2 Section 1 Footer</p>
-							</footer>
-						</section>
-						<section class="demoborder">
-							<header>
-								<h4>Article 2 Section 2 Header</h4>
-							</header>
-							<p>Article 2 Section 2 Paragraph</p>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.</p>
-							<footer>
-								<p>Article 2 Section 2 Footer</p>
-							</footer>
-						</section>
-						<section class="demoborder">
-							<header>
-								<h4>Section</h4>
-							</header>
-							<p>Used for grouping together thematically-related content. Sounds like a div element, but its not. The div has no semantic meaning. Before replacing all your div’s with section elements, always ask yourself, “Is all of the content related?”</p>
-						</section>
-					</article>
-					<article class="documentborder demoborder">
-						<header>
-							<h3>Article 3 Header</h3>
-						</header>
-						<p>Article 3 Paragraph</p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.</p>
+						<p>Article 2 Section 2 Paragraph</p>
+						<p class="longparagraph"></p>
 						<footer>
-							<p>Article 3 Footer</p>
+							<p>Article 2 Section 2 Footer</p>
 						</footer>
-					</article>
-				</main>
-				<aside class="documentcontent documentborder">
-					<h3>Aside</h3>
-					<p>Used for tangentially related content. Just because some content appears to the left or right of the main content isn’t enough reason to use the aside element. Ask yourself if the content within the aside can be removed without reducing the meaning of the main content. Pullquotes are an example of tangentially related content.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.</p>
-				</aside>
-			</span>
-			<div class="clearfix"></div>
-			<footer class="documentcontent documentborder demoborder">
-				<h4>Footer</h4>
-				<p>Sounds like its a description of the position, but its not. Footer elements contain information about it’s containing element: who wrote it, copyright, links to related content, etc. Whereas we usually have one footer for an entire document, HTML5 allows us to also have footer within sections.</p>
-			</footer>
-		</div>
+					</section>
+					<section>
+						<header>
+							<h4>Section</h4>
+						</header>
+						<p>Used for grouping together thematically-related content. Sounds like a div element, but its not. The div has no semantic meaning. Before replacing all your div’s with section elements, always ask yourself, “Is all of the content related?”</p>
+					</section>
+				</article>
+				<article class="documentborder">
+					<header>
+						<h3>Article 3 Header</h3>
+					</header>
+					<p>Article 3 Paragraph</p>
+					<p class="longparagraph"></p>
+					<footer>
+						<p>Article 3 Footer</p>
+					</footer>
+				</article>
+			</main>
+			<aside class="documentcontent documentborder">
+				<h3>Aside</h3>
+				<p>Used for tangentially related content. Just because some content appears to the left or right of the main content isn’t enough reason to use the aside element. Ask yourself if the content within the aside can be removed without reducing the meaning of the main content. Pullquotes are an example of tangentially related content.</p>
+				<p class="longparagraph"></p>
+			</aside>
+		</span>
+		<div class="clearfix"></div>
+		<footer class="documentcontent documentborder">
+			<h4>Footer</h4>
+			<p>Sounds like its a description of the position, but its not. Footer elements contain information about it’s containing element: who wrote it, copyright, links to related content, etc. Whereas we usually have one footer for an entire document, HTML5 allows us to also have footer within sections.</p>
+		</footer>
+	</div>
+
+	<script type="text/javascript" id="js_layout_longparagraph">
+	/*<![CDATA[*/
+	document.addEventListener("DOMContentLoaded", function(){ 
+		$('.longparagraph').html('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit accumsan libero, sed scelerisque velit posuere vehicula. Vestibulum vestibulum dignissim libero, sed porta felis auctor at. Vestibulum malesuada massa nulla, eu vestibulum leo tristique id. Fusce in lorem aliquet, imperdiet tellus consequat, viverra lorem. Vestibulum odio arcu, interdum non erat quis, commodo aliquam enim. Donec hendrerit adipiscing nisl at aliquet. Etiam vitae iaculis eros, sit amet pulvinar lacus. Vivamus est eros, suscipit eu fermentum nec, sagittis ac lorem. Cras iaculis quam a ipsum interdum facilisis quis in magna. Vestibulum eget sodales tortor. In dapibus ac diam dignissim bibendum. Duis vel leo id tortor tempor lobortis. Fusce pulvinar in est eleifend aliquam. Duis ac rhoncus sem, id rhoncus dolor.\n\nFusce mollis turpis interdum arcu mollis ultrices. Maecenas posuere convallis vestibulum. Donec interdum molestie metus, quis interdum tellus pellentesque sit amet. Pellentesque tincidunt ipsum imperdiet, aliquam ipsum vel, hendrerit diam. Duis massa augue, vehicula et condimentum non, posuere id nulla. Etiam vehicula tortor in ligula mollis semper. Ut viverra tortor nec lacinia congue. Maecenas at dui orci.');
+	}, false);
+	/*]]>*/
+	</script>
+
 </wicket:extend>
