@@ -1,19 +1,24 @@
-@mainwidth: 75%;
-@borderradius: 3px;
-@documentcontent_padding: .8em;
-@article_section_marginbottom: .4em;
-@border_width: .1em;
-@banner_height: 80px;
-
 .mxRound(@rad) {
 	-webkit-border-radius:@rad;
 	-moz-border-radius:@rad;
 	border-radius:@rad;
 }
 
+@mainwidth: 75%;
+@sides: 2;
+@borderradius: 3px;
+@article_section_marginbottom: .4em;
+@border_width: .1em;
+@banner_height: 80px;
+@smallpadding: .4em;
+@inset: 1.6em;
+@docfontsize: 1em;
+@headerfontsize: 1.2em;
+@footerfontsize: .8em;
+@docmargin: 1.6em;
+
 .document {
 	img {
-		background: gray;
 		background: rgba(0, 0, 0, 0.50);
 	}
 
@@ -24,15 +29,15 @@
 		.mxRound(@borderradius);
 	}
 
-	margin: 1.6em;
-	font-size: 1em;
+	margin: @docmargin;
+	font-size: @docfontsize;
 	footer {
-		font-size: 0.8em;
+		font-size: @footerfontsize;
 	}	
 	> header.documentcontent {
-		font-size: 1.2em;
-		padding-bottom: .4em;
-		padding-top: .4em;
+		font-size: @headerfontsize;
+		padding-bottom: @smallpadding;
+		padding-top: @smallpadding;
 		.banner {
 			width: 100%;
 			height: @banner_height;
@@ -45,35 +50,44 @@
 	}
 	article {
 		section {
-			margin-left: 2em;
+			margin-left: @inset;
 		}
 	}
 	details {
 		summary {
 		}
 	}
-	main {
+	main.documentcontent.maindocumentcontent {
 		width: @mainwidth;
-		float: left;
 	}
-	aside {
-		width: (100% - @mainwidth); 
-		float: right;
+	aside.documentcontent.maindocumentcontent {
+		width: (100% - @mainwidth) / @sides; 
 	}
-
+	.documentcontent {
+		position: relative;
+		&.maindocumentcontent {
+			float: left;
+			&:not(last) {
+				padding-right: @smallpadding;
+			}
+			&:not(first) {
+				padding-left: @smallpadding;
+			}
+		}
+	}
 	.documentcontent:not(main) {
-		padding: @documentcontent_padding;
+		padding: @smallpadding * 2;
 		margin-bottom: @article_section_marginbottom;
 	}
 	main.documentcontent {
 		section,
 		article {
-			padding: @documentcontent_padding;
+			padding: @smallpadding * 2;
 			margin-bottom: @article_section_marginbottom;
 		}
 	}
 	> footer.documentcontent {
-		padding-top: .4em;
-		padding-bottom: .4em;
+		padding-top: @smallpadding;
+		padding-bottom: @smallpadding;
 	}
 }
