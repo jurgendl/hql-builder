@@ -4,13 +4,14 @@
 	border-radius:@rad;
 }
 
-@mainwidth: 75%;
-@sides: 2;
+//@mainwidth: 75%;
+//@sides: 2;
 @borderradius: 3px;
-@article_section_marginbottom: .4em;
+@marginbottom: .4em;
 @border_width: .1em;
 @banner_height: 80px;
 @smallpadding: .4em;
+@largepadding: .8em;
 @inset: 1.6em;
 @docfontsize: 1em;
 @headerfontsize: 1.2em;
@@ -57,12 +58,12 @@
 		summary {
 		}
 	}
-	main.documentcontent.maindocumentcontent {
-		width: @mainwidth;
-	}
-	aside.documentcontent.maindocumentcontent {
-		width: (100% - @mainwidth) / @sides; 
-	}
+//	main.documentcontent.maindocumentcontent {
+//		width: @mainwidth;
+//	}
+//	aside.documentcontent.maindocumentcontent {
+//		width: (100% - @mainwidth) / @sides; 
+//	}
 	.documentcontent {
 		position: relative;
 		&.maindocumentcontent {
@@ -76,15 +77,18 @@
 		}
 	}
 	.documentcontent:not(main) {
-		padding: @smallpadding * 2;
-		margin-bottom: @article_section_marginbottom;
+		padding: @smallpadding;
+		margin-bottom: @marginbottom;
 	}
 	main.documentcontent {
 		section,
 		article {
-			padding: @smallpadding * 2;
-			margin-bottom: @article_section_marginbottom;
+			padding: @largepadding;
+			margin-bottom: @marginbottom;
 		}
+	}
+	aside.documentcontent.maindocumentcontent {
+		padding: @largepadding;
 	}
 	> footer.documentcontent {
 		padding-top: @smallpadding;
