@@ -1,0 +1,79 @@
+@mainwidth: 75%;
+@borderradius: 3px;
+@documentcontent_padding: .8em;
+@article_section_marginbottom: .4em;
+@border_width: .1em;
+@banner_height: 80px;
+
+.mxRound(@rad) {
+	-webkit-border-radius:@rad;
+	-moz-border-radius:@rad;
+	border-radius:@rad;
+}
+
+.document {
+	img {
+		background: gray;
+		background: rgba(0, 0, 0, 0.50);
+	}
+
+	.documentborder {
+		border-width: @border_width;
+		border-style: solid;
+		border-color: rgba(0,0,0,.3);
+		.mxRound(@borderradius);
+	}
+
+	margin: 1.6em;
+	font-size: 1em;
+	footer {
+		font-size: 0.8em;
+	}	
+	> header.documentcontent {
+		font-size: 1.2em;
+		padding-bottom: .4em;
+		padding-top: .4em;
+		.banner {
+			width: 100%;
+			height: @banner_height;
+			border-width: @border_width;
+			border-style: solid;
+			border-color: rgba(0,0,0,.1);
+		}	
+	}
+	nav {
+	}
+	article {
+		section {
+			margin-left: 2em;
+		}
+	}
+	details {
+		summary {
+		}
+	}
+	main {
+		width: @mainwidth;
+		float: left;
+	}
+	aside {
+		width: (100% - @mainwidth); 
+		float: right;
+	}
+
+	.documentcontent:not(main) {
+		padding: @documentcontent_padding;
+		margin-bottom: @article_section_marginbottom;
+	}
+	main.documentcontent {
+		section,
+		article {
+			padding: @documentcontent_padding;
+			margin-bottom: @article_section_marginbottom;
+		}
+	}
+	> footer.documentcontent {
+		padding-top: .4em;
+		padding-bottom: .4em;
+	}
+}
