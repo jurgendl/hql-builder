@@ -1,4 +1,18 @@
 <wicket:extend>
+	<style>
+	.document > header.documentcontent .banner {
+		height:80px;
+	}
+	.document aside.documentcontent.maindocumentcontent:nth-of-type(1) {
+		width:20%
+	}
+	.document main.documentcontent.maindocumentcontent {
+		width:50%
+	}
+	.document aside.documentcontent.maindocumentcontent:nth-of-type(2) {
+		width:30%
+	}
+	</style>
 	<div class="document">
 		<header class="documentcontent documentborder">
 			<img class="banner" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" title="header banner image">
@@ -13,12 +27,12 @@
 			<a href="#">Nav4</a>
 			<p>Intended for major navigation information. A group of links grouped together isn’t enough reason to use the nav element. Site-wide navigation, on the other hand belongs in a nav element.</p>
 		</nav>
-		<aside style="width:20%" class="documentcontent maindocumentcontent documentborder">
+		<aside class="documentcontent maindocumentcontent documentborder">
 			<h3>Aside 20%</h3>
 			<p>Used for tangentially related content. Just because some content appears to the left or right of the main content isn’t enough reason to use the aside element. Ask yourself if the content within the aside can be removed without reducing the meaning of the main content. Pullquotes are an example of tangentially related content.</p>
 			<p class="longparagraph"></p>
 		</aside>
-		<main style="width:50%" class="documentcontent maindocumentcontent">
+		<main class="documentcontent maindocumentcontent">
 			<article class="documentborder">
 				<header>
 					<h3>Article 1 Header</h3>
@@ -73,7 +87,7 @@
 				</footer>
 			</article>
 		</main>
-		<aside style="width:30%" class="documentcontent maindocumentcontent documentborder">
+		<aside class="documentcontent maindocumentcontent documentborder">
 			<h3>Aside 30%</h3>
 			<p>Used for tangentially related content. Just because some content appears to the left or right of the main content isn’t enough reason to use the aside element. Ask yourself if the content within the aside can be removed without reducing the meaning of the main content. Pullquotes are an example of tangentially related content.</p>
 			<p class="longparagraph"></p>

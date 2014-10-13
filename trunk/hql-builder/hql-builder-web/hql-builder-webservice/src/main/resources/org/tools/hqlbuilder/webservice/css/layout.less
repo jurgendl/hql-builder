@@ -4,18 +4,17 @@
 	border-radius:@rad;
 }
 
-//@mainwidth: 75%;
-//@sides: 2;
-@borderradius: 3px;
-@marginbottom: .4em;
-@border_width: .1em;
-@banner_height: 80px;
-@smallpadding: .4em;
-@largepadding: .8em;
-@inset: 1.6em;
 @docfontsize: 1em;
 @headerfontsize: 1.2em;
 @footerfontsize: .8em;
+
+@borderradius: 3px;
+@borderwidth: .1em;
+
+@marginbottom: .4em;
+@smallpadding: .4em;
+@largepadding: .8em;
+@inset: 1.6em;
 @docmargin: 1.6em;
 
 .document {
@@ -24,7 +23,7 @@
 	}
 
 	.documentborder {
-		border-width: @border_width;
+		border-width: @borderwidth;
 		border-style: solid;
 		border-color: rgba(0,0,0,.3);
 		.mxRound(@borderradius);
@@ -41,8 +40,7 @@
 		padding-top: @smallpadding;
 		.banner {
 			width: 100%;
-			height: @banner_height;
-			border-width: @border_width;
+			border-width: @borderwidth;
 			border-style: solid;
 			border-color: rgba(0,0,0,.1);
 		}	
@@ -58,12 +56,7 @@
 		summary {
 		}
 	}
-//	main.documentcontent.maindocumentcontent {
-//		width: @mainwidth;
-//	}
-//	aside.documentcontent.maindocumentcontent {
-//		width: (100% - @mainwidth) / @sides; 
-//	}
+
 	.documentcontent {
 		position: relative;
 		&.maindocumentcontent {
