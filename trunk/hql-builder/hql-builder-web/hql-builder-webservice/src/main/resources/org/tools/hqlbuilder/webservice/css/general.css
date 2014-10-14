@@ -165,7 +165,7 @@ h1, h2, h3, h4, h5 {
 /* hover: when the user hovers their mouse over a link */
 /* active: when the user clicks on the link (or presses the Enter key on a focused link) */
 /* focus: when the user uses the Tab key to navigate to hyperlinks */
-/*a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
+a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):visited,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):hover,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):active,
@@ -182,7 +182,7 @@ a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):hover,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):active,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):focus {
 	border-bottom: .1em solid #1E608E;
-}*/
+}
 
 /* ======================== ui-state-* fix unreadable blur ======================== */
 .ui-state-error,
@@ -287,7 +287,16 @@ i {
 }
 mark {
 }
+/* http://perishablepress.com/wrapping-content/ */
 pre {
+	white-space: pre;           /* CSS 2.0 */
+	white-space: pre-wrap;      /* CSS 2.1 */
+	white-space: pre-line;      /* CSS 3.0 */
+	white-space: -pre-wrap;     /* Opera 4-6 */
+	white-space: -o-pre-wrap;   /* Opera 7 */
+	white-space: -moz-pre-wrap; /* Mozilla */
+	white-space: -hp-pre-wrap;  /* HP Printers */
+	word-wrap: break-word;      /* IE 5+ */
 }
 q {
 }
