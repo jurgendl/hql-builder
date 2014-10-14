@@ -62,9 +62,9 @@ https://html.spec.whatwg.org/multipage/embedded-content.html#embedded-content
 http://gsgd.co.uk/sandbox/jquery/easing/
 http://jquery-plugins.net/owl-carousel-touch-enabled-and-responsive-jquery-carousel-slider
 http://jquery-plugins.net/popular
-
-
-
+http://perishablepress.com/css-remove-link-underlines-borders-linked-images/
+http://www.roundedworks.com/notebook/xhtmlcss/10-css-selectors-you-probably-dont-know-about/
+https://www.google.com/webmasters/tools/home?hl=nl
 
 http://oembed.com/
       <link rel="alternate" type="application/json+oembed" href="http://www.youtube.com/oembed?url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DP1hYT_V8a-o&amp;format=json" title="Easter Special 2014 | Ashens">

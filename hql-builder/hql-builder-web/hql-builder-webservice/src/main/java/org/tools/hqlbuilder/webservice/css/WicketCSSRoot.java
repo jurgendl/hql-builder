@@ -21,6 +21,9 @@ public class WicketCSSRoot {
 
     public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
 
+    /** http://daneden.github.io/animate.css/ */
+    public static CssResourceReference ANIMATE = new CssResourceReference(WicketCSSRoot.class, "animate.css");
+
     public static void main(String[] args) {
         minify(WicketCSSRoot.class, "", new String[] { "general", "meyer.reset", "normalize" });
         minify(Spectrum.class, "", new String[] { "spectrum" });

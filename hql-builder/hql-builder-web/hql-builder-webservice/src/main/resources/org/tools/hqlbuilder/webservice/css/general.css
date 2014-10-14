@@ -165,20 +165,16 @@ h1, h2, h3, h4, h5 {
 /* hover: when the user hovers their mouse over a link */
 /* active: when the user clicks on the link (or presses the Enter key on a focused link) */
 /* focus: when the user uses the Tab key to navigate to hyperlinks */
-a {
-	text-decoration: none;
-}
-a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
-a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):link,
+/*a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):visited,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):hover,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):active,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):focus {
+	text-decoration: none;
 	outline: none;
 	color: #1E608E;
 }
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
-a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):link,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):visited {
 	border-bottom: .1em solid rgba(0,0,0,.1);
 }
@@ -186,7 +182,7 @@ a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):hover,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):active,
 a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):focus {
 	border-bottom: .1em solid #1E608E;
-}
+}*/
 
 /* ======================== ui-state-* fix unreadable blur ======================== */
 .ui-state-error,
@@ -211,6 +207,13 @@ a:not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):focus {
 	right: 0;
 	text-align: right;
 	top: 0;
+}
+
+/* ======================== popout ======================== */
+/* http://perishablepress.com/margin-list-floated-image/ */
+.popout {
+	width: auto;
+	overflow: hidden;
 }
 
 /* ======================== centering ======================== */
