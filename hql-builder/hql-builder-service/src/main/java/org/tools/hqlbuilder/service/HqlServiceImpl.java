@@ -458,7 +458,7 @@ public class HqlServiceImpl implements HqlService {
                 String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
             }
-            logger.debug("sql={}", sql);
+            logger.info("sql={}", sql);
             result.setSql(sql);
         }
         if (max != -1) {
