@@ -1382,9 +1382,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String d = df.format(rv.getDuration() / 1000.0);
             resultsInfo.setText(HqlResourceBundle.getMessage("results in seconds", String.valueOf(rv.getSize()), d));
         }
-        logger.debug("duration: {} ms", rv.getDuration());
-        logger.debug("overhead-server: {} ms", rv.getOverhead());
-        logger.debug("overhead-client: {} ms", ((System.currentTimeMillis() - start - rv.getDuration())));
+        logger.info("duration: {} ms", rv.getDuration());
+        logger.info("overhead-server: {} ms", rv.getOverhead());
+        logger.info("overhead-client: {} ms", ((System.currentTimeMillis() - start - rv.getDuration())));
         logger.debug("end query");
     }
 
