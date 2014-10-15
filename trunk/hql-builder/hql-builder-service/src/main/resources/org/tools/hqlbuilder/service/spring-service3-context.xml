@@ -61,7 +61,16 @@
 	<bean id="configurationBean" class="org.tools.hqlbuilder.service.ConfigurationBean" scope="singleton" lazy-init="false">
 	</bean>
 
-	<bean id="hqlService" class="org.tools.hqlbuilder.service.HqlServiceImpl" scope="singleton" lazy-init="false">
+	<bean id="hqlService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="hqlServiceImpl" />
+		<property name="interceptorNames">
+			<list>
+				<value>methodLogger</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hqlServiceImpl" class="org.tools.hqlbuilder.service.HqlServiceImpl" scope="singleton" lazy-init="false">
 		<property name="sessionFactory" ref="sessionFactory"/>
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
