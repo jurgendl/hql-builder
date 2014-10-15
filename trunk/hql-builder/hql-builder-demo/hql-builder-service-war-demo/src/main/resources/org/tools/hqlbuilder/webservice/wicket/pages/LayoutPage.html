@@ -1,48 +1,48 @@
 <wicket:extend>
 	<style>
 	.document > header.documentcontent .banner {
-		height:80px;
+		height: 80px;
 		border: 0 !important;
 	}
 	.document aside.documentcontent.maindocumentcontent:nth-of-type(1) {
-		width:20%
+		width: 20%
 	}
 	.document main.documentcontent.maindocumentcontent {
-		width:50%
+		width: 50%
 	}
 	.document aside.documentcontent.maindocumentcontent:nth-of-type(2) {
-		width:30%
+		width: 30%
 	}
-	.docked,
-	.docked footer.documentcontent {
-		height:8em;
+	.document .docked,
+	.document .docked footer.documentcontent {
+		height: 8em;
+	}
+	.document .pui-menuitem {
+		padding: 0 .5em;
 	}
 	</style>
 	<div class="document">
 		<header class="documentcontent documentborder">
-			<a href="#" wicket:id="link1"><img class="banner" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" title="header banner image"></a>
+			<a class="fake" href="#" wicket:id="link1"><img class="banner" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" title="header banner image"></a>
 			<p>There is a crucial difference between the header element and the general accepted usage of header (or masthead). There’s usually only one header or ‘masthead’ in a page. In HTML5 you can have as many as you want. The spec defines it as “a group of introductory or navigational aids”. You can use a header in any section on your site. In fact, you probably should use a header within most of your sections. The spec describes the section element as “a thematic grouping of content, typically with a heading.”</p>
 		</header>
 		<nav class="documentcontent documentborder">
 			<h4>Nav</h4>
 			<span class="stickied">
 				<ul class="puimenubar">
-					<li><a href="#" wicket:id="link2">Refresh</a></li>
-					<li><a href="#">Nav1</a></li>
-					<li><a href="#">Nav2</a></li>
-					<li><a href="#">Nav3</a></li>
-					<li><a href="#">Nav4</a></li>
-					<li><a href="#">Nav5</a>
+					<li class="fontawesome-home"><a href="#" wicket:id="link2">Home</a></li>
+					<li class="fontawesome-cog"><a href="http://www.google.com">Settings</a></li>
+					<li class="fontawesome-tasks"><a href="#">Articles/Sections</a>
 						<ul>
-							<li><a href="#">Nav5A</a></li>
-							<li><a href="#">Nav5B</a></li>
-							<li><a href="#">Nav5C</a>
+							<li><a href="#article1">Article 1</a></li>
+							<li><a href="#article2">Article 2</a>
 								<ul>
-									<li><a href="#">Nav5C1</a></li>
-									<li><a href="#">Nav5C2</a></li>
-									<li><a href="#">Nav5C3</a></li>
+									<li><a href="#article2section1">Section 1</a></li>
+									<li><a href="#article2section2">Section 2</a></li>
+									<li><a href="#article2section3">Section 3</a></li>
 								</ul>
 							</li>
+							<li><a href="#article3">Article 3</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -56,22 +56,26 @@
 		</aside>
 		<main class="documentcontent maindocumentcontent">
 			<article class="documentborder">
+				<a name="article1"></a>
 				<header>
 					<h3>Article 1 Header</h3>
 				</header>
 				<p>Article 1 Paragraph</p>
+				<p><a href="http://www.google.com">some link</a></p>
 				<p class="longparagraph"></p>
 				<footer>
 					<p>Article 1 Footer</p>
 				</footer>
 			</article>
 			<article class="documentborder">
+				<a name="article2"></a>
 				<header>
 					<h3>Article 2 Header</h3>
 				</header>
 				<p>Article 2 Paragraph</p>
 				<p class="longparagraph"></p>
 				<section>
+					<a name="article2section1"></a>
 					<header>
 						<h4>Article 2 Section 1 Header</h4>
 					</header>
@@ -82,6 +86,7 @@
 					</footer>
 				</section>
 				<section>
+					<a name="article2section2"></a>
 					<header>
 						<h4>Article 2 Section 2 Header</h4>
 					</header>
@@ -92,6 +97,7 @@
 					</footer>
 				</section>
 				<section>
+					<a name="article2section3"></a>
 					<header>
 						<h4>Section</h4>
 					</header>
@@ -99,6 +105,7 @@
 				</section>
 			</article>
 			<article class="documentborder">
+				<a name="article3"></a>
 				<header>
 					<h3>Article 3 Header</h3>
 				</header>
@@ -119,7 +126,6 @@
 			<footer class="documentcontent documentborder">
 				<h4>Footer</h4>
 				<p>Sounds like its a description of the position, but its not. Footer elements contain information about it’s containing element: who wrote it, copyright, links to related content, etc. Whereas we usually have one footer for an entire document, HTML5 allows us to also have footer within sections.</p>
-				<p><a href="#">link</a></p>
 			</footer>
 		</span>
 	</div>
