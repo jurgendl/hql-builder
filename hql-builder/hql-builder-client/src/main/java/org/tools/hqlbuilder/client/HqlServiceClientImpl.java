@@ -37,7 +37,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             "and",
             "or",
             "group by",
-            "order by" };
+    "order by" };
 
     /** when cleaning up HQL: replace key by value */
     private Map<String, String> hqlReplacers = new HashMap<String, String>();
@@ -95,10 +95,10 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                         // nummers worden vervangen door 'kolom${nummer}' want nummer alleen wordt niet aanvaard
                         Long.parseLong(queryReturnAlias);
                         String newAlias = queryReturnAlias.replace('.', ' ').replace('(', ' ').replace(')', ' ').trim().replace(' ', '_');
-                        logger.info(": " + scalarColumnName + " >> " + queryReturnAlias + " >> " + newAlias);
+                        logger.debug(": " + scalarColumnName + " >> " + queryReturnAlias + " >> " + newAlias);
                         sqlString = sqlString.replace(scalarColumnName, newAlias);
                     } catch (NumberFormatException ex) {
-                        logger.info(": " + scalarColumnName + " >> " + queryReturnAlias);
+                        logger.debug(": " + scalarColumnName + " >> " + queryReturnAlias);
                         sqlString = sqlString.replace(scalarColumnName, queryReturnAlias);
                     }
                 } catch (ArrayIndexOutOfBoundsException ex) {
@@ -130,7 +130,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
                 for (Map.Entry<String, String> hqlReplacer : hqlReplacers.entrySet()) {
                     if (replaceBy.contains(hqlReplacer.getKey())) {
-                        logger.info("-> " + replaceBy + " >> " + replaceBy.replace(hqlReplacer.getKey(), hqlReplacer.getValue()));
+                        logger.debug("-> " + replaceBy + " >> " + replaceBy.replace(hqlReplacer.getKey(), hqlReplacer.getValue()));
                         replaceBy = replaceBy.replace(hqlReplacer.getKey(), hqlReplacer.getValue());
                     }
                 }
@@ -138,11 +138,11 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                 int existing = CollectionUtils.cardinality(replaceBy, replacers.values());
 
                 if (existing > 0) {
-                    logger.info("-> " + replaceBy + " >> " + replaceBy + (existing + 1));
+                    logger.debug("-> " + replaceBy + " >> " + replaceBy + (existing + 1));
                     replaceBy = replaceBy + (existing + 1);
                 }
 
-                logger.info("- " + replacing + " >> " + replaceBy);
+                logger.debug("- " + replacing + " >> " + replaceBy);
                 replacers.put(replacing, replaceBy);
 
                 startpos = matcher.end();
@@ -164,7 +164,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                         newvalue = newvalue.substring(0, 30);
                     }
 
-                    logger.info("* " + replacer + " EN " + replacerOther + " >> " + replacer.getValue() + "=" + newvalue);
+                    logger.debug("* " + replacer + " EN " + replacerOther + " >> " + replacer.getValue() + "=" + newvalue);
                     replacer.setValue(newvalue);
 
                     hqlReplacerMap.add(newvalue);
@@ -190,7 +190,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         // vervang nu replacers
         for (String key : keys) {
             String value = replacers.get(key);
-            logger.info("+ " + key + " > " + value);
+            logger.debug("+ " + key + " > " + value);
             sqlString = sqlString.replaceAll(key, value);
         }
 
@@ -210,7 +210,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                 String group = matcher.group();
 
                 try {
-                    logger.info("/ " + group + " > " + newvalue);
+                    logger.debug("/ " + group + " > " + newvalue);
                     sqlString = sqlString.replaceAll("\\Q" + group + "\\E", newvalue);
                 } catch (Exception ex) {
                     logger.warn("ERROR: " + ex);
@@ -218,7 +218,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             }
         }
 
-        logger.info(sqlString);
+        logger.debug(sqlString);
 
         if (formatLines) {
             sqlString = makeMultiline(sqlString);
@@ -257,7 +257,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
         sqlString = anew.toString();
 
-        logger.info(sqlString);
+        logger.debug(sqlString);
 
         try {
             sqlString = CommonUtils

@@ -10,6 +10,7 @@ import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.stickynavbar.StickyNavbar;
+import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.less.LessResourceReference;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -39,5 +40,6 @@ public class LayoutPage extends BasePage {
         response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "layout.css")));
         response.render(JavaScriptHeaderItem.forReference(StickyNavbar.STICKY_NAVBAR_JS));
         // response.render(OnDomReadyHeaderItem.forScript("$('.stickied').stickyNavbar();"));
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));
     }
 }

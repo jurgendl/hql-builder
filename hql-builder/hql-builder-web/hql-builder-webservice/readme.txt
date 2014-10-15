@@ -66,7 +66,7 @@ http://perishablepress.com/css-remove-link-underlines-borders-linked-images/
 http://www.roundedworks.com/notebook/xhtmlcss/10-css-selectors-you-probably-dont-know-about/
 https://www.google.com/webmasters/tools/home?hl=nl
 http://perishablepress.com/awesome-new-css3-selectors/
-
+http://perishablepress.com/css3-progressive-enhancement-smart-design/
 
 
 
