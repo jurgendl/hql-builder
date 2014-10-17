@@ -3,4 +3,7 @@
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
 	<conversionRule conversionWord="web" converterClass="org.wicketstuff.logback.WicketWebFormattingConverter" />
 	<property name="pattern" value="%date{ISO8601}|%-5level|%thread|%web| \\(%class.java:%line\\) |%message%n"/>
+	<!-- http://mo-tomcat-ext.sourceforge.net/user-guide.html#LogbackContextNameListener -->
+	<!-- http://stackoverflow.com/questions/10465301/tomcat-war-configure-logback-to-use-app-name-in-path -->
+	<!-- %contextPath -->
 </included>

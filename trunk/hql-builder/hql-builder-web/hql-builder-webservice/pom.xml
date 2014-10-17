@@ -11,6 +11,11 @@
 	<description>hql-builder-webservice</description>
 	<dependencies>
 		<dependency>
+			<groupId>net.sf.michael-o.tomcat</groupId>
+			<artifactId>michael-o-tomcat-extras</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>ro.isdc.wro4j</groupId>
 			<artifactId>wro4j-extensions</artifactId>
 			<version>1.7.6</version>

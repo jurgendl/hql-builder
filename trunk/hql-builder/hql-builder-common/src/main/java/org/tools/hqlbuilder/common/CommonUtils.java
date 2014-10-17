@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -170,7 +171,7 @@ public class CommonUtils {
     }
 
     public static char[] whitespace_chars = ( //
-    "\u0009" // CHARACTER TABULATION
+            "\u0009" // CHARACTER TABULATION
             + "\n" // LINE FEED (LF)
             + "\u000B" // LINE TABULATION
             + "\u000C" // FORM FEED (FF)
@@ -196,7 +197,7 @@ public class CommonUtils {
             + "\u202F" // NARROW NO-BREAK SPACE
             + "\u205F" // MEDIUM MATHEMATICAL SPACE
             + "\u3000" // IDEOGRAPHIC SPACE
-    ).toCharArray();
+            ).toCharArray();
 
     public static String removeUnnecessaryWhiteSpaces(String s) {
         StringBuilder sb = new StringBuilder();
@@ -339,6 +340,9 @@ public class CommonUtils {
     }
 
     public static <T> T proxy(Class<T> type) {
+        if (Modifier.isFinal(type.getModifiers())) {
+            throw new IllegalArgumentException(type + " cannot be final");
+        }
         return Lambda.on(type);
     }
 
