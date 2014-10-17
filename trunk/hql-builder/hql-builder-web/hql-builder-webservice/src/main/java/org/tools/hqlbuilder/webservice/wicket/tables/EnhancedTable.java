@@ -42,12 +42,12 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 
     protected final Table<T> table;
 
-    public EnhancedTable(String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
+    public EnhancedTable(String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
         super(id);
         setOutputMarkupId(true);
         Form<?> form = new Form<Object>(FORM_ID);
         add(form);
-        table = new Table<T>(form, TABLE_ID, columns, dataProvider);
+        table = new Table<T>(form, TABLE_ID, columns, dataProvider, settings);
         form.add(table);
     }
 
@@ -136,13 +136,14 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         return new Model<String>(label);
     }
 
-    public static <T extends Serializable> IColumn<T, String> getActionsColumn(Component parent, final DataProvider<T> provider) {
+    public static <T extends Serializable> IColumn<T, String> getActionsColumn(Component parent, final DataProvider<T> provider,
+            final TableSettings settings) {
         return new AbstractColumn<T, String>(labelModel(parent, ACTIONS_ID)) {
             @Override
             @SuppressWarnings({ "rawtypes", "unchecked" })
             public void populateItem(Item cellItem, String componentId, IModel rowModel) {
                 T object = ((T) rowModel.getObject());
-                cellItem.add(new ActionsPanel<T>(componentId, object) {
+                cellItem.add(new ActionsPanel<T>(componentId, object, settings) {
                     @Override
                     public void onDelete(AjaxRequestTarget target, T o) {
                         provider.delete(target, o);

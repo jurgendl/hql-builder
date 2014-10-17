@@ -108,6 +108,9 @@ public class WicketApplication extends WebApplication {
             getFrameworkSettings().setSerializer(new KryoSerializer());
         }
 
+        getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+        // => ((WebClientInfo)WebRequestCycle.get().getClientInfo()).getProperties().isJavaEnabled()
+
         // markup settings
         getMarkupSettings().setStripComments(deployed);
         getMarkupSettings().setCompressWhitespace(deployed);

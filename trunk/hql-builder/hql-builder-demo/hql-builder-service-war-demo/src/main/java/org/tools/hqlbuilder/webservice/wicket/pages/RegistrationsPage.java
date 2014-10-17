@@ -25,6 +25,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
+import org.tools.hqlbuilder.webservice.wicket.tables.TableSettings;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @SuppressWarnings("serial")
@@ -118,9 +119,10 @@ public class RegistrationsPage extends BasePage {
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername()));
         columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()));
         columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
-        columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider));
 
-        table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider);
+        TableSettings settings = new TableSettings();
+        columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider, settings));
+        table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider, settings);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             @Override
