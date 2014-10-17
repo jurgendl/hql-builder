@@ -76,8 +76,11 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     protected String CSS_ODD = "ui-widget-content pui-datatable-odd ui-datatable-odd";
 
-    public Table(Form<?> form, String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider) {
+    protected AjaxFallbackButton addLink;
+
+    public Table(Form<?> form, String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
         super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
+        addLink.setVisible(settings.isAdd());
         setOutputMarkupId(true);
     }
 
@@ -123,7 +126,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    protected static class URLColumn<D> extends PropertyColumn<D, String> {
+    public static class URLColumn<D> extends PropertyColumn<D, String> {
         private static final long serialVersionUID = -2998876473654238089L;
 
         public URLColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
@@ -136,13 +139,13 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
         @Override
         public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
-            item.add(new LinkPanel(componentId, getDataModel(rowModel)));
+            item.add(new LinkPanel(componentId, getDataModel(rowModel), getDisplayModel()));
         }
 
         private class LinkPanel extends Panel {
             private static final long serialVersionUID = -7352081661850450279L;
 
-            public LinkPanel(String id, final IModel<Object> model) {
+            public LinkPanel(String id, final IModel<Object> model, final IModel<String> labelModel) {
                 super(id);
                 AbstractReadOnlyModel<String> linkModel = new AbstractReadOnlyModel<String>() {
                     private static final long serialVersionUID = 6336814546294579370L;
@@ -165,7 +168,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                         throw new UnsupportedOperationException("type for url not supported: " + object.getClass().getName());
                     }
                 };
-                add(new ExternalLink("link", linkModel, true));
+                add(new ExternalLink("link", linkModel, labelModel));
             }
         }
     }
@@ -173,29 +176,37 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     protected static abstract class ActionsPanel<T extends Serializable> extends Panel {
         private static final long serialVersionUID = -5249593513368522879L;
 
-        public ActionsPanel(String id, final T object) {
+        public ActionsPanel(String id, final T object, TableSettings settings) {
             super(id);
             setOutputMarkupId(true);
             @SuppressWarnings("unchecked")
             final Form<T> form = (Form<T>) getParent();
-            AjaxFallbackButton editLink = new AjaxFallbackButton(ACTIONS_EDIT_ID, form) {
-                private static final long serialVersionUID = 2401036651703118413L;
+            if (settings.isEdit()) {
+                AjaxFallbackButton editLink = new AjaxFallbackButton(ACTIONS_EDIT_ID, form) {
+                    private static final long serialVersionUID = 2401036651703118413L;
 
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
-                    onEdit(target, object);
-                }
-            };
-            add(editLink);
-            AjaxFallbackButton deleteLink = new AjaxFallbackButton(ACTIONS_DELETE_ID, form) {
-                private static final long serialVersionUID = 8838151595047275051L;
+                    @Override
+                    protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
+                        onEdit(target, object);
+                    }
+                };
+                add(editLink);
+            } else {
+                add(new WebMarkupContainer(ACTIONS_EDIT_ID).setVisible(false));
+            }
+            if (settings.isDelete()) {
+                AjaxFallbackButton deleteLink = new AjaxFallbackButton(ACTIONS_DELETE_ID, form) {
+                    private static final long serialVersionUID = 8838151595047275051L;
 
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
-                    onDelete(target, object);
-                }
-            };
-            add(deleteLink);
+                    @Override
+                    protected void onSubmit(AjaxRequestTarget target, Form<?> f) {
+                        onDelete(target, object);
+                    }
+                };
+                add(deleteLink);
+            } else {
+                add(new WebMarkupContainer(ACTIONS_DELETE_ID).setVisible(false));
+            }
         }
 
         /**
@@ -436,7 +447,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             // possible fix 1: put this in a form (form within form)
             // possible fix 2: adjust AjaxFallbackButton to fetch form at the moment of execution later so it is not needed during contruction
             Form<?> form = ((DelegateDataProvider<T>) getDataprovider()).getForm();
-            AjaxFallbackButton addLink = new AjaxFallbackButton(ACTIONS_ADD_ID, form) {
+            addLink = new AjaxFallbackButton(ACTIONS_ADD_ID, form) {
                 private static final long serialVersionUID = -8033338314334624474L;
 
                 @Override
