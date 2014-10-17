@@ -34,9 +34,9 @@ public class DefaultWebPage extends WebPage {
         setStatelessHint(false);
         logger = LoggerFactory.getLogger(getClass());
         Injector.get().inject(this);
-        if (getClass().equals(DefaultWebPage.class)) {
-            setResponsePage(EmptyPage.class, parameters);
-        }
+        // if (getClass().equals(DefaultWebPage.class)) {
+        // setResponsePage(EmptyPage.class, parameters);
+        // }
         addComponents();
     }
 
