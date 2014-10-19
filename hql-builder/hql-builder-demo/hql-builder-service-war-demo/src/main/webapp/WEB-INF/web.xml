@@ -6,8 +6,8 @@
 	version="2.5"
 	>
 
-	<display-name>app</display-name>
-	<description>app</description>
+	<display-name>hqlbuilder</display-name>
+	<description>hqlbuilder</description>
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
