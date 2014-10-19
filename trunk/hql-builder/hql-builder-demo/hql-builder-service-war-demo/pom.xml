@@ -11,7 +11,7 @@
 	<description>hql-builder-service-war-demo</description>
 	<packaging>war</packaging>
 	<properties>
-		<contextRoot>app</contextRoot>
+		<contextRoot>hqlbuilder</contextRoot>
 	</properties>
 	<dependencies>
 		<!-- Core -->
