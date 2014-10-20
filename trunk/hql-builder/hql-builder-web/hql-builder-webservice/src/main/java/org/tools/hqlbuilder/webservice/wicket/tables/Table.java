@@ -1,8 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
 import java.io.Serializable;
-import java.net.URI;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +48,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
-import org.tools.hqlbuilder.webservice.wicket.components.ExternalLink;
+import org.tools.hqlbuilder.webservice.wicket.components.LinkPanel;
+import org.tools.hqlbuilder.webservice.wicket.components.LinkPanel.LinkType;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
@@ -100,29 +99,12 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
             IModel<Object> dataModel = getDataModel(rowModel);
-            @SuppressWarnings("rawtypes")
             IModel dataModelUncast = dataModel;
-            @SuppressWarnings("unchecked")
             IModel<String> dataModelCast = dataModelUncast;
-            item.add(new LinkPanel(componentId, dataModelCast));
-        }
-
-        private class LinkPanel extends Panel {
-            private static final long serialVersionUID = -1585097370509255949L;
-
-            public LinkPanel(String id, final IModel<String> model) {
-                super(id);
-                add(new ExternalLink("link", new AbstractReadOnlyModel<String>() {
-                    private static final long serialVersionUID = -2903758951408761993L;
-
-                    @Override
-                    public String getObject() {
-                        return "mailto:" + model.getObject();
-                    }
-                }, model));
-            }
+            item.add(new LinkPanel(componentId, dataModelUncast, dataModelCast, LinkType.email));
         }
     }
 
@@ -139,37 +121,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
         @Override
         public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
-            item.add(new LinkPanel(componentId, getDataModel(rowModel), getDisplayModel()));
-        }
-
-        private class LinkPanel extends Panel {
-            private static final long serialVersionUID = -7352081661850450279L;
-
-            public LinkPanel(String id, final IModel<Object> model, final IModel<String> labelModel) {
-                super(id);
-                AbstractReadOnlyModel<String> linkModel = new AbstractReadOnlyModel<String>() {
-                    private static final long serialVersionUID = 6336814546294579370L;
-
-                    @Override
-                    public String getObject() {
-                        Object object = model.getObject();
-                        if (object == null) {
-                            return null;
-                        }
-                        if (object instanceof String) {
-                            return String.class.cast(object);
-                        }
-                        if (object instanceof URL) {
-                            return URL.class.cast(object).toExternalForm();
-                        }
-                        if (object instanceof URI) {
-                            return URI.class.cast(object).toASCIIString();
-                        }
-                        throw new UnsupportedOperationException("type for url not supported: " + object.getClass().getName());
-                    }
-                };
-                add(new ExternalLink("link", linkModel, labelModel));
-            }
+            item.add(new LinkPanel(componentId, getDataModel(rowModel), getDisplayModel(), LinkType.url));
         }
     }
 
