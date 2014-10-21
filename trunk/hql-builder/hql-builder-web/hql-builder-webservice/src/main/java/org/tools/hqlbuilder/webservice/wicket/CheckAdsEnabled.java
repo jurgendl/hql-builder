@@ -11,36 +11,42 @@ import org.apache.wicket.request.resource.ResourceReference;
 public class CheckAdsEnabled extends Panel {
     private static final long serialVersionUID = -5845042169704523961L;
 
-    public static JavaScriptResourceReference JS = new JavaScriptResourceReference(CheckAdsEnabled.class, "CheckAdsEnabled.js");
+    public static JavaScriptResourceReference JS;
 
     public static final String IMG_NAME = "ads.gif";
 
-    public static PackageResourceReference IMG = new PackageResourceReference(CheckJavaScriptEnabled.class, IMG_NAME) {
-        private static final long serialVersionUID = 4214735061850976515L;
-
-        @Override
-        public String getName() {
-            return IMG_NAME;
-        }
-
-        @Override
-        protected String getMinifiedName() {
-            return getName();
-        };
-
-        @Override
-        public String getStyle() {
-            return null;
-        };
-
-        @Override
-        public String getVariation() {
-            return null;
-        };
-    };
+    public static PackageResourceReference IMG;
 
     static {
-        WebApplication.get().mountResource(IMG_NAME, IMG);
+        try {
+            JS = new JavaScriptResourceReference(CheckAdsEnabled.class, "CheckAdsEnabled.js");
+            IMG = new PackageResourceReference(CheckJavaScriptEnabled.class, IMG_NAME) {
+                private static final long serialVersionUID = 4214735061850976515L;
+
+                @Override
+                public String getName() {
+                    return IMG_NAME;
+                }
+
+                @Override
+                protected String getMinifiedName() {
+                    return getName();
+                };
+
+                @Override
+                public String getStyle() {
+                    return null;
+                };
+
+                @Override
+                public String getVariation() {
+                    return null;
+                };
+            };
+            WebApplication.get().mountResource(IMG_NAME, IMG);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public CheckAdsEnabled() {

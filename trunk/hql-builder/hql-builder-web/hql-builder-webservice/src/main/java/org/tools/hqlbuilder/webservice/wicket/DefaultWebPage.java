@@ -49,7 +49,11 @@ public class DefaultWebPage extends WebPage {
         // check if cookies are enabled
         add(new CheckCookiesEnabled());
         // check if ads are not blocked
-        add(new CheckAdsEnabled());
+        try {
+            add(new CheckAdsEnabled());
+        } catch (Throwable ex) {
+            add(new EmptyPanel("check.ads.enabled"));
+        }
         // add header response (javascript) down below on page
         add(new HeaderResponseContainer("footer-container", "footer-bucket"));
     }
