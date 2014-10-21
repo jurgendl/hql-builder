@@ -5,6 +5,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.tools.hqlbuilder.common.CommonUtils;
 
 public class WebHelper extends CommonUtils {
@@ -40,5 +41,15 @@ public class WebHelper extends CommonUtils {
         } else {
             tag.getAttributes().put(tagId, value);
         }
+    }
+
+    public static PageParameters clone(PageParameters pageParameters, String... ids) {
+        PageParameters pp = new PageParameters();
+        for (String id : ids) {
+            if (StringUtils.isNotBlank(pageParameters.get(id).toOptionalString())) {
+                pp.add(id, pageParameters.get(id).toOptionalString());
+            }
+        }
+        return pp;
     }
 }
