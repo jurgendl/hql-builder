@@ -42,6 +42,7 @@ import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -76,6 +77,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     protected String CSS_ODD = "ui-widget-content pui-datatable-odd ui-datatable-odd";
 
     protected AjaxFallbackButton addLink;
+
+    protected BottomToolbar bottomToolbar;
 
     public Table(Form<?> form, String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
         super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
@@ -174,7 +177,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     @Override
     public void addBottomToolbar(AbstractToolbar toolbar) {
-        super.addBottomToolbar(new BottomToolbar(this, getDataprovider()));
+        bottomToolbar = new BottomToolbar(this, getDataprovider());
+        super.addBottomToolbar(bottomToolbar);
     }
 
     @Override
@@ -258,7 +262,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    protected class HeadersToolbar extends AjaxFallbackHeadersToolbar<String> {
+    public class HeadersToolbar extends AjaxFallbackHeadersToolbar<String> {
         private static final long serialVersionUID = -8737070685949753385L;
 
         public HeadersToolbar(DataTable<?, String> table, ISortStateLocator<String> stateLocator) {
@@ -283,7 +287,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    protected class TopToolbar extends AjaxNavigationToolbar {
+    public class TopToolbar extends AjaxNavigationToolbar {
         private static final long serialVersionUID = 7871654433608259728L;
 
         public TopToolbar(final DataTable<T, String> table, @SuppressWarnings("unused") final DataProvider<T> dataProvider) {
@@ -296,7 +300,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    protected class PagingNavigator extends AjaxPagingNavigator {
+    public class PagingNavigator extends AjaxPagingNavigator {
         private static final long serialVersionUID = 1844950934466502565L;
 
         public PagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
@@ -374,7 +378,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    protected class BottomToolbar extends AbstractToolbar {
+    public class BottomToolbar extends AbstractToolbar {
         private static final long serialVersionUID = -8277730819874510969L;
 
         public BottomToolbar(final DataTable<T, String> table, final DataProvider<T> dataProvider) {
@@ -408,6 +412,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 }
             };
             td.add(addLink);
+
+            RepeatingView extraActions = new RepeatingView("extraActions");
+            td.add(extraActions);
         }
     }
 
@@ -524,5 +531,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         protected abstract void onSortChanged();
 
         protected abstract void onAjaxClick(final AjaxRequestTarget target);
+    }
+
+    public BottomToolbar getBottomToolbar() {
+        return this.bottomToolbar;
     }
 }
