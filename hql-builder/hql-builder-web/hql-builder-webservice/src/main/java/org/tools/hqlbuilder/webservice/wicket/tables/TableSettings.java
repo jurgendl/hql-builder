@@ -5,33 +5,47 @@ import java.io.Serializable;
 public class TableSettings implements Serializable {
     private static final long serialVersionUID = -2692137255417228253L;
 
-    private boolean add = true;
+    protected boolean add = true;
 
-    private boolean delete = true;
+    protected boolean delete = true;
 
-    private boolean edit = true;
+    protected boolean edit = true;
+
+    protected boolean stateless = false;
 
     public boolean isAdd() {
         return this.add;
     }
 
-    public void setAdd(boolean add) {
+    public TableSettings setAdd(boolean add) {
         this.add = add;
+        return this;
     }
 
     public boolean isDelete() {
         return this.delete;
     }
 
-    public void setDelete(boolean delete) {
+    public TableSettings setDelete(boolean delete) {
         this.delete = delete;
+        return this;
     }
 
     public boolean isEdit() {
         return this.edit;
     }
 
-    public void setEdit(boolean edit) {
+    public TableSettings setEdit(boolean edit) {
         this.edit = edit;
+        return this;
+    }
+
+    public boolean isStateless() {
+        return this.stateless;
+    }
+
+    public TableSettings setStateless(boolean stateless) {
+        this.stateless = stateless;
+        return this;
     }
 }
