@@ -11,32 +11,29 @@ import org.apache.wicket.model.IModel;
 public class LinkPanel extends Panel {
     public static final String LINK_ID = "link";
 
+    public static final String LABEL_ID = "label";
+
     public static enum LinkType {
         url, email;
     }
 
     private static final long serialVersionUID = -7352081661850450279L;
 
-    private LinkType linkType;
-
     public LinkPanel(String id, final IModel<Object> model, final IModel<String> labelModel, LinkType linkType) {
         super(id);
-        this.linkType = linkType;
-        add(getLink(model, labelModel));
-    }
-
-    protected AbstractLink getLink(final IModel<Object> model, final IModel<String> labelModel) {
         switch (linkType) {
             case email:
-                return getEmailLink(model, labelModel);
+                add(getEmailLink(model, labelModel));
+                break;
             default:
             case url:
-                return getURLLink(model, labelModel);
+                add(getURLLink(model, labelModel));
+                break;
         }
     }
 
     protected AbstractLink getURLLink(final IModel<Object> model, final IModel<String> labelModel) {
-        return new ExternalLink(LINK_ID, new AbstractReadOnlyModel<String>() {
+        ExternalLink externalLink = new ExternalLink(LINK_ID, new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = 6336814546294579370L;
 
             @Override
@@ -57,10 +54,11 @@ public class LinkPanel extends Panel {
                 throw new UnsupportedOperationException("type for url not supported: " + object.getClass().getName());
             }
         }, labelModel);
+        return externalLink;
     }
 
     protected AbstractLink getEmailLink(final IModel<Object> model, final IModel<String> labelModel) {
-        return new ExternalLink(LINK_ID, new AbstractReadOnlyModel<String>() {
+        ExternalLink externalLink = new ExternalLink(LINK_ID, new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -2903758951408761993L;
 
             @Override
@@ -68,5 +66,6 @@ public class LinkPanel extends Panel {
                 return "mailto:" + model.getObject();
             }
         }, labelModel);
+        return externalLink;
     }
 }
