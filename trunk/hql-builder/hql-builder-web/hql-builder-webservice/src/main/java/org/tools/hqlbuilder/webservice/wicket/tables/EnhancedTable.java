@@ -18,6 +18,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -45,7 +46,12 @@ public class EnhancedTable<T extends Serializable> extends Panel {
     public EnhancedTable(String id, List<IColumn<T, String>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
         super(id);
         setOutputMarkupId(true);
-        Form<?> form = new Form<Object>(FORM_ID);
+        Form<?> form;
+        if (settings.isStateless()) {
+            form = new StatelessForm<T>(FORM_ID);
+        } else {
+            form = new Form<T>(FORM_ID);
+        }
         add(form);
         table = new Table<T>(form, TABLE_ID, columns, dataProvider, settings);
         form.add(table);

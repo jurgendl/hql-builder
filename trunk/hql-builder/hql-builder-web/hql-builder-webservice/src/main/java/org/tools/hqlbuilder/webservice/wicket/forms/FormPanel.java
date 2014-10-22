@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -142,7 +143,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     public Form<T> getForm() {
         if (form == null) {
             getFormActions();
-            getFormSettings();
             IModel<T> formModel = new LoadableDetachableModel<T>() {
                 private static final long serialVersionUID = -5489467484161698560L;
 
@@ -151,16 +151,29 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     return getFormActions().loadObject();
                 }
             };
-            this.form = new Form<T>(FORM, formModel) {
-                private static final long serialVersionUID = -5899425422548211723L;
+            if (getFormSettings().isStateless()) {
+                this.form = new StatelessForm<T>(FORM, formModel) {
+                    private static final long serialVersionUID = -5855525240326128645L;
 
-                @Override
-                protected void onSubmit() {
-                    onBeforeSubmit();
-                    getFormActions().submitModel(getFormModel());
-                    onAfterSubmit();
-                }
-            };
+                    @Override
+                    protected void onSubmit() {
+                        onBeforeSubmit();
+                        getFormActions().submitModel(getFormModel());
+                        onAfterSubmit();
+                    }
+                };
+            } else {
+                this.form = new Form<T>(FORM, formModel) {
+                    private static final long serialVersionUID = -5899425422548211723L;
+
+                    @Override
+                    protected void onSubmit() {
+                        onBeforeSubmit();
+                        getFormActions().submitModel(getFormModel());
+                        onAfterSubmit();
+                    }
+                };
+            }
 
             if (Boolean.FALSE.equals(formSettings.getAutocomplete())) {
                 form.add(new AttributeModifier("autocomplete", "off"));
@@ -369,7 +382,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
