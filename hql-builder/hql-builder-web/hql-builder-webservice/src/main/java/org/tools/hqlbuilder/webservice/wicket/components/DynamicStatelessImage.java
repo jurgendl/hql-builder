@@ -30,4 +30,14 @@ public class DynamicStatelessImage extends Image {
             }
         });
     }
+
+    @Override
+    public IResource getImageResource() {
+        return super.getImageResource();
+    }
+
+    @Override
+    public ResourceReference getImageResourceReference() {
+        return super.getImageResourceReference();
+    }
 }
