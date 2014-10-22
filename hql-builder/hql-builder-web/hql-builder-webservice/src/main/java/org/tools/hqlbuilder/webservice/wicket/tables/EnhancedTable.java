@@ -126,20 +126,35 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         };
     }
 
-    public static Model<String> labelModel(Component parent, Object argument) {
+    public static IModel<String> labelModel(Component parent, Object argument) {
         String property = name(argument);
         return labelModel(parent, property);
     }
 
-    public static Model<String> labelModel(Component parent, String property) {
-        String label;
+    public static IModel<String> labelModel(final Component parent, final String property) {
+        IModel<String> label;
         try {
-            label = parent.getString(property);
+            label = new IModel<String>() {
+                @Override
+                public void detach() {
+                    //
+                }
+
+                @Override
+                public String getObject() {
+                    return parent.getString(property);
+                }
+
+                @Override
+                public void setObject(String object) {
+                    //
+                }
+            };
         } catch (MissingResourceException ex) {
             logger.error(parent.getClass().getName() + ": no translation for " + property);
-            label = "[" + property + "_" + parent.getLocale() + "]";
+            label = Model.of("[" + property + "_" + parent.getLocale() + "]");
         }
-        return new Model<String>(label);
+        return label;
     }
 
     public static <T extends Serializable> IColumn<T, String> getActionsColumn(Component parent, final DataProvider<T> provider,

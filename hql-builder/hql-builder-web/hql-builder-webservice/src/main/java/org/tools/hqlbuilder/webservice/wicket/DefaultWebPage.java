@@ -127,7 +127,7 @@ public class DefaultWebPage extends WebPage {
                 @Override
                 public void component(Component component, IVisit<Void> arg1) {
                     if (!component.isStateless()) {
-                        logger.error("Component " + component.getId() + " is not stateless");
+                        logger.error("Component " + component.getClass().getName() + " with id " + component.getId() + " is not stateless");
                     }
                 }
             });
