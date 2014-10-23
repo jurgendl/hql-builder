@@ -25,6 +25,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
+import org.tools.hqlbuilder.webservice.wicket.tables.TableColumnSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.TableSettings;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -114,11 +115,12 @@ public class RegistrationsPage extends BasePage {
 
     protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
-        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName()));
-        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName()));
-        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername()));
-        columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()));
-        columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()));
+        TableColumnSettings tcSet = new TableColumnSettings();
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName(), tcSet));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName(), tcSet));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername(), tcSet));
+        columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail(), tcSet));
+        columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth(), tcSet));
 
         TableSettings settings = new TableSettings();
         columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider, settings));
