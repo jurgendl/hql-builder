@@ -292,10 +292,14 @@
             };
 
             function getElementText(config, node) {
+            	
+                if (!node) return "";
+                
+		        var $node = $(node),
+		            data = $node.attr('data-sort-value');
+		        if (data !== undefined) return data;
 
                 var text = "";
-
-                if (!node) return "";
 
                 if (!config.supportsTextContent) config.supportsTextContent = node.textContent || false;
 
@@ -384,7 +388,7 @@
                 
                 var header_index = computeTableHeaderCellIndexes(table);
 
-                $tableHeaders = $(table.config.selectorHeaders, table).each(function (index) {
+                var $tableHeaders = $(table.config.selectorHeaders, table).each(function (index) {
 
                     this.column = header_index[this.parentNode.rowIndex + "-" + this.cellIndex];
                     // this.column = index;
@@ -576,6 +580,8 @@
             }
 
             /* sorting methods */
+            
+            var sortWrapper;
 
             function multisort(table, sortList, cache) {
 
@@ -583,7 +589,7 @@
                     var sortTime = new Date();
                 }
 
-                var dynamicExp = "var sortWrapper = function(a,b) {",
+                var dynamicExp = "sortWrapper = function(a,b) {",
                     l = sortList.length;
 
                 // TODO: inline functions.
@@ -860,11 +866,9 @@
             };
             this.clearTableBody = function (table) {
                 if ($.browser.msie) {
-                    function empty() {
-                        while (this.firstChild)
-                        this.removeChild(this.firstChild);
+                    while (table.tBodies[0].firstChild) {
+                        table.tBodies[0].removeChild(table.tBodies[0].firstChild);
                     }
-                    empty.apply(table.tBodies[0]);
                 } else {
                     table.tBodies[0].innerHTML = "";
                 }
@@ -976,6 +980,9 @@
             if (c.dateFormat == "us") {
                 // reformat the string in ISO format
                 s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/, "$3/$1/$2");
+            }    
+            if (c.dateFormat == "pt") {
+                s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/, "$3/$2/$1");   
             } else if (c.dateFormat == "uk") {
                 // reformat the string in ISO format
                 s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/, "$3/$2/$1");
