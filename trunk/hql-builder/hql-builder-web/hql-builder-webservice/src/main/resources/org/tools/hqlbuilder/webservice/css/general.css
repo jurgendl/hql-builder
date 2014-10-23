@@ -234,7 +234,7 @@ a[href$=jpg], a[href$=jpeg], a[href$=jpe], a[href$=png], a[href$=gif], a[href$=b
 	width: auto; /* needs to set fixed width */ 
 }
 
-/* ======================== sort arrows on tables ======================== */
+/* ======================== sort arrows on tables headers ======================== */
 .pui-sortable-column.wicket_orderUp span::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dd";
@@ -246,6 +246,22 @@ a[href$=jpg], a[href$=jpeg], a[href$=jpe], a[href$=png], a[href$=gif], a[href$=b
 .pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortable) span::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dc";
+}
+/* ======================== buttons in tables ======================== */
+.ui-button.delete::before {
+	font-family: 'FontAwesome';
+	content: "\f00d  ";
+	color: red;
+}
+.ui-button.edit::before {
+	font-family: 'FontAwesome';
+	content: "\f044  ";
+	color: green;
+}
+.ui-button.add::before {
+	font-family: 'FontAwesome';
+	content: "\f067  ";
+	color: blue;
 }
 
 /* ======================== text transformations ======================== */
