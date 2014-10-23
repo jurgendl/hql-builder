@@ -133,16 +133,17 @@ public class RegistrationsPage extends BasePage {
 			DefaultDataProvider<Registration> dataProvider) {
 		List<TableColumn<Registration>> columns = new ArrayList<TableColumn<Registration>>();
 
+		Side side = Side.client;
 		columns.add(EnhancedTable.<Registration> newColumn(this,
-				proxy.getFirstName()).setSorting(Side.client));
+				proxy.getFirstName()).setSorting(side));
 		columns.add(EnhancedTable.<Registration> newColumn(this,
-				proxy.getLastName()).setSorting(Side.client));
+				proxy.getLastName()).setSorting(side));
 		columns.add(EnhancedTable.<Registration> newColumn(this,
-				proxy.getUsername()).setSorting(Side.client));
+				proxy.getUsername()).setSorting(side));
 		columns.add(EnhancedTable.<Registration> newEmailColumn(this,
-				proxy.getEmail()).setSorting(Side.client));
+				proxy.getEmail()).setSorting(side));
 		columns.add(EnhancedTable.<Registration> newDateTimeColumn(this,
-				proxy.getDateOfBirth()).setSorting(Side.client));
+				proxy.getDateOfBirth()).setSorting(side));
 
 		TableSettings settings = new TableSettings();
 		columns.add(EnhancedTable.<Registration> getActionsColumn(this,
