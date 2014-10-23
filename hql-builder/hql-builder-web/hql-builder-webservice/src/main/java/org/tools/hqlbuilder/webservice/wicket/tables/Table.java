@@ -27,7 +27,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractTool
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -86,7 +85,7 @@ public class Table<T extends Serializable> extends
 
 	protected BottomToolbar bottomToolbar;
 
-	public Table(Form<?> form, String id, List<IColumn<T, String>> columns,
+	public Table(Form<?> form, String id, List<TableColumn<T>> columns,
 			final DataProvider<T> dataProvider, TableSettings settings) {
 		super(id, columns, new DelegateDataProvider<T>(form, dataProvider),
 				dataProvider.getRowsPerPage());
@@ -98,12 +97,13 @@ public class Table<T extends Serializable> extends
 		return (DataProvider<T>) getDataProvider();
 	}
 
-	protected static class EmailColumn<D> extends PropertyColumn<D, String> {
+	protected static class EmailColumn<D> extends TableColumn<D> {
 		private static final long serialVersionUID = 4634739390630581195L;
 
-		public EmailColumn(IModel<String> displayModel, String sortProperty,
+		public EmailColumn(IModel<String> displayModel,
 				String propertyExpression) {
-			super(displayModel, sortProperty, propertyExpression);
+			setDisplayModel(displayModel);
+			setPropertyExpression(propertyExpression);
 		}
 
 		@Override
@@ -118,12 +118,12 @@ public class Table<T extends Serializable> extends
 		}
 	}
 
-	public static class URLColumn<D> extends PropertyColumn<D, String> {
+	public static class URLColumn<D> extends TableColumn<D> {
 		private static final long serialVersionUID = -2998876473654238089L;
 
-		public URLColumn(IModel<String> displayModel, String sortProperty,
-				String propertyExpression) {
-			super(displayModel, sortProperty, propertyExpression);
+		public URLColumn(IModel<String> displayModel, String propertyExpression) {
+			setDisplayModel(displayModel);
+			setPropertyExpression(propertyExpression);
 		}
 
 		@Override
@@ -245,8 +245,8 @@ public class Table<T extends Serializable> extends
 		protected Item newCellItem(final String id, final int index,
 				final IModel model) {
 			Item item = Table.this.newCellItem(id, index, model);
-			final IColumn<T, String> column = Table.this.getColumns()
-					.get(index);
+			final TableColumn<T> column = (TableColumn<T>) Table.this
+					.getColumns().get(index);
 			if (column instanceof IStyledColumn) {
 				item.add(new CssAttributeBehavior() {
 					private static final long serialVersionUID = -8376202471270737937L;
@@ -318,7 +318,7 @@ public class Table<T extends Serializable> extends
 		private static final long serialVersionUID = 7871654433608259728L;
 
 		public TopToolbar(final DataTable<T, String> table,
-				@SuppressWarnings("unused") final DataProvider<T> dataProvider) {
+				final DataProvider<T> dataProvider) {
 			super(table);
 		}
 

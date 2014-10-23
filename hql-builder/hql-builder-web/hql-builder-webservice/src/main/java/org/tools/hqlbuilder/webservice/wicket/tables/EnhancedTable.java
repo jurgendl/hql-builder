@@ -5,10 +5,8 @@ import static org.tools.hqlbuilder.common.CommonUtils.name;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.apache.wicket.Component;
@@ -16,9 +14,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -49,13 +45,9 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 
 	protected final Table<T> table;
 
-	protected LinkedHashMap<IColumn<T, String>, TableColumnSettings> columns;
-
-	public EnhancedTable(String id,
-			LinkedHashMap<IColumn<T, String>, TableColumnSettings> columns,
+	public EnhancedTable(String id, List<TableColumn<T>> columns,
 			final DataProvider<T> dataProvider, TableSettings settings) {
 		super(id);
-		this.columns = columns;
 		setOutputMarkupId(true);
 		Form<?> form;
 		if (settings.isStateless()) {
@@ -64,8 +56,7 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 			form = new Form<T>(FORM_ID);
 		}
 		add(form);
-		table = new Table<T>(form, TABLE_ID, new ArrayList<IColumn<T, String>>(
-				columns.keySet()), dataProvider, settings);
+		table = new Table<T>(form, TABLE_ID, columns, dataProvider, settings);
 		form.add(table);
 	}
 
@@ -73,32 +64,23 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 		return this.table;
 	}
 
-	public static String getServerColumnSorting(Object argument,
-			TableColumnSettings settings) {
-		return settings.getSorting() == Side.server ? name(argument) : null;
+	public static <D> TableColumn<D> newColumn(Component parent, Object argument) {
+		return new TableColumn<D>(labelModel(parent, argument), name(argument));
 	}
 
-	public static <D> IColumn<D, String> newColumn(Component parent,
-			Object argument, TableColumnSettings settings) {
-		return new PropertyColumn<D, String>(labelModel(parent, argument),
-				getServerColumnSorting(argument, settings), name(argument));
-	}
-
-	public static <D> IColumn<D, String> newEmailColumn(Component parent,
-			Object argument, TableColumnSettings settings) {
-		return new EmailColumn<D>(labelModel(parent, argument),
-				getServerColumnSorting(argument, settings), name(argument));
+	public static <D> TableColumn<D> newEmailColumn(Component parent,
+			Object argument) {
+		return new EmailColumn<D>(labelModel(parent, argument), name(argument));
 	}
 
 	/** {@link URL}, {@link URI} and url as {@link String} supported */
-	public static <D> IColumn<D, String> newURLColumn(Component parent,
-			Object argument, TableColumnSettings settings) {
-		return new URLColumn<D>(labelModel(parent, argument),
-				getServerColumnSorting(argument, settings), name(argument));
+	public static <D> TableColumn<D> newURLColumn(Component parent,
+			Object argument) {
+		return new URLColumn<D>(labelModel(parent, argument), name(argument));
 	}
 
-	public static <D> IColumn<D, String> newTimeColumn(Component parent,
-			Object argument, TableColumnSettings settings) {
+	public static <D> TableColumn<D> newTimeColumn(Component parent,
+			Object argument) {
 		return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
 			@Override
 			protected DateTimeFormatter getFormat(Locale locale) {
@@ -109,11 +91,11 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 			public String getDatePattern(Locale locale) {
 				return getFormat(locale).toString();
 			}
-		}, settings);
+		});
 	}
 
-	public static <D> IColumn<D, String> newDateColumn(Component parent,
-			Object argument, TableColumnSettings settings) {
+	public static <D> TableColumn<D> newDateColumn(Component parent,
+			Object argument) {
 		return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
 			@Override
 			protected DateTimeFormatter getFormat(Locale locale) {
@@ -124,11 +106,11 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 			public String getDatePattern(Locale locale) {
 				return getFormat(locale).toString();
 			}
-		}, settings);
+		});
 	}
 
-	public static <D> IColumn<D, String> newDateTimeColumn(Component parent,
-			Object argument, TableColumnSettings settings) {
+	public static <D> TableColumn<D> newDateTimeColumn(Component parent,
+			Object argument) {
 		return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
 			@Override
 			protected DateTimeFormatter getFormat(Locale locale) {
@@ -139,14 +121,12 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 			public String getDatePattern(Locale locale) {
 				return getFormat(locale).toString();
 			}
-		}, settings);
+		});
 	}
 
-	public static <D> IColumn<D, String> newDateOrTimeColumn(Component parent,
-			Object argument, final DateConverter dateConverter,
-			TableColumnSettings settings) {
-		return new PropertyColumn<D, String>(labelModel(parent, argument),
-				getServerColumnSorting(argument, settings), name(argument)) {
+	public static <D> TableColumn<D> newDateOrTimeColumn(Component parent,
+			Object argument, final DateConverter dateConverter) {
+		return new TableColumn<D>(labelModel(parent, argument), name(argument)) {
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public void populateItem(Item<ICellPopulator<D>> item,
@@ -190,7 +170,7 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 		return label;
 	}
 
-	public static <T extends Serializable> IColumn<T, String> getActionsColumn(
+	public static <T extends Serializable> TableColumn<T> getActionsColumn(
 			Component parent, final DataProvider<T> provider,
 			final TableSettings settings) {
 		return new ActionsColumn<T>(labelModel(parent, ACTIONS_ID), provider,
@@ -206,16 +186,13 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 		// client column sorting
 		{
 			boolean anyClientSortable = false;
-			String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssHeader:'wicket_orderNone',cssAsc:'wicket_orderUp',cssDesc:'wicket_orderDown',headers:{";
+			String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp',headers:{";
 			int i = 0;
-			for (Map.Entry<IColumn<T, String>, TableColumnSettings> columnSettings : columns
-					.entrySet()) {
+			for (IColumn<T, String> column : getTable().getColumns()) {
 				if (i > 0) {
 					config += ",";
 				}
-				boolean clientSortable = !(columnSettings.getKey() instanceof ActionsColumn)
-						&& columnSettings.getValue() != null
-						&& columnSettings.getValue().getSorting() == Side.client;
+				boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
 				anyClientSortable |= clientSortable;
 				config += i + ":{sorter:" + clientSortable + "}";
 				i++;
@@ -226,19 +203,20 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 						.forReference(TableSorter.TABLE_SORTER_JS));
 				response.render(OnDomReadyHeaderItem.forScript("$('#"
 						+ getTable().getMarkupId() + "').tablesorter({"
-						+ config + "});;"));
+						+ config + "});"));
 			}
 		}
 	}
 
 	public static class ActionsColumn<T extends Serializable> extends
-			AbstractColumn<T, String> {
+			TableColumn<T> {
 		protected final DataProvider<T> provider;
+
 		protected final TableSettings settings;
 
 		public ActionsColumn(IModel<String> displayModel,
 				final DataProvider<T> provider, final TableSettings settings) {
-			super(displayModel);
+			setDisplayModel(displayModel);
 			this.provider = provider;
 			this.settings = settings;
 		}

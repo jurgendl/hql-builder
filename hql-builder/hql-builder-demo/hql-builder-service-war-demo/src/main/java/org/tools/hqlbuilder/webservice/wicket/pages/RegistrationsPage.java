@@ -3,14 +3,13 @@ package org.tools.hqlbuilder.webservice.wicket.pages;
 import static org.tools.hqlbuilder.common.CommonUtils.proxy;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -26,7 +25,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
 import org.tools.hqlbuilder.webservice.wicket.tables.Side;
-import org.tools.hqlbuilder.webservice.wicket.tables.TableColumnSettings;
+import org.tools.hqlbuilder.webservice.wicket.tables.TableColumn;
 import org.tools.hqlbuilder.webservice.wicket.tables.TableSettings;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -132,28 +131,22 @@ public class RegistrationsPage extends BasePage {
 
 	protected DefaultFormActions<Registration> initTable(Registration proxy,
 			DefaultDataProvider<Registration> dataProvider) {
-		LinkedHashMap<IColumn<Registration, String>, TableColumnSettings> columns = new LinkedHashMap<IColumn<Registration, String>, TableColumnSettings>();
-		TableColumnSettings tcSet = new TableColumnSettings().setFiltering(
-				Side.none).setSorting(Side.client);
-		columns.put(
-				EnhancedTable.<Registration> newColumn(this,
-						proxy.getFirstName(), tcSet), tcSet);
-		columns.put(
-				EnhancedTable.<Registration> newColumn(this,
-						proxy.getLastName(), tcSet), tcSet);
-		columns.put(
-				EnhancedTable.<Registration> newColumn(this,
-						proxy.getUsername(), tcSet), tcSet);
-		columns.put(
-				EnhancedTable.<Registration> newEmailColumn(this,
-						proxy.getEmail(), tcSet), tcSet);
-		columns.put(
-				EnhancedTable.<Registration> newDateTimeColumn(this,
-						proxy.getDateOfBirth(), tcSet), tcSet);
+		List<TableColumn<Registration>> columns = new ArrayList<TableColumn<Registration>>();
+
+		columns.add(EnhancedTable.<Registration> newColumn(this,
+				proxy.getFirstName()).setSorting(Side.client));
+		columns.add(EnhancedTable.<Registration> newColumn(this,
+				proxy.getLastName()).setSorting(Side.client));
+		columns.add(EnhancedTable.<Registration> newColumn(this,
+				proxy.getUsername()).setSorting(Side.client));
+		columns.add(EnhancedTable.<Registration> newEmailColumn(this,
+				proxy.getEmail()).setSorting(Side.client));
+		columns.add(EnhancedTable.<Registration> newDateTimeColumn(this,
+				proxy.getDateOfBirth()).setSorting(Side.client));
 
 		TableSettings settings = new TableSettings();
-		columns.put(EnhancedTable.<Registration> getActionsColumn(this,
-				dataProvider, settings), null);
+		columns.add(EnhancedTable.<Registration> getActionsColumn(this,
+				dataProvider, settings));
 		table = new EnhancedTable<Registration>("registrationstable", columns,
 				dataProvider, settings);
 
