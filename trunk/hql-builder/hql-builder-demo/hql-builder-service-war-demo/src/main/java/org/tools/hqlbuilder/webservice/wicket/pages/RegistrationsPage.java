@@ -11,6 +11,9 @@ import java.util.Map;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -19,12 +22,14 @@ import org.joda.time.LocalDateTime;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.demo.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
+import org.tools.hqlbuilder.webservice.jquery.ui.tablesorter.TableSorter;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
+import org.tools.hqlbuilder.webservice.wicket.tables.Side;
 import org.tools.hqlbuilder.webservice.wicket.tables.TableColumnSettings;
 import org.tools.hqlbuilder.webservice.wicket.tables.TableSettings;
 import org.wicketstuff.annotation.mount.MountPath;
@@ -50,10 +55,11 @@ public class RegistrationsPage extends BasePage {
     }
 
     protected DefaultDataProvider<Registration> initDataProvider() {
+        final int rows = 9999;
         DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
             @Override
             public int getRowsPerPage() {
-                return 2;
+                return rows;
             }
 
             @Override
@@ -109,13 +115,13 @@ public class RegistrationsPage extends BasePage {
                 }
             }
         };
-        dataProvider.setRowsPerPage(5);
+        dataProvider.setRowsPerPage(rows);
         return dataProvider;
     }
 
     protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
         List<IColumn<Registration, String>> columns = new ArrayList<IColumn<Registration, String>>();
-        TableColumnSettings tcSet = new TableColumnSettings();
+        TableColumnSettings tcSet = new TableColumnSettings().setFiltering(Side.none).setSorting(Side.client);
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName(), tcSet));
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName(), tcSet));
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername(), tcSet));
@@ -161,5 +167,25 @@ public class RegistrationsPage extends BasePage {
         formPanel.addDatePicker(proxy.getDateOfBirth(), new FormElementSettings(true));
         formPanel.addPasswordTextField(proxy.getPassword(), new FormElementSettings(true));
         formPanel.setVisible(false);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
+        String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssHeader:'wicket_orderNone',cssAsc:'wicket_orderUp',cssDesc:'wicket_orderDown',headers:{";
+        for (int i = 0; i < this.table.getTable().getColumns().size(); i++) {
+            if (i > 0) {
+                config += ",";
+            }
+            boolean sortable = false;
+            if (i >= 1 && i < (this.table.getTable().getColumns().size() - 1)) {
+                sortable = true;
+            }
+            config += i + ":{sorter:" + sortable + "}";
+        }
+        config += "}";
+        response.render(OnDomReadyHeaderItem.forScript("$('#" + this.table.getTable().getMarkupId() + "').tablesorter({" + config + "});;"));
+
     }
 }
