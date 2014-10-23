@@ -61,20 +61,24 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         return this.table;
     }
 
-    public static <D> IColumn<D, String> newColumn(Component parent, Object argument) {
-        return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument), name(argument));
+    public static String getColumnSorting(Object argument, TableColumnSettings settings) {
+        return settings.getSorting() == Side.server ? name(argument) : null;
     }
 
-    public static <D> IColumn<D, String> newEmailColumn(Component parent, Object argument) {
-        return new EmailColumn<D>(labelModel(parent, argument), name(argument));
+    public static <D> IColumn<D, String> newColumn(Component parent, Object argument, TableColumnSettings settings) {
+        return new PropertyColumn<D, String>(labelModel(parent, argument), getColumnSorting(argument, settings), name(argument));
+    }
+
+    public static <D> IColumn<D, String> newEmailColumn(Component parent, Object argument, TableColumnSettings settings) {
+        return new EmailColumn<D>(labelModel(parent, argument), getColumnSorting(argument, settings), name(argument));
     }
 
     /** {@link URL}, {@link URI} and url as {@link String} supported */
-    public static <D> IColumn<D, String> newURLColumn(Component parent, Object argument) {
-        return new URLColumn<D>(labelModel(parent, argument), name(argument));
+    public static <D> IColumn<D, String> newURLColumn(Component parent, Object argument, TableColumnSettings settings) {
+        return new URLColumn<D>(labelModel(parent, argument), getColumnSorting(argument, settings), name(argument));
     }
 
-    public static <D> IColumn<D, String> newTimeColumn(Component parent, Object argument) {
+    public static <D> IColumn<D, String> newTimeColumn(Component parent, Object argument, TableColumnSettings settings) {
         return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
             @Override
             protected DateTimeFormatter getFormat(Locale locale) {
@@ -85,10 +89,10 @@ public class EnhancedTable<T extends Serializable> extends Panel {
             public String getDatePattern(Locale locale) {
                 return getFormat(locale).toString();
             }
-        });
+        }, settings);
     }
 
-    public static <D> IColumn<D, String> newDateColumn(Component parent, Object argument) {
+    public static <D> IColumn<D, String> newDateColumn(Component parent, Object argument, TableColumnSettings settings) {
         return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
             @Override
             protected DateTimeFormatter getFormat(Locale locale) {
@@ -99,10 +103,10 @@ public class EnhancedTable<T extends Serializable> extends Panel {
             public String getDatePattern(Locale locale) {
                 return getFormat(locale).toString();
             }
-        });
+        }, settings);
     }
 
-    public static <D> IColumn<D, String> newDateTimeColumn(Component parent, Object argument) {
+    public static <D> IColumn<D, String> newDateTimeColumn(Component parent, Object argument, TableColumnSettings settings) {
         return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
             @Override
             protected DateTimeFormatter getFormat(Locale locale) {
@@ -113,11 +117,12 @@ public class EnhancedTable<T extends Serializable> extends Panel {
             public String getDatePattern(Locale locale) {
                 return getFormat(locale).toString();
             }
-        });
+        }, settings);
     }
 
-    public static <D> IColumn<D, String> newDateOrTimeColumn(Component parent, Object argument, final DateConverter dateConverter) {
-        return new PropertyColumn<D, String>(labelModel(parent, argument), name(argument), name(argument)) {
+    public static <D> IColumn<D, String> newDateOrTimeColumn(Component parent, Object argument, final DateConverter dateConverter,
+            TableColumnSettings settings) {
+        return new PropertyColumn<D, String>(labelModel(parent, argument), getColumnSorting(argument, settings), name(argument)) {
             @SuppressWarnings({ "unchecked", "rawtypes" })
             @Override
             public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
