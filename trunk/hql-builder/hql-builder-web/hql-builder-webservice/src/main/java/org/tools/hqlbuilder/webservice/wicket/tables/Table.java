@@ -26,7 +26,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -226,17 +225,17 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         protected Item newCellItem(final String id, final int index, final IModel model) {
             Item item = Table.this.newCellItem(id, index, model);
-            final TableColumn<T> column = (TableColumn<T>) Table.this.getColumns().get(index);
-            if (column instanceof IStyledColumn) {
-                item.add(new CssAttributeBehavior() {
-                    private static final long serialVersionUID = -8376202471270737937L;
-
-                    @Override
-                    protected String getCssClass() {
-                        return ((IStyledColumn<T, String>) column).getCssClass();
-                    }
-                });
-            }
+            // final TableColumn<T> column = (TableColumn<T>) Table.this.getColumns().get(index);
+            // if (column instanceof IStyledColumn) {
+            // item.add(new CssAttributeBehavior() {
+            // private static final long serialVersionUID = -8376202471270737937L;
+            //
+            // @Override
+            // protected String getCssClass() {
+            // return ((IStyledColumn<T, String>) column).getCssClass();
+            // }
+            // });
+            // }
             return item;
         }
 

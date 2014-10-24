@@ -173,18 +173,16 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         // client column sorting
         {
             boolean anyClientSortable = false;
+            boolean addComma = false;
             String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp',headers:{";
             int i = 0;
             for (IColumn<T, String> column : getTable().getColumns()) {
                 boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
                 if (!clientSortable) {
-                    if (anyClientSortable) {
-                        config += ",";
-                    } else {
-                        anyClientSortable = true;
-                    }
-                    config += i + ":{sorter:false}";
+                    config += (addComma ? "," : "") + i + ":{sorter:false}";
+                    addComma = true;
                 }
+                anyClientSortable |= clientSortable;
                 i++;
             }
             config += "}";
