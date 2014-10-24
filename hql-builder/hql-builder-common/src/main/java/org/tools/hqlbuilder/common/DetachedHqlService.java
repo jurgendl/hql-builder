@@ -65,7 +65,7 @@ public class DetachedHqlService extends DelegatingHqlService {
      * collection
      */
     public void cleanObject(Object listObj, HashSet visitedBeansSet) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException,
-    InstantiationException, InvocationTargetException {
+            InstantiationException, InvocationTargetException {
         if (visitedBeansSet == null) {
             visitedBeansSet = new HashSet();
         }
@@ -110,7 +110,7 @@ public class DetachedHqlService extends DelegatingHqlService {
      * Remove the un-initialized proxies from the given object
      */
     private void processBean(Object objBean, HashSet visitedBeans) throws IllegalAccessException, IllegalArgumentException, ClassNotFoundException,
-    InstantiationException, InvocationTargetException {
+            InstantiationException, InvocationTargetException {
         Class tmpClass = objBean.getClass();
         Field[] classFields = null;
         while (tmpClass != null && tmpClass != baseBeanClass && tmpClass != Object.class) {
@@ -121,7 +121,7 @@ public class DetachedHqlService extends DelegatingHqlService {
     }
 
     private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans) throws ClassNotFoundException, IllegalArgumentException,
-    IllegalAccessException, InstantiationException, InvocationTargetException {
+            IllegalAccessException, InstantiationException, InvocationTargetException {
         boolean accessModifierFlag = false;
         for (int z = 0; z < classFields.length; z++) {
             Field field = classFields[z];

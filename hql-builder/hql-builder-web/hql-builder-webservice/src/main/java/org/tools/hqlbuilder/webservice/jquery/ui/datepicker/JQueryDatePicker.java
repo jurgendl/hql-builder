@@ -20,6 +20,6 @@ public class JQueryDatePicker {
 
     public static JavaScriptResourceReference i18n(Locale locale) {
         return new JavaScriptResourceReference(JQueryDatePicker.class, RESOURCE_I18N_PATH + "datepicker.js", locale, null, null)
-        .addJavaScriptResourceReferenceDependency(DATEPICKER_JS);
+                .addJavaScriptResourceReferenceDependency(DATEPICKER_JS);
     }
 }

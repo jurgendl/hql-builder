@@ -58,13 +58,13 @@ public class ClientUtils extends CommonUtils {
         ResultType returnValue = CustomizableOptionPane.showCustomDialog(parent, container, title, MessageType.QUESTION, OptionType.OK_CANCEL, null,
                 new ListOptionPaneCustomizer<V>(list) {
 
-            @Override
-            public void customize(Component parentComponent, MessageType messageType, OptionType optionType, final JOptionPane pane,
-                    final JDialog dialog) {
-                super.customize(parentComponent, messageType, optionType, pane, dialog);
-                dialog.getRootPane().setDefaultButton(null);
-            }
-        });
+                    @Override
+                    public void customize(Component parentComponent, MessageType messageType, OptionType optionType, final JOptionPane pane,
+                            final JDialog dialog) {
+                        super.customize(parentComponent, messageType, optionType, pane, dialog);
+                        dialog.getRootPane().setDefaultButton(null);
+                    }
+                });
 
         return returnValue != ResultType.OK ? null : list.getSelectedRecord() == null ? null : list.getSelectedRecord().get();
     }

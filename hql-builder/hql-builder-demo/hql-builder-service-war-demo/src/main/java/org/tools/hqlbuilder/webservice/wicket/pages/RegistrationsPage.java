@@ -32,166 +32,134 @@ import org.wicketstuff.annotation.mount.MountPath;
 @SuppressWarnings("serial")
 @MountPath("/form/registrations")
 public class RegistrationsPage extends BasePage {
-	@SpringBean
-	private HqlWebServiceClient hqlWebClient;
+    @SpringBean
+    private HqlWebServiceClient hqlWebClient;
 
-	private FormPanel<Registration> formPanel;
+    private FormPanel<Registration> formPanel;
 
-	private EnhancedTable<Registration> table;
+    private EnhancedTable<Registration> table;
 
-	public RegistrationsPage(PageParameters parameters) {
-		super(parameters);
-		Registration proxy = proxy(Registration.class);
-		DefaultDataProvider<Registration> dataProvider = initDataProvider();
-		DefaultFormActions<Registration> formActions = initTable(proxy,
-				dataProvider);
-		add(table);
-		initForm(proxy, formActions);
-		add(formPanel);
-	}
+    public RegistrationsPage(PageParameters parameters) {
+        super(parameters);
+        Registration proxy = proxy(Registration.class);
+        DefaultDataProvider<Registration> dataProvider = initDataProvider();
+        DefaultFormActions<Registration> formActions = initTable(proxy, dataProvider);
+        add(table);
+        initForm(proxy, formActions);
+        add(formPanel);
+    }
 
-	protected DefaultDataProvider<Registration> initDataProvider() {
-		final int rows = 9999;
-		DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
-			@Override
-			public int getRowsPerPage() {
-				return rows;
-			}
+    protected DefaultDataProvider<Registration> initDataProvider() {
+        final int rows = 9999;
+        DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
+            @Override
+            public int getRowsPerPage() {
+                return rows;
+            }
 
-			@Override
-			@SuppressWarnings("unchecked")
-			public Iterator<Registration> select(long first, long count,
-					Map<String, SortOrder> sorting) {
-				String hql = "select obj from "
-						+ Registration.class.getSimpleName() + " obj";
-				String orderByHql = " order by ";
-				for (Map.Entry<String, SortOrder> sortEntry : sorting
-						.entrySet()) {
-					if (sortEntry.getValue() != null
-							&& sortEntry.getValue() != SortOrder.NONE) {
-						orderByHql += "obj."
-								+ sortEntry.getKey()
-								+ " "
-								+ (sortEntry.getValue() == SortOrder.ASCENDING ? "asc"
-										: "desc") + ", ";
-					}
-				}
-				if (!" order by ".equals(orderByHql)) {
-					hql += orderByHql.substring(0, orderByHql.length() - 2);
-				}
-				QueryParameters query = new QueryParameters().setHql(hql)
-						.setFirst((int) first).setMax((int) count);
-				Iterator<Serializable> iterator = hqlWebClient.execute(query)
-						.getResults().getValue().iterator();
-				return Iterator.class.cast(iterator);
-			}
+            @Override
+            @SuppressWarnings("unchecked")
+            public Iterator<Registration> select(long first, long count, Map<String, SortOrder> sorting) {
+                String hql = "select obj from " + Registration.class.getSimpleName() + " obj";
+                String orderByHql = " order by ";
+                for (Map.Entry<String, SortOrder> sortEntry : sorting.entrySet()) {
+                    if (sortEntry.getValue() != null && sortEntry.getValue() != SortOrder.NONE) {
+                        orderByHql += "obj." + sortEntry.getKey() + " " + (sortEntry.getValue() == SortOrder.ASCENDING ? "asc" : "desc") + ", ";
+                    }
+                }
+                if (!" order by ".equals(orderByHql)) {
+                    hql += orderByHql.substring(0, orderByHql.length() - 2);
+                }
+                QueryParameters query = new QueryParameters().setHql(hql).setFirst((int) first).setMax((int) count);
+                Iterator<Serializable> iterator = hqlWebClient.execute(query).getResults().getValue().iterator();
+                return Iterator.class.cast(iterator);
+            }
 
-			@Override
-			public long size() {
-				String hql = "select count(obj.id) from "
-						+ Registration.class.getSimpleName() + " obj";
-				List<Serializable> value = hqlWebClient
-						.execute(new QueryParameters().setHql(hql))
-						.getResults().getValue();
-				return Long.parseLong(String.valueOf(value.get(0)));
-			}
+            @Override
+            public long size() {
+                String hql = "select count(obj.id) from " + Registration.class.getSimpleName() + " obj";
+                List<Serializable> value = hqlWebClient.execute(new QueryParameters().setHql(hql)).getResults().getValue();
+                return Long.parseLong(String.valueOf(value.get(0)));
+            }
 
-			@Override
-			public void delete(AjaxRequestTarget target, Registration object) {
-				hqlWebClient.delete(object);
-				if (target != null) {
-					target.add(table);
-				}
-			}
+            @Override
+            public void delete(AjaxRequestTarget target, Registration object) {
+                hqlWebClient.delete(object);
+                if (target != null) {
+                    target.add(table);
+                }
+            }
 
-			@Override
-			public void edit(AjaxRequestTarget target, Registration object) {
-				formPanel.setVisible(true);
-				formPanel.getFormModel().setObject(object);
-				if (target != null) {
-					target.add(formPanel);
-				}
-			}
+            @Override
+            public void edit(AjaxRequestTarget target, Registration object) {
+                formPanel.setVisible(true);
+                formPanel.getFormModel().setObject(object);
+                if (target != null) {
+                    target.add(formPanel);
+                }
+            }
 
-			@Override
-			public void add(AjaxRequestTarget target) {
-				formPanel.setVisible(true);
-				formPanel.getFormModel().setObject(new Registration());
-				if (target != null) {
-					target.add(formPanel);
-					@SuppressWarnings({ "unused", "unchecked" })
-					Form<Registration> form = (Form<Registration>) formPanel
-							.get(FormPanel.FORM);
-				}
-			}
-		};
-		dataProvider.setRowsPerPage(rows);
-		return dataProvider;
-	}
+            @Override
+            public void add(AjaxRequestTarget target) {
+                formPanel.setVisible(true);
+                formPanel.getFormModel().setObject(new Registration());
+                if (target != null) {
+                    target.add(formPanel);
+                    @SuppressWarnings({ "unused", "unchecked" })
+                    Form<Registration> form = (Form<Registration>) formPanel.get(FormPanel.FORM);
+                }
+            }
+        };
+        dataProvider.setRowsPerPage(rows);
+        return dataProvider;
+    }
 
-	protected DefaultFormActions<Registration> initTable(Registration proxy,
-			DefaultDataProvider<Registration> dataProvider) {
-		List<TableColumn<Registration>> columns = new ArrayList<TableColumn<Registration>>();
-		TableSettings settings = new TableSettings();
-		Side side = Side.client;
-		columns.add(EnhancedTable.<Registration> newColumn(this,
-				proxy.getFirstName()).setSorting(side));
-		columns.add(EnhancedTable.<Registration> newColumn(this,
-				proxy.getLastName()).setSorting(side));
-		columns.add(EnhancedTable.<Registration> newColumn(this,
-				proxy.getUsername()).setSorting(side));
-		columns.add(EnhancedTable.<Registration> newEmailColumn(this,
-				proxy.getEmail()).setSorting(side));
-		columns.add(EnhancedTable.<Registration> newDateTimeColumn(this,
-				proxy.getDateOfBirth()).setSorting(side));
-		columns.add(EnhancedTable.<Registration> getActionsColumn(this,
-				dataProvider, settings));
-		table = new EnhancedTable<Registration>("registrationstable", columns,
-				dataProvider, settings);
+    protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
+        List<TableColumn<Registration>> columns = new ArrayList<TableColumn<Registration>>();
+        TableSettings settings = new TableSettings();
+        Side side = Side.client;
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName()).setSorting(side));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName()).setSorting(side));
+        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername()).setSorting(side));
+        columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()).setSorting(side));
+        columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()).setSorting(side));
+        columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider, settings));
+        table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider, settings);
 
-		DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
-			@Override
-			public void submitModel(IModel<Registration> model) {
-				Registration object = model.getObject();
-				object.setVerification(new LocalDateTime());
-				Serializable id = hqlWebClient.save(object);
-				object = hqlWebClient.get(object.getClass(), id);
-				model.setObject(object);
-			}
+        DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
+            @Override
+            public void submitModel(IModel<Registration> model) {
+                Registration object = model.getObject();
+                object.setVerification(new LocalDateTime());
+                Serializable id = hqlWebClient.save(object);
+                object = hqlWebClient.get(object.getClass(), id);
+                model.setObject(object);
+            }
 
-			@Override
-			public void afterSubmit(AjaxRequestTarget target,
-					Form<Registration> form, IModel<Registration> model) {
-				formPanel.getFormModel().setObject(new Registration());
-				formPanel.setVisible(false);
-				table.setVisible(true);
-				if (target != null) {
-					target.add(formPanel);
-					target.add(table);
-				}
-			}
-		};
+            @Override
+            public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
+                formPanel.getFormModel().setObject(new Registration());
+                formPanel.setVisible(false);
+                table.setVisible(true);
+                if (target != null) {
+                    target.add(formPanel);
+                    target.add(table);
+                }
+            }
+        };
 
-		return formActions;
-	}
+        return formActions;
+    }
 
-	protected void initForm(Registration proxy,
-			DefaultFormActions<Registration> formActions) {
-		formPanel = new FormPanel<Registration>("registrationform",
-				formActions, new FormSettings().setLiveValidation(true)
-						.setAjax(true).setInheritId(true));
-		formPanel.addTextField(proxy.getUsername(), new FormElementSettings(
-				true));
-		formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(
-				true));
-		formPanel.addTextField(proxy.getLastName(), new FormElementSettings(
-				true));
-		formPanel.addEmailTextField(proxy.getEmail(), new FormElementSettings(
-				true));
-		formPanel.addDatePicker(proxy.getDateOfBirth(),
-				new FormElementSettings(true));
-		formPanel.addPasswordTextField(proxy.getPassword(),
-				new FormElementSettings(true));
-		formPanel.setVisible(false);
-	}
+    protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
+        formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setLiveValidation(true).setAjax(true)
+                .setInheritId(true));
+        formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
+        formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));
+        formPanel.addEmailTextField(proxy.getEmail(), new FormElementSettings(true));
+        formPanel.addDatePicker(proxy.getDateOfBirth(), new FormElementSettings(true));
+        formPanel.addPasswordTextField(proxy.getPassword(), new FormElementSettings(true));
+        formPanel.setVisible(false);
+    }
 }
