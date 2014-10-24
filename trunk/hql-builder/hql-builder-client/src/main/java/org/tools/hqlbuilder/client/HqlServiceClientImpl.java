@@ -37,7 +37,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             "and",
             "or",
             "group by",
-    "order by" };
+            "order by" };
 
     /** when cleaning up HQL: replace key by value */
     private Map<String, String> hqlReplacers = new HashMap<String, String>();

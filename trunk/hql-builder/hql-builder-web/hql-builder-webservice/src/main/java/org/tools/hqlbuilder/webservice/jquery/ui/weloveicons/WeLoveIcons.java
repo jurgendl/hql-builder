@@ -14,7 +14,7 @@ public class WeLoveIcons {
     public static CssResourceReference WE_LOVE_ICONS_CSS = new CssResourceReference(WeLoveIcons.class, "weloveiconfonts.css");
 
     public static CssResourceReference WE_LOVE_ICONS_SOCIAL_CSS = new CssResourceReference(WeLoveIcons.class, "weloveiconfonts-social.css")
-    .addCssResourceReferenceDependency(WE_LOVE_ICONS_CSS);
+            .addCssResourceReferenceDependency(WE_LOVE_ICONS_CSS);
 
     public static CssResourceReference SOCIAL_COLORS_CSS = new CssResourceReference(WeLoveIcons.class, "socialcolors.css");
 
@@ -42,7 +42,7 @@ public class WeLoveIcons {
                     "maki",
                     "openwebicons",
                     "typicons",
-            "zocial" };
+                    "zocial" };
             for (String t : type) {
                 System.out.println("public static enum " + Character.toUpperCase(t.charAt(0)) + t.substring(1) + " {");
                 Matcher matcher = Pattern.compile("class=\"" + t + "-[^\"]+\"").matcher(html);

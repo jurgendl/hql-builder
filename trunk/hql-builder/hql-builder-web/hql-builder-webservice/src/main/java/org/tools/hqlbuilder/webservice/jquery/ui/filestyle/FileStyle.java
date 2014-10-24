@@ -11,5 +11,5 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
  */
 public class FileStyle {
     public static JavaScriptResourceReference FILESTYLE_JS = new JavaScriptResourceReference(FileStyle.class, "bootstrap-filestyle.js")
-    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 }

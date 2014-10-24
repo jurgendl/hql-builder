@@ -30,11 +30,11 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
         @Override
         public int compare(Locale o1, Locale o2) {
             return new CompareToBuilder()//
-            .append(o1.getDisplayLanguage(o1).toLowerCase(), o2.getDisplayLanguage(o2).toLowerCase())//
-            .append(o1.getDisplayCountry(o1).toLowerCase(), o2.getDisplayCountry(o2).toLowerCase())//
-            .append(o1.getDisplayVariant(o1).toLowerCase(), o2.getDisplayVariant(o2).toLowerCase())//
-            .append(o1.getDisplayScript(o1).toLowerCase(), o2.getDisplayScript(o2).toLowerCase())//
-            .toComparison();//
+                    .append(o1.getDisplayLanguage(o1).toLowerCase(), o2.getDisplayLanguage(o2).toLowerCase())//
+                    .append(o1.getDisplayCountry(o1).toLowerCase(), o2.getDisplayCountry(o2).toLowerCase())//
+                    .append(o1.getDisplayVariant(o1).toLowerCase(), o2.getDisplayVariant(o2).toLowerCase())//
+                    .append(o1.getDisplayScript(o1).toLowerCase(), o2.getDisplayScript(o2).toLowerCase())//
+                    .toComparison();//
         }
     }
 
@@ -131,7 +131,7 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
                     add = true;
                 }
                 script.append("{ label: '").append(getLabel(locale)).append("' , value: '").append(getId(locale)).append("' , country: '")
-                .append(locale.getCountry().toLowerCase()).append("' }");
+                        .append(locale.getCountry().toLowerCase()).append("' }");
                 script.append("\n");
             }
             script.append(");\n");
@@ -140,9 +140,9 @@ public class LocalesDropDown extends DropDownChoice<Locale> {
         {
             StringBuilder script = new StringBuilder();
             script.append("$('#").append(getMarkupId()).append("').text('').puidropdown({ filter: true, filterMatchMode: 'contains', data: options_")
-            .append(getMarkupId())
-            .append(", content: function(option) { return '<img class=\"flag flag-' + option['country'] + '\"/> ' + option['label']; } ")
-            .append("}).puidropdown('selectValue', '" + getId(getModel().getObject()) + "');\n");
+                    .append(getMarkupId())
+                    .append(", content: function(option) { return '<img class=\"flag flag-' + option['country'] + '\"/> ' + option['label']; } ")
+                    .append("}).puidropdown('selectValue', '" + getId(getModel().getObject()) + "');\n");
             response.render(OnLoadHeaderItem.forScript(script.toString()));
         }
     }

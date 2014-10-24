@@ -83,11 +83,11 @@ public class LogInPanel extends Panel {
         @Override
         protected CharSequence getActionUrl() {
             return getRequest().getContextPath() + webProperties.getProperty("login")
-                    // + "?"
-                    // + webProperties.getProperty("returnto.propertyname") + "="
-                    // + ((org.apache.wicket.protocol.http.servlet.ServletWebRequest) getRequest()).getContainerRequest().getRequestURL()
-                    // + super.getActionUrl()
-                    ;
+            // + "?"
+            // + webProperties.getProperty("returnto.propertyname") + "="
+            // + ((org.apache.wicket.protocol.http.servlet.ServletWebRequest) getRequest()).getContainerRequest().getRequestURL()
+            // + super.getActionUrl()
+            ;
         }
     }
 }

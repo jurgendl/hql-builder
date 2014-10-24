@@ -52,7 +52,7 @@ public class JQueryValidation {
     public static final String PATH_LOCALIZATION_METHODS_JS = "localization/methods.js";
 
     public static JavaScriptResourceReference VALIDATION_JS = new JavaScriptResourceReference(JQueryValidation.class, PATH_JQUERY_VALIDATE_JS)
-    .addJavaScriptResourceReferenceDependency(JQueryForm.FORM_JS);
+            .addJavaScriptResourceReferenceDependency(JQueryForm.FORM_JS);
 
     public static JavaScriptResourceReference VALIDATION_ADDITIONAL_JS = new JavaScriptResourceReference(JQueryValidation.class,
             PATH_ADDITIONAL_METHODS_JS).addJavaScriptResourceReferenceDependency(VALIDATION_JS);

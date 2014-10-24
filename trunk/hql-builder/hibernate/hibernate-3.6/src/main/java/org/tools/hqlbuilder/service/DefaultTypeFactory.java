@@ -4,8 +4,8 @@ import org.hibernate.type.Type;
 
 @SuppressWarnings("rawtypes")
 public class DefaultTypeFactory {
-	private static org.hibernate.type.TypeResolver typeResolver = new org.hibernate.type.TypeResolver();
-	
+    private static org.hibernate.type.TypeResolver typeResolver = new org.hibernate.type.TypeResolver();
+
     public static Type resolve(String name) {
         return typeResolver.basic(name);
     }

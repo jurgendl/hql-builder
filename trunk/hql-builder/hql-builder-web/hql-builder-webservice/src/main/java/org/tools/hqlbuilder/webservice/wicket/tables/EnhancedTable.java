@@ -35,211 +35,192 @@ import org.tools.hqlbuilder.webservice.wicket.tables.Table.URLColumn;
 
 @SuppressWarnings("serial")
 public class EnhancedTable<T extends Serializable> extends Panel {
-	private static final Logger logger = LoggerFactory.getLogger(Table.class);
+    private static final Logger logger = LoggerFactory.getLogger(Table.class);
 
-	public static final String FORM_ID = "tableform";
+    public static final String FORM_ID = "tableform";
 
-	public static final String TABLE_ID = "table";
+    public static final String TABLE_ID = "table";
 
-	public static final String ACTIONS_ID = "table.actions";
+    public static final String ACTIONS_ID = "table.actions";
 
-	protected final Table<T> table;
+    protected final Table<T> table;
 
-	public EnhancedTable(String id, List<TableColumn<T>> columns,
-			final DataProvider<T> dataProvider, TableSettings settings) {
-		super(id);
-		setOutputMarkupId(true);
-		Form<?> form;
-		if (settings.isStateless()) {
-			form = new StatelessForm<T>(FORM_ID);
-		} else {
-			form = new Form<T>(FORM_ID);
-		}
-		add(form);
-		table = new Table<T>(form, TABLE_ID, columns, dataProvider, settings);
-		form.add(table);
-	}
+    public EnhancedTable(String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
+        super(id);
+        setOutputMarkupId(true);
+        Form<?> form;
+        if (settings.isStateless()) {
+            form = new StatelessForm<T>(FORM_ID);
+        } else {
+            form = new Form<T>(FORM_ID);
+        }
+        add(form);
+        table = new Table<T>(form, TABLE_ID, columns, dataProvider, settings);
+        form.add(table);
+    }
 
-	public Table<T> getTable() {
-		return this.table;
-	}
+    public Table<T> getTable() {
+        return this.table;
+    }
 
-	public static <D> TableColumn<D> newColumn(Component parent, Object argument) {
-		return new TableColumn<D>(labelModel(parent, argument), name(argument));
-	}
+    public static <D> TableColumn<D> newColumn(Component parent, Object argument) {
+        return new TableColumn<D>(labelModel(parent, argument), name(argument));
+    }
 
-	public static <D> TableColumn<D> newEmailColumn(Component parent,
-			Object argument) {
-		return new EmailColumn<D>(labelModel(parent, argument), name(argument));
-	}
+    public static <D> TableColumn<D> newEmailColumn(Component parent, Object argument) {
+        return new EmailColumn<D>(labelModel(parent, argument), name(argument));
+    }
 
-	/** {@link URL}, {@link URI} and url as {@link String} supported */
-	public static <D> TableColumn<D> newURLColumn(Component parent,
-			Object argument) {
-		return new URLColumn<D>(labelModel(parent, argument), name(argument));
-	}
+    /** {@link URL}, {@link URI} and url as {@link String} supported */
+    public static <D> TableColumn<D> newURLColumn(Component parent, Object argument) {
+        return new URLColumn<D>(labelModel(parent, argument), name(argument));
+    }
 
-	public static <D> TableColumn<D> newTimeColumn(Component parent,
-			Object argument) {
-		return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
-			@Override
-			protected DateTimeFormatter getFormat(Locale locale) {
-				return DateTimeFormat.longTime().withLocale(locale);
-			}
+    public static <D> TableColumn<D> newTimeColumn(Component parent, Object argument) {
+        return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
+            @Override
+            protected DateTimeFormatter getFormat(Locale locale) {
+                return DateTimeFormat.longTime().withLocale(locale);
+            }
 
-			@Override
-			public String getDatePattern(Locale locale) {
-				return getFormat(locale).toString();
-			}
-		});
-	}
+            @Override
+            public String getDatePattern(Locale locale) {
+                return getFormat(locale).toString();
+            }
+        });
+    }
 
-	public static <D> TableColumn<D> newDateColumn(Component parent,
-			Object argument) {
-		return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
-			@Override
-			protected DateTimeFormatter getFormat(Locale locale) {
-				return DateTimeFormat.longDate().withLocale(locale);
-			}
+    public static <D> TableColumn<D> newDateColumn(Component parent, Object argument) {
+        return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
+            @Override
+            protected DateTimeFormatter getFormat(Locale locale) {
+                return DateTimeFormat.longDate().withLocale(locale);
+            }
 
-			@Override
-			public String getDatePattern(Locale locale) {
-				return getFormat(locale).toString();
-			}
-		});
-	}
+            @Override
+            public String getDatePattern(Locale locale) {
+                return getFormat(locale).toString();
+            }
+        });
+    }
 
-	public static <D> TableColumn<D> newDateTimeColumn(Component parent,
-			Object argument) {
-		return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
-			@Override
-			protected DateTimeFormatter getFormat(Locale locale) {
-				return DateTimeFormat.longDateTime().withLocale(locale);
-			}
+    public static <D> TableColumn<D> newDateTimeColumn(Component parent, Object argument) {
+        return newDateOrTimeColumn(parent, argument, new DateConverter(true) {
+            @Override
+            protected DateTimeFormatter getFormat(Locale locale) {
+                return DateTimeFormat.longDateTime().withLocale(locale);
+            }
 
-			@Override
-			public String getDatePattern(Locale locale) {
-				return getFormat(locale).toString();
-			}
-		});
-	}
+            @Override
+            public String getDatePattern(Locale locale) {
+                return getFormat(locale).toString();
+            }
+        });
+    }
 
-	public static <D> TableColumn<D> newDateOrTimeColumn(Component parent,
-			Object argument, final DateConverter dateConverter) {
-		return new TableColumn<D>(labelModel(parent, argument), name(argument)) {
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			@Override
-			public void populateItem(Item<ICellPopulator<D>> item,
-					String componentId, IModel<D> rowModel) {
-				item.add(new DateLabel(componentId,
-						(IModel) getDataModel(rowModel), dateConverter));
-			}
-		};
-	}
+    public static <D> TableColumn<D> newDateOrTimeColumn(Component parent, Object argument, final DateConverter dateConverter) {
+        return new TableColumn<D>(labelModel(parent, argument), name(argument)) {
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @Override
+            public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
+                item.add(new DateLabel(componentId, (IModel) getDataModel(rowModel), dateConverter));
+            }
+        };
+    }
 
-	public static IModel<String> labelModel(Component parent, Object argument) {
-		String property = name(argument);
-		return labelModel(parent, property);
-	}
+    public static IModel<String> labelModel(Component parent, Object argument) {
+        String property = name(argument);
+        return labelModel(parent, property);
+    }
 
-	public static IModel<String> labelModel(final Component parent,
-			final String property) {
-		IModel<String> label;
-		try {
-			label = new IModel<String>() {
-				@Override
-				public void detach() {
-					//
-				}
+    public static IModel<String> labelModel(final Component parent, final String property) {
+        IModel<String> label;
+        try {
+            label = new IModel<String>() {
+                @Override
+                public void detach() {
+                    //
+                }
 
-				@Override
-				public String getObject() {
-					return parent.getString(property);
-				}
+                @Override
+                public String getObject() {
+                    return parent.getString(property);
+                }
 
-				@Override
-				public void setObject(String object) {
-					//
-				}
-			};
-		} catch (MissingResourceException ex) {
-			logger.error(parent.getClass().getName() + ": no translation for "
-					+ property);
-			label = Model.of("[" + property + "_" + parent.getLocale() + "]");
-		}
-		return label;
-	}
+                @Override
+                public void setObject(String object) {
+                    //
+                }
+            };
+        } catch (MissingResourceException ex) {
+            logger.error(parent.getClass().getName() + ": no translation for " + property);
+            label = Model.of("[" + property + "_" + parent.getLocale() + "]");
+        }
+        return label;
+    }
 
-	public static <T extends Serializable> TableColumn<T> getActionsColumn(
-			Component parent, final DataProvider<T> provider,
-			final TableSettings settings) {
-		return new ActionsColumn<T>(labelModel(parent, ACTIONS_ID), provider,
-				settings);
-	}
+    public static <T extends Serializable> TableColumn<T> getActionsColumn(Component parent, final DataProvider<T> provider,
+            final TableSettings settings) {
+        return new ActionsColumn<T>(labelModel(parent, ACTIONS_ID), provider, settings);
+    }
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		if (!isEnabledInHierarchy()) {
-			return;
-		}
-		// client column sorting
-		{
-			boolean anyClientSortable = false;
-			String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp',headers:{";
-			int i = 0;
-			for (IColumn<T, String> column : getTable().getColumns()) {
-				boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
-				if (!clientSortable) {
-					if (anyClientSortable) {
-						config += ",";
-					} else {
-						anyClientSortable = true;
-					}
-					config += i + ":{sorter:false}";
-				}
-				i++;
-			}
-			config += "}";
-			if (anyClientSortable) {
-				response.render(JavaScriptHeaderItem
-						.forReference(TableSorter.TABLE_SORTER_JS));
-				response.render(OnDomReadyHeaderItem.forScript("$('#"
-						+ getTable().getMarkupId() + "').tablesorter({"
-						+ config + "});"));
-			}
-		}
-	}
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!isEnabledInHierarchy()) {
+            return;
+        }
+        // client column sorting
+        {
+            boolean anyClientSortable = false;
+            String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp',headers:{";
+            int i = 0;
+            for (IColumn<T, String> column : getTable().getColumns()) {
+                boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
+                if (!clientSortable) {
+                    if (anyClientSortable) {
+                        config += ",";
+                    } else {
+                        anyClientSortable = true;
+                    }
+                    config += i + ":{sorter:false}";
+                }
+                i++;
+            }
+            config += "}";
+            if (anyClientSortable) {
+                response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
+                response.render(OnDomReadyHeaderItem.forScript("$('#" + getTable().getMarkupId() + "').tablesorter({" + config + "});"));
+            }
+        }
+    }
 
-	public static class ActionsColumn<T extends Serializable> extends
-			TableColumn<T> {
-		protected final DataProvider<T> provider;
+    public static class ActionsColumn<T extends Serializable> extends TableColumn<T> {
+        protected final DataProvider<T> provider;
 
-		protected final TableSettings settings;
+        protected final TableSettings settings;
 
-		public ActionsColumn(IModel<String> displayModel,
-				final DataProvider<T> provider, final TableSettings settings) {
-			setDisplayModel(displayModel);
-			this.provider = provider;
-			this.settings = settings;
-		}
+        public ActionsColumn(IModel<String> displayModel, final DataProvider<T> provider, final TableSettings settings) {
+            setDisplayModel(displayModel);
+            this.provider = provider;
+            this.settings = settings;
+        }
 
-		@Override
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		public void populateItem(Item cellItem, String componentId,
-				IModel rowModel) {
-			T object = ((T) rowModel.getObject());
-			cellItem.add(new ActionsPanel<T>(componentId, object, settings) {
-				@Override
-				public void onDelete(AjaxRequestTarget target, T o) {
-					provider.delete(target, o);
-				}
+        @Override
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public void populateItem(Item cellItem, String componentId, IModel rowModel) {
+            T object = ((T) rowModel.getObject());
+            cellItem.add(new ActionsPanel<T>(componentId, object, settings) {
+                @Override
+                public void onDelete(AjaxRequestTarget target, T o) {
+                    provider.delete(target, o);
+                }
 
-				@Override
-				public void onEdit(AjaxRequestTarget target, T o) {
-					provider.edit(target, o);
-				}
-			});
-		}
-	}
+                @Override
+                public void onEdit(AjaxRequestTarget target, T o) {
+                    provider.edit(target, o);
+                }
+            });
+        }
+    }
 }
