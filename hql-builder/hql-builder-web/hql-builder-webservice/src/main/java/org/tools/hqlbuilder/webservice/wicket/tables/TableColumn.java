@@ -58,6 +58,10 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
         this.propertyExpression = propertyExpression;
     }
 
+    /**
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.export.IExportableColumn#getDisplayModel()
+     */
+    @Override
     public IModel<String> getDisplayModel() {
         return displayModel;
     }
@@ -97,6 +101,9 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
         }
     }
 
+    /**
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn#getCssClass()
+     */
     @Override
     public String getCssClass() {
         return sorting == Side.none ? UNSORTABLE : null;
@@ -104,7 +111,7 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
 
     /**
      * Implementation of populateItem which adds a label to the cell whose model is the provided property expression evaluated against rowModelObject
-     * 
+     *
      * @see ICellPopulator#populateItem(Item, String, IModel)
      */
     @Override
