@@ -236,12 +236,8 @@
             function getParserById(name) {
                 var l = parsers.length;
                 for (var i = 0; i < l; i++) {
-                	try {
-                        if (parsers[i].id.toLowerCase() == name.toLowerCase()) {
-                            return parsers[i];
-                        }
-					} catch (e) {
-						// TODO: handle exception
+					if (parsers[i].id.toLowerCase() == name.toLowerCase()) {
+						return parsers[i];
 					}
                 }
                 return false;
