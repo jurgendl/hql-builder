@@ -189,12 +189,15 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 			String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp',headers:{";
 			int i = 0;
 			for (IColumn<T, String> column : getTable().getColumns()) {
-				if (i > 0) {
-					config += ",";
-				}
 				boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
-				anyClientSortable |= clientSortable;
-				config += i + ":{sorter:" + clientSortable + "}";
+				if (!clientSortable) {
+					if (anyClientSortable) {
+						config += ",";
+					} else {
+						anyClientSortable = true;
+					}
+					config += i + ":{sorter:false}";
+				}
 				i++;
 			}
 			config += "}";
