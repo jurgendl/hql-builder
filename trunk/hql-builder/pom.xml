@@ -48,7 +48,7 @@
 		<version.commons-beanutils>1.9.1</version.commons-beanutils><!-- recent version, keep up to date -->
 		<version.javassist>3.18.1-GA</version.javassist><!-- seems to be Java 1.8 ready -->
 		<version.ehcache>2.8.2</version.ehcache><!-- recent version, keep up to date -->
-		<version.resteasy>3.0.8.Final</version.resteasy><!-- keep up to date 3.x.x -->
+		<version.resteasy>3.0.10.Final</version.resteasy><!-- keep up to date 3.x.x -->
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.3.5</version.httpclient><!-- keep up to date 4.x.x -->
 		<version.spring-security>3.2.5.RELEASE</version.spring-security><!-- does not follow Spring version -->
@@ -378,6 +378,11 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jackson-provider</artifactId>
+				<version>${version.resteasy}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jackson2-provider</artifactId>
 				<version>${version.resteasy}</version>
 			</dependency>
 			<dependency>
