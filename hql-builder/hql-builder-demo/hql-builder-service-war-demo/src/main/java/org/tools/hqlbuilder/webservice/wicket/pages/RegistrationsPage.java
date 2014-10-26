@@ -1,7 +1,5 @@
 package org.tools.hqlbuilder.webservice.wicket.pages;
 
-import static org.tools.hqlbuilder.common.CommonUtils.proxy;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,10 +13,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDateTime;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.demo.Registration;
 import org.tools.hqlbuilder.webclient.HqlWebServiceClient;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
+import org.tools.hqlbuilder.webservice.wicket.forms.FormConstants;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormElementSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
@@ -41,17 +41,50 @@ public class RegistrationsPage extends BasePage {
 
     public RegistrationsPage(PageParameters parameters) {
         super(parameters);
-        Registration proxy = proxy(Registration.class);
-        DefaultDataProvider<Registration> dataProvider = initDataProvider();
-        DefaultFormActions<Registration> formActions = initTable(proxy, dataProvider);
-        add(table);
-        initForm(proxy, formActions);
-        add(formPanel);
+        Registration proxy = CommonUtils.proxy(Registration.class);
+        DefaultDataProvider<Registration> dataProvider = this.initDataProvider();
+        DefaultFormActions<Registration> formActions = this.initTable(proxy, dataProvider);
+        this.add(this.table);
+        this.initForm(proxy, formActions);
+        this.add(this.formPanel);
     }
 
     protected DefaultDataProvider<Registration> initDataProvider() {
         final int rows = 9999;
         DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
+            @Override
+            public void add(AjaxRequestTarget target) {
+                RegistrationsPage.this.formPanel.setVisible(true);
+                RegistrationsPage.this.formPanel.getFormModel().setObject(new Registration());
+                if (target != null) {
+                    target.add(RegistrationsPage.this.formPanel);
+                    @SuppressWarnings({ "unused", "unchecked" })
+                    Form<Registration> form = (Form<Registration>) RegistrationsPage.this.formPanel.get(FormConstants.FORM);
+                }
+            }
+
+            @Override
+            public void delete(AjaxRequestTarget target, Registration object) {
+                RegistrationsPage.this.hqlWebClient.delete(object);
+                if (target != null) {
+                    target.add(RegistrationsPage.this.table);
+                }
+            }
+
+            @Override
+            public void edit(AjaxRequestTarget target, Registration object) {
+                RegistrationsPage.this.formPanel.setVisible(true);
+                RegistrationsPage.this.formPanel.getFormModel().setObject(object);
+                if (target != null) {
+                    target.add(RegistrationsPage.this.formPanel);
+                }
+            }
+
+            @Override
+            public String getId(IModel<Registration> model) {
+                return null;
+            }
+
             @Override
             public int getRowsPerPage() {
                 return rows;
@@ -63,7 +96,7 @@ public class RegistrationsPage extends BasePage {
                 String hql = "select obj from " + Registration.class.getSimpleName() + " obj";
                 String orderByHql = " order by ";
                 for (Map.Entry<String, SortOrder> sortEntry : sorting.entrySet()) {
-                    if (sortEntry.getValue() != null && sortEntry.getValue() != SortOrder.NONE) {
+                    if ((sortEntry.getValue() != null) && (sortEntry.getValue() != SortOrder.NONE)) {
                         orderByHql += "obj." + sortEntry.getKey() + " " + (sortEntry.getValue() == SortOrder.ASCENDING ? "asc" : "desc") + ", ";
                     }
                 }
@@ -71,47 +104,31 @@ public class RegistrationsPage extends BasePage {
                     hql += orderByHql.substring(0, orderByHql.length() - 2);
                 }
                 QueryParameters query = new QueryParameters().setHql(hql).setFirst((int) first).setMax((int) count);
-                Iterator<Serializable> iterator = hqlWebClient.execute(query).getResults().getValue().iterator();
+                Iterator<Serializable> iterator = RegistrationsPage.this.hqlWebClient.execute(query).getResults().getValue().iterator();
                 return Iterator.class.cast(iterator);
             }
 
             @Override
             public long size() {
                 String hql = "select count(obj.id) from " + Registration.class.getSimpleName() + " obj";
-                List<Serializable> value = hqlWebClient.execute(new QueryParameters().setHql(hql)).getResults().getValue();
+                List<Serializable> value = RegistrationsPage.this.hqlWebClient.execute(new QueryParameters().setHql(hql)).getResults().getValue();
                 return Long.parseLong(String.valueOf(value.get(0)));
-            }
-
-            @Override
-            public void delete(AjaxRequestTarget target, Registration object) {
-                hqlWebClient.delete(object);
-                if (target != null) {
-                    target.add(table);
-                }
-            }
-
-            @Override
-            public void edit(AjaxRequestTarget target, Registration object) {
-                formPanel.setVisible(true);
-                formPanel.getFormModel().setObject(object);
-                if (target != null) {
-                    target.add(formPanel);
-                }
-            }
-
-            @Override
-            public void add(AjaxRequestTarget target) {
-                formPanel.setVisible(true);
-                formPanel.getFormModel().setObject(new Registration());
-                if (target != null) {
-                    target.add(formPanel);
-                    @SuppressWarnings({ "unused", "unchecked" })
-                    Form<Registration> form = (Form<Registration>) formPanel.get(FormPanel.FORM);
-                }
             }
         };
         dataProvider.setRowsPerPage(rows);
         return dataProvider;
+    }
+
+    protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
+        this.formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setLiveValidation(true).setAjax(true)
+                .setInheritId(true));
+        this.formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
+        this.formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
+        this.formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));
+        this.formPanel.addEmailTextField(proxy.getEmail(), new FormElementSettings(true));
+        this.formPanel.addDatePicker(proxy.getDateOfBirth(), new FormElementSettings(true));
+        this.formPanel.addPasswordTextField(proxy.getPassword(), new FormElementSettings(true));
+        this.formPanel.setVisible(false);
     }
 
     protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
@@ -124,42 +141,30 @@ public class RegistrationsPage extends BasePage {
         columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()).setSorting(side));
         columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider, settings));
-        table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider, settings);
+        this.table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider, settings);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
+            @Override
+            public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
+                RegistrationsPage.this.formPanel.getFormModel().setObject(new Registration());
+                RegistrationsPage.this.formPanel.setVisible(false);
+                RegistrationsPage.this.table.setVisible(true);
+                if (target != null) {
+                    target.add(RegistrationsPage.this.formPanel);
+                    target.add(RegistrationsPage.this.table);
+                }
+            }
+
             @Override
             public void submitModel(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setVerification(new LocalDateTime());
-                Serializable id = hqlWebClient.save(object);
-                object = hqlWebClient.get(object.getClass(), id);
+                Serializable id = RegistrationsPage.this.hqlWebClient.save(object);
+                object = RegistrationsPage.this.hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
-            }
-
-            @Override
-            public void afterSubmit(AjaxRequestTarget target, Form<Registration> form, IModel<Registration> model) {
-                formPanel.getFormModel().setObject(new Registration());
-                formPanel.setVisible(false);
-                table.setVisible(true);
-                if (target != null) {
-                    target.add(formPanel);
-                    target.add(table);
-                }
             }
         };
 
         return formActions;
-    }
-
-    protected void initForm(Registration proxy, DefaultFormActions<Registration> formActions) {
-        formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setLiveValidation(true).setAjax(true)
-                .setInheritId(true));
-        formPanel.addTextField(proxy.getUsername(), new FormElementSettings(true));
-        formPanel.addTextField(proxy.getFirstName(), new FormElementSettings(true));
-        formPanel.addTextField(proxy.getLastName(), new FormElementSettings(true));
-        formPanel.addEmailTextField(proxy.getEmail(), new FormElementSettings(true));
-        formPanel.addDatePicker(proxy.getDateOfBirth(), new FormElementSettings(true));
-        formPanel.addPasswordTextField(proxy.getPassword(), new FormElementSettings(true));
-        formPanel.setVisible(false);
     }
 }
