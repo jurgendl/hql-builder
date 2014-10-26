@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.model.IModel;
 
 public interface DataProvider<T extends Serializable> extends ISortableDataProvider<T, String> {
     /** service call to delete object & target.add( feedback ); target.add( table ); */
@@ -14,4 +15,6 @@ public interface DataProvider<T extends Serializable> extends ISortableDataProvi
     public void add(AjaxRequestTarget target);
 
     public int getRowsPerPage();
+
+    public String getId(IModel<T> model);
 }
