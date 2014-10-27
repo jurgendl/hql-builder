@@ -13,8 +13,38 @@ public class TableSettings implements Serializable {
 
     protected boolean stateless = false;
 
+    protected int ajaxRefresh = 5;
+
+    protected String ajaxRefreshUrl;
+
+    protected String ajaxRefresMethod = "GET";
+
+    public int getAjaxRefresh() {
+        return this.ajaxRefresh;
+    }
+
+    public String getAjaxRefreshUrl() {
+        return this.ajaxRefreshUrl;
+    }
+
+    public String getAjaxRefresMethod() {
+        return this.ajaxRefresMethod;
+    }
+
     public boolean isAdd() {
         return this.add;
+    }
+
+    public boolean isDelete() {
+        return this.delete;
+    }
+
+    public boolean isEdit() {
+        return this.edit;
+    }
+
+    public boolean isStateless() {
+        return this.stateless;
     }
 
     public TableSettings setAdd(boolean add) {
@@ -22,8 +52,19 @@ public class TableSettings implements Serializable {
         return this;
     }
 
-    public boolean isDelete() {
-        return this.delete;
+    public TableSettings setAjaxRefresh(int ajaxRefresh) {
+        this.ajaxRefresh = ajaxRefresh;
+        return this;
+    }
+
+    public TableSettings setAjaxRefreshUrl(String ajaxRefreshUrl) {
+        this.ajaxRefreshUrl = ajaxRefreshUrl;
+        return this;
+    }
+
+    public TableSettings setAjaxRefresMethod(String ajaxRefresMethod) {
+        this.ajaxRefresMethod = ajaxRefresMethod;
+        return this;
     }
 
     public TableSettings setDelete(boolean delete) {
@@ -31,17 +72,9 @@ public class TableSettings implements Serializable {
         return this;
     }
 
-    public boolean isEdit() {
-        return this.edit;
-    }
-
     public TableSettings setEdit(boolean edit) {
         this.edit = edit;
         return this;
-    }
-
-    public boolean isStateless() {
-        return this.stateless;
     }
 
     public TableSettings setStateless(boolean stateless) {
