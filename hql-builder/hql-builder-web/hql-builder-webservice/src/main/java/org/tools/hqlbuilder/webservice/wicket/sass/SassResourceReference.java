@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.wicket.StreamResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
-import ro.isdc.wro.extensions.processor.css.SassCssProcessor;
+import ro.isdc.wro.extensions.processor.css.RubySassCssProcessor;
 import ro.isdc.wro.model.resource.processor.ResourcePreProcessor;
 import ro.isdc.wro.model.resource.processor.impl.css.CssCompressorProcessor;
 
@@ -170,7 +170,7 @@ public class SassResourceReference extends StreamResourceReference implements IR
 
     public ResourcePreProcessor getSassCssProcessor() {
         if (sassCssProcessor == null) {
-            sassCssProcessor = new SassCssProcessor();
+            sassCssProcessor = new RubySassCssProcessor();
         }
         return this.sassCssProcessor;
     }
@@ -180,8 +180,9 @@ public class SassResourceReference extends StreamResourceReference implements IR
     }
 
     public ResourcePreProcessor getCssCompressorProcessor() {
-        if (cssCompressorProcessor == null)
+        if (cssCompressorProcessor == null) {
             cssCompressorProcessor = new CssCompressorProcessor();
+        }
         return cssCompressorProcessor;
     }
 
