@@ -45,12 +45,13 @@
 		<version.commons-lang3>3.3.1</version.commons-lang3><!-- recent version, keep up to date -->
 		<version.commons-collections>3.2.1</version.commons-collections><!-- not being updated -->
 		<version.commons-collections4>4.0</version.commons-collections4><!-- recent version, keep up to date -->
-		<version.commons-beanutils>1.9.1</version.commons-beanutils><!-- recent version, keep up to date -->
+		<version.commons-beanutils>1.9.2</version.commons-beanutils><!-- recent version, keep up to date -->
 		<version.javassist>3.18.1-GA</version.javassist><!-- seems to be Java 1.8 ready -->
 		<version.ehcache>2.8.2</version.ehcache><!-- recent version, keep up to date -->
 		<version.resteasy>3.0.10.Final</version.resteasy><!-- keep up to date 3.x.x -->
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.3.5</version.httpclient><!-- keep up to date 4.x.x -->
+		<version.httpcore>4.3.3</version.httpcore><!-- keep up to date 4.x.x -->
 		<version.spring-security>3.2.5.RELEASE</version.spring-security><!-- does not follow Spring version -->
 		<version.jadira>3.1.0.CR11</version.jadira><!-- newer version available but breaks Hibernate 4.2+ -->
 		<version.wicket.core>6.17.0</version.wicket.core><!-- keep up to date 6.x.x -->
@@ -177,6 +178,11 @@
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>${version.commons-lang}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${version.commons-beanutils}</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-collections</groupId>
@@ -359,6 +365,11 @@
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>${version.httpclient}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpcore</artifactId>
+				<version>${version.httpcore}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
