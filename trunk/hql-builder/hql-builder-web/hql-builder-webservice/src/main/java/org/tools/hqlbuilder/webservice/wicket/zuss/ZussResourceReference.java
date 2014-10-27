@@ -1,13 +1,12 @@
-package org.tools.hqlbuilder.webservice.wicket.sass;
+package org.tools.hqlbuilder.webservice.wicket.zuss;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 import org.apache.wicket.request.resource.PackageResource;
@@ -19,21 +18,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.wicket.StreamResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
-
-import ro.isdc.wro.extensions.processor.css.SassCssProcessor;
-import ro.isdc.wro.model.resource.processor.ResourcePreProcessor;
-import ro.isdc.wro.model.resource.processor.impl.css.CssCompressorProcessor;
+import org.zkoss.zuss.Resolver;
+import org.zkoss.zuss.Zuss;
+import org.zkoss.zuss.impl.out.BuiltinResolver;
+import org.zkoss.zuss.metainfo.ZussDefinition;
 
 /**
- * response.render(CssHeaderItem.forReference(new SassResourceReference(WicketCSSRoot.class, "table.sass")));
- *
- * @see http://sass-lang.com/
- * @see https://code.google.com/p/wro4j/
+ * response.render(CssHeaderItem.forReference(new ZussResourceReference(WicketCSSRoot.class, "table.css")));
  */
-public class SassResourceReference extends StreamResourceReference implements IResourceStream {
+public class ZussResourceReference extends StreamResourceReference implements IResourceStream, Resolver {
     private static final long serialVersionUID = 6384603768717480808L;
 
-    protected static final Logger logger = LoggerFactory.getLogger(SassResourceReference.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ZussResourceReference.class);
 
     protected final String charset = "utf-8";
 
@@ -41,15 +37,15 @@ public class SassResourceReference extends StreamResourceReference implements IR
 
     protected transient Bytes length = null;
 
+    protected transient ZussStyle zussStyle = null;
+
     protected transient String css = "";
 
     protected transient Time lastModified = null;
 
-    protected transient ResourcePreProcessor sassCssProcessor;
+    protected transient Resolver resolver = null;
 
-    protected transient ResourcePreProcessor cssCompressorProcessor;
-
-    public SassResourceReference(Class<?> scope, String name) {
+    public ZussResourceReference(Class<?> scope, String name) {
         super(scope, name);
     }
 
@@ -72,7 +68,7 @@ public class SassResourceReference extends StreamResourceReference implements IR
                 throw new RuntimeException(ex);
             }
         }
-        logger.info(getSassName() + " - sending lastModifiedTime: " + lastModified);
+        logger.info(getZussName() + " - sending lastModifiedTime: " + lastModified);
         return lastModified;
     }
 
@@ -90,12 +86,18 @@ public class SassResourceReference extends StreamResourceReference implements IR
     public InputStream getInputStream() throws ResourceStreamNotFoundException {
         try {
             boolean rebuild = false;
-            String fullPath = getResourcePath() + '/' + getSassName();
+            String fullPath = getResourcePath() + '/' + getZussName();
             if (css == null) {
                 logger.info("building " + fullPath + " because is new");
                 rebuild = true;
             } else if (lastModified == null) {
                 logger.info("building " + fullPath + " because out of date");
+                rebuild = true;
+            } else if (getZussStyle().getLastModified() == null) {
+                logger.info("building " + fullPath + " because style is new");
+                rebuild = true;
+            } else if (lastModified.getMilliseconds() < getZussStyle().getLastModified()) {
+                logger.info("building " + fullPath + " because style out of date");
                 rebuild = true;
             } else if (WicketApplication.get().usesDevelopmentConfig()) {
                 try {
@@ -109,16 +111,9 @@ public class SassResourceReference extends StreamResourceReference implements IR
                 }
             }
             if (rebuild) {
-                ByteArrayOutputStream out;
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {
-                    out = new ByteArrayOutputStream();
-                    getSassCssProcessor().process(null, new InputStreamReader(read()), new OutputStreamWriter(out));
-                    // ByteArrayInputStream in = new ByteArrayInputStream(
-                    // out.toByteArray());
-                    // out = new ByteArrayOutputStream();
-                    // getCssCompressorProcessor().process(null,
-                    // new InputStreamReader(in),
-                    // new OutputStreamWriter(out));
+                    write(out);
                 } catch (IOException ex) {
                     throw new ResourceStreamNotFoundException(ex);
                 }
@@ -152,8 +147,8 @@ public class SassResourceReference extends StreamResourceReference implements IR
         //
     }
 
-    protected String getSassName() {
-        return getName();
+    protected String getZussName() {
+        return getName().replaceAll("\\.css", ".zuss");
     }
 
     protected String getResourcePath() {
@@ -161,31 +156,63 @@ public class SassResourceReference extends StreamResourceReference implements IR
     }
 
     protected InputStream read() throws IOException {
-        return getClass().getClassLoader().getResourceAsStream(getResourcePath() + '/' + getSassName());
+        return getClass().getClassLoader().getResourceAsStream(getResourcePath() + '/' + getZussName());
     }
 
     protected void write(OutputStream out) throws IOException {
-        getSassCssProcessor().process(null, new InputStreamReader(read()), new OutputStreamWriter(out));
+        ZussDefinition parsed = Zuss.parse(read(), charset, null, getZussName());
+        Zuss.translate(parsed, out, charset, getResolver());
     }
 
-    public ResourcePreProcessor getSassCssProcessor() {
-        if (sassCssProcessor == null) {
-            sassCssProcessor = new SassCssProcessor();
+    @Override
+    public Object getVariable(String name) {
+        String value = getZussStyle().getStyling().get("@" + name);
+        if (value == null) {
+            return null;
         }
-        return this.sassCssProcessor;
+        value = value.trim();
+        return value.substring(0, value.length() - 1);
     }
 
-    public void setSassCssProcessor(ResourcePreProcessor sassCssProcessor) {
-        this.sassCssProcessor = sassCssProcessor;
+    @Override
+    public Method getMethod(String name) {
+        return null;
     }
 
-    public ResourcePreProcessor getCssCompressorProcessor() {
-        if (cssCompressorProcessor == null)
-            cssCompressorProcessor = new CssCompressorProcessor();
-        return cssCompressorProcessor;
+    protected ZussStyle getZussStyle() {
+        return this.zussStyle;
     }
 
-    public void setCssCompressorProcessor(ResourcePreProcessor cssCompressorProcessor) {
-        this.cssCompressorProcessor = cssCompressorProcessor;
+    protected void setZussStyle(ZussStyle zussStyle) {
+        this.zussStyle = zussStyle;
+    }
+
+    protected Resolver getResolver() {
+        if (resolver == null) {
+            resolver = new BuiltinResolver() {
+                @Override
+                public Object getVariable(String name) {
+                    Object variable = ZussResourceReference.this.getVariable(name);
+                    if (variable == null) {
+                        variable = super.getVariable(name);
+                    }
+                    return variable;
+                }
+
+                @Override
+                public Method getMethod(String name) {
+                    Method method = ZussResourceReference.this.getMethod(name);
+                    if (method == null) {
+                        method = super.getMethod(name);
+                    }
+                    return method;
+                };
+            };
+        }
+        return this.resolver;
+    }
+
+    protected void setResolver(Resolver resolver) {
+        this.resolver = resolver;
     }
 }
