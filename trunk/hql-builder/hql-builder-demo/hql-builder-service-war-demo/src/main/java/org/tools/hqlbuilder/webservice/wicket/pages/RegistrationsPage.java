@@ -86,6 +86,11 @@ public class RegistrationsPage extends BasePage {
             }
 
             @Override
+            public String getIdProperty() {
+                return null;
+            }
+
+            @Override
             public int getRowsPerPage() {
                 return rows;
             }

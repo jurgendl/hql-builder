@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,6 +53,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
+import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
+import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 import org.tools.hqlbuilder.webservice.wicket.components.LinkPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.LinkPanel.LinkType;
 
@@ -295,6 +298,11 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
+        public String getIdProperty() {
+            return this.delegate.getIdProperty();
+        }
+
+        @Override
         public int getRowsPerPage() {
             return this.delegate.getRowsPerPage();
         }
@@ -470,6 +478,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     private static final long serialVersionUID = -997730195881970840L;
 
+    public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+
     public static final String ACTIONS_DELETE_ID = "delete";
 
     public static final String ACTIONS_EDIT_ID = "edit";
@@ -494,8 +505,11 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     protected DataProvider<T> dataProvider;
 
+    protected TableSettings settings;
+
     public Table(Form<?> form, String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
         super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
+        this.settings = settings;
         this.dataProvider = dataProvider;
         this.addLink.setVisible(settings.isAdd());
         this.setOutputMarkupId(true);
@@ -563,20 +577,39 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             return;
         }
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
-        Map<String, Integer> ids = new LinkedHashMap<>();
-        int i = 0;
-        for (IColumn<T, String> column : this.getColumns()) {
-            if (column.getClass().equals(TableColumn.class)) {
-                TableColumn<T> propertyColumn = (TableColumn<T>) column;
-                if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
-                    ids.put(propertyColumn.getPropertyExpression(), i);
-                }
+
+        if (StringUtils.isNotBlank(this.dataProvider.getIdProperty()) && StringUtils.isNotBlank(this.settings.getAjaxRefreshUrl())) {
+            response.render(JavaScriptHeaderItem.forReference(Table.JS_AJAX_UPDATE));
+            String tableAjaxRefresh = "tableAjaxRefresh";
+            {
+                StringBuilder cfg = new StringBuilder();
+                cfg.append("var " + tableAjaxRefresh + " = Array.prototype.map;\n");
+                response.render(JavaScriptHeaderItem.forScript(cfg.toString(), "js_" + tableAjaxRefresh));
             }
-            i++;
+            {
+                Map<String, Integer> ids = new LinkedHashMap<>();
+                int i = 0;
+                for (IColumn<T, String> column : this.getColumns()) {
+                    if (column.getClass().equals(TableColumn.class)) {
+                        TableColumn<T> propertyColumn = (TableColumn<T>) column;
+                        if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
+                            ids.put(propertyColumn.getPropertyExpression(), i);
+                        }
+                    }
+                    i++;
+                }
+                String tableMarkupId = this.getMarkupId();
+                Map<String, Object> configMap = new HashMap<String, Object>();
+                configMap.put("refresh", this.settings.getAjaxRefresh());
+                configMap.put("type", this.settings.getAjaxRefresMethod());
+                configMap.put("url", this.settings.getAjaxRefreshUrl());
+                configMap.put("oidProperty", this.dataProvider.getIdProperty());
+                configMap.put("struct", ids);
+                response.render(JavaScriptHeaderItem.forScript(
+                        tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
+                        + "_" + tableMarkupId));
+            }
         }
-        String x = this.getMarkupId();
-        response.render(JavaScriptHeaderItem.forScript("var tablestruct = Array.prototype.map;\ntablestruct['x'] = " + new JSONObject(ids).toString()
-                + ";", "js_tablestruct_" + this.getMarkupId()));
     }
 
     public void setCssEven(String cssEven) {
