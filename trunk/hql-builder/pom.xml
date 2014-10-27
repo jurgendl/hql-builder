@@ -45,7 +45,7 @@
 		<version.commons-lang3>3.3.1</version.commons-lang3><!-- recent version, keep up to date -->
 		<version.commons-collections>3.2.1</version.commons-collections><!-- not being updated -->
 		<version.commons-collections4>4.0</version.commons-collections4><!-- recent version, keep up to date -->
-		<version.commons-beanutils>1.9.1</version.commons-beanutils><!-- recent version, keep up to date -->
+		<version.commons-beanutils>1.9.2</version.commons-beanutils><!-- recent version, keep up to date -->
 		<version.javassist>3.18.1-GA</version.javassist><!-- seems to be Java 1.8 ready -->
 		<version.ehcache>2.8.2</version.ehcache><!-- recent version, keep up to date -->
 		<version.resteasy>3.0.10.Final</version.resteasy><!-- keep up to date 3.x.x -->
@@ -289,6 +289,12 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${version.spring}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -359,6 +365,12 @@
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>${version.httpclient}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -505,11 +517,6 @@
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-logback</artifactId>
-				<version>${version.wicket.core}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-tinymce</artifactId>
 				<version>${version.wicket.core}</version>
 			</dependency>
 			<dependency>
