@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.wicket.StreamResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
-import ro.isdc.wro.extensions.processor.css.SassCssProcessor;
+import ro.isdc.wro.extensions.processor.css.RubySassCssProcessor;
 import ro.isdc.wro.model.resource.processor.ResourcePreProcessor;
 import ro.isdc.wro.model.resource.processor.impl.css.CssCompressorProcessor;
 
@@ -54,57 +54,42 @@ public class SassResourceReference extends StreamResourceReference implements IR
     }
 
     @Override
-    public PackageResource getResource() {
-        return super.getResource();
-    }
-
-    @Override
-    public IResourceStream getResourceStream() {
-        return this;
-    }
-
-    @Override
-    public Time lastModifiedTime() {
-        if (lastModified == null) {
-            try {
-                getInputStream();
-            } catch (ResourceStreamNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        logger.info(getSassName() + " - sending lastModifiedTime: " + lastModified);
-        return lastModified;
+    public void close() throws IOException {
+        //
     }
 
     @Override
     public String getContentType() {
-        return contentType;
+        return this.contentType;
     }
 
-    @Override
-    public Bytes length() {
-        return length;
+    public ResourcePreProcessor getCssCompressorProcessor() {
+        if (this.cssCompressorProcessor == null) {
+            this.cssCompressorProcessor = new CssCompressorProcessor();
+        }
+        return this.cssCompressorProcessor;
     }
 
     @Override
     public InputStream getInputStream() throws ResourceStreamNotFoundException {
         try {
             boolean rebuild = false;
-            String fullPath = getResourcePath() + '/' + getSassName();
-            if (css == null) {
-                logger.info("building " + fullPath + " because is new");
+            String fullPath = this.getResourcePath() + '/' + this.getSassName();
+            if (this.css == null) {
+                SassResourceReference.logger.info("building " + fullPath + " because is new");
                 rebuild = true;
-            } else if (lastModified == null) {
-                logger.info("building " + fullPath + " because out of date");
+            } else if (this.lastModified == null) {
+                SassResourceReference.logger.info("building " + fullPath + " because out of date");
                 rebuild = true;
             } else if (WicketApplication.get().usesDevelopmentConfig()) {
                 try {
-                    if (lastModified.getMilliseconds() < getClass().getClassLoader().getResource(fullPath).openConnection().getLastModified()) {
-                        logger.info("building " + fullPath + " because template out of date");
+                    if (this.lastModified.getMilliseconds() < this.getClass().getClassLoader().getResource(fullPath).openConnection()
+                            .getLastModified()) {
+                        SassResourceReference.logger.info("building " + fullPath + " because template out of date");
                         rebuild = true;
                     }
                 } catch (IOException ex1) {
-                    logger.info("building " + fullPath + " because of exception: " + ex1);
+                    SassResourceReference.logger.info("building " + fullPath + " because of exception: " + ex1);
                     rebuild = true;
                 }
             }
@@ -112,7 +97,7 @@ public class SassResourceReference extends StreamResourceReference implements IR
                 ByteArrayOutputStream out;
                 try {
                     out = new ByteArrayOutputStream();
-                    getSassCssProcessor().process(null, new InputStreamReader(read()), new OutputStreamWriter(out));
+                    this.getSassCssProcessor().process(null, new InputStreamReader(this.read()), new OutputStreamWriter(out));
                     // ByteArrayInputStream in = new ByteArrayInputStream(
                     // out.toByteArray());
                     // out = new ByteArrayOutputStream();
@@ -122,24 +107,74 @@ public class SassResourceReference extends StreamResourceReference implements IR
                 } catch (IOException ex) {
                     throw new ResourceStreamNotFoundException(ex);
                 }
-                length = Bytes.bytes(out.size());
-                lastModified = Time.now();
-                css = new String(out.toByteArray(), charset);
+                this.length = Bytes.bytes(out.size());
+                this.lastModified = Time.now();
+                this.css = new String(out.toByteArray(), this.charset);
             }
-            return new ByteArrayInputStream(css.getBytes(charset));
+            return new ByteArrayInputStream(this.css.getBytes(this.charset));
         } catch (UnsupportedEncodingException ex) {
             throw new ResourceStreamNotFoundException(ex);
         }
     }
 
     @Override
-    public void close() throws IOException {
-        //
+    public PackageResource getResource() {
+        return super.getResource();
+    }
+
+    protected String getResourcePath() {
+        return this.getScope().getPackage().getName().replace('.', '/');
+    }
+
+    @Override
+    public IResourceStream getResourceStream() {
+        return this;
+    }
+
+    public ResourcePreProcessor getSassCssProcessor() {
+        if (this.sassCssProcessor == null) {
+            this.sassCssProcessor = new RubySassCssProcessor();
+        }
+        return this.sassCssProcessor;
+    }
+
+    protected String getSassName() {
+        return this.getName();
+    }
+
+    @Override
+    public Time lastModifiedTime() {
+        if (this.lastModified == null) {
+            try {
+                this.getInputStream();
+            } catch (ResourceStreamNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        SassResourceReference.logger.info(this.getSassName() + " - sending lastModifiedTime: " + this.lastModified);
+        return this.lastModified;
+    }
+
+    @Override
+    public Bytes length() {
+        return this.length;
+    }
+
+    protected InputStream read() throws IOException {
+        return this.getClass().getClassLoader().getResourceAsStream(this.getResourcePath() + '/' + this.getSassName());
+    }
+
+    public void setCssCompressorProcessor(ResourcePreProcessor cssCompressorProcessor) {
+        this.cssCompressorProcessor = cssCompressorProcessor;
     }
 
     @Override
     public void setLocale(Locale locale) {
         //
+    }
+
+    public void setSassCssProcessor(ResourcePreProcessor sassCssProcessor) {
+        this.sassCssProcessor = sassCssProcessor;
     }
 
     @Override
@@ -152,40 +187,7 @@ public class SassResourceReference extends StreamResourceReference implements IR
         //
     }
 
-    protected String getSassName() {
-        return getName();
-    }
-
-    protected String getResourcePath() {
-        return getScope().getPackage().getName().replace('.', '/');
-    }
-
-    protected InputStream read() throws IOException {
-        return getClass().getClassLoader().getResourceAsStream(getResourcePath() + '/' + getSassName());
-    }
-
     protected void write(OutputStream out) throws IOException {
-        getSassCssProcessor().process(null, new InputStreamReader(read()), new OutputStreamWriter(out));
-    }
-
-    public ResourcePreProcessor getSassCssProcessor() {
-        if (sassCssProcessor == null) {
-            sassCssProcessor = new SassCssProcessor();
-        }
-        return this.sassCssProcessor;
-    }
-
-    public void setSassCssProcessor(ResourcePreProcessor sassCssProcessor) {
-        this.sassCssProcessor = sassCssProcessor;
-    }
-
-    public ResourcePreProcessor getCssCompressorProcessor() {
-        if (cssCompressorProcessor == null)
-            cssCompressorProcessor = new CssCompressorProcessor();
-        return cssCompressorProcessor;
-    }
-
-    public void setCssCompressorProcessor(ResourcePreProcessor cssCompressorProcessor) {
-        this.cssCompressorProcessor = cssCompressorProcessor;
+        this.getSassCssProcessor().process(null, new InputStreamReader(this.read()), new OutputStreamWriter(out));
     }
 }
