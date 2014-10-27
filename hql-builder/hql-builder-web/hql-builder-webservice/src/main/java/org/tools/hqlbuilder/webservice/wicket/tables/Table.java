@@ -1,8 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -564,16 +563,10 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             return;
         }
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
-        Map<String, Integer> ids = new HashMap<>();
+        Map<String, Integer> ids = new LinkedHashMap<>();
         int i = 0;
         for (IColumn<T, String> column : this.getColumns()) {
-            if (column instanceof PropertyColumn) {
-                PropertyColumn<T, String> propertyColumn = (PropertyColumn<T, String>) column;
-                if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
-                    ids.put(propertyColumn.getPropertyExpression(), i);
-                }
-            }
-            if (column instanceof TableColumn) {
+            if (column.getClass().equals(TableColumn.class)) {
                 TableColumn<T> propertyColumn = (TableColumn<T>) column;
                 if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
                     ids.put(propertyColumn.getPropertyExpression(), i);
