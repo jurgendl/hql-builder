@@ -235,7 +235,10 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         protected Item newCellItem(final String id, final int index, final IModel model) {
             Item item = Table.this.newCellItem(id, index, model);
-            // final TableColumn<T> column = (TableColumn<T>) Table.this.getColumns().get(index);
+            final TableColumn<T> column = (TableColumn<T>) Table.this.getColumns().get(index);
+            if (column.isDataTag()) {
+                item.add(new AttributeModifier("data", String.valueOf(model.getObject())));
+            }
             // if (column instanceof IStyledColumn) {
             // item.add(new CssAttributeBehavior() {
             // private static final long serialVersionUID = -8376202471270737937L;
@@ -514,7 +517,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -639,7 +642,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 configMap.put("struct", ids);
                 response.render(JavaScriptHeaderItem.forScript(
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
-                                + "_" + tableMarkupId));
+                        + "_" + tableMarkupId));
             }
         }
     }
