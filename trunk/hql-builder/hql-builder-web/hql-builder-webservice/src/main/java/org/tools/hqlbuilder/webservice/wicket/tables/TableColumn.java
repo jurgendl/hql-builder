@@ -22,6 +22,8 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
 
     protected String propertyExpression;
 
+    protected boolean dataTag = false;
+
     public TableColumn() {
         super();
     }
@@ -134,5 +136,14 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
     public IModel<Object> getDataModel(IModel<T> rowModel) {
         PropertyModel<Object> propertyModel = new PropertyModel<Object>(rowModel, propertyExpression);
         return propertyModel;
+    }
+
+    public boolean isDataTag() {
+        return this.dataTag;
+    }
+
+    public TableColumn<T> setDataTag(boolean dataTag) {
+        this.dataTag = dataTag;
+        return this;
     }
 }
