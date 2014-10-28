@@ -3,7 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public class CheckCookiesEnabled extends Panel {
@@ -16,7 +16,7 @@ public class CheckCookiesEnabled extends Panel {
 
         // site uses cookies info (asked when user choice not known)
         WebMarkupContainer cookiesQ = new WebMarkupContainer("nocookies");
-        cookiesQ.add(new Link<String>("allowCookies") {
+        cookiesQ.add(new StatelessLink<String>("allowCookies") {
             private static final long serialVersionUID = -8778073423020169707L;
 
             @Override
@@ -25,7 +25,7 @@ public class CheckCookiesEnabled extends Panel {
                 CheckCookiesEnabled.this.get("nocookies").setVisible(false);
             }
         });
-        cookiesQ.add(new Link<String>("disallowCookies") {
+        cookiesQ.add(new StatelessLink<String>("disallowCookies") {
             private static final long serialVersionUID = 4600682011663940306L;
 
             @Override
