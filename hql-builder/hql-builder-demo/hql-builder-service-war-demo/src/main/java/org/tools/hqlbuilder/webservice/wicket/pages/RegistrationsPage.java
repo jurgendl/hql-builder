@@ -26,7 +26,6 @@ import org.tools.hqlbuilder.webservice.wicket.tables.DefaultDataProvider;
 import org.tools.hqlbuilder.webservice.wicket.tables.EnhancedTable;
 import org.tools.hqlbuilder.webservice.wicket.tables.Side;
 import org.tools.hqlbuilder.webservice.wicket.tables.TableColumn;
-import org.tools.hqlbuilder.webservice.wicket.tables.TableSettings;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @SuppressWarnings("serial")
@@ -50,7 +49,6 @@ public class RegistrationsPage extends BasePage {
     }
 
     protected DefaultDataProvider<Registration> initDataProvider() {
-        final int rows = 9999;
         DefaultDataProvider<Registration> dataProvider = new DefaultDataProvider<Registration>() {
             @Override
             public void add(AjaxRequestTarget target) {
@@ -81,21 +79,6 @@ public class RegistrationsPage extends BasePage {
             }
 
             @Override
-            public String getId(IModel<Registration> model) {
-                return null;
-            }
-
-            @Override
-            public String getIdProperty() {
-                return null;
-            }
-
-            @Override
-            public int getRowsPerPage() {
-                return rows;
-            }
-
-            @Override
             @SuppressWarnings("unchecked")
             public Iterator<Registration> select(long first, long count, Map<String, SortOrder> sorting) {
                 String hql = "select obj from " + Registration.class.getSimpleName() + " obj";
@@ -120,7 +103,6 @@ public class RegistrationsPage extends BasePage {
                 return Long.parseLong(String.valueOf(value.get(0)));
             }
         };
-        dataProvider.setRowsPerPage(rows);
         return dataProvider;
     }
 
@@ -138,15 +120,14 @@ public class RegistrationsPage extends BasePage {
 
     protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
         List<TableColumn<Registration>> columns = new ArrayList<TableColumn<Registration>>();
-        TableSettings settings = new TableSettings();
         Side side = Side.client;
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()).setSorting(side));
-        columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider, settings));
-        this.table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider, settings);
+        columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider));
+        this.table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             @Override

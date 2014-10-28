@@ -129,6 +129,9 @@
 	<listener>
 		<listener-class>org.wicketstuff.logback.LogbackConfigListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>org.tools.hqlbuilder.webcommon.ServletContextListener</listener-class>
+	</listener>
 	<!-- <listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener> -->

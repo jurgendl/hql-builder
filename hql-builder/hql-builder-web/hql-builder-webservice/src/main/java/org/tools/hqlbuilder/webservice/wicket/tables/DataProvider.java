@@ -19,4 +19,18 @@ public interface DataProvider<T extends Serializable> extends ISortableDataProvi
     public String getId(IModel<T> model);
 
     public String getIdProperty();
+
+    public int getAjaxRefreshSeconds();
+
+    public String getAjaxRefreshUrl();
+
+    public String getAjaxRefreshMethod();
+
+    public boolean canAdd();
+
+    public boolean canDelete();
+
+    public boolean canEdit();
+
+    public boolean isStateless();
 }

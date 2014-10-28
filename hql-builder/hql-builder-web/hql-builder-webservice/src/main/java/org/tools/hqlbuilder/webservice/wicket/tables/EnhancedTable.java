@@ -45,17 +45,17 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 
     protected final Table<T> table;
 
-    public EnhancedTable(String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
+    public EnhancedTable(String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider) {
         super(id);
         setOutputMarkupId(true);
         Form<?> form;
-        if (settings.isStateless()) {
+        if (dataProvider.isStateless()) {
             form = new StatelessForm<T>(FORM_ID);
         } else {
             form = new Form<T>(FORM_ID);
         }
         add(form);
-        table = new Table<T>(form, TABLE_ID, columns, dataProvider, settings);
+        table = new Table<T>(form, TABLE_ID, columns, dataProvider);
         form.add(table);
     }
 
@@ -159,9 +159,8 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         return label;
     }
 
-    public static <T extends Serializable> TableColumn<T> getActionsColumn(Component parent, final DataProvider<T> provider,
-            final TableSettings settings) {
-        return new ActionsColumn<T>(labelModel(parent, ACTIONS_ID), provider, settings);
+    public static <T extends Serializable> TableColumn<T> getActionsColumn(Component parent, final DataProvider<T> provider) {
+        return new ActionsColumn<T>(labelModel(parent, ACTIONS_ID), provider);
     }
 
     @Override
@@ -196,19 +195,16 @@ public class EnhancedTable<T extends Serializable> extends Panel {
     public static class ActionsColumn<T extends Serializable> extends TableColumn<T> {
         protected final DataProvider<T> provider;
 
-        protected final TableSettings settings;
-
-        public ActionsColumn(IModel<String> displayModel, final DataProvider<T> provider, final TableSettings settings) {
+        public ActionsColumn(IModel<String> displayModel, final DataProvider<T> provider) {
             setDisplayModel(displayModel);
             this.provider = provider;
-            this.settings = settings;
         }
 
         @Override
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public void populateItem(Item cellItem, String componentId, IModel rowModel) {
             T object = ((T) rowModel.getObject());
-            cellItem.add(new ActionsPanel<T>(componentId, object, settings) {
+            cellItem.add(new ActionsPanel<T>(componentId, object, provider) {
                 @Override
                 public void onDelete(AjaxRequestTarget target, T o) {
                     provider.delete(target, o);
