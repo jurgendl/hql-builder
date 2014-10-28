@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
@@ -118,7 +119,12 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      */
     @Override
     public void populateItem(Item<ICellPopulator<T>> item, String componentId, IModel<T> rowModel) {
-        item.add(new Label(componentId, getDataModel(rowModel)));
+        IModel<Object> dataModel = getDataModel(rowModel);
+        Label label = new Label(componentId, dataModel);
+        item.add(label);
+        if (dataTag) {
+            item.add(new AttributeModifier("data", String.valueOf(dataModel.getObject())));
+        }
     }
 
     /**
