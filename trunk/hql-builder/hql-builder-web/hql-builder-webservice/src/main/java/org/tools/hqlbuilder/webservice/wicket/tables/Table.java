@@ -69,12 +69,12 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     protected static abstract class ActionsPanel<T extends Serializable> extends Panel {
         private static final long serialVersionUID = -5249593513368522879L;
 
-        public ActionsPanel(String id, final T object, TableSettings settings) {
+        public ActionsPanel(String id, final T object, DataProvider<T> dataProvider) {
             super(id);
             this.setOutputMarkupId(true);
             @SuppressWarnings("unchecked")
             final Form<T> form = (Form<T>) this.getParent();
-            if (settings.isEdit()) {
+            if (dataProvider.canEdit()) {
                 AjaxFallbackButton editLink = new AjaxFallbackButton(Table.ACTIONS_EDIT_ID, form) {
                     private static final long serialVersionUID = 2401036651703118413L;
 
@@ -87,7 +87,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             } else {
                 this.add(new WebMarkupContainer(Table.ACTIONS_EDIT_ID).setVisible(false));
             }
-            if (settings.isDelete()) {
+            if (dataProvider.canDelete()) {
                 AjaxFallbackButton deleteLink = new AjaxFallbackButton(Table.ACTIONS_DELETE_ID, form) {
                     private static final long serialVersionUID = 8838151595047275051L;
 
@@ -326,6 +326,41 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         public long size() {
             return this.delegate.size();
         }
+
+        @Override
+        public int getAjaxRefreshSeconds() {
+            return this.delegate.getAjaxRefreshSeconds();
+        }
+
+        @Override
+        public String getAjaxRefreshUrl() {
+            return this.delegate.getAjaxRefreshUrl();
+        }
+
+        @Override
+        public String getAjaxRefreshMethod() {
+            return this.delegate.getAjaxRefreshMethod();
+        }
+
+        @Override
+        public boolean canAdd() {
+            return this.delegate.canAdd();
+        }
+
+        @Override
+        public boolean canDelete() {
+            return this.delegate.canDelete();
+        }
+
+        @Override
+        public boolean canEdit() {
+            return this.delegate.canEdit();
+        }
+
+        @Override
+        public boolean isStateless() {
+            return this.delegate.isStateless();
+        }
     }
 
     protected static class EmailColumn<D> extends TableColumn<D> {
@@ -479,7 +514,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -505,13 +540,10 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     protected DataProvider<T> dataProvider;
 
-    protected TableSettings settings;
-
-    public Table(Form<?> form, String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider, TableSettings settings) {
+    public Table(Form<?> form, String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider) {
         super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
-        this.settings = settings;
         this.dataProvider = dataProvider;
-        this.addLink.setVisible(settings.isAdd());
+        this.addLink.setVisible(dataProvider.canAdd());
         this.setOutputMarkupId(true);
     }
 
@@ -578,7 +610,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
 
-        if (StringUtils.isNotBlank(this.dataProvider.getIdProperty()) && StringUtils.isNotBlank(this.settings.getAjaxRefreshUrl())) {
+        if (StringUtils.isNotBlank(this.dataProvider.getIdProperty()) && StringUtils.isNotBlank(this.dataProvider.getAjaxRefreshUrl())) {
             response.render(JavaScriptHeaderItem.forReference(Table.JS_AJAX_UPDATE));
             String tableAjaxRefresh = "tableAjaxRefresh";
             {
@@ -600,14 +632,14 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 }
                 String tableMarkupId = this.getMarkupId();
                 Map<String, Object> configMap = new HashMap<String, Object>();
-                configMap.put("refresh", this.settings.getAjaxRefresh());
-                configMap.put("type", this.settings.getAjaxRefresMethod());
-                configMap.put("url", this.settings.getAjaxRefreshUrl());
+                configMap.put("refresh", this.dataProvider.getAjaxRefreshSeconds());
+                configMap.put("type", this.dataProvider.getAjaxRefreshMethod());
+                configMap.put("url", this.dataProvider.getAjaxRefreshUrl());
                 configMap.put("oidProperty", this.dataProvider.getIdProperty());
                 configMap.put("struct", ids);
                 response.render(JavaScriptHeaderItem.forScript(
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
-                        + "_" + tableMarkupId));
+                                + "_" + tableMarkupId));
             }
         }
     }

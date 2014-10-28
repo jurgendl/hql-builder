@@ -49,7 +49,7 @@ public class ServiceUrlBuilder implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         serviceUrl = new URI(getProtocol(), null, getHostAddress(), getPort(), append(getContextPath()) + append(getRestPath()), null, null)
-                .toASCIIString();
+        .toASCIIString();
     }
 
     protected String append(String path) {
