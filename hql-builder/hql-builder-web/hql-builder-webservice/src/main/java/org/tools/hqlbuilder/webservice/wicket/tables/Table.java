@@ -118,11 +118,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         private static final long serialVersionUID = 212283337538504257L;
 
         public AjaxFallbackOrderBy(final String id, final String sortProperty, final ISortStateLocator<String> stateLocator,
-                final IAjaxCallListener ajaxCallListener) {
-            this(id, sortProperty, stateLocator, new AjaxFallbackOrderByLink.DefaultCssProvider<String>(), ajaxCallListener);
-        }
-
-        public AjaxFallbackOrderBy(final String id, final String sortProperty, final ISortStateLocator<String> stateLocator,
                 final AjaxFallbackOrderByLink.ICssProvider<String> cssProvider, final IAjaxCallListener ajaxCallListener) {
             super(id);
             AjaxFallbackOrderByLink<String> link = new AjaxFallbackOrderByLink<String>("orderByLink", sortProperty, stateLocator, cssProvider,
@@ -157,12 +152,17 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             link.add(this.getBodyContainer());
         }
 
+        public AjaxFallbackOrderBy(final String id, final String sortProperty, final ISortStateLocator<String> stateLocator,
+                final IAjaxCallListener ajaxCallListener) {
+            this(id, sortProperty, stateLocator, new AjaxFallbackOrderByLink.DefaultCssProvider<String>(), ajaxCallListener);
+        }
+
+        protected abstract void onAjaxClick(final AjaxRequestTarget target);
+
         /**
          * This method is a hook for subclasses to perform an action after sort has changed
          */
         protected abstract void onSortChanged();
-
-        protected abstract void onAjaxClick(final AjaxRequestTarget target);
     }
 
     public class BottomToolbar extends AbstractToolbar {
@@ -274,6 +274,21 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
+        public boolean canAdd() {
+            return this.delegate.canAdd();
+        }
+
+        @Override
+        public boolean canDelete() {
+            return this.delegate.canDelete();
+        }
+
+        @Override
+        public boolean canEdit() {
+            return this.delegate.canEdit();
+        }
+
+        @Override
         public void delete(AjaxRequestTarget target, T object) {
             this.delegate.delete(target, object);
         }
@@ -286,6 +301,21 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         public void edit(AjaxRequestTarget target, T object) {
             this.delegate.edit(target, object);
+        }
+
+        @Override
+        public String getAjaxRefreshMethod() {
+            return this.delegate.getAjaxRefreshMethod();
+        }
+
+        @Override
+        public int getAjaxRefreshSeconds() {
+            return this.delegate.getAjaxRefreshSeconds();
+        }
+
+        @Override
+        public String getAjaxRefreshUrl() {
+            return this.delegate.getAjaxRefreshUrl();
         }
 
         public Form<?> getForm() {
@@ -313,6 +343,11 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
+        public boolean isStateless() {
+            return this.delegate.isStateless();
+        }
+
+        @Override
         public Iterator<? extends T> iterator(long first, long count) {
             return this.delegate.iterator(first, count);
         }
@@ -325,41 +360,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         public long size() {
             return this.delegate.size();
-        }
-
-        @Override
-        public int getAjaxRefreshSeconds() {
-            return this.delegate.getAjaxRefreshSeconds();
-        }
-
-        @Override
-        public String getAjaxRefreshUrl() {
-            return this.delegate.getAjaxRefreshUrl();
-        }
-
-        @Override
-        public String getAjaxRefreshMethod() {
-            return this.delegate.getAjaxRefreshMethod();
-        }
-
-        @Override
-        public boolean canAdd() {
-            return this.delegate.canAdd();
-        }
-
-        @Override
-        public boolean canDelete() {
-            return this.delegate.canDelete();
-        }
-
-        @Override
-        public boolean canEdit() {
-            return this.delegate.canEdit();
-        }
-
-        @Override
-        public boolean isStateless() {
-            return this.delegate.isStateless();
         }
     }
 
@@ -514,7 +514,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -627,7 +627,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                         TableColumn<T> propertyColumn = (TableColumn<T>) column;
                         if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
                             ids.put(propertyColumn.getPropertyExpression(), i);
-                            hasData.put(propertyColumn.getPropertyExpression(), propertyColumn.isDataTag());
+                            if (propertyColumn.isDataTag()) {
+                                hasData.put(propertyColumn.getPropertyExpression(), true);
+                            }
                         }
                     }
                     i++;
@@ -642,7 +644,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 configMap.put("data", hasData);
                 response.render(JavaScriptHeaderItem.forScript(
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
-                                + "_" + tableMarkupId));
+                        + "_" + tableMarkupId));
             }
         }
     }
