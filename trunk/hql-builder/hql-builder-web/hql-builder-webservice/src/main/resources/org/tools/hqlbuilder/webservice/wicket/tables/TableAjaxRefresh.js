@@ -23,6 +23,7 @@ $(document).ready(function() {
 				,
 				success : function(response) {
 					var tableMap = tableAjaxRefreshMeta['struct'];
+					var hasDataMap = tableAjaxRefreshMeta['data'];
 					var oidProperty = tableAjaxRefreshMeta['oidProperty'];
 					$.each(response, function(rowIdx, record) {
 						var oid = record[oidProperty];
@@ -35,6 +36,9 @@ $(document).ready(function() {
 								var currV = dataNode.html();
 								console.log(oid+':('+property+'='+col+'):'+currV+'>'+data);
 								dataNode.empty().append(data);
+								if(hasDataMap[property]){
+									dataNode.attr('data', data);
+								}
 							}
 						});
 					});
