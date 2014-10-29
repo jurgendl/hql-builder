@@ -619,17 +619,19 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 response.render(JavaScriptHeaderItem.forScript(cfg.toString(), "js_" + tableAjaxRefresh));
             }
             {
-                Map<String, Integer> ids = new LinkedHashMap<>();
-                Map<String, Boolean> hasData = new LinkedHashMap<>();
+                Map<String, Map<String, Object>> propertyConfigs = new LinkedHashMap<>();
                 int i = 0;
                 for (IColumn<T, String> column : this.getColumns()) {
                     if (column.getClass().equals(TableColumn.class)) {
                         TableColumn<T> propertyColumn = (TableColumn<T>) column;
                         if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
-                            ids.put(propertyColumn.getPropertyExpression(), i);
-                            if (propertyColumn.isDataTag()) {
-                                hasData.put(propertyColumn.getPropertyExpression(), true);
-                            }
+
+                            Map<String, Object> propertyConfig = new HashMap<>();
+                            propertyConfigs.put(propertyColumn.getPropertyExpression(), propertyConfig);
+                            propertyConfig.put("idx", i);
+							if (propertyColumn.isDataTag()) {
+                            	propertyConfig.put("data", propertyColumn.isDataTag());
+							}
                         }
                     }
                     i++;
@@ -640,8 +642,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 configMap.put("type", this.dataProvider.getAjaxRefreshMethod());
                 configMap.put("url", this.dataProvider.getAjaxRefreshUrl());
                 configMap.put("oidProperty", this.dataProvider.getIdProperty());
-                configMap.put("struct", ids);
-                configMap.put("data", hasData);
+                configMap.put("config", propertyConfigs);
                 response.render(JavaScriptHeaderItem.forScript(
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
                         + "_" + tableMarkupId));
