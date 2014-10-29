@@ -123,7 +123,7 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
         Label label = new Label(componentId, dataModel);
         item.add(label);
         if (dataTag) {
-            item.add(new AttributeModifier("data", String.valueOf(dataModel.getObject())));
+            item.add(new AttributeModifier("data-" + propertyExpression, String.valueOf(dataModel.getObject())));
         }
     }
 
