@@ -6,7 +6,8 @@
 $(document).ready(function() {
 	$.each( tableAjaxRefresh, function( tableId, tableAjaxRefreshMeta ) {
 		console.log(tableId+'::'+tableAjaxRefreshMeta['type']+'::'+tableAjaxRefreshMeta['url']+'::'+tableAjaxRefreshMeta['oidProperty']);
-		var intervalID = self.setInterval( function() {
+		tableAjaxRefreshMeta['update-since'] = $.now();
+		tableAjaxRefreshMeta['intervalID'] = window.setInterval( function() {
 			$.ajax({
 				type : tableAjaxRefreshMeta['type']
 				,
@@ -15,39 +16,45 @@ $(document).ready(function() {
 				dataType : 'json'
 				,
 				data : {
-					time : $.now()
+					time : tableAjaxRefreshMeta['update-since']
 				}
 				,
 				beforeSend : function() {
-					// nothing
+					tableAjaxRefreshMeta['update-start'] = $.now();
 				}
 				,
 				success : function(response) {
-					$.each(response, function(rowIdx, record) {
-						var oid = record[tableAjaxRefreshMeta['oidProperty']];
-						var htmlRecNode = $('tr[data-id='+oid+']');
-						$.each(tableAjaxRefreshMeta['config'], function(property, propertyConfigMap) {
-							var value = record[property];
-							if(value) {
-								var col = propertyConfigMap['idx'];
-								var dataNode = $(htmlRecNode.children()[col]).children('div');
-								var currentValue = dataNode.html();
-								if(currentValue!=value) {
-									console.log(oid+':('+property+'='+col+'):'+currentValue+'>'+value);
-									dataNode.empty().append(value);
-									if(propertyConfigMap['data']){
-										dataNode.attr('data-'+property, value);
-										console.log(oid+':'+'data-'+property+'='+value);
+					try {
+						$.each(response, function(rowIdx, record) {
+							var oid = record[tableAjaxRefreshMeta['oidProperty']];
+							var htmlRecNode = $('tr[data-id='+oid+']');
+							$.each(tableAjaxRefreshMeta['config'], function(property, propertyConfigMap) {
+								var value = record[property];
+								if(value) {
+									var col = propertyConfigMap['idx'];
+									var dataNode = $(htmlRecNode.children()[col]).children('div');
+									var currentValue = dataNode.html();
+									if(currentValue!=value) {
+										console.log(oid+':('+property+'='+col+'):'+currentValue+'>'+value);
+										dataNode.empty().append(value);
+										if(propertyConfigMap['data']){
+											dataNode.parent().attr('data-'+property, value);
+											console.log(oid+':'+'data-'+property+'='+value);
+										}
 									}
 								}
-							}
+							});
 						});
-					});
+						tableAjaxRefreshMeta['update-since'] = tableAjaxRefreshMeta['update-start'];
+					} catch (e) {
+						window.clearInterval(tableAjaxRefreshMeta['intervalID']);
+						console.log(tableAjaxRefreshMeta['intervalID']+' stopped because of '+e);
+					}
 				}
 				,
 				error : function(xhr, ajaxOptions, thrownError) {
-					window.clearInterval(intervalID);
-					console.log(xhr.status+' - '+xhr.responseText+' - '+thrownError);
+					window.clearInterval(tableAjaxRefreshMeta['intervalID']);
+					console.log(tableAjaxRefreshMeta['intervalID']+' stopped because of '+xhr.status+' - '+xhr.responseText+' - '+thrownError);
 				}
 			});
 		}, tableAjaxRefreshMeta['refresh'] * 1000);
