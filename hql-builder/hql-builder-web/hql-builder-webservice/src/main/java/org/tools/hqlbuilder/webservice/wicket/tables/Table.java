@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -35,6 +37,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.border.Border;
@@ -52,6 +55,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.tools.hqlbuilder.webservice.jquery.ui.tablesorter.TableSorter;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
@@ -608,16 +612,22 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         if (!this.isEnabledInHierarchy()) {
             return;
         }
-        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+        renderHeadIcons(response);
+        renderHeadClientSorting(response);
+        renderHeadClientUpdate(response);
+    }
 
+    public void renderHeadIcons(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+    }
+
+    /** client update table via ajax */
+    public void renderHeadClientUpdate(IHeaderResponse response) {
         if (StringUtils.isNotBlank(this.dataProvider.getIdProperty()) && StringUtils.isNotBlank(this.dataProvider.getAjaxRefreshUrl())) {
             response.render(JavaScriptHeaderItem.forReference(Table.JS_AJAX_UPDATE));
+
             String tableAjaxRefresh = "tableAjaxRefresh";
-            {
-                StringBuilder cfg = new StringBuilder();
-                cfg.append("var " + tableAjaxRefresh + " = Array.prototype.map;\n");
-                response.render(JavaScriptHeaderItem.forScript(cfg.toString(), "js_" + tableAjaxRefresh));
-            }
+            response.render(JavaScriptHeaderItem.forScript(";var " + tableAjaxRefresh + "=Array.prototype.map;", "js_" + tableAjaxRefresh));
             {
                 Map<String, Map<String, Object>> propertyConfigs = new LinkedHashMap<>();
                 int i = 0;
@@ -629,9 +639,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                             Map<String, Object> propertyConfig = new HashMap<>();
                             propertyConfigs.put(propertyColumn.getPropertyExpression(), propertyConfig);
                             propertyConfig.put("idx", i);
-							if (propertyColumn.isDataTag()) {
-                            	propertyConfig.put("data", propertyColumn.isDataTag());
-							}
+                            if (propertyColumn.isDataTag()) {
+                                propertyConfig.put("data", propertyColumn.isDataTag());
+                            }
                         }
                     }
                     i++;
@@ -647,6 +657,35 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
                         + "_" + tableMarkupId));
             }
+        }
+    }
+
+    /** client column sorting */
+    public void renderHeadClientSorting(IHeaderResponse response) {
+        boolean anyClientSortable = false;
+        int i = 0;
+        Map<Integer, Boolean> sortConfig = new HashMap<>();
+        for (IColumn<T, String> column : getColumns()) {
+            boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
+            if (!clientSortable) {
+                sortConfig.put(i, false);
+            }
+            anyClientSortable |= clientSortable;
+            i++;
+        }
+        if (anyClientSortable) {
+            Map<String, Object> config = new HashMap<>();
+            config.put("sortReset", true);
+            config.put("widgets", Arrays.asList("zebra"));
+            config.put("widgetOptions", Collections.singletonMap("zebra", Arrays.asList(cssOdd, cssEven)));
+            // config.put("textExtraction", "function(node){return $(node).text();}");
+            config.put("sortMultiSortKey", "ctrlKey");
+            config.put("cssAsc", "wicket_orderDown"); // TODO get from somwhere else
+            config.put("cssDesc", "wicket_orderUp");
+            config.put("headers", sortConfig);
+            response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
+            JSONObject jsonObject = new JSONObject(config);
+            response.render(OnDomReadyHeaderItem.forScript("$('#" + getMarkupId() + "').tablesorter(" + jsonObject + ");"));
         }
     }
 

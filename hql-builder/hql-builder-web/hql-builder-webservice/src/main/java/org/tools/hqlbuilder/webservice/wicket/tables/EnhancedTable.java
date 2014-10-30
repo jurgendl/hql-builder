@@ -14,10 +14,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -28,7 +24,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tools.hqlbuilder.webservice.jquery.ui.tablesorter.TableSorter;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.ActionsPanel;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.EmailColumn;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.URLColumn;
@@ -161,35 +156,6 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 
     public static <T extends Serializable> TableColumn<T> getActionsColumn(Component parent, final DataProvider<T> provider) {
         return new ActionsColumn<T>(labelModel(parent, ACTIONS_ID), provider);
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
-            return;
-        }
-        // client column sorting
-        {
-            boolean anyClientSortable = false;
-            boolean addComma = false;
-            String config = "textExtraction:function(node){return $(node).text();},sortMultiSortKey:'ctrlKey',cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp',headers:{";
-            int i = 0;
-            for (IColumn<T, String> column : getTable().getColumns()) {
-                boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
-                if (!clientSortable) {
-                    config += (addComma ? "," : "") + i + ":{sorter:false}";
-                    addComma = true;
-                }
-                anyClientSortable |= clientSortable;
-                i++;
-            }
-            config += "}";
-            if (anyClientSortable) {
-                response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
-                response.render(OnDomReadyHeaderItem.forScript("$('#" + getTable().getMarkupId() + "').tablesorter({" + config + "});"));
-            }
-        }
     }
 
     public static class ActionsColumn<T extends Serializable> extends TableColumn<T> {
