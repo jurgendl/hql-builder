@@ -518,7 +518,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -655,7 +655,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 configMap.put("config", propertyConfigs);
                 response.render(JavaScriptHeaderItem.forScript(
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
-                        + "_" + tableMarkupId));
+                                + "_" + tableMarkupId));
             }
         }
     }
@@ -678,13 +678,16 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             config.put("sortReset", true);
             config.put("widgets", Arrays.asList("zebra"));
             config.put("widgetOptions", Collections.singletonMap("zebra", Arrays.asList(cssOdd, cssEven)));
-            // config.put("textExtraction", "function(node){return $(node).text();}");
             config.put("sortMultiSortKey", "ctrlKey");
             config.put("cssAsc", "wicket_orderDown"); // TODO get from somwhere else
             config.put("cssDesc", "wicket_orderUp");
             config.put("headers", sortConfig);
             response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
-            JSONObject jsonObject = new JSONObject(config);
+            String jsonObject = new JSONObject(config).toString();
+            // fix: remove " around non sortable indices
+            for (Integer si : sortConfig.keySet()) {
+                jsonObject = jsonObject.replaceAll("\"" + si + "\"", "" + si);
+            }
             response.render(OnDomReadyHeaderItem.forScript("$('#" + getMarkupId() + "').tablesorter(" + jsonObject + ");"));
         }
     }
