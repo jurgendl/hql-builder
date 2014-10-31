@@ -1,8 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -662,33 +660,19 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     /** client column sorting */
     public void renderHeadClientSorting(IHeaderResponse response) {
-        boolean anyClientSortable = false;
-        int i = 0;
-        Map<Integer, Boolean> sortConfig = new HashMap<>();
         for (IColumn<T, String> column : getColumns()) {
-            boolean clientSortable = ((TableColumn<T>) column).getSorting() == Side.client;
-            if (!clientSortable) {
-                sortConfig.put(i, false);
+            if (((TableColumn<T>) column).getSorting() == Side.client) {
+                response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
+                String debug = "debug:true";
+                String sortReset = "sortReset:true";
+                String headers = "headers:{'." + TableColumn.UNSORTABLE + "':{sorter: false},'." + TableColumn.SERVER_SORTABLE + "':{sorter: false}}";
+                String zebra = "widgets:['zebra'],widgetOptions:{zebra:['" + cssOdd + "','" + cssEven + "']}";
+                String key = "sortMultiSortKey:'ctrlKey'";
+                String css = "cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp'";
+                String config = "{" + debug + "," + headers + "," + zebra + "," + sortReset + "," + key + "," + css + "}";
+                response.render(OnDomReadyHeaderItem.forScript("$('#" + getMarkupId() + "').tablesorter(" + config + ");"));
+                break;
             }
-            anyClientSortable |= clientSortable;
-            i++;
-        }
-        if (anyClientSortable) {
-            Map<String, Object> config = new HashMap<>();
-            config.put("sortReset", true);
-            config.put("widgets", Arrays.asList("zebra"));
-            config.put("widgetOptions", Collections.singletonMap("zebra", Arrays.asList(cssOdd, cssEven)));
-            config.put("sortMultiSortKey", "ctrlKey");
-            config.put("cssAsc", "wicket_orderDown"); // TODO get from somwhere else
-            config.put("cssDesc", "wicket_orderUp");
-            config.put("headers", sortConfig);
-            response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
-            String jsonObject = new JSONObject(config).toString();
-            // fix: remove " around non sortable indices
-            for (Integer si : sortConfig.keySet()) {
-                jsonObject = jsonObject.replaceAll("\"" + si + "\"", "" + si);
-            }
-            response.render(OnDomReadyHeaderItem.forScript("$('#" + getMarkupId() + "').tablesorter(" + jsonObject + ");"));
         }
     }
 

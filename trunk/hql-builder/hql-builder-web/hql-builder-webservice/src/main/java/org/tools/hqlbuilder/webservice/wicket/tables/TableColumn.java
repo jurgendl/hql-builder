@@ -13,6 +13,10 @@ import org.apache.wicket.model.PropertyModel;
 public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColumn<T, String, Object> {
     private static final long serialVersionUID = -7609015288627705664L;
 
+    public static final String SERVER_SORTABLE = "serversortable";
+
+    public static final String CLIENT_SORTABLE = "clientsortable";
+
     public static final String UNSORTABLE = "unsortable";
 
     protected IModel<String> displayModel;
@@ -109,7 +113,13 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      */
     @Override
     public String getCssClass() {
-        return sorting == Side.none ? UNSORTABLE : null;
+        if (sorting == Side.client) {
+            return CLIENT_SORTABLE;
+        }
+        if (sorting == Side.server) {
+            return SERVER_SORTABLE;
+        }
+        return UNSORTABLE;
     }
 
     /**

@@ -43,15 +43,21 @@ public class EnhancedTable<T extends Serializable> extends Panel {
     public EnhancedTable(String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider) {
         super(id);
         setOutputMarkupId(true);
-        Form<?> form;
-        if (dataProvider.isStateless()) {
-            form = new StatelessForm<T>(FORM_ID);
-        } else {
-            form = new Form<T>(FORM_ID);
-        }
+        Form<T> form = createForm(dataProvider);
         add(form);
-        table = new Table<T>(form, TABLE_ID, columns, dataProvider);
+        this.table = createTable(columns, dataProvider, form);
         form.add(table);
+    }
+
+    protected Form<T> createForm(final DataProvider<T> dataProvider) {
+        if (dataProvider.isStateless()) {
+            return new StatelessForm<T>(FORM_ID);
+        }
+        return new Form<T>(FORM_ID);
+    }
+
+    protected Table<T> createTable(List<TableColumn<T>> columns, final DataProvider<T> dataProvider, Form<T> form) {
+        return new Table<T>(form, TABLE_ID, columns, dataProvider);
     }
 
     public Table<T> getTable() {
