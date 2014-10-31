@@ -235,26 +235,17 @@ a[href$=jpg], a[href$=jpeg], a[href$=jpe], a[href$=png], a[href$=gif], a[href$=b
 }
 
 /* ======================== sort arrows on tables headers ======================== */
-/*.pui-sortable-column.wicket_orderUp div::after { 
+th.pui-sortable-column.wicket_orderUp div::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dd";
 }
-.pui-sortable-column.wicket_orderDown div::after { 
+th.pui-sortable-column.wicket_orderDown div::after { 
 	font-family: 'FontAwesome';
 	content: " \f0de";
 }
-.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortable) div::after { 
+th.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortable) div::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dc";
-}*/
-.pui-sortable-column.wicket_orderUp div { 
-	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
-}
-.pui-sortable-column.wicket_orderDown div { 
-	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
-}
-.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortable) div { 
-	background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
 }
 /* ======================== buttons in tables ======================== */
 .ui-button.delete::before {
