@@ -29,73 +29,16 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
 
     protected boolean dataTag = false;
 
+    protected boolean escapeModelStrings = true;
+
     public TableColumn() {
         super();
     }
 
     public TableColumn(IModel<String> displayModel, String propertyExpression) {
         this();
-        setDisplayModel(displayModel);
-        setPropertyExpression(propertyExpression);
-    }
-
-    public Side getFiltering() {
-        return filtering;
-    }
-
-    public TableColumn<T> setFiltering(Side filtering) {
-        this.filtering = filtering;
-        return this;
-    }
-
-    public Side getSorting() {
-        return sorting;
-    }
-
-    public TableColumn<T> setSorting(Side sorting) {
-        this.sorting = sorting;
-        return this;
-    }
-
-    public void setDisplayModel(IModel<String> displayModel) {
-        this.displayModel = displayModel;
-    }
-
-    public void setPropertyExpression(String propertyExpression) {
-        this.propertyExpression = propertyExpression;
-    }
-
-    /**
-     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.export.IExportableColumn#getDisplayModel()
-     */
-    @Override
-    public IModel<String> getDisplayModel() {
-        return displayModel;
-    }
-
-    /**
-     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn#getSortProperty()
-     */
-    @Override
-    public String getSortProperty() {
-        return sorting == Side.server ? propertyExpression : null;
-    }
-
-    /**
-     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn#isSortable()
-     */
-    @Override
-    public boolean isSortable() {
-        return getSortProperty() != null;
-    }
-
-    /**
-     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn#getHeader(java.lang.String)
-     */
-    @Override
-    public Component getHeader(final String componentId) {
-        Label label = new Label(componentId, getDisplayModel());
-        return label;
+        this.setDisplayModel(displayModel);
+        this.setPropertyExpression(propertyExpression);
     }
 
     /**
@@ -103,8 +46,8 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      */
     @Override
     public void detach() {
-        if (displayModel != null) {
-            displayModel.detach();
+        if (this.displayModel != null) {
+            this.displayModel.detach();
         }
     }
 
@@ -113,13 +56,79 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      */
     @Override
     public String getCssClass() {
-        if (sorting == Side.client) {
-            return CLIENT_SORTABLE;
+        if (this.sorting == Side.client) {
+            return TableColumn.CLIENT_SORTABLE;
         }
-        if (sorting == Side.server) {
-            return SERVER_SORTABLE;
+        if (this.sorting == Side.server) {
+            return TableColumn.SERVER_SORTABLE;
         }
-        return UNSORTABLE;
+        return TableColumn.UNSORTABLE;
+    }
+
+    /**
+     * Factory method for generating a model that will generated the displayed value. Typically the model is a property model using the
+     * {@link #propertyExpression} specified in the constructor.
+     */
+    @Override
+    public IModel<Object> getDataModel(IModel<T> rowModel) {
+        PropertyModel<Object> propertyModel = new PropertyModel<Object>(rowModel, this.propertyExpression);
+        return propertyModel;
+    }
+
+    /**
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.export.IExportableColumn#getDisplayModel()
+     */
+    @Override
+    public IModel<String> getDisplayModel() {
+        return this.displayModel;
+    }
+
+    public Side getFiltering() {
+        return this.filtering;
+    }
+
+    /**
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn#getHeader(java.lang.String)
+     */
+    @Override
+    public Component getHeader(final String componentId) {
+        Label label = new Label(componentId, this.getDisplayModel());
+        return label;
+    }
+
+    /**
+     * @return wicket property expression
+     */
+    public String getPropertyExpression() {
+        return this.propertyExpression;
+    }
+
+    public Side getSorting() {
+        return this.sorting;
+    }
+
+    /**
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn#getSortProperty()
+     */
+    @Override
+    public String getSortProperty() {
+        return this.sorting == Side.server ? this.propertyExpression : null;
+    }
+
+    public boolean isDataTag() {
+        return this.dataTag;
+    }
+
+    public boolean isEscapeModelStrings() {
+        return this.escapeModelStrings;
+    }
+
+    /**
+     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn#isSortable()
+     */
+    @Override
+    public boolean isSortable() {
+        return this.getSortProperty() != null;
     }
 
     /**
@@ -129,37 +138,40 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      */
     @Override
     public void populateItem(Item<ICellPopulator<T>> item, String componentId, IModel<T> rowModel) {
-        IModel<Object> dataModel = getDataModel(rowModel);
+        IModel<Object> dataModel = this.getDataModel(rowModel);
         Label label = new Label(componentId, dataModel);
+        label.setEscapeModelStrings(this.escapeModelStrings);
         item.add(label);
-        if (dataTag) {
-            item.add(new AttributeModifier("data-" + propertyExpression, String.valueOf(dataModel.getObject())));
+        if (this.dataTag) {
+            item.add(new AttributeModifier("data-" + this.propertyExpression, String.valueOf(dataModel.getObject())));
         }
-    }
-
-    /**
-     * @return wicket property expression
-     */
-    public String getPropertyExpression() {
-        return propertyExpression;
-    }
-
-    /**
-     * Factory method for generating a model that will generated the displayed value. Typically the model is a property model using the
-     * {@link #propertyExpression} specified in the constructor.
-     */
-    @Override
-    public IModel<Object> getDataModel(IModel<T> rowModel) {
-        PropertyModel<Object> propertyModel = new PropertyModel<Object>(rowModel, propertyExpression);
-        return propertyModel;
-    }
-
-    public boolean isDataTag() {
-        return this.dataTag;
     }
 
     public TableColumn<T> setDataTag(boolean dataTag) {
         this.dataTag = dataTag;
+        return this;
+    }
+
+    public void setDisplayModel(IModel<String> displayModel) {
+        this.displayModel = displayModel;
+    }
+
+    public TableColumn<T> setEscapeModelStrings(boolean escapeModelStrings) {
+        this.escapeModelStrings = escapeModelStrings;
+        return this;
+    }
+
+    public TableColumn<T> setFiltering(Side filtering) {
+        this.filtering = filtering;
+        return this;
+    }
+
+    public void setPropertyExpression(String propertyExpression) {
+        this.propertyExpression = propertyExpression;
+    }
+
+    public TableColumn<T> setSorting(Side sorting) {
+        this.sorting = sorting;
         return this;
     }
 }
