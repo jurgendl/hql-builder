@@ -610,13 +610,28 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         if (!this.isEnabledInHierarchy()) {
             return;
         }
-        renderHeadIcons(response);
-        renderHeadClientSorting(response);
-        renderHeadClientUpdate(response);
+        this.renderHeadIcons(response);
+        this.renderHeadClientSorting(response);
+        this.renderHeadClientUpdate(response);
     }
 
-    public void renderHeadIcons(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
+    /** client column sorting */
+    public void renderHeadClientSorting(IHeaderResponse response) {
+        for (IColumn<T, String> column : this.getColumns()) {
+            if (((TableColumn<T>) column).getSorting() == Side.client) {
+                response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_WIDGETS_JS));
+                String debug = "debug:true";
+                String sortReset = "sortReset:true";
+                String headers = "headers:{'." + TableColumn.UNSORTABLE + "':{sorter: false},'." + TableColumn.SERVER_SORTABLE + "':{sorter: false}}";
+                String zebra = "widgets:['zebra','filter'],widgetOptions:{filter_cssFilter:'tablesorter-filter puiinputtext pui-inputtext ui-widget ui-state-default ui-corner-all',filter_ignoreCase:true,zebra:['"
+                        + this.cssOdd + "','" + this.cssEven + "']}";
+                String key = "sortMultiSortKey:'ctrlKey'";
+                String css = "cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp'";
+                String config = "{" + debug + "," + headers + "," + zebra + "," + sortReset + "," + key + "," + css + "}";
+                response.render(OnDomReadyHeaderItem.forScript("$('#" + this.getMarkupId() + "').tablesorter(" + config + ");"));
+                break;
+            }
+        }
     }
 
     /** client update table via ajax */
@@ -658,22 +673,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    /** client column sorting */
-    public void renderHeadClientSorting(IHeaderResponse response) {
-        for (IColumn<T, String> column : getColumns()) {
-            if (((TableColumn<T>) column).getSorting() == Side.client) {
-                response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_JS));
-                String debug = "debug:true";
-                String sortReset = "sortReset:true";
-                String headers = "headers:{'." + TableColumn.UNSORTABLE + "':{sorter: false},'." + TableColumn.SERVER_SORTABLE + "':{sorter: false}}";
-                String zebra = "widgets:['zebra'],widgetOptions:{zebra:['" + cssOdd + "','" + cssEven + "']}";
-                String key = "sortMultiSortKey:'ctrlKey'";
-                String css = "cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp'";
-                String config = "{" + debug + "," + headers + "," + zebra + "," + sortReset + "," + key + "," + css + "}";
-                response.render(OnDomReadyHeaderItem.forScript("$('#" + getMarkupId() + "').tablesorter(" + config + ");"));
-                break;
-            }
-        }
+    public void renderHeadIcons(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
     }
 
     public void setCssEven(String cssEven) {

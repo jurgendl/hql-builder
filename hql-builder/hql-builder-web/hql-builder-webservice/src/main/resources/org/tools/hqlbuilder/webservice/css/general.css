@@ -544,3 +544,8 @@ kbd.light, .light-keys kbd, .key.light, .light-keys .key {
 /* http://www.w3schools.com/html/html5_semantic_elements.asp */
 /* http://www.w3.org/TR/html5/sections.html */
 /* http://www.anthonycalzadilla.com/2010/08/html5-section-aside-header-nav-footer-elements-not-as-obvious-as-they-sound/ */
+
+
+.tablesorter-filter {
+	width: 100%;
+} 
