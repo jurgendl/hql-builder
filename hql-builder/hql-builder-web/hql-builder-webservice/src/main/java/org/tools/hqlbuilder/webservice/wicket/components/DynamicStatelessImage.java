@@ -11,9 +11,13 @@ public class DynamicStatelessImage extends Image {
     protected ImageDataProvider imageDataProvider;
 
     public DynamicStatelessImage(String id, ImageDataProvider imageProvider) {
+        this(DynamicStatelessImage.class, id, imageProvider);
+    }
+
+    public DynamicStatelessImage(Class<?> scope, String id, ImageDataProvider imageProvider) {
         super(id);
         this.imageDataProvider = imageProvider;
-        setImageResource(new DynamicImageResource(imageDataProvider.getFormat()) {
+        setImageResource(new DynamicImageResource() {
             private static final long serialVersionUID = -9082465729974294243L;
 
             @Override
@@ -21,7 +25,7 @@ public class DynamicStatelessImage extends Image {
                 return imageDataProvider.getImageData(attributes);
             }
         });
-        setImageResourceReference(new ResourceReference(getClass(), imageProvider.getName()) {
+        setImageResourceReference(new ResourceReference(scope, imageProvider.getName()) {
             private static final long serialVersionUID = -3929292825497004941L;
 
             @Override
