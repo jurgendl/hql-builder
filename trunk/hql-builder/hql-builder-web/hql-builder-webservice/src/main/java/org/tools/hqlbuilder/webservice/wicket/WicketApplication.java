@@ -241,7 +241,7 @@ public class WicketApplication extends WebApplication {
                     mountPage(path, pageClass);
                 }
             } catch (ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
+                logger.error("{}", ex);
             }
         }
     }
@@ -257,7 +257,7 @@ public class WicketApplication extends WebApplication {
                 mountResource(cssImages + name, reference);
                 logger.info("mounting image: " + WicketRoot.class.getCanonicalName() + ": " + cssImages + name);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("{}", ex);
             }
         }
         PrimeUI.mountImages(this);
