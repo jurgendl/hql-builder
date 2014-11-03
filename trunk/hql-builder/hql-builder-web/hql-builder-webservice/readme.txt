@@ -80,10 +80,11 @@ http://oembed.com/
 https://github.com/l0rdn1kk0n/wicket-bootstrap
 http://wb.agilecoders.de/demo/
 http://dinbror.dk/blazy/
-
-
-
-
+http://imakewebthings.com/jquery-waypoints/#shortcuts-examples
+http://omnipotent.net/jquery.sparkline/#s-about
+http://camanjs.com/
+https://github.com/carhartl/jquery-cookie
+http://designshack.net/articles/javascript/how-to-build-a-dynamic-imgur-upload-app-using-jquery-php/
 
 
 
