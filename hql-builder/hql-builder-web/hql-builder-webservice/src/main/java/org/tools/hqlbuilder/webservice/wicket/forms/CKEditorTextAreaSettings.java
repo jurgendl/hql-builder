@@ -5,7 +5,7 @@ import org.tools.hqlbuilder.webservice.jquery.ui.ckeditor.CKEditor.CKEType;
 /**
  * @see http://docs.ckeditor.com/#!/api/CKEDITOR.config
  */
-public class CKEditorTextAreaSettings extends FormElementSettings {
+public class CKEditorTextAreaSettings extends AbstractFormElementSettings<CKEditorTextAreaSettings> {
     private static final long serialVersionUID = 2746452642715136812L;
 
     protected CKEType type;

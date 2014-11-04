@@ -10,7 +10,7 @@ import java.util.List;
  * containerClassName: 'x'<br>
  * replacerClassName: 'x'<br>
  */
-public class ColorPickerSettings extends FormElementSettings {
+public class ColorPickerSettings extends AbstractFormElementSettings<ColorPickerSettings> {
     private static final long serialVersionUID = 6407342468858453586L;
 
     public static enum ColorFormat {

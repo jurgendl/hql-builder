@@ -349,12 +349,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         }
     }
 
-    public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, ElementSettings extends FormElementSettings, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType, ElementSettings>> RowPanel addDefaultRow(
+    public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, ElementSettings extends AbstractFormElementSettings<ElementSettings>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType, ElementSettings>> RowPanel addDefaultRow(
             RowPanel rowpanel) {
         return addRow(rowpanel);
     }
 
-    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, ElementSettings extends FormElementSettings, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType, ElementSettings>> RowPanel addCustomRow(
+    public <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, ElementSettings extends AbstractFormElementSettings<ElementSettings>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType, ElementSettings>> RowPanel addCustomRow(
             RowPanel rowpanel) {
         return addRow(rowpanel);
     }
@@ -415,7 +415,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.componentRepeater;
     }
 
-    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, ElementSettings extends FormElementSettings, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType, ElementSettings>> RowPanel addRow(
+    protected <PropertyType, ModelType, ComponentType extends FormComponent<ModelType>, ElementSettings extends AbstractFormElementSettings<ElementSettings>, RowPanel extends FormRowPanel<PropertyType, ModelType, ComponentType, ElementSettings>> RowPanel addRow(
             RowPanel rowpanel) {
         getForm();
 

@@ -15,7 +15,7 @@ import wicket.contrib.tinymce.settings.TinyMCESettings.Position;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Theme;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Toolbar;
 
-public class TinyMCETextAreaSettings extends TextAreaSettings {
+public class TinyMCETextAreaSettings extends AbstractTextAreaSettings<TinyMCETextAreaSettings> {
     private static final long serialVersionUID = 2558455789913160626L;
 
     protected TinyMCESettings tinyMCESettings;

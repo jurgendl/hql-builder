@@ -1,11 +1,9 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-public class ListSettings extends FormElementSettings {
+public class ListSettings extends AbstractSelectSettings<ListSettings> {
     private static final long serialVersionUID = -6574286191603464915L;
 
     protected int size = 10;
-
-    protected boolean nullValid = false;
 
     protected boolean multiple = true;
 
@@ -30,10 +28,12 @@ public class ListSettings extends FormElementSettings {
         return this;
     }
 
+    @Override
     public boolean isNullValid() {
         return this.nullValid;
     }
 
+    @Override
     public ListSettings setNullValid(boolean nullValid) {
         this.nullValid = nullValid;
         return this;

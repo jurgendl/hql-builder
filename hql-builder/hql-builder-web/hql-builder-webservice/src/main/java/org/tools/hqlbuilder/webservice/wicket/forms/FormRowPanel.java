@@ -29,7 +29,8 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
-public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends FormElementSettings> extends Panel implements FormConstants {
+public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSettings extends AbstractFormElementSettings<ElementSettings>> extends
+Panel implements FormConstants {
     private static final long serialVersionUID = 5258950770053560483L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormRowPanel.class);
@@ -53,14 +54,14 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
 
     protected FormSettings formSettings;
 
-    protected S componentSettings;
+    protected ElementSettings componentSettings;
 
-    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, S componentSettings) {
+    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, ElementSettings componentSettings) {
         this(valueModel, propertyPath, formSettings, componentSettings);
         this.valueModel = valueModel;
     }
 
-    protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, S componentSettings) {
+    protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, ElementSettings componentSettings) {
         super(FORM_ELEMENT, model);
         if (formSettings == null) {
             throw new NullPointerException("formSettings");
@@ -160,7 +161,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return feedbackPanel;
     }
 
-    protected FormRowPanel<P, T, C, S> addComponents() {
+    protected FormRowPanel<P, T, C, ElementSettings> addComponents() {
         this.add(getLabel());
         this.add(getComponent());
         this.add(getRequiredMarker());
@@ -181,7 +182,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
     }
 
     @SuppressWarnings("unchecked")
-    protected FormRowPanel<P, T, C, S> afterAddComponents() {
+    protected FormRowPanel<P, T, C, ElementSettings> afterAddComponents() {
         getComponent().setLabel((IModel<String>) getLabel().getDefaultModel());
         setupRequiredBehavior();
         setupId();
@@ -250,7 +251,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         }
     }
 
-    protected S getComponentSettings() {
+    protected ElementSettings getComponentSettings() {
         return this.componentSettings;
     }
 
@@ -268,7 +269,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return labelModel;
     }
 
-    public FormRowPanel<P, T, C, S> setLabelModel(IModel<String> labelModel) {
+    public FormRowPanel<P, T, C, ElementSettings> setLabelModel(IModel<String> labelModel) {
         this.labelModel = labelModel;
         return this;
     }
@@ -284,7 +285,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return this.propertyName;
     }
 
-    public FormRowPanel<P, T, C, S> setPropertyName(String propertyName) {
+    public FormRowPanel<P, T, C, ElementSettings> setPropertyName(String propertyName) {
         this.propertyName = propertyName;
         return this;
     }
@@ -296,7 +297,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return this.valueModel;
     }
 
-    public FormRowPanel<P, T, C, S> setValueModel(IModel<T> valueModel) {
+    public FormRowPanel<P, T, C, ElementSettings> setValueModel(IModel<T> valueModel) {
         this.valueModel = valueModel;
         return this;
     }
@@ -308,7 +309,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         return this.propertyType;
     }
 
-    public FormRowPanel<P, T, C, S> setPropertyType(Class<T> propertyType) {
+    public FormRowPanel<P, T, C, ElementSettings> setPropertyType(Class<T> propertyType) {
         this.propertyType = propertyType;
         return this;
     }
@@ -326,7 +327,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, S extends F
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
     }
 
-    public FormRowPanel<P, T, C, S> inheritId() {
+    public FormRowPanel<P, T, C, ElementSettings> inheritId() {
         // . is replaced because sql selectors don't work well with dot's
         getComponent().setMarkupId(getPropertyName().toString().replace('.', DOT_REPLACER));
         return this;
