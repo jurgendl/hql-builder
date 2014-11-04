@@ -8,17 +8,16 @@ import javax.servlet.ServletContextEvent;
  */
 // @javax.servlet.annotation.WebListener
 public class ServletContextListener implements javax.servlet.ServletContextListener {
-    private static ServletContextListener instance;
+    public static ServletContextListener get() {
+        return ServletContextListener.instance;
+    }
+
+    private static ServletContextListener instance = new ServletContextListener();
 
     private ServletContext servletContext;
 
     public ServletContextListener() {
-        set(instance);
-    }
-
-    @Override
-    public void contextInitialized(ServletContextEvent sce) {
-        get().servletContext = sce.getServletContext();
+        super();
     }
 
     @Override
@@ -26,15 +25,9 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
         //
     }
 
-    public static ServletContextListener get() {
-        return instance;
-    }
-
-    private static void set(ServletContextListener instance) {
-        if (instance != null) {
-            throw new UnsupportedOperationException();
-        }
-        ServletContextListener.instance = instance;
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        ServletContextListener.get().servletContext = sce.getServletContext();
     }
 
     public ServletContext getServletContext() {
