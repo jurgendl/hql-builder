@@ -4,7 +4,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -19,18 +18,18 @@ public class CheckAdsEnabled extends Panel {
 
     static {
         try {
-            JS = new JavaScriptResourceReference(CheckAdsEnabled.class, "CheckAdsEnabled.js");
-            IMG = new PackageResourceReference(CheckJavaScriptEnabled.class, IMG_NAME) {
+            CheckAdsEnabled.JS = new JavaScriptResourceReference(CheckAdsEnabled.class, "CheckAdsEnabled.js");
+            CheckAdsEnabled.IMG = new PackageResourceReference(CheckJavaScriptEnabled.class, CheckAdsEnabled.IMG_NAME) {
                 private static final long serialVersionUID = 4214735061850976515L;
 
                 @Override
-                public String getName() {
-                    return IMG_NAME;
+                protected String getMinifiedName() {
+                    return this.getName();
                 }
 
                 @Override
-                protected String getMinifiedName() {
-                    return getName();
+                public String getName() {
+                    return CheckAdsEnabled.IMG_NAME;
                 };
 
                 @Override
@@ -43,7 +42,6 @@ public class CheckAdsEnabled extends Panel {
                     return null;
                 };
             };
-            WebApplication.get().mountResource(IMG_NAME, IMG);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -56,20 +54,20 @@ public class CheckAdsEnabled extends Panel {
 
             @Override
             protected ResourceReference getImageResourceReference() {
-                return IMG;
+                return CheckAdsEnabled.IMG;
             }
         };
         image.setMarkupId(image.getId());
-        add(image);
-        setVisible(WicketApplication.get().isCheckAdsEnabled());
+        this.add(image);
+        this.setVisible(WicketApplication.get().isCheckAdsEnabled());
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
+        if (!this.isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(JS));
+        response.render(JavaScriptHeaderItem.forReference(CheckAdsEnabled.JS));
     }
 }

@@ -516,7 +516,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -587,6 +587,33 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         return (DataProvider<T>) this.getDataProvider();
     }
 
+    public String getTableRefreshAjaxId() {
+        return this.tableRefreshAjaxId;
+    }
+
+    public String getTableSortAjaxId() {
+        return this.tableSortAjaxId;
+    }
+
+    protected String getTableSortConfig() {
+        String debug = "debug:true";
+        String sortReset = "sortReset:true";
+        String headers = "headers:{'." + TableColumn.UNSORTABLE + "':{sorter:false},'." + TableColumn.SERVER_SORTABLE + "':{sorter:false}}";
+        String widgets = "widgets:[" + this.getTableSortConfigWidgets() + "],widgetOptions:{" + this.getTableSortConfigWidgetsConfig() + "}";
+        String key = "sortMultiSortKey:'ctrlKey'";
+        String css = "cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp'"; // TODO get wicket_orderDown/wicket_orderUp from somewhere else
+        return debug + "," + headers + "," + widgets + "," + sortReset + "," + key + "," + css;
+    }
+
+    protected String getTableSortConfigWidgets() {
+        return "'zebra','filter'";
+    }
+
+    protected String getTableSortConfigWidgetsConfig() {
+        return "filter_useParsedData:true,filter_searchDelay:300,filter_ignoreCase:true,filter_columnFilters:false,filter_saveFilters:true,filter_reset:'.tablesortfilterreset',zebra:['"
+                + this.getCssOdd() + "','" + this.getCssEven() + "']";
+    }
+
     @Override
     protected DataGridView<T> newDataGridView(String id, List<? extends IColumn<T, String>> columns, IDataProvider<T> _dataProvider) {
         return new DefaultDataGridView(id, columns, _dataProvider);
@@ -626,31 +653,12 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         for (IColumn<T, String> column : this.getColumns()) {
             if (((TableColumn<T>) column).getSorting() == Side.client) {
                 response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_WIDGETS_JS));
-                tableSortAjaxId = "sortable_table_" + this.getMarkupId();
-                response.render(OnDomReadyHeaderItem.forScript("var " + tableSortAjaxId + " = $('#" + this.getMarkupId() + "').tablesorter({"
-                        + getTableSortConfig() + "});"));
+                this.tableSortAjaxId = "sortable_table_" + this.getMarkupId();
+                response.render(OnDomReadyHeaderItem.forScript("var " + this.tableSortAjaxId + " = $('#" + this.getMarkupId() + "').tablesorter({"
+                        + this.getTableSortConfig() + "});"));
                 break;
             }
         }
-    }
-
-    protected String getTableSortConfig() {
-        String debug = "debug:true";
-        String sortReset = "sortReset:true";
-        String headers = "headers:{'." + TableColumn.UNSORTABLE + "':{sorter:false},'." + TableColumn.SERVER_SORTABLE + "':{sorter:false}}";
-        String widgets = "widgets:[" + getTableSortConfigWidgets() + "],widgetOptions:{" + getTableSortConfigWidgetsConfig() + "}";
-        String key = "sortMultiSortKey:'ctrlKey'";
-        String css = "cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp'"; // TODO get wicket_orderDown/wicket_orderUp from somewhere else
-        return /* debug + "," + */headers + "," + widgets + "," + sortReset + "," + key + "," + css;
-    }
-
-    protected String getTableSortConfigWidgets() {
-        return "'zebra','filter'";
-    }
-
-    protected String getTableSortConfigWidgetsConfig() {
-        return "filter_useParsedData:true,filter_searchDelay:300,filter_ignoreCase:true,filter_columnFilters:false,filter_saveFilters:true,filter_reset:'.tablesortfilterreset',zebra:['"
-                + getCssOdd() + "','" + getCssEven() + "']";
     }
 
     /** client update table via ajax */
@@ -658,7 +666,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         if (StringUtils.isNotBlank(this.dataProvider.getIdProperty()) && StringUtils.isNotBlank(this.dataProvider.getAjaxRefreshUrl())) {
             response.render(JavaScriptHeaderItem.forReference(Table.JS_AJAX_UPDATE));
 
-            response.render(JavaScriptHeaderItem.forScript(";var " + tableRefreshAjaxId + "=Array.prototype.map;", "js_" + tableRefreshAjaxId));
+            response.render(JavaScriptHeaderItem.forScript(";var " + this.tableRefreshAjaxId + "=Array.prototype.map;", "js_"
+                    + this.tableRefreshAjaxId));
             {
                 Map<String, Map<String, Object>> propertyConfigs = new LinkedHashMap<>();
                 int i = 0;
@@ -685,8 +694,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 configMap.put("oidProperty", this.dataProvider.getIdProperty());
                 configMap.put("config", propertyConfigs);
                 response.render(JavaScriptHeaderItem.forScript(
-                        tableRefreshAjaxId + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableRefreshAjaxId
-                                + "_" + tableMarkupId));
+                        this.tableRefreshAjaxId + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_"
+                                + this.tableRefreshAjaxId + "_" + tableMarkupId));
             }
         }
     }
@@ -701,14 +710,6 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
 
     public void setCssOdd(String cssOdd) {
         this.cssOdd = cssOdd;
-    }
-
-    public String getTableSortAjaxId() {
-        return this.tableSortAjaxId;
-    }
-
-    public String getTableRefreshAjaxId() {
-        return this.tableRefreshAjaxId;
     }
 
     public void setTableRefreshAjaxId(String tableRefreshAjaxId) {
