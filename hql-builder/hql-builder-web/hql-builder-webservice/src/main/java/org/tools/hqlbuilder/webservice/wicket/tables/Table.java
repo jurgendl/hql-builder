@@ -516,7 +516,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -606,12 +606,13 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     protected String getTableSortConfigWidgets() {
-        return "'zebra','filter'";
+        // 'filter',
+        return "'zebra'";
     }
 
     protected String getTableSortConfigWidgetsConfig() {
-        return "filter_useParsedData:true,filter_searchDelay:300,filter_ignoreCase:true,filter_columnFilters:false,filter_saveFilters:true,filter_reset:'.tablesortfilterreset',zebra:['"
-                + this.getCssOdd() + "','" + this.getCssEven() + "']";
+        // filter_useParsedData:true,filter_searchDelay:300,filter_ignoreCase:true,filter_columnFilters:false,filter_saveFilters:true,filter_reset:'.tablesortfilterreset',
+        return "zebra:['" + this.getCssOdd() + "','" + this.getCssEven() + "']";
     }
 
     @Override
