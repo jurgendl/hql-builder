@@ -8,8 +8,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
-public abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>, S extends FormElementSettings> extends
-        FormRowPanel<T, T, C, S> {
+public abstract class DefaultFormRowPanel<T extends Serializable, C extends FormComponent<T>, S extends AbstractFormElementSettings<S>> extends
+FormRowPanel<T, T, C, S> {
     private static final long serialVersionUID = -3609764520190287373L;
 
     public DefaultFormRowPanel(IModel<?> model, T propertyPath, FormSettings formSettings, S componentSettings) {

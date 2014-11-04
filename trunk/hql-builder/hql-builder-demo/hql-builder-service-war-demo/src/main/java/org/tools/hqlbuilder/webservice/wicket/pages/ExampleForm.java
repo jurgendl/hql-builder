@@ -41,7 +41,6 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.JQueryUIColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
-import org.tools.hqlbuilder.webservice.wicket.forms.RangeFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
@@ -108,22 +107,22 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-                .setValueModel(new IModel<String>() {
-                    @Override
-                    public void detach() {
-                        //
-                    }
+        .setValueModel(new IModel<String>() {
+            @Override
+            public void detach() {
+                //
+            }
 
-                    @Override
-                    public String getObject() {
-                        return WicketSession.get().getJQueryUITheme();
-                    }
+            @Override
+            public String getObject() {
+                return WicketSession.get().getJQueryUITheme();
+            }
 
-                    @Override
-                    public void setObject(String theme) {
-                        WicketSession.get().setJQueryUITheme(theme);
-                    }
-                });
+            @Override
+            public void setObject(String theme) {
+                WicketSession.get().setJQueryUITheme(theme);
+            }
+        });
         addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -158,7 +157,7 @@ public class ExampleForm extends FormPanel<Example> {
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
         addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
         addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
-        addSliderField(proxy.getIntegerv(), new RangeFieldSettings<Integer>(0, 100, 1));
+        addSliderField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
         addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
         addFilepicker(proxy);
         addColorPicker(proxy.getColor(), new ColorPickerSettings());

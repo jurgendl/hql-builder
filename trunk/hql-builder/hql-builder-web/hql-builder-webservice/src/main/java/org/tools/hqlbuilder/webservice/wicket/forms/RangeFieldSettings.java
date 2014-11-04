@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-public class RangeFieldSettings<N extends Number & Comparable<N>> extends NumberFieldSettings<N> {
+public class RangeFieldSettings<N extends Number & Comparable<N>> extends AbstractNumberFieldSettings<N, RangeFieldSettings<N>> {
     private static final long serialVersionUID = -3095218945374192038L;
 
     protected N tickStep;

@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-public class AutoCompleteTextFieldSettings extends FormElementSettings {
+public class AutoCompleteTextFieldSettings extends AbstractFormElementSettings<AutoCompleteTextFieldSettings> {
     private static final long serialVersionUID = 208227230310006451L;
 
     protected int maxResults = 10;

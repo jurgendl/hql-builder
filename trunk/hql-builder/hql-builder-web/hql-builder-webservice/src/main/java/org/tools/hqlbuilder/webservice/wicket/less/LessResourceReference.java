@@ -30,6 +30,7 @@ import ro.isdc.wro.model.resource.processor.impl.css.CssCompressorProcessor;
  * @see http://less-lang.com/
  * @see https://code.google.com/p/wro4j/
  * @see http://lesscss.org/features
+ * @see https://github.com/duncansmart/less.js-windows
  */
 public class LessResourceReference extends StreamResourceReference implements IResourceStream {
     private static final long serialVersionUID = 4347055808647080465L;

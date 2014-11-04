@@ -14,7 +14,7 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
  * @see http://jqueryui.com/button/
  */
 public class MultiSelectCheckBoxPanel<T extends Serializable> extends
-        FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
+FormRowPanel<Collection<T>, Collection<T>, CheckBoxMultipleChoice<T>, FormElementSettings> {
     private static final long serialVersionUID = -637534401267056720L;
 
     protected IModel<List<T>> choices;

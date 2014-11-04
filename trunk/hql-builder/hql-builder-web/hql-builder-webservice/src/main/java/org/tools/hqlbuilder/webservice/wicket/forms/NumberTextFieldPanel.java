@@ -14,7 +14,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 /**
  * @see http://www.primefaces.org/primeui/spinner.html
  */
-public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, TextField<N>, FormElementSettings> {
+public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends DefaultFormRowPanel<N, TextField<N>, NumberFieldSettings<N>> {
     private static final long serialVersionUID = 2490571767214451220L;
 
     public NumberTextFieldPanel(IModel<?> model, N propertyPath, FormSettings formSettings, NumberFieldSettings<N> componentSettings) {
@@ -30,8 +30,7 @@ public class NumberTextFieldPanel<N extends Number & Comparable<N>> extends Defa
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 onFormComponentTag(tag);
-                @SuppressWarnings("unchecked")
-                NumberFieldSettings<N> settings = (NumberFieldSettings<N>) getComponentSettings();
+                NumberFieldSettings<N> settings = getComponentSettings();
                 tag(tag, "min", settings.getMinimum());
                 tag(tag, "max", settings.getMaximum());
                 tag(tag, "step", settings.getStep());

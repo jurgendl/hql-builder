@@ -159,8 +159,7 @@ public class WicketApplication extends WebApplication {
 
         // mount resources
         mountImages();
-
-        // mount pages
+        mountResources();
         mountPages();
 
         getMarkupSettings().setDefaultBeforeDisabledLink("");
@@ -244,6 +243,10 @@ public class WicketApplication extends WebApplication {
                 logger.error("{}", ex);
             }
         }
+    }
+
+    protected void mountResources() {
+        //
     }
 
     protected void mountImages() {
