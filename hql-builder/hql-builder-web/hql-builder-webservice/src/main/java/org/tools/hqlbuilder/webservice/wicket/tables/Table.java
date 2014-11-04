@@ -516,7 +516,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -611,8 +611,8 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             return;
         }
         this.renderHeadIcons(response);
-        this.renderHeadClientSorting(response);
         this.renderHeadClientUpdate(response);
+        this.renderHeadClientSorting(response);
     }
 
     /** client column sorting */
@@ -623,12 +623,13 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 String debug = "debug:true";
                 String sortReset = "sortReset:true";
                 String headers = "headers:{'." + TableColumn.UNSORTABLE + "':{sorter: false},'." + TableColumn.SERVER_SORTABLE + "':{sorter: false}}";
-                String zebra = "widgets:['zebra','filter'],widgetOptions:{filter_cssFilter:'tablesorter-filter puiinputtext pui-inputtext ui-widget ui-state-default ui-corner-all',filter_ignoreCase:true,zebra:['"
+                String zebraAndFilter = "widgets:['zebra','filter'],widgetOptions:{filter_columnFilters:false,filter_saveFilters:true,filter_reset:'.reset',zebra:['"
                         + this.cssOdd + "','" + this.cssEven + "']}";
                 String key = "sortMultiSortKey:'ctrlKey'";
                 String css = "cssAsc:'wicket_orderDown',cssDesc:'wicket_orderUp'";
-                String config = "{" + debug + "," + headers + "," + zebra + "," + sortReset + "," + key + "," + css + "}";
-                response.render(OnDomReadyHeaderItem.forScript("$('#" + this.getMarkupId() + "').tablesorter(" + config + ");"));
+                String config = "{" + debug + "," + headers + "," + zebraAndFilter + "," + sortReset + "," + key + "," + css + "}";
+                response.render(OnDomReadyHeaderItem.forScript("var sortable_table_" + this.getMarkupId() + " = $('#" + this.getMarkupId()
+                        + "').tablesorter(" + config + ");"));
                 break;
             }
         }
@@ -668,7 +669,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 configMap.put("config", propertyConfigs);
                 response.render(JavaScriptHeaderItem.forScript(
                         tableAjaxRefresh + "['" + tableMarkupId + "'] = " + new JSONObject(configMap).toString() + ";", "js_" + tableAjaxRefresh
-                                + "_" + tableMarkupId));
+                        + "_" + tableMarkupId));
             }
         }
     }
