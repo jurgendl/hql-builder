@@ -1,14 +1,11 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
-import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriState;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
@@ -26,15 +23,10 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckB
     @Override
     protected CheckBox createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
         CheckBox checkBox = new CheckBox(VALUE, model);
-        if (componentSettings.isNullValid()) {
-            // checkedvalue="on" uncheckedvalue="off" indeterminatevalue="null"
-            checkBox.add(new CssClassNameAppender("tristate"));
+        if (formSettings.isPreferPrime()) {
+            checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
         } else {
-            if (formSettings.isPreferPrime()) {
-                checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
-            } else {
-                checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
-            }
+            checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
         }
         return checkBox;
     }
@@ -77,20 +69,9 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckB
                 super.onComponentTag(tag);
                 tag.getAttributes().put(FOR, getComponent().getMarkupId());
             }
-        }.add(new CssClassNameAppender(PrimeUI.puibutton)).setVisible(!componentSettings.isNullValid()));
+        }.add(new CssClassNameAppender(PrimeUI.puibutton)));
         this.add(getRequiredMarker().setVisible(false));
         this.add(getFeedback());
         return this;
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
-            return;
-        }
-        if (componentSettings.isNullValid()) {
-            response.render(JavaScriptHeaderItem.forReference(TriState.TRISTATE_FACTORY_JS));
-        }
     }
 }

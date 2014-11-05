@@ -39,6 +39,7 @@ import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.pocketgrid.PocketGrid;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriStateValue;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
@@ -535,6 +536,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public CheckBoxPanel addCheckBox(Boolean propertyPath, CheckBoxSettings componentSettings) {
         return addDefaultRow(new CheckBoxPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
+    }
+
+    public TriStateCheckBoxPanel addTriStateCheckBox(TriStateValue propertyPath, TriStateCheckBoxSettings componentSettings) {
+        return addRow(new TriStateCheckBoxPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
     public EmailTextFieldPanel addEmailTextField(String propertyPath, FormElementSettings componentSettings) {
