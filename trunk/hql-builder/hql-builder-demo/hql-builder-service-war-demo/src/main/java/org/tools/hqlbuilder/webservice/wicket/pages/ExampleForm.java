@@ -30,6 +30,7 @@ import org.tools.hqlbuilder.webservice.services.ServiceInterface;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.WicketSession;
 import org.tools.hqlbuilder.webservice.wicket.forms.CKEditorTextAreaSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.CheckBoxSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.DefaultFormActions;
 import org.tools.hqlbuilder.webservice.wicket.forms.DropDownSettings;
@@ -52,21 +53,20 @@ public class ExampleForm extends FormPanel<Example> {
 
     @SuppressWarnings("unchecked")
     public ExampleForm(String id) {
-        super(id);
-        setFormSettings(new FormSettings().setClientsideRequiredValidation(false).setShowPlaceholder(false));
+        super(id, new DefaultFormActions<Example>() {
+            /***/
+        }, new FormSettings().setClientsideRequiredValidation(false).setShowPlaceholder(false));
+
         setFormActions(new DefaultFormActions<Example>() {
             @Override
             public void submitObject(Example example) {
-                exampleService.save(getInstanceId(), example);
-            }
-
-            public String getInstanceId() {
-                return WicketSession.get().getId();
+                _submitObject(example);
             }
 
             @Override
             public Example loadObject() {
-                return exampleService.getExample(getInstanceId());
+                return _loadObject();
+
             }
         });
 
@@ -107,23 +107,23 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-        .setValueModel(new IModel<String>() {
-            @Override
-            public void detach() {
-                //
-            }
+                .setValueModel(new IModel<String>() {
+                    @Override
+                    public void detach() {
+                        //
+                    }
 
-            @Override
-            public String getObject() {
-                return WicketSession.get().getJQueryUITheme();
-            }
+                    @Override
+                    public String getObject() {
+                        return WicketSession.get().getJQueryUITheme();
+                    }
 
-            @Override
-            public void setObject(String theme) {
-                WicketSession.get().setJQueryUITheme(theme);
-            }
-        });
-        addCheckBox(null, fset).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
+                    @Override
+                    public void setObject(String theme) {
+                        WicketSession.get().setJQueryUITheme(theme);
+                    }
+                });
+        addCheckBox(null, new CheckBoxSettings()).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
                 //
@@ -277,5 +277,17 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
         addFilePicker(proxy.getFiles(), new FilePickerSettings().setMimeType("application/pdf").setMultiple(true).setConsistentLook(true), hook);
+    }
+
+    protected void _submitObject(Example example) {
+        exampleService.save(getInstanceId(), example);
+    }
+
+    protected Example _loadObject() {
+        return exampleService.getExample(getInstanceId());
+    }
+
+    protected String getInstanceId() {
+        return WicketSession.get().getId();
     }
 }
