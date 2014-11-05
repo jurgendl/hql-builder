@@ -6,14 +6,28 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 public abstract class DefaultFormActions<T extends Serializable> implements FormActions<T> {
     private static final long serialVersionUID = 555158530492799693L;
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultFormActions.class);
+
+    protected IModel<T> formModel;
+
     public DefaultFormActions() {
         super();
+    }
+
+    public DefaultFormActions(T modelObject) {
+        this(Model.of(modelObject));
+    }
+
+    public DefaultFormActions(IModel<T> model) {
+        this.formModel = model;
     }
 
     public void ajaxRefreshForm(AjaxRequestTarget target, Form<T> form) {
@@ -49,7 +63,7 @@ public abstract class DefaultFormActions<T extends Serializable> implements Form
         try {
             submitObject(model.getObject());
         } catch (UnsupportedOperationException ex) {
-            ex.printStackTrace(System.out);
+            logger.error("{}", ex);
         }
     }
 
@@ -68,12 +82,15 @@ public abstract class DefaultFormActions<T extends Serializable> implements Form
      */
     @Override
     public IModel<T> loadModel() {
-        try {
-            return WebHelper.model(loadObject());
-        } catch (UnsupportedOperationException ex) {
-            ex.printStackTrace(System.out);
-            return Model.<T> of();
+        if (formModel == null) {
+            try {
+                formModel = WebHelper.model(loadObject());
+            } catch (UnsupportedOperationException ex) {
+                formModel = Model.<T> of();
+                logger.error("{}", ex);
+            }
         }
+        return formModel;
     }
 
     /**

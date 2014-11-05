@@ -8,26 +8,33 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.model.IModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriState;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
  * @see http://jqueryui.com/button/
+ * @see http://vanderlee.github.io/tristate/
  */
-public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormElementSettings> {
+public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckBoxSettings> {
     private static final long serialVersionUID = 7669787482921703670L;
 
-    public CheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, FormElementSettings componentSettings) {
+    public CheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, CheckBoxSettings componentSettings) {
         super(model, propertyPath, formSettings, componentSettings);
     }
 
     @Override
     protected CheckBox createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
         CheckBox checkBox = new CheckBox(VALUE, model);
-        if (formSettings.isPreferPrime()) {
-            checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
+        if (componentSettings.isNullValid()) {
+            // checkedvalue="on" uncheckedvalue="off" indeterminatevalue="null"
+            checkBox.add(new CssClassNameAppender("tristate"));
         } else {
-            checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+            if (formSettings.isPreferPrime()) {
+                checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
+            } else {
+                checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+            }
         }
         return checkBox;
     }
@@ -70,7 +77,7 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
                 super.onComponentTag(tag);
                 tag.getAttributes().put(FOR, getComponent().getMarkupId());
             }
-        }.add(new CssClassNameAppender(PrimeUI.puibutton)));
+        }.add(new CssClassNameAppender(PrimeUI.puibutton)).setVisible(!componentSettings.isNullValid()));
         this.add(getRequiredMarker().setVisible(false));
         this.add(getFeedback());
         return this;
@@ -82,10 +89,8 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, FormEl
         if (!isEnabledInHierarchy()) {
             return;
         }
-        if (formSettings.isPreferPrime()) {
-            response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
-        } else {
-            response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
+        if (componentSettings.isNullValid()) {
+            response.render(JavaScriptHeaderItem.forReference(TriState.TRISTATE_FACTORY_JS));
         }
     }
 }

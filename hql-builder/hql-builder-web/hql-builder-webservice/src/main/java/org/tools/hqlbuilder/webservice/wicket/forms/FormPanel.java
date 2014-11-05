@@ -72,10 +72,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected Set<String> cssClasses = new HashSet<String>();
 
-    public FormPanel(String id) {
-        this(id, null, null);
-    }
-
     public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
         super(id);
         WebHelper.show(this);
@@ -156,6 +152,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     private static final long serialVersionUID = -5855525240326128645L;
 
                     @Override
+                    protected String getMethod() {
+                        return formSettings.getMethod() != null ? formSettings.getMethod().toString() : super.getMethod();
+                    }
+
+                    @Override
                     protected void onSubmit() {
                         onBeforeSubmit();
                         getFormActions().submitModel(getFormModel());
@@ -165,6 +166,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             } else {
                 this.form = new Form<T>(FORM, formModel) {
                     private static final long serialVersionUID = -5899425422548211723L;
+
+                    @Override
+                    protected String getMethod() {
+                        return formSettings.getMethod() != null ? formSettings.getMethod().toString() : super.getMethod();
+                    }
 
                     @Override
                     protected void onSubmit() {
@@ -425,7 +431,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         // rowpanel is already created
         elementContainer.add(rowpanel);
 
-        // components are created in "rowpanel.addComponents" method
+        // components are created in "rowpanel.addComponents"
         rowpanel.addComponents();
 
         // some post creation stuff
@@ -527,7 +533,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return addDefaultRow(new RangeFieldPanel<N>(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
-    public CheckBoxPanel addCheckBox(Boolean propertyPath, FormElementSettings componentSettings) {
+    public CheckBoxPanel addCheckBox(Boolean propertyPath, CheckBoxSettings componentSettings) {
         return addDefaultRow(new CheckBoxPanel(getFormModel(), propertyPath, getFormSettings(), componentSettings));
     }
 
