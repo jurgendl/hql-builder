@@ -6,10 +6,9 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriState;
-import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriStateValue;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
@@ -17,25 +16,26 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
  * @see http://jqueryui.com/button/
  * @see http://vanderlee.github.io/tristate/
  */
-public class TriStateCheckBoxPanel extends FormRowPanel<TriStateValue, Boolean, CheckBox, TriStateCheckBoxSettings> {
+public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenField<Boolean>, TriStateCheckBoxSettings> {
     private static final long serialVersionUID = 7669787482921703670L;
 
-    public TriStateCheckBoxPanel(IModel<?> model, TriStateValue propertyPath, FormSettings formSettings, TriStateCheckBoxSettings componentSettings) {
+    public static final String INDETERMINATE = "indeterminate";
+
+    public static final String CHECKED = "checked";
+
+    protected CheckBox checkBox;
+
+    public TriStateCheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, TriStateCheckBoxSettings componentSettings) {
         super(model, propertyPath, formSettings, componentSettings);
     }
 
-    public TriStateCheckBoxPanel(TriStateValue propertyPath, IModel<Boolean> valueModel, FormSettings formSettings,
-            TriStateCheckBoxSettings componentSettings) {
-        super(propertyPath, valueModel, formSettings, componentSettings);
-    }
-
     @Override
-    protected void setupRequired(CheckBox component) {
+    protected void setupRequired(HiddenField<Boolean> component) {
         //
     }
 
     @Override
-    protected Label getLabel() {
+    public Label getLabel() {
         if (label == null) {
             label = new Label(LABEL, getLabelModel()) {
                 private static final long serialVersionUID = 8512361193054906821L;
@@ -59,6 +59,7 @@ public class TriStateCheckBoxPanel extends FormRowPanel<TriStateValue, Boolean, 
     protected TriStateCheckBoxPanel addComponents() {
         this.add(getLabel());
         this.add(getComponent());
+        this.add(getCheckBox());
         this.add(getRequiredMarker().setVisible(false));
         this.add(getFeedback());
         return this;
@@ -74,12 +75,59 @@ public class TriStateCheckBoxPanel extends FormRowPanel<TriStateValue, Boolean, 
     }
 
     @Override
-    protected CheckBox createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
-        CheckBox checkBox = new CheckBox(VALUE, model);
+    protected HiddenField<Boolean> createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
+        HiddenField<Boolean> hiddenField = new HiddenField<Boolean>(VALUE, model);
+        return hiddenField;
+    }
+
+    protected CheckBox createCheckBox() {
+        IModel<Boolean> checkBoxModel = new IModel<Boolean>() {
+            private static final long serialVersionUID = -2705845792897833793L;
+
+            @Override
+            public void detach() {
+                //
+            }
+
+            @Override
+            public void setObject(Boolean object) {
+                //
+            }
+
+            @Override
+            public Boolean getObject() {
+                return getValueModel().getObject();
+            }
+        };
+        checkBox = new CheckBox("checkbox", checkBoxModel) {
+            private static final long serialVersionUID = -5957722711076496171L;
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                Boolean value = getValueModel().getObject();
+                if (Boolean.TRUE.equals(value)) {
+                    tag.remove(INDETERMINATE);
+                    tag.put(CHECKED, CHECKED);
+                } else if (Boolean.FALSE.equals(value)) {
+                    tag.remove(INDETERMINATE);
+                    tag.remove(CHECKED);
+                } else {
+                    tag.put(INDETERMINATE, INDETERMINATE);
+                    tag.remove(CHECKED);
+                }
+            }
+        };
+        checkBox.add(new AttributeModifier("for", getComponent().getMarkupId()));
         checkBox.add(new CssClassNameAppender("tristate"));
-        checkBox.add(new AttributeModifier("checkedvalue", Model.of(String.valueOf(TriStateValue.on))));
-        checkBox.add(new AttributeModifier("uncheckedvalue", Model.of(String.valueOf(TriStateValue.off))));
-        checkBox.add(new AttributeModifier("indeterminatevalue", Model.of(String.valueOf(TriStateValue.indeterminate))));
         return checkBox;
     }
+
+    public CheckBox getCheckBox() {
+        if (checkBox == null) {
+            checkBox = createCheckBox();
+        }
+        return this.checkBox;
+    }
+
 }

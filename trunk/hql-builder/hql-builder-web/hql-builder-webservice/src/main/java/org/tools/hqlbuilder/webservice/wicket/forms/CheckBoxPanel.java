@@ -37,7 +37,7 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckB
     }
 
     @Override
-    protected Label getLabel() {
+    public Label getLabel() {
         if (label == null) {
             label = new Label(LABEL, getLabelModel()) {
                 private static final long serialVersionUID = 8512361193054906821L;

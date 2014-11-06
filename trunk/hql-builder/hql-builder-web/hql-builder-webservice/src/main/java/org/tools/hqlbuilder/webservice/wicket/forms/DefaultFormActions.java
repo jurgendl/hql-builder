@@ -99,6 +99,9 @@ public abstract class DefaultFormActions<T extends Serializable> implements Form
      */
     @Override
     public T loadObject() {
+        if (formModel != null) {
+            return formModel.getObject();
+        }
         try {
             return WebHelper.create(forObjectClass());
         } catch (org.springframework.beans.BeanInstantiationException ex) {
