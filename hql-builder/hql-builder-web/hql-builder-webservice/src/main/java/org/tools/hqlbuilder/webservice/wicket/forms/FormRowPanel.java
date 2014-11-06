@@ -30,7 +30,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSettings extends AbstractFormElementSettings<ElementSettings>> extends
-Panel implements FormConstants {
+        Panel implements FormConstants {
     private static final long serialVersionUID = 5258950770053560483L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormRowPanel.class);
@@ -111,7 +111,7 @@ Panel implements FormConstants {
         }
     }
 
-    protected Label getLabel() {
+    public Label getLabel() {
         if (label == null) {
             label = new Label(LABEL, getLabelModel()) {
                 private static final long serialVersionUID = 8512361193054906821L;

@@ -29,8 +29,6 @@ import org.apache.wicket.request.resource.caching.version.MessageDigestResourceV
 import org.apache.wicket.settings.IExceptionSettings;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.convert.ConversionException;
-import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -46,7 +44,6 @@ import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
-import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriStateValue;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.logback.ConfiguratorPage;
@@ -300,19 +297,6 @@ public class WicketApplication extends WebApplication {
         locator.set(java.sql.Date.class, dateConverter);
         locator.set(java.util.Date.class, dateConverter);
         locator.set(java.sql.Timestamp.class, dateConverter);
-        locator.set(TriStateValue.class, new IConverter<TriStateValue>() {
-            private static final long serialVersionUID = 8388144550757094671L;
-
-            @Override
-            public TriStateValue convertToObject(String value, Locale locale) throws ConversionException {
-                return value == null ? TriStateValue.indeterminate : TriStateValue.valueOf(value);
-            }
-
-            @Override
-            public String convertToString(TriStateValue value, Locale locale) {
-                return value == null ? TriStateValue.indeterminate.toString() : value.toString();
-            }
-        });
         return locator;
     }
 
