@@ -147,7 +147,7 @@ public class EnhancedTable<T extends Serializable> extends Panel {
         };
     }
 
-    public static IModel<String> labelModel(final Component parent, final Object argument) {
+    public static IModel<String> labelModel(final Component parent, Object argument) {
         String tmp = null;
         try {
             tmp = name(argument);
