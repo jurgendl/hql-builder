@@ -57,6 +57,7 @@ import org.tools.hqlbuilder.webservice.jquery.ui.tablesorter.TableSorter;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
+import org.tools.hqlbuilder.webservice.wicket.components.CheckBoxPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.LinkPanel;
 import org.tools.hqlbuilder.webservice.wicket.components.LinkPanel.LinkType;
 
@@ -362,6 +363,22 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         public long size() {
             return this.delegate.size();
+        }
+    }
+
+    protected static class BooleanColumn<D> extends TableColumn<D> {
+        private static final long serialVersionUID = 4634739390630581195L;
+
+        public BooleanColumn(IModel<String> displayModel, String propertyExpression) {
+            this.setDisplayModel(displayModel);
+            this.setPropertyExpression(propertyExpression);
+        }
+
+        @Override
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
+            IModel<Boolean> dataModel = (IModel) this.getDataModel(rowModel);
+            item.add(new CheckBoxPanel(componentId, dataModel, null));
         }
     }
 

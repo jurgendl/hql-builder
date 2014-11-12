@@ -25,6 +25,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.ActionsPanel;
+import org.tools.hqlbuilder.webservice.wicket.tables.Table.BooleanColumn;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.EmailColumn;
 import org.tools.hqlbuilder.webservice.wicket.tables.Table.URLColumn;
 
@@ -66,6 +67,10 @@ public class EnhancedTable<T extends Serializable> extends Panel {
 
     public static <D> TableColumn<D> newColumn(Component parent, Object argument) {
         return new TableColumn<D>(labelModel(parent, argument), name(argument));
+    }
+
+    public static <D> TableColumn<D> newBooleanColumn(Component parent, Object argument) {
+        return new BooleanColumn<D>(labelModel(parent, argument), name(argument));
     }
 
     public static <D> TableColumn<D> newEmailColumn(Component parent, Object argument) {
