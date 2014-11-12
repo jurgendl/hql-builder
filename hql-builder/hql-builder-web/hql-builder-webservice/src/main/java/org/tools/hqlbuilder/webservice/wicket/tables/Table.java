@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.tables;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -53,6 +55,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
+import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.tablesorter.TableSorter;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
@@ -366,7 +369,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    protected static class BooleanColumn<D> extends TableColumn<D> {
+    public static class BooleanColumn<D> extends TableColumn<D, Boolean> {
         private static final long serialVersionUID = 4634739390630581195L;
 
         public BooleanColumn(IModel<String> displayModel, String propertyExpression) {
@@ -375,14 +378,16 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
-        @SuppressWarnings({ "rawtypes", "unchecked" })
         public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
-            IModel<Boolean> dataModel = (IModel) this.getDataModel(rowModel);
-            item.add(new CheckBoxPanel(componentId, dataModel, null));
+            IModel<Boolean> dataModel = this.getDataModel(rowModel);
+            CheckBoxPanel checkBoxPanel = new CheckBoxPanel(componentId, dataModel, null);
+            checkBoxPanel.getField().setEnabled(false);
+            checkBoxPanel.getField().add(new CssClassNameAppender(PrimeUI.puicheckbox));
+            item.add(checkBoxPanel);
         }
     }
 
-    protected static class EmailColumn<D> extends TableColumn<D> {
+    public static class EmailColumn<D> extends TableColumn<D, String> {
         private static final long serialVersionUID = 4634739390630581195L;
 
         public EmailColumn(IModel<String> displayModel, String propertyExpression) {
@@ -393,7 +398,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         @Override
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
-            IModel<Object> dataModel = this.getDataModel(rowModel);
+            IModel<String> dataModel = this.getDataModel(rowModel);
             IModel dataModelUncast = dataModel;
             IModel<String> dataModelCast = dataModelUncast;
             item.add(new LinkPanel(componentId, dataModelUncast, dataModelCast, LinkType.email));
@@ -516,7 +521,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
-    public static class URLColumn<D> extends TableColumn<D> {
+    public static class URLColumn<D> extends TableColumn<D, URL> {
         private static final long serialVersionUID = -2998876473654238089L;
 
         public URLColumn(IModel<String> displayModel, String propertyExpression) {
@@ -530,10 +535,39 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
     }
 
+    public static class URIColumn<D> extends TableColumn<D, URI> {
+        private static final long serialVersionUID = -2998876473654238089L;
+
+        public URIColumn(IModel<String> displayModel, String propertyExpression) {
+            this.setDisplayModel(displayModel);
+            this.setPropertyExpression(propertyExpression);
+        }
+
+        @Override
+        public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
+            item.add(new LinkPanel(componentId, this.getDataModel(rowModel), this.getDisplayModel(), LinkType.url));
+        }
+    }
+
+    public static class URLStringColumn<D> extends TableColumn<D, String> {
+        private static final long serialVersionUID = -2998876473654238089L;
+
+        public URLStringColumn(IModel<String> displayModel, String propertyExpression) {
+            this.setDisplayModel(displayModel);
+            this.setPropertyExpression(propertyExpression);
+        }
+
+        @Override
+        public void populateItem(Item<ICellPopulator<D>> item, String componentId, IModel<D> rowModel) {
+            IModel<String> dataModel = this.getDataModel(rowModel);
+            item.add(new LinkPanel(componentId, dataModel, this.getDisplayModel(), LinkType.url));
+        }
+    }
+
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -565,7 +599,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     /** id javascript object for all tables; set before creation */
     protected String tableRefreshAjaxId = "tableAjaxRefresh";
 
-    public Table(Form<?> form, String id, List<TableColumn<T>> columns, final DataProvider<T> dataProvider) {
+    public Table(Form<?> form, String id, List<TableColumn<T, ?>> columns, final DataProvider<T> dataProvider) {
         super(id, columns, new DelegateDataProvider<T>(form, dataProvider), dataProvider.getRowsPerPage());
         this.dataProvider = dataProvider;
         this.addLink.setVisible(dataProvider.canAdd());
@@ -667,9 +701,10 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     }
 
     /** client column sorting */
+    @SuppressWarnings("unchecked")
     public void renderHeadClientSorting(IHeaderResponse response) {
         for (IColumn<T, String> column : this.getColumns()) {
-            if (((TableColumn<T>) column).getSorting() == Side.client) {
+            if (((TableColumn<T, ?>) column).getSorting() == Side.client) {
                 response.render(JavaScriptHeaderItem.forReference(TableSorter.TABLE_SORTER_WIDGETS_JS));
                 this.tableSortAjaxId = "sortable_table_" + this.getMarkupId();
                 response.render(OnDomReadyHeaderItem.forScript("var " + this.tableSortAjaxId + " = $('#" + this.getMarkupId() + "').tablesorter({"
@@ -691,9 +726,9 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
                 int i = 0;
                 for (IColumn<T, String> column : this.getColumns()) {
                     if (column.getClass().equals(TableColumn.class)) {
-                        TableColumn<T> propertyColumn = (TableColumn<T>) column;
+                        @SuppressWarnings("unchecked")
+                        TableColumn<T, ?> propertyColumn = (TableColumn<T, ?>) column;
                         if (StringUtils.isNotBlank(propertyColumn.getPropertyExpression())) {
-
                             Map<String, Object> propertyConfig = new HashMap<>();
                             propertyConfigs.put(propertyColumn.getPropertyExpression(), propertyConfig);
                             propertyConfig.put("idx", i);

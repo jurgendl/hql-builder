@@ -10,7 +10,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColumn<T, String, Object> {
+public class TableColumn<T, D> implements IStyledColumn<T, String>, IExportableColumn<T, String, D> {
     private static final long serialVersionUID = -7609015288627705664L;
 
     public static final String SERVER_SORTABLE = "serversortable";
@@ -70,8 +70,8 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      * {@link #propertyExpression} specified in the constructor.
      */
     @Override
-    public IModel<Object> getDataModel(IModel<T> rowModel) {
-        PropertyModel<Object> propertyModel = new PropertyModel<Object>(rowModel, this.propertyExpression);
+    public IModel<D> getDataModel(IModel<T> rowModel) {
+        PropertyModel<D> propertyModel = new PropertyModel<D>(rowModel, this.propertyExpression);
         return propertyModel;
     }
 
@@ -138,7 +138,7 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
      */
     @Override
     public void populateItem(Item<ICellPopulator<T>> item, String componentId, IModel<T> rowModel) {
-        IModel<Object> dataModel = this.getDataModel(rowModel);
+        IModel<D> dataModel = this.getDataModel(rowModel);
         Label label = new Label(componentId, dataModel);
         label.setEscapeModelStrings(this.escapeModelStrings);
         item.add(label);
@@ -147,7 +147,7 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
         }
     }
 
-    public TableColumn<T> setDataTag(boolean dataTag) {
+    public TableColumn<T, D> setDataTag(boolean dataTag) {
         this.dataTag = dataTag;
         return this;
     }
@@ -156,12 +156,12 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
         this.displayModel = displayModel;
     }
 
-    public TableColumn<T> setEscapeModelStrings(boolean escapeModelStrings) {
+    public TableColumn<T, D> setEscapeModelStrings(boolean escapeModelStrings) {
         this.escapeModelStrings = escapeModelStrings;
         return this;
     }
 
-    public TableColumn<T> setFiltering(Side filtering) {
+    public TableColumn<T, D> setFiltering(Side filtering) {
         this.filtering = filtering;
         return this;
     }
@@ -170,7 +170,7 @@ public class TableColumn<T> implements IStyledColumn<T, String>, IExportableColu
         this.propertyExpression = propertyExpression;
     }
 
-    public TableColumn<T> setSorting(Side sorting) {
+    public TableColumn<T, D> setSorting(Side sorting) {
         this.sorting = sorting;
         return this;
     }

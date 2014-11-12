@@ -19,7 +19,7 @@ public class LinkPanel extends Panel {
 
     private static final long serialVersionUID = -7352081661850450279L;
 
-    public LinkPanel(String id, final IModel<Object> model, final IModel<String> labelModel, LinkType linkType) {
+    public LinkPanel(String id, final IModel<?> model, final IModel<String> labelModel, LinkType linkType) {
         super(id);
         switch (linkType) {
             case email:
@@ -32,7 +32,7 @@ public class LinkPanel extends Panel {
         }
     }
 
-    protected AbstractLink getURLLink(final IModel<Object> model, final IModel<String> labelModel) {
+    protected AbstractLink getURLLink(final IModel<?> model, final IModel<String> labelModel) {
         ExternalLink externalLink = new ExternalLink(LINK_ID, new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = 6336814546294579370L;
 
@@ -57,7 +57,7 @@ public class LinkPanel extends Panel {
         return externalLink;
     }
 
-    protected AbstractLink getEmailLink(final IModel<Object> model, final IModel<String> labelModel) {
+    protected AbstractLink getEmailLink(final IModel<?> model, final IModel<String> labelModel) {
         ExternalLink externalLink = new ExternalLink(LINK_ID, new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -2903758951408761993L;
 
