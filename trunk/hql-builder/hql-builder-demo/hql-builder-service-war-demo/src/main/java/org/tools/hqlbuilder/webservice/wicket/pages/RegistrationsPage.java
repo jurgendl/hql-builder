@@ -119,11 +119,11 @@ public class RegistrationsPage extends BasePage {
     }
 
     protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
-        List<TableColumn<Registration>> columns = new ArrayList<TableColumn<Registration>>();
+        List<TableColumn<Registration, ?>> columns = new ArrayList<TableColumn<Registration, ?>>();
         Side side = Side.client;
-        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getFirstName()).setSorting(side));
-        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getLastName()).setSorting(side));
-        columns.add(EnhancedTable.<Registration> newColumn(this, proxy.getUsername()).setSorting(side));
+        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getFirstName()).setSorting(side));
+        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getLastName()).setSorting(side));
+        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getUsername()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()).setSorting(side));
         columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()).setSorting(side));
         columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider));
