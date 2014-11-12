@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.converter.BooleanConverter;
 import org.tools.hqlbuilder.webservice.jquery.ui.tristate.TriState;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -96,7 +97,9 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
 
             @Override
             public Boolean getObject() {
-                return getValueModel().getObject();
+                Object object = getValueModel().getObject();
+                Boolean value = toBoolean(object);
+                return value;
             }
         };
         checkBox = new CheckBox("checkbox", checkBoxModel) {
@@ -105,7 +108,8 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                Boolean value = getValueModel().getObject();
+                Object object = getValueModel().getObject();
+                Boolean value = toBoolean(object);
                 if (Boolean.TRUE.equals(value)) {
                     tag.remove(INDETERMINATE);
                     tag.put(CHECKED, CHECKED);
@@ -130,4 +134,18 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
         return this.checkBox;
     }
 
+    protected BooleanConverter booleanConverter = new BooleanConverter();
+
+    public Boolean toBoolean(Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (object instanceof Boolean) {
+            return (Boolean) object;
+        }
+        if (object instanceof String) {
+            return booleanConverter.convertToObject((String) object, getLocale());
+        }
+        throw new UnsupportedOperationException();
+    }
 }
