@@ -1,14 +1,17 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
@@ -41,21 +44,33 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
+        // shortcut icon
+        add(new WebMarkupContainer("shortcutIcon").add(new AttributeModifier("href", Model.of(WicketApplication.get().getShortcutIcon())))
+                .setVisible(StringUtils.isNotBlank(WicketApplication.get().getShortcutIcon())));
+
         // wicket/ajax debug bars
         add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug") : new EmptyPanel(
                 "debug").setVisible(false));
+
         // check if javascript is enabled
         add(new CheckJavaScriptEnabled());
+
         // check if cookies are enabled
         add(new CheckCookiesEnabled());
+
         // check if ads are not blocked
         try {
             add(new CheckAdsEnabled());
         } catch (Throwable ex) {
-            add(new EmptyPanel("check.ads.enabled"));
+            add(new EmptyPanel("check.ads.enabled").setVisible(false));
         }
+
         // add header response (javascript) down below on page
-        add(new HeaderResponseContainer("footer-container", "footer-bucket"));
+        if (WicketApplication.get().isJavascriptAtBottom()) {
+            add(new HeaderResponseContainer("footer-container", "footer-bucket"));
+        } else {
+            add(new EmptyPanel("footer-container").setVisible(false));
+        }
     }
 
     @Override
