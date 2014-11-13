@@ -60,16 +60,9 @@ public class DefaultWebPage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
-        super.renderHead(response);
-
         if (!isEnabledInHierarchy()) {
             return;
         }
-
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
-
         addDefaultResources(response);
         addThemeResources(response);
         addPageResources(response);
@@ -107,8 +100,10 @@ public class DefaultWebPage extends WebPage {
         }
     }
 
-    protected void addDefaultResources(@SuppressWarnings("unused") IHeaderResponse response) {
-        //
+    protected void addDefaultResources(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
     }
 
     protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {

@@ -86,10 +86,10 @@ http://camanjs.com/
 https://github.com/carhartl/jquery-cookie
 http://designshack.net/articles/javascript/how-to-build-a-dynamic-imgur-upload-app-using-jquery-php/
 
-
-
-
-
+http://designshack.net/category/articles/css/
+http://css-tricks.com/collision-detection/
+http://css-tricks.com/almanac/properties/f/float/
+http://designshack.net/articles/css/html5-css3-anchor-link-tooltips/
 
 
 
