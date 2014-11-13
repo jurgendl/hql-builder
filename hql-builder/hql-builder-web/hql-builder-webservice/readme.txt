@@ -100,6 +100,31 @@ http://jquery-plugins.net/menuitems-responsive-jquery-navigation-menu-plugin
 http://sirxemic.github.io/jquery.ripples/
 http://jquery-plugins.net/slider-pro-responsive-and-touch-enabled-jquery-slider
 http://jquery-plugins.net/canvasjs-jquery-charts-plugin
+http://jquery-plugins.net/jquery-ui-slider-pips
+http://jquery-plugins.net/jquery-circular-slider-plugin
+http://jquery-plugins.net/lazysizes-lazyloader-for-responsive-images-iframes-and-widget
+http://jquery-plugins.net/awtooltip-css-based-tooltip-with-jquery
+http://jquery-plugins.net/making-better-select-elements-with-jquery-and-css3
+http://jquery-plugins.net/scrollwatch-jquery-plugin-for-determining-active-sections-on-scrolling
+http://jquery-plugins.net/autocomplete-like-google
+http://elmahdim.com/checkbo/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
