@@ -67,20 +67,32 @@ public class WicketApplication extends WebApplication {
 
     protected static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
 
+    @SpringBean(name = "pagesPackages", required = false)
+    protected String pagesPackages = "org.tools.hqlbuilder.webservice.wicket.pages";
+
     @SpringBean(name = "webProperties", required = false)
     protected transient Properties webProperties;
 
+    @SpringBean(name = "diskStore", required = false)
     protected boolean diskStore = false;
 
+    @SpringBean(name = "showDebugbars", required = false)
     protected boolean showDebugbars = false;
 
+    @SpringBean(name = "checkCookiesEnabled", required = false)
     protected boolean checkCookiesEnabled = true;
 
+    @SpringBean(name = "checkJavaScriptEnabled", required = false)
     protected boolean checkJavaScriptEnabled = true;
 
+    @SpringBean(name = "checkAdsEnabled", required = false)
     protected boolean checkAdsEnabled = false;
 
-    protected String pagesPackages = "org.tools.hqlbuilder.webservice.wicket.pages";
+    @SpringBean(name = "shortcutIcon", required = false)
+    protected String shortcutIcon;
+
+    @SpringBean(name = "javascriptAtBottom", required = false)
+    protected boolean javascriptAtBottom = true;
 
     /**
      * @see org.apache.wicket.Application#getHomePage()
@@ -326,5 +338,21 @@ public class WicketApplication extends WebApplication {
 
     public void setWebProperties(Properties webProperties) {
         this.webProperties = webProperties;
+    }
+
+    public String getShortcutIcon() {
+        return this.shortcutIcon;
+    }
+
+    public void setShortcutIcon(String shortcutIcon) {
+        this.shortcutIcon = shortcutIcon;
+    }
+
+    public boolean isJavascriptAtBottom() {
+        return this.javascriptAtBottom;
+    }
+
+    public void setJavascriptAtBottom(boolean javascriptAtBottom) {
+        this.javascriptAtBottom = javascriptAtBottom;
     }
 }

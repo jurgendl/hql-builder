@@ -3,12 +3,20 @@
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
 	">
+
+	<util:properties>
+		<prop key="shortcutIcon">bricks-icon.png</prop>
+	</util:properties>
+	<bean name="shortcutIcon" class="java.lang.String"><constructor-arg value="${shortcutIcon}"/></bean>
 
 	<import resource="classpath:org/tools/hqlbuilder/common/spring-logback.xml"/>
 

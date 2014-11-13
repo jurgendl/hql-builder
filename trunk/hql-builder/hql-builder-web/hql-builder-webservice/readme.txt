@@ -90,6 +90,26 @@ http://designshack.net/category/articles/css/
 http://css-tricks.com/collision-detection/
 http://css-tricks.com/almanac/properties/f/float/
 http://designshack.net/articles/css/html5-css3-anchor-link-tooltips/
+http://cssarrowplease.com/
+http://webdesign.about.com/od/html5/qt/html-5-information.htm
+http://alistapart.com/article/previewofhtml5
+http://www.html5rocks.com/en/
+http://jquery-plugins.net/particles-js-javascript-library-for-creating-particles
+http://jquery-plugins.net/tagator-jquery-plugin-for-tagging-boxes
+http://jquery-plugins.net/menuitems-responsive-jquery-navigation-menu-plugin
+http://sirxemic.github.io/jquery.ripples/
+http://jquery-plugins.net/slider-pro-responsive-and-touch-enabled-jquery-slider
+http://jquery-plugins.net/canvasjs-jquery-charts-plugin
+
+
+
+
+
+
+
+
+
+
 
 
 
