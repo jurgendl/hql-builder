@@ -12,7 +12,7 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic);
 
 /* monospace */
-@import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400,500,600,700,900&subset=latin,latin-ext);
 
 /* https://www.google.com/fonts/specimen/Tinos#pairings */
 /* serif, replacer for Times New Roman */
@@ -344,7 +344,7 @@ samp,
 var {
 	font-style: normal;
 	font-size: 1.2em;
-	font-family: 'Inconsolata', monospace;
+	font-family: 'Source Code Pro', monospace;
 }
 code {
 	display: block;
