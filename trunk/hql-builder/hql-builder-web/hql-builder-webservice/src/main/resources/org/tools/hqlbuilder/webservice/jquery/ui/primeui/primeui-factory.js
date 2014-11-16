@@ -1,34 +1,35 @@
+function primeuifactory(prefix) {
+	$(prefix+'.puiinputtext').puiinputtext();
+	$(prefix+'.puiinputtextarea').puiinputtextarea();
+	$(prefix+'.puidropdown').puidropdown();
+	$(prefix+'.puiaccordion').puiaccordion();
+	$(prefix+'.puipassword').puipassword();
+	$(prefix+'.puispinner').puispinner();
+	$(prefix+'.puilistbox').puilistbox();
+	$(prefix+'.puiautocomplete').puiautocomplete();
+	$(prefix+'.puibreadcrumb').puibreadcrumb();
+	$(prefix+'.puibutton').puibutton();
+	$(prefix+'.puicheckbox').puicheckbox();
+	$(prefix+'.puifieldset').puifieldset();
+	$(prefix+'.puigalleria').puigalleria();
+	$(prefix+'.puilightbox').puilightbox();
+	$(prefix+'.puimenu').puimenu();
+	$(prefix+'.puimenubar').puimenubar();
+	$(prefix+'.puicontextmenu').puicontextmenu();
+	$(prefix+'.puislidemenu').puislidemenu();
+	$(prefix+'.puitieredmenu').puitieredmenu();
+	$(prefix+'.puipaginator').puipaginator();
+	$(prefix+'.puipanel').puipanel();
+	$(prefix+'.puipicklist').puipicklist();
+	$(prefix+'.puiprogressbar').puiprogressbar();
+	$(prefix+'.puiradiobutton').puiradiobutton();
+	$(prefix+'.puisticky').puisticky();
+	$(prefix+'.puitabview').puitabview();
+	$(prefix+'.puigrowl').puigrowl();
+	$(prefix+'.puinotifytop').puinotify({easing: 'easeInOutCirc', position: 'top'});
+	$(prefix+'.puinotifybottom').puinotify({easing: 'easeInOutCirc', position: 'bottom'});
+	$(prefix+'.puidropdownfiltered').puidropdown({ filter: true, filterMatchMode: 'contains'});	
+}
 $( document ).ready(function() {
-
-$('.puiinputtext').puiinputtext();
-$('.puiinputtextarea').puiinputtextarea();
-$('.puidropdown').puidropdown();
-$('.puiaccordion').puiaccordion();
-$('.puipassword').puipassword();
-$('.puispinner').puispinner();
-$('.puilistbox').puilistbox();
-$('.puiautocomplete').puiautocomplete();
-$('.puibreadcrumb').puibreadcrumb();
-$('.puibutton').puibutton();
-$('.puicheckbox').puicheckbox();
-$('.puifieldset').puifieldset();
-$('.puigalleria').puigalleria();
-$('.puilightbox').puilightbox();
-$('.puimenu').puimenu();
-$('.puimenubar').puimenubar();
-$('.puicontextmenu').puicontextmenu();
-$('.puislidemenu').puislidemenu();
-$('.puitieredmenu').puitieredmenu();
-$('.puipaginator').puipaginator();
-$('.puipanel').puipanel();
-$('.puipicklist').puipicklist();
-$('.puiprogressbar').puiprogressbar();
-$('.puiradiobutton').puiradiobutton();
-$('.puisticky').puisticky();
-$('.puitabview').puitabview();
-$('.puigrowl').puigrowl();
-$('.puinotifytop').puinotify({easing: 'easeInOutCirc', position: 'top'});
-$('.puinotifybottom').puinotify({easing: 'easeInOutCirc', position: 'bottom'});
-$('.puidropdownfiltered').puidropdown({ filter: true, filterMatchMode: 'contains'});
-
+	primeuifactory('');
 });
