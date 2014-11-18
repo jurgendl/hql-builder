@@ -57,6 +57,8 @@ public class Example implements Serializable {
 
     private String text;
 
+    private String tags;
+
     private String textAdd;
 
     private String textExtra;
@@ -361,5 +363,13 @@ public class Example implements Serializable {
 
     public void setHtmlTextExtra(String htmlTextExtra) {
         this.htmlTextExtra = htmlTextExtra;
+    }
+
+    public String getTags() {
+        return this.tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

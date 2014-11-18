@@ -7,6 +7,8 @@ import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -23,6 +25,7 @@ import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.jquery.ui.scrollator.Scrollator;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -119,6 +122,10 @@ public class DefaultWebPage extends WebPage {
         response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
         response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
         response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
+
+        response.render(JavaScriptHeaderItem.forReference(Scrollator.SCROLLATOR_JS));
+        response.render(CssHeaderItem.forReference(Scrollator.SCROLLATOR_CSS));
+        response.render(OnDomReadyHeaderItem.forScript(Scrollator.SCROLLATOR_FACTORY_JS));
     }
 
     protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {

@@ -15,11 +15,11 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, IModel<List<String>> choices) {
         StringBuilder optionsBuilder = new StringBuilder("[");
         for (String choice : choices.getObject()) {
-            optionsBuilder.append(",").append(choice).append("',");
+            optionsBuilder.append("'").append(choice).append("',");
         }
         optionsBuilder.deleteCharAt(optionsBuilder.length() - 1).append("]");
-        return "$('#" + id + "').tagit({caseSensitive:" + tagItTextFieldSettings.isCaseSensitive() + ",availableTags:" + optionsBuilder
-                + ",singleField:true,singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'});";
+        return ";$('#" + id + "').tagit({caseSensitive:" + tagItTextFieldSettings.isCaseSensitive() + ",availableTags:" + optionsBuilder
+                + ",singleField:true,singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'});$('#" + id + "').hide();";
     }
 
     private static final long serialVersionUID = -3317709333874063112L;

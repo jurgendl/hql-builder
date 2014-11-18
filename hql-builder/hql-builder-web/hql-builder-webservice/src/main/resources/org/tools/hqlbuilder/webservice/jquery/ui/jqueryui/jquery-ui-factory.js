@@ -1,4 +1,5 @@
 function jqueryuifactory(prefix) {
+	console.log('jqueryuifactory['+prefix+']');
 	$(prefix+'.jquiaccordion').accordion();
 	$(prefix+'.jquiautocomplete').autocomplete();
 	$(prefix+'.jquibutton').button();
@@ -13,6 +14,6 @@ function jqueryuifactory(prefix) {
 	$(prefix+'.jquiselectmenu').selectmenu(); /* added in 6.16 */
 	$(prefix+'.feedbackPanel').addClass('ui-state-highlight').addClass('ui-corner-all').addClass('ui-state-error').addClass('ui-state-error-text');
 }
-$( document ).ready(function() {
+$(document).ready(function() {
 	jqueryuifactory('');
 });
