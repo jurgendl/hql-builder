@@ -13,10 +13,13 @@
 		http://www.springframework.org/schema/util/spring-util.xsd
 	">
 
-	<util:properties>
-		<prop key="shortcutIcon">bricks-icon.png</prop>
+	<util:properties id="hqlAppProperties">
+		<prop key="shortcutIcon">/hqlbuilder/bricks-icon.png</prop>
 	</util:properties>
-	<bean name="shortcutIcon" class="java.lang.String"><constructor-arg value="${shortcutIcon}"/></bean>
+	<bean id="hqlAppPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="hqlAppProperties" />
+	</bean>
+	<bean id="shortcutIcon" class="java.lang.String"><constructor-arg value="${shortcutIcon}"/></bean>
 
 	<import resource="classpath:org/tools/hqlbuilder/common/spring-logback.xml"/>
 

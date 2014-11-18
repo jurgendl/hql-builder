@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
@@ -42,6 +43,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.JQueryUIColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.TagItTextFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
@@ -55,7 +57,7 @@ public class ExampleForm extends FormPanel<Example> {
     public ExampleForm(String id) {
         super(id, new DefaultFormActions<Example>() {
             /***/
-        }, new FormSettings().setClientsideRequiredValidation(false).setShowPlaceholder(false));
+        }, new FormSettings().setClientsideRequiredValidation(false).setShowPlaceholder(false).setLabelWidth("18em"));
 
         setFormActions(new DefaultFormActions<Example>() {
             @Override
@@ -73,7 +75,7 @@ public class ExampleForm extends FormPanel<Example> {
         Example proxy = WebHelper.proxy(Example.class);
 
         getForm().setMultiPart(true);
-        getForm().setMaxSize(Bytes.megabytes(100));
+        getForm().setMaxSize(Bytes.megabytes(10));
 
         FormElementSettings fset = new FormElementSettings();
         final IChoiceRenderer<ExampleOpts> choiceRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
@@ -107,22 +109,22 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-                .setValueModel(new IModel<String>() {
-                    @Override
-                    public void detach() {
-                        //
-                    }
+        .setValueModel(new IModel<String>() {
+            @Override
+            public void detach() {
+                //
+            }
 
-                    @Override
-                    public String getObject() {
-                        return WicketSession.get().getJQueryUITheme();
-                    }
+            @Override
+            public String getObject() {
+                return WicketSession.get().getJQueryUITheme();
+            }
 
-                    @Override
-                    public void setObject(String theme) {
-                        WicketSession.get().setJQueryUITheme(theme);
-                    }
-                });
+            @Override
+            public void setObject(String theme) {
+                WicketSession.get().setJQueryUITheme(theme);
+            }
+        });
         addCheckBox(null, new CheckBoxSettings()).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -152,6 +154,11 @@ public class ExampleForm extends FormPanel<Example> {
         addHidden(proxy.getHidden1());
         addHidden(proxy.getHidden2());
 
+        List<String> rndwords = new ArrayList<String>();
+        for (int i = 0; i < 128; i++) {
+            rndwords.add(RandomStringUtils.randomAlphabetic(16));
+        }
+        addTagItTextFieldPanel(proxy.getTags(), new TagItTextFieldSettings(), new ListModel<String>(rndwords));
         addTextField(proxy.getText(), fset.clone());
         addTextField(proxy.getTextAdd(), fset.clone());
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);

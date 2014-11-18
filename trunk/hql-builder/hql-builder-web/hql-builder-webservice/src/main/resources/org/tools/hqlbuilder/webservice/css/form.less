@@ -9,12 +9,16 @@
 // background-color: 
 
 .defaultform {
+	margin: 2em auto;
+	width: 90%;
+
 	// pocketgrid form
 	.block-group {
 		margin-top: 0.4em;
 		margin-bottom: 0.4em;
 	}
 
+	// feedbackpanel
 	.feedbackPanel.ui-state-error {
 		font-size: 0.8em;
 		margin: 0px;
@@ -64,14 +68,26 @@
 		}
 
 		// default form element width
-		select,
-		.pui-inputtext:not(textarea),
-		input:not([type=submit]):not([type=reset]):not([type=button]):not([type=radio]):not([type=checkbox]) {
-			width: 260px;
-		}
-		
-		textarea {
-			width: 100%;
+		div.forminput {
+			> .likeinput,
+			> select,
+			> input[type='text'],
+			> input[type='password'],
+			> input[type='email'],
+			> textarea {
+				width: 100%;
+			}
+			> .pui-dropdown,
+			> .pui-spinner,
+			> .pui-listbox {
+				width: 100% !important;
+				> input {
+					width: 100% !important;
+				}
+				> .pui-dropdown-label {
+					width: 100% !important;
+				}
+			}
 		}
 
 		// overrides default padding and font size radiobuttonset and multiselectset of jquery-ui
@@ -103,14 +119,25 @@
 		}
 
 		// jqueryui colorpicker
-		.jquicolorpicker + button.ui-button.ui-widget.ui-button-text-only {
-			padding: 2px;
-			vertical-align: middle;
-			margin: 2px;
-		}
-		.jquerycolorpickerbuttonimage {
-			width: 16px;
-			height: 16px;
+		.jqueryuicolorpicker {
+			display: block;
+			width: 100%;
+			> input {
+				width: calc( ~"100% - 30px" );
+				display: inline-block;
+			}
+			> button {
+				padding: 2px;
+				vertical-align: middle;
+				margin: 2px;
+				height: 100%;
+				width: 24px;
+				display: inline-block;
+				.jquerycolorpickerbuttonimage {
+					width: 16px;
+					height: 16px;
+				}
+			}
 		}
 
 		// jquery slider replacing input slider
@@ -141,18 +168,18 @@
 		}
 
 		// tag-it
-		ul.tagit li.tagit-choice-editable { 
-			padding: 0 1em 0 0.2em; 
-		} 
-		ul.tagit li {
-			margin: 0 0 0 .1em;
-		}
 		ul.tagit {
 			padding: .15em;
+			margin: 0;
+			li {
+				margin: 0 0 0 .1em;
+			}
+			li.tagit-new {
+				padding: 0;
+			}
+			li.tagit-choice-editable {
+				padding: 0 1em 0 0.2em; 
+			}
 		}
-		ul.tagit li.tagit-new {
-			padding: 0;
-		}
-
 	}
 }

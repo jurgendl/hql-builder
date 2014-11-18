@@ -1,12 +1,13 @@
 function primeuifactory(prefix) {
-	$(prefix+'.puiinputtext').puiinputtext();
-	$(prefix+'.puiinputtextarea').puiinputtextarea();
-	$(prefix+'.puidropdown').puidropdown();
+	console.log('primeuifactory['+prefix+']');
+	$(prefix+'.puiinputtext').puiinputtext({width:'auto'});
+	$(prefix+'.puiinputtextarea').puiinputtextarea({width:'auto'});
+	$(prefix+'.puidropdown').puidropdown({width:'auto'});
 	$(prefix+'.puiaccordion').puiaccordion();
-	$(prefix+'.puipassword').puipassword();
-	$(prefix+'.puispinner').puispinner();
-	$(prefix+'.puilistbox').puilistbox();
-	$(prefix+'.puiautocomplete').puiautocomplete();
+	$(prefix+'.puipassword').puipassword({width:'auto'});
+	$(prefix+'.puispinner').puispinner({width:'auto'});
+	$(prefix+'.puilistbox').puilistbox({width:'auto'});
+	$(prefix+'.puiautocomplete').puiautocomplete({width:'auto'});
 	$(prefix+'.puibreadcrumb').puibreadcrumb();
 	$(prefix+'.puibutton').puibutton();
 	$(prefix+'.puicheckbox').puicheckbox();
@@ -26,10 +27,10 @@ function primeuifactory(prefix) {
 	$(prefix+'.puisticky').puisticky();
 	$(prefix+'.puitabview').puitabview();
 	$(prefix+'.puigrowl').puigrowl();
-	$(prefix+'.puinotifytop').puinotify({easing: 'easeInOutCirc', position: 'top'});
-	$(prefix+'.puinotifybottom').puinotify({easing: 'easeInOutCirc', position: 'bottom'});
-	$(prefix+'.puidropdownfiltered').puidropdown({ filter: true, filterMatchMode: 'contains'});	
+	$(prefix+'.puinotifytop').puinotify({easing:'easeInOutCirc',position:'top'});
+	$(prefix+'.puinotifybottom').puinotify({easing:'easeInOutCirc',position:'bottom'});
+	$(prefix+'.puidropdownfiltered').puidropdown({width:'auto',filter:true,filterMatchMode:'contains'});
 }
-$( document ).ready(function() {
+$(document).ready(function() {
 	primeuifactory('');
 });
