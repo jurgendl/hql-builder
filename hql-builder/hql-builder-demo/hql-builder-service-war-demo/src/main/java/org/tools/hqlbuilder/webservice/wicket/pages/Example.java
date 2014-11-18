@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.tools.hqlbuilder.demo.Registration;
 
 public class Example implements Serializable {
@@ -108,6 +110,17 @@ public class Example implements Serializable {
     private String htmlText = "<u>underline</u> <b>bold</b> <i>italic</i>";
 
     private String htmlTextExtra = "<u>underline</u> <b>bold</b> <i>italic</i>";
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("id", id).append("multi", multi).append("files", files)
+                .append("hidden1", hidden1).append("hidden2", hidden2).append("registration", registration).append("text", text).append("tags", tags)
+                .append("textAdd", textAdd).append("textExtra", textExtra).append("radio", radio).append("combo", combo).append("list", list)
+                .append("check", check).append("date1", date1).append("date2", date2).append("integerv", integerv).append("longv", longv)
+                .append("shortv", shortv).append("doublev", doublev).append("floatv", floatv).append("bytev", bytev).append("integerr", integerr)
+                .append("longr", longr).append("shortr", shortr).append("doubler", doubler).append("floatr", floatr).append("byter", byter)
+                .append("color", color).append("color2", color2).append("htmlText", htmlText).append("htmlTextExtra", htmlTextExtra).toString();
+    }
 
     public ExampleOpts getRadio() {
         return this.radio;

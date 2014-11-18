@@ -109,22 +109,22 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-        .setValueModel(new IModel<String>() {
-            @Override
-            public void detach() {
-                //
-            }
+                .setValueModel(new IModel<String>() {
+                    @Override
+                    public void detach() {
+                        //
+                    }
 
-            @Override
-            public String getObject() {
-                return WicketSession.get().getJQueryUITheme();
-            }
+                    @Override
+                    public String getObject() {
+                        return WicketSession.get().getJQueryUITheme();
+                    }
 
-            @Override
-            public void setObject(String theme) {
-                WicketSession.get().setJQueryUITheme(theme);
-            }
-        });
+                    @Override
+                    public void setObject(String theme) {
+                        WicketSession.get().setJQueryUITheme(theme);
+                    }
+                });
         addCheckBox(null, new CheckBoxSettings()).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {
@@ -287,6 +287,7 @@ public class ExampleForm extends FormPanel<Example> {
     }
 
     protected void _submitObject(Example example) {
+        System.out.println(">" + example);
         exampleService.save(getInstanceId(), example);
     }
 
