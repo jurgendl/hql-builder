@@ -12,12 +12,6 @@
 	margin: 2em auto;
 	width: 90%;
 
-	// pocketgrid form
-	.block-group {
-		margin-top: 0.4em;
-		margin-bottom: 0.4em;
-	}
-
 	// feedbackpanel
 	.feedbackPanel.ui-state-error {
 		font-size: 0.8em;
@@ -54,17 +48,27 @@
 			font-weight: 700;
 			font-size: 1.2em;
 		}
-
-		// form labels
-		.formlabel {
-			text-align: right;
-			display: block;
-			margin-left: 0.5em;
-			margin-right: 0.5em;
-			font-weight: bold;
-			vertical-align: middle;
-			height: 24px;
-			line-height: 24px;
+		
+		// form row, aka block-group
+		.formrow {
+			margin-top: 0.4em;
+			margin-bottom: 0.4em;
+			// form row blocks
+			.block {
+				// form labels
+				.formlabel {
+					text-align: right;
+					display: block;
+					margin-left: 0.5em;
+					margin-right: 0.5em;
+					font-weight: bold;
+					height: 28px;
+					line-height: 28px;
+				}
+				// form input
+				&.forminput {
+				}
+			}
 		}
 
 		// default form element width
@@ -95,17 +99,25 @@
 		.multiselectchoice .ui-button {
 			padding: 3px 5px 3px 5px;
 			font-size: 0.8em;
-		}	
+		}
+		
+		// buttonset
+		.likeinput .ui-buttonset > .ui-button {
+			padding-top: 4px;
+			padding-bottom: 4px;
+		}
 
 		// spectrum
-		.sp-preview {
-			height: 18px;
-		}
-		.sp-dd {
-			height: 18px;
-			line-height: 18px;
-			vertical-align: top;
-			padding: 0px;
+		.sp-replacer {
+			.sp-preview {
+				height: 18px;
+			}
+			.sp-dd {
+				height: 18px;
+				line-height: 18px;
+				vertical-align: top;
+				padding: 0px;
+			}
 		}
 
 		// bootstrap theme fix
@@ -123,7 +135,7 @@
 			display: block;
 			width: 100%;
 			> input {
-				width: calc( ~"100% - 30px" );
+				width: calc( 100% - 30px );
 				display: inline-block;
 			}
 			> button {
@@ -145,7 +157,7 @@
 			display: block;
 			width: 100%;
 			.slider {
-				width: calc( ~"100% - 58px" );
+				width: calc( 100% - 58px );
 				height: 1.6em;
 				line-height: 1.6em;
 				display: inline-block;
@@ -175,16 +187,16 @@
 
 		// tag-it
 		ul.tagit {
-			padding: .15em;
+			padding: 4px;
 			margin: 0;
 			li {
-				margin: 0 0 0 .1em;
+				margin: 0 0 0 2px;
 			}
 			li.tagit-new {
 				padding: 0;
 			}
 			li.tagit-choice-editable {
-				padding: 0 1.2em 0 0.4em; 
+				padding: 0 16px 0 6px; 
 			}
 		}
 	}
