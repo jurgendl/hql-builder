@@ -103,7 +103,7 @@ public class Example implements Serializable {
 
     private Byte byter = (byte) 50;
 
-    private String color = "#005599";
+    private String color1 = "#005599";
 
     private String color2 = "#995500";
 
@@ -111,15 +111,18 @@ public class Example implements Serializable {
 
     private String htmlTextExtra = "<u>underline</u> <b>bold</b> <i>italic</i>";
 
+    private Boolean tristate;
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("id", id).append("multi", multi).append("files", files)
-                .append("hidden1", hidden1).append("hidden2", hidden2).append("registration", registration).append("text", text).append("tags", tags)
-                .append("textAdd", textAdd).append("textExtra", textExtra).append("radio", radio).append("combo", combo).append("list", list)
-                .append("check", check).append("date1", date1).append("date2", date2).append("integerv", integerv).append("longv", longv)
-                .append("shortv", shortv).append("doublev", doublev).append("floatv", floatv).append("bytev", bytev).append("integerr", integerr)
-                .append("longr", longr).append("shortr", shortr).append("doubler", doubler).append("floatr", floatr).append("byter", byter)
-                .append("color", color).append("color2", color2).append("htmlText", htmlText).append("htmlTextExtra", htmlTextExtra).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("id", id).append("tristate", tristate).append("multi", multi)
+                .append("files", files).append("hidden1", hidden1).append("hidden2", hidden2).append("registration", registration)
+                .append("text", text).append("tags", tags).append("textAdd", textAdd).append("textExtra", textExtra).append("radio", radio)
+                .append("combo", combo).append("list", list).append("check", check).append("date1", date1).append("date2", date2)
+                .append("integerv", integerv).append("longv", longv).append("shortv", shortv).append("doublev", doublev).append("floatv", floatv)
+                .append("bytev", bytev).append("integerr", integerr).append("longr", longr).append("shortr", shortr).append("doubler", doubler)
+                .append("floatr", floatr).append("byter", byter).append("color1", color1).append("color2", color2).append("htmlText", htmlText)
+                .append("htmlTextExtra", htmlTextExtra).toString();
     }
 
     public ExampleOpts getRadio() {
@@ -330,14 +333,6 @@ public class Example implements Serializable {
         this.textExtra = textExtra;
     }
 
-    public String getColor() {
-        return this.color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getTextAdd() {
         return this.textAdd;
     }
@@ -384,5 +379,21 @@ public class Example implements Serializable {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public Boolean getTristate() {
+        return this.tristate;
+    }
+
+    public void setTristate(Boolean tristate) {
+        this.tristate = tristate;
+    }
+
+    public String getColor1() {
+        return this.color1;
+    }
+
+    public void setColor1(String color1) {
+        this.color1 = color1;
     }
 }

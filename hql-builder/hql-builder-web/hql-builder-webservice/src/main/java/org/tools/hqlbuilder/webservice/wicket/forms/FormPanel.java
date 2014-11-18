@@ -42,7 +42,7 @@ import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.converter.Converter;
-import org.tools.hqlbuilder.webservice.wicket.less.LessResourceReference;
+import org.tools.hqlbuilder.webservice.wicket.sass.SassResourceReference;
 
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 
@@ -55,6 +55,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     private static final long serialVersionUID = -6387604067134639316L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
+
+    public static final SassResourceReference FORM_CSS = new SassResourceReference(WicketCSSRoot.class, "form.css");
 
     protected RepeatingView rowRepeater;
 
@@ -532,7 +534,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -564,7 +566,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
         this.renderColumnsCss(response);
-        response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "form.css")));
+        response.render(CssHeaderItem.forReference(FORM_CSS));
     }
 
     public void setFormActions(FormActions<T> formActions) {

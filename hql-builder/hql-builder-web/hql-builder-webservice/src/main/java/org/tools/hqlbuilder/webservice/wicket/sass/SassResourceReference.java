@@ -139,7 +139,7 @@ public class SassResourceReference extends StreamResourceReference implements IR
     }
 
     protected String getSassName() {
-        return this.getName();
+        return this.getName().replaceAll("\\.css", ".scss");
     }
 
     @Override

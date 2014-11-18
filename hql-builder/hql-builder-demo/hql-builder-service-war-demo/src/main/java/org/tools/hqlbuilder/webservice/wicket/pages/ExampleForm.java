@@ -45,6 +45,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TagItTextFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.TriStateCheckBoxSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
@@ -162,12 +163,13 @@ public class ExampleForm extends FormPanel<Example> {
         addTextField(proxy.getText(), fset.clone());
         addTextField(proxy.getTextAdd(), fset.clone());
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
+        addTriStateCheckBox(proxy.getTristate(), new TriStateCheckBoxSettings());
         addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
         addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
         addSliderField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
         addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
         addFilepicker(proxy);
-        addColorPicker(proxy.getColor(), new ColorPickerSettings());
+        addColorPicker(proxy.getColor1(), new ColorPickerSettings());
         addColorPicker(proxy.getColor2(), new JQueryUIColorPickerSettings());
 
         {
