@@ -141,19 +141,25 @@
 		}
 
 		// jquery slider replacing input slider
-		.slider.ui-slider-horizontal {
-			width: 150px;
-			height: 1.6em;
-			line-height: 1.6em;
-			display: inline-block;
-			margin-left: 6px;
-			margin-right: 8px;
-			vertical-align: bottom;
-			margin-top: 3px;
-		}
-		.slider.ui-slider-horizontal .ui-slider-handle {
-			height: 1.8em;
-			top: -1px;
+		.numberslider {
+			display: block;
+			width: 100%;
+			.slider {
+				width: calc( ~"100% - 58px" );
+				height: 1.6em;
+				line-height: 1.6em;
+				display: inline-block;
+				margin: 2px 10px 2px 7px;
+				vertical-align: bottom;
+				.ui-slider-handle {
+					height: 1.8em;
+					top: -1px;
+				}
+			}
+			output {
+				display: inline-block;
+				width: 40px;
+			}
 		}
 
 		// primeui checkbox
@@ -161,10 +167,10 @@
 			vertical-align: middle;
 			width: 19px;
 			height: 19px;
-		}
-		.pui-chkbox-box.ui-widget {
-			width: 16px;
-			height: 16px;
+			.pui-chkbox-box.ui-widget {
+				width: 18px;
+				height: 18px;
+			}
 		}
 
 		// tag-it
