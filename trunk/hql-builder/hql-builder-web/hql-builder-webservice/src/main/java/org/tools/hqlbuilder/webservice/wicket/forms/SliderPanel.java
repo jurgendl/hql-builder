@@ -14,7 +14,7 @@ public class SliderPanel<N extends Number & Comparable<N>> extends DefaultFormRo
     private static final long serialVersionUID = 1636673516673656939L;
 
     public static final JavaScriptResourceReference SLIDER_REFERENCE = new JavaScriptResourceReference(SliderPanel.class, "slider.js")
-    .addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
+            .addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
 
     public static final String STEP = "step";
 
@@ -55,7 +55,6 @@ public class SliderPanel<N extends Number & Comparable<N>> extends DefaultFormRo
         if (!isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
         response.render(JavaScriptHeaderItem.forReference(SLIDER_REFERENCE));
         response.render(JavaScriptHeaderItem.forScript("$( document ).ready(function() { sliderWidget('" + getComponent().getMarkupId() + "'); }); ",
                 "js_slider_" + getComponent().getMarkupId()));
