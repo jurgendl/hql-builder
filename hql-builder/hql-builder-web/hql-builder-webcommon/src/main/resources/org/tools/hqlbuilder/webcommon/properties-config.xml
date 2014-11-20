@@ -10,6 +10,8 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd  
 	">
 
+	<bean id="disableEHCacheUpdateCheck" class="org.tools.hqlbuilder.common.DisableEHCacheUpdateCheck" lazy-init="false" scope="singleton"/>
+
 	<bean id="webPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="properties" ref="webProperties" />
 	</bean>

@@ -110,6 +110,13 @@ http://jquery-plugins.net/autocomplete-like-google
 http://elmahdim.com/checkbo/
 http://css3gen.com/box-shadow/
 http://cssload.net/
+http://www.aakashweb.com/demos/jquery-easy-ticker/
+http://metricsgraphicsjs.org/examples.htm
+http://www.dynamicdrive.com/dynamicindex4/beforeandafter.htm
+http://jquery-plugins.net/hello-js-javascript-restful-api-for-connecting-with-oauth2-services
+http://pgwjs.com/pgwbrowser/
+https://github.com/mbostock/d3/wiki/Gallery
+https://github.com/mistic100/jQuery-QueryBuilder
 
 
 
@@ -130,11 +137,4 @@ http://cssload.net/
 
 
 
-
-
-
-
-
-
-
-
+http://pakcheong.github.io/jqthumb/

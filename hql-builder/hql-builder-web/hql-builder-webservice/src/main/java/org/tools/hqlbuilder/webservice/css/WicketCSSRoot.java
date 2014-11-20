@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import org.tools.hqlbuilder.webservice.jquery.ui.spectrum.Spectrum;
-import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 
 import ro.isdc.wro.extensions.processor.support.yui.YuiCssCompressor;
@@ -25,9 +24,9 @@ public class WicketCSSRoot {
     public static CssResourceReference ANIMATE = new CssResourceReference(WicketCSSRoot.class, "animate.css");
 
     public static void main(String[] args) {
-        minify(WicketCSSRoot.class, "", new String[] { "general", "meyer.reset", "normalize" });
+        minify(WicketCSSRoot.class, "", new String[] { "meyer.reset", "normalize" });
         minify(Spectrum.class, "", new String[] { "spectrum" });
-        minify(WeLoveIcons.class, "", new String[] { "weloveiconfonts", "weloveiconfonts-social" });
+        // minify(WeLoveIcons.class, "", new String[] { "weloveiconfonts", "weloveiconfonts-social" });
     }
 
     protected static void minify(Class<?> root, String path, String[] sources) {
