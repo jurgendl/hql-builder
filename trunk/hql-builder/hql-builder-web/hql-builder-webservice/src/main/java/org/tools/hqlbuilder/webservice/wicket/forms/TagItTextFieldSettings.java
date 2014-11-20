@@ -7,6 +7,12 @@ public class TagItTextFieldSettings extends AbstractFormElementSettings<TagItTex
 
     protected char fieldDelimiter = ',';
 
+    protected int minLength = 1;
+
+    protected long delay = 200;
+
+    protected boolean singleField = true;
+
     public TagItTextFieldSettings() {
         super();
     }
@@ -30,6 +36,33 @@ public class TagItTextFieldSettings extends AbstractFormElementSettings<TagItTex
 
     public TagItTextFieldSettings setFieldDelimiter(char fieldDelimiter) {
         this.fieldDelimiter = fieldDelimiter;
+        return this;
+    }
+
+    public int getMinLength() {
+        return this.minLength;
+    }
+
+    public TagItTextFieldSettings setMinLength(int minLength) {
+        this.minLength = minLength;
+        return this;
+    }
+
+    public long getDelay() {
+        return this.delay;
+    }
+
+    public TagItTextFieldSettings setDelay(long delay) {
+        this.delay = delay;
+        return this;
+    }
+
+    public boolean isSingleField() {
+        return this.singleField;
+    }
+
+    public TagItTextFieldSettings setSingleField(boolean singleField) {
+        this.singleField = singleField;
         return this;
     }
 }

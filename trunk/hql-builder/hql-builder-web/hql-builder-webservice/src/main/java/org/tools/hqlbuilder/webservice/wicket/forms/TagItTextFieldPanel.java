@@ -18,8 +18,10 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
             optionsBuilder.append("'").append(choice).append("',");
         }
         optionsBuilder.deleteCharAt(optionsBuilder.length() - 1).append("]");
-        return ";$('#" + id + "').tagit({caseSensitive:" + tagItTextFieldSettings.isCaseSensitive() + ",availableTags:" + optionsBuilder
-                + ",singleField:true,singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'});$('#" + id + "').hide();";
+        return ";$('#" + id + "').hide().tagit({autocomplete:{delay:" + tagItTextFieldSettings.getDelay() + ",minLength:"
+        + tagItTextFieldSettings.getMinLength() + "},caseSensitive:" + tagItTextFieldSettings.isCaseSensitive() + ",availableTags:"
+        + optionsBuilder + ",singleField:" + tagItTextFieldSettings.isSingleField() + ",singleFieldDelimiter:'"
+                + tagItTextFieldSettings.getFieldDelimiter() + "'});";
     }
 
     private static final long serialVersionUID = -3317709333874063112L;
