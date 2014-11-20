@@ -117,9 +117,8 @@ http://jquery-plugins.net/hello-js-javascript-restful-api-for-connecting-with-oa
 http://pgwjs.com/pgwbrowser/
 https://github.com/mbostock/d3/wiki/Gallery
 https://github.com/mistic100/jQuery-QueryBuilder
-
-
-
+http://www.jacklmoore.com/colorbox/
+http://designwithpc.com/Plugins/ddSlick#demo
 
 
 
