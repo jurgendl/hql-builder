@@ -13,6 +13,8 @@ public class TagItTextFieldSettings extends AbstractFormElementSettings<TagItTex
 
     protected boolean singleField = true;
 
+    protected boolean allowSpaces = true;
+
     public TagItTextFieldSettings() {
         super();
     }
@@ -63,6 +65,15 @@ public class TagItTextFieldSettings extends AbstractFormElementSettings<TagItTex
 
     public TagItTextFieldSettings setSingleField(boolean singleField) {
         this.singleField = singleField;
+        return this;
+    }
+
+    public boolean isAllowSpaces() {
+        return this.allowSpaces;
+    }
+
+    public TagItTextFieldSettings setAllowSpaces(boolean allowSpaces) {
+        this.allowSpaces = allowSpaces;
         return this;
     }
 }

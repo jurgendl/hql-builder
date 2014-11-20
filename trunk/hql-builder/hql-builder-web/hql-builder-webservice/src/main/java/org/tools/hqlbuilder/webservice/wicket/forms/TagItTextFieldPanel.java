@@ -13,15 +13,30 @@ import org.tools.hqlbuilder.webservice.jquery.ui.tagit.TagIt;
 
 public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<String>, TagItTextFieldSettings> {
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, IModel<List<String>> choices) {
-        StringBuilder optionsBuilder = new StringBuilder("[");
+        StringBuilder availableTags = new StringBuilder("[");
         for (String choice : choices.getObject()) {
-            optionsBuilder.append("'").append(choice).append("',");
+            availableTags.append("'").append(choice).append("',");
         }
-        optionsBuilder.deleteCharAt(optionsBuilder.length() - 1).append("]");
-        return ";$('#" + id + "').hide().tagit({autocomplete:{delay:" + tagItTextFieldSettings.getDelay() + ",minLength:"
-        + tagItTextFieldSettings.getMinLength() + "},caseSensitive:" + tagItTextFieldSettings.isCaseSensitive() + ",availableTags:"
-        + optionsBuilder + ",singleField:" + tagItTextFieldSettings.isSingleField() + ",singleFieldDelimiter:'"
-                + tagItTextFieldSettings.getFieldDelimiter() + "'});";
+        availableTags.deleteCharAt(availableTags.length() - 1).append("]");
+        return (";$('#" + id + "').hide().tagit({"//
+                + "autocomplete:"//
+                + "{"//
+                + "source:function(request,response){"//
+                + "var availableTags=" + availableTags + ";"//
+                + "var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term),'i');"//
+                + "response($.grep(availableTags,function(item){"//
+                + "return matcher.test(item);"//
+                + "}));"//
+                + "}"//
+                + ",delay:" + tagItTextFieldSettings.getDelay()//
+                + ",minLength:" + tagItTextFieldSettings.getMinLength()//
+                + "}"//
+                + ",allowSpaces:" + tagItTextFieldSettings.isAllowSpaces()//
+                + ",caseSensitive:" + tagItTextFieldSettings.isCaseSensitive()//
+                // + ",availableTags:" + availableTags //
+                + ",singleField:" + tagItTextFieldSettings.isSingleField()//
+                + ",singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'"//
+                + "});");//
     }
 
     private static final long serialVersionUID = -3317709333874063112L;
