@@ -1,16 +1,6 @@
-// input:-webkit-autofill {
-//    -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */
-//    -webkit-text-fill-color: #333;
-//}
-// input:-webkit-autofill:focus {
-//    -webkit-box-shadow: /*your box-shadow*/,0 0 0 50px white inset;
-//    -webkit-text-fill-color: #333;
-//}
-// background-color: 
-
 .defaultform {
-	//margin: 2em auto;
-	//width: 90%;
+	margin: 2em auto;
+	width: 95%;
 
 	// feedbackpanel
 	.feedbackPanel.ui-state-error {
@@ -107,7 +97,7 @@
 			padding-bottom: 4px;
 		}
 		
-		//tristate
+		// tristate
 		.tristate {
 			height: 28px;
 		}
