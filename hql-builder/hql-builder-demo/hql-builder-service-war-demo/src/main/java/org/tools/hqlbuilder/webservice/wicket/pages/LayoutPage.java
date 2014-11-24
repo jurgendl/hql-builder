@@ -11,12 +11,14 @@ import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.stickynavbar.StickyNavbar;
 import org.tools.hqlbuilder.webservice.jquery.ui.weloveicons.WeLoveIcons;
-import org.tools.hqlbuilder.webservice.wicket.less.LessResourceReference;
+import org.tools.hqlbuilder.webservice.wicket.sass.SassResourceReference;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @MountPath("/layout")
 public class LayoutPage extends BasePage {
     private static final long serialVersionUID = 3459253460686535846L;
+
+    public static final SassResourceReference LAYOUT_CSS = new SassResourceReference(WicketCSSRoot.class, "layout.css");
 
     public LayoutPage(PageParameters parameters) {
         super(parameters);
@@ -37,7 +39,7 @@ public class LayoutPage extends BasePage {
         }
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
-        response.render(CssHeaderItem.forReference(new LessResourceReference(WicketCSSRoot.class, "layout.css")));
+        response.render(CssHeaderItem.forReference(LAYOUT_CSS));
         response.render(JavaScriptHeaderItem.forReference(StickyNavbar.STICKY_NAVBAR_JS));
         // response.render(OnDomReadyHeaderItem.forScript("$('.stickied').stickyNavbar();"));
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_SOCIAL_CSS));

@@ -152,9 +152,9 @@ http://nanobar.micronube.com/
 http://jquery-plugins.net/cytoscape-js-javascript-graph-library-for-analysis-and-visualisation
 http://www.pontikis.net/labs/bs_pagination/demo/
 http://www.class.pm/projects/jquery/classycountdown/
-
-
-
+http://css-tricks.com/snippets/css/a-guide-to-flexbox/
+http://css-tricks.com/flexbox-nav-bar-fixed-variable-take-rest-elements/
+http://codersblock.com/blog/fun-times-with-css-counters/
 
 
 
