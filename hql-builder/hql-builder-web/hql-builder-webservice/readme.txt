@@ -155,7 +155,7 @@ http://www.class.pm/projects/jquery/classycountdown/
 http://css-tricks.com/snippets/css/a-guide-to-flexbox/
 http://css-tricks.com/flexbox-nav-bar-fixed-variable-take-rest-elements/
 http://codersblock.com/blog/fun-times-with-css-counters/
-
+http://codersblock.com/blog/inline-block-working-as-intended/
 
 
 
