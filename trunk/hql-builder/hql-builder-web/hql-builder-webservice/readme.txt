@@ -119,11 +119,23 @@ https://github.com/mbostock/d3/wiki/Gallery
 https://github.com/mistic100/jQuery-QueryBuilder
 http://www.jacklmoore.com/colorbox/
 http://designwithpc.com/Plugins/ddSlick#demo
-
-
-
-
-
+http://goodies.pixabay.com/jquery/tag-editor/demo.html
+http://jquery-plugins.net/jquery-serialize-object
+http://jquery-plugins.net/jquery-qrcode-jquery-plugin-to-dynamically-generate-qr-codes
+https://github.com/jayKayEss/Flapper
+http://jquery-plugins.net/tikslus-carousel-fully-responsive-jquery-carousel
+http://dc-js.github.io/dc.js/
+http://jquery-plugins.net/demo/animated-scrollto.html
+http://jquery-plugins.net/gifffer-prevent-autoplaying-of-animated-gifs
+http://www.chartjs.org/
+https://github.com/robicch/jQueryGantt
+http://tympanus.net/codrops/2014/06/26/draggable-dual-view-slideshow/
+https://github.com/flowjs/flow.js
+http://jackocnr.com/intl-tel-input.html
+http://dragdropsite.github.io/waterpipe.js/
+https://github.com/carhartl/jquery-cookie
+http://www.owlcarousel.owlgraphic.com/
+http://qrohlf.com/trianglify/
 
 
 
@@ -137,3 +149,6 @@ http://designwithpc.com/Plugins/ddSlick#demo
 
 
 http://pakcheong.github.io/jqthumb/
+http://thrilleratplay.github.io/jquery-validation-bootstrap-tooltip/
+http://creoart.github.io/jquery.textareafullscreen/
+http://jquery-plugins.net/clockpicker-clock-style-timepicker-for-bootstrap
