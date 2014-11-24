@@ -136,6 +136,40 @@ http://dragdropsite.github.io/waterpipe.js/
 https://github.com/carhartl/jquery-cookie
 http://www.owlcarousel.owlgraphic.com/
 http://qrohlf.com/trianglify/
+http://anseki.github.io/jquery-plainmodal/
+http://bigspaceship.github.io/shine.js/
+https://github.com/videojs/video.js
+http://tuxsudo.com/code/project/letterfx
+http://jaredly.github.io/treed/
+http://ngiriraj.com/pages/htmltable_export/demo.php
+http://sniperwolf.github.io/taggingJS/
+http://projects.zoulcreations.com/jquery/jquery-growl/
+http://pgwjs.com/pgwmodal/
+http://jquery-plugins.net/slick-jquery-responsive-touch-carousel
+http://baijs.com/tinyscrollbar/
+http://danielm.herokuapp.com/demos/dnd/
+http://nanobar.micronube.com/
+http://jquery-plugins.net/cytoscape-js-javascript-graph-library-for-analysis-and-visualisation
+http://www.pontikis.net/labs/bs_pagination/demo/
+http://www.class.pm/projects/jquery/classycountdown/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -152,3 +186,5 @@ http://pakcheong.github.io/jqthumb/
 http://thrilleratplay.github.io/jquery-validation-bootstrap-tooltip/
 http://creoart.github.io/jquery.textareafullscreen/
 http://jquery-plugins.net/clockpicker-clock-style-timepicker-for-bootstrap
+http://sachinchoolur.github.io/lightslider/
+http://fengyuanchen.github.io/cropper/
