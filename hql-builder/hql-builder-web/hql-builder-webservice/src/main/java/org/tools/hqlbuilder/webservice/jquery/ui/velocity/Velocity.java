@@ -10,7 +10,9 @@ import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
  * @see http://julian.com/research/velocity/
  */
 public class Velocity {
-    public static JavaScriptResourceReference VELOCITY_JS = new JavaScriptResourceReference(Velocity.class, "jquery.velocity.js");
+    public static JavaScriptResourceReference VELOCITY_UI_JS = new JavaScriptResourceReference(Velocity.class, "velocity.ui.js");
+
+    public static JavaScriptResourceReference VELOCITY_JS = new JavaScriptResourceReference(Velocity.class, "velocity.js");
 
     static {
         try {
