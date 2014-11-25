@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.service;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -213,5 +215,10 @@ public abstract class ServiceImpl {
 
     protected void update(String entityName, Object object) {
         this.getSession().update(entityName, object);
+    }
+
+    public static <T extends Comparable<? super T>> List<T> sort(List<T> list) {
+        Collections.sort(list);
+        return list;
     }
 }
