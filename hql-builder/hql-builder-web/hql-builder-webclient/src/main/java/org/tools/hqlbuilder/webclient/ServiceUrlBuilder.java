@@ -92,9 +92,18 @@ public class ServiceUrlBuilder implements InitializingBean {
     }
 
     public Integer getPort() {
-        if (port == null && webProperties != null) {
-            String tmp = webProperties.getProperty("port");
-            port = tmp == null ? 80 : Integer.parseInt(tmp);
+        if (port == null) {
+            if (webProperties != null && webProperties.containsKey("port")) {
+                port = Integer.parseInt(webProperties.getProperty("port"));
+            }
+            if (port == null) {
+                try {
+                    // ServletContextListener servletContextListener = ServletContextListener.get();
+                    System.out.println();
+                } catch (Exception ex) {
+                    // TODO: handle exception
+                }
+            }
         }
         return this.port;
     }
