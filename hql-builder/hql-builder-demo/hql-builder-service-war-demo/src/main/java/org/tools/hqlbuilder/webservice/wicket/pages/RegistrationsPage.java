@@ -120,12 +120,12 @@ public class RegistrationsPage extends BasePage {
 
     protected DefaultFormActions<Registration> initTable(Registration proxy, DefaultDataProvider<Registration> dataProvider) {
         List<TableColumn<Registration, ?>> columns = new ArrayList<TableColumn<Registration, ?>>();
-        Side side = Side.server;
-        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getFirstName()).setSorting(side));
-        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getLastName()).setSorting(side));
-        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getUsername()).setSorting(side));
-        columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()).setSorting(side));
-        columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()).setSorting(side));
+        Side sort = Side.server;
+        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getFirstName()).setSorting(sort));
+        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getLastName()).setSorting(sort));
+        columns.add(EnhancedTable.<Registration, String> newColumn(this, proxy.getUsername()).setSorting(sort));
+        columns.add(EnhancedTable.<Registration> newEmailColumn(this, proxy.getEmail()).setSorting(sort));
+        columns.add(EnhancedTable.<Registration> newDateTimeColumn(this, proxy.getDateOfBirth()).setSorting(sort));
         columns.add(EnhancedTable.<Registration> getActionsColumn(this, dataProvider));
         this.table = new EnhancedTable<Registration>("registrationstable", columns, dataProvider);
 
