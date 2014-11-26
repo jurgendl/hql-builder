@@ -1,6 +1,10 @@
 package org.tools.hqlbuilder.webservice.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.tools.hqlbuilder.webservice.wicket.pages.Example;
@@ -13,6 +17,12 @@ public class ServiceImpl implements ServiceInterface {
         if (!examples.containsKey(id)) {
             Example value = new Example();
             value.setId(id);
+            List<String> options = new ArrayList<String>(new HashSet<String>(Arrays.asList(new Example().getLongText().split(" "))));
+            List<String> manyOptions = new ArrayList<String>();
+            manyOptions.add(options.get(10));
+            manyOptions.add(options.get(20));
+            manyOptions.add(options.get(30));
+            value.setManyOptions(manyOptions);
             examples.put(id, value);
         }
         return examples.get(id);
