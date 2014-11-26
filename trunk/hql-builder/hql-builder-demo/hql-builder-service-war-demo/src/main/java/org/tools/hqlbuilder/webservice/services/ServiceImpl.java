@@ -17,7 +17,8 @@ public class ServiceImpl implements ServiceInterface {
         if (!examples.containsKey(id)) {
             Example value = new Example();
             value.setId(id);
-            List<String> options = new ArrayList<String>(new HashSet<String>(Arrays.asList(new Example().getLongText().split(" "))));
+            List<String> options = new ArrayList<String>(new HashSet<String>(Arrays.asList(new Example().getLongText().toLowerCase()
+                    .replaceAll("[^a-z ]", "").replaceAll("  ", " ").split(" "))));
             List<String> manyOptions = new ArrayList<String>();
             manyOptions.add(options.get(10));
             manyOptions.add(options.get(20));

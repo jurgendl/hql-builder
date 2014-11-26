@@ -59,6 +59,8 @@ public class Example implements Serializable {
 
     private String text;
 
+    private String dropdown;
+
     private String tags;
 
     private String textAdd;
@@ -405,5 +407,13 @@ public class Example implements Serializable {
 
     public void setManyOptions(List<String> manyOptions) {
         this.manyOptions = manyOptions;
+    }
+
+    public String getDropdown() {
+        return this.dropdown;
+    }
+
+    public void setDropdown(String dropdown) {
+        this.dropdown = dropdown;
     }
 }
