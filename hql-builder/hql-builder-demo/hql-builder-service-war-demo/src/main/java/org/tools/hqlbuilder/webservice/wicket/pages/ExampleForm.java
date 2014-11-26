@@ -79,6 +79,16 @@ public class ExampleForm extends FormPanel<Example> {
         getForm().setMultiPart(true);
         getForm().setMaxSize(Bytes.megabytes(10));
 
+        {
+            Example tmp = getFormActions().loadObject();
+            ArrayList<String> list = new ArrayList<String>(new TreeSet<String>(Arrays.asList(tmp.getLongText().toLowerCase()
+                    .replaceAll("[^a-z ]", "").replaceAll("  ", " ").split(" "))));
+            list.removeAll(tmp.getManyOptions());
+            addPickList(proxy.getManyOptions(), new ListSettings(), new ListModel<String>(list), null);
+        }
+
+        nextRow();
+
         FormElementSettings fset = new FormElementSettings();
         final IChoiceRenderer<ExampleOpts> choiceRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
         IOptionRenderer<ExampleOpts> optionRenderer = new IOptionRenderer<ExampleOpts>() {
@@ -197,7 +207,7 @@ public class ExampleForm extends FormPanel<Example> {
             groupLabels = null;
             ListModel<String>[] opt = new ListModel[] { new ListModel<String>(opt1), new ListModel<String>(opt2) };
 
-            addDropDown(WebHelper.proxy(Example.class).getText(), new DropDownSettings().setNullValid(true), optionRenderer2, opt, groupLabels);
+            addDropDown(WebHelper.proxy(Example.class).getDropdown(), new DropDownSettings().setNullValid(true), optionRenderer2, opt, groupLabels);
             nextRow();
             addList(WebHelper.proxy(Example.class).getTextExtra(), new ListSettings().setSize(10), optionRenderer2, opt, groupLabels);
         }
@@ -205,9 +215,6 @@ public class ExampleForm extends FormPanel<Example> {
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
         nextRow();
         addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
-        nextRow();
-        addPickList(proxy.getManyOptions(), new ListSettings(),
-                new ListModel<String>(new ArrayList<String>(new TreeSet<String>(Arrays.asList(new Example().getLongText().split(" "))))), null);
     }
 
     private void addFilepicker(Example proxy) {

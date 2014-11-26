@@ -21,7 +21,7 @@ function primeuifactory(prefix) {
 	$(prefix+'.puitieredmenu').puitieredmenu({});
 	$(prefix+'.puipaginator').puipaginator({});
 	$(prefix+'.puipanel').puipanel({});
-	$(prefix+'.puipicklist').puipicklist({effect:'clip',showSourceControls:true,showTargetControls:true,filter:true});
+	$(prefix+'.puipicklist').puipicklist({showSourceControls:false,showTargetControls:false,filter:true});
 	$(prefix+'.puiprogressbar').puiprogressbar({});
 	$(prefix+'.puiradiobutton').puiradiobutton({});
 	$(prefix+'.puisticky').puisticky({});

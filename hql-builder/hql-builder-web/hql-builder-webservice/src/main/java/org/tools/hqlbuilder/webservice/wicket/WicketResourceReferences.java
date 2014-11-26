@@ -11,22 +11,17 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
-import org.apache.wicket.settings.IJavaScriptLibrarySettings;
 import org.tools.hqlbuilder.webservice.jquery.ui.kendoui.KendoUI;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
-import com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings;
+import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
 import com.googlecode.wicket.jquery.ui.calendar.settings.CalendarLibrarySettings;
-import com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings;
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.resource.EmoticonsJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.resource.EmoticonsStyleSheetResourceReference;
-import com.googlecode.wicket.jquery.ui.plugins.emoticons.settings.IEmoticonsLibrarySettings;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.resource.FixedHeaderTableJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.resource.FixedHeaderTableStyleSheetResourceReference;
-import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.settings.IFixedHeaderTableLibrarySettings;
 import com.googlecode.wicket.jquery.ui.plugins.sfmenu.resource.SuperfishStyleSheetResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.sfmenu.resource.SuperfishVerticalStyleSheetResourceReference;
-import com.googlecode.wicket.jquery.ui.plugins.sfmenu.settings.ISuperfishLibrarySettings;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapCombinedNoIconsStyleSheetResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapDropDownJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapResponsiveStyleSheetResourceReference;
@@ -34,29 +29,15 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapWysiwyg
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.EditorStyleSheetResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.JQueryHotKeysJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.PrettifyJavaScriptResourceReference;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.IWysiwygLibrarySettings;
 import com.googlecode.wicket.jquery.ui.resource.JQueryUIResourceReference;
 import com.googlecode.wicket.kendo.ui.resource.ConsoleJavaScriptResourceReference;
 import com.googlecode.wicket.kendo.ui.resource.ConsoleStyleSheetResourceReference;
-import com.googlecode.wicket.kendo.ui.settings.IConsoleLibrarySettings;
-import com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings;
 import com.googlecode.wicket.kendo.ui.settings.KendoUILibrarySettings;
 
 /**
  * combination of resource references with public getters and setters
  */
-@SuppressWarnings("deprecation")
-public class WicketResourceReferences implements //
-        IJavaScriptLibrarySettings, //
-        IJQueryLibrarySettings,//
-        IKendoUILibrarySettings, //
-        ICalendarLibrarySettings,//
-        ISuperfishLibrarySettings,//
-        IConsoleLibrarySettings, //
-        IFixedHeaderTableLibrarySettings,//
-        IWysiwygLibrarySettings,//
-        IEmoticonsLibrarySettings //
-{
+public class WicketResourceReferences extends JQueryLibrarySettings {
     /** if possible load resources from CDN when they match any of the patterns in this list */
     protected final List<Pattern> acceptedCDNPatterns = new ArrayList<Pattern>();
 
@@ -281,6 +262,7 @@ public class WicketResourceReferences implements //
      * @see com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings#getJQueryGlobalizeReference()
      */
 
+    @Override
     public ResourceReference getJQueryGlobalizeReference() {
         return this.jQueryGlobalizeReference;
     }
@@ -328,6 +310,7 @@ public class WicketResourceReferences implements //
      * @see com.googlecode.wicket.jquery.core.settings.IJQueryLibrarySettings#setJQueryGlobalizeReference(org.apache.wicket.request.resource.ResourceReference)
      */
 
+    @Override
     public void setJQueryGlobalizeReference(ResourceReference jQueryGlobalizeReference) {
         this.jQueryGlobalizeReference = jQueryGlobalizeReference;
     }
