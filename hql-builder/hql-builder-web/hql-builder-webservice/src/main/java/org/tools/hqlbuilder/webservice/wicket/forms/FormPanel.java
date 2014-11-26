@@ -181,6 +181,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 choices, renderer));
     }
 
+    public <F extends Serializable> PickListPanel<F> addPickList(Collection<F> propertyPath, ListSettings componentSettings, IModel<List<F>> choices,
+            IChoiceRenderer<F> renderer) {
+        return this
+                .addCustomRow(new PickListPanel<F>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, choices, renderer));
+    }
+
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
         return this.addDefaultRow(new NumberFieldPanel<N>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings));
     }
@@ -534,7 +540,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {

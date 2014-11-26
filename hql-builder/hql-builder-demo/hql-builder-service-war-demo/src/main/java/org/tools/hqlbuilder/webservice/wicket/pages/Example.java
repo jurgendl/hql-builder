@@ -113,6 +113,8 @@ public class Example implements Serializable {
 
     private Boolean tristate;
 
+    private List<String> manyOptions;
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("id", id).append("tristate", tristate).append("multi", multi)
@@ -122,7 +124,7 @@ public class Example implements Serializable {
                 .append("integerv", integerv).append("longv", longv).append("shortv", shortv).append("doublev", doublev).append("floatv", floatv)
                 .append("bytev", bytev).append("integerr", integerr).append("longr", longr).append("shortr", shortr).append("doubler", doubler)
                 .append("floatr", floatr).append("byter", byter).append("color1", color1).append("color2", color2).append("htmlText", htmlText)
-                .append("htmlTextExtra", htmlTextExtra).toString();
+                .append("htmlTextExtra", htmlTextExtra).append("manyOptions", manyOptions).toString();
     }
 
     public ExampleOpts getRadio() {
@@ -395,5 +397,13 @@ public class Example implements Serializable {
 
     public void setColor1(String color1) {
         this.color1 = color1;
+    }
+
+    public List<String> getManyOptions() {
+        return this.manyOptions;
+    }
+
+    public void setManyOptions(List<String> manyOptions) {
+        this.manyOptions = manyOptions;
     }
 }

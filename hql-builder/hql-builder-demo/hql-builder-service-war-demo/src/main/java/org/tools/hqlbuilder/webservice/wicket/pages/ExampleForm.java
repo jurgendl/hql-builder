@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -202,15 +203,11 @@ public class ExampleForm extends FormPanel<Example> {
         }
         nextRow();
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
-        // nextRow();
-        // addTinyMCETextArea(proxy.getHtmlText(),//
-        // //
-        // new TinyMCETextAreaSettings(TinyMCESettings.Theme.advanced)//
-        // .setResizing(true)//
-        // .setToolbarLocation(TinyMCESettings.Location.top)//
-        // );
         nextRow();
         addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
+        nextRow();
+        addPickList(proxy.getManyOptions(), new ListSettings(),
+                new ListModel<String>(new ArrayList<String>(new TreeSet<String>(Arrays.asList(new Example().getLongText().split(" "))))), null);
     }
 
     private void addFilepicker(Example proxy) {
