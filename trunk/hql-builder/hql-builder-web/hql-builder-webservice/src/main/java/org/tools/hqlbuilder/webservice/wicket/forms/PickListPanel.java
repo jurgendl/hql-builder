@@ -39,15 +39,17 @@ public class PickListPanel<T extends Serializable> extends FormRowPanel<Collecti
 
             @Override
             public Object getDisplayValue(T object) {
+                Object tmp = object;
                 if (renderer != null) {
-                    renderer.getDisplayValue(object);
+                    tmp = renderer.getDisplayValue(object);
                 }
-                return String.valueOf(object);
+                return String.valueOf(tmp);
             }
 
             @Override
             public String getIdValue(T object, int index) {
-                return String.valueOf(getDisplayValue(object));
+                Object displayValue = getDisplayValue(object);
+                return String.valueOf(displayValue);
             }
         };
     }
