@@ -26,9 +26,19 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 public class PickListPanel<T extends Serializable> extends FormRowPanel<Collection<T>, Collection<T>, ListMultipleChoice<T>, ListSettings> {
     private static final long serialVersionUID = 7874409832671834238L;
 
+    public static final String SOURCEID = "source";
+
+    public static final String PICKLISTID = "picklist";
+
+    public static final String TARGETID = "target";
+
     protected IModel<List<T>> choices;
 
     protected IChoiceRenderer<T> renderer;
+
+    protected WebMarkupContainer pickList;
+
+    protected ListMultipleChoice<T> source;
 
     protected PickListPanel(IModel<?> model, Collection<T> propertyPath, FormSettings formSettings, ListSettings componentSettings,
             IModel<List<T>> choices, final IChoiceRenderer<T> renderer) {
@@ -36,6 +46,11 @@ public class PickListPanel<T extends Serializable> extends FormRowPanel<Collecti
         this.choices = choices;
         this.renderer = new IChoiceRenderer<T>() {
             private static final long serialVersionUID = 9002126185670506302L;
+
+            @Override
+            public String toString() {
+                return "IChoiceRenderer<T>";
+            }
 
             @Override
             public Object getDisplayValue(T object) {
@@ -60,6 +75,11 @@ public class PickListPanel<T extends Serializable> extends FormRowPanel<Collecti
             private static final long serialVersionUID = 7030770200558777598L;
 
             @Override
+            public String toString() {
+                return "IModel<List<T>> selectionListModel";
+            }
+
+            @Override
             public void detach() {
                 selection.detach();
             }
@@ -71,11 +91,19 @@ public class PickListPanel<T extends Serializable> extends FormRowPanel<Collecti
 
             @Override
             public void setObject(List<T> object) {
-                selection.setObject(object);
+                IModel<Collection<T>> _selection = selection;
+                Collection<T> selectionObject = _selection.getObject();
+                selectionObject.clear();
+                selectionObject.addAll(object);
             }
         };
-        ListMultipleChoice<T> source = new ListMultipleChoice<T>("target", selectionListModel, selectionListModel, renderer) {
+        ListMultipleChoice<T> target = new ListMultipleChoice<T>(TARGETID, selectionListModel, selectionListModel, renderer) {
             private static final long serialVersionUID = -4637460687004256289L;
+
+            @Override
+            public String toString() {
+                return "ListMultipleChoice<T>";
+            }
 
             @Override
             protected List<T> convertChoiceIdsToChoices(String[] ids) {
@@ -113,20 +141,36 @@ public class PickListPanel<T extends Serializable> extends FormRowPanel<Collecti
                 return choiceIds2choiceValues;
             }
         };
-        return source;
+        return target;
     }
 
     @Override
     protected FormRowPanel<Collection<T>, Collection<T>, ListMultipleChoice<T>, ListSettings> addComponents() {
         this.add(getLabel());
-        add(//
-                new WebMarkupContainer("puipicklist")//
-                .add(new ListMultipleChoice<T>("source", choices/* new ListModel<T>(new ArrayList<T>()) */, choices, renderer))//
-                .add(getComponent())//
-                .add(new CssClassNameAppender(PrimeUI.puipicklist)));//
+        this.add(getPickList().add(getSource()).add(getComponent()));
         this.add(getRequiredMarker());
         this.add(getFeedback());
         return this;
+    }
+
+    public WebMarkupContainer getPickList() {
+        if (pickList == null) {
+            pickList = new WebMarkupContainer(PICKLISTID);
+            pickList.setOutputMarkupId(true);
+            pickList.add(new CssClassNameAppender(PrimeUI.puipicklist));
+        }
+        return pickList;
+    }
+
+    public ListMultipleChoice<T> getSource() {
+        if (source == null) {
+            source = new ListMultipleChoice<T>(SOURCEID, choices, choices, renderer);
+        }
+        return source;
+    }
+
+    public ListMultipleChoice<T> getTarget() {
+        return super.getComponent();
     }
 
     @Override
@@ -156,5 +200,9 @@ public class PickListPanel<T extends Serializable> extends FormRowPanel<Collecti
     @Override
     public Class<Collection<T>> getPropertyType() {
         return (Class) Collection.class;
+    }
+
+    public IChoiceRenderer<T> getRenderer() {
+        return this.renderer;
     }
 }

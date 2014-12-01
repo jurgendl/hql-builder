@@ -81,6 +81,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             private static final long serialVersionUID = -6135914559717102175L;
 
             @Override
+            public String toString() {
+                return "DefaultFormActions";
+            }
+
+            @Override
             public Class<T> forObjectClass() {
                 return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
             }
@@ -284,6 +289,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = -5489467484161698560L;
 
                 @Override
+                public String toString() {
+                    return "Form:IModel<T>";
+                }
+
+                @Override
                 protected T load() {
                     return FormPanel.this.getFormActions().loadObject();
                 }
@@ -291,6 +301,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             if (this.getFormSettings().isStateless()) {
                 this.form = new StatelessForm<T>(FormConstants.FORM, formModel) {
                     private static final long serialVersionUID = -5855525240326128645L;
+
+                    @Override
+                    public String toString() {
+                        return "StatelessForm";
+                    }
 
                     @Override
                     protected String getMethod() {
@@ -308,6 +323,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             } else {
                 this.form = new Form<T>(FormConstants.FORM, formModel) {
                     private static final long serialVersionUID = -5899425422548211723L;
+
+                    @Override
+                    public String toString() {
+                        return "Form";
+                    }
 
                     @Override
                     protected String getMethod() {
@@ -341,6 +361,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = 6548216685529936996L;
 
                 @Override
+                public String toString() {
+                    return "WebMarkupContainer:" + FormConstants.FORM_HEADER;
+                }
+
+                @Override
                 public boolean isVisible() {
                     for (int i = 0; i < this.size(); i++) {
                         if (!this.get(i).isVisible()) {
@@ -370,6 +395,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 submit = new AjaxSubmitLink(FormConstants.FORM_SUBMIT, this.form) {
                     private static final long serialVersionUID = 1046494045754727027L;
 
+                    @Override
+                    public String toString() {
+                        return "AjaxSubmitLink:" + FormConstants.FORM_SUBMIT;
+                    }
+
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
@@ -392,6 +422,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             if (this.getFormSettings().isAjax()) {
                 cancel = new AjaxSubmitLink(FormConstants.FORM_CANCEL, this.form) {
                     private static final long serialVersionUID = -8816675271842238444L;
+
+                    @Override
+                    public String toString() {
+                        return "AjaxSubmitLink:" + FormConstants.FORM_CANCEL;
+                    }
 
                     @SuppressWarnings("unchecked")
                     @Override
@@ -424,6 +459,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = -8111670292045284274L;
 
                 @Override
+                public String toString() {
+                    return "WebMarkupContainer:" + FormConstants.FORM_FOOTER;
+                }
+
+                @Override
                 public boolean isVisible() {
                     for (int i = 0; i < this.size(); i++) {
                         if (!this.get(i).isVisible()) {
@@ -439,12 +479,22 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = -8111670292045284274L;
 
                 @Override
+                public String toString() {
+                    return "FeedbackPanel:allMessagesTop";
+                }
+
+                @Override
                 public boolean isVisible() {
                     return super.isVisible() && this.anyMessage();
                 }
             });
             formFooter.add(new FeedbackPanel("allMessagesBottom") {
                 private static final long serialVersionUID = 5678584511310860629L;
+
+                @Override
+                public String toString() {
+                    return "FeedbackPanel:allMessagesBottom";
+                }
 
                 @Override
                 public boolean isVisible() {
@@ -502,6 +552,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     @SuppressWarnings("rawtypes")
     protected void onAfterSubmit() {
         this.getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
+
+            @Override
+            public String toString() {
+                return "onAfterSubmit:IVisitor<FormRowPanel, Void>";
+            }
+
             @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
@@ -514,6 +570,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     @SuppressWarnings("rawtypes")
     protected void onBeforeSubmit() {
         this.getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
+            @Override
+            public String toString() {
+                return "onBeforeSubmit:IVisitor<FormRowPanel, Void>";
+            }
+
             @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
@@ -540,7 +601,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
