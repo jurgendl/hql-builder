@@ -410,10 +410,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             } else {
                 submit = new Button(FormConstants.FORM_SUBMIT, submitModel);
             }
+            submit.setVisible(formSettings.isShowSubmit());
             submit.add(new CssClassNameAppender(JQueryUI.jquibutton));
 
             Button reset = new Button(FormConstants.FORM_RESET, resetModel);
             reset.add(new CssClassNameAppender(JQueryUI.jquibutton));
+            reset.setVisible(formSettings.isShowReset());
 
             /*
              * https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit +buttons
@@ -454,6 +456,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             formActionsContainer.add(submit);
             formActionsContainer.add(reset);
             formActionsContainer.add(cancel);
+            formActionsContainer.setVisible(formSettings.isShowReset() || formSettings.isShowSubmit() || getFormSettings().isCancelable());
 
             WebMarkupContainer formFooter = new WebMarkupContainer(FormConstants.FORM_FOOTER) {
                 private static final long serialVersionUID = -8111670292045284274L;
@@ -601,7 +604,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {

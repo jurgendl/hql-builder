@@ -21,6 +21,10 @@ public class FormSettings implements Serializable {
     /** show label */
     protected boolean showLabel = true;
 
+    protected boolean showReset = true;
+
+    protected boolean showSubmit = true;
+
     /** requires ajax = true */
     protected boolean liveValidation = false;
 
@@ -273,6 +277,24 @@ public class FormSettings implements Serializable {
 
     public FormSettings setAutocomplete(Boolean autocomplete) {
         this.autocomplete = autocomplete;
+        return this;
+    }
+
+    public boolean isShowReset() {
+        return this.showReset;
+    }
+
+    public boolean isShowSubmit() {
+        return this.showSubmit;
+    }
+
+    public FormSettings setShowReset(boolean showReset) {
+        this.showReset = showReset;
+        return this;
+    }
+
+    public FormSettings setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
         return this;
     }
 }
