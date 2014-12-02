@@ -160,7 +160,12 @@ public class EnhancedTable<T extends Serializable> extends Panel {
             label = new AbstractReadOnlyModel<String>() {
                 @Override
                 public String getObject() {
-                    return parent.getString(property);
+                    try {
+                        return parent.getString(property);
+                    } catch (java.util.MissingResourceException ex) {
+                        return null;
+                    }
+
                 }
             };
         } catch (MissingResourceException ex) {
