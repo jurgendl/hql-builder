@@ -156,6 +156,22 @@ http://css-tricks.com/snippets/css/a-guide-to-flexbox/
 http://css-tricks.com/flexbox-nav-bar-fixed-variable-take-rest-elements/
 http://codersblock.com/blog/fun-times-with-css-counters/
 http://codersblock.com/blog/inline-block-working-as-intended/
+http://bootstrap-calendar.azurewebsites.net/index-bs3.html
+http://www.goat1000.com/tagcanvas.php
+http://www.iangeorge.net/snippets/tags/
+https://github.com/JexCheng/regulex
+http://jquery-plugins.net/jquery-upload-file
+http://www.jointjs.com/demos
+https://highlightjs.org/static/demo/
+http://jquery-plugins.net/circliful-jquery-circle-statistics-plugin
+http://logicify.github.io/jquery-locationpicker-plugin/#examples
+http://mathjs.org/
+https://github.com/fgnass/spin.js
+http://highcharttable.org/#demo
+https://github.com/xdan/flipcountdown
+https://github.com/clubdesign/floatlabels.js
+http://slippry.com/
+https://github.com/claviska/jquery-dropdown
 
 
 
@@ -171,17 +187,10 @@ http://codersblock.com/blog/inline-block-working-as-intended/
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+http://kugaevsky.github.io/jquery-phoenix/
+http://jquery-plugins.net/rangeslider-js-html5-input-range-slider-element-polyfill-with-jquery
+http://cbopp-art.github.io/anchor/
+http://fullcalendar.io/
 http://pakcheong.github.io/jqthumb/
 http://thrilleratplay.github.io/jquery-validation-bootstrap-tooltip/
 http://creoart.github.io/jquery.textareafullscreen/
