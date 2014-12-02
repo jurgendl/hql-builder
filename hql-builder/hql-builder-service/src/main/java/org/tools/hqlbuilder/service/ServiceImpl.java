@@ -17,70 +17,76 @@ import org.hibernate.SessionFactory;
 import org.hibernate.SimpleNaturalIdLoadAccess;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
+import org.springframework.security.access.method.P;
 
+@SuppressWarnings({ "unchecked", "hiding" })
 public abstract class ServiceImpl {
-    protected IdentifierLoadAccess byId(Class<?> entityClass) {
+    protected <P> IdentifierLoadAccess byId(Class<P> entityClass) {
         return this.getSession().byId(entityClass);
     }
 
-    protected IdentifierLoadAccess byId(String entityName) {
+    protected <P> IdentifierLoadAccess byId(String entityName) {
         return this.getSession().byId(entityName);
     }
 
-    protected NaturalIdLoadAccess byNaturalId(Class<?> entityClass) {
+    protected <P> NaturalIdLoadAccess byNaturalId(Class<P> entityClass) {
         return this.getSession().byNaturalId(entityClass);
     }
 
-    protected NaturalIdLoadAccess byNaturalId(String entityName) {
+    protected <P> NaturalIdLoadAccess byNaturalId(String entityName) {
         return this.getSession().byNaturalId(entityName);
     }
 
-    protected SimpleNaturalIdLoadAccess bySimpleNaturalId(Class<?> entityClass) {
+    protected <P> SimpleNaturalIdLoadAccess bySimpleNaturalId(Class<P> entityClass) {
         return this.getSession().bySimpleNaturalId(entityClass);
     }
 
-    protected SimpleNaturalIdLoadAccess bySimpleNaturalId(String entityName) {
+    protected <P> SimpleNaturalIdLoadAccess bySimpleNaturalId(String entityName) {
         return this.getSession().bySimpleNaturalId(entityName);
     }
 
-    protected boolean contains(Object object) {
-        return this.getSession().contains(object);
+    protected <P> boolean contains(P entity) {
+        return this.getSession().contains(entity);
     }
 
-    protected Criteria createCriteria(Class<?> persistentClass) {
+    protected <P> Criteria createCriteria(Class<P> persistentClass) {
         return this.getSession().createCriteria(persistentClass);
     }
 
-    protected Criteria createCriteria(Class<?> persistentClass, String alias) {
+    protected <P> Criteria createCriteria(Class<P> persistentClass, String alias) {
         return this.getSession().createCriteria(persistentClass, alias);
     }
 
-    protected Criteria createCriteria(String entityName) {
+    protected <P> Criteria createCriteria(String entityName) {
         return this.getSession().createCriteria(entityName);
     }
 
-    protected Criteria createCriteria(String entityName, String alias) {
+    protected <P> Criteria createCriteria(String entityName, String alias) {
         return this.getSession().createCriteria(entityName, alias);
     }
 
-    protected Query createFilter(Object collection, String queryString) {
+    protected <P> Query createFilter(P collection, String queryString) {
         return this.getSession().createFilter(collection, queryString);
     }
 
-    protected Query createQuery(String queryString) {
+    protected <P> Query createQuery(String queryString) {
         return this.getSession().createQuery(queryString);
     }
 
-    protected SQLQuery createSQLQuery(String queryString) {
+    protected <P> SQLQuery createSQLQuery(String queryString) {
         return this.getSession().createSQLQuery(queryString);
     }
 
-    protected void delete(Object object) {
-        this.getSession().delete(object);
+    protected <P> void delete(P entity) {
+        this.getSession().delete(entity);
     }
 
-    protected void delete(String entityName, Object object) {
-        this.getSession().delete(entityName, object);
+    protected <P> Long count(Class<P> entityClass) {
+        return (Long) this.getSession().createQuery("select count(o) from " + entityClass.getName() + " o").list().get(0);
+    }
+
+    protected <P> void delete(String entityName, P entity) {
+        this.getSession().delete(entityName, entity);
     }
 
     protected <T> T doReturningWork(ReturningWork<T> work) throws HibernateException {
@@ -91,32 +97,32 @@ public abstract class ServiceImpl {
         this.getSession().doWork(work);
     }
 
-    protected void evict(Object object) {
-        this.getSession().evict(object);
+    protected void evict(P entity) {
+        this.getSession().evict(entity);
     }
 
     protected void flush() throws HibernateException {
         this.getSession().flush();
     }
 
-    protected Object get(Class<?> clazz, Serializable id) {
-        return this.getSession().get(clazz, id);
+    protected <P> P get(Class<P> clazz, Serializable id) {
+        return (P) this.getSession().get(clazz, id);
     }
 
-    protected Object get(Class<?> clazz, Serializable id, LockOptions lockOptions) {
-        return this.getSession().get(clazz, id, lockOptions);
+    protected <P> P get(Class<P> clazz, Serializable id, LockOptions lockOptions) {
+        return (P) this.getSession().get(clazz, id, lockOptions);
     }
 
-    protected Object get(String entityName, Serializable id) {
-        return this.getSession().get(entityName, id);
+    protected <P> P get(String entityName, Serializable id) {
+        return (P) this.getSession().get(entityName, id);
     }
 
-    protected Object get(String entityName, Serializable id, LockOptions lockOptions) {
-        return this.getSession().get(entityName, id, lockOptions);
+    protected <P> P get(String entityName, Serializable id, LockOptions lockOptions) {
+        return (P) this.getSession().get(entityName, id, lockOptions);
     }
 
-    protected Serializable getIdentifier(Object object) {
-        return this.getSession().getIdentifier(object);
+    protected Serializable getIdentifier(P entity) {
+        return this.getSession().getIdentifier(entity);
     }
 
     protected Query getNamedQuery(String queryName) {
@@ -129,92 +135,92 @@ public abstract class ServiceImpl {
         return this.getSession().getSessionFactory();
     }
 
-    protected boolean isReadOnly(Object entityOrProxy) {
+    protected <P> boolean isReadOnly(P entityOrProxy) {
         return this.getSession().isReadOnly(entityOrProxy);
     }
 
-    protected Object load(Class<?> theClass, Serializable id) {
-        return this.getSession().load(theClass, id);
+    protected <P> P load(Class<P> theClass, Serializable id) {
+        return (P) this.getSession().load(theClass, id);
     }
 
-    protected Object load(Class<?> theClass, Serializable id, LockOptions lockOptions) {
-        return this.getSession().load(theClass, id, lockOptions);
+    protected <P> P load(Class<P> theClass, Serializable id, LockOptions lockOptions) {
+        return (P) this.getSession().load(theClass, id, lockOptions);
     }
 
-    protected void load(Object object, Serializable id) {
-        this.getSession().load(object, id);
+    protected <P> void load(P entity, Serializable id) {
+        this.getSession().load(entity, id);
     }
 
-    protected Object load(String entityName, Serializable id) {
-        return this.getSession().load(entityName, id);
+    protected <P> P load(String entityName, Serializable id) {
+        return (P) this.getSession().load(entityName, id);
     }
 
-    protected Object load(String entityName, Serializable id, LockOptions lockOptions) {
-        return this.getSession().load(entityName, id, lockOptions);
+    protected <P> P load(String entityName, Serializable id, LockOptions lockOptions) {
+        return (P) this.getSession().load(entityName, id, lockOptions);
     }
 
-    protected Object merge(Object object) {
-        return this.getSession().merge(object);
+    protected <P> P merge(P entity) {
+        return (P) this.getSession().merge(entity);
     }
 
-    protected Object merge(String entityName, Object object) {
-        return this.getSession().merge(entityName, object);
+    protected <P> P merge(String entityName, P entity) {
+        return (P) this.getSession().merge(entityName, entity);
     }
 
-    protected void persist(Object object) {
-        this.getSession().persist(object);
+    protected <P> void persist(P entity) {
+        this.getSession().persist(entity);
     }
 
-    protected void persist(String entityName, Object object) {
-        this.getSession().persist(entityName, object);
+    protected <P> void persist(String entityName, P entity) {
+        this.getSession().persist(entityName, entity);
     }
 
-    protected void refresh(Object object) {
-        this.getSession().refresh(object);
+    protected <P> void refresh(P entity) {
+        this.getSession().refresh(entity);
     }
 
-    protected void refresh(Object object, LockOptions lockOptions) {
-        this.getSession().refresh(object, lockOptions);
+    protected <P> void refresh(P entity, LockOptions lockOptions) {
+        this.getSession().refresh(entity, lockOptions);
     }
 
-    protected void refresh(String entityName, Object object) {
-        this.getSession().refresh(entityName, object);
+    protected <P> void refresh(String entityName, P entity) {
+        this.getSession().refresh(entityName, entity);
     }
 
-    protected void refresh(String entityName, Object object, LockOptions lockOptions) {
-        this.getSession().refresh(entityName, object, lockOptions);
+    protected <P> void refresh(String entityName, P entity, LockOptions lockOptions) {
+        this.getSession().refresh(entityName, entity, lockOptions);
     }
 
-    protected void replicate(Object object, ReplicationMode replicationMode) {
-        this.getSession().replicate(object, replicationMode);
+    protected <P> void replicate(P entity, ReplicationMode replicationMode) {
+        this.getSession().replicate(entity, replicationMode);
     }
 
-    protected void replicate(String entityName, Object object, ReplicationMode replicationMode) {
-        this.getSession().replicate(entityName, object, replicationMode);
+    protected <P> void replicate(String entityName, P entity, ReplicationMode replicationMode) {
+        this.getSession().replicate(entityName, entity, replicationMode);
     }
 
-    protected Serializable save(Object object) {
-        return this.getSession().save(object);
+    protected <P> Serializable save(P entity) {
+        return this.getSession().save(entity);
     }
 
-    protected Serializable save(String entityName, Object object) {
-        return this.getSession().save(entityName, object);
+    protected <P> Serializable save(String entityName, P entity) {
+        return this.getSession().save(entityName, entity);
     }
 
-    protected void saveOrUpdate(Object object) {
-        this.getSession().saveOrUpdate(object);
+    protected <P> void saveOrUpdate(P entity) {
+        this.getSession().saveOrUpdate(entity);
     }
 
-    protected void saveOrUpdate(String entityName, Object object) {
-        this.getSession().saveOrUpdate(entityName, object);
+    protected <P> void saveOrUpdate(String entityName, P entity) {
+        this.getSession().saveOrUpdate(entityName, entity);
     }
 
-    protected void update(Object object) {
-        this.getSession().update(object);
+    protected <P> void update(P entity) {
+        this.getSession().update(entity);
     }
 
-    protected void update(String entityName, Object object) {
-        this.getSession().update(entityName, object);
+    protected <P> void update(String entityName, P entity) {
+        this.getSession().update(entityName, entity);
     }
 
     public static <T extends Comparable<? super T>> List<T> sort(List<T> list) {
