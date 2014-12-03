@@ -16,7 +16,7 @@ public interface DataProvider<T extends Serializable> extends ISortableDataProvi
 
     public int getRowsPerPage();
 
-    public String getId(IModel<T> model);
+    public Serializable getId(IModel<T> model);
 
     public String getIdProperty();
 

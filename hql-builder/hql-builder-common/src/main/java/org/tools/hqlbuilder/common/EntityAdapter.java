@@ -34,24 +34,24 @@ public abstract class EntityAdapter implements EntityI {
         super();
     }
 
-    final public Long getId() {
+    public Long getId() {
         return id;
     }
 
-    final public void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    final public Integer getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    final public void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (!(other instanceof EntityAdapter)) {
             return false;
         }
