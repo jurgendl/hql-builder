@@ -329,7 +329,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
         }
 
         @Override
-        public String getId(IModel<T> model) {
+        public Serializable getId(IModel<T> model) {
             return this.delegate.getId(model);
         }
 
@@ -511,7 +511,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     public class TopToolbar extends AjaxNavigationToolbar {
         private static final long serialVersionUID = 7871654433608259728L;
 
-        public TopToolbar(final DataTable<T, String> table, final DataProvider<T> dataProvider) {
+        public TopToolbar(final DataTable<T, String> table, @SuppressWarnings("unused") final DataProvider<T> dataProvider) {
             super(table);
         }
 
@@ -567,7 +567,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     private static final long serialVersionUID = -997730195881970840L;
 
     public static JavaScriptResourceReference JS_AJAX_UPDATE = new JavaScriptResourceReference(Table.class, "TableAjaxRefresh.js")
-    .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
+            .addJavaScriptResourceReferenceDependency(WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference());
 
     public static final String ACTIONS_DELETE_ID = "delete";
 
@@ -680,11 +680,14 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("class", ((this.getIndex() % 2) == 0) ? Table.this.cssEven : Table.this.cssOdd);
-                String dataId = Table.this.dataProvider.getId(model);
-                if (StringUtils.isBlank(dataId)) {
-                    dataId = String.valueOf(index);
+                Serializable dataId = Table.this.dataProvider.getId(model);
+                String dataIdString;
+                if (dataId instanceof String && StringUtils.isBlank(String.class.cast(dataId))) {
+                    dataIdString = String.valueOf(index);
+                } else {
+                    dataIdString = String.valueOf(dataId);
                 }
-                tag.put("data-id", dataId);
+                tag.put("data-id", dataIdString);
             }
         };
     }

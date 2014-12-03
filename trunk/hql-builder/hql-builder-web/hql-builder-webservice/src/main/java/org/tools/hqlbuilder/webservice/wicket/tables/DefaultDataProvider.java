@@ -170,8 +170,8 @@ public abstract class DefaultDataProvider<T extends Serializable> implements Dat
     }
 
     @Override
-    public String getId(IModel<T> model) {
-        return getIdProperty() == null ? null : new PropertyModel<String>(model, getIdProperty()).getObject();
+    public Serializable getId(IModel<T> model) {
+        return getIdProperty() == null ? null : new PropertyModel<Serializable>(model, getIdProperty()).getObject();
     }
 
     @Override
