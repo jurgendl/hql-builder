@@ -235,15 +235,15 @@ a[href$=jpg], a[href$=jpeg], a[href$=jpe], a[href$=png], a[href$=gif], a[href$=b
 }
 
 /* ======================== sort arrows on tables headers ======================== */
-th.pui-sortable-column.wicket_orderUp div::after { 
+th.pui-sortable-column.wicket_orderUp div.tableheaderlabel::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dd";
 }
-th.pui-sortable-column.wicket_orderDown div::after { 
+th.pui-sortable-column.wicket_orderDown div.tableheaderlabel::after { 
 	font-family: 'FontAwesome';
 	content: " \f0de";
 }
-th.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortable) div::after { 
+th.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortable) div.tableheaderlabel::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dc";
 }
