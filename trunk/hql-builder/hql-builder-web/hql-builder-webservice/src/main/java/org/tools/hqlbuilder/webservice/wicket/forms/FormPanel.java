@@ -593,7 +593,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected String renderColumnsCss(boolean showLabel, int columnCount, String labelWidth) {
         String cssClass = "pocketgrid_" + this.getId() + '_' + columnCount
-                + (showLabel ? '_' + new String(Hex.encodeHex(labelWidth.getBytes())) : "");
+                + (showLabel ? '_' + new String(Hex.encodeHex(labelWidth.getBytes())) : "") + " rows" + columnCount;
         if (!this.cssClasses.contains(cssClass)) {
             this.cssClasses.add(cssClass);
             StringBuilder sbColumnsCss = new StringBuilder();
@@ -604,7 +604,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -635,7 +635,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
-        this.renderColumnsCss(response);
+        if (formSettings.isRenderPocketGrid()) {
+            this.renderColumnsCss(response);
+        }
         response.render(CssHeaderItem.forReference(FORM_CSS));
     }
 

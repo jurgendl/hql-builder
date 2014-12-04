@@ -172,7 +172,7 @@ https://github.com/xdan/flipcountdown
 https://github.com/clubdesign/floatlabels.js
 http://slippry.com/
 https://github.com/claviska/jquery-dropdown
-
+http://jquery-plugins.net/d3-js-javascript-visualization-library-for-html-and-svg
 
 
 
@@ -197,3 +197,7 @@ http://creoart.github.io/jquery.textareafullscreen/
 http://jquery-plugins.net/clockpicker-clock-style-timepicker-for-bootstrap
 http://sachinchoolur.github.io/lightslider/
 http://fengyuanchen.github.io/cropper/
+
+/* http://www.w3schools.com/html/html5_semantic_elements.asp */
+/* http://www.w3.org/TR/html5/sections.html */
+/* http://www.anthonycalzadilla.com/2010/08/html5-section-aside-header-nav-footer-elements-not-as-obvious-as-they-sound/ */

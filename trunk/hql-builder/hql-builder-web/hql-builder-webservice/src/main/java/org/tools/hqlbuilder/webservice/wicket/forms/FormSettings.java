@@ -53,6 +53,8 @@ public class FormSettings implements Serializable {
 
     protected Boolean autocomplete;
 
+    protected boolean renderPocketGrid = true;
+
     public FormSettings() {
         super();
     }
@@ -295,6 +297,15 @@ public class FormSettings implements Serializable {
 
     public FormSettings setShowSubmit(boolean showSubmit) {
         this.showSubmit = showSubmit;
+        return this;
+    }
+
+    public boolean isRenderPocketGrid() {
+        return this.renderPocketGrid;
+    }
+
+    public FormSettings setRenderPocketGrid(boolean renderPocketGrid) {
+        this.renderPocketGrid = renderPocketGrid;
         return this;
     }
 }

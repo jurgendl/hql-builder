@@ -1,6 +1,10 @@
+$verticalgutter: 2px;
+$horizontal: 4px;
+$width: 95%;
+
 .defaultform {
 	margin: 2em auto;
-	width: 95%;
+	width: $width;
 
 	// feedbackpanel
 	.feedbackPanel.ui-state-error {
@@ -33,6 +37,9 @@
 	}
 
 	.formbody {
+		.block-group { margin: -$verticalgutter -$horizontal; }
+		.block { padding: $verticalgutter $horizontal; }
+	
 		// formbody fieldsets
 		fieldset legend {
 			font-weight: 700;
@@ -41,8 +48,8 @@
 		
 		// form row, aka block-group
 		.formrow {
-			margin-top: 0.4em;
-			margin-bottom: 0.4em;
+			/*margin-top: 0.4em;
+			margin-bottom: 0.4em;*/
 			// form row blocks
 			.block {
 				// form labels

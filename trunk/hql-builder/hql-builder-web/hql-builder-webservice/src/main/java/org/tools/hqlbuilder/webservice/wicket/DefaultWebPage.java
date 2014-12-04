@@ -121,7 +121,6 @@ public class DefaultWebPage extends WebPage {
 
     protected void addDefaultResources(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
         response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
 
         response.render(JavaScriptHeaderItem.forReference(Scrollator.SCROLLATOR_JS));
