@@ -186,7 +186,7 @@ http://jquery-plugins.net/d3-js-javascript-visualization-library-for-html-and-sv
 
 
 
-
+http://github.hubspot.com/pace/docs/welcome/
 http://kugaevsky.github.io/jquery-phoenix/
 http://jquery-plugins.net/rangeslider-js-html5-input-range-slider-element-polyfill-with-jquery
 http://cbopp-art.github.io/anchor/
