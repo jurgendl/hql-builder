@@ -271,8 +271,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         if (this.componentRepeater == null) {
             WebMarkupContainer rowContainer = new WebMarkupContainer(this.getRowRepeater().newChildId());
 
-            rowContainer.add(new CssClassNameAppender(this.renderColumnsCss(this.getFormSettings().isShowLabel(),
-                    this.getFormSettings().getColumns(), this.getFormSettings().getLabelWidth())));
+            rowContainer.add(new CssClassNameAppender("cols"
+                    + this.getFormSettings().getColumns()
+                    + " "
+                    + this.renderColumnsCss(this.getFormSettings().isShowLabel(), this.getFormSettings().getColumns(), this.getFormSettings()
+                            .getLabelWidth())));
             this.getRowRepeater().add(rowContainer);
 
             RepeatingView repeater = new RepeatingView(FormConstants.FORM_ELEMENT_REPEATER);
