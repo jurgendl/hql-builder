@@ -37,8 +37,8 @@ $width: 95%;
 	}
 
 	.formbody {
-		.block-group { margin: -$verticalgutter -$horizontal; }
-		.block { padding: $verticalgutter $horizontal; }
+		/*.block-group { margin: -$verticalgutter -$horizontal; }
+		.block { padding: $verticalgutter $horizontal; }*/
 	
 		// formbody fieldsets
 		fieldset legend {
@@ -48,8 +48,8 @@ $width: 95%;
 		
 		// form row, aka block-group
 		.formrow {
-			/*margin-top: 0.4em;
-			margin-bottom: 0.4em;*/
+			margin-top: 0.4em;
+			margin-bottom: 0.4em;
 			// form row blocks
 			.block {
 				// form labels
