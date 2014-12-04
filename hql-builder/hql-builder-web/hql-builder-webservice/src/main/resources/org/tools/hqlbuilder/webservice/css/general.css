@@ -1,3 +1,21 @@
+/* ======================== clear-fix ======================== */
+
+/* http://css-tricks.com/all-about-floats/ */
+/* clearfix - http://css-tricks.com/snippets/css/clear-fix/*/
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+	}
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
+
 /* ======================== fonts ======================== */
 /* https://www.google.com/fonts */
 /* http://fontfabric.com/idealist-sans/ */
@@ -113,50 +131,6 @@ h1, h2, h3, h4, h5 {
 /* ======================== icon fonts ======================== */
 .transparentbg {
 	background-color : transparent !important;
-}
-
-/* ======================== class="tooltip" title="tooltiptext" ======================== */
-.tooltip {
-	position: relative;
-}
-.tooltip:before,.tooltip:after {
-	position: absolute;
-	transition: All 0.5s ease;
-	-webkit-transition: All 0.5s ease;
-	-moz-transition: All 0.5s ease;
-	-o-transition: All 0.5s ease;
-	margin-left: -100px;
-	left: 50%;
-	bottom: 300%;
-	display: block;
-	color: #000;
-	opacity: 0;
-}
-.tooltip:before {
-	content: attr(title);
-	border: solid 1px #0088cc;
-	background: #FFF;
-	width: 200px;
-	text-align: center;
-	z-index: 2;
-	font-size: 13px;
-	line-height: 18px;
-	padding: 5px;
-}
-.tooltip:after {
-	content: '\25c6';
-	margin-left: 0;
-	margin-top: 10px;
-	width: 15px;
-	height: 15px;
-	z-index: 1;
-	line-height: 28px;
-	color: #0088cc;
-	font-size: 20px;
-}
-.tooltip:hover:before,.tooltip:hover:after {
-	bottom: 150%;
-	opacity: 1;
 }
 
 /* ======================== hyperlink ======================== */
@@ -540,11 +514,7 @@ kbd.light, .light-keys kbd, .key.light, .light-keys .key {
 	box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .4), 0 .1em .11em rgba(0, 0, 0, .9);
 }
 
-/* ========================  ======================== */
-/* http://www.w3schools.com/html/html5_semantic_elements.asp */
-/* http://www.w3.org/TR/html5/sections.html */
-/* http://www.anthonycalzadilla.com/2010/08/html5-section-aside-header-nav-footer-elements-not-as-obvious-as-they-sound/ */
-
+/* ======================== table sorter  ======================== */
 
 .tablesorter-filter {
 	width: 100%;
