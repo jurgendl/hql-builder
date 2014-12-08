@@ -18,7 +18,7 @@ public class WicketCSSRoot {
 
     public static CssResourceReference GENERAL = new CssResourceReference(WicketCSSRoot.class, "general.css");
 
-    // public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
+    public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
 
     /** http://daneden.github.io/animate.css/ */
     public static CssResourceReference ANIMATE = new CssResourceReference(WicketCSSRoot.class, "animate.css");

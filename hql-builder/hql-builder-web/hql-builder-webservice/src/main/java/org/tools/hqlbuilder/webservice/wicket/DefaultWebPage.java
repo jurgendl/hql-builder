@@ -26,7 +26,6 @@ import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.scrollator.Scrollator;
-import org.tools.hqlbuilder.webservice.jquery.ui.velocity.Velocity;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -120,6 +119,7 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addDefaultResources(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
         response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
         response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
 
@@ -128,7 +128,7 @@ public class DefaultWebPage extends WebPage {
         response.render(OnDomReadyHeaderItem.forScript(Scrollator.SCROLLATOR_FACTORY_JS));
 
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
-        response.render(JavaScriptHeaderItem.forReference(Velocity.VELOCITY_JS));
+        // response.render(JavaScriptHeaderItem.forReference(Velocity.VELOCITY_JS));
     }
 
     protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {

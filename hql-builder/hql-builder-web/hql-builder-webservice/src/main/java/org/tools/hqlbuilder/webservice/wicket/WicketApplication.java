@@ -174,6 +174,8 @@ public class WicketApplication extends WebApplication {
             this.getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         }
 
+        getResourceBundles().addCssBundle(WicketCSSRoot.class, "bundle.js", WicketCSSRoot.CLEARFIX, WicketCSSRoot.NORMALIZE, WicketCSSRoot.GENERAL);
+
         // mount resources
         this.mountImages();
         this.mountResources();
