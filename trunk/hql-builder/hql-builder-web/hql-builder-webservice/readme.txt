@@ -173,6 +173,8 @@ https://github.com/clubdesign/floatlabels.js
 http://slippry.com/
 https://github.com/claviska/jquery-dropdown
 http://jquery-plugins.net/d3-js-javascript-visualization-library-for-html-and-svg
+http://jquery-plugins.net/nprogress-js-progress-bar-inspired-by-google-and-youtube
+http://jquery-plugins.net/google-nexus-website-menu
 
 
 
@@ -184,9 +186,6 @@ http://jquery-plugins.net/d3-js-javascript-visualization-library-for-html-and-sv
 
 
 
-
-
-http://github.hubspot.com/pace/docs/welcome/
 http://kugaevsky.github.io/jquery-phoenix/
 http://jquery-plugins.net/rangeslider-js-html5-input-range-slider-element-polyfill-with-jquery
 http://cbopp-art.github.io/anchor/
