@@ -175,7 +175,7 @@ https://github.com/claviska/jquery-dropdown
 http://jquery-plugins.net/d3-js-javascript-visualization-library-for-html-and-svg
 http://jquery-plugins.net/nprogress-js-progress-bar-inspired-by-google-and-youtube
 http://jquery-plugins.net/google-nexus-website-menu
-
+http://jquery-plugins.net/qtip2-pretty-powerful-tooltips
 
 
 
