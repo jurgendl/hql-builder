@@ -166,7 +166,7 @@ https://highlightjs.org/static/demo/
 http://jquery-plugins.net/circliful-jquery-circle-statistics-plugin
 http://logicify.github.io/jquery-locationpicker-plugin/#examples
 http://mathjs.org/
-https://github.com/fgnass/spin.js
+
 http://highcharttable.org/#demo
 https://github.com/xdan/flipcountdown
 https://github.com/clubdesign/floatlabels.js
@@ -180,7 +180,7 @@ http://jquery-plugins.net/qtip2-pretty-powerful-tooltips
 
 
 
-
+https://github.com/fgnass/spin.js
 
 
 
