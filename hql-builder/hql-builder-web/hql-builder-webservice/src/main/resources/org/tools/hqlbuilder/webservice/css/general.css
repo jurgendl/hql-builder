@@ -219,20 +219,41 @@ th.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortab
 	content: " \f0dc";
 }
 
+.icon.delete::before,
 .ui-button.delete::before {
 	font-family: 'FontAwesome';
 	content: "\f00d  ";
 	color: red;
 }
+.icon.edit::before,
 .ui-button.edit::before {
 	font-family: 'FontAwesome';
 	content: "\f044  ";
 	color: green;
 }
+.icon.add::before,
 .ui-button.add::before {
 	font-family: 'FontAwesome';
 	content: "\f067  ";
 	color: blue;
+}
+.icon.submit::before,
+.ui-button.submit::before {
+	font-family: 'IconicStroke';
+	content: "\2717  ";
+	color: green;
+}
+.icon.reset::before,
+.ui-button.reset::before {
+	font-family: 'IconicStroke';
+	content: "\e02f  ";
+	color: blue;
+}
+.icon.cancel::before,
+.ui-button.cancel::before {
+	font-family: 'IconicStroke';
+	content: "\2713  ";
+	color: red;
 }
 
 /* ======================== text transformations ======================== */
