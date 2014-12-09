@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.model.IModel;
@@ -47,8 +48,6 @@ public abstract class DefaultDataProvider<T extends Serializable> implements Dat
     public Iterator<? extends T> iterator(long first, long count) {
         return select(first, count, sort);
     }
-
-    protected abstract Iterator<T> select(long first, long count, Map<String, SortOrder> sorting);
 
     @Override
     public ISortState<String> getSortState() {
@@ -182,5 +181,45 @@ public abstract class DefaultDataProvider<T extends Serializable> implements Dat
     public DefaultDataProvider<T> setIdProperty(String idProperty) {
         this.idProperty = idProperty;
         return this;
+    }
+
+    /**
+     * implement me
+     */
+    @Override
+    public void edit(AjaxRequestTarget target, T object) {
+        throw new UnsupportedOperationException("implement me");
+    }
+
+    /**
+     * implement me
+     */
+    @Override
+    public void add(AjaxRequestTarget target) {
+        throw new UnsupportedOperationException("implement me");
+    }
+
+    /**
+     * implement me
+     */
+    @Override
+    public void delete(AjaxRequestTarget target, T object) {
+        throw new UnsupportedOperationException("implement me");
+    }
+
+    /**
+     * implement me
+     */
+    @SuppressWarnings("unused")
+    public Iterator<T> select(long first, long count, Map<String, SortOrder> sorting) {
+        throw new UnsupportedOperationException("implement me");
+    }
+
+    /**
+     * implement me
+     */
+    @Override
+    public long size() {
+        throw new UnsupportedOperationException("implement me");
     }
 }
