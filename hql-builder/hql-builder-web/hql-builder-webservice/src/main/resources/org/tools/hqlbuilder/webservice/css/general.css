@@ -1,20 +1,4 @@
-/* ======================== clear-fix ======================== */
-
-/* http://css-tricks.com/all-about-floats/ */
-/* clearfix - http://css-tricks.com/snippets/css/clear-fix/*/
-.clearfix:after {
-	visibility: hidden;
-	display: block;
-	font-size: 0;
-	content: " ";
-	clear: both;
-	height: 0;
-	}
-.clearfix { display: inline-block; }
-/* start commented backslash hack \*/
-* html .clearfix { height: 1%; }
-.clearfix { display: block; }
-/* close commented backslash hack */
+/* ========================xxx======================== */
 
 /* ======================== fonts ======================== */
 /* https://www.google.com/fonts */
@@ -139,22 +123,26 @@ h1, h2, h3, h4, h5 {
 /* hover: when the user hovers their mouse over a link */
 /* active: when the user clicks on the link (or presses the Enter key on a focused link) */
 /* focus: when the user uses the Tab key to navigate to hyperlinks */
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):visited,
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):hover,
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):active,
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):focus {
+/* link used to be "a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke)" */
+a.ui-button {
+	text-decoration: none;
+}
+.link,
+.link:visited,
+.link:hover,
+.link:active,
+.link:focus {
 	text-decoration: none;
 	outline: none;
 	color: #1E608E;
 }
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke),
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):visited {
+.link,
+.link:visited {
 	border-bottom: .1em solid rgba(0,0,0,.1);
 }
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):hover,
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):active,
-a:not(.fake):not(.ui-button-text-only):not(.pui-menuitem-link):not(.cke):focus {
+.link:hover,
+.link:active,
+.link:focus {
 	border-bottom: .1em solid #1E608E;
 }
 a img,
@@ -208,7 +196,16 @@ a[href$=jpg], a[href$=jpeg], a[href$=jpe], a[href$=png], a[href$=gif], a[href$=b
 	width: auto; /* needs to set fixed width */ 
 }
 
-/* ======================== sort arrows on tables headers ======================== */
+/* ======================== tables ======================== */
+
+.tablesorter-filter {
+	width: 100%;
+}
+
+.pui-datatable.ui-widget table {
+	table-layout: auto;
+}
+
 th.pui-sortable-column.wicket_orderUp div.tableheaderlabel::after { 
 	font-family: 'FontAwesome';
 	content: " \f0dd";
@@ -221,7 +218,7 @@ th.pui-sortable-column:not(.wicket_orderDown):not(.wicket_orderUp):not(.unsortab
 	font-family: 'FontAwesome';
 	content: " \f0dc";
 }
-/* ======================== buttons in tables ======================== */
+
 .ui-button.delete::before {
 	font-family: 'FontAwesome';
 	content: "\f00d  ";
@@ -514,10 +511,4 @@ kbd.light, .light-keys kbd, .key.light, .light-keys .key {
 	box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .4), 0 .1em .11em rgba(0, 0, 0, .9);
 }
 
-/* ======================== table sorter  ======================== */
-
-.tablesorter-filter {
-	width: 100%;
-} 
-
-/* ========================  ======================== */
+/* ========================xxx======================== */
