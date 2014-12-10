@@ -81,6 +81,10 @@ public abstract class ServiceImpl {
         this.getSession().delete(entity);
     }
 
+    protected <P> void deleteAll(Class<P> entityClass) {
+        this.getSession().createQuery("delete from " + entityClass.getName()).executeUpdate();
+    }
+
     protected <P> Long count(Class<P> entityClass) {
         return (Long) this.getSession().createQuery("select count(o) from " + entityClass.getName() + " o").list().get(0);
     }
