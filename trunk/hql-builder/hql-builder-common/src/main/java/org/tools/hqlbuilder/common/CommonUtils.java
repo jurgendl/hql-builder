@@ -171,7 +171,7 @@ public class CommonUtils {
     }
 
     public static char[] whitespace_chars = ( //
-    "\u0009" // CHARACTER TABULATION
+            "\u0009" // CHARACTER TABULATION
             + "\n" // LINE FEED (LF)
             + "\u000B" // LINE TABULATION
             + "\u000C" // FORM FEED (FF)
@@ -197,7 +197,7 @@ public class CommonUtils {
             + "\u202F" // NARROW NO-BREAK SPACE
             + "\u205F" // MEDIUM MATHEMATICAL SPACE
             + "\u3000" // IDEOGRAPHIC SPACE
-    ).toCharArray();
+            ).toCharArray();
 
     public static String removeUnnecessaryWhiteSpaces(String s) {
         StringBuilder sb = new StringBuilder();
@@ -472,6 +472,8 @@ public class CommonUtils {
         StringBuilder sb = new StringBuilder();
         for (char c : Normalizer.normalize(string, Normalizer.Form.NFKD).toUpperCase().toCharArray()) {
             if (('A' <= c) && (c <= 'Z')) {
+                sb.append(c);
+            } else if (('0' <= c) && (c <= '9')) {
                 sb.append(c);
             }
         }
