@@ -1,19 +1,19 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-public class ListSettings extends AbstractSelectSettings<ListSettings> {
-    private static final long serialVersionUID = -6574286191603464915L;
+public class MultiListSettings extends AbstractSelectSettings<MultiListSettings> {
+    private static final long serialVersionUID = -7087528702318354068L;
 
     protected int size = 10;
 
-    public ListSettings() {
+    public MultiListSettings() {
         super();
     }
 
-    public ListSettings(ListSettings other) {
+    public MultiListSettings(MultiListSettings other) {
         super(other);
     }
 
-    public ListSettings(boolean required) {
+    public MultiListSettings(boolean required) {
         super(required);
     }
 
@@ -21,7 +21,7 @@ public class ListSettings extends AbstractSelectSettings<ListSettings> {
         return this.size;
     }
 
-    public ListSettings setSize(int size) {
+    public MultiListSettings setSize(int size) {
         this.size = size;
         return this;
     }
@@ -32,7 +32,7 @@ public class ListSettings extends AbstractSelectSettings<ListSettings> {
     }
 
     @Override
-    public ListSettings setNullValid(boolean nullValid) {
+    public MultiListSettings setNullValid(boolean nullValid) {
         this.nullValid = nullValid;
         return this;
     }

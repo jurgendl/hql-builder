@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 import static org.tools.hqlbuilder.webservice.wicket.WebHelper.tag;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
@@ -11,6 +12,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -18,31 +20,35 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 /**
  * @see http://www.primefaces.org/primeui/listbox.html
  */
-public class ListPanel<T extends Serializable> extends SelectPanel<T, Select<T>, ListSettings> {
-    private static final long serialVersionUID = 6519523561212631975L;
+public class MultiListPanel<O extends Serializable, T extends Collection<O>> extends FormRowPanel<T, T, Select<T>, MultiListSettings> {
+    private static final long serialVersionUID = 167148397490967806L;
 
-    public ListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, ListSettings componentSettings, IOptionRenderer<T> renderer,
-            IModel<List<T>> choices) {
-        super(model, propertyPath, formSettings, componentSettings, renderer, choices);
-    }
+    protected IOptionRenderer<O> renderer;
 
-    public ListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, ListSettings componentSettings, IOptionRenderer<T> renderer,
-            IModel<List<T>>[] choices, IModel<String>[] groupLabels) {
-        super(model, propertyPath, formSettings, componentSettings, renderer, choices, groupLabels);
+    protected IModel<List<O>> choices;
+
+    protected Class<O> type;
+
+    public MultiListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, MultiListSettings componentSettings,
+            IOptionRenderer<O> renderer, IModel<List<O>> choices) {
+        super(model, propertyPath, formSettings, componentSettings);
+        this.renderer = renderer;
+        this.choices = choices;
     }
 
     @Override
-    protected Select<T> createComponent(IModel<T> model) {
+    protected Select<T> createComponent(IModel<T> model, Class<T> valueType) {
         if (getComponentSettings().getSize() <= 1) {
             throw new IllegalArgumentException("getComponentSettings().getSize()<=1");
         }
         Select<T> select = new Select<T>(VALUE, model) {
-            private static final long serialVersionUID = 6509470567166194399L;
+            private static final long serialVersionUID = -3408379598404381390L;
 
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 onFormComponentTag(tag);
+                tag(tag, "multiple", "multiple");
                 tag(tag, "size", getComponentSettings().getSize());
                 tag(tag, "style", "height: auto");
             }
@@ -51,7 +57,6 @@ public class ListPanel<T extends Serializable> extends SelectPanel<T, Select<T>,
         return select;
     }
 
-    @Override
     protected boolean isNullValid() {
         return getComponentSettings().isNullValid();
     }
@@ -63,5 +68,28 @@ public class ListPanel<T extends Serializable> extends SelectPanel<T, Select<T>,
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
+    }
+
+    // /////////////////////
+
+    @Override
+    public FormRowPanel<T, T, Select<T>, MultiListSettings> setValueModel(IModel<T> model) {
+        getComponent().setModel(model);
+        return super.setValueModel(model);
+    }
+
+    @Override
+    public IModel<T> getValueModel() {
+        if (valueModel == null) {
+            String property = getPropertyName();
+            valueModel = property == null ? null : new PropertyModel<T>(getDefaultModel(), property);
+        }
+        return valueModel;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<T> getPropertyType() {
+        return (Class<T>) Collection.class;
     }
 }

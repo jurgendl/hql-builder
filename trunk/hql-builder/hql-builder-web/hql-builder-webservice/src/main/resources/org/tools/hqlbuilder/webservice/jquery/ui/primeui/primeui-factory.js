@@ -2,7 +2,7 @@ function primeuifactory(prefix) {
 	console.log('primeuifactory['+prefix+']');
 	$(prefix+'.puiinputtext').puiinputtext({width:'auto'});
 	$(prefix+'.puiinputtextarea').puiinputtextarea({width:'auto'});
-	$(prefix+'.puidropdown').puidropdown({width:'auto'});
+	$(prefix+'.puidropdown').puidropdown({width:'auto',filter:true});
 	$(prefix+'.puiaccordion').puiaccordion({});
 	$(prefix+'.puipassword').puipassword({width:'auto'});
 	$(prefix+'.puispinner').puispinner({width:'auto'});

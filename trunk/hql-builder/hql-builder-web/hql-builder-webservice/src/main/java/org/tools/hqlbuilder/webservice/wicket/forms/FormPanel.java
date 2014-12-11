@@ -163,6 +163,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.addDefaultRow(new HiddenFieldPanel<F>(this.getFormModel(), propertyPath));
     }
 
+    public <F extends Serializable, C extends Collection<F>> MultiListPanel<F, C> addMultiList(C propertyPath, MultiListSettings componentSettings,
+            IOptionRenderer<F> renderer, IModel<List<F>> choices) {
+        return this.addCustomRow(new MultiListPanel<F, C>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, renderer,
+                choices));
+    }
+
     public <F extends Serializable> ListPanel<F> addList(F propertyPath, ListSettings componentSettings, IOptionRenderer<F> renderer,
             IModel<List<F>> choices) {
         return this.addDefaultRow(new ListPanel<F>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, renderer, choices));
@@ -607,7 +613,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
