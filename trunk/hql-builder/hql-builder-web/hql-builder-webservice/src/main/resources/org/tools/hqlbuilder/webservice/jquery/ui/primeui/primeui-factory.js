@@ -6,7 +6,7 @@ function primeuifactory(prefix) {
 	$(prefix+'.puiaccordion').puiaccordion({});
 	$(prefix+'.puipassword').puipassword({width:'auto'});
 	$(prefix+'.puispinner').puispinner({width:'auto'});
-	$(prefix+'.puilistbox').puilistbox({width:'auto'});
+	$(prefix+'.puilistbox').puilistbox({width:'auto'}).parent().parent().height(200);
 	$(prefix+'.puiautocomplete').puiautocomplete({width:'auto'});
 	$(prefix+'.puibreadcrumb').puibreadcrumb({});
 	$(prefix+'.puibutton').puibutton({});
