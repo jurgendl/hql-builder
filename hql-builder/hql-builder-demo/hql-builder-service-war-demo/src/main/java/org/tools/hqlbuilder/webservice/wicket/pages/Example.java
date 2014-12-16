@@ -117,6 +117,8 @@ public class Example implements Serializable {
 
     private List<String> manyOptions;
 
+    private List<String> rndwords = new ArrayList<>();
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("id", id).append("tristate", tristate).append("multi", multi)
@@ -126,7 +128,7 @@ public class Example implements Serializable {
                 .append("integerv", integerv).append("longv", longv).append("shortv", shortv).append("doublev", doublev).append("floatv", floatv)
                 .append("bytev", bytev).append("integerr", integerr).append("longr", longr).append("shortr", shortr).append("doubler", doubler)
                 .append("floatr", floatr).append("byter", byter).append("color1", color1).append("color2", color2).append("htmlText", htmlText)
-                .append("htmlTextExtra", htmlTextExtra).append("manyOptions", manyOptions).toString();
+                .append("htmlTextExtra", htmlTextExtra).append("manyOptions", manyOptions).append("rndwords", rndwords).toString();
     }
 
     public ExampleOpts getRadio() {
@@ -415,5 +417,13 @@ public class Example implements Serializable {
 
     public void setDropdown(String dropdown) {
         this.dropdown = dropdown;
+    }
+
+    public List<String> getRndwords() {
+        return this.rndwords;
+    }
+
+    public void setRndwords(List<String> rndwords) {
+        this.rndwords = rndwords;
     }
 }

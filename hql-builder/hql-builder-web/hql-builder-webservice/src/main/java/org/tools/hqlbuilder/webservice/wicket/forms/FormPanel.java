@@ -163,8 +163,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.addDefaultRow(new HiddenFieldPanel<F>(this.getFormModel(), propertyPath));
     }
 
-    public <F extends Serializable, C extends Collection<F>> MultiListPanel<F, C> addMultiList(C propertyPath, MultiListSettings componentSettings,
-            IOptionRenderer<F> renderer, IModel<List<F>> choices) {
+    public <F extends Serializable, C extends Collection<F>> MultiListPanel<F, C> addMultiSelectList(C propertyPath,
+            MultiListSettings componentSettings, IOptionRenderer<F> renderer, IModel<List<F>> choices) {
         return this.addCustomRow(new MultiListPanel<F, C>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, renderer,
                 choices));
     }
