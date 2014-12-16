@@ -8,12 +8,14 @@ import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
+import org.apache.wicket.extensions.markup.html.form.select.SelectOptions;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.wicket.components.DefaultOptionRenderer;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
@@ -32,14 +34,24 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
     public MultiListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, MultiListSettings componentSettings,
             IOptionRenderer<O> renderer, IModel<List<O>> choices) {
         super(model, propertyPath, formSettings, componentSettings);
-        this.renderer = renderer;
+        this.renderer = fallback(renderer);
         this.choices = choices;
+    }
+
+    protected IOptionRenderer<O> fallback(IOptionRenderer<O> r) {
+        if (r == null) {
+            r = new DefaultOptionRenderer<O>();
+        }
+        return r;
     }
 
     @Override
     protected Select<T> createComponent(IModel<T> model, Class<T> valueType) {
         if (getComponentSettings().getSize() <= 1) {
             throw new IllegalArgumentException("getComponentSettings().getSize()<=1");
+        }
+        if (model.getObject() == null) {
+            throw new NullPointerException("model object");
         }
         Select<T> select = new Select<T>(VALUE, model) {
             private static final long serialVersionUID = -3408379598404381390L;
@@ -53,12 +65,10 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
                 tag(tag, "style", "height: auto");
             }
         };
+        SelectOptions<O> options = new SelectOptions<O>("options", choices, renderer);
+        select.add(options);
         select.add(new CssClassNameAppender(PrimeUI.puilistbox));
         return select;
-    }
-
-    protected boolean isNullValid() {
-        return getComponentSettings().isNullValid();
     }
 
     @Override
@@ -69,8 +79,6 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
-
-    // /////////////////////
 
     @Override
     public FormRowPanel<T, T, Select<T>, MultiListSettings> setValueModel(IModel<T> model) {

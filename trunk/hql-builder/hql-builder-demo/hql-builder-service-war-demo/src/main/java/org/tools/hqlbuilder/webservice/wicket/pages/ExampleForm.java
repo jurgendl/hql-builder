@@ -43,6 +43,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.JQueryUIColorPickerSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.ListSettings;
+import org.tools.hqlbuilder.webservice.wicket.forms.MultiListSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.NumberFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TagItTextFieldSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextAreaSettings;
@@ -70,7 +71,6 @@ public class ExampleForm extends FormPanel<Example> {
             @Override
             public Example loadObject() {
                 return _loadObject();
-
             }
         });
 
@@ -79,15 +79,10 @@ public class ExampleForm extends FormPanel<Example> {
         getForm().setMultiPart(true);
         getForm().setMaxSize(Bytes.megabytes(10));
 
-        {
-            Example tmp = getFormActions().loadObject();
-            ArrayList<String> list = new ArrayList<String>(new TreeSet<String>(Arrays.asList(tmp.getLongText().toLowerCase()
-                    .replaceAll("[^a-z ]", "").replaceAll("  ", " ").split(" "))));
-            list.removeAll(tmp.getManyOptions());
-            addPickList(proxy.getManyOptions(), new ListSettings(), new ListModel<String>(list), null);
+        List<String> rndwords = new ArrayList<String>();
+        for (int i = 0; i < 128; i++) {
+            rndwords.add(RandomStringUtils.randomAlphabetic(16));
         }
-
-        nextRow();
 
         FormElementSettings fset = new FormElementSettings();
         final IChoiceRenderer<ExampleOpts> choiceRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
@@ -103,6 +98,17 @@ public class ExampleForm extends FormPanel<Example> {
             }
         };
         ListModel<ExampleOpts> optsChoices = new ListModel<ExampleOpts>(Arrays.asList(ExampleOpts.values()));
+
+        {
+            Example tmp = getFormActions().loadObject();
+            ArrayList<String> list = new ArrayList<String>(new TreeSet<String>(Arrays.asList(tmp.getLongText().toLowerCase()
+                    .replaceAll("[^a-z ]", "").replaceAll("  ", " ").split(" "))));
+            list.removeAll(tmp.getManyOptions());
+            addPickList(proxy.getManyOptions(), new ListSettings(), new ListModel<String>(list), null);
+        }
+
+        nextRow();
+
         addLocalesDropDown(null, fset, null, null).setPropertyName("locale").setValueModel(new IModel<Locale>() {
             @Override
             public void detach() {
@@ -166,10 +172,6 @@ public class ExampleForm extends FormPanel<Example> {
         addHidden(proxy.getHidden1());
         addHidden(proxy.getHidden2());
 
-        List<String> rndwords = new ArrayList<String>();
-        for (int i = 0; i < 128; i++) {
-            rndwords.add(RandomStringUtils.randomAlphabetic(16));
-        }
         addTagItTextFieldPanel(proxy.getTags(), new TagItTextFieldSettings(), new ListModel<String>(rndwords));
         addTextField(proxy.getText(), fset.clone());
         addTextField(proxy.getTextAdd(), fset.clone());
@@ -215,6 +217,8 @@ public class ExampleForm extends FormPanel<Example> {
         addTextArea(proxy.getLongText(), new TextAreaSettings().setResizable(false).setRows(5).setCols(100));
         nextRow();
         addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
+        nextRow();
+        addMultiSelectList(proxy.getRndwords(), new MultiListSettings(), null, new ListModel<String>(rndwords));
     }
 
     private void addFilepicker(Example proxy) {
