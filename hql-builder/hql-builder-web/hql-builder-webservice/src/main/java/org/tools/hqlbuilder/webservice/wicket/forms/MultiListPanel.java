@@ -62,7 +62,6 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
                 onFormComponentTag(tag);
                 tag(tag, "multiple", "multiple");
                 tag(tag, "size", getComponentSettings().getSize());
-                tag(tag, "style", "height: auto");
             }
         };
         SelectOptions<O> options = new SelectOptions<O>("options", choices, renderer);
@@ -99,5 +98,10 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
     @Override
     public Class<T> getPropertyType() {
         return (Class<T>) Collection.class;
+    }
+
+    @Override
+    protected void setupPlaceholder(ComponentTag tag) {
+        //
     }
 }

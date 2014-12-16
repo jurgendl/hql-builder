@@ -15,7 +15,7 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, IModel<List<String>> choices) {
         StringBuilder availableTags = new StringBuilder("[");
         for (String choice : choices.getObject()) {
-            availableTags.append("'").append(choice).append("',");
+            availableTags.append("\"").append(choice).append("\",");
         }
         availableTags.deleteCharAt(availableTags.length() - 1).append("]");
         return (";$('#" + id + "').hide().tagit({"//
@@ -36,7 +36,7 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
                 // + ",availableTags:" + availableTags //
                 + ",singleField:" + tagItTextFieldSettings.isSingleField()//
                 + ",singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'"//
-                + "});");//
+        + "});");//
     }
 
     private static final long serialVersionUID = -3317709333874063112L;

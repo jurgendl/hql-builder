@@ -44,13 +44,17 @@ public class Growl extends Panel {
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 
-    public void message(AjaxRequestTarget target, GrowlMessage... message) {
+    public String message(AjaxRequestTarget target, GrowlMessage... message) {
         StringBuilder msg = new StringBuilder();
         for (int i = 0; i < message.length; i++) {
             msg.append(message[i].toString()).append(",");
         }
-        target.appendJavaScript(";$('#" + get(GROWL_MESSAGE).getMarkupId() + "').puigrowl('show',["
-                + msg.delete(msg.length(), msg.length()).toString() + "]);");
+        String javascript = ";$('#" + get(GROWL_MESSAGE).getMarkupId() + "').puigrowl('show',[" + msg.delete(msg.length(), msg.length()).toString()
+                + "]);";
+        if (target != null) {
+            target.appendJavaScript(javascript);
+        }
+        return javascript;
     }
 
     public static class GrowlMessage implements Serializable {
