@@ -49,8 +49,8 @@ public class Growl extends Panel {
         for (int i = 0; i < message.length; i++) {
             msg.append(message[i].toString()).append(",");
         }
-        String javascript = ";$('#" + get(GROWL_MESSAGE).getMarkupId() + "').puigrowl('show',[" + msg.delete(msg.length(), msg.length()).toString()
-                + "]);";
+        String javascript = ";$('#" + get(GROWL_MESSAGE).getMarkupId() + "').puigrowl({life:60000}).puigrowl('show',["
+                + msg.delete(msg.length(), msg.length()).toString() + "]);";
         if (target != null) {
             target.appendJavaScript(javascript);
         }
