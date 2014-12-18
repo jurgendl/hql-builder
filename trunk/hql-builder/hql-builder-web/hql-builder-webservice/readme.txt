@@ -176,16 +176,24 @@ http://jquery-plugins.net/d3-js-javascript-visualization-library-for-html-and-sv
 http://jquery-plugins.net/nprogress-js-progress-bar-inspired-by-google-and-youtube
 http://jquery-plugins.net/google-nexus-website-menu
 http://jquery-plugins.net/qtip2-pretty-powerful-tooltips
+http://jquery-plugins.net/contextmenu-js-customizable-jquery-context-menu
+http://jquery-plugins.net/youtube-tv-youtube-user-playlist-player-jquery-plugin
+http://jquery-plugins.net/gridly-jquery-plugin-to-enable-drag-and-drop-on-grids
+http://jquery-plugins.net/simple-vertical-menu-with-jquery-and-css3
+http://jquery-plugins.net/mason-js-jquery-plugin-to-create-grid-layout
+http://jquery-plugins.net/how-to-make-a-digital-clock-with-jquery-and-css3
+http://jquery-plugins.net/ion-range-slider-jquery-range-slider-with-skin-support
 
 
 
 
-https://github.com/fgnass/spin.js
 
 
 
 
 
+http://brianreavis.github.io/selectize.js/
+http://jquery-plugins.net/scroll-to-simple-way-to-animate-to-anchors
 http://kugaevsky.github.io/jquery-phoenix/
 http://jquery-plugins.net/rangeslider-js-html5-input-range-slider-element-polyfill-with-jquery
 http://cbopp-art.github.io/anchor/
