@@ -9,10 +9,13 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-@SuppressWarnings("serial")
 public class ExternalLink extends org.apache.wicket.markup.html.link.ExternalLink {
+    private static final long serialVersionUID = 822282823515079064L;
+
     public static IModel<String> convertModelForURI(final IModel<URI> uri) {
         return new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = 3823865517405954216L;
+
             @Override
             public String getObject() {
                 return uri == null || uri.getObject() == null ? null : uri.getObject().toASCIIString();
@@ -22,6 +25,8 @@ public class ExternalLink extends org.apache.wicket.markup.html.link.ExternalLin
 
     public static IModel<String> convertModelForURL(final IModel<URL> url) {
         return new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = 620100245769705448L;
+
             @Override
             public String getObject() {
                 return url == null || url.getObject() == null ? null : url.getObject().toExternalForm();
@@ -31,6 +36,8 @@ public class ExternalLink extends org.apache.wicket.markup.html.link.ExternalLin
 
     public static IModel<String> createModel(final URI uri) {
         return new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = 89848643726769637L;
+
             @Override
             public String getObject() {
                 return uri == null ? null : uri.toASCIIString();
@@ -40,6 +47,8 @@ public class ExternalLink extends org.apache.wicket.markup.html.link.ExternalLin
 
     public static IModel<String> createModel(final URL url) {
         return new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = -3280636915902490355L;
+
             @Override
             public String getObject() {
                 return url == null ? null : url.toExternalForm();
