@@ -37,59 +37,60 @@ public class DefaultWebPage extends WebPage {
 
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
-        setStatelessHint(false);
-        logger = LoggerFactory.getLogger(getClass());
+        this.setStatelessHint(false);
+        this.logger = LoggerFactory.getLogger(this.getClass());
         Injector.get().inject(this);
         // if (getClass().equals(DefaultWebPage.class)) {
         // setResponsePage(EmptyPage.class, parameters);
         // }
-        addComponents();
+        this.addComponents();
     }
 
     protected void addComponents() {
         // shortcut icon
-        add(new WebMarkupContainer("shortcutIcon").add(new AttributeModifier("href", Model.of(WicketApplication.get().getShortcutIcon())))
+        this.add(new WebMarkupContainer("shortcutIcon").add(new AttributeModifier("href", Model.of(WicketApplication.get().getShortcutIcon())))
                 .setVisible(StringUtils.isNotBlank(WicketApplication.get().getShortcutIcon())));
 
         // wicket/ajax debug bars
-        add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug") : new EmptyPanel(
-                "debug").setVisible(false));
+        this.add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug")
+                : new EmptyPanel("debug").setVisible(false));
 
         // check if javascript is enabled
-        add(new CheckJavaScriptEnabled());
+        this.add(new CheckJavaScriptEnabled());
 
         // check if cookies are enabled
-        add(new CheckCookiesEnabled());
+        this.add(new CheckCookiesEnabled());
 
         // check if ads are not blocked
         try {
-            add(new CheckAdsEnabled());
+            this.add(new CheckAdsEnabled());
         } catch (Throwable ex) {
-            add(new EmptyPanel("check.ads.enabled").setVisible(false));
+            this.add(new EmptyPanel("check.ads.enabled").setVisible(false));
         }
 
         // add header response (javascript) down below on page
         if (WicketApplication.get().isJavascriptAtBottom()) {
-            add(new HeaderResponseContainer("footer-container", "footer-bucket"));
+            this.add(new HeaderResponseContainer("footer-container", "footer-bucket"));
         } else {
-            add(new EmptyPanel("footer-container").setVisible(false));
+            this.add(new EmptyPanel("footer-container").setVisible(false));
         }
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        if (!isEnabledInHierarchy()) {
-            return;
-        }
-        addDefaultResources(response);
-        addThemeResources(response);
-        addPageResources(response);
-        addUserResources(response);
-        addDynamicResources(response);
+    protected void addDefaultResources(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
+        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
+
+        response.render(JavaScriptHeaderItem.forReference(Scrollator.SCROLLATOR_JS));
+        response.render(CssHeaderItem.forReference(Scrollator.SCROLLATOR_CSS));
+        response.render(OnDomReadyHeaderItem.forScript(Scrollator.SCROLLATOR_FACTORY_JS));
+
+        response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
+        // response.render(JavaScriptHeaderItem.forReference(Velocity.VELOCITY_JS));
     }
 
-    protected void addUserResources(@SuppressWarnings("unused") IHeaderResponse response) {
-        // none by default
+    protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {
+        //
     }
 
     protected void addPageResources(@SuppressWarnings("unused") IHeaderResponse response) {
@@ -118,52 +119,8 @@ public class DefaultWebPage extends WebPage {
         }
     }
 
-    protected void addDefaultResources(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.CLEARFIX));
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.NORMALIZE));
-        response.render(CssHeaderItem.forReference(WicketCSSRoot.GENERAL));
-
-        response.render(JavaScriptHeaderItem.forReference(Scrollator.SCROLLATOR_JS));
-        response.render(CssHeaderItem.forReference(Scrollator.SCROLLATOR_CSS));
-        response.render(OnDomReadyHeaderItem.forScript(Scrollator.SCROLLATOR_FACTORY_JS));
-
-        response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
-        // response.render(JavaScriptHeaderItem.forReference(Velocity.VELOCITY_JS));
-    }
-
-    protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {
-        //
-    }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-        statelessCheck();
-    }
-
-    protected void statelessCheck() {
-        if (getStatelessHint() && WicketApplication.get().usesDevelopmentConfig()) {
-            visitChildren(new IVisitor<Component, Void>() {
-                @Override
-                public void component(Component component, IVisit<Void> arg1) {
-                    if (!component.isStateless()) {
-                        logger.error("Component " + component.getClass().getName() + " with id " + component.getId() + " is not stateless");
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
-    protected void setHeaders(WebResponse response) {
-        super.setHeaders(response);
-
-        // if page is stateless en in deployment mode, we enable caching
-        if (isPageStateless() && WicketApplication.get().usesDeploymentConfig()) {
-            enableCaching(response);
-        } else {
-            disableCaching(response);
-        }
+    protected void addUserResources(@SuppressWarnings("unused") IHeaderResponse response) {
+        // none by default
     }
 
     protected void disableCaching(WebResponse response) {
@@ -171,14 +128,58 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void enableCaching(WebResponse response) {
-        response.enableCaching(defaultCacheDuration, WebResponse.CacheScope.PUBLIC);
+        response.enableCaching(this.defaultCacheDuration, WebResponse.CacheScope.PUBLIC);
     }
 
     public Duration getDefaultCacheDuration() {
         return this.defaultCacheDuration;
     }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        this.statelessCheck();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        if (!this.isEnabledInHierarchy()) {
+            return;
+        }
+        this.addDefaultResources(response);
+        this.addThemeResources(response);
+        this.addPageResources(response);
+        this.addUserResources(response);
+        this.addDynamicResources(response);
+    }
+
     public void setDefaultCacheDuration(Duration defaultCacheDuration) {
         this.defaultCacheDuration = defaultCacheDuration;
+    }
+
+    @Override
+    protected void setHeaders(WebResponse response) {
+        super.setHeaders(response);
+
+        // if page is stateless en in deployment mode, we enable caching
+        if (this.isPageStateless() && WicketApplication.get().usesDeploymentConfig()) {
+            this.enableCaching(response);
+        } else {
+            this.disableCaching(response);
+        }
+    }
+
+    protected void statelessCheck() {
+        if (this.getStatelessHint() && WicketApplication.get().usesDevelopmentConfig()) {
+            this.visitChildren(new IVisitor<Component, Void>() {
+                @Override
+                public void component(Component component, IVisit<Void> arg1) {
+                    if (!component.isStateless()) {
+                        DefaultWebPage.this.logger.warn("Component " + component.getClass().getName() + " with id " + component.getId()
+                                + " is not stateless");
+                    }
+                }
+            });
+        }
     }
 }
