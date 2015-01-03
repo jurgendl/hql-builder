@@ -150,7 +150,7 @@ public class SassResourceReference extends StreamResourceReference implements IR
                 throw new RuntimeException(ex);
             }
         }
-        SassResourceReference.logger.info(this.getSassName() + " - sending lastModifiedTime: " + this.lastModified);
+        SassResourceReference.logger.debug(this.getSassName() + " - sending lastModifiedTime: " + this.lastModified);
         return this.lastModified;
     }
 

@@ -5,6 +5,7 @@ import java.util.MissingResourceException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
@@ -22,6 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.HtmlEvent.HtmlFormEvent;
 import org.tools.hqlbuilder.webservice.wicket.WebHelper;
@@ -56,13 +58,8 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
 
     protected ElementSettings componentSettings;
 
-    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, ElementSettings componentSettings) {
-        this(valueModel, propertyPath, formSettings, componentSettings);
-        this.valueModel = valueModel;
-    }
-
     protected FormRowPanel(IModel<?> model, P propertyPath, FormSettings formSettings, ElementSettings componentSettings) {
-        super(FORM_ELEMENT, model);
+        super(FormConstants.FORM_ELEMENT, model);
         if (formSettings == null) {
             throw new NullPointerException("formSettings");
         }
@@ -75,12 +72,196 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
         WebHelper.show(this);
     }
 
-    protected void setupRequiredBehavior() {
-        C c = getComponent();
-        if (formSettings.isAjax() && formSettings.isLiveValidation() && !(c instanceof PasswordTextField)
-                && !(c instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
-            // c.add(setupDynamicRequiredBehavior());
+    public FormRowPanel(P propertyPath, IModel<T> valueModel, FormSettings formSettings, ElementSettings componentSettings) {
+        this(valueModel, propertyPath, formSettings, componentSettings);
+        this.valueModel = valueModel;
+    }
+
+    @Override
+    public MarkupContainer add(Component... childs) {
+        if ((childs == null) || (childs.length == 0) || ((childs.length == 1) && (childs[0] == null))) {
+            return this;
         }
+        return super.add(childs);
+    }
+
+    protected FormRowPanel<P, T, C, ElementSettings> addComponents() {
+        this.add(this.getLabel());
+        this.add(this.getComponent());
+        this.add(this.getRequiredMarker());
+        this.add(this.getFeedback());
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected FormRowPanel<P, T, C, ElementSettings> afterAddComponents() {
+        this.getComponent().setLabel((IModel<String>) this.getLabel().getDefaultModel());
+        this.setupRequiredBehavior();
+        this.setupId();
+        return this;
+    }
+
+    protected abstract C createComponent(IModel<T> model, Class<T> valueType);
+
+    public C getComponent() {
+        if (this.component == null) {
+            this.component = this.createComponent(this.getValueModel(), this.getPropertyType());
+            this.setupRequired(this.component);
+        }
+        return this.component;
+    }
+
+    public ElementSettings getComponentSettings() {
+        return this.componentSettings;
+    }
+
+    protected FeedbackPanel getFeedback() {
+        if (this.feedbackPanel == null) {
+            this.feedbackPanel = new FeedbackPanel(FormConstants.FEEDBACK_ID, new ComponentFeedbackMessageFilter(this.component)) {
+                private static final long serialVersionUID = 211849904711387432L;
+
+                @Override
+                public boolean isVisible() {
+                    return super.isVisible() && this.anyMessage();
+                }
+            };
+            this.feedbackPanel.setOutputMarkupId(true);
+        }
+        return this.feedbackPanel;
+    }
+
+    public C getFormComponent() {
+        return this.getComponent();
+    }
+
+    public Label getLabel() {
+        if (this.label == null) {
+            this.label = new Label(FormConstants.LABEL, this.getLabelModel()) {
+                private static final long serialVersionUID = 8512361193054906821L;
+
+                @Override
+                public boolean isVisible() {
+                    return super.isVisible() && ((FormRowPanel.this.formSettings == null) || FormRowPanel.this.formSettings.isShowLabel());
+                }
+
+                @Override
+                protected void onComponentTag(ComponentTag tag) {
+                    super.onComponentTag(tag);
+                    tag.getAttributes().put(FormConstants.FOR, FormRowPanel.this.getComponent().getMarkupId());
+                    tag.getAttributes().put(FormConstants.TITLE, FormRowPanel.this.getLabelModel().getObject());
+                }
+            };
+        }
+        return this.label;
+    }
+
+    public IModel<String> getLabelModel() {
+        if (this.labelModel == null) {
+            this.labelModel = new LoadableDetachableModel<String>() {
+                private static final long serialVersionUID = -6695403939068552376L;
+
+                @Override
+                protected String load() {
+                    return FormRowPanel.this.getLabelText();
+                }
+            };
+        }
+        return this.labelModel;
+    }
+
+    protected String getLabelText() {
+        try {
+            return this.getString(this.getPropertyName());
+        } catch (MissingResourceException ex) {
+            FormRowPanel.logger.warn("no translation for " + this.getPropertyName());
+            return "[" + this.getPropertyName() + "_" + this.getLocale() + "]";
+        }
+    }
+
+    protected String getPlaceholderText() {
+        try {
+            return this.getString(FormConstants.PLACEHOLDER);
+        } catch (MissingResourceException ex) {
+            FormRowPanel.logger.info("no translation for " + FormConstants.PLACEHOLDER);
+            return null;
+        }
+    }
+
+    public String getPropertyName() {
+        if (this.propertyName == null) {
+            try {
+                this.propertyName = CommonUtils.name(this.propertyPath);
+            } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
+                this.propertyName = this.propertyPath == null ? null : this.propertyPath.toString();
+            }
+        }
+        return this.propertyName;
+    }
+
+    public Class<T> getPropertyType() {
+        if (this.propertyType == null) {
+            throw new NullPointerException();
+        }
+        return this.propertyType;
+    }
+
+    protected WebMarkupContainer getRequiredMarker() {
+        WebMarkupContainer requiredMarker = new WebMarkupContainer("requiredMarker") {
+            private static final long serialVersionUID = -6386826366809908431L;
+
+            @Override
+            public boolean isVisible() {
+                return super.isVisible() && FormRowPanel.this.componentSettings.isRequired();
+            }
+        };
+        return requiredMarker;
+    }
+
+    public IModel<T> getValueModel() {
+        if (this.valueModel == null) {
+            throw new NullPointerException();
+        }
+        return this.valueModel;
+    }
+
+    public FormRowPanel<P, T, C, ElementSettings> inheritId() {
+        // . is replaced because sql selectors don't work well with dot's
+        this.getComponent().setMarkupId(this.getPropertyName().toString().replace('.', FormConstants.DOT_REPLACER));
+        return this;
+    }
+
+    /**
+     * call this in overridden method:<br>
+     * org.tools.hqlbuilder.webservice.wicket.forms.[Component]Panel. createComponent().new [Component]() {...}.onComponentTag(ComponentTag)
+     */
+    protected void onFormComponentTag(ComponentTag tag) {
+        this.setupPlaceholder(tag);
+        this.setupRequired(tag);
+        this.setupReadOnly(tag);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (!this.isEnabledInHierarchy()) {
+            return;
+        }
+        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
+    }
+
+    public FormRowPanel<P, T, C, ElementSettings> setLabelModel(IModel<String> labelModel) {
+        this.labelModel = labelModel;
+        return this;
+    }
+
+    public FormRowPanel<P, T, C, ElementSettings> setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+        return this;
+    }
+
+    public FormRowPanel<P, T, C, ElementSettings> setPropertyType(Class<T> propertyType) {
+        this.propertyType = propertyType;
+        return this;
     }
 
     protected Behavior setupDynamicRequiredBehavior() {
@@ -90,215 +271,77 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
             @Override
             protected void onError(AjaxRequestTarget ajaxRequestTarget, RuntimeException e) {
                 C c = FormRowPanel.this.getComponent();
-                c.add(new CssClassNameRemover(formSettings.validClass));
-                c.add(new CssClassNameAppender(formSettings.invalidClass));
-                ajaxRequestTarget.add(c, getFeedback());
+                c.add(new CssClassNameRemover(FormRowPanel.this.formSettings.validClass));
+                c.add(new CssClassNameAppender(FormRowPanel.this.formSettings.invalidClass));
+                ajaxRequestTarget.add(c, FormRowPanel.this.getFeedback());
             }
 
             @Override
             protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
                 C c = FormRowPanel.this.getComponent();
-                c.add(new CssClassNameRemover(formSettings.invalidClass));
-                c.add(new CssClassNameAppender(formSettings.validClass));
-                ajaxRequestTarget.add(c, getFeedback());
+                c.add(new CssClassNameRemover(FormRowPanel.this.formSettings.invalidClass));
+                c.add(new CssClassNameAppender(FormRowPanel.this.formSettings.validClass));
+                ajaxRequestTarget.add(c, FormRowPanel.this.getFeedback());
             }
         };
     }
 
     protected void setupId() {
-        if (formSettings.isInheritId() || componentSettings.isInheritId()) {
-            inheritId();
+        if (this.formSettings.isInheritId() || this.componentSettings.isInheritId()) {
+            this.inheritId();
         }
-    }
-
-    public Label getLabel() {
-        if (label == null) {
-            label = new Label(LABEL, getLabelModel()) {
-                private static final long serialVersionUID = 8512361193054906821L;
-
-                @Override
-                public boolean isVisible() {
-                    return super.isVisible() && (formSettings == null || formSettings.isShowLabel());
-                }
-
-                @Override
-                protected void onComponentTag(ComponentTag tag) {
-                    super.onComponentTag(tag);
-                    tag.getAttributes().put(FOR, getComponent().getMarkupId());
-                    tag.getAttributes().put(TITLE, getLabelModel().getObject());
-                }
-            };
-        }
-        return label;
-    }
-
-    public C getFormComponent() {
-        return getComponent();
-    }
-
-    public C getComponent() {
-        if (component == null) {
-            component = createComponent(getValueModel(), getPropertyType());
-            setupRequired(component);
-        }
-        return this.component;
-    }
-
-    protected abstract C createComponent(IModel<T> model, Class<T> valueType);
-
-    protected FeedbackPanel getFeedback() {
-        if (feedbackPanel == null) {
-            feedbackPanel = new FeedbackPanel(FEEDBACK_ID, new ComponentFeedbackMessageFilter(component)) {
-                private static final long serialVersionUID = 211849904711387432L;
-
-                @Override
-                public boolean isVisible() {
-                    return super.isVisible() && anyMessage();
-                }
-            };
-            feedbackPanel.setOutputMarkupId(true);
-        }
-        return feedbackPanel;
-    }
-
-    protected FormRowPanel<P, T, C, ElementSettings> addComponents() {
-        this.add(getLabel());
-        this.add(getComponent());
-        this.add(getRequiredMarker());
-        this.add(getFeedback());
-        return this;
-    }
-
-    protected WebMarkupContainer getRequiredMarker() {
-        WebMarkupContainer requiredMarker = new WebMarkupContainer("requiredMarker") {
-            private static final long serialVersionUID = -6386826366809908431L;
-
-            @Override
-            public boolean isVisible() {
-                return super.isVisible() && componentSettings.isRequired();
-            }
-        };
-        return requiredMarker;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected FormRowPanel<P, T, C, ElementSettings> afterAddComponents() {
-        getComponent().setLabel((IModel<String>) getLabel().getDefaultModel());
-        setupRequiredBehavior();
-        setupId();
-        return this;
-    }
-
-    @Override
-    public MarkupContainer add(Component... childs) {
-        if (childs == null || childs.length == 0 || (childs.length == 1 && childs[0] == null)) {
-            return this;
-        }
-        return super.add(childs);
     }
 
     protected void setupPlaceholder(ComponentTag tag) {
-        if (componentSettings != null && !componentSettings.isShowPlaceholder()) {
-            WebHelper.untag(tag, PLACEHOLDER);
-        } else if (componentSettings != null && componentSettings.isShowPlaceholder()) {
-            WebHelper.tag(tag, PLACEHOLDER, getPlaceholderText());
-        } else if (formSettings != null && formSettings.isShowPlaceholder()) {
-            WebHelper.tag(tag, PLACEHOLDER, getPlaceholderText());
+        if ((this.componentSettings != null) && !this.componentSettings.isShowPlaceholder()) {
+            WebHelper.untag(tag, FormConstants.PLACEHOLDER);
+        } else if ((this.componentSettings != null) && this.componentSettings.isShowPlaceholder()) {
+            WebHelper.tag(tag, FormConstants.PLACEHOLDER, this.getPlaceholderText());
+        } else if ((this.formSettings != null) && this.formSettings.isShowPlaceholder()) {
+            WebHelper.tag(tag, FormConstants.PLACEHOLDER, this.getPlaceholderText());
         } else {
-            WebHelper.untag(tag, PLACEHOLDER);
+            WebHelper.untag(tag, FormConstants.PLACEHOLDER);
         }
     }
 
-    protected void setupRequired(ComponentTag tag) {
-        if (formSettings != null && formSettings.isClientsideRequiredValidation() && componentSettings != null && componentSettings.isRequired()) {
-            WebHelper.tag(tag, REQUIRED, REQUIRED);
+    protected void setupReadOnly(ComponentTag tag) {
+        if ((this.componentSettings != null) && this.componentSettings.isReadOnly()) {
+            WebHelper.tag(tag, FormConstants.READ_ONLY, FormConstants.READ_ONLY);
         } else {
-            WebHelper.untag(tag, REQUIRED);
+            WebHelper.untag(tag, FormConstants.READ_ONLY);
         }
     }
 
     protected void setupRequired(C component) {
-        component.setRequired(componentSettings.isRequired());
-        if (StringUtils.isNotBlank(formSettings.getRequiredClass())) {
-            if (componentSettings.isRequired()) {
-                component.add(new CssClassNameAppender(formSettings.getRequiredClass()));
-            } else {
-                component.add(new CssClassNameRemover(formSettings.getRequiredClass()));
-            }
-        }
-    }
-
-    /**
-     * call this in overridden method:<br>
-     * org.tools.hqlbuilder.webservice.wicket.forms.[Component]Panel. createComponent().new [Component]() {...}.onComponentTag(ComponentTag)
-     */
-    protected void onFormComponentTag(ComponentTag tag) {
-        setupPlaceholder(tag);
-        setupRequired(tag);
-    }
-
-    protected String getLabelText() {
         try {
-            return getString(getPropertyName());
-        } catch (MissingResourceException ex) {
-            logger.warn("no translation for " + getPropertyName());
-            return "[" + getPropertyName() + "_" + getLocale() + "]";
-        }
-    }
-
-    protected String getPlaceholderText() {
-        try {
-            return getString(PLACEHOLDER);
-        } catch (MissingResourceException ex) {
-            logger.info("no translation for " + PLACEHOLDER);
-            return null;
-        }
-    }
-
-    public ElementSettings getComponentSettings() {
-        return this.componentSettings;
-    }
-
-    public IModel<String> getLabelModel() {
-        if (labelModel == null) {
-            labelModel = new LoadableDetachableModel<String>() {
-                private static final long serialVersionUID = -6695403939068552376L;
-
-                @Override
-                protected String load() {
-                    return getLabelText();
+            component.setRequired(this.componentSettings.isRequired());
+            if (StringUtils.isNotBlank(this.formSettings.getRequiredClass())) {
+                if (this.componentSettings.isRequired()) {
+                    component.add(new CssClassNameAppender(this.formSettings.getRequiredClass()));
+                } else {
+                    component.add(new CssClassNameRemover(this.formSettings.getRequiredClass()));
                 }
-            };
-        }
-        return labelModel;
-    }
-
-    public FormRowPanel<P, T, C, ElementSettings> setLabelModel(IModel<String> labelModel) {
-        this.labelModel = labelModel;
-        return this;
-    }
-
-    public String getPropertyName() {
-        if (propertyName == null) {
-            try {
-                propertyName = WebHelper.name(propertyPath);
-            } catch (ch.lambdaj.function.argument.ArgumentConversionException ex) {
-                propertyName = propertyPath == null ? null : propertyPath.toString();
             }
+        } catch (WicketRuntimeException ex) {
+            // TODO primitive
         }
-        return this.propertyName;
     }
 
-    public FormRowPanel<P, T, C, ElementSettings> setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-        return this;
+    protected void setupRequired(ComponentTag tag) {
+        if ((this.formSettings != null) && this.formSettings.isClientsideRequiredValidation() && (this.componentSettings != null)
+                && this.componentSettings.isRequired()) {
+            WebHelper.tag(tag, FormConstants.REQUIRED, FormConstants.REQUIRED);
+        } else {
+            WebHelper.untag(tag, FormConstants.REQUIRED);
+        }
     }
 
-    public IModel<T> getValueModel() {
-        if (valueModel == null) {
-            throw new NullPointerException();
+    protected void setupRequiredBehavior() {
+        C c = this.getComponent();
+        if (this.formSettings.isAjax() && this.formSettings.isLiveValidation() && !(c instanceof PasswordTextField)
+                && !(c instanceof com.googlecode.wicket.jquery.ui.form.datepicker.DatePicker)) {
+            // c.add(setupDynamicRequiredBehavior());
         }
-        return this.valueModel;
     }
 
     public FormRowPanel<P, T, C, ElementSettings> setValueModel(IModel<T> valueModel) {
@@ -306,34 +349,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
         return this;
     }
 
-    public Class<T> getPropertyType() {
-        if (propertyType == null) {
-            throw new NullPointerException();
-        }
-        return this.propertyType;
-    }
-
-    public FormRowPanel<P, T, C, ElementSettings> setPropertyType(Class<T> propertyType) {
-        this.propertyType = propertyType;
-        return this;
-    }
-
     public boolean takesUpSpace() {
         return true;
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
-            return;
-        }
-        response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_JS));
-    }
-
-    public FormRowPanel<P, T, C, ElementSettings> inheritId() {
-        // . is replaced because sql selectors don't work well with dot's
-        getComponent().setMarkupId(getPropertyName().toString().replace('.', DOT_REPLACER));
-        return this;
     }
 }

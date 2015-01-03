@@ -81,13 +81,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             private static final long serialVersionUID = -6135914559717102175L;
 
             @Override
-            public String toString() {
-                return "DefaultFormActions";
+            public Class<T> forObjectClass() {
+                return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
             }
 
             @Override
-            public Class<T> forObjectClass() {
-                return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
+            public String toString() {
+                return "DefaultFormActions";
             }
         });
         this.setFormSettings(formSettings == null ? new FormSettings() : formSettings);
@@ -163,12 +163,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.addDefaultRow(new HiddenFieldPanel<F>(this.getFormModel(), propertyPath));
     }
 
-    public <F extends Serializable, C extends Collection<F>> MultiListPanel<F, C> addMultiSelectList(C propertyPath,
-            MultiListSettings componentSettings, IOptionRenderer<F> renderer, IModel<List<F>> choices) {
-        return this.addCustomRow(new MultiListPanel<F, C>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, renderer,
-                choices));
-    }
-
     public <F extends Serializable> ListPanel<F> addList(F propertyPath, ListSettings componentSettings, IOptionRenderer<F> renderer,
             IModel<List<F>> choices) {
         return this.addDefaultRow(new ListPanel<F>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, renderer, choices));
@@ -192,10 +186,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 choices, renderer));
     }
 
-    public <F extends Serializable> PickListPanel<F> addPickList(Collection<F> propertyPath, ListSettings componentSettings, IModel<List<F>> choices,
-            IChoiceRenderer<F> renderer) {
-        return this
-                .addCustomRow(new PickListPanel<F>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, choices, renderer));
+    public <F extends Serializable, C extends Collection<F>> MultiListPanel<F, C> addMultiSelectList(C propertyPath,
+            MultiListSettings componentSettings, IOptionRenderer<F> renderer, IModel<List<F>> choices) {
+        return this.addCustomRow(new MultiListPanel<F, C>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, renderer,
+                choices));
     }
 
     public <N extends Number & Comparable<N>> NumberFieldPanel<N> addNumberField(N propertyPath, NumberFieldSettings<N> componentSettings) {
@@ -208,6 +202,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public PasswordTextFieldPanel addPasswordTextField(String propertyPath, FormElementSettings componentSettings) {
         return this.addDefaultRow(new PasswordTextFieldPanel(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings));
+    }
+
+    public <F extends Serializable> PickListPanel<F> addPickList(Collection<F> propertyPath, ListSettings componentSettings, IModel<List<F>> choices,
+            IChoiceRenderer<F> renderer) {
+        return this
+                .addCustomRow(new PickListPanel<F>(this.getFormModel(), propertyPath, this.getFormSettings(), componentSettings, choices, renderer));
     }
 
     public <F extends Serializable> RadioButtonsPanel<F> addRadioButtons(F propertyPath, FormElementSettings componentSettings,
@@ -298,13 +298,13 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = -5489467484161698560L;
 
                 @Override
-                public String toString() {
-                    return "Form:IModel<T>";
+                protected T load() {
+                    return FormPanel.this.getFormActions().loadObject();
                 }
 
                 @Override
-                protected T load() {
-                    return FormPanel.this.getFormActions().loadObject();
+                public String toString() {
+                    return "Form:IModel<T>";
                 }
             };
             if (this.getFormSettings().isStateless()) {
@@ -312,11 +312,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     private static final long serialVersionUID = -5855525240326128645L;
 
                     @Override
-                    public String toString() {
-                        return "StatelessForm";
-                    }
-
-                    @Override
                     protected String getMethod() {
                         return FormPanel.this.formSettings.getMethod() != null ? FormPanel.this.formSettings.getMethod().toString() : super
                                 .getMethod();
@@ -327,6 +322,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                         FormPanel.this.onBeforeSubmit();
                         FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
                         FormPanel.this.onAfterSubmit();
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "StatelessForm";
                     }
                 };
             } else {
@@ -334,11 +334,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     private static final long serialVersionUID = -5899425422548211723L;
 
                     @Override
-                    public String toString() {
-                        return "Form";
-                    }
-
-                    @Override
                     protected String getMethod() {
                         return FormPanel.this.formSettings.getMethod() != null ? FormPanel.this.formSettings.getMethod().toString() : super
                                 .getMethod();
@@ -349,6 +344,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                         FormPanel.this.onBeforeSubmit();
                         FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
                         FormPanel.this.onAfterSubmit();
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "Form";
                     }
                 };
             }
@@ -370,11 +370,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = 6548216685529936996L;
 
                 @Override
-                public String toString() {
-                    return "WebMarkupContainer:" + FormConstants.FORM_HEADER;
-                }
-
-                @Override
                 public boolean isVisible() {
                     for (int i = 0; i < this.size(); i++) {
                         if (!this.get(i).isVisible()) {
@@ -382,6 +377,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                         }
                     }
                     return super.isVisible();
+                }
+
+                @Override
+                public String toString() {
+                    return "WebMarkupContainer:" + FormConstants.FORM_HEADER;
                 }
             };
             this.form.add(formHeader);
@@ -391,7 +391,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             WebMarkupContainer formFieldSet = new WebMarkupContainer(FormConstants.FORM_FIELDSET);
             formBody.add(formFieldSet);
-            Label formFieldSetLegend = new Label(FormConstants.FORM_FIELDSET_LEGEND);
+            Label formFieldSetLegend = new Label(FormConstants.FORM_FIELDSET_LEGEND, (String) null);
+            formFieldSetLegend.setVisible(false);// TODO configure
             formFieldSet.add(formFieldSetLegend);
             formFieldSet.add(this.getRowRepeater());
 
@@ -404,27 +405,27 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 submit = new AjaxSubmitLink(FormConstants.FORM_SUBMIT, this.form) {
                     private static final long serialVersionUID = 1046494045754727027L;
 
-                    @Override
-                    public String toString() {
-                        return "AjaxSubmitLink:" + FormConstants.FORM_SUBMIT;
-                    }
-
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
                         FormPanel.this.getFormActions().afterSubmit(target, (Form<T>) f, FormPanel.this.getFormModel());
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "AjaxSubmitLink:" + FormConstants.FORM_SUBMIT;
                     }
                 };
                 submit.setDefaultModel(submitModel);
             } else {
                 submit = new Button(FormConstants.FORM_SUBMIT, submitModel);
             }
-            submit.setVisible(formSettings.isShowSubmit());
+            submit.setVisible(this.formSettings.isShowSubmit());
             submit.add(new CssClassNameAppender(JQueryUI.jquibutton));
 
             Button reset = new Button(FormConstants.FORM_RESET, resetModel);
             reset.add(new CssClassNameAppender(JQueryUI.jquibutton));
-            reset.setVisible(formSettings.isShowReset());
+            reset.setVisible(this.formSettings.isShowReset());
 
             /*
              * https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit +buttons
@@ -434,15 +435,15 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 cancel = new AjaxSubmitLink(FormConstants.FORM_CANCEL, this.form) {
                     private static final long serialVersionUID = -8816675271842238444L;
 
-                    @Override
-                    public String toString() {
-                        return "AjaxSubmitLink:" + FormConstants.FORM_CANCEL;
-                    }
-
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onAfterSubmit(AjaxRequestTarget target, Form<?> f) {
                         FormPanel.this.getFormActions().afterCancel(target, (Form<T>) f, FormPanel.this.getFormModel());
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "AjaxSubmitLink:" + FormConstants.FORM_CANCEL;
                     }
                 };
                 cancel.setDefaultModel(cancelModel);
@@ -465,15 +466,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             formActionsContainer.add(submit);
             formActionsContainer.add(reset);
             formActionsContainer.add(cancel);
-            formActionsContainer.setVisible(formSettings.isShowReset() || formSettings.isShowSubmit() || getFormSettings().isCancelable());
+            formActionsContainer.setVisible(this.formSettings.isShowReset() || this.formSettings.isShowSubmit()
+                    || this.getFormSettings().isCancelable());
 
             WebMarkupContainer formFooter = new WebMarkupContainer(FormConstants.FORM_FOOTER) {
                 private static final long serialVersionUID = -8111670292045284274L;
-
-                @Override
-                public String toString() {
-                    return "WebMarkupContainer:" + FormConstants.FORM_FOOTER;
-                }
 
                 @Override
                 public boolean isVisible() {
@@ -484,6 +481,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     }
                     return super.isVisible();
                 }
+
+                @Override
+                public String toString() {
+                    return "WebMarkupContainer:" + FormConstants.FORM_FOOTER;
+                }
             };
             this.form.add(formFooter);
 
@@ -491,28 +493,29 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                 private static final long serialVersionUID = -8111670292045284274L;
 
                 @Override
-                public String toString() {
-                    return "FeedbackPanel:allMessagesTop";
+                public boolean isVisible() {
+                    return super.isVisible() && this.anyMessage();
                 }
 
                 @Override
-                public boolean isVisible() {
-                    return super.isVisible() && this.anyMessage();
+                public String toString() {
+                    return "FeedbackPanel:allMessagesTop";
                 }
             });
             formFooter.add(new FeedbackPanel("allMessagesBottom") {
                 private static final long serialVersionUID = 5678584511310860629L;
 
                 @Override
-                public String toString() {
-                    return "FeedbackPanel:allMessagesBottom";
-                }
-
-                @Override
                 public boolean isVisible() {
                     return super.isVisible() && this.anyMessage();
                 }
+
+                @Override
+                public String toString() {
+                    return "FeedbackPanel:allMessagesBottom";
+                }
             });
+            this.form.add(new RepeatingView(FormConstants.FORM_ADDITIONAL).setVisible(false));
         }
         return this.form;
     }
@@ -566,15 +569,15 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         this.getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
 
             @Override
-            public String toString() {
-                return "onAfterSubmit:IVisitor<FormRowPanel, Void>";
-            }
-
-            @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
                     FormSubmitInterceptor.class.cast(object).onAfterSubmit();
                 }
+            }
+
+            @Override
+            public String toString() {
+                return "onAfterSubmit:IVisitor<FormRowPanel, Void>";
             }
         });
     }
@@ -583,15 +586,15 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     protected void onBeforeSubmit() {
         this.getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
             @Override
-            public String toString() {
-                return "onBeforeSubmit:IVisitor<FormRowPanel, Void>";
-            }
-
-            @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
                     FormSubmitInterceptor.class.cast(object).onBeforeSubmit();
                 }
+            }
+
+            @Override
+            public String toString() {
+                return "onBeforeSubmit:IVisitor<FormRowPanel, Void>";
             }
         });
     }
@@ -613,7 +616,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
@@ -644,10 +647,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         response.render(CssHeaderItem.forReference(WeLoveIcons.WE_LOVE_ICONS_CSS));
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.JQUERY_UI_FACTORY_JS));
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
-        if (formSettings.isRenderPocketGrid()) {
+        if (this.formSettings.isRenderPocketGrid()) {
             this.renderColumnsCss(response);
         }
-        response.render(CssHeaderItem.forReference(FORM_CSS));
+        response.render(CssHeaderItem.forReference(FormPanel.FORM_CSS));
     }
 
     public void setFormActions(FormActions<T> formActions) {
