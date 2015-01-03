@@ -15,6 +15,8 @@ public interface FormConstants {
 
     public static final String FORM_FIELDSET_LEGEND = "form.fieldset.legend";
 
+    public static final String FORM_ADDITIONAL = "form.additional";
+
     public static final String FORM = "form";
 
     public static final String VALUE = "value";
@@ -24,6 +26,8 @@ public interface FormConstants {
     public static final String PLACEHOLDER = "placeholder";
 
     public static final String REQUIRED = "required";
+
+    public static final String READ_ONLY = "readonly";
 
     public static final String CLASS = "class";
 

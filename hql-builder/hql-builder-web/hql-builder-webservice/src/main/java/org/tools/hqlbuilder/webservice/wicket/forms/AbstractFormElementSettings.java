@@ -14,12 +14,18 @@ public abstract class AbstractFormElementSettings<T extends AbstractFormElementS
 
     protected boolean required = false;
 
+    protected boolean readOnly = false;
+
     protected boolean showPlaceholder = false;
 
     protected boolean inheritId = false;
 
     public AbstractFormElementSettings() {
         super();
+    }
+
+    public AbstractFormElementSettings(boolean required) {
+        this.required = required;
     }
 
     public AbstractFormElementSettings(T other) {
@@ -41,7 +47,7 @@ public abstract class AbstractFormElementSettings<T extends AbstractFormElementS
     @Override
     public T clone() {
         try {
-            return (T) getClass().cast(BeanUtils.cloneBean(this));
+            return (T) this.getClass().cast(BeanUtils.cloneBean(this));
         } catch (IllegalAccessException ex) {
             throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
         } catch (InstantiationException ex) {
@@ -53,6 +59,46 @@ public abstract class AbstractFormElementSettings<T extends AbstractFormElementS
         }
     }
 
+    public boolean isInheritId() {
+        return this.inheritId;
+    }
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public boolean isRequired() {
+        return this.required;
+    }
+
+    public boolean isShowPlaceholder() {
+        return this.showPlaceholder;
+    }
+
+    public T setInheritId(boolean inheritId) {
+        this.inheritId = inheritId;
+        return this.castThis();
+    }
+
+    public T setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        return this.castThis();
+    }
+
+    public T setRequired(boolean required) {
+        this.required = required;
+        return this.castThis();
+    }
+
+    public T setShowPlaceholder(boolean showPlaceholder) {
+        this.showPlaceholder = showPlaceholder;
+        return this.castThis();
+    }
+
+    protected boolean skipForExport(String propertyName) {
+        return "required".equals(propertyName) || "showPlaceholder".equals(propertyName) || "inheritId".equals(propertyName);
+    }
+
     @Override
     public String toString() {
         try {
@@ -60,7 +106,7 @@ public abstract class AbstractFormElementSettings<T extends AbstractFormElementS
             PropertyUtilsBean propertyUtils = BeanUtilsBean.getInstance().getPropertyUtils();
             for (PropertyDescriptor desc : propertyUtils.getPropertyDescriptors(this)) {
                 String name = desc.getName();
-                if ("class".equals(name) || skipForExport(name)) {
+                if ("class".equals(name) || this.skipForExport(name)) {
                     continue;
                 }
                 Object value = propertyUtils.getSimpleProperty(this, name);
@@ -89,40 +135,5 @@ public abstract class AbstractFormElementSettings<T extends AbstractFormElementS
         } catch (NoSuchMethodException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    public AbstractFormElementSettings(boolean required) {
-        this.required = required;
-    }
-
-    public boolean isRequired() {
-        return this.required;
-    }
-
-    public T setRequired(boolean required) {
-        this.required = required;
-        return castThis();
-    }
-
-    protected boolean skipForExport(String propertyName) {
-        return "required".equals(propertyName) || "showPlaceholder".equals(propertyName) || "inheritId".equals(propertyName);
-    }
-
-    public boolean isShowPlaceholder() {
-        return this.showPlaceholder;
-    }
-
-    public T setShowPlaceholder(boolean showPlaceholder) {
-        this.showPlaceholder = showPlaceholder;
-        return castThis();
-    }
-
-    public boolean isInheritId() {
-        return this.inheritId;
-    }
-
-    public T setInheritId(boolean inheritId) {
-        this.inheritId = inheritId;
-        return castThis();
     }
 }
