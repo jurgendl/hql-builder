@@ -13,19 +13,18 @@ import org.tools.hqlbuilder.webservice.jquery.ui.tagit.TagIt;
 
 public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<String>, TagItTextFieldSettings> {
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, IModel<List<String>> choices) {
-        StringBuilder availableTags = new StringBuilder("[");
-        for (String choice : choices.getObject()) {
-            availableTags.append("\"").append(choice).append("\",");
-        }
-        availableTags.deleteCharAt(availableTags.length() - 1).append("]");
+        return TagItTextFieldPanel.tagIt(id, tagItTextFieldSettings, TagItTextFieldPanel.tagItChoices(choices));
+    }
+
+    public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, String choices) {
         return (";$('#" + id + "').hide().tagit({"//
                 + "autocomplete:"//
                 + "{"//
                 + "source:function(request,response){"//
-                + "var availableTags=" + availableTags + ";"//
-                + "var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term),'i');"//
+                + "var availableTags=" + choices + ";"//
+                + "var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term.trim()),'i');"//
                 + "response($.grep(availableTags,function(item){"//
-                + "return matcher.test(item);"//
+                + "return matcher.test(item.trim());"//
                 + "}));"//
                 + "}"//
                 + ",delay:" + tagItTextFieldSettings.getDelay()//
@@ -33,10 +32,20 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
                 + "}"//
                 + ",allowSpaces:" + tagItTextFieldSettings.isAllowSpaces()//
                 + ",caseSensitive:" + tagItTextFieldSettings.isCaseSensitive()//
+                + ",allowDuplicates:false"//
                 // + ",availableTags:" + availableTags //
                 + ",singleField:" + tagItTextFieldSettings.isSingleField()//
                 + ",singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'"//
         + "});");//
+    }
+
+    public static String tagItChoices(IModel<List<String>> choices) {
+        StringBuilder availableTags = new StringBuilder("[");
+        for (String choice : choices.getObject()) {
+            availableTags.append("\"").append(choice).append("\"").append(',');
+        }
+        availableTags.deleteCharAt(availableTags.length() - 1).append("]");
+        return availableTags.toString();
     }
 
     private static final long serialVersionUID = -3317709333874063112L;
