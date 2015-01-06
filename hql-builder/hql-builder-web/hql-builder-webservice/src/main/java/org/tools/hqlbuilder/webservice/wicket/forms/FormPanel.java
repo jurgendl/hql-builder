@@ -293,7 +293,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     public Form<T> getForm() {
         if (this.form == null) {
-            this.getFormActions();
+            this.getFormActions(); // check if exists asap
             IModel<T> formModel = new LoadableDetachableModel<T>() {
                 private static final long serialVersionUID = -5489467484161698560L;
 
@@ -616,7 +616,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
