@@ -14,6 +14,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
  * @see http://vanderlee.github.io/tristate/
  */
 public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckBoxSettings> {
+    public static final String CHECKBOXLABEL = "checkboxlabel";
     private static final long serialVersionUID = 7669787482921703670L;
 
     public CheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, CheckBoxSettings componentSettings) {
@@ -61,7 +62,7 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckB
     protected CheckBoxPanel addComponents() {
         this.add(getLabel());
         this.add(getComponent());
-        this.add(new Label("checkboxlabel", getLabelModel()) {
+        this.add(new Label(CHECKBOXLABEL, getLabelModel()) {
             private static final long serialVersionUID = 7533571573957789273L;
 
             @Override
