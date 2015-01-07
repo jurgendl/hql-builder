@@ -97,7 +97,7 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
     @SuppressWarnings("unchecked")
     @Override
     public Class<T> getPropertyType() {
-        return (Class<T>) Collection.class;
+        return (Class<T>) (Class) Collection.class;
     }
 
     @Override
