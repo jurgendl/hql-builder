@@ -8,6 +8,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.bean.validation.PropertyValidator;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
@@ -32,7 +33,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSettings extends AbstractFormElementSettings<ElementSettings>> extends
-        Panel implements FormConstants {
+Panel implements FormConstants {
     private static final long serialVersionUID = 5258950770053560483L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormRowPanel.class);
@@ -95,6 +96,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
 
     @SuppressWarnings("unchecked")
     protected FormRowPanel<P, T, C, ElementSettings> afterAddComponents() {
+        this.getComponent().add(new PropertyValidator<T>()); // jsr bean validation
         this.getComponent().setLabel((IModel<String>) this.getLabel().getDefaultModel());
         this.setupRequiredBehavior();
         this.setupId();

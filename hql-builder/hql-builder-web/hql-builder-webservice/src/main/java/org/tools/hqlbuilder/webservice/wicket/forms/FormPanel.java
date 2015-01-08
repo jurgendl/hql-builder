@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -50,6 +51,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 
 /**
  * @see http://jqueryui.com/button/
+ * @see http://wicket.apache.org/guide/guide/forms2.html#forms2_1
  */
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
     private static final long serialVersionUID = -6387604067134639316L;
@@ -391,9 +393,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             WebMarkupContainer formFieldSet = new WebMarkupContainer(FormConstants.FORM_FIELDSET);
             formBody.add(formFieldSet);
-            Label formFieldSetLegend = new Label(FormConstants.FORM_FIELDSET_LEGEND, (String) null);
-            formFieldSetLegend.setVisible(false);// TODO configure
-            formFieldSet.add(formFieldSetLegend);
+            String fieldSetLegend = this.getFormSettings().getFieldSetLegend();
+            Label formFieldSetLegend = new Label(FormConstants.FORM_FIELDSET_LEGEND, fieldSetLegend == null ? Model.of("") : new ResourceModel(
+                    fieldSetLegend));
+            formFieldSet.add(formFieldSetLegend.setVisible(fieldSetLegend != null));
             formFieldSet.add(this.getRowRepeater());
 
             ResourceModel submitModel = new ResourceModel(FormConstants.SUBMIT_LABEL);
@@ -567,7 +570,6 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     @SuppressWarnings("rawtypes")
     protected void onAfterSubmit() {
         this.getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
-
             @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
@@ -616,7 +618,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
