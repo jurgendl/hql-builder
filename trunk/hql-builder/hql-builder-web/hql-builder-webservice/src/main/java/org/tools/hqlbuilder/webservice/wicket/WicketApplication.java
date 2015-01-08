@@ -12,6 +12,7 @@ import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
+import org.apache.wicket.bean.validation.BeanValidationConfiguration;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
@@ -102,6 +103,10 @@ public class WicketApplication extends WebApplication {
         return DefaultWebPage.class;
     }
 
+    public String getShortcutIcon() {
+        return this.shortcutIcon;
+    }
+
     public Properties getWebProperties() {
         return this.webProperties;
     }
@@ -174,10 +179,13 @@ public class WicketApplication extends WebApplication {
             this.getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         }
 
-        getResourceBundles().addCssBundle(WicketCSSRoot.class, "bundle.js", //
+        this.getResourceBundles().addCssBundle(WicketCSSRoot.class, "bundle.js", //
                 WicketCSSRoot.CLEARFIX, //
                 WicketCSSRoot.NORMALIZE, //
                 WicketCSSRoot.GENERAL);//
+
+        // jsr bean validation
+        new BeanValidationConfiguration().configure(this);
 
         // mount resources
         this.mountImages();
@@ -229,6 +237,10 @@ public class WicketApplication extends WebApplication {
 
     public boolean isCheckJavaScriptEnabled() {
         return this.checkJavaScriptEnabled;
+    }
+
+    public boolean isJavascriptAtBottom() {
+        return this.javascriptAtBottom;
     }
 
     public boolean isShowDebugbars() {
@@ -337,27 +349,19 @@ public class WicketApplication extends WebApplication {
         this.checkJavaScriptEnabled = checkJavaScriptEnabled;
     }
 
-    public void setShowDebugbars(boolean showDebugbars) {
-        this.showDebugbars = showDebugbars;
-    }
-
-    public void setWebProperties(Properties webProperties) {
-        this.webProperties = webProperties;
-    }
-
-    public String getShortcutIcon() {
-        return this.shortcutIcon;
+    public void setJavascriptAtBottom(boolean javascriptAtBottom) {
+        this.javascriptAtBottom = javascriptAtBottom;
     }
 
     public void setShortcutIcon(String shortcutIcon) {
         this.shortcutIcon = shortcutIcon;
     }
 
-    public boolean isJavascriptAtBottom() {
-        return this.javascriptAtBottom;
+    public void setShowDebugbars(boolean showDebugbars) {
+        this.showDebugbars = showDebugbars;
     }
 
-    public void setJavascriptAtBottom(boolean javascriptAtBottom) {
-        this.javascriptAtBottom = javascriptAtBottom;
+    public void setWebProperties(Properties webProperties) {
+        this.webProperties = webProperties;
     }
 }

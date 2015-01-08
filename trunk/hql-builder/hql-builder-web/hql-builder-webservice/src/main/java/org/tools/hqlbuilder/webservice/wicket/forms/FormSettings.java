@@ -18,6 +18,8 @@ public class FormSettings implements Serializable {
     /** activate ajax on form (per field live validation, submit by ajax) */
     protected boolean ajax = false;
 
+    protected String fieldSetLegend;
+
     /** show label */
     protected boolean showLabel = true;
 
@@ -67,37 +69,151 @@ public class FormSettings implements Serializable {
         }
     }
 
-    public boolean isShowLabel() {
-        return this.showLabel;
+    @Override
+    public FormSettings clone() {
+        try {
+            return this.getClass().cast(BeanUtils.cloneBean(this));
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
+            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
+        }
     }
 
-    public boolean isAjax() {
+    public boolean getAjax() {
         return this.ajax;
     }
 
-    public String getRequiredClass() {
-        return this.requiredClass;
+    public Boolean getAutocomplete() {
+        return this.autocomplete;
     }
 
-    public boolean isLiveValidation() {
-        return this.liveValidation;
+    public boolean getCancelable() {
+        return this.cancelable;
     }
 
-    public String getValidClass() {
-        return this.validClass;
+    public boolean getClientsideRequiredValidation() {
+        return this.clientsideRequiredValidation;
+    }
+
+    public int getColumns() {
+        return this.columns;
+    }
+
+    public String getFieldSetLegend() {
+        return this.fieldSetLegend;
+    }
+
+    public boolean getInheritId() {
+        return this.inheritId;
     }
 
     public String getInvalidClass() {
         return this.invalidClass;
     }
 
-    public FormSettings setRequiredClass(String requiredClass) {
-        this.requiredClass = requiredClass;
+    public String getLabelWidth() {
+        return this.labelWidth;
+    }
+
+    public boolean getLiveValidation() {
+        return this.liveValidation;
+    }
+
+    public FormMethod getMethod() {
+        return this.method;
+    }
+
+    public String getRequiredClass() {
+        return this.requiredClass;
+    }
+
+    public boolean getShowLabel() {
+        return this.showLabel;
+    }
+
+    public String getValidClass() {
+        return this.validClass;
+    }
+
+    public boolean isAjax() {
+        return this.ajax;
+    }
+
+    public boolean isCancelable() {
+        return this.cancelable;
+    }
+
+    public boolean isClientsideRequiredValidation() {
+        return this.clientsideRequiredValidation;
+    }
+
+    public boolean isInheritId() {
+        return this.inheritId;
+    }
+
+    public boolean isLiveValidation() {
+        return this.liveValidation;
+    }
+
+    public boolean isPreferPrime() {
+        return this.preferPrime;
+    }
+
+    public boolean isRenderPocketGrid() {
+        return this.renderPocketGrid;
+    }
+
+    public boolean isShowLabel() {
+        return this.showLabel;
+    }
+
+    public boolean isShowPlaceholder() {
+        return this.showPlaceholder;
+    }
+
+    public boolean isShowReset() {
+        return this.showReset;
+    }
+
+    public boolean isShowSubmit() {
+        return this.showSubmit;
+    }
+
+    public boolean isStateless() {
+        return this.stateless;
+    }
+
+    public FormSettings setAjax(boolean ajax) {
+        this.ajax = ajax;
         return this;
     }
 
-    public FormSettings setValidClass(String validClass) {
-        this.validClass = validClass;
+    public FormSettings setAutocomplete(Boolean autocomplete) {
+        this.autocomplete = autocomplete;
+        return this;
+    }
+
+    public FormSettings setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
+        return this;
+    }
+
+    public FormSettings setClientsideRequiredValidation(boolean clientsideRequiredValidation) {
+        this.clientsideRequiredValidation = clientsideRequiredValidation;
+        return this;
+    }
+
+    public FormSettings setColumns(int columns) {
+        this.columns = columns;
+        return this;
+    }
+
+    public FormSettings setFieldSetLegend(String fieldSetLegend) {
+        this.fieldSetLegend = fieldSetLegend;
+        return this;
+    }
+
+    public FormSettings setInheritId(boolean inheritId) {
+        this.inheritId = inheritId;
         return this;
     }
 
@@ -106,17 +222,8 @@ public class FormSettings implements Serializable {
         return this;
     }
 
-    public boolean isClientsideRequiredValidation() {
-        return this.clientsideRequiredValidation;
-    }
-
-    public FormSettings setClientsideRequiredValidation(boolean clientsideRequiredValidation) {
-        this.clientsideRequiredValidation = clientsideRequiredValidation;
-        return this;
-    }
-
-    public FormSettings setShowLabel(boolean showLabel) {
-        this.showLabel = showLabel;
+    public FormSettings setLabelWidth(String labelWidth) {
+        this.labelWidth = labelWidth;
         return this;
     }
 
@@ -125,13 +232,58 @@ public class FormSettings implements Serializable {
         return this;
     }
 
-    @Override
-    public FormSettings clone() {
-        try {
-            return getClass().cast(BeanUtils.cloneBean(this));
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ex) {
-            throw new RuntimeException(new CloneNotSupportedException(String.valueOf(ex)));
-        }
+    public FormSettings setMethod(FormMethod method) {
+        this.method = method;
+        return this;
+    }
+
+    public FormSettings setPreferPrime(boolean preferPrime) {
+        this.preferPrime = preferPrime;
+        return this;
+    }
+
+    public FormSettings setRenderPocketGrid(boolean renderPocketGrid) {
+        this.renderPocketGrid = renderPocketGrid;
+        return this;
+    }
+
+    public FormSettings setRequiredClass(String requiredClass) {
+        this.requiredClass = requiredClass;
+        return this;
+    }
+
+    public FormSettings setShowLabel(boolean showLabel) {
+        this.showLabel = showLabel;
+        return this;
+    }
+
+    public FormSettings setShowPlaceholder(boolean showPlaceholder) {
+        this.showPlaceholder = showPlaceholder;
+        return this;
+    }
+
+    public FormSettings setShowReset(boolean showReset) {
+        this.showReset = showReset;
+        return this;
+    }
+
+    public FormSettings setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
+        return this;
+    }
+
+    public FormSettings setStateless(boolean stateless) {
+        this.stateless = stateless;
+        return this;
+    }
+
+    public FormSettings setValidClass(String validClass) {
+        this.validClass = validClass;
+        return this;
+    }
+
+    protected boolean skipForExport(String propertyName) {
+        return propertyName == null;
     }
 
     @Override
@@ -141,7 +293,7 @@ public class FormSettings implements Serializable {
             PropertyUtilsBean propertyUtils = BeanUtilsBean.getInstance().getPropertyUtils();
             for (PropertyDescriptor desc : propertyUtils.getPropertyDescriptors(this)) {
                 String name = desc.getName();
-                if ("class".equals(name) || skipForExport(name)) {
+                if ("class".equals(name) || this.skipForExport(name)) {
                     continue;
                 }
                 Object value = propertyUtils.getSimpleProperty(this, name);
@@ -166,146 +318,5 @@ public class FormSettings implements Serializable {
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    protected boolean skipForExport(String propertyName) {
-        return propertyName == null;
-    }
-
-    public FormSettings setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
-        return this;
-    }
-
-    public boolean isCancelable() {
-        return this.cancelable;
-    }
-
-    public FormSettings setAjax(boolean ajax) {
-        this.ajax = ajax;
-        return this;
-    }
-
-    public boolean isInheritId() {
-        return this.inheritId;
-    }
-
-    public FormSettings setInheritId(boolean inheritId) {
-        this.inheritId = inheritId;
-        return this;
-    }
-
-    public boolean getClientsideRequiredValidation() {
-        return this.clientsideRequiredValidation;
-    }
-
-    public boolean getAjax() {
-        return this.ajax;
-    }
-
-    public boolean getShowLabel() {
-        return this.showLabel;
-    }
-
-    public boolean getLiveValidation() {
-        return this.liveValidation;
-    }
-
-    public boolean getCancelable() {
-        return this.cancelable;
-    }
-
-    public boolean getInheritId() {
-        return this.inheritId;
-    }
-
-    public int getColumns() {
-        return this.columns;
-    }
-
-    public FormSettings setColumns(int columns) {
-        this.columns = columns;
-        return this;
-    }
-
-    public String getLabelWidth() {
-        return this.labelWidth;
-    }
-
-    public FormSettings setLabelWidth(String labelWidth) {
-        this.labelWidth = labelWidth;
-        return this;
-    }
-
-    public boolean isPreferPrime() {
-        return this.preferPrime;
-    }
-
-    public FormSettings setPreferPrime(boolean preferPrime) {
-        this.preferPrime = preferPrime;
-        return this;
-    }
-
-    public boolean isShowPlaceholder() {
-        return this.showPlaceholder;
-    }
-
-    public FormSettings setShowPlaceholder(boolean showPlaceholder) {
-        this.showPlaceholder = showPlaceholder;
-        return this;
-    }
-
-    public FormMethod getMethod() {
-        return this.method;
-    }
-
-    public FormSettings setMethod(FormMethod method) {
-        this.method = method;
-        return this;
-    }
-
-    public boolean isStateless() {
-        return this.stateless;
-    }
-
-    public FormSettings setStateless(boolean stateless) {
-        this.stateless = stateless;
-        return this;
-    }
-
-    public Boolean getAutocomplete() {
-        return this.autocomplete;
-    }
-
-    public FormSettings setAutocomplete(Boolean autocomplete) {
-        this.autocomplete = autocomplete;
-        return this;
-    }
-
-    public boolean isShowReset() {
-        return this.showReset;
-    }
-
-    public boolean isShowSubmit() {
-        return this.showSubmit;
-    }
-
-    public FormSettings setShowReset(boolean showReset) {
-        this.showReset = showReset;
-        return this;
-    }
-
-    public FormSettings setShowSubmit(boolean showSubmit) {
-        this.showSubmit = showSubmit;
-        return this;
-    }
-
-    public boolean isRenderPocketGrid() {
-        return this.renderPocketGrid;
-    }
-
-    public FormSettings setRenderPocketGrid(boolean renderPocketGrid) {
-        this.renderPocketGrid = renderPocketGrid;
-        return this;
     }
 }
