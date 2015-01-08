@@ -37,6 +37,8 @@ public interface FormConstants {
 
     public static final String FORM_ACTIONS = "form.actions";
 
+    public static final String FORM_ACTIONS_ADDTIONAL = "form.actions.additional";
+
     public static final String FORM_BODY = "form.body";
 
     public static final String FORM_HEADER = "form.header";

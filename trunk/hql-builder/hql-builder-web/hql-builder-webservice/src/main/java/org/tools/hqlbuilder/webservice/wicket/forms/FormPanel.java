@@ -472,6 +472,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             formActionsContainer.setVisible(this.formSettings.isShowReset() || this.formSettings.isShowSubmit()
                     || this.getFormSettings().isCancelable());
 
+            this.form.add(new RepeatingView(FormConstants.FORM_ACTIONS_ADDTIONAL).setRenderBodyOnly(true).setVisible(false));
+
             WebMarkupContainer formFooter = new WebMarkupContainer(FormConstants.FORM_FOOTER) {
                 private static final long serialVersionUID = -8111670292045284274L;
 
@@ -518,7 +520,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     return "FeedbackPanel:allMessagesBottom";
                 }
             });
-            this.form.add(new RepeatingView(FormConstants.FORM_ADDITIONAL).setVisible(false));
+            this.form.add(new RepeatingView(FormConstants.FORM_ADDITIONAL).setRenderBodyOnly(true).setVisible(false));
         }
         return this.form;
     }
@@ -528,6 +530,27 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             throw new RuntimeException("FormActions required");
         }
         return this.formActions;
+    }
+
+    /**
+     * behind normal form buttons, default invisible, default render body only
+     */
+    public RepeatingView getFormActionsAdditionalContainer() {
+        return (RepeatingView) this.getForm().get(FormConstants.FORM_ACTIONS_ADDTIONAL);
+    }
+
+    /**
+     * button container
+     */
+    public WebMarkupContainer getFormActionsContainer() {
+        return (WebMarkupContainer) this.getForm().get(FormConstants.FORM_ACTIONS);
+    }
+
+    /**
+     * behind normal form, default invisible, default render body only
+     */
+    public RepeatingView getFormAdditionalContainer() {
+        return (RepeatingView) this.getForm().get(FormConstants.FORM_ADDITIONAL);
     }
 
     public IModel<T> getFormModel() {
