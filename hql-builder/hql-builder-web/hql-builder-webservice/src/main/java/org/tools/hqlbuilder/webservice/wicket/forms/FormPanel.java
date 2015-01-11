@@ -472,7 +472,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             formActionsContainer.setVisible(this.formSettings.isShowReset() || this.formSettings.isShowSubmit()
                     || this.getFormSettings().isCancelable());
 
-            this.form.add(new RepeatingView(FormConstants.FORM_ACTIONS_ADDTIONAL).setRenderBodyOnly(true).setVisible(false));
+            formActionsContainer.add(new RepeatingView(FormConstants.FORM_ACTIONS_ADDTIONAL).setRenderBodyOnly(true).setVisible(false));
 
             WebMarkupContainer formFooter = new WebMarkupContainer(FormConstants.FORM_FOOTER) {
                 private static final long serialVersionUID = -8111670292045284274L;
@@ -536,7 +536,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
      * behind normal form buttons, default invisible, default render body only
      */
     public RepeatingView getFormActionsAdditionalContainer() {
-        return (RepeatingView) this.getForm().get(FormConstants.FORM_ACTIONS_ADDTIONAL);
+        return (RepeatingView) this.getForm().get(FormConstants.FORM_ACTIONS).get(FormConstants.FORM_ACTIONS_ADDTIONAL);
     }
 
     /**
@@ -641,7 +641,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                    .append(")");
+                            .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
