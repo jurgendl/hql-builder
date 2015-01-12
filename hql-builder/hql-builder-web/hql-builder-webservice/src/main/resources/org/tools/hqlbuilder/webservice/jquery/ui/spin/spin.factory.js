@@ -16,18 +16,22 @@ var opts = {
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-var spinnerInstance="undefined";
+var spinnerInstance;
 function startSpinner() {
-	console.log('start spinner');
-	if("undefined"==spinnerInstance) {
+	if(spinnerInstance) {
+	} else {
+		console.log('start spinner');
 		spinnerInstance = new Spinner(opts);
 		spinnerInstance.spin(document.getElementById('spinner'));
-	} else {
-		spinnerInstance.spin();
 	}
 }
 function stopSpinner() {
-	console.log('stop spinner');
-	spinnerInstance.stop();
+	try {
+		spinnerInstance.stop();
+		spinnerInstance = null;
+		console.log('stop spinner');
+	} catch (e) {
+		//
+	}
 }
 
