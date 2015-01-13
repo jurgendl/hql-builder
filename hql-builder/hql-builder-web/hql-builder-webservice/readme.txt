@@ -60,7 +60,6 @@ http://zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba
 http://blog.cloudfour.com/dont-use-picture-most-of-the-time/
 https://html.spec.whatwg.org/multipage/embedded-content.html#embedded-content
 http://gsgd.co.uk/sandbox/jquery/easing/
-http://jquery-plugins.net/owl-carousel-touch-enabled-and-responsive-jquery-carousel-slider
 http://jquery-plugins.net/popular
 http://perishablepress.com/css-remove-link-underlines-borders-linked-images/
 http://www.roundedworks.com/notebook/xhtmlcss/10-css-selectors-you-probably-dont-know-about/
@@ -196,7 +195,6 @@ http://brianreavis.github.io/selectize.js/
 http://jquery-plugins.net/scroll-to-simple-way-to-animate-to-anchors
 http://kugaevsky.github.io/jquery-phoenix/
 http://jquery-plugins.net/rangeslider-js-html5-input-range-slider-element-polyfill-with-jquery
-http://cbopp-art.github.io/anchor/
 http://fullcalendar.io/
 http://pakcheong.github.io/jqthumb/
 http://thrilleratplay.github.io/jquery-validation-bootstrap-tooltip/
