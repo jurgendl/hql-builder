@@ -56,6 +56,64 @@ h1, h2, h3, h4, h5 {
 	font-size: 10px;
 }
 
+/* ======================== rotated ======================== */
+
+.rotate45 {
+	-ms-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.rotate90 {
+	-ms-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.rotate135 {
+	-ms-transform: rotate(135deg);
+	-webkit-transform: rotate(135deg);
+	-moz-transform: rotate(135deg);
+	-o-transform: rotate(135deg);
+	transform: rotate(135deg);
+}
+
+.rotate180 {
+	-ms-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.rotate225 {
+	-ms-transform: rotate(225deg);
+	-webkit-transform: rotate(225deg);
+	-moz-transform: rotate(225deg);
+	-o-transform: rotate(225deg);
+	transform: rotate(225deg);
+}
+
+.rotate270 {
+	-ms-transform: rotate(270deg);
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	-o-transform: rotate(270deg);
+	transform: rotate(270deg);
+}
+
+.rotate345 {
+	-ms-transform: rotate(345deg);
+	-webkit-transform: rotate(345deg);
+	-moz-transform: rotate(345deg);
+	-o-transform: rotate(345deg);
+	transform: rotate(345deg);
+}
+
 /* ======================== rotation animation ======================== */
 @-webkit-keyframes rotate {
 	from { -webkit-transform:rotate(0deg); }
