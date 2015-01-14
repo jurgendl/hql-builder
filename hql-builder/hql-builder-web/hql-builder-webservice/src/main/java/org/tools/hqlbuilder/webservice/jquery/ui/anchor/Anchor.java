@@ -7,6 +7,7 @@ import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
  * $(function() { $('a[href*=#]').anchor({ transitionDuration : 1200 }); });<br/>
  * <a href="#section1">Jump to first section</a><br/>
  * <section id="section1">first section</section><br/>
+ * normal anchor: <a name="section1">first section</a><br/>
  *
  * @see http://cbopp-art.github.io/anchor/
  */
@@ -22,5 +23,5 @@ public class Anchor {
     }
 
     public static final JavaScriptResourceReference FACTORY_JS = new JavaScriptResourceReference(Anchor.class, "anchor_factory.js")
-    .addJavaScriptResourceReferenceDependency(JS);
+            .addJavaScriptResourceReferenceDependency(JS);
 }
