@@ -21,15 +21,25 @@ function startSpinner() {
 	if(spinnerInstance) {
 	} else {
 		console.log('start spinner');
+		try {
+			$('#spinnercontainer').get(0).style.display='block';
+		} catch (e) {
+			//
+		}
 		spinnerInstance = new Spinner(opts);
 		spinnerInstance.spin(document.getElementById('spinner'));
 	}
 }
 function stopSpinner() {
 	try {
+		console.log('stop spinner');
+		try {
+			$('#spinnercontainer').get(0).style.display='none';
+		} catch (e) {
+			//
+		}
 		spinnerInstance.stop();
 		spinnerInstance = null;
-		console.log('stop spinner');
 	} catch (e) {
 		//
 	}
