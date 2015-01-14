@@ -17,14 +17,15 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
     }
 
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, String choices) {
+        String cleanup = ".replace(/\\W/g, '')";// .toUpperCase() not needed because of i
         return (";$('#" + id + "').hide().tagit({"//
                 + "autocomplete:"//
                 + "{"//
                 + "source:function(request,response){"//
                 + "var availableTags=" + choices + ";"//
-                + "var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term.trim()),'i');"//
+                + "var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term" + cleanup + "),'i');"//
                 + "response($.grep(availableTags,function(item){"//
-                + "return matcher.test(item.trim());"//
+                + "return matcher.test(item" + cleanup + ");"//
                 + "}));"//
                 + "}"//
                 + ",delay:" + tagItTextFieldSettings.getDelay()//
@@ -36,7 +37,7 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
                 // + ",availableTags:" + availableTags //
                 + ",singleField:" + tagItTextFieldSettings.isSingleField()//
                 + ",singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'"//
-        + "});");//
+                + "});");//
     }
 
     public static String tagItChoices(IModel<List<String>> choices) {
