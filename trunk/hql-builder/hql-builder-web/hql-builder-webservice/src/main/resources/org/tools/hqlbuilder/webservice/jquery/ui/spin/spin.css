@@ -7,10 +7,27 @@
 	left: 0;
 	bottom: 0;
 	right: 0;
-	display: none;
 	z-index: 2000;
-	background-color: rgba(200,200,200,0.5);
+	display: none;
+	background-color: transparent;
+	-webkit-transition: background-color 1.5s linear;
+	-moz-transition: background-color 1.5s linear;
+	-ms-transition: background-color 1.5s linear;
+	-o-transition: background-color 1.5s linear;
+	transition: background-color 1.5s linear;
 }
+
+#spinnercontainer.visible {
+	display: block;
+	background-color: rgba(200,200,200,0.5);
+	-webkit-transition: background-color 1.5s linear;
+	-moz-transition: background-color 1.5s linear;
+	-ms-transition: background-color 1.5s linear;
+	-o-transition: background-color 1.5s linear;
+	transition: background-color 1.5s linear;
+}
+
+/* ease|linear|ease-in|ease-out|ease-in-out|cubic-bezier()|initial|inherit; */
 
 #spinner {
 	position: fixed;

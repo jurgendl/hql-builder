@@ -22,7 +22,7 @@ function startSpinner() {
 	} else {
 		console.log('start spinner');
 		try {
-			$('#spinnercontainer').get(0).style.display='block';
+			$('#spinnercontainer').addClass('visible');
 		} catch (e) {
 			//
 		}
@@ -34,7 +34,7 @@ function stopSpinner() {
 	try {
 		console.log('stop spinner');
 		try {
-			$('#spinnercontainer').get(0).style.display='none';
+			$('#spinnercontainer').removeClass('visible');
 		} catch (e) {
 			//
 		}
