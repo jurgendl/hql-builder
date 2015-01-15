@@ -629,6 +629,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected String renderColumnsCss(boolean showLabel, int columnCount, String labelWidth) {
+        if (!formSettings.isRenderPocketGrid()) {
+            return "";
+        }
+
         String cssClass = "pocketgrid_" + this.getId() + '_' + columnCount
                 + (showLabel ? '_' + new String(Hex.encodeHex(labelWidth.getBytes())) : "");
         if (!this.cssClasses.contains(cssClass)) {
@@ -641,7 +645,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     sbColumnsCss.append("calc(100% - ").append(labelWidth).append(")");
                 } else {
                     sbColumnsCss.append("calc((100% - (").append(labelWidth).append(" * ").append(columnCount).append(")) / ").append(columnCount)
-                            .append(")");
+                    .append(")");
                 }
                 sbColumnsCss.append(";}\n");
             } else {
