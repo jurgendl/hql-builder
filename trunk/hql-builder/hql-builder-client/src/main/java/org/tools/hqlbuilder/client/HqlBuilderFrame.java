@@ -585,7 +585,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, getIcon(CONTROL_REWIND_BLUE_PNG), IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD,
                 IMPORT_PASTE_HQL_AS_JAVA_FROM_CLIPBOARD, true, null, "alt F12");
         helpInsertAction = new HqlBuilderAction(hql, this, HELP_INSERT, true, HELP_INSERT, getIcon(ATTACH), HELP_INSERT, HELP_INSERT, true, null,
-                "ctrl shift SPACE");
+                "ctrl shift +");
         remarkToggleAction = new HqlBuilderAction(hql, this, REMARK_TOGGLE, true, REMARK_TOGGLE, getIcon(TEXT_INDENT), REMARK_TOGGLE, REMARK_TOGGLE,
                 true, null, "ctrl shift SLASH");
         startQueryAction = new HqlBuilderAction(hql, this, START_QUERY, true, START_QUERY, getIcon(CONTROL_PLAY_BLUE), START_QUERY, START_QUERY,
@@ -774,7 +774,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void helpInsertClass() {
-        getInsertHelperClasses().show(hql, (int) hql.getCaret().getMagicCaretPosition().getX(), (int) hql.getCaret().getMagicCaretPosition().getY());
+        Point magicCaretPosition = hql.getCaret().getMagicCaretPosition();
+        getInsertHelperClasses().show(hql, magicCaretPosition == null ? 10 : (int) magicCaretPosition.getX(),
+                magicCaretPosition == null ? 10 : (int) magicCaretPosition.getY());
         insertHelperList.grabFocus();
     }
 
@@ -796,7 +798,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
 
-        insertHelper2local.show(hql, (int) hql.getCaret().getMagicCaretPosition().getX(), (int) hql.getCaret().getMagicCaretPosition().getY());
+        Point magicCaretPosition = hql.getCaret().getMagicCaretPosition();
+        insertHelper2local.show(hql, magicCaretPosition == null ? 10 : (int) magicCaretPosition.getX(), magicCaretPosition == null ? 10
+                : (int) magicCaretPosition.getY());
         insertPropertyHelper.grabFocus();
     }
 
