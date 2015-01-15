@@ -194,17 +194,15 @@ $width: 95%;
 				margin: 0 0 0 2px;
 			}
 			li.tagit-new {
-				padding: 0;
 				width: auto;
 				input {
 					width: auto;
 				}
 			}
+			li.tagit-new,
 			li.tagit-choice,
 			li.tagit-choice-editable {
 				padding: 0 16px 0 6px;
-			}
-			li.tagit-choice {
 				margin: 5px 5px 5px 0;
 				line-height: 22px;
 				height: 22px;
