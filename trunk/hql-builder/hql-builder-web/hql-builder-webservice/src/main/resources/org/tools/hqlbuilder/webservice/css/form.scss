@@ -196,9 +196,17 @@ $width: 95%;
 			}
 			li.tagit-new {
 				padding: 0;
+				width: auto;
+				input {
+					width: auto;
+				}
 			}
+			li.tagit-choice,
 			li.tagit-choice-editable {
-				padding: 0 16px 0 6px; 
+				padding: 0 16px 0 6px;
+			}
+			li.tagit-choice {
+				margin: 5px 5px 5px 0;
 			}
 		}
 	}
