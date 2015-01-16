@@ -182,7 +182,7 @@ http://jquery-plugins.net/simple-vertical-menu-with-jquery-and-css3
 http://jquery-plugins.net/mason-js-jquery-plugin-to-create-grid-layout
 http://jquery-plugins.net/how-to-make-a-digital-clock-with-jquery-and-css3
 http://jquery-plugins.net/ion-range-slider-jquery-range-slider-with-skin-support
-
+http://jquery-plugins.net/jquery-slider-plugin
 
 
 
