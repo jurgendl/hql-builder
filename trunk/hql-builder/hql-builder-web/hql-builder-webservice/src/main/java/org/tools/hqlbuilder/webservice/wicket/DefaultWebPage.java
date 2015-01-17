@@ -24,6 +24,7 @@ import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryuithemes.JQueryUIThemes;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 
 public class DefaultWebPage extends WebPage {
     private static final long serialVersionUID = -9203251110723359467L;
@@ -51,7 +52,7 @@ public class DefaultWebPage extends WebPage {
 
         // wicket/ajax debug bars
         this.add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug")
-                : new EmptyPanel("debug").setVisible(false));
+        : new EmptyPanel("debug").setVisible(false));
 
         // check if javascript is enabled
         this.add(new CheckJavaScriptEnabled());
@@ -86,6 +87,8 @@ public class DefaultWebPage extends WebPage {
 
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
         // response.render(JavaScriptHeaderItem.forReference(Velocity.VELOCITY_JS));
+
+        response.render(JavaScriptHeaderItem.forReference(WicketJSRoot.GENERAL));
     }
 
     protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {
