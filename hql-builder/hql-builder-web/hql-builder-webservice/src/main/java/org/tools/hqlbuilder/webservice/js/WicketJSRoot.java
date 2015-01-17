@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
 import ro.isdc.wro.extensions.processor.js.UglifyJsProcessor;
 
@@ -17,7 +18,7 @@ public class WicketJSRoot {
         // minify(Spectrum.class, "", new String[] { "spectrum" });
         // minify(PrimeUI.class, "", new String[] { "primeui-factory" });
         // minify(JQueryUI.class, "", new String[] { "jquery-ui-factory" });
-        minify(PrimeUI.class, "", new String[] { "primeui-1.1-custom" });
+        WicketJSRoot.minify(PrimeUI.class, "", new String[] { "primeui-1.1-custom" });
     }
 
     protected static void minify(Class<?> root, String path, String[] sources) {
@@ -38,4 +39,6 @@ public class WicketJSRoot {
             ex.printStackTrace();
         }
     }
+
+    public static JavaScriptResourceReference GENERAL = new JavaScriptResourceReference(WicketJSRoot.class, "general.js");
 }

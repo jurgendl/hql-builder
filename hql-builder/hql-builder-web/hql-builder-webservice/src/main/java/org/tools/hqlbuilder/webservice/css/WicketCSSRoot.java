@@ -14,18 +14,9 @@ import ro.isdc.wro.extensions.processor.support.yui.YuiCssCompressor;
 public class WicketCSSRoot {
     // public static CssResourceReference RESET = new CssResourceReference(WicketCSSRoot.class, "meyer.reset.css");
 
-    public static CssResourceReference NORMALIZE = new CssResourceReference(WicketCSSRoot.class, "normalize.css");
-
-    public static CssResourceReference GENERAL = new CssResourceReference(WicketCSSRoot.class, "general.css");
-
-    public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
-
-    /** http://daneden.github.io/animate.css/ */
-    public static CssResourceReference ANIMATE = new CssResourceReference(WicketCSSRoot.class, "animate.css");
-
     public static void main(String[] args) {
-        minify(WicketCSSRoot.class, "", new String[] { "meyer.reset", "normalize" });
-        minify(Spectrum.class, "", new String[] { "spectrum" });
+        WicketCSSRoot.minify(WicketCSSRoot.class, "", new String[] { "meyer.reset", "normalize" });
+        WicketCSSRoot.minify(Spectrum.class, "", new String[] { "spectrum" });
         // minify(WeLoveIcons.class, "", new String[] { "weloveiconfonts", "weloveiconfonts-social" });
     }
 
@@ -47,4 +38,13 @@ public class WicketCSSRoot {
             ex.printStackTrace();
         }
     }
+
+    public static CssResourceReference NORMALIZE = new CssResourceReference(WicketCSSRoot.class, "normalize.css");
+
+    public static CssResourceReference GENERAL = new CssResourceReference(WicketCSSRoot.class, "general.css");
+
+    public static CssResourceReference CLEARFIX = new CssResourceReference(WicketCSSRoot.class, "clearfix.css");
+
+    /** http://daneden.github.io/animate.css/ */
+    public static CssResourceReference ANIMATE = new CssResourceReference(WicketCSSRoot.class, "animate.css");
 }
