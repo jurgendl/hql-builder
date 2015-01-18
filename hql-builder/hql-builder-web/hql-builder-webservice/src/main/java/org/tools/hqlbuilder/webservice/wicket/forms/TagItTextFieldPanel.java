@@ -17,17 +17,21 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
     }
 
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, String choices) {
-        String cleanup = ".replace(/\\W/g, '')";// .toUpperCase() not needed because of i
         return (";$('#" + id + "').hide().tagit({"//
                 + "autocomplete:"//
-                + "{"//
-                + "source:function(request,response){"//
-                + "var availableTags=" + choices + ";"//
-                + "var matcher=new RegExp($.ui.autocomplete.escapeRegex(request.term" + cleanup + "),'i');"//
-                + "response($.grep(availableTags,function(item){"//
-                + "return matcher.test(item" + cleanup + ");"//
-                + "}));"//
-                + "}"//
+                + "{\n"//
+                + "source:function(request,response){\n"//
+                + "var availableTags=" + choices + ";\n"//
+                + "var matcherStr=request.term.replace(new RegExp('\\\\*', 'g'), 'A1B2C3');\n"//
+                + "matcherStr=matcherStr.replace(/\\W/g, '');\n"//
+                + "matcherStr=$.ui.autocomplete.escapeRegex(matcherStr);\n"//
+                + "matcherStr=matcherStr.replace(new RegExp('A1B2C3', 'g'), '.*');\n" //
+                + "console.log('matcherStr='+matcherStr);\n"//
+                + "var matcher=new RegExp(matcherStr,'i');\n"//
+                + "response($.grep(availableTags,function(item){\n"//
+                + "return matcher.test(item.replace(/\\W/g, ''));\n"//
+                + "}));\n"//
+                + "}\n"//
                 + ",delay:" + tagItTextFieldSettings.getDelay()//
                 + ",minLength:" + tagItTextFieldSettings.getMinLength()//
                 + "}"//
