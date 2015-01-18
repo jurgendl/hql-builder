@@ -28,3 +28,11 @@ function jsonForm(id) {
 	// .serialize()
 	return JSON.stringify($(id).serializeObject());
 }
+
+function replaceAll(str, find, replace) {
+	return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function escapeRegExp(string) {
+	return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
