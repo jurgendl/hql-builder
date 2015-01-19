@@ -188,6 +188,18 @@ http://jquery-plugins.net/responsive-vertical-timeline
 http://jquery-plugins.net/jquery-simple-event-calendar
 http://jquery-plugins.net/geocomplete-jquery-geocoding-and-places-autocomplete-plugin
 http://jquery-plugins.net/bootstrap-calendar-bootstrap-based-full-view-calendar
+http://www.jqueryscript.net/other/Simple-jQuery-UI-jQuery-Mobile-Message-Box-Plugin.html
+http://www.jqueryscript.net/form/jQuery-International-Telephone-Input-With-Flags-Dial-Codes.html
+http://www.jqueryscript.net/demo/Easy-Numbers-Currency-Formatting-Plugin-autoNumeric/
+http://www.jqueryscript.net/time-clock/Full-Size-Drag-Drop-Calendar-Plugin-FullCalendar.html
+
+
+
+
+
+
+
+
 
 
 
