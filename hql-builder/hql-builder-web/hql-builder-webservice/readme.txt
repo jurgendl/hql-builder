@@ -183,11 +183,11 @@ http://jquery-plugins.net/mason-js-jquery-plugin-to-create-grid-layout
 http://jquery-plugins.net/how-to-make-a-digital-clock-with-jquery-and-css3
 http://jquery-plugins.net/ion-range-slider-jquery-range-slider-with-skin-support
 http://jquery-plugins.net/jquery-slider-plugin
-
-
-
-
-
+http://jquery-plugins.net/geometryangle-jquery-plugin-for-geometrical-backgrounds
+http://jquery-plugins.net/responsive-vertical-timeline
+http://jquery-plugins.net/jquery-simple-event-calendar
+http://jquery-plugins.net/geocomplete-jquery-geocoding-and-places-autocomplete-plugin
+http://jquery-plugins.net/bootstrap-calendar-bootstrap-based-full-view-calendar
 
 
 
