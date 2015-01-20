@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import java.util.Locale;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -32,6 +34,21 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
 
     @Override
     protected void setupRequired(HiddenField<Boolean> component) {
+        //
+    }
+
+    @Override
+    protected void setupPlaceholder(ComponentTag tag) {
+        //
+    }
+
+    @Override
+    protected void setupRequired(ComponentTag tag) {
+        //
+    }
+
+    @Override
+    protected void setupRequiredBehavior() {
         //
     }
 
@@ -78,6 +95,7 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
     @Override
     protected HiddenField<Boolean> createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
         HiddenField<Boolean> hiddenField = new HiddenField<Boolean>(VALUE, model);
+        hiddenField.setRequired(false);
         return hiddenField;
     }
 
@@ -137,6 +155,10 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
     protected BooleanConverter booleanConverter = new BooleanConverter();
 
     public Boolean toBoolean(Object object) {
+        return toBoolean(object, booleanConverter, getLocale());
+    }
+
+    public static Boolean toBoolean(Object object, BooleanConverter booleanConverter, Locale locale) {
         if (object == null) {
             return null;
         }
@@ -144,8 +166,16 @@ public class TriStateCheckBoxPanel extends DefaultFormRowPanel<Boolean, HiddenFi
             return (Boolean) object;
         }
         if (object instanceof String) {
-            return booleanConverter.convertToObject((String) object, getLocale());
+            return booleanConverter.convertToObject((String) object, locale);
         }
         throw new UnsupportedOperationException();
+    }
+
+    public BooleanConverter getBooleanConverter() {
+        return this.booleanConverter;
+    }
+
+    public void setBooleanConverter(BooleanConverter booleanConverter) {
+        this.booleanConverter = booleanConverter;
     }
 }
