@@ -13,10 +13,14 @@ import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
 import org.apache.wicket.bean.validation.BeanValidationConfiguration;
+import org.apache.wicket.bean.validation.IPropertyResolver;
+import org.apache.wicket.bean.validation.Property;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
 import org.apache.wicket.pageStore.memory.PageNumberEvictionStrategy;
@@ -184,8 +188,19 @@ public class WicketApplication extends WebApplication {
                 WicketCSSRoot.NORMALIZE, //
                 WicketCSSRoot.GENERAL);//
 
-        // jsr bean validation
-        new BeanValidationConfiguration().configure(this);
+        // jsr bean validation: special models can implement IPropertyResolver to return the propertyname
+        BeanValidationConfiguration beanValidationConfiguration = new BeanValidationConfiguration();
+        beanValidationConfiguration.configure(this);
+        beanValidationConfiguration.add(new IPropertyResolver() {
+            @Override
+            public Property resolveProperty(FormComponent<?> component) {
+                IModel<?> model = component.getModel();
+                if (model instanceof IPropertyResolver) {
+                    return ((IPropertyResolver) model).resolveProperty(component);
+                }
+                return null;
+            }
+        });
 
         // mount resources
         this.mountImages();
