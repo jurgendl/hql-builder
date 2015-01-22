@@ -15,6 +15,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
  */
 public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckBoxSettings> {
     public static final String CHECKBOXLABEL = "checkboxlabel";
+
     private static final long serialVersionUID = 7669787482921703670L;
 
     public CheckBoxPanel(IModel<?> model, Boolean propertyPath, FormSettings formSettings, CheckBoxSettings componentSettings) {
@@ -24,10 +25,12 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckB
     @Override
     protected CheckBox createComponent(IModel<Boolean> model, Class<Boolean> valueType) {
         CheckBox checkBox = new CheckBox(VALUE, model);
-        if (formSettings.isPreferPrime()) {
-            checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
-        } else {
-            checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+        if (getComponentSettings().isNice()) {
+            if (formSettings.isPreferPrime()) {
+                checkBox.add(new CssClassNameAppender(PrimeUI.puicheckbox));
+            } else {
+                checkBox.add(new CssClassNameAppender(JQueryUI.jquibutton));
+            }
         }
         return checkBox;
     }
