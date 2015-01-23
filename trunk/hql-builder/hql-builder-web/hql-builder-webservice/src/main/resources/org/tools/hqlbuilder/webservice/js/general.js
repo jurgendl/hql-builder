@@ -36,3 +36,12 @@ function replaceAll(str, find, replace) {
 function escapeRegExp(string) {
 	return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
+
+function inputFocus(selector) {
+	$(selector).focus(function() {
+		$(selector).select().mouseup(function(e) {
+			e.preventDefault();
+			$(this).unbind("mouseup");
+		});
+	});
+}

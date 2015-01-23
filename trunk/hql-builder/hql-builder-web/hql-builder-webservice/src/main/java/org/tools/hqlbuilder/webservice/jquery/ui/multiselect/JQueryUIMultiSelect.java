@@ -5,6 +5,8 @@ import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
 /**
+ * ;$('.multiselect').multiselect({header:true,selectedList:10}).multiselectfilter();
+ *
  * @see https://github.com/ehynds/jquery-ui-multiselect-widget
  * @see http://www.erichynds.com/examples/jquery-ui-multiselect-widget/demos/#basic
  */
