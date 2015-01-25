@@ -52,7 +52,7 @@ public class DefaultWebPage extends WebPage {
 
         // wicket/ajax debug bars
         this.add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug")
-        : new EmptyPanel("debug").setVisible(false));
+                : new EmptyPanel("debug").setVisible(false));
 
         // check if javascript is enabled
         this.add(new CheckJavaScriptEnabled());
@@ -176,6 +176,7 @@ public class DefaultWebPage extends WebPage {
             this.visitChildren(new IVisitor<Component, Void>() {
                 @Override
                 public void component(Component component, IVisit<Void> arg1) {
+                    DefaultWebPage.this.logger.trace("Component " + component.getClass().getName() + " with id " + component.getId());
                     if (!component.isStateless()) {
                         DefaultWebPage.this.logger.warn("Component " + component.getClass().getName() + " with id " + component.getId()
                                 + " is not stateless");
