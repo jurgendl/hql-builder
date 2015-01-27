@@ -82,7 +82,7 @@ public class WicketApplication extends WebApplication {
     protected boolean diskStore = false;
 
     @SpringBean(name = "showDebugbars", required = false)
-    protected boolean showDebugbars = false;
+    protected boolean showDebugbars = true;
 
     @SpringBean(name = "checkCookiesEnabled", required = false)
     protected boolean checkCookiesEnabled = true;
