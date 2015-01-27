@@ -68,7 +68,7 @@ http://perishablepress.com/awesome-new-css3-selectors/
 http://perishablepress.com/css3-progressive-enhancement-smart-design/
 
 
-
+http://www.jqueryscript.net/other/jQuery-Virtual-Keyboard-Plugin-Keyboard.html
 
 
 http://oembed.com/
@@ -218,3 +218,20 @@ http://fengyuanchen.github.io/cropper/
 /* http://www.w3schools.com/html/html5_semantic_elements.asp */
 /* http://www.w3.org/TR/html5/sections.html */
 /* http://www.anthonycalzadilla.com/2010/08/html5-section-aside-header-nav-footer-elements-not-as-obvious-as-they-sound/ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http://tomaszdziurko.pl/2010/02/wicket-ajax-modal-are-you-sure-window/
+
+http://www.7thweb.net/wicket-jquery-ui/button/ConfirmAjaxButtonPage
