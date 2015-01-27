@@ -59,12 +59,13 @@ public abstract class DefaultFormActions<T extends Serializable> implements Form
      * @see org.tools.hqlbuilder.webservice.wicket.forms.FormActions#submitModel(org.apache.wicket.model.IModel)
      */
     @Override
-    public void submitModel(IModel<T> model) {
+    public Serializable submitModel(IModel<T> model) {
         try {
             submitObject(model.getObject());
         } catch (UnsupportedOperationException ex) {
             logger.error("{}", ex);
         }
+        return null;
     }
 
     /**

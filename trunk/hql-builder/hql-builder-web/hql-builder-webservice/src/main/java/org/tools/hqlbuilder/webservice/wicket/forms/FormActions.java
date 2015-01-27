@@ -8,7 +8,7 @@ import org.apache.wicket.model.IModel;
 
 public interface FormActions<T extends Serializable> extends Serializable {
     /**
-     * after default form cancelling
+     * after default form cancelling when ajax=true
      *
      * @param target exists when ajax is enabled on form and on the default submit
      * @param form this form
@@ -17,7 +17,7 @@ public interface FormActions<T extends Serializable> extends Serializable {
     public abstract void afterCancel(AjaxRequestTarget target, Form<T> form, IModel<T> model);
 
     /**
-     * after default form submitting
+     * after default form submitting when ajax=true
      *
      * @param target exists when ajax is enabled on form and on the default submit
      * @param form this form
@@ -31,7 +31,7 @@ public interface FormActions<T extends Serializable> extends Serializable {
 
     public abstract T loadObject() throws UnsupportedOperationException;
 
-    public abstract void submitModel(IModel<T> model);
+    public abstract Serializable submitModel(IModel<T> model);
 
     public abstract void submitObject(T object) throws UnsupportedOperationException;
 }

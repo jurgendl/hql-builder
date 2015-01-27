@@ -45,3 +45,11 @@ function inputFocus(selector) {
 		});
 	});
 }
+
+function selectedOption(selector) {
+	return $(selector+' option:selected').text();
+}
+
+function selectedRadioOption(name) {
+	return $('input[name='+name+'][type=radio]:checked').val();
+}

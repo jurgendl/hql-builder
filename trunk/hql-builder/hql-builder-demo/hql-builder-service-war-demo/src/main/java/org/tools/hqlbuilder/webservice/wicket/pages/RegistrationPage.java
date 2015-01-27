@@ -31,13 +31,14 @@ public class RegistrationPage extends BasePage {
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
             @Override
-            public void submitModel(IModel<Registration> model) {
+            public Serializable submitModel(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setPassword(passwordEncoder.encode(object.getPassword()));
                 object.setVerification(new LocalDateTime());
                 Serializable id = hqlWebClient.save(object);
                 object = hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
+                return null;
             }
         };
         FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setInheritId(true));
