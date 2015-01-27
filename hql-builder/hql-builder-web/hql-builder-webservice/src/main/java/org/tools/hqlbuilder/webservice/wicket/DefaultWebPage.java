@@ -36,7 +36,6 @@ public class DefaultWebPage extends WebPage {
 
     public DefaultWebPage(PageParameters parameters) {
         super(parameters);
-        this.setStatelessHint(false);
         this.logger = LoggerFactory.getLogger(this.getClass());
         Injector.get().inject(this);
         // if (getClass().equals(DefaultWebPage.class)) {
@@ -52,7 +51,7 @@ public class DefaultWebPage extends WebPage {
 
         // wicket/ajax debug bars
         this.add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug")
-                : new EmptyPanel("debug").setVisible(false));
+        : new EmptyPanel("debug").setVisible(false));
 
         // check if javascript is enabled
         this.add(new CheckJavaScriptEnabled());

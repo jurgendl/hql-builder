@@ -322,8 +322,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     @Override
                     protected void onSubmit() {
                         FormPanel.this.onBeforeSubmit();
-                        FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
-                        FormPanel.this.onAfterSubmit();
+                        Serializable submitReturnValue = FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
+                        FormPanel.this.onAfterSubmit(submitReturnValue);
                     }
 
                     @Override
@@ -344,8 +344,8 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                     @Override
                     protected void onSubmit() {
                         FormPanel.this.onBeforeSubmit();
-                        FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
-                        FormPanel.this.onAfterSubmit();
+                        Serializable submitReturnValue = FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
+                        FormPanel.this.onAfterSubmit(submitReturnValue);
                     }
 
                     @Override
@@ -591,12 +591,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     @SuppressWarnings("rawtypes")
-    protected void onAfterSubmit() {
+    protected void onAfterSubmit(final Serializable submitReturnValue) {
         this.getRowRepeater().visitChildren(FormRowPanel.class, new IVisitor<FormRowPanel, Void>() {
             @Override
             public void component(FormRowPanel object, IVisit<Void> visit) {
                 if (object instanceof FormSubmitInterceptor) {
-                    FormSubmitInterceptor.class.cast(object).onAfterSubmit();
+                    FormSubmitInterceptor.class.cast(object).onAfterSubmit(submitReturnValue);
                 }
             }
 
