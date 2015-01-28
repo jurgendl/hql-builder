@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
@@ -18,6 +19,7 @@ public class WicketJSRoot {
         // minify(Spectrum.class, "", new String[] { "spectrum" });
         // minify(PrimeUI.class, "", new String[] { "primeui-factory" });
         // minify(JQueryUI.class, "", new String[] { "jquery-ui-factory" });
+        WicketJSRoot.minify(WicketJSRoot.class, "", new String[] { "general.js" });
         WicketJSRoot.minify(PrimeUI.class, "", new String[] { "primeui-1.1-custom" });
     }
 
@@ -41,4 +43,12 @@ public class WicketJSRoot {
     }
 
     public static JavaScriptResourceReference GENERAL = new JavaScriptResourceReference(WicketJSRoot.class, "general.js");
+
+    static {
+        try {
+            GENERAL.addJavaScriptResourceReferenceDependency(JQuery.getJQueryReference());
+        } catch (Exception ex) {
+            //
+        }
+    }
 }

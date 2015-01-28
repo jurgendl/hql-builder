@@ -37,15 +37,6 @@ function escapeRegExp(string) {
 	return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-function inputFocus(selector) {
-	$(selector).focus(function() {
-		$(selector).select().mouseup(function(e) {
-			e.preventDefault();
-			$(this).unbind("mouseup");
-		});
-	});
-}
-
 function selectedOption(selector) {
 	return $(selector+' option:selected').text();
 }
@@ -53,3 +44,32 @@ function selectedOption(selector) {
 function selectedRadioOption(name) {
 	return $('input[name='+name+'][type=radio]:checked').val();
 }
+
+// http://jsfiddle.net/Marcel/jvJzX/
+jQuery.fn.extend({
+	inputFocus : function() {
+		return this.each(function() {
+			if(this.nodeName == 'INPUT') {
+				if($(this).attr('type') == 'text') {
+					$(this).focus(function() {
+						$(this).select().mouseup(function(event) {
+							event.preventDefault();
+							$(this).unbind("mouseup");
+						});
+					});
+				}
+			}
+		});
+	}
+});
+
+// https://asimilia.wordpress.com/2008/12/17/jquery-extend-confusion/
+jQuery.fn.extend({
+	resetform : function() {
+		var form = $(this);
+		form.find('input[type][value]').val('');
+		form.find('input[type=checkbox]:checked').removeAttr('checked');
+		form.find('input[type=radio]:checked').removeAttr('checked');
+		form.find('select option:selected').removeAttr('selected');
+	}
+});
