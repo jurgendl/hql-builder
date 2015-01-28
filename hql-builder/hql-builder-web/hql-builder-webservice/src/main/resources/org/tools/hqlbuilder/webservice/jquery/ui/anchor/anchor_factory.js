@@ -3,5 +3,5 @@ function anchorfactory(prefix,time) {
 	$(prefix+'a[href*=#]').anchor({ transitionDuration : time });
 }
 $(document).ready(function() {
-	anchorfactory('',1500);
+	anchorfactory('',1000);
 });
