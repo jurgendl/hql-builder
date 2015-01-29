@@ -13,4 +13,6 @@
 		http://www.springframework.org/schema/context/spring-context.xsd"
 	>
 
+	<bean id="restOverviewResource" class="org.tools.hqlbuilder.webservice.resteasy.resources.OverviewResource"/>
+
 </beans>
