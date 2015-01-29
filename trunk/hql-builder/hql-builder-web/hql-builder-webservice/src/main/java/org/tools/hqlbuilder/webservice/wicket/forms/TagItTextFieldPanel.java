@@ -17,31 +17,34 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
     }
 
     public static String tagIt(String id, TagItTextFieldSettings tagItTextFieldSettings, String choices) {
-        return (";$('#" + id + "').hide().tagit({"//
-                + "autocomplete:"//
-                + "{\n"//
-                + "source:function(request,response){\n"//
-                + "var availableTags=" + choices + ";\n"//
-                + "var matcherStr=request.term.replace(new RegExp('\\\\*', 'g'), 'A1B2C3');\n"//
-                + "matcherStr=matcherStr.replace(/\\W/g, '');\n"//
-                + "matcherStr=$.ui.autocomplete.escapeRegex(matcherStr);\n"//
-                + "matcherStr=matcherStr.replace(new RegExp('A1B2C3', 'g'), '.*');\n" //
-                + "console.log('matcherStr='+matcherStr);\n"//
-                + "var matcher=new RegExp(matcherStr,'i');\n"//
-                + "response($.grep(availableTags,function(item){\n"//
-                + "return matcher.test(item.replace(/\\W/g, ''));\n"//
-                + "}));\n"//
-                + "}\n"//
-                + ",delay:" + tagItTextFieldSettings.getDelay()//
-                + ",minLength:" + tagItTextFieldSettings.getMinLength()//
-                + "}"//
-                + ",allowSpaces:" + tagItTextFieldSettings.isAllowSpaces()//
-                + ",caseSensitive:" + tagItTextFieldSettings.isCaseSensitive()//
-                + ",allowDuplicates:false"//
-                // + ",availableTags:" + availableTags //
-                + ",singleField:" + tagItTextFieldSettings.isSingleField()//
-                + ",singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'"//
-                + "});");//
+        return (";$('#" + id + "').tagIt(" + choices + ", " + tagItTextFieldSettings.getDelay() + ", " + tagItTextFieldSettings.getMinLength() + ", "
+                + tagItTextFieldSettings.isAllowSpaces() + ", " + tagItTextFieldSettings.isCaseSensitive() + ", "
+                + tagItTextFieldSettings.isSingleField() + ", '" + tagItTextFieldSettings.getFieldDelimiter() + "');");
+        // return (";$('#" + id + "').hide().tagit({"//
+        // + "autocomplete:"//
+        // + "{\n"//
+        // + "source:function(request,response){\n"//
+        // + "var availableTags=" + choices + ";\n"//
+        // + "var matcherStr=request.term.replace(new RegExp('\\\\*', 'g'), 'A1B2C3');\n"//
+        // + "matcherStr=matcherStr.replace(/\\W/g, '');\n"//
+        // + "matcherStr=$.ui.autocomplete.escapeRegex(matcherStr);\n"//
+        // + "matcherStr=matcherStr.replace(new RegExp('A1B2C3', 'g'), '.*');\n" //
+        // + "console.log('matcherStr='+matcherStr);\n"//
+        // + "var matcher=new RegExp(matcherStr,'i');\n"//
+        // + "response($.grep(availableTags,function(item){\n"//
+        // + "return matcher.test(item.replace(/\\W/g, ''));\n"//
+        // + "}));\n"//
+        // + "}\n"//
+        // + ",delay:" + tagItTextFieldSettings.getDelay()//
+        // + ",minLength:" + tagItTextFieldSettings.getMinLength()//
+        // + "}"//
+        // + ",allowSpaces:" + tagItTextFieldSettings.isAllowSpaces()//
+        // + ",caseSensitive:" + tagItTextFieldSettings.isCaseSensitive()//
+        // + ",allowDuplicates:false"//
+        // // + ",availableTags:" + availableTags //
+        // + ",singleField:" + tagItTextFieldSettings.isSingleField()//
+        // + ",singleFieldDelimiter:'" + tagItTextFieldSettings.getFieldDelimiter() + "'"//
+        // + "})._hoverable()._focusable();");//
     }
 
     public static String tagItChoices(IModel<List<String>> choices) {
@@ -83,7 +86,7 @@ public class TagItTextFieldPanel extends DefaultFormRowPanel<String, TextField<S
         if (!this.isEnabledInHierarchy()) {
             return;
         }
-        response.render(JavaScriptHeaderItem.forReference(TagIt.TAG_IT_JS));
+        response.render(JavaScriptHeaderItem.forReference(TagIt.TAG_IT_FACTORY_JS));
         response.render(CssHeaderItem.forReference(TagIt.TAG_IT_CSS));
         response.render(CssHeaderItem.forReference(TagIt.TAG_IT_ZEN_CSS));
         response.render(OnDomReadyHeaderItem.forScript(TagItTextFieldPanel.tagIt(this.getComponent().getMarkupId(), this.getComponentSettings(),
