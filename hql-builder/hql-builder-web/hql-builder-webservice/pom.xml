@@ -113,10 +113,13 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-multipart-provider</artifactId>
 		</dependency>
+		<!-- 
+		not compatible with 5.x.x
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-hibernatevalidator-provider</artifactId>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-html</artifactId>
