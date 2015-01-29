@@ -235,3 +235,24 @@ http://fengyuanchen.github.io/cropper/
 http://tomaszdziurko.pl/2010/02/wicket-ajax-modal-are-you-sure-window/
 
 http://www.7thweb.net/wicket-jquery-ui/button/ConfirmAjaxButtonPage
+
+
+
+
+
+
+
+
+
+Introduce ajaxical polls to keep the session alive as long as enduser has the page open in webbrowser. Here's a kickoff example with a little help of jQuery.
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+    $(document).ready(function() {
+        setInterval(function() {
+            $.get('poll');
+        }, ${(pageContext.session.maxInactiveInterval - 10) * 1000});
+    });
+</script>
+Here ${pageContext.session.maxInactiveInterval} returns the remnant of seconds the session has yet to live (and is been deducted with 10 seconds -just to be on time with poll- and converted to milliseconds so that it suits what setInterval() expects).
+The $.get('poll') should call a servlet which is mapped on an url-pattern of /poll and contains basically the following line in the doGet() method.
+**request.getSession(); // Keep session alive.

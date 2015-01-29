@@ -69,7 +69,6 @@ jQuery.fn.extend({
 		var form = $(this);
 		form.find('input[type][value]').val('');
 		form.find('input[type=checkbox]:checked').removeAttr('checked');
-		form.find('input[type=radio]:checked').removeAttr('checked');
 		form.find('select option:selected').removeAttr('selected');
 	}
 });
