@@ -130,9 +130,9 @@ public class WicketApplication extends WebApplication {
         Injector.get().inject(this);
 
         // framework settings
-        if (deployed) {
-            this.getFrameworkSettings().setSerializer(new KryoSerializer());
-        }
+        // if (deployed) {
+        this.getFrameworkSettings().setSerializer(new KryoSerializer());
+        // }
 
         this.getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
         // => ((WebClientInfo)WebRequestCycle.get().getClientInfo()).getProperties().isJavaEnabled()
@@ -349,7 +349,8 @@ public class WicketApplication extends WebApplication {
      */
     @Override
     public Session newSession(Request request, Response response) {
-        return new WicketSession(request);
+        WicketSession wicketSession = new WicketSession(request);
+        return wicketSession;
     }
 
     public void setCheckAdsEnabled(boolean checkAdsEnabled) {
