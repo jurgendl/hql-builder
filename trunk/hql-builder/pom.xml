@@ -70,6 +70,7 @@
 		<module>spring</module>
 		<module>hql-builder-annotations</module>
 		<module>hql-builder-common</module>
+		<module>hql-builder-orm</module>
 		<module>hql-builder-lucene</module>
 		<module>hql-builder-service</module>
 		<module>hql-builder-web</module>
