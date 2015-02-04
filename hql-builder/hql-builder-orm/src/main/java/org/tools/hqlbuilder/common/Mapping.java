@@ -28,29 +28,62 @@ public class Mapping<S, T> {
     }
 
     public Mapping<S, T> add(BiConsumer<S, T> consumer) {
-        consumers.add(consumer);
+        this.consumers.add(consumer);
         return this;
     }
 
-    public T map(MappingFactory factory, S source) throws MappingException {
-        try {
-            T target = classPair.getTargetClass().newInstance();
-            return map(factory, source, target);
-        } catch (InstantiationException | IllegalAccessException ex1) {
-            throw new MappingException(ex1);
-        }
+    public Mapping<S, T> clear() {
+        this.collections.clear();
+        this.conditionals.clear();
+        this.consumers.clear();
+        return this;
     }
 
-    public T map(MappingFactory factory, S source, T target) throws MappingException {
+    @SuppressWarnings("unchecked")
+    public <SCT, TCT, SC extends Collection<SCT>, TC extends Collection<TCT>> Mapping<S, T> collect(MappingFactory factory, String sourceProperty,
+            String targetProperty, Supplier<TC> collectionFactory, Class<TCT> targetType) {
+        this.consumers.add((S source, T target) -> {
+            Property<S, SC> sourcePD = (Property<S, SC>) this.sourceInfo.get(sourceProperty);
+            SC sourceCollection = sourcePD.read(source);
+            TC targetCollection = StreamSupport.stream(sourceCollection.spliterator(), factory.parallel)
+                    .map(sourceIt -> factory.map(sourceIt, targetType)).collect(Collectors.toCollection(collectionFactory));
+            Property<T, TC> targetPD = (Property<T, TC>) this.targetInfo.get(targetProperty);
+            targetPD.write(target, targetCollection);
+        });
+        return this;
+    }
+
+    protected void collections(String property) {
+        this.collections.add(property);
+    }
+
+    protected void conditional(String property) {
+        this.conditionals.add(property);
+    }
+
+    public void debug() {
+        //
+    }
+
+    protected Map<String, Property<Object, Object>> getSourceInfo() {
+        return this.sourceInfo;
+    }
+
+    protected Map<String, Property<Object, Object>> getTargetInfo() {
+        return this.targetInfo;
+    }
+
+    protected T map(Map<Object, Object> context, MappingFactory factory, S source, T target) throws MappingException {
         try {
+            context.put(source, target);
             T proxy = null;
-            for (BiConsumer<S, T> consumer : consumers) {
+            for (BiConsumer<S, T> consumer : this.consumers) {
                 try {
                     try {
                         consumer.accept(source, target);
                     } catch (NullPointerException ex) {
                         if (proxy == null) {
-                            proxy = proxy(target);
+                            proxy = this.proxy(target);
                         }
                         consumer.accept(source, proxy);
                     }
@@ -58,9 +91,9 @@ public class Mapping<S, T> {
                     throw new MappingException(ex);
                 }
             }
-            for (String conditional : conditionals) {
-                Property<Object, Object> nestedSourcePD = sourceInfo.get(conditional);
-                Property<Object, Object> nestedTargetPD = targetInfo.get(conditional);
+            for (String conditional : this.conditionals) {
+                Property<Object, Object> nestedSourcePD = this.sourceInfo.get(conditional);
+                Property<Object, Object> nestedTargetPD = this.targetInfo.get(conditional);
                 Class<?> nestedSourceClass = nestedSourcePD.type();
                 Class<?> nestedTargetClass = nestedTargetPD.type();
                 if (!factory.accept(nestedSourceClass, nestedTargetClass)) {
@@ -71,12 +104,16 @@ public class Mapping<S, T> {
                     nestedTargetPD.write(target, null);
                     continue;
                 }
+                if (context.containsKey(nestedSourceValue)) {
+                    nestedTargetPD.write(target, context.get(nestedSourceValue));
+                    continue;
+                }
                 Object nestedTargetValue = nestedTargetPD.read(target);
                 if (nestedTargetValue == null) {
                     nestedTargetValue = nestedTargetClass.newInstance();
                     nestedTargetPD.write(target, nestedTargetValue);
                 }
-                factory.map(nestedSourceValue, nestedTargetValue);
+                factory.map(context, nestedSourceValue, nestedTargetValue);
             }
             return target;
         } catch (InstantiationException | IllegalAccessException ex1) {
@@ -84,18 +121,31 @@ public class Mapping<S, T> {
         }
     }
 
+    public T map(MappingFactory factory, S source) throws MappingException {
+        try {
+            T target = this.classPair.getTargetClass().newInstance();
+            return this.map(factory, source, target);
+        } catch (InstantiationException | IllegalAccessException ex1) {
+            throw new MappingException(ex1);
+        }
+    }
+
+    public T map(MappingFactory factory, S source, T target) throws MappingException {
+        return this.map(new HashMap<>(), factory, source, target);
+    }
+
     protected T proxy(final T target) throws InstantiationException, IllegalAccessException {
         javassist.util.proxy.ProxyFactory f = new javassist.util.proxy.ProxyFactory();
-        f.setSuperclass(classPair.getTargetClass());
+        f.setSuperclass(this.classPair.getTargetClass());
         javassist.util.proxy.MethodHandler mi = new javassist.util.proxy.MethodHandler() {
             @Override
             public Object invoke(Object self, java.lang.reflect.Method method, java.lang.reflect.Method paramMethod2, Object[] args) throws Throwable {
                 try {
                     Object invoke = method.invoke(target, args);
-                    if (method.getName().startsWith("get") && args.length == 0 && invoke == null) {
+                    if (method.getName().startsWith("get") && (args.length == 0) && (invoke == null)) {
                         String propertyName = method.getName().substring(3);
                         propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-                        Property<Object, Object> pd = targetInfo.get(propertyName);
+                        Property<Object, Object> pd = Mapping.this.targetInfo.get(propertyName);
                         invoke = method.getReturnType().newInstance();
                         pd.write(target, invoke);
                     }
@@ -112,14 +162,6 @@ public class Mapping<S, T> {
         return proxy;
     }
 
-    protected Map<String, Property<Object, Object>> getSourceInfo() {
-        return this.sourceInfo;
-    }
-
-    protected Map<String, Property<Object, Object>> getTargetInfo() {
-        return this.targetInfo;
-    }
-
     protected void setSourceInfo(Map<String, Property<Object, Object>> sourceInfo) {
         this.sourceInfo.clear();
         this.sourceInfo.putAll(sourceInfo);
@@ -128,38 +170,5 @@ public class Mapping<S, T> {
     protected void setTargetInfo(Map<String, Property<Object, Object>> targetInfo) {
         this.targetInfo.clear();
         this.targetInfo.putAll(targetInfo);
-    }
-
-    protected void conditional(String property) {
-        this.conditionals.add(property);
-    }
-
-    public void debug() {
-        //
-    }
-
-    @SuppressWarnings("unchecked")
-    public <SCT, TCT, SC extends Collection<SCT>, TC extends Collection<TCT>> Mapping<S, T> collect(MappingFactory factory, String sourceProperty,
-            String targetProperty, Supplier<TC> collectionFactory, Class<TCT> targetType) {
-        consumers.add((S source, T target) -> {
-            Property<S, SC> sourcePD = (Property<S, SC>) sourceInfo.get(sourceProperty);
-            SC sourceCollection = sourcePD.read(source);
-            TC targetCollection = StreamSupport.stream(sourceCollection.spliterator(), factory.parallel)
-                    .map(sourceIt -> factory.map(sourceIt, targetType)).collect(Collectors.toCollection(collectionFactory));
-            Property<T, TC> targetPD = (Property<T, TC>) targetInfo.get(targetProperty);
-            targetPD.write(target, targetCollection);
-        });
-        return this;
-    }
-
-    protected void collections(String property) {
-        collections.add(property);
-    }
-
-    public Mapping<S, T> clear() {
-        collections.clear();
-        conditionals.clear();
-        consumers.clear();
-        return this;
     }
 }

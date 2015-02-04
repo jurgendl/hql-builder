@@ -34,23 +34,12 @@ public class MappingFactory {
         return this.mappings.containsKey(classPair);
     }
 
-    public <S, T> Mapping<S, T> mapping(Class<S> sourceClass, Class<T> targetClass) {
-        ClassPair<S, T> classPair = new ClassPair<>(sourceClass, targetClass);
-        if (this.mappings.containsKey(classPair)) {
-            return mapping(classPair);
-        }
-        Mapping<S, T> mapping = new Mapping<S, T>(classPair);
-        this.mappings.put(classPair, mapping);
-        return mapping;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <S, T> Mapping<S, T> mapping(ClassPair<S, T> classPair) {
-        return (Mapping<S, T>) this.mappings.get(classPair);
+    public <S, T> void add(Class<S> sourceClass, Class<T> targetClass, BiConsumer<S, T> mappingRedirect) {
+        this.mapping(sourceClass, targetClass).add(mappingRedirect);
     }
 
     public <S, T> Mapping<S, T> build(Class<S> sourceClass, Class<T> targetClass) throws MappingException {
-        Mapping<S, T> mapping = mapping(sourceClass, targetClass);
+        Mapping<S, T> mapping = this.mapping(sourceClass, targetClass);
         Map<String, Property<Object, Object>> sourceInfo = this.info(sourceClass);
         mapping.setSourceInfo(sourceInfo);
         Map<String, Property<Object, Object>> targetInfo = this.info(targetClass);
@@ -67,7 +56,7 @@ public class MappingFactory {
                 } else if (targetType.equals(sourceType)) {
                     mapping.add((source, target) -> targetPD.write(target, sourcePD.read(source)));
                 } else if (this.getConversionService().canConvert(sourceType, targetType)) {
-                    mapping.add((source, target) -> targetPD.write(target, convert(sourcePD.read(source), targetType)));
+                    mapping.add((source, target) -> targetPD.write(target, this.convert(sourcePD.read(source), targetType)));
                 } else {
                     mapping.conditional(property);
                 }
@@ -77,7 +66,7 @@ public class MappingFactory {
     }
 
     protected Object convert(Object source, Class<?> targetType) {
-        return getConversionService().convert(source, targetType);
+        return this.getConversionService().convert(source, targetType);
     }
 
     public ConversionService getConversionService() {
@@ -91,12 +80,12 @@ public class MappingFactory {
         if (!this.info.containsKey(clazz)) {
             try {
                 Map<String, PropertyDescriptor> originalMap = StreamSupport
-                        .stream(Arrays.asList(Introspector.getBeanInfo(clazz).getPropertyDescriptors()).spliterator(), parallel)
+                        .stream(Arrays.asList(Introspector.getBeanInfo(clazz).getPropertyDescriptors()).spliterator(), this.parallel)
                         .filter((t) -> ((t.getWriteMethod() != null) && (t.getReadMethod() != null)))
                         .collect(Collectors.toMap(PropertyDescriptor::getName, Function.<PropertyDescriptor> identity()));
-                Map<String, Property<Object, Object>> convertedMap = StreamSupport.stream(originalMap.entrySet().spliterator(), parallel).collect(
-                        Collectors.toMap(Entry::getKey, e -> new Property<>(e.getValue())));
-                info.put(clazz, convertedMap);
+                Map<String, Property<Object, Object>> convertedMap = StreamSupport.stream(originalMap.entrySet().spliterator(), this.parallel)
+                        .collect(Collectors.toMap(Entry::getKey, e -> new Property<>(e.getValue())));
+                this.info.put(clazz, convertedMap);
             } catch (IntrospectionException ex) {
                 throw new MappingException(ex);
             }
@@ -104,33 +93,48 @@ public class MappingFactory {
         return this.info.get(clazz);
     }
 
-    public <S, T> T map(S source, Class<T> targetClass) {
-        try {
-            return map(source, targetClass.newInstance());
-        } catch (InstantiationException | IllegalAccessException ex) {
-            throw new MappingException(ex);
-        }
+    public boolean isParallel() {
+        return this.parallel;
     }
 
-    public <S, T> T map(S source, T target) {
+    protected <S, T> T map(Map<Object, Object> context, S source, T target) {
         @SuppressWarnings("unchecked")
         Class<S> sourceClass = (Class<S>) source.getClass();
         @SuppressWarnings("unchecked")
         Class<T> targetClass = (Class<T>) target.getClass();
         Mapping<S, T> mapping = this.mapping(sourceClass, targetClass);
-        return mapping.map(this, source, target);
+        return mapping.map(context, this, source, target);
+    }
+
+    public <S, T> T map(S source, Class<T> targetClass) {
+        try {
+            return this.map(source, targetClass.newInstance());
+        } catch (InstantiationException | IllegalAccessException ex) {
+            throw new MappingException(ex);
+        }
+    }
+
+    protected <S, T> T map(S source, T target) {
+        return this.map(new HashMap<>(), source, target);
+    }
+
+    public <S, T> Mapping<S, T> mapping(Class<S> sourceClass, Class<T> targetClass) {
+        ClassPair<S, T> classPair = new ClassPair<>(sourceClass, targetClass);
+        if (this.mappings.containsKey(classPair)) {
+            return this.mapping(classPair);
+        }
+        Mapping<S, T> mapping = new Mapping<S, T>(classPair);
+        this.mappings.put(classPair, mapping);
+        return mapping;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <S, T> Mapping<S, T> mapping(ClassPair<S, T> classPair) {
+        return (Mapping<S, T>) this.mappings.get(classPair);
     }
 
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
-    }
-
-    public <S, T> void add(Class<S> sourceClass, Class<T> targetClass, BiConsumer<S, T> mappingRedirect) {
-        mapping(sourceClass, targetClass).add(mappingRedirect);
-    }
-
-    public boolean isParallel() {
-        return this.parallel;
     }
 
     public void setParallel(boolean parallel) {
