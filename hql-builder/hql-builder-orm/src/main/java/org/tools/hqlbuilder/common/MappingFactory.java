@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -21,6 +22,8 @@ public class MappingFactory {
     protected final Map<ClassPair<?, ?>, Mapping<?, ?>> mappings = new HashMap<>();
 
     protected ConversionService conversionService;
+
+    protected boolean parallel = true;
 
     public MappingFactory() {
         super();
@@ -59,9 +62,9 @@ public class MappingFactory {
                 Property<Object, Object> targetPD = targetInfo.get(property);
                 Class<?> sourceType = sourcePD.type();
                 Class<?> targetType = targetPD.type();
-                if (sourceType.isAssignableFrom(Collection.class) && targetType.isAssignableFrom(Collection.class)) {
+                if (Collection.class.isAssignableFrom(sourceType) && Collection.class.isAssignableFrom(targetType)) {
                     mapping.collections(property);
-                } else if (targetType.isAssignableFrom(sourceType)) {
+                } else if (targetType.equals(sourceType)) {
                     mapping.add((source, target) -> targetPD.write(target, sourcePD.read(source)));
                 } else if (this.getConversionService().canConvert(sourceType, targetType)) {
                     mapping.add((source, target) -> targetPD.write(target, convert(sourcePD.read(source), targetType)));
@@ -74,6 +77,7 @@ public class MappingFactory {
     }
 
     protected Object convert(Object source, Class<?> targetType) {
+        System.out.println(source + " > " + targetType);
         return getConversionService().convert(source, targetType);
     }
 
@@ -87,11 +91,12 @@ public class MappingFactory {
     public Map<String, Property<Object, Object>> info(Class<?> clazz) throws MappingException {
         if (!this.info.containsKey(clazz)) {
             try {
-                Map<String, PropertyDescriptor> originalMap = Arrays.asList(Introspector.getBeanInfo(clazz).getPropertyDescriptors())
-                        .parallelStream().filter((t) -> ((t.getWriteMethod() != null) && (t.getReadMethod() != null)))
+                Map<String, PropertyDescriptor> originalMap = StreamSupport
+                        .stream(Arrays.asList(Introspector.getBeanInfo(clazz).getPropertyDescriptors()).spliterator(), parallel)
+                        .filter((t) -> ((t.getWriteMethod() != null) && (t.getReadMethod() != null)))
                         .collect(Collectors.toMap(PropertyDescriptor::getName, Function.<PropertyDescriptor> identity()));
-                Map<String, Property<Object, Object>> convertedMap = originalMap.entrySet().parallelStream()
-                        .collect(Collectors.toMap(Entry::getKey, e -> new Property<>(e.getValue())));
+                Map<String, Property<Object, Object>> convertedMap = StreamSupport.stream(originalMap.entrySet().spliterator(), parallel).collect(
+                        Collectors.toMap(Entry::getKey, e -> new Property<>(e.getValue())));
                 info.put(clazz, convertedMap);
             } catch (IntrospectionException ex) {
                 throw new MappingException(ex);
@@ -123,5 +128,13 @@ public class MappingFactory {
 
     public <S, T> void add(Class<S> sourceClass, Class<T> targetClass, BiConsumer<S, T> mappingRedirect) {
         mapping(sourceClass, targetClass).add(mappingRedirect);
+    }
+
+    public boolean isParallel() {
+        return this.parallel;
+    }
+
+    public void setParallel(boolean parallel) {
+        this.parallel = parallel;
     }
 }
