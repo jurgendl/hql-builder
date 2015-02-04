@@ -21,9 +21,11 @@ public class Property<T, P> {
 
     public void write(T obj, P value) {
         try {
-            descriptor.getWriteMethod().invoke(obj, value);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
+            descriptor.getWriteMethod().invoke(obj, new Object[] { value });
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex.getTargetException());
+        } catch (IllegalAccessException | IllegalArgumentException | ClassCastException ex) {
+            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex);
         }
     }
 
@@ -31,8 +33,10 @@ public class Property<T, P> {
     public P read(T obj) {
         try {
             return (P) descriptor.getReadMethod().invoke(obj);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex.getTargetException());
+        } catch (IllegalAccessException | IllegalArgumentException | ClassCastException ex) {
+            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex);
         }
     }
 }

@@ -60,7 +60,7 @@ public class MappingFactory {
                 Class<?> sourceType = sourcePD.type();
                 Class<?> targetType = targetPD.type();
                 if (sourceType.isAssignableFrom(Collection.class) && targetType.isAssignableFrom(Collection.class)) {
-                    mapping.collection(property);
+                    mapping.collections(property);
                 } else if (targetType.isAssignableFrom(sourceType)) {
                     mapping.add((source, target) -> targetPD.write(target, sourcePD.read(source)));
                 } else if (this.getConversionService().canConvert(sourceType, targetType)) {
