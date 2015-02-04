@@ -13,6 +13,8 @@ public class Pojo {
 
     private String nestedPojoVeld;
 
+    private CommonNestedPojo commonNested;
+
     public String getVeld1() {
         return this.veld1;
     }
@@ -56,6 +58,14 @@ public class Pojo {
     @Override
     public String toString() {
         return new ToStringBuilder(this).appendSuper(super.toString()).append("veld1", veld1).append("veld2", veld2).append("veld3", veld3)
-                .append("nestedPojo", nestedPojo).append("nestedPojoVeld", nestedPojoVeld).toString();
+                .append("nestedPojo", nestedPojo).append("nestedPojoVeld", nestedPojoVeld).append("commonNested", commonNested).toString();
+    }
+
+    public CommonNestedPojo getCommonNested() {
+        return this.commonNested;
+    }
+
+    public void setCommonNested(CommonNestedPojo commonNested) {
+        this.commonNested = commonNested;
     }
 }
