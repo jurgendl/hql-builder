@@ -5,13 +5,19 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Supplier;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Mapping<S, T> {
+    protected static final Logger logger = LoggerFactory.getLogger(Mapping.class);
+
     protected final ClassPair<S, T> classPair;
 
     protected final Map<String, Property<Object, Object>> sourceInfo = new HashMap<>();
@@ -48,7 +54,12 @@ public class Mapping<S, T> {
             SC sourceCollection = sourcePD.read(source);
             TC targetCollection = collectionFactory.get();
             for (SCT sourceIt : sourceCollection) {
-                TCT targetIt = factory.map(context, sourceIt, targetType);
+                TCT targetIt;
+                if (context.containsKey(sourceIt)) {
+                    targetIt = (TCT) context.get(sourceIt);
+                } else {
+                    targetIt = factory.map(context, sourceIt, targetType);
+                }
                 targetCollection.add(targetIt);
             }
             Property<T, TC> targetPD = (Property<T, TC>) Mapping.this.targetInfo.get(targetProperty);
@@ -77,7 +88,7 @@ public class Mapping<S, T> {
         return this.targetInfo;
     }
 
-    public T map(HashMap<Object, Object> context, MappingFactory factory, S source) throws MappingException {
+    public T map(Map<Object, Object> context, MappingFactory factory, S source) throws MappingException {
         try {
             T target = this.classPair.getTargetClass().newInstance();
             return this.map(context, factory, source, target);
@@ -88,7 +99,10 @@ public class Mapping<S, T> {
 
     protected T map(Map<Object, Object> context, MappingFactory factory, S source, T target) throws MappingException {
         try {
-            System.out.println("add to context: " + source + " > " + target);
+            Mapping.logger.trace("add to context: " + context.size() + ": " + System.identityHashCode(source) + ": " + source + " > " + target);
+            if (context.containsKey(source)) {
+                throw new RuntimeException();
+            }
             context.put(source, target);
             T proxy = null;
             for (Mapper<S, T> consumer : this.mappers) {
@@ -96,7 +110,7 @@ public class Mapping<S, T> {
                     try {
                         consumer.apply(context, source, target);
                     } catch (NullPointerException ex) {
-                        System.out.println("proxy for " + target);
+                        Mapping.logger.trace("proxy for " + target);
                         if (proxy == null) {
                             proxy = this.proxy(target);
                         }
@@ -119,8 +133,16 @@ public class Mapping<S, T> {
                     nestedTargetPD.write(target, null);
                     continue;
                 }
-                if (context.containsKey(nestedSourceValue)) {
-                    nestedTargetPD.write(target, context.get(nestedSourceValue));
+                boolean breaker = false;
+                for (Entry<Object, Object> entry : context.entrySet()) {
+                    if (entry.getKey() == nestedSourceValue) {
+                        Mapping.logger.trace("reusing " + nestedSourceValue + " > " + entry.getValue());
+                        nestedTargetPD.write(target, entry.getValue());
+                        breaker = true;
+                        break;
+                    }
+                }
+                if (breaker) {
                     continue;
                 }
                 Object nestedTargetValue = nestedTargetPD.read(target);
