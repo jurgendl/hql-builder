@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,13 +31,13 @@ public class MappingFactoryTest {
     public void test1() {
         try {
             Mapping<Pojo, DTO> mapping = this.mappingFactory.build(Pojo.class, DTO.class)//
-                    .add((s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
-                    .add((s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
+                    .add((ctx, s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
+                    .add((ctx, s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
                     .collect(this.mappingFactory, "collection", "collection", () -> new ArrayList<CommonNestedDTO>(), CommonNestedDTO.class)//
-            ;
+                    ;
             this.mappingFactory.build(CommonNestedPojo.class, CommonNestedDTO.class);
             Pojo pojo = this.getTestPojo();
-            DTO dto = mapping.map(this.mappingFactory, pojo);
+            DTO dto = mapping.map(new HashMap<>(), this.mappingFactory, pojo);
             Assert.assertEquals(pojo.getVeld1(), dto.getVeld1());
             Assert.assertEquals(pojo.getVeld2(), dto.getVeld2().intValue());
             Assert.assertEquals(pojo.getVeld3(), dto.getVeld3());
@@ -59,6 +60,6 @@ public class MappingFactoryTest {
         Retro r2 = new Retro();
         r1.setRetro(r2);
         r2.setRetro(r1);
-        mf.map(r1, RetroB.class);
+        mf.map(new HashMap<>(), r1, RetroB.class);
     }
 }
