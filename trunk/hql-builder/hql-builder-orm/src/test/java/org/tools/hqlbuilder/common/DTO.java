@@ -13,6 +13,8 @@ public class DTO {
 
     private NestedDTO nestedDTO;
 
+    private CommonNestedDTO commonNested;
+
     public String getVeld1() {
         return this.veld1;
     }
@@ -56,6 +58,14 @@ public class DTO {
     @Override
     public String toString() {
         return new ToStringBuilder(this).appendSuper(super.toString()).append("veld1", veld1).append("veld2", veld2).append("veld3", veld3)
-                .append("nestedDTOVeld", nestedDTOVeld).append("nestedDTO", nestedDTO).toString();
+                .append("nestedDTOVeld", nestedDTOVeld).append("nestedDTO", nestedDTO).append("commonNested", commonNested).toString();
+    }
+
+    public CommonNestedDTO getCommonNested() {
+        return this.commonNested;
+    }
+
+    public void setCommonNested(CommonNestedDTO commonNested) {
+        this.commonNested = commonNested;
     }
 }
