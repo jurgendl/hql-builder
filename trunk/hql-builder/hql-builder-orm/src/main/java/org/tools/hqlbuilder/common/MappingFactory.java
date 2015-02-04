@@ -77,7 +77,6 @@ public class MappingFactory {
     }
 
     protected Object convert(Object source, Class<?> targetType) {
-        System.out.println(source + " > " + targetType);
         return getConversionService().convert(source, targetType);
     }
 
