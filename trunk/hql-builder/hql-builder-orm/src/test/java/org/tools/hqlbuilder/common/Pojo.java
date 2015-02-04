@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.common;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Pojo {
@@ -14,6 +17,8 @@ public class Pojo {
     private String nestedPojoVeld;
 
     private CommonNestedPojo commonNested;
+
+    private Collection<CommonNestedPojo> collection = new ArrayList<>();
 
     public String getVeld1() {
         return this.veld1;
@@ -67,5 +72,13 @@ public class Pojo {
 
     public void setCommonNested(CommonNestedPojo commonNested) {
         this.commonNested = commonNested;
+    }
+
+    public Collection<CommonNestedPojo> getCollection() {
+        return this.collection;
+    }
+
+    public void setCollection(Collection<CommonNestedPojo> collection) {
+        this.collection = collection;
     }
 }

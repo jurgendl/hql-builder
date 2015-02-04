@@ -11,7 +11,7 @@ public class MappingFactoryTest {
         Mapping<Pojo, DTO> mapping = mappingFactory.build(Pojo.class, DTO.class)//
                 .add((s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
                 .add((s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
-        ;
+                ;
         mappingFactory.build(CommonNestedPojo.class, CommonNestedDTO.class);
         Pojo pojo = getTestPojo();
         DTO dto = mapping.map(mappingFactory, pojo);
@@ -21,6 +21,8 @@ public class MappingFactoryTest {
         Assert.assertEquals(pojo.getNestedPojo().getNestedVeld(), dto.getNestedDTOVeld());
         Assert.assertEquals(pojo.getNestedPojoVeld(), dto.getNestedDTO().getNestedVeld());
         Assert.assertEquals(pojo.getCommonNested().getCommonNestedField(), dto.getCommonNested().getCommonNestedField());
+        Assert.assertEquals(pojo.getCollection().iterator().next().getCommonNestedField(), dto.getCollection().iterator().next()
+                .getCommonNestedField());
     }
 
     private Pojo getTestPojo() {
