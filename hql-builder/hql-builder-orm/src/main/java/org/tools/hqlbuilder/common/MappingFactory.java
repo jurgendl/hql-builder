@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -58,7 +59,9 @@ public class MappingFactory {
                 Property<Object, Object> targetPD = targetInfo.get(property);
                 Class<?> sourceType = sourcePD.type();
                 Class<?> targetType = targetPD.type();
-                if (targetType.isAssignableFrom(sourceType)) {
+                if (sourceType.isAssignableFrom(Collection.class) && targetType.isAssignableFrom(Collection.class)) {
+                    mapping.collection(property);
+                } else if (targetType.isAssignableFrom(sourceType)) {
                     mapping.add((source, target) -> targetPD.write(target, sourcePD.read(source)));
                 } else if (this.getConversionService().canConvert(sourceType, targetType)) {
                     mapping.add((source, target) -> targetPD.write(target, convert(sourcePD.read(source), targetType)));

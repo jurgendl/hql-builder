@@ -1,5 +1,8 @@
 package org.tools.hqlbuilder.common;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class DTO {
@@ -14,6 +17,8 @@ public class DTO {
     private NestedDTO nestedDTO;
 
     private CommonNestedDTO commonNested;
+
+    private Collection<CommonNestedDTO> collection = new ArrayList<>();
 
     public String getVeld1() {
         return this.veld1;
@@ -67,5 +72,13 @@ public class DTO {
 
     public void setCommonNested(CommonNestedDTO commonNested) {
         this.commonNested = commonNested;
+    }
+
+    public Collection<CommonNestedDTO> getCollection() {
+        return this.collection;
+    }
+
+    public void setCollection(Collection<CommonNestedDTO> collection) {
+        this.collection = collection;
     }
 }

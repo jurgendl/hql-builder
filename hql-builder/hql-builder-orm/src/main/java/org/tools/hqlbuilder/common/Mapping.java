@@ -127,4 +127,12 @@ public class Mapping<S, T> {
     protected void conditional(String property) {
         this.conditionals.add(property);
     }
+
+    public void debug() {
+        //
+    }
+
+    public void collection(String property) {
+        // TODO Auto-generated method stub
+    }
 }
