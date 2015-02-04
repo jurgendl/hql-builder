@@ -19,24 +19,24 @@ public class Property<T, P> {
         return this.descriptor.getName();
     }
 
-    public void write(T obj, P value) {
+    public void write(T obj, P value) throws PropertyException {
         try {
             descriptor.getWriteMethod().invoke(obj, new Object[] { value });
         } catch (InvocationTargetException ex) {
-            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex.getTargetException());
+            throw new PropertyException(descriptor.getPropertyType().getName() + " " + descriptor.getName(), ex.getTargetException());
         } catch (IllegalAccessException | IllegalArgumentException | ClassCastException ex) {
-            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex);
+            throw new PropertyException(descriptor.getPropertyType().getName() + " " + descriptor.getName(), ex);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public P read(T obj) {
+    public P read(T obj) throws PropertyException {
         try {
             return (P) descriptor.getReadMethod().invoke(obj);
         } catch (InvocationTargetException ex) {
-            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex.getTargetException());
+            throw new PropertyException(descriptor.getPropertyType().getName() + " " + descriptor.getName(), ex.getTargetException());
         } catch (IllegalAccessException | IllegalArgumentException | ClassCastException ex) {
-            throw new RuntimeException(descriptor.getPropertyType().getName() + "#" + descriptor.getName(), ex);
+            throw new PropertyException(descriptor.getPropertyType().getName() + " " + descriptor.getName(), ex);
         }
     }
 }
