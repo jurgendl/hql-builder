@@ -1,10 +1,13 @@
 package org.tools.hqlbuilder.common;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Mapping<S, T> {
     protected final ClassPair<S, T> classPair;
@@ -16,6 +19,8 @@ public class Mapping<S, T> {
     protected final List<BiConsumer<S, T>> consumers = new ArrayList<>();
 
     protected final List<String> conditionals = new ArrayList<String>();
+
+    protected final List<String> collections = new ArrayList<String>();
 
     public Mapping(ClassPair<S, T> classPair) {
         this.classPair = classPair;
@@ -78,7 +83,7 @@ public class Mapping<S, T> {
         }
     }
 
-    private T proxy(final T target) throws InstantiationException, IllegalAccessException {
+    protected T proxy(final T target) throws InstantiationException, IllegalAccessException {
         javassist.util.proxy.ProxyFactory f = new javassist.util.proxy.ProxyFactory();
         f.setSuperclass(classPair.getTargetClass());
         javassist.util.proxy.MethodHandler mi = new javassist.util.proxy.MethodHandler() {
@@ -132,7 +137,28 @@ public class Mapping<S, T> {
         //
     }
 
-    public void collection(String property) {
-        // TODO Auto-generated method stub
+    @SuppressWarnings("unchecked")
+    public <SCT, TCT, SC extends Collection<SCT>, TC extends Collection<TCT>> Mapping<S, T> collect(MappingFactory factory, String sourceProperty,
+            String targetProperty, Supplier<TC> collectionFactory, Class<TCT> targetType) {
+        consumers.add((S source, T target) -> {
+            Property<S, SC> sourcePD = (Property<S, SC>) sourceInfo.get(sourceProperty);
+            SC sourceCollection = sourcePD.read(source);
+            TC targetCollection = sourceCollection.parallelStream().map(sourceIt -> factory.map(sourceIt, targetType))
+                    .collect(Collectors.toCollection(collectionFactory));
+            Property<T, TC> targetPD = (Property<T, TC>) targetInfo.get(targetProperty);
+            targetPD.write(target, targetCollection);
+        });
+        return this;
+    }
+
+    protected void collections(String property) {
+        collections.add(property);
+    }
+
+    public Mapping<S, T> clear() {
+        collections.clear();
+        conditionals.clear();
+        consumers.clear();
+        return this;
     }
 }
