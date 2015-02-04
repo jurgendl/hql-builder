@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -34,7 +33,7 @@ public class MappingFactory {
         return this.mappings.containsKey(classPair);
     }
 
-    public <S, T> void add(Class<S> sourceClass, Class<T> targetClass, BiConsumer<S, T> mappingRedirect) {
+    public <S, T> void add(Class<S> sourceClass, Class<T> targetClass, Mapper<S, T> mappingRedirect) {
         this.mapping(sourceClass, targetClass).add(mappingRedirect);
     }
 
@@ -54,9 +53,9 @@ public class MappingFactory {
                 if (Collection.class.isAssignableFrom(sourceType) && Collection.class.isAssignableFrom(targetType)) {
                     mapping.collections(property);
                 } else if (targetType.equals(sourceType)) {
-                    mapping.add((source, target) -> targetPD.write(target, sourcePD.read(source)));
+                    mapping.add((ctx, source, target) -> targetPD.write(target, sourcePD.read(source)));
                 } else if (this.getConversionService().canConvert(sourceType, targetType)) {
-                    mapping.add((source, target) -> targetPD.write(target, this.convert(sourcePD.read(source), targetType)));
+                    mapping.add((ctx, source, target) -> targetPD.write(target, this.convert(sourcePD.read(source), targetType)));
                 } else {
                     mapping.conditional(property);
                 }
@@ -97,6 +96,14 @@ public class MappingFactory {
         return this.parallel;
     }
 
+    public <S, T> T map(Map<Object, Object> context, S source, Class<T> targetClass) {
+        try {
+            return this.map(context, source, targetClass.newInstance());
+        } catch (InstantiationException | IllegalAccessException ex) {
+            throw new MappingException(ex);
+        }
+    }
+
     protected <S, T> T map(Map<Object, Object> context, S source, T target) {
         @SuppressWarnings("unchecked")
         Class<S> sourceClass = (Class<S>) source.getClass();
@@ -104,18 +111,6 @@ public class MappingFactory {
         Class<T> targetClass = (Class<T>) target.getClass();
         Mapping<S, T> mapping = this.mapping(sourceClass, targetClass);
         return mapping.map(context, this, source, target);
-    }
-
-    public <S, T> T map(S source, Class<T> targetClass) {
-        try {
-            return this.map(source, targetClass.newInstance());
-        } catch (InstantiationException | IllegalAccessException ex) {
-            throw new MappingException(ex);
-        }
-    }
-
-    protected <S, T> T map(S source, T target) {
-        return this.map(new HashMap<>(), source, target);
     }
 
     public <S, T> Mapping<S, T> mapping(Class<S> sourceClass, Class<T> targetClass) {

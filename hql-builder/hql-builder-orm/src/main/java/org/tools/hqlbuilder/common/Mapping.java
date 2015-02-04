@@ -5,10 +5,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 
 public class Mapping<S, T> {
     protected final ClassPair<S, T> classPair;
@@ -17,7 +18,7 @@ public class Mapping<S, T> {
 
     protected final Map<String, Property<Object, Object>> targetInfo = new HashMap<>();
 
-    protected final List<BiConsumer<S, T>> consumers = new ArrayList<>();
+    protected final List<Mapper<S, T>> mappers = new ArrayList<>();
 
     protected final List<String> conditionals = new ArrayList<String>();
 
@@ -27,27 +28,30 @@ public class Mapping<S, T> {
         this.classPair = classPair;
     }
 
-    public Mapping<S, T> add(BiConsumer<S, T> consumer) {
-        this.consumers.add(consumer);
+    public Mapping<S, T> add(Mapper<S, T> consumer) {
+        this.mappers.add(consumer);
         return this;
     }
 
     public Mapping<S, T> clear() {
         this.collections.clear();
         this.conditionals.clear();
-        this.consumers.clear();
+        this.mappers.clear();
         return this;
     }
 
     @SuppressWarnings("unchecked")
     public <SCT, TCT, SC extends Collection<SCT>, TC extends Collection<TCT>> Mapping<S, T> collect(MappingFactory factory, String sourceProperty,
             String targetProperty, Supplier<TC> collectionFactory, Class<TCT> targetType) {
-        this.consumers.add((S source, T target) -> {
-            Property<S, SC> sourcePD = (Property<S, SC>) this.sourceInfo.get(sourceProperty);
+        this.mappers.add((Map<Object, Object> context, S source, T target) -> {
+            Property<S, SC> sourcePD = (Property<S, SC>) Mapping.this.sourceInfo.get(sourceProperty);
             SC sourceCollection = sourcePD.read(source);
-            TC targetCollection = StreamSupport.stream(sourceCollection.spliterator(), factory.parallel)
-                    .map(sourceIt -> factory.map(sourceIt, targetType)).collect(Collectors.toCollection(collectionFactory));
-            Property<T, TC> targetPD = (Property<T, TC>) this.targetInfo.get(targetProperty);
+            TC targetCollection = collectionFactory.get();
+            for (SCT sourceIt : sourceCollection) {
+                TCT targetIt = factory.map(context, sourceIt, targetType);
+                targetCollection.add(targetIt);
+            }
+            Property<T, TC> targetPD = (Property<T, TC>) Mapping.this.targetInfo.get(targetProperty);
             targetPD.write(target, targetCollection);
         });
         return this;
@@ -73,19 +77,30 @@ public class Mapping<S, T> {
         return this.targetInfo;
     }
 
+    public T map(HashMap<Object, Object> context, MappingFactory factory, S source) throws MappingException {
+        try {
+            T target = this.classPair.getTargetClass().newInstance();
+            return this.map(context, factory, source, target);
+        } catch (InstantiationException | IllegalAccessException ex1) {
+            throw new MappingException(ex1);
+        }
+    }
+
     protected T map(Map<Object, Object> context, MappingFactory factory, S source, T target) throws MappingException {
         try {
+            System.out.println("add to context: " + source + " > " + target);
             context.put(source, target);
             T proxy = null;
-            for (BiConsumer<S, T> consumer : this.consumers) {
+            for (Mapper<S, T> consumer : this.mappers) {
                 try {
                     try {
-                        consumer.accept(source, target);
+                        consumer.apply(context, source, target);
                     } catch (NullPointerException ex) {
+                        System.out.println("proxy for " + target);
                         if (proxy == null) {
                             proxy = this.proxy(target);
                         }
-                        consumer.accept(source, proxy);
+                        consumer.apply(context, source, proxy);
                     }
                 } catch (RuntimeException ex) {
                     throw new MappingException(ex);
@@ -121,23 +136,10 @@ public class Mapping<S, T> {
         }
     }
 
-    public T map(MappingFactory factory, S source) throws MappingException {
-        try {
-            T target = this.classPair.getTargetClass().newInstance();
-            return this.map(factory, source, target);
-        } catch (InstantiationException | IllegalAccessException ex1) {
-            throw new MappingException(ex1);
-        }
-    }
-
-    public T map(MappingFactory factory, S source, T target) throws MappingException {
-        return this.map(new HashMap<>(), factory, source, target);
-    }
-
     protected T proxy(final T target) throws InstantiationException, IllegalAccessException {
-        javassist.util.proxy.ProxyFactory f = new javassist.util.proxy.ProxyFactory();
+        ProxyFactory f = new ProxyFactory();
         f.setSuperclass(this.classPair.getTargetClass());
-        javassist.util.proxy.MethodHandler mi = new javassist.util.proxy.MethodHandler() {
+        MethodHandler mi = new MethodHandler() {
             @Override
             public Object invoke(Object self, java.lang.reflect.Method method, java.lang.reflect.Method paramMethod2, Object[] args) throws Throwable {
                 try {
@@ -158,7 +160,7 @@ public class Mapping<S, T> {
         };
         @SuppressWarnings("unchecked")
         T proxy = (T) f.createClass().newInstance();
-        ((javassist.util.proxy.ProxyObject) proxy).setHandler(mi);
+        ((ProxyObject) proxy).setHandler(mi);
         return proxy;
     }
 
