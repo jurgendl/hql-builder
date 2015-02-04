@@ -3,6 +3,8 @@ package org.tools.hqlbuilder.common;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class Property<T, P> {
     protected final PropertyDescriptor descriptor;
 
@@ -38,5 +40,10 @@ public class Property<T, P> {
         } catch (IllegalAccessException | IllegalArgumentException | ClassCastException ex) {
             throw new PropertyException(descriptor.getPropertyType().getName() + " " + descriptor.getName(), ex);
         }
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("descriptor", descriptor).toString();
     }
 }

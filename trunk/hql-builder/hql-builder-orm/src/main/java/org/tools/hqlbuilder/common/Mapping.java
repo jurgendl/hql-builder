@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class Mapping<S, T> {
     protected final ClassPair<S, T> classPair;
@@ -143,8 +144,8 @@ public class Mapping<S, T> {
         consumers.add((S source, T target) -> {
             Property<S, SC> sourcePD = (Property<S, SC>) sourceInfo.get(sourceProperty);
             SC sourceCollection = sourcePD.read(source);
-            TC targetCollection = sourceCollection.parallelStream().map(sourceIt -> factory.map(sourceIt, targetType))
-                    .collect(Collectors.toCollection(collectionFactory));
+            TC targetCollection = StreamSupport.stream(sourceCollection.spliterator(), factory.parallel)
+                    .map(sourceIt -> factory.map(sourceIt, targetType)).collect(Collectors.toCollection(collectionFactory));
             Property<T, TC> targetPD = (Property<T, TC>) targetInfo.get(targetProperty);
             targetPD.write(target, targetCollection);
         });
