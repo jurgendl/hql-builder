@@ -21,32 +21,16 @@ public abstract class EntityAdapter implements EntityI {
     @Version
     private Integer version;
 
-    public EntityAdapter(Long id, Integer version) {
-        this.id = id;
-        this.version = version;
+    public EntityAdapter() {
+        super();
     }
 
     public EntityAdapter(Long id) {
         this.id = id;
     }
 
-    public EntityAdapter() {
-        super();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public EntityAdapter(Long id, Integer version) {
         this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -56,22 +40,38 @@ public abstract class EntityAdapter implements EntityI {
             return false;
         }
         EntityAdapter castOther = (EntityAdapter) other;
-        if (id != null && castOther.id != null) {
-            return new EqualsBuilder().append(id, castOther.id).isEquals();
+        if ((this.id != null) && (castOther.id != null)) {
+            return new EqualsBuilder().append(this.id, castOther.id).isEquals();
         }
         return super.equals(other);
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public Integer getVersion() {
+        return this.version;
+    }
+
     @Override
     public int hashCode() {
-        if (id != null) {
-            return new HashCodeBuilder().append(id).toHashCode();
+        if (this.id != null) {
+            return new HashCodeBuilder().append(this.id).toHashCode();
         }
         return super.hashCode();
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", id).append("version", version).toString();
+        return new ToStringBuilder(this).append("id", this.id).append("version", this.version).toString();
     }
 }
