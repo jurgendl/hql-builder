@@ -41,7 +41,8 @@ public abstract class EntityAdapter implements EntityI {
         }
         EntityAdapter castOther = (EntityAdapter) other;
         if ((this.id != null) && (castOther.id != null)) {
-            return new EqualsBuilder().append(this.id, castOther.id).isEquals();
+            // FIXME class/proxy==
+            return new EqualsBuilder().append(this.id, castOther.id).append(this.getClass(), castOther.getClass()).isEquals();
         }
         return super.equals(other);
     }
