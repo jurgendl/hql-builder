@@ -88,7 +88,7 @@ public class Mapping<S, T> {
         return this.targetInfo;
     }
 
-    public T map(Map<Object, Object> context, MappingFactory factory, S source) throws MappingException {
+    protected T map(Map<Object, Object> context, MappingFactory factory, S source) throws MappingException {
         try {
             T target = this.classPair.getTargetClass().newInstance();
             return this.map(context, factory, source, target);
@@ -156,6 +156,14 @@ public class Mapping<S, T> {
         } catch (InstantiationException | IllegalAccessException ex1) {
             throw new MappingException(ex1);
         }
+    }
+
+    public T map(MappingFactory factory, S source) throws MappingException {
+        return this.map(new HashMap<>(), factory, source);
+    }
+
+    public T map(MappingFactory factory, S source, T target) throws MappingException {
+        return this.map(new HashMap<>(), factory, source, target);
     }
 
     protected T proxy(final T target) throws InstantiationException, IllegalAccessException {

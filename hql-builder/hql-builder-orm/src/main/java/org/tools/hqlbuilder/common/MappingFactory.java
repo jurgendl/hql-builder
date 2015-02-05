@@ -96,7 +96,7 @@ public class MappingFactory {
         return this.parallel;
     }
 
-    public <S, T> T map(Map<Object, Object> context, S source, Class<T> targetClass) {
+    protected <S, T> T map(Map<Object, Object> context, S source, Class<T> targetClass) {
         try {
             return this.map(context, source, targetClass.newInstance());
         } catch (InstantiationException | IllegalAccessException ex) {
@@ -111,6 +111,14 @@ public class MappingFactory {
         Class<T> targetClass = (Class<T>) target.getClass();
         Mapping<S, T> mapping = this.mapping(sourceClass, targetClass);
         return mapping.map(context, this, source, target);
+    }
+
+    public <S, T> T map(S source, Class<T> targetClass) {
+        return this.map(new HashMap<>(), source, targetClass);
+    }
+
+    public <S, T> T map(S source, T target) {
+        return this.map(new HashMap<>(), source, target);
     }
 
     public <S, T> Mapping<S, T> mapping(Class<S> sourceClass, Class<T> targetClass) {
