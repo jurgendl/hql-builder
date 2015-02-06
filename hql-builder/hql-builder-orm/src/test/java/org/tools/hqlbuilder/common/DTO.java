@@ -20,6 +20,8 @@ public class DTO {
 
     private Collection<CommonNestedDTO> collection = new ArrayList<>();
 
+    private CommonNestedDTO[] array;
+
     public String getVeld1() {
         return this.veld1;
     }
@@ -80,5 +82,13 @@ public class DTO {
 
     public void setCollection(Collection<CommonNestedDTO> collection) {
         this.collection = collection;
+    }
+
+    public CommonNestedDTO[] getArray() {
+        return this.array;
+    }
+
+    public void setArray(CommonNestedDTO[] array) {
+        this.array = array;
     }
 }
