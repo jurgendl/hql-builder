@@ -57,6 +57,10 @@ public class FormSettings implements Serializable {
 
     protected boolean renderPocketGrid = true;
 
+    protected boolean showMessagesTop = false;
+
+    protected boolean showMessagesBottom = true;
+
     public FormSettings() {
         super();
     }
@@ -318,5 +322,23 @@ public class FormSettings implements Serializable {
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public boolean isShowMessagesTop() {
+        return this.showMessagesTop;
+    }
+
+    public boolean isShowMessagesBottom() {
+        return this.showMessagesBottom;
+    }
+
+    public FormSettings setShowMessagesTop(boolean showMessagesTop) {
+        this.showMessagesTop = showMessagesTop;
+        return this;
+    }
+
+    public FormSettings setShowMessagesBottom(boolean showMessagesBottom) {
+        this.showMessagesBottom = showMessagesBottom;
+        return this;
     }
 }

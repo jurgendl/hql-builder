@@ -52,8 +52,9 @@ public class Mapping<S, T> {
         this.mappers.add((Map<Object, Object> context, S source, T target) -> {
             Property<S, SC> sourcePD = (Property<S, SC>) Mapping.this.sourceInfo.get(sourceProperty);
             SC sourceCollection = sourcePD.read(source);
-            TC targetCollection = collectionFactory.get();
-            for (SCT sourceIt : sourceCollection) {
+            // FIXME create based on type, remove collectionFactory
+                TC targetCollection = collectionFactory.get();
+                for (SCT sourceIt : sourceCollection) {
                 TCT targetIt;
                 if (context.containsKey(sourceIt)) {
                     targetIt = (TCT) context.get(sourceIt);
