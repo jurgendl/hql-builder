@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Assert;
@@ -24,6 +23,11 @@ public class MappingFactoryTest {
             commonNested.setCommonNestedField("commonNestedField");
             pojo.getCollection().add(commonNested);
         }
+        {
+            CommonNestedPojo commonNested = new CommonNestedPojo();
+            commonNested.setCommonNestedField("commonNestedField");
+            pojo.setArray(new CommonNestedPojo[] { commonNested });
+        }
         return pojo;
     }
 
@@ -33,8 +37,9 @@ public class MappingFactoryTest {
             Mapping<Pojo, DTO> mapping = this.mappingFactory.build(Pojo.class, DTO.class)//
                     .add((ctx, s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
                     .add((ctx, s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
-                    .collect(this.mappingFactory, "collection", "collection", () -> new ArrayList<CommonNestedDTO>(), CommonNestedDTO.class)//
-                    ;
+                    .collect(this.mappingFactory, "collection", CommonNestedDTO.class)//
+                    .collect(this.mappingFactory, "array", CommonNestedDTO.class)//
+            ;
             this.mappingFactory.build(CommonNestedPojo.class, CommonNestedDTO.class);
             Pojo pojo = this.getTestPojo();
             DTO dto = mapping.map(new HashMap<>(), this.mappingFactory, pojo);

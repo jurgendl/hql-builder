@@ -1,12 +1,17 @@
 package org.tools.hqlbuilder.common;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Supplier;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
@@ -46,25 +51,76 @@ public class Mapping<S, T> {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    public <SCT, TCT, SC extends Collection<SCT>, TC extends Collection<TCT>> Mapping<S, T> collect(MappingFactory factory, String sourceProperty,
-            String targetProperty, Supplier<TC> collectionFactory, Class<TCT> targetType) {
-        this.mappers.add((Map<Object, Object> context, S source, T target) -> {
-            Property<S, SC> sourcePD = (Property<S, SC>) Mapping.this.sourceInfo.get(sourceProperty);
-            SC sourceCollection = sourcePD.read(source);
-            // FIXME create based on type, remove collectionFactory
-                TC targetCollection = collectionFactory.get();
-                for (SCT sourceIt : sourceCollection) {
-                TCT targetIt;
+    public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, Class<TC> targetType) {
+        return collect(factory, sourceProperty, sourceProperty, targetType);
+    }
+
+    public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, String targetProperty, Class<TC> targetType) {
+        this.mappers.add(new Mapper<S, T>() {
+            @Override
+            public void apply(Map<Object, Object> context, S source, T target) {
+                @SuppressWarnings("unchecked")
+                Property<S, Object> sourcePD = (Property<S, Object>) Mapping.this.sourceInfo.get(sourceProperty);
+                @SuppressWarnings("unchecked")
+                Property<T, Object> targetPD = (Property<T, Object>) Mapping.this.targetInfo.get(targetProperty);
+                Object sourceIterable = sourcePD.read(source);
+                Collection<TC> tmpTargetCollection = new ArrayList<TC>();
+                if (sourceIterable instanceof Collection) {
+                    for (Object sourceIt : Collection.class.cast(sourceIterable)) {
+                        convertAndAdd(context, tmpTargetCollection, sourceIt);
+                    }
+                } else {
+                    for (Object sourceIt : Object[].class.cast(sourceIterable)) {
+                        convertAndAdd(context, tmpTargetCollection, sourceIt);
+                    }
+                }
+
+                Object targetIterable;
+                if (Object[].class.isAssignableFrom(targetPD.type())) {
+                    targetIterable = Object[].class.cast(Array.newInstance(targetPD.type().getComponentType(), tmpTargetCollection.size()));
+                    Iterator<TC> iterator = tmpTargetCollection.iterator();
+                    for (int i = 0; i < tmpTargetCollection.size(); i++) {
+                        Array.set(targetIterable, i, iterator.next());
+                    }
+                } else {
+                    targetIterable = targetPD.read(target);
+                    if (targetIterable == null) {
+                        try {
+                            targetIterable = targetPD.type().newInstance();
+                        } catch (InstantiationException | IllegalAccessException | RuntimeException ex1) {
+                            //
+                        }
+                    }
+                    if (targetIterable == null) {
+                        if (SortedSet.class.isAssignableFrom(targetPD.type())) {
+                            targetIterable = new TreeSet<TC>(tmpTargetCollection);
+                        } else if (Set.class.isAssignableFrom(targetPD.type())) {
+                            targetIterable = new HashSet<TC>(tmpTargetCollection);
+                        } else if (List.class.isAssignableFrom(targetPD.type())) {
+                            targetIterable = new ArrayList<TC>(tmpTargetCollection);
+                        } else {
+                            targetIterable = new ArrayList<TC>(tmpTargetCollection);
+                        }
+                    } else {
+                        @SuppressWarnings("unchecked")
+                        Collection<TC> coll = Collection.class.cast(targetIterable);
+                        coll.addAll(tmpTargetCollection);
+                    }
+                }
+                targetPD.write(target, targetIterable);
+            }
+
+            protected void convertAndAdd(Map<Object, Object> context, Collection<TC> tmpTargetCollection, Object obj) {
+                @SuppressWarnings("unchecked")
+                SC sourceIt = (SC) obj;
+                TC targetIt;
                 if (context.containsKey(sourceIt)) {
-                    targetIt = (TCT) context.get(sourceIt);
+                    targetIt = targetType.cast(context.get(sourceIt));
                 } else {
                     targetIt = factory.map(context, sourceIt, targetType);
                 }
-                targetCollection.add(targetIt);
+                tmpTargetCollection.add(targetIt);
             }
-            Property<T, TC> targetPD = (Property<T, TC>) Mapping.this.targetInfo.get(targetProperty);
-            targetPD.write(target, targetCollection);
         });
         return this;
     }

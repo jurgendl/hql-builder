@@ -20,6 +20,8 @@ public class Pojo {
 
     private Collection<CommonNestedPojo> collection = new ArrayList<>();
 
+    private CommonNestedPojo[] array;
+
     public String getVeld1() {
         return this.veld1;
     }
@@ -80,5 +82,13 @@ public class Pojo {
 
     public void setCollection(Collection<CommonNestedPojo> collection) {
         this.collection = collection;
+    }
+
+    public CommonNestedPojo[] getArray() {
+        return this.array;
+    }
+
+    public void setArray(CommonNestedPojo[] array) {
+        this.array = array;
     }
 }
