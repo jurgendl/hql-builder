@@ -183,7 +183,7 @@ public class WicketApplication extends WebApplication {
             this.getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         }
 
-        this.getResourceBundles().addCssBundle(WicketCSSRoot.class, "bundle.js", //
+        this.getResourceBundles().addCssBundle(WicketCSSRoot.class, "bundle.css", //
                 WicketCSSRoot.CLEARFIX, //
                 WicketCSSRoot.NORMALIZE, //
                 WicketCSSRoot.GENERAL);//
