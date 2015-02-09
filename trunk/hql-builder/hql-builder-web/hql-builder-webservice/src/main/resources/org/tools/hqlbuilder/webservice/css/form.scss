@@ -213,6 +213,14 @@ $width: 95%;
 					height: 22px;
 				}
 			}
+			li.tagit-new {
+				-moz-border-radius: 6px;
+				border-radius: 6px;
+				-webkit-border-radius: 6px;
+				border: 1px solid #CAD8F3;
+				width: 50px;
+				padding: 0 16px 0 6px;
+			}
 		}
 	}
 }
