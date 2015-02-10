@@ -130,9 +130,9 @@ public class WicketApplication extends WebApplication {
         Injector.get().inject(this);
 
         // framework settings
-        // if (deployed) {
-        this.getFrameworkSettings().setSerializer(new KryoSerializer());
-        // }
+        if (deployed) {
+            this.getFrameworkSettings().setSerializer(new KryoSerializer());
+        }
 
         this.getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
         // => ((WebClientInfo)WebRequestCycle.get().getClientInfo()).getProperties().isJavaEnabled()
