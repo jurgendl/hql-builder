@@ -11,7 +11,7 @@
 		<deploy.skip.demo>true</deploy.skip.demo>
 		<deploy.skip.web>true</deploy.skip.web>
 		<!-- general properties -->
-		<targetJdk>1.7</targetJdk><!-- should be compatible with 1.6; not ready for 1.8 - reason library problems -->
+		<targetJdk>1.7</targetJdk><!-- should be compatible with 1.6; not ready for 8 - reason library problems -->
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding><!-- fixed encoding -->
 		<project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
 		<!--  -->
