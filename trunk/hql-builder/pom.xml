@@ -531,11 +531,6 @@
 			</dependency>
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-tinymce</artifactId>
-				<version>${version.wicket.core}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-annotation</artifactId>
 				<version>${version.wicket.core}</version>
 			</dependency>
