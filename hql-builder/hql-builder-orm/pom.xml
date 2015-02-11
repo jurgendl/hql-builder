@@ -10,7 +10,7 @@
 	<name>hql-builder-orm</name>
 	<description>hql-builder-orm</description>
 	<properties>
-		<targetJdk>1.8</targetJdk>
+		<targetJdk>8</targetJdk>
 		<maven.compiler.source>${targetJdk}</maven.compiler.source>
 		<maven.compiler.target>${targetJdk}</maven.compiler.target>
 	</properties>
