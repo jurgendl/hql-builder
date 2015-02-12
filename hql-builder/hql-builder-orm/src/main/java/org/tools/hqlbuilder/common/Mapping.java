@@ -34,6 +34,8 @@ public class Mapping<S, T> {
             ProxyObject.class.cast(proxy).setHandler(new MethodHandler() {
                 @Override
                 public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
+                    // FIXME java.lang.IllegalAccessException: Class org.tools.hqlbuilder.common.Mapping$1 can not access a member of class
+                    // java.lang.Object with modifiers "protected"
                     // String propertyName = method.getName().substring(3);
                     // propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
                     // Property<Object, Object> pd = targetInfo.get(propertyName);
