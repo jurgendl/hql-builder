@@ -27,19 +27,33 @@ public class Mapping<S, T> {
     public static <T> T proxy(T target, Class<?> targetClass, Map<String, Property<Object, Object>> targetInfo) {
         try {
             ProxyFactory f = new ProxyFactory();
-            f.setFilter((method) -> method.getName().startsWith("get") && (method.getParameterCount() == 0));
+            // f.setFilter((method) -> method.getName().startsWith("get") && (method.getParameterCount() == 0));
             f.setSuperclass(targetClass);
             @SuppressWarnings("unchecked")
             T proxy = (T) f.createClass().newInstance();
             ProxyObject.class.cast(proxy).setHandler(new MethodHandler() {
                 @Override
                 public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
-                    String propertyName = method.getName().substring(3);
-                    propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-                    Property<Object, Object> pd = targetInfo.get(propertyName);
-                    Object invoke = method.getReturnType().newInstance();
-                    pd.write(target, invoke);
-                    return invoke;
+                    // String propertyName = method.getName().substring(3);
+                    // propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+                    // Property<Object, Object> pd = targetInfo.get(propertyName);
+                    // Object invoke = method.getReturnType().newInstance();
+                    // pd.write(target, invoke);
+                    // return invoke;
+                    try {
+                        Object invoke = method.invoke(target, args);
+                        if (method.getName().startsWith("get") && (args.length == 0) && (invoke == null)) {
+                            String propertyName = method.getName().substring(3);
+                            propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+                            Property<Object, Object> pd = targetInfo.get(propertyName);
+                            invoke = method.getReturnType().newInstance();
+                            pd.write(target, invoke);
+                        }
+                        return invoke;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return null;
+                    }
                 }
             });
             return proxy;
