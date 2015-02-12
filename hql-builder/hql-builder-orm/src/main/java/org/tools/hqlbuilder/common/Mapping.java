@@ -51,10 +51,16 @@ public class Mapping<S, T> {
         return this;
     }
 
+    /**
+     * TODO sourceProperty
+     */
     public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, Class<TC> targetType) {
         return collect(factory, sourceProperty, sourceProperty, targetType);
     }
 
+    /**
+     * TODO sourceProperty,targetProperty
+     */
     public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, String targetProperty, Class<TC> targetType) {
         this.mappers.add(new Mapper<S, T>() {
             @Override
@@ -133,6 +139,9 @@ public class Mapping<S, T> {
         this.conditionals.add(property);
     }
 
+    /**
+     * debug info
+     */
     public void debug() {
         //
     }
@@ -215,10 +224,16 @@ public class Mapping<S, T> {
         }
     }
 
+    /**
+     * map <S> to new <T>
+     */
     public T map(MappingFactory factory, S source) throws MappingException {
         return this.map(new HashMap<>(), factory, source);
     }
 
+    /**
+     * map <S> to existing <T>
+     */
     public T map(MappingFactory factory, S source, T target) throws MappingException {
         return this.map(new HashMap<>(), factory, source, target);
     }
