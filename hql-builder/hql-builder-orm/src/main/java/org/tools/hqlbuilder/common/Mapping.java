@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
@@ -68,9 +68,9 @@ public class Mapping<S, T> {
 
     protected final ClassPair<S, T> classPair;
 
-    protected final Map<String, Property<Object, Object>> sourceInfo = new HashMap<>();
+    protected final Map<String, Property<Object, Object>> sourceInfo = new ConcurrentHashMap<>();
 
-    protected final Map<String, Property<Object, Object>> targetInfo = new HashMap<>();
+    protected final Map<String, Property<Object, Object>> targetInfo = new ConcurrentHashMap<>();
 
     protected final List<Mapper<S, T>> mappers = new ArrayList<>();
 
@@ -274,14 +274,14 @@ public class Mapping<S, T> {
      * map <S> to new <T>
      */
     public T map(MappingFactory factory, S source) throws MappingException {
-        return this.map(new HashMap<>(), factory, source);
+        return this.map(factory.newContext(), factory, source);
     }
 
     /**
      * map <S> to existing <T>
      */
     public T map(MappingFactory factory, S source, T target) throws MappingException {
-        return this.map(new HashMap<>(), factory, source, target);
+        return this.map(factory.newContext(), factory, source, target);
     }
 
     public T proxy(T target) {

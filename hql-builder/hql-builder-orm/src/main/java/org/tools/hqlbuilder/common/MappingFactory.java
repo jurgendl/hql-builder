@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -29,66 +30,11 @@ public class MappingFactory {
     }
 
     /**
-     * convert <S> to <T>, create new <T>
-     */
-    public <S, T> T map(S source, Class<T> targetClass) {
-        return this.map(new HashMap<>(), source, targetClass);
-    }
-
-    /**
-     * convert <S> to <T>, reuse <T>
-     */
-    public <S, T> T map(S source, T target) {
-        return this.map(new HashMap<>(), source, target);
-    }
-
-    /**
-     * convert S[] to Collection<T>, create new Collection<T> and <T>
-     */
-    public <S, T, Col> Col map(S[] sourceArray, Class<T> targetClass, Collector<T, ?, Col> factory) {
-        return mapArrayToCollection(new HashMap<Object, Object>(), sourceArray, targetClass, factory);
-    }
-
-    /**
-     * convert Collection<S> to Collection<T>, create new Collection<T> and <T>
-     */
-    public <S, T, Col> Col map(Collection<S> sourceCollection, Class<T> targetClass, Collector<T, ?, Col> factory) {
-        return mapCollection(new HashMap<Object, Object>(), sourceCollection, targetClass, factory);
-    }
-
-    /**
-     * convert Collection<S> to <T>[], create new <T>[] and <T>
-     */
-    public <S, T> T[] map(Collection<S> sourceCollection, Class<T> targetClass) {
-        return mapCollectionToArray(new HashMap<Object, Object>(), sourceCollection, targetClass);
-    }
-
-    /**
-     * convert S[] to <T>[], create new <T>[] and <T>
-     */
-    public <S, T> T[] map(S[] sourceArray, Class<T> targetClass) {
-        return mapArray(new HashMap<Object, Object>(), sourceArray, targetClass);
-    }
-
-    /**
      * is object mappable?
      */
     public <S, T> boolean accept(Class<S> sourceClass, Class<T> targetClass) {
         ClassPair<S, T> classPair = new ClassPair<>(sourceClass, targetClass);
         return this.mappings.containsKey(classPair);
-    }
-
-    /**
-     * create and return and empty {@link Mapping} from <S> to <T>
-     */
-    public <S, T> Mapping<S, T> mapping(Class<S> sourceClass, Class<T> targetClass) {
-        ClassPair<S, T> classPair = new ClassPair<>(sourceClass, targetClass);
-        if (this.mappings.containsKey(classPair)) {
-            return this.mapping(classPair);
-        }
-        Mapping<S, T> mapping = new Mapping<S, T>(classPair);
-        this.mappings.put(classPair, mapping);
-        return mapping;
     }
 
     /**
@@ -162,6 +108,20 @@ public class MappingFactory {
         return this.parallel;
     }
 
+    /**
+     * convert Collection<S> to <T>[], create new <T>[] and <T>
+     */
+    public <S, T> T[] map(Collection<S> sourceCollection, Class<T> targetClass) {
+        return this.mapCollectionToArray(this.newContext(), sourceCollection, targetClass);
+    }
+
+    /**
+     * convert Collection<S> to Collection<T>, create new Collection<T> and <T>
+     */
+    public <S, T, Col> Col map(Collection<S> sourceCollection, Class<T> targetClass, Collector<T, ?, Col> factory) {
+        return this.mapCollection(this.newContext(), sourceCollection, targetClass, factory);
+    }
+
     protected <S, T> T map(Map<Object, Object> context, S source, Class<T> targetClass) {
         try {
             return this.map(context, source, targetClass.newInstance());
@@ -179,31 +139,75 @@ public class MappingFactory {
         return mapping.map(context, this, source, target);
     }
 
-    protected <S, T, Col> Col mapStream(HashMap<Object, Object> context, Stream<S> stream, Class<T> targetClass, Collector<T, ?, Col> factory) {
-        return stream.map(source -> map(context, source, targetClass)).collect(factory);
+    /**
+     * convert <S> to <T>, create new <T>
+     */
+    public <S, T> T map(S source, Class<T> targetClass) {
+        return this.map(this.newContext(), source, targetClass);
     }
 
-    protected <S, T, Col> Col mapArrayToCollection(HashMap<Object, Object> context, S[] sourceArray, Class<T> targetClass,
+    /**
+     * convert <S> to <T>, reuse <T>
+     */
+    public <S, T> T map(S source, T target) {
+        return this.map(this.newContext(), source, target);
+    }
+
+    /**
+     * convert S[] to <T>[], create new <T>[] and <T>
+     */
+    public <S, T> T[] map(S[] sourceArray, Class<T> targetClass) {
+        return this.mapArray(this.newContext(), sourceArray, targetClass);
+    }
+
+    /**
+     * convert S[] to Collection<T>, create new Collection<T> and <T>
+     */
+    public <S, T, Col> Col map(S[] sourceArray, Class<T> targetClass, Collector<T, ?, Col> factory) {
+        return this.mapArrayToCollection(this.newContext(), sourceArray, targetClass, factory);
+    }
+
+    protected <S, T> T[] mapArray(Map<Object, Object> context, S[] sourceArray, Class<T> targetClass) {
+        return J8.toArray(targetClass, this.mapArrayToCollection(context, sourceArray, targetClass, J8.list()));
+    }
+
+    protected <S, T, Col> Col mapArrayToCollection(Map<Object, Object> context, S[] sourceArray, Class<T> targetClass, Collector<T, ?, Col> factory) {
+        return this.mapStream(context, J8.stream(sourceArray, this.parallel), targetClass, factory);
+    }
+
+    protected <S, T, Col> Col mapCollection(Map<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass,
             Collector<T, ?, Col> factory) {
-        return mapStream(context, J8.stream(sourceArray, this.parallel), targetClass, factory);
+        return this.mapStream(context, J8.stream(sourceCollection, this.parallel), targetClass, factory);
     }
 
-    protected <S, T, Col> Col mapCollection(HashMap<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass,
-            Collector<T, ?, Col> factory) {
-        return mapStream(context, J8.stream(sourceCollection, this.parallel), targetClass, factory);
+    protected <S, T> T[] mapCollectionToArray(Map<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass) {
+        return J8.toArray(targetClass, this.mapCollection(context, sourceCollection, targetClass, J8.list()));
     }
 
-    protected <S, T> T[] mapCollectionToArray(HashMap<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass) {
-        return J8.toArray(targetClass, mapCollection(context, sourceCollection, targetClass, J8.list()));
-    }
-
-    protected <S, T> T[] mapArray(HashMap<Object, Object> context, S[] sourceArray, Class<T> targetClass) {
-        return J8.toArray(targetClass, mapArrayToCollection(context, sourceArray, targetClass, J8.list()));
+    /**
+     * create and return and empty {@link Mapping} from <S> to <T>
+     */
+    public <S, T> Mapping<S, T> mapping(Class<S> sourceClass, Class<T> targetClass) {
+        ClassPair<S, T> classPair = new ClassPair<>(sourceClass, targetClass);
+        if (this.mappings.containsKey(classPair)) {
+            return this.mapping(classPair);
+        }
+        Mapping<S, T> mapping = new Mapping<S, T>(classPair);
+        this.mappings.put(classPair, mapping);
+        return mapping;
     }
 
     @SuppressWarnings("unchecked")
     protected <S, T> Mapping<S, T> mapping(ClassPair<S, T> classPair) {
         return (Mapping<S, T>) this.mappings.get(classPair);
+    }
+
+    protected <S, T, Col> Col mapStream(Map<Object, Object> context, Stream<S> stream, Class<T> targetClass, Collector<T, ?, Col> factory) {
+        return stream.map(source -> this.map(context, source, targetClass)).collect(factory);
+    }
+
+    protected Map<Object, Object> newContext() {
+        return new ConcurrentHashMap<>();
     }
 
     public void setConversionService(ConversionService conversionService) {
