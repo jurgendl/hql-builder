@@ -47,7 +47,7 @@
 		<version.commons-collections4>4.0</version.commons-collections4><!-- recent version, keep up to date -->
 		<version.commons-beanutils>1.9.2</version.commons-beanutils><!-- recent version, keep up to date -->
 		<version.javassist>3.19.0-GA</version.javassist><!-- seems to be Java 1.8 ready -->
-		<version.ehcache>2.9.0</version.ehcache><!-- recent version, keep up to date -->
+		<version.ehcache>2.8.2</version.ehcache><!-- recent version, keep up to date; 2.9.0 gives problems -->
 		<version.resteasy>3.0.10.Final</version.resteasy><!-- keep up to date 3.x.x -->
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.4</version.httpclient><!-- keep up to date 4.x.x -->
