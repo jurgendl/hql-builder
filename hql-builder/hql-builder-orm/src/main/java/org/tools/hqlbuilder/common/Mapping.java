@@ -262,8 +262,11 @@ public class Mapping<S, T> {
                 factory.map(context, nestedSourceValue, nestedTargetValue);
             }
             return target;
-        } catch (InstantiationException | IllegalAccessException ex1) {
-            throw new MappingException(ex1);
+        } catch (Exception ex) {
+            Mapping.logger.error("source={}", source);
+            Mapping.logger.error("target={}", target);
+            Mapping.logger.error("{}", ex);
+            throw new MappingException(ex);
         }
     }
 
