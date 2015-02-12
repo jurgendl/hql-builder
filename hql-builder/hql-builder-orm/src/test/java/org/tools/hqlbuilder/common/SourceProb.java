@@ -12,4 +12,8 @@ public class SourceProb {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public void test() {
+        this.date = new Date(0);
+    }
 }

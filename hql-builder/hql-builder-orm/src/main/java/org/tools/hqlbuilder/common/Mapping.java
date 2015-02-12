@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.common;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +24,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Mapping<S, T> {
+    public static <T> T proxy(T target, Class<?> targetClass, Map<String, Property<Object, Object>> targetInfo) {
+        try {
+            ProxyFactory f = new ProxyFactory();
+            f.setFilter((method) -> method.getName().startsWith("get") && (method.getParameterCount() == 0));
+            f.setSuperclass(targetClass);
+            @SuppressWarnings("unchecked")
+            T proxy = (T) f.createClass().newInstance();
+            ProxyObject.class.cast(proxy).setHandler(new MethodHandler() {
+                @Override
+                public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
+                    String propertyName = method.getName().substring(3);
+                    propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+                    Property<Object, Object> pd = targetInfo.get(propertyName);
+                    Object invoke = method.getReturnType().newInstance();
+                    pd.write(target, invoke);
+                    return invoke;
+                }
+            });
+            return proxy;
+        } catch (InstantiationException | IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     protected static final Logger logger = LoggerFactory.getLogger(Mapping.class);
 
     protected final ClassPair<S, T> classPair;
@@ -57,7 +82,7 @@ public class Mapping<S, T> {
      * TODO sourceProperty
      */
     public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, Class<TC> targetType) {
-        return collect(factory, sourceProperty, sourceProperty, targetType);
+        return this.collect(factory, sourceProperty, sourceProperty, targetType);
     }
 
     /**
@@ -75,11 +100,11 @@ public class Mapping<S, T> {
                 Collection<TC> tmpTargetCollection = new ArrayList<TC>();
                 if (sourceIterable instanceof Collection) {
                     for (Object sourceIt : Collection.class.cast(sourceIterable)) {
-                        convertAndAdd(context, tmpTargetCollection, sourceIt);
+                        this.convertAndAdd(context, tmpTargetCollection, sourceIt);
                     }
                 } else {
                     for (Object sourceIt : Object[].class.cast(sourceIterable)) {
-                        convertAndAdd(context, tmpTargetCollection, sourceIt);
+                        this.convertAndAdd(context, tmpTargetCollection, sourceIt);
                     }
                 }
 
@@ -240,32 +265,8 @@ public class Mapping<S, T> {
         return this.map(new HashMap<>(), factory, source, target);
     }
 
-    protected T proxy(final T target) throws InstantiationException, IllegalAccessException {
-        ProxyFactory f = new ProxyFactory();
-        f.setSuperclass(this.classPair.getTargetClass());
-        MethodHandler mi = new MethodHandler() {
-            @Override
-            public Object invoke(Object self, java.lang.reflect.Method method, java.lang.reflect.Method paramMethod2, Object[] args) throws Throwable {
-                try {
-                    Object invoke = method.invoke(target, args);
-                    if (method.getName().startsWith("get") && (args.length == 0) && (invoke == null)) {
-                        String propertyName = method.getName().substring(3);
-                        propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-                        Property<Object, Object> pd = Mapping.this.targetInfo.get(propertyName);
-                        invoke = method.getReturnType().newInstance();
-                        pd.write(target, invoke);
-                    }
-                    return invoke;
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    return null;
-                }
-            }
-        };
-        @SuppressWarnings("unchecked")
-        T proxy = (T) f.createClass().newInstance();
-        ((ProxyObject) proxy).setHandler(mi);
-        return proxy;
+    public T proxy(T target) {
+        return Mapping.proxy(target, this.classPair.getTargetClass(), Mapping.this.targetInfo);
     }
 
     protected void setSourceInfo(Map<String, Property<Object, Object>> sourceInfo) {
@@ -280,7 +281,7 @@ public class Mapping<S, T> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).appendSuper(super.toString()).append("classPair", classPair)
-                .append("mappers", mappers).append("conditionals", conditionals).append("collections", collections).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).appendSuper(super.toString()).append("classPair", this.classPair)
+                .append("mappers", this.mappers).append("conditionals", this.conditionals).append("collections", this.collections).toString();
     }
 }
