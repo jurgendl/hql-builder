@@ -1,6 +1,7 @@
 package org.tools.hqlbuilder.common;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -8,6 +9,19 @@ import org.junit.Test;
 
 public class MappingFactoryTest {
     private MappingFactory mappingFactory = new MappingFactory();
+
+    protected Mapping<Pojo, DTO> init() {
+        Mapping<Pojo, DTO> mapping = this.mappingFactory.build(Pojo.class, DTO.class)//
+                .add((ctx, s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
+                .add((ctx, s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
+                .collect(this.mappingFactory, "collection", CommonNestedDTO.class)//
+                .collect(this.mappingFactory, "array", CommonNestedDTO.class)//
+                ;
+        this.mappingFactory.build(CommonNestedPojo.class, CommonNestedDTO.class);
+        this.mappingFactory.build(Retro.class, RetroB.class);
+        this.mappingFactory.build(SourceProb.class, TargetProb.class);
+        return mapping;
+    }
 
     private Pojo getTestPojo(String suffix, int index) {
         Pojo pojo = new Pojo();
@@ -34,38 +48,24 @@ public class MappingFactoryTest {
 
     @Test
     public void test1() {
-        try {
-            Mapping<Pojo, DTO> mapping = init();
-            Pojo pojo = this.getTestPojo("test1", 1);
-            DTO dto = mapping.map(this.mappingFactory, pojo);
-            Assert.assertEquals(pojo.getVeld1(), dto.getVeld1());
-            Assert.assertEquals(pojo.getVeld2(), dto.getVeld2().intValue());
-            Assert.assertEquals(pojo.getVeld3(), dto.getVeld3());
-            Assert.assertEquals(pojo.getNestedPojo().getNestedVeld(), dto.getNestedDTOVeld());
-            Assert.assertEquals(pojo.getNestedPojoVeld(), dto.getNestedDTO().getNestedVeld());
-            Assert.assertEquals(pojo.getCommonNested().getCommonNestedField(), dto.getCommonNested().getCommonNestedField());
-            Assert.assertEquals(pojo.getCollection().iterator().next().getCommonNestedField(), dto.getCollection().iterator().next()
-                    .getCommonNestedField());
-        } catch (Exception ex) {
-            ex.printStackTrace(System.out);
-            Assert.fail();
-        }
-    }
+        init();
 
-    protected Mapping<Pojo, DTO> init() {
-        Mapping<Pojo, DTO> mapping = this.mappingFactory.build(Pojo.class, DTO.class)//
-                .add((ctx, s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
-                .add((ctx, s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
-                .collect(this.mappingFactory, "collection", CommonNestedDTO.class)//
-                .collect(this.mappingFactory, "array", CommonNestedDTO.class)//
-        ;
-        this.mappingFactory.build(CommonNestedPojo.class, CommonNestedDTO.class);
-        this.mappingFactory.build(Retro.class, RetroB.class);
-        return mapping;
+        Pojo pojo = this.getTestPojo("test1", 1);
+        DTO dto = mappingFactory.map(pojo, DTO.class);
+        Assert.assertEquals(pojo.getVeld1(), dto.getVeld1());
+        Assert.assertEquals(pojo.getVeld2(), dto.getVeld2().intValue());
+        Assert.assertEquals(pojo.getVeld3(), dto.getVeld3());
+        Assert.assertEquals(pojo.getNestedPojo().getNestedVeld(), dto.getNestedDTOVeld());
+        Assert.assertEquals(pojo.getNestedPojoVeld(), dto.getNestedDTO().getNestedVeld());
+        Assert.assertEquals(pojo.getCommonNested().getCommonNestedField(), dto.getCommonNested().getCommonNestedField());
+        Assert.assertEquals(pojo.getCollection().iterator().next().getCommonNestedField(), dto.getCollection().iterator().next()
+                .getCommonNestedField());
     }
 
     @Test
     public void test2() {
+        init();
+
         Retro r1 = new Retro();
         Retro r2 = new Retro();
         r1.setRetro(r2);
@@ -76,6 +76,7 @@ public class MappingFactoryTest {
     @Test
     public void test3() {
         init();
+
         List<Pojo> pc = new ArrayList<>();
         Pojo p1 = this.getTestPojo("test3a", 30);
         pc.add(p1);
@@ -122,5 +123,16 @@ public class MappingFactoryTest {
             Assert.assertEquals(c.get(1).getVeld2().intValue(), p2.getVeld2());
             Assert.assertEquals(c.get(1).getVeld3(), p2.getVeld3());
         }
+    }
+
+    @Test
+    public void test4() {
+        init();
+
+        SourceProb s = new SourceProb();
+        s.setDate(new Date());
+        TargetProb t = new TargetProb();
+        mappingFactory.map(s, t);
+        Assert.assertEquals(s.getDate(), t.getDate());
     }
 }

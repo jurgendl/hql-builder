@@ -17,6 +17,8 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -274,5 +276,11 @@ public class Mapping<S, T> {
     protected void setTargetInfo(Map<String, Property<Object, Object>> targetInfo) {
         this.targetInfo.clear();
         this.targetInfo.putAll(targetInfo);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).appendSuper(super.toString()).append("classPair", classPair)
+                .append("mappers", mappers).append("conditionals", conditionals).append("collections", collections).toString();
     }
 }
