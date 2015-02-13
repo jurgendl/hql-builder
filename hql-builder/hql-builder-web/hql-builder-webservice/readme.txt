@@ -260,3 +260,18 @@ Introduce ajaxical polls to keep the session alive as long as enduser has the pa
 Here ${pageContext.session.maxInactiveInterval} returns the remnant of seconds the session has yet to live (and is been deducted with 10 seconds -just to be on time with poll- and converted to milliseconds so that it suits what setInterval() expects).
 The $.get('poll') should call a servlet which is mapped on an url-pattern of /poll and contains basically the following line in the doGet() method.
 **request.getSession(); // Keep session alive.
+
+
+
+
+http://jquery-plugins.net/treed-powerful-tree-editor
+http://aexmachina.info/jquery-bonsai
+http://wwwendt.de/tech/fancytree/demo/
+http://jquery-plugins.net/dynatree-dynamic-tree-view-jquery-plugin
+
+
+
+
+
+
+
