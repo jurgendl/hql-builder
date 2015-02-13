@@ -268,7 +268,7 @@ http://jquery-plugins.net/treed-powerful-tree-editor
 http://aexmachina.info/jquery-bonsai
 http://wwwendt.de/tech/fancytree/demo/
 http://jquery-plugins.net/dynatree-dynamic-tree-view-jquery-plugin
-
+http://sandbox.crac-design.com/jaofiletree/
 
 
 
