@@ -28,6 +28,7 @@ public class Mapping<S, T> {
         try {
             ProxyFactory f = new ProxyFactory();
             // f.setFilter((method) -> method.getName().startsWith("get") && (method.getParameterCount() == 0));
+            f.setFilter((method) -> !(method.getName().equals("finalize") && (method.getParameterCount() == 0)));
             f.setSuperclass(targetClass);
             @SuppressWarnings("unchecked")
             T proxy = (T) f.createClass().newInstance();
@@ -263,6 +264,13 @@ public class Mapping<S, T> {
             }
             return target;
         } catch (Exception ex) {
+            if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
+                Mapping.logger.warn("source={}", source);
+                Mapping.logger.warn("target={}", target);
+                Mapping.logger.warn("{}", ex);
+                context.remove(source);
+                return null;
+            }
             Mapping.logger.error("source={}", source);
             Mapping.logger.error("target={}", target);
             Mapping.logger.error("{}", ex);
