@@ -130,7 +130,7 @@ public class WicketApplication extends WebApplication {
         Injector.get().inject(this);
 
         // framework settings
-        if (deployed) {
+        if (false && deployed) {
             this.getFrameworkSettings().setSerializer(new KryoSerializer());
         }
 
