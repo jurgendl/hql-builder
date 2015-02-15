@@ -69,7 +69,7 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
         return r;
     }
 
-    @SuppressWarnings({ "unchecked", "cast", "rawtypes" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public Class<T> getPropertyType() {
         Class c = Collection.class;
