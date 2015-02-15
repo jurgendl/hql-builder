@@ -190,8 +190,8 @@ public class WicketApplication extends WebApplication {
         this.getResourceSettings().setUseMinifiedResources(deployed);
         this.getResourceSettings().setEncodeJSessionId(deployed);
         this.getResourceSettings().setDefaultCacheDuration(
-                StringUtils.isNotBlank(this.cacheDuration) ? Duration.valueOf(this.cacheDuration) : (inDevelopment ? Duration.NONE
-                        : WebResponse.MAX_CACHE_DURATION));
+                StringUtils.isNotBlank(this.cacheDuration) ? ("none".equals(this.cacheDuration) ? Duration.NONE : Duration
+                        .valueOf(this.cacheDuration)) : (inDevelopment ? Duration.NONE : WebResponse.MAX_CACHE_DURATION));
 
         if (deployed) {
             // minify your resources on deploy
