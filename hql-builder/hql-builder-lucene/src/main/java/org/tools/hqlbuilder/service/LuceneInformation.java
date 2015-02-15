@@ -39,6 +39,7 @@ import org.tools.hqlbuilder.common.interfaces.Information;
 public abstract class LuceneInformation implements Information {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
+    @SuppressWarnings("deprecation")
     protected static final Version LUCENE_VERSION = Version.LUCENE_4_9;
 
     protected static final Store STORE = Store.YES;
@@ -55,13 +56,19 @@ public abstract class LuceneInformation implements Information {
 
     protected boolean persistent = false;
 
-    protected final Analyzer analyzer = new StandardAnalyzer(LUCENE_VERSION);
+    @SuppressWarnings("deprecation")
+    protected final Analyzer analyzer = new StandardAnalyzer(LuceneInformation.LUCENE_VERSION);
 
     protected Directory index;
+
+    protected boolean ready = false;
 
     public LuceneInformation() {
         super();
     }
+
+    protected abstract void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
+            throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException;
 
     @Override
     public void init(String id, Object sf) throws IOException, UnsupportedOperationException {
@@ -69,23 +76,23 @@ public abstract class LuceneInformation implements Information {
 
         Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
-        if (persistent) {
-            index = new NIOFSDirectory(new File(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LUCENE_VERSION + "/"
+        if (this.persistent) {
+            this.index = new NIOFSDirectory(new File(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LuceneInformation.LUCENE_VERSION + "/"
                     + id.replaceAll("[^A-Za-z0-9]", "")));
         } else {
-            index = new RAMDirectory();
+            this.index = new RAMDirectory();
         }
-        IndexWriterConfig config = new IndexWriterConfig(LUCENE_VERSION, analyzer);
-        IndexWriter w = new IndexWriter(index, config);
+        IndexWriterConfig config = new IndexWriterConfig(LuceneInformation.LUCENE_VERSION, this.analyzer);
+        IndexWriter w = new IndexWriter(this.index, config);
 
         try {
             for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
                 if (i.getValue() instanceof JoinedSubclassEntityPersister) {
                     JoinedSubclassEntityPersister p = (JoinedSubclassEntityPersister) i.getValue();
-                    create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+                    this.create(w, sessionFactory, i.getKey(), p.getClassMetadata());
                 } else if (i.getValue() instanceof SingleTableEntityPersister) {
                     SingleTableEntityPersister p = (SingleTableEntityPersister) i.getValue();
-                    create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+                    this.create(w, sessionFactory, i.getKey(), p.getClassMetadata());
                 } else {
                     throw new UnsupportedOperationException(i.getValue().getClass().getName());
                 }
@@ -100,49 +107,23 @@ public abstract class LuceneInformation implements Information {
 
         w.close();
 
-        ready = true;
+        this.ready = true;
     }
 
-    protected abstract void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
-            throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException;
+    public boolean isPersistent() {
+        return this.persistent;
+    }
 
-    @Override
-    public List<String> search(String text, String typeName, int hitsPerPage) {
-        Query q;
-        try {
-            if (typeName != null) {
-                BooleanQuery bq = new BooleanQuery();
-                Query query = new StandardQueryParser(analyzer).parse(text, DATA);
-                bq.add(query, BooleanClause.Occur.MUST);
-                bq.add(new TermQuery(new Term(TYPE, typeName)), BooleanClause.Occur.MUST);
-                q = bq;
-            } else {
-                q = new StandardQueryParser(analyzer).parse(text, DATA);
-            }
-        } catch (QueryNodeException e) {
-            throw new RuntimeException(e.getMessage());
+    public boolean isReady() {
+        return this.ready;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected void printEnumValues(Class<? extends Enum> enumclass, StringBuilder sb) {
+        sb.append(this.transformClassName(enumclass.getName()));
+        for (Object v : EnumSet.allOf(enumclass)) {
+            sb.append(" ").append(v);
         }
-
-        List<String> results = new ArrayList<String>();
-        try {
-            IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(index));
-            TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
-            searcher.search(q, collector);
-            ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
-            logger.info("Found " + hits.length + " hits.");
-            for (int i = 0; i < hits.length; ++i) {
-                int docId = hits[i].doc;
-                Document d = searcher.doc(docId);
-                logger.debug((i + 1) + ". " + d.get(NAME));
-                logger.debug(d.getField(DATA).stringValue());
-                results.add(d.get(NAME));
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        return results;
     }
 
     protected String proper(String name) {
@@ -159,33 +140,54 @@ public abstract class LuceneInformation implements Information {
         return sb.toString().trim();
     }
 
+    @Override
+    public List<String> search(String text, String typeName, int hitsPerPage) {
+        Query q;
+        try {
+            if (typeName != null) {
+                BooleanQuery bq = new BooleanQuery();
+                Query query = new StandardQueryParser(this.analyzer).parse(text, LuceneInformation.DATA);
+                bq.add(query, BooleanClause.Occur.MUST);
+                bq.add(new TermQuery(new Term(LuceneInformation.TYPE, typeName)), BooleanClause.Occur.MUST);
+                q = bq;
+            } else {
+                q = new StandardQueryParser(this.analyzer).parse(text, LuceneInformation.DATA);
+            }
+        } catch (QueryNodeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        List<String> results = new ArrayList<String>();
+        try {
+            IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(this.index));
+            TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+            searcher.search(q, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+            LuceneInformation.logger.info("Found " + hits.length + " hits.");
+            for (int i = 0; i < hits.length; ++i) {
+                int docId = hits[i].doc;
+                Document d = searcher.doc(docId);
+                LuceneInformation.logger.debug((i + 1) + ". " + d.get(LuceneInformation.NAME));
+                LuceneInformation.logger.debug(d.getField(LuceneInformation.DATA).stringValue());
+                results.add(d.get(LuceneInformation.NAME));
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return results;
+    }
+
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
+    }
+
     protected Object transformClassName(String name) {
         try {
             return name.substring(1 + name.substring(0, name.lastIndexOf('.')).lastIndexOf('.')).replaceAll("\\.", " ");
         } catch (IndexOutOfBoundsException ex) {
             return name.replaceAll("\\.", " ");
         }
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected void printEnumValues(Class<? extends Enum> enumclass, StringBuilder sb) {
-        sb.append(transformClassName(enumclass.getName()));
-        for (Object v : EnumSet.allOf(enumclass)) {
-            sb.append(" ").append(v);
-        }
-    }
-
-    protected boolean ready = false;
-
-    public boolean isReady() {
-        return ready;
-    }
-
-    public boolean isPersistent() {
-        return this.persistent;
-    }
-
-    public void setPersistent(boolean persistent) {
-        this.persistent = persistent;
     }
 }
