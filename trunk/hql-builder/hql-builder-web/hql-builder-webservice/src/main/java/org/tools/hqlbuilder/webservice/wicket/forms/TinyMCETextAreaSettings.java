@@ -25,14 +25,176 @@ public class TinyMCETextAreaSettings extends AbstractTextAreaSettings<TinyMCETex
     }
 
     public TinyMCETextAreaSettings(Theme theme) {
-        tinyMCESettings = new TinyMCESettings(theme);
+        this.tinyMCESettings = new TinyMCESettings(theme);
+    }
+
+    public TinyMCETextAreaSettings add(Button button, Toolbar toolbar, Position position) {
+        this.getTinyMCESettings().add(button, toolbar, position);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings addCustomSetting(String customSetting) {
+        this.getTinyMCESettings().addCustomSetting(customSetting);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings disableButton(Button button) {
+        this.getTinyMCESettings().disableButton(button);
+        return this;
+    }
+
+    public String getAdditionalPluginJavaScript() {
+        return this.getTinyMCESettings().getAdditionalPluginJavaScript();
+    }
+
+    public String getBlockFormats() {
+        return this.getTinyMCESettings().getBlockFormats();
+    }
+
+    public ResourceReference getContentCss() {
+        return this.getTinyMCESettings().getContentCss();
+    }
+
+    public Boolean getConvertUrls() {
+        return this.getTinyMCESettings().getConvertUrls();
+    }
+
+    public String[] getCustomSettings() {
+        return this.getTinyMCESettings().getCustomSettings();
+    }
+
+    public String getDocumentBaseUrl() {
+        return this.getTinyMCESettings().getDocumentBaseUrl();
+    }
+
+    public EntityEncoding getEntityEncoding() {
+        return this.getTinyMCESettings().getEntityEncoding();
+    }
+
+    public boolean getHorizontalResizing() {
+        return this.getTinyMCESettings().getHorizontalResizing();
+    }
+
+    public Language getLanguage() {
+        return this.getTinyMCESettings().getLanguage();
+    }
+
+    public String getLoadPluginJavaScript() {
+        return this.getTinyMCESettings().getLoadPluginJavaScript();
+    }
+
+    public Boolean getRelativeUrls() {
+        return this.getTinyMCESettings().getRelativeUrls();
+    }
+
+    public Boolean getRemoveScriptHost() {
+        return this.getTinyMCESettings().getRemoveScriptHost();
+    }
+
+    public boolean getResizing() {
+        return this.getTinyMCESettings().getResizing();
+    }
+
+    public boolean getResizingUseCookie() {
+        return this.getTinyMCESettings().getResizingUseCookie();
+    }
+
+    public Location getStatusbarLocation() {
+        return this.getTinyMCESettings().getStatusbarLocation();
+    }
+
+    public Theme getTheme() {
+        return this.getTinyMCESettings().getTheme();
     }
 
     public TinyMCESettings getTinyMCESettings() {
-        if (tinyMCESettings == null) {
-            tinyMCESettings = new TinyMCESettings();
+        if (this.tinyMCESettings == null) {
+            this.tinyMCESettings = new TinyMCESettings();
         }
-        return tinyMCESettings;
+        return this.tinyMCESettings;
+    }
+
+    public Align getToolbarAlign() {
+        return this.getTinyMCESettings().getToolbarAlign();
+    }
+
+    public List<Button> getToolbarButtons(Toolbar toolbar) {
+        return this.getTinyMCESettings().getToolbarButtons(toolbar);
+    }
+
+    public Location getToolbarLocation() {
+        return this.getTinyMCESettings().getToolbarLocation();
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return this.getTinyMCESettings().isReadOnly();
+    }
+
+    public TinyMCETextAreaSettings register(Plugin plugin) {
+        this.getTinyMCESettings().register(plugin);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setBlockFormats(String blockFormats) {
+        this.getTinyMCESettings().setBlockFormats(blockFormats);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setContentCss(ResourceReference contentCss) {
+        this.getTinyMCESettings().setContentCss(contentCss);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setConvertUrls(boolean convertUrls) {
+        this.getTinyMCESettings().setConvertUrls(convertUrls);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setDocumentBaseUrl(String documentBaseUrl) {
+        this.getTinyMCESettings().setDocumentBaseUrl(documentBaseUrl);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setEntityEncoding(EntityEncoding entityEncoding) {
+        this.getTinyMCESettings().setEntityEncoding(entityEncoding);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setHorizontalResizing(boolean horizontalResizing) {
+        this.getTinyMCESettings().setHorizontalResizing(horizontalResizing);
+        return this;
+    }
+
+    @Override
+    public TinyMCETextAreaSettings setReadOnly(boolean readOnly) {
+        this.getTinyMCESettings().setReadOnly(readOnly);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setRelativeUrls(Boolean relativeUrls) {
+        this.getTinyMCESettings().setRelativeUrls(relativeUrls);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setRemoveScriptHost(Boolean removeScriptHost) {
+        this.getTinyMCESettings().setRemoveScriptHost(removeScriptHost);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setResizing(boolean resizing) {
+        this.getTinyMCESettings().setResizing(resizing);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setResizingUseCookie(boolean resizingUseCookie) {
+        this.getTinyMCESettings().setResizingUseCookie(resizingUseCookie);
+        return this;
+    }
+
+    public TinyMCETextAreaSettings setStatusbarLocation(Location statusbarLocation) {
+        this.getTinyMCESettings().setStatusbarLocation(statusbarLocation);
+        return this;
     }
 
     public TinyMCETextAreaSettings setTinyMCESettings(TinyMCESettings tinyMCESettings) {
@@ -40,178 +202,18 @@ public class TinyMCETextAreaSettings extends AbstractTextAreaSettings<TinyMCETex
         return this;
     }
 
-    public Theme getTheme() {
-        return getTinyMCESettings().getTheme();
-    }
-
-    public Language getLanguage() {
-        return getTinyMCESettings().getLanguage();
-    }
-
-    public String getDocumentBaseUrl() {
-        return getTinyMCESettings().getDocumentBaseUrl();
-    }
-
-    public TinyMCETextAreaSettings setDocumentBaseUrl(String documentBaseUrl) {
-        getTinyMCESettings().setDocumentBaseUrl(documentBaseUrl);
-        return this;
-    }
-
-    public TinyMCETextAreaSettings addCustomSetting(String customSetting) {
-        getTinyMCESettings().addCustomSetting(customSetting);
-        return this;
-    }
-
-    public String[] getCustomSettings() {
-        return getTinyMCESettings().getCustomSettings();
-    }
-
-    public ResourceReference getContentCss() {
-        return getTinyMCESettings().getContentCss();
-    }
-
-    public TinyMCETextAreaSettings setContentCss(ResourceReference contentCss) {
-        getTinyMCESettings().setContentCss(contentCss);
-        return this;
-    }
-
-    public String getBlockFormats() {
-        return getTinyMCESettings().getBlockFormats();
-    }
-
-    public TinyMCETextAreaSettings setBlockFormats(String blockFormats) {
-        getTinyMCESettings().setBlockFormats(blockFormats);
-        return this;
-    }
-
-    public TinyMCETextAreaSettings setToolbarLocation(Location toolbarLocation) {
-        getTinyMCESettings().setToolbarLocation(toolbarLocation);
-        return this;
-    }
-
-    public Location getToolbarLocation() {
-        return getTinyMCESettings().getToolbarLocation();
-    }
-
-    public TinyMCETextAreaSettings setStatusbarLocation(Location statusbarLocation) {
-        getTinyMCESettings().setStatusbarLocation(statusbarLocation);
-        return this;
-    }
-
-    public Location getStatusbarLocation() {
-        return getTinyMCESettings().getStatusbarLocation();
-    }
-
     public TinyMCETextAreaSettings setToolbarAlign(Align toolbarAlign) {
-        getTinyMCESettings().setToolbarAlign(toolbarAlign);
-        return this;
-    }
-
-    public Align getToolbarAlign() {
-        return getTinyMCESettings().getToolbarAlign();
-    }
-
-    public TinyMCETextAreaSettings setEntityEncoding(EntityEncoding entityEncoding) {
-        getTinyMCESettings().setEntityEncoding(entityEncoding);
-        return this;
-    }
-
-    public EntityEncoding getEntityEncoding() {
-        return getTinyMCESettings().getEntityEncoding();
-    }
-
-    public TinyMCETextAreaSettings setReadOnly(boolean readOnly) {
-        getTinyMCESettings().setReadOnly(readOnly);
-        return this;
-    }
-
-    public boolean isReadOnly() {
-        return getTinyMCESettings().isReadOnly();
-    }
-
-    public TinyMCETextAreaSettings setResizing(boolean resizing) {
-        getTinyMCESettings().setResizing(resizing);
-        return this;
-    }
-
-    public boolean getResizing() {
-        return getTinyMCESettings().getResizing();
-    }
-
-    public TinyMCETextAreaSettings setHorizontalResizing(boolean horizontalResizing) {
-        getTinyMCESettings().setHorizontalResizing(horizontalResizing);
-        return this;
-    }
-
-    public boolean getHorizontalResizing() {
-        return getTinyMCESettings().getHorizontalResizing();
-    }
-
-    public boolean getResizingUseCookie() {
-        return getTinyMCESettings().getResizingUseCookie();
-    }
-
-    public TinyMCETextAreaSettings setResizingUseCookie(boolean resizingUseCookie) {
-        getTinyMCESettings().setResizingUseCookie(resizingUseCookie);
-        return this;
-    }
-
-    public TinyMCETextAreaSettings setConvertUrls(boolean convertUrls) {
-        getTinyMCESettings().setConvertUrls(convertUrls);
-        return this;
-    }
-
-    public Boolean getConvertUrls() {
-        return getTinyMCESettings().getConvertUrls();
-    }
-
-    public TinyMCETextAreaSettings setRemoveScriptHost(Boolean removeScriptHost) {
-        getTinyMCESettings().setRemoveScriptHost(removeScriptHost);
-        return this;
-    }
-
-    public Boolean getRemoveScriptHost() {
-        return getTinyMCESettings().getRemoveScriptHost();
-    }
-
-    public TinyMCETextAreaSettings setRelativeUrls(Boolean relativeUrls) {
-        getTinyMCESettings().setRelativeUrls(relativeUrls);
-        return this;
-    }
-
-    public Boolean getRelativeUrls() {
-        return getTinyMCESettings().getRelativeUrls();
-    }
-
-    public TinyMCETextAreaSettings add(Button button, Toolbar toolbar, Position position) {
-        getTinyMCESettings().add(button, toolbar, position);
-        return this;
-    }
-
-    public TinyMCETextAreaSettings disableButton(Button button) {
-        getTinyMCESettings().disableButton(button);
+        this.getTinyMCESettings().setToolbarAlign(toolbarAlign);
         return this;
     }
 
     public TinyMCETextAreaSettings setToolbarButtons(Toolbar toolbar, List<Button> buttons) {
-        getTinyMCESettings().setToolbarButtons(toolbar, buttons);
+        this.getTinyMCESettings().setToolbarButtons(toolbar, buttons);
         return this;
     }
 
-    public List<Button> getToolbarButtons(Toolbar toolbar) {
-        return getTinyMCESettings().getToolbarButtons(toolbar);
-    }
-
-    public TinyMCETextAreaSettings register(Plugin plugin) {
-        getTinyMCESettings().register(plugin);
+    public TinyMCETextAreaSettings setToolbarLocation(Location toolbarLocation) {
+        this.getTinyMCESettings().setToolbarLocation(toolbarLocation);
         return this;
-    }
-
-    public String getLoadPluginJavaScript() {
-        return getTinyMCESettings().getLoadPluginJavaScript();
-    }
-
-    public String getAdditionalPluginJavaScript() {
-        return getTinyMCESettings().getAdditionalPluginJavaScript();
     }
 }
