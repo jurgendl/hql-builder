@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.webservice.jquery.ui.jqueryui;
 
-import org.apache.wicket.request.resource.ResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.CssResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 
@@ -10,8 +9,8 @@ import com.googlecode.wicket.jquery.ui.settings.JQueryUILibrarySettings;
  * version 1.11.1
  */
 public class JQueryUI {
-    public static ResourceReference getJQueryUIReference() {
-        return JQueryUILibrarySettings.get().getJavaScriptReference();
+    public static org.apache.wicket.request.resource.JavaScriptResourceReference getJQueryUIReference() {
+        return (org.apache.wicket.request.resource.JavaScriptResourceReference) JQueryUILibrarySettings.get().getJavaScriptReference();
         // return ((IJQueryLibrarySettings) WicketApplication.get().getJavaScriptLibrarySettings()).getJQueryUIReference();
     }
 
@@ -25,9 +24,9 @@ public class JQueryUI {
 
     static {
         try {
-            JQUERY_UI_FACTORY_JS.addJavaScriptResourceReferenceDependency(getJQueryUIReference());
-            JQUERY_UI_STRUCTURE_JS.addJavaScriptResourceReferenceDependency(getJQueryUIReference());
-            JQUERY_UI_THEME_CSS.addCssResourceReferenceDependency(JQUERY_UI_CSS);
+            JQueryUI.JQUERY_UI_FACTORY_JS.addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
+            JQueryUI.JQUERY_UI_STRUCTURE_JS.addJavaScriptResourceReferenceDependency(JQueryUI.getJQueryUIReference());
+            JQueryUI.JQUERY_UI_THEME_CSS.addCssResourceReferenceDependency(JQueryUI.JQUERY_UI_CSS);
         } catch (Exception ex) {
             //
         }

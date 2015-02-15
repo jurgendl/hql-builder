@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.webservice.jquery.ui.jquery;
 
-import org.apache.wicket.request.resource.ResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
 import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
 
@@ -8,8 +7,9 @@ import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
  * version 1.11.1
  */
 public class JQuery {
-    public static ResourceReference getJQueryReference() {
-        return WicketApplication.get().getJavaScriptLibrarySettings().getJQueryReference();
+    public static org.apache.wicket.request.resource.JavaScriptResourceReference getJQueryReference() {
+        return (org.apache.wicket.request.resource.JavaScriptResourceReference) WicketApplication.get().getJavaScriptLibrarySettings()
+                .getJQueryReference();
     }
 
     /**
@@ -21,7 +21,7 @@ public class JQuery {
 
     static {
         try {
-            JQUERY_MIGRATE_JS.addJavaScriptResourceReferenceDependency(getJQueryReference());
+            JQuery.JQUERY_MIGRATE_JS.addJavaScriptResourceReferenceDependency(JQuery.getJQueryReference());
         } catch (Exception ex) {
             //
         }

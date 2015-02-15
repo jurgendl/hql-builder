@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
@@ -48,7 +49,10 @@ import org.springframework.core.type.filter.TypeFilter;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
+import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
+import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.logback.ConfiguratorPage;
@@ -82,7 +86,7 @@ public class WicketApplication extends WebApplication {
     protected boolean diskStore = false;
 
     @SpringBean(name = "showDebugbars", required = false)
-    protected boolean showDebugbars = false;
+    protected boolean showDebugbars = true;
 
     @SpringBean(name = "checkCookiesEnabled", required = false)
     protected boolean checkCookiesEnabled = true;
@@ -98,6 +102,21 @@ public class WicketApplication extends WebApplication {
 
     @SpringBean(name = "javascriptAtBottom", required = false)
     protected boolean javascriptAtBottom = true;
+
+    @SpringBean(name = "javascriptAtBottom", required = false)
+    protected String cacheDuration;
+
+    public WicketApplication() {
+        super();
+    }
+
+    public WicketSession createSession(Request request, @SuppressWarnings("unused") Response response) {
+        return new WicketSession(request);
+    }
+
+    public String getCacheDuration() {
+        return this.cacheDuration;
+    }
 
     /**
      * @see org.apache.wicket.Application#getHomePage()
@@ -140,7 +159,7 @@ public class WicketApplication extends WebApplication {
         // markup settings
         this.getMarkupSettings().setStripComments(deployed);
         this.getMarkupSettings().setCompressWhitespace(deployed);
-        this.getMarkupSettings().setStripWicketTags(true);
+        this.getMarkupSettings().setStripWicketTags(deployed);
         if (deployed) {
             this.getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
@@ -161,7 +180,9 @@ public class WicketApplication extends WebApplication {
         this.getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
         this.getResourceSettings().setUseMinifiedResources(deployed);
         this.getResourceSettings().setEncodeJSessionId(deployed);
-        this.getResourceSettings().setDefaultCacheDuration(inDevelopment ? Duration.NONE : WebResponse.MAX_CACHE_DURATION);
+        this.getResourceSettings().setDefaultCacheDuration(
+                StringUtils.isNotBlank(this.cacheDuration) ? Duration.valueOf(this.cacheDuration) : (inDevelopment ? Duration.NONE
+                        : WebResponse.MAX_CACHE_DURATION));
 
         if (deployed) {
             // minify your resources on deploy
@@ -183,10 +204,17 @@ public class WicketApplication extends WebApplication {
             this.getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         }
 
-        this.getResourceBundles().addCssBundle(WicketCSSRoot.class, "bundle.css", //
+        this.getResourceBundles().addCssBundle(WicketCSSRoot.class, "styling.css", //
                 WicketCSSRoot.CLEARFIX, //
                 WicketCSSRoot.NORMALIZE, //
                 WicketCSSRoot.GENERAL);//
+
+        this.getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "jquery+ui.js", //
+                JQuery.getJQueryReference(), //
+                JQueryUI.getJQueryUIReference(), //
+                JQueryUI.JQUERY_UI_FACTORY_JS, //
+                PrimeUI.PRIME_UI_JS, //
+                PrimeUI.PRIME_UI_FACTORY_JS);//
 
         // jsr bean validation: special models can implement IPropertyResolver to return the propertyname
         BeanValidationConfiguration beanValidationConfiguration = new BeanValidationConfiguration();
@@ -210,12 +238,11 @@ public class WicketApplication extends WebApplication {
         this.getMarkupSettings().setDefaultBeforeDisabledLink("");
         this.getMarkupSettings().setDefaultAfterDisabledLink("");
 
-        if (!inDevelopment) {
-            this.getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_NO_EXCEPTION_PAGE);
-            // getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
-            // getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
-            // getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
-        }
+        this.getExceptionSettings().setUnexpectedExceptionDisplay(
+                inDevelopment ? IExceptionSettings.SHOW_EXCEPTION_PAGE : IExceptionSettings.SHOW_NO_EXCEPTION_PAGE);
+        // getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
+        // getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
+        // getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
     }
 
     protected void initStore() {
@@ -348,9 +375,14 @@ public class WicketApplication extends WebApplication {
      * @see org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.wicket.request.Request, org.apache.wicket.request.Response)
      */
     @Override
-    public Session newSession(Request request, Response response) {
-        WicketSession wicketSession = new WicketSession(request);
+    final public Session newSession(Request request, Response response) {
+        WicketSession wicketSession = this.createSession(request, response);
+        WicketApplication.logger.trace("creating new session {}", wicketSession);
         return wicketSession;
+    }
+
+    public void setCacheDuration(String cacheDuration) {
+        this.cacheDuration = cacheDuration;
     }
 
     public void setCheckAdsEnabled(boolean checkAdsEnabled) {
