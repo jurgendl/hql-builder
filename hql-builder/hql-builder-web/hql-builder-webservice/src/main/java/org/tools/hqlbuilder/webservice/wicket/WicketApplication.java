@@ -109,6 +109,9 @@ public class WicketApplication extends WebApplication {
     @SpringBean(name = "kryo", required = false)
     protected boolean kryo = false;
 
+    @SpringBean(name = "gatherBrowserInfo", required = false)
+    protected boolean gatherBrowserInfo = true;
+
     public WicketApplication() {
         super();
     }
@@ -156,8 +159,11 @@ public class WicketApplication extends WebApplication {
             this.getFrameworkSettings().setSerializer(new KryoSerializer());
         }
 
-        this.getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
-        // => ((WebClientInfo)WebRequestCycle.get().getClientInfo()).getProperties().isJavaEnabled()
+        // gather browser info
+        if (this.isGatherBrowserInfo()) {
+            this.getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+            // => ((WebClientInfo)WebRequestCycle.get().getClientInfo()).getProperties().isJavaEnabled()
+        }
 
         // markup settings
         this.getMarkupSettings().setStripComments(deployed);
@@ -207,11 +213,13 @@ public class WicketApplication extends WebApplication {
             this.getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         }
 
+        // styling bundle
         this.getResourceBundles().addCssBundle(WicketCSSRoot.class, "styling.css", //
                 WicketCSSRoot.CLEARFIX, //
                 WicketCSSRoot.NORMALIZE, //
                 WicketCSSRoot.GENERAL);//
 
+        // jquery & prime bundle
         this.getResourceBundles().addJavaScriptBundle(WicketJSRoot.class, "jquery+ui.js", //
                 JQuery.getJQueryReference(), //
                 JQueryUI.getJQueryUIReference(), //
@@ -238,14 +246,18 @@ public class WicketApplication extends WebApplication {
         this.mountResources();
         this.mountPages();
 
+        // defaults
         this.getMarkupSettings().setDefaultBeforeDisabledLink("");
         this.getMarkupSettings().setDefaultAfterDisabledLink("");
 
+        // exceptions
         this.getExceptionSettings().setUnexpectedExceptionDisplay(
                 inDevelopment ? IExceptionSettings.SHOW_EXCEPTION_PAGE : IExceptionSettings.SHOW_NO_EXCEPTION_PAGE);
-        // getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
-        // getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
-        // getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
+        /*
+         * getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
+         * getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
+         * getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
+         */
     }
 
     protected void initStore() {
@@ -282,6 +294,10 @@ public class WicketApplication extends WebApplication {
 
     public boolean isCheckJavaScriptEnabled() {
         return this.checkJavaScriptEnabled;
+    }
+
+    public boolean isGatherBrowserInfo() {
+        return this.gatherBrowserInfo;
     }
 
     public boolean isJavascriptAtBottom() {
@@ -402,6 +418,10 @@ public class WicketApplication extends WebApplication {
 
     public void setCheckJavaScriptEnabled(boolean checkJavaScriptEnabled) {
         this.checkJavaScriptEnabled = checkJavaScriptEnabled;
+    }
+
+    public void setGatherBrowserInfo(boolean gatherBrowserInfo) {
+        this.gatherBrowserInfo = gatherBrowserInfo;
     }
 
     public void setJavascriptAtBottom(boolean javascriptAtBottom) {
