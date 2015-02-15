@@ -1,7 +1,5 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
-import static org.tools.hqlbuilder.webservice.wicket.WebHelper.tag;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +13,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.components.DefaultOptionRenderer;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -34,8 +33,33 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
     public MultiListPanel(IModel<?> model, T propertyPath, FormSettings formSettings, MultiListSettings componentSettings,
             IOptionRenderer<O> renderer, IModel<List<O>> choices) {
         super(model, propertyPath, formSettings, componentSettings);
-        this.renderer = fallback(renderer);
+        this.renderer = this.fallback(renderer);
         this.choices = choices;
+    }
+
+    @Override
+    protected Select<T> createComponent(IModel<T> model, Class<T> valueType) {
+        if (this.getComponentSettings().getSize() <= 1) {
+            throw new IllegalArgumentException("getComponentSettings().getSize()<=1");
+        }
+        if (model.getObject() == null) {
+            throw new NullPointerException("model object");
+        }
+        Select<T> select = new Select<T>(FormConstants.VALUE, model) {
+            private static final long serialVersionUID = -3408379598404381390L;
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                MultiListPanel.this.onFormComponentTag(tag);
+                WebHelper.tag(tag, "multiple", "multiple");
+                WebHelper.tag(tag, "size", MultiListPanel.this.getComponentSettings().getSize());
+            }
+        };
+        SelectOptions<O> options = new SelectOptions<O>("options", this.choices, this.renderer);
+        select.add(options);
+        select.add(new CssClassNameAppender(PrimeUI.puilistbox));
+        return select;
     }
 
     protected IOptionRenderer<O> fallback(IOptionRenderer<O> r) {
@@ -45,63 +69,39 @@ public class MultiListPanel<O extends Serializable, T extends Collection<O>> ext
         return r;
     }
 
+    @SuppressWarnings({ "unchecked", "cast", "rawtypes" })
     @Override
-    protected Select<T> createComponent(IModel<T> model, Class<T> valueType) {
-        if (getComponentSettings().getSize() <= 1) {
-            throw new IllegalArgumentException("getComponentSettings().getSize()<=1");
-        }
-        if (model.getObject() == null) {
-            throw new NullPointerException("model object");
-        }
-        Select<T> select = new Select<T>(VALUE, model) {
-            private static final long serialVersionUID = -3408379598404381390L;
+    public Class<T> getPropertyType() {
+        Class c = Collection.class;
+        return c;
+    }
 
-            @Override
-            protected void onComponentTag(ComponentTag tag) {
-                super.onComponentTag(tag);
-                onFormComponentTag(tag);
-                tag(tag, "multiple", "multiple");
-                tag(tag, "size", getComponentSettings().getSize());
-            }
-        };
-        SelectOptions<O> options = new SelectOptions<O>("options", choices, renderer);
-        select.add(options);
-        select.add(new CssClassNameAppender(PrimeUI.puilistbox));
-        return select;
+    @Override
+    public IModel<T> getValueModel() {
+        if (this.valueModel == null) {
+            String property = this.getPropertyName();
+            this.valueModel = property == null ? null : new PropertyModel<T>(this.getDefaultModel(), property);
+        }
+        return this.valueModel;
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        if (!isEnabledInHierarchy()) {
+        if (!this.isEnabledInHierarchy()) {
             return;
         }
         response.render(JavaScriptHeaderItem.forReference(PrimeUI.PRIME_UI_FACTORY_JS));
     }
 
     @Override
-    public FormRowPanel<T, T, Select<T>, MultiListSettings> setValueModel(IModel<T> model) {
-        getComponent().setModel(model);
-        return super.setValueModel(model);
-    }
-
-    @Override
-    public IModel<T> getValueModel() {
-        if (valueModel == null) {
-            String property = getPropertyName();
-            valueModel = property == null ? null : new PropertyModel<T>(getDefaultModel(), property);
-        }
-        return valueModel;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<T> getPropertyType() {
-        return (Class<T>) (Class) Collection.class;
-    }
-
-    @Override
     protected void setupPlaceholder(ComponentTag tag) {
         //
+    }
+
+    @Override
+    public FormRowPanel<T, T, Select<T>, MultiListSettings> setValueModel(IModel<T> model) {
+        this.getComponent().setModel(model);
+        return super.setValueModel(model);
     }
 }
