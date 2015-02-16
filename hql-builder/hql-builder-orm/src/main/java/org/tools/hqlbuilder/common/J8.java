@@ -17,20 +17,19 @@ import java.util.stream.StreamSupport;
 
 public class J8 {
     public static <T> Collector<T, ?, List<T>> list() {
-        Collector<T, ?, List<T>> collection = Collectors.toCollection(ArrayList::new);
-        // Collectors.toList();
-        return collection;
+        return Collectors.toCollection(ArrayList::new);
+    }
+
+    public static <K, V> Map<K, V> map(Collection<Map.Entry<K, V>> entries) {
+        return entries.stream().parallel().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
     }
 
     public static <T> Collector<T, ?, Set<T>> set() {
-        Collector<T, ?, Set<T>> collection = Collectors.toCollection(HashSet::new);
-        // Collectors.toSet();
-        return collection;
+        return Collectors.toCollection(HashSet::new);
     }
 
     public static <T> Collector<T, ?, SortedSet<T>> sortedset() {
-        Collector<T, ?, SortedSet<T>> collection = Collectors.toCollection(TreeSet::new);
-        return collection;
+        return Collectors.toCollection(TreeSet::new);
     }
 
     public static <T> Stream<T> stream(Collection<T> collection, boolean parallel) {
