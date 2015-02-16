@@ -211,11 +211,11 @@ public class Mapping<S, T> {
     protected T map(Map<Object, Object> context, MappingFactory factory, S source, T target) throws MappingException {
         if (context.containsKey(source)) {
             target = (T) context.get(source);
-            Mapping.logger.warn("returning from context: " + System.identityHashCode(source) + ": " + source + " > " + target);
+            Mapping.logger.trace("returning from context: " + System.identityHashCode(source) + ": " + source + " > " + target);
             return target;
         }
         context.put(source, target);
-        Mapping.logger.warn("add to context: " + context.size() + ": " + System.identityHashCode(source) + ": " + source + " > " + target);
+        Mapping.logger.trace("add to context: " + context.size() + ": " + System.identityHashCode(source) + ": " + source + " > " + target);
         T proxy = null;
         for (Mapper<S, T> consumer : this.mappers) {
             try {
