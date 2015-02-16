@@ -101,8 +101,9 @@ public abstract class ServiceImpl {
         this.getSession().doWork(work);
     }
 
-    protected void evict(P entity) {
+    protected <P> P evict(P entity) {
         this.getSession().evict(entity);
+        return entity;
     }
 
     protected void flush() throws HibernateException {
