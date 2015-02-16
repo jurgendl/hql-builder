@@ -208,29 +208,37 @@ public class Mapping<S, T> {
     }
 
     protected T map(Map<Object, Object> context, MappingFactory factory, S source, T target) throws MappingException {
-        try {
-            Mapping.logger.trace("add to context: " + context.size() + ": " + System.identityHashCode(source) + ": " + source + " > " + target);
-            if (context.containsKey(source)) {
-                throw new RuntimeException();
-            }
-            context.put(source, target);
-            T proxy = null;
-            for (Mapper<S, T> consumer : this.mappers) {
+        Mapping.logger.trace("add to context: " + context.size() + ": " + System.identityHashCode(source) + ": " + source + " > " + target);
+        if (context.containsKey(source)) {
+            throw new RuntimeException();
+        }
+        context.put(source, target);
+        T proxy = null;
+        for (Mapper<S, T> consumer : this.mappers) {
+            try {
                 try {
-                    try {
-                        consumer.apply(context, source, target);
-                    } catch (NullPointerException ex) {
-                        Mapping.logger.trace("proxy for " + target);
-                        if (proxy == null) {
-                            proxy = this.proxy(target);
-                        }
-                        consumer.apply(context, source, proxy);
+                    consumer.apply(context, source, target);
+                } catch (NullPointerException ex) {
+                    Mapping.logger.trace("proxy for " + target);
+                    if (proxy == null) {
+                        proxy = this.proxy(target);
                     }
-                } catch (RuntimeException ex) {
+                    consumer.apply(context, source, proxy);
+                }
+            } catch (Exception ex) {
+                if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
+                    Mapping.logger.trace("{}", String.valueOf(ex));
+                    context.remove(source);
+                } else {
+                    Mapping.logger.error("source={}", source);
+                    Mapping.logger.error("target={}", target);
+                    Mapping.logger.error("{}", ex);
                     throw new MappingException(ex);
                 }
             }
-            for (String conditional : this.conditionals) {
+        }
+        for (String conditional : this.conditionals) {
+            try {
                 Property<Object, Object> nestedSourcePD = this.sourceInfo.get(conditional);
                 Property<Object, Object> nestedTargetPD = this.targetInfo.get(conditional);
                 Class<?> nestedSourceClass = nestedSourcePD.type();
@@ -261,21 +269,18 @@ public class Mapping<S, T> {
                     nestedTargetPD.write(target, nestedTargetValue);
                 }
                 factory.map(context, nestedSourceValue, nestedTargetValue);
+            } catch (Exception ex) {
+                if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
+                    Mapping.logger.trace("{}", String.valueOf(ex));
+                } else {
+                    Mapping.logger.error("source={}", source);
+                    Mapping.logger.error("target={}", target);
+                    Mapping.logger.error("{}", ex);
+                    throw new MappingException(ex);
+                }
             }
-            return target;
-        } catch (Exception ex) {
-            if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
-                Mapping.logger.warn("source={}", source);
-                Mapping.logger.warn("target={}", target);
-                Mapping.logger.warn("{}", ex);
-                context.remove(source);
-                return null;
-            }
-            Mapping.logger.error("source={}", source);
-            Mapping.logger.error("target={}", target);
-            Mapping.logger.error("{}", ex);
-            throw new MappingException(ex);
         }
+        return target;
     }
 
     /**
