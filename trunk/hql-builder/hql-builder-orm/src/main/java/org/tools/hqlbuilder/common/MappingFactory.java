@@ -207,7 +207,17 @@ public class MappingFactory {
     }
 
     protected Map<Object, Object> newContext() {
-        return new ConcurrentHashMap<>();
+        return new ConcurrentHashMap<Object, Object>() {
+            private static final long serialVersionUID = -3627308857667996734L;
+
+            @Override
+            public Object put(Object key, Object value) {
+                if (this.containsKey(key)) {
+                    throw new UnsupportedOperationException("double key: " + key);
+                }
+                return super.put(key, value);
+            }
+        };
     }
 
     public void setConversionService(ConversionService conversionService) {
