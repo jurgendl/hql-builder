@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -32,12 +33,50 @@ public class J8 {
         return Collectors.toCollection(TreeSet::new);
     }
 
+    public static <T> Stream<T> stream(Collection<T> collection) {
+        return stream(collection, false);
+    }
+
     public static <T> Stream<T> stream(Collection<T> collection, boolean parallel) {
         return StreamSupport.stream(collection.spliterator(), parallel);
     }
 
+    public static <T> Stream<T> streamEditable(Collection<T> collection) {
+        return streamEditable(collection, false);
+    }
+
+    public static <T> Stream<T> streamEditable(Collection<T> collection, boolean parallel) {
+        return stream(entries(collection), parallel);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T[] entries(Collection<T> collection) {
+        return collection.toArray((T[]) new Object[collection.size()]);
+    }
+
+    public static <K, V> Stream<Map.Entry<K, V>> stream(Map<K, V> map) {
+        return stream(map, false);
+    }
+
     public static <K, V> Stream<Map.Entry<K, V>> stream(Map<K, V> map, boolean parallel) {
         return StreamSupport.stream(map.entrySet().spliterator(), parallel);
+    }
+
+    public static <K, V> Stream<Map.Entry<K, V>> streamEditable(Map<K, V> map) {
+        return streamEditable(map, false);
+    }
+
+    public static <K, V> Stream<Map.Entry<K, V>> streamEditable(Map<K, V> map, boolean parallel) {
+        return stream(entries(map), parallel);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K, V> Entry<K, V>[] entries(Map<K, V> map) {
+        return map.entrySet().toArray((Map.Entry<K, V>[]) new Map.Entry[0]);
+    }
+
+    public static <T> Stream<T> stream(T[] array) {
+        return stream(array, false);
     }
 
     public static <T> Stream<T> stream(T[] array, boolean parallel) {
