@@ -15,7 +15,7 @@
 		<hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
 		<hibernate-validator.version>5.0.1.Final</hibernate-validator.version>
 		<hibernate.search.version>4.2.0.Final</hibernate.search.version>
-		<version.slf4j>1.7.7</version.slf4j>
+		<version.slf4j>1.7.10</version.slf4j>
 		<version.javax.el>2.2.5</version.javax.el>
 		<version.lucene>3.6.2</version.lucene>
 	</properties>
