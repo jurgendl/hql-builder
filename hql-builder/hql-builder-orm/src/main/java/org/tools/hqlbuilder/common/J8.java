@@ -17,6 +17,16 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class J8 {
+    @SuppressWarnings("unchecked")
+    public static <T> T[] entries(Collection<T> collection) {
+        return collection.toArray((T[]) new Object[collection.size()]);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K, V> Entry<K, V>[] entries(Map<K, V> map) {
+        return map.entrySet().toArray((Map.Entry<K, V>[]) new Map.Entry[0]);
+    }
+
     public static <T> Collector<T, ?, List<T>> list() {
         return Collectors.toCollection(ArrayList::new);
     }
@@ -34,53 +44,43 @@ public class J8 {
     }
 
     public static <T> Stream<T> stream(Collection<T> collection) {
-        return stream(collection, false);
+        return J8.stream(collection, false);
     }
 
     public static <T> Stream<T> stream(Collection<T> collection, boolean parallel) {
         return StreamSupport.stream(collection.spliterator(), parallel);
     }
 
-    public static <T> Stream<T> streamEditable(Collection<T> collection) {
-        return streamEditable(collection, false);
-    }
-
-    public static <T> Stream<T> streamEditable(Collection<T> collection, boolean parallel) {
-        return stream(entries(collection), parallel);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T[] entries(Collection<T> collection) {
-        return collection.toArray((T[]) new Object[collection.size()]);
-    }
-
     public static <K, V> Stream<Map.Entry<K, V>> stream(Map<K, V> map) {
-        return stream(map, false);
+        return J8.stream(map, false);
     }
 
     public static <K, V> Stream<Map.Entry<K, V>> stream(Map<K, V> map, boolean parallel) {
         return StreamSupport.stream(map.entrySet().spliterator(), parallel);
     }
 
-    public static <K, V> Stream<Map.Entry<K, V>> streamEditable(Map<K, V> map) {
-        return streamEditable(map, false);
-    }
-
-    public static <K, V> Stream<Map.Entry<K, V>> streamEditable(Map<K, V> map, boolean parallel) {
-        return stream(entries(map), parallel);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <K, V> Entry<K, V>[] entries(Map<K, V> map) {
-        return map.entrySet().toArray((Map.Entry<K, V>[]) new Map.Entry[0]);
-    }
-
     public static <T> Stream<T> stream(T[] array) {
-        return stream(array, false);
+        return J8.stream(array, false);
     }
 
     public static <T> Stream<T> stream(T[] array, boolean parallel) {
         return StreamSupport.stream(Arrays.spliterator(array), parallel);
+    }
+
+    public static <T> Stream<T> streamEditable(Collection<T> collection) {
+        return J8.streamEditable(collection, false);
+    }
+
+    public static <T> Stream<T> streamEditable(Collection<T> collection, boolean parallel) {
+        return J8.stream(J8.entries(collection), parallel);
+    }
+
+    public static <K, V> Stream<Map.Entry<K, V>> streamEditable(Map<K, V> map) {
+        return J8.streamEditable(map, false);
+    }
+
+    public static <K, V> Stream<Map.Entry<K, V>> streamEditable(Map<K, V> map, boolean parallel) {
+        return J8.stream(J8.entries(map), parallel);
     }
 
     public static <T> T[] toArray(Class<T> targetClass, List<T> tmp) {
