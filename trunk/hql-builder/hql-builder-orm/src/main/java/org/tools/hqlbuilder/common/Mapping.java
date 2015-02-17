@@ -115,13 +115,28 @@ public class Mapping<S, T> {
                 Property<T, Object> targetPD = (Property<T, Object>) Mapping.this.targetInfo.get(targetProperty);
                 Object sourceIterable = sourcePD.read(source);
                 Collection<TC> tmpTargetCollection = new ArrayList<TC>();
-                if (sourceIterable instanceof Collection) {
-                    for (Object sourceIt : Collection.class.cast(sourceIterable)) {
-                        this.convertAndAdd(context, tmpTargetCollection, sourceIt);
+
+                try {
+                    if (sourceIterable instanceof Collection) {
+                        for (Object sourceIt : Collection.class.cast(sourceIterable)) {
+                            this.convertAndAdd(context, tmpTargetCollection, sourceIt);
+                        }
+                    } else {
+                        for (Object sourceIt : Object[].class.cast(sourceIterable)) {
+                            this.convertAndAdd(context, tmpTargetCollection, sourceIt);
+                        }
                     }
-                } else {
-                    for (Object sourceIt : Object[].class.cast(sourceIterable)) {
-                        this.convertAndAdd(context, tmpTargetCollection, sourceIt);
+                } catch (Exception ex) {
+                    if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
+                        Mapping.logger.warn("source={}", source);
+                        Mapping.logger.warn("target={}", target);
+                        Mapping.logger.warn("{}", ex);
+                        tmpTargetCollection.clear();
+                    } else {
+                        Mapping.logger.error("source={}", source);
+                        Mapping.logger.error("target={}", target);
+                        Mapping.logger.error("{}", ex);
+                        throw new MappingException(ex);
                     }
                 }
 
