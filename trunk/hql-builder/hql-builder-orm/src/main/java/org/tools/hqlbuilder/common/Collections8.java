@@ -102,11 +102,6 @@ public interface Collections8 {
         return Collections8.filter(collection, false, predicates);
     }
 
-    public static <T> Function<? super T, ? extends T> idFunction() {
-        Function<? super T, ? extends T> valueMapper = (t) -> t;
-        return valueMapper;
-    }
-
     public static <K, V> Map<K, V> map(Collection<Map.Entry<K, V>> entries) {
         return Collections8.map(entries, false);
     }
@@ -201,5 +196,10 @@ public interface Collections8 {
 
     public static Stream<Path> streamFully(Path path) {
         return Collections8.stream(new PathIterator(path));
+    }
+
+    public static <T> Function<? super T, ? extends T> value() {
+        Function<? super T, ? extends T> value = (t) -> t;
+        return value;
     }
 }
