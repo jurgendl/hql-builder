@@ -49,15 +49,16 @@ public class Collections8 {
     }
 
     @SafeVarargs
-    public static <T> Collection<T> filter(Collection<T> collection, Predicate<? super T>... predicates) {
+    public static <T, C extends Collection<T>> C filter(C collection, Predicate<? super T>... predicates) {
         return filter(collection, false, predicates);
     }
 
     @SafeVarargs
-    public static <T> Collection<T> filter(Collection<T> collection, boolean parallel, Predicate<? super T>... predicates) {
+    @SuppressWarnings("unchecked")
+    public static <T, C extends Collection<T>> C filter(C collection, boolean parallel, Predicate<? super T>... predicates) {
         AtomicReference<Stream<T>> streamReference = new AtomicReference<>(stream(collection, parallel));
         stream(predicates).forEach((predicate) -> streamReference.set(streamReference.get().filter(predicate)));
-        return streamReference.get().collect(collector(collection));
+        return (C) streamReference.get().collect(collector(collection));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
