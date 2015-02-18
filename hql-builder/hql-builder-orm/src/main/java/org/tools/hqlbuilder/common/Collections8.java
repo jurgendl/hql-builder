@@ -22,6 +22,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TransferQueue;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -99,6 +100,11 @@ public interface Collections8 {
     @SafeVarargs
     public static <T, C extends Collection<T>> C filter(C collection, Predicate<? super T>... predicates) {
         return Collections8.filter(collection, false, predicates);
+    }
+
+    public static <T> Function<? super T, ? extends T> idFunction() {
+        Function<? super T, ? extends T> valueMapper = (t) -> t;
+        return valueMapper;
     }
 
     public static <K, V> Map<K, V> map(Collection<Map.Entry<K, V>> entries) {
