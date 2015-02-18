@@ -84,7 +84,7 @@ public class MappingFactoryTest {
         pc.add(p2);
         Pojo[] pa = { p1, p2 };
         {
-            List<DTO> c = this.mappingFactory.map(pc, DTO.class, J8.list());
+            List<DTO> c = this.mappingFactory.map(pc, DTO.class, Collections8.list());
             Assert.assertEquals(pc.size(), c.size());
             Assert.assertEquals(c.get(0).getVeld1(), p1.getVeld1());
             Assert.assertEquals(c.get(0).getVeld2().intValue(), p1.getVeld2());
@@ -114,7 +114,7 @@ public class MappingFactoryTest {
             Assert.assertEquals(a[1].getVeld3(), p2.getVeld3());
         }
         {
-            List<DTO> c = this.mappingFactory.map(pa, DTO.class, J8.list());
+            List<DTO> c = this.mappingFactory.map(pa, DTO.class, Collections8.list());
             Assert.assertEquals(pc.size(), c.size());
             Assert.assertEquals(c.get(0).getVeld1(), p1.getVeld1());
             Assert.assertEquals(c.get(0).getVeld2().intValue(), p1.getVeld2());

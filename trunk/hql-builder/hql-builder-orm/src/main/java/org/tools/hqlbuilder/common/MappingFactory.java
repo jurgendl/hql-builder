@@ -91,10 +91,11 @@ public class MappingFactory {
     protected Map<String, Property<Object, Object>> info(Class<?> clazz) throws MappingException {
         if (!this.info.containsKey(clazz)) {
             try {
-                Map<String, PropertyDescriptor> originalMap = J8.stream(Introspector.getBeanInfo(clazz).getPropertyDescriptors(), this.parallel)
+                Map<String, PropertyDescriptor> originalMap = Collections8
+                        .stream(Introspector.getBeanInfo(clazz).getPropertyDescriptors(), this.parallel)
                         .filter((t) -> ((t.getWriteMethod() != null) && (t.getReadMethod() != null)))
                         .collect(Collectors.toMap(PropertyDescriptor::getName, Function.<PropertyDescriptor> identity()));
-                Map<String, Property<Object, Object>> convertedMap = J8.stream(originalMap, this.parallel).collect(
+                Map<String, Property<Object, Object>> convertedMap = Collections8.stream(originalMap, this.parallel).collect(
                         Collectors.toMap(Entry::getKey, e -> new Property<>(e.getValue())));
                 this.info.put(clazz, convertedMap);
             } catch (IntrospectionException ex) {
@@ -168,20 +169,22 @@ public class MappingFactory {
     }
 
     protected <S, T> T[] mapArray(Map<Object, Object> context, S[] sourceArray, Class<T> targetClass) {
-        return J8.toArray(targetClass, this.mapArrayToCollection(context, sourceArray, targetClass, J8.list()));
+        // return Collections8.toArray(targetClass, this.mapArrayToCollection(context, sourceArray, targetClass, Collections8.list()));
+        return Collections8.array(this.mapArrayToCollection(context, sourceArray, targetClass, Collections8.list()));
     }
 
     protected <S, T, Col> Col mapArrayToCollection(Map<Object, Object> context, S[] sourceArray, Class<T> targetClass, Collector<T, ?, Col> factory) {
-        return this.mapStream(context, J8.stream(sourceArray, this.parallel), targetClass, factory);
+        return this.mapStream(context, Collections8.stream(sourceArray, this.parallel), targetClass, factory);
     }
 
     protected <S, T, Col> Col mapCollection(Map<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass,
             Collector<T, ?, Col> factory) {
-        return this.mapStream(context, J8.stream(sourceCollection, this.parallel), targetClass, factory);
+        return this.mapStream(context, Collections8.stream(sourceCollection, this.parallel), targetClass, factory);
     }
 
     protected <S, T> T[] mapCollectionToArray(Map<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass) {
-        return J8.toArray(targetClass, this.mapCollection(context, sourceCollection, targetClass, J8.list()));
+        // return Collections8.toArray(targetClass, this.mapCollection(context, sourceCollection, targetClass, Collections8.list()));
+        return Collections8.array(this.mapCollection(context, sourceCollection, targetClass, Collections8.list()));
     }
 
     /**
