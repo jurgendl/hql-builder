@@ -128,9 +128,7 @@ public class Mapping<S, T> {
                     }
                 } catch (Exception ex) {
                     if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
-                        Mapping.logger.warn("source={}", source);
-                        Mapping.logger.warn("target={}", target);
-                        Mapping.logger.warn("{}", ex);
+                        Mapping.logger.trace("{}", String.valueOf(ex));
                         tmpTargetCollection.clear();
                     } else {
                         Mapping.logger.error("source={}", source);
@@ -290,6 +288,7 @@ public class Mapping<S, T> {
             } catch (Exception ex) {
                 if (ex.getClass().getName().equals("org.hibernate.LazyInitializationException")) {
                     Mapping.logger.trace("{}", String.valueOf(ex));
+                    context.remove(source);
                 } else {
                     Mapping.logger.error("source={}", source);
                     Mapping.logger.error("target={}", target);
