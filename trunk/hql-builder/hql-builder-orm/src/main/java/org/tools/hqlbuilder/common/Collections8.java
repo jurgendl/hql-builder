@@ -1,5 +1,6 @@
 package org.tools.hqlbuilder.common;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -77,6 +78,14 @@ public class Collections8 {
 
     public static <T> Stream<T> stream(Collection<T> collection, boolean parallel) {
         return StreamSupport.stream(collection.spliterator(), parallel);
+    }
+
+    public static Stream<Path> stream(Path path) {
+        return stream(path, false);
+    }
+
+    public static Stream<Path> stream(Path path, boolean parallel) {
+        return StreamSupport.stream(path.spliterator(), parallel);
     }
 
     public static <K, V> Stream<Map.Entry<K, V>> stream(Map<K, V> map) {
