@@ -170,7 +170,7 @@ public class MappingFactory {
 
     protected <S, T> T[] mapArray(Map<Object, Object> context, S[] sourceArray, Class<T> targetClass) {
         // return Collections8.toArray(targetClass, this.mapArrayToCollection(context, sourceArray, targetClass, Collections8.list()));
-        return Collections8.array(this.mapArrayToCollection(context, sourceArray, targetClass, Collections8.list()));
+        return Collections8.array(this.mapArrayToCollection(context, sourceArray, targetClass, Collections8.newList()));
     }
 
     protected <S, T, Col> Col mapArrayToCollection(Map<Object, Object> context, S[] sourceArray, Class<T> targetClass, Collector<T, ?, Col> factory) {
@@ -184,7 +184,7 @@ public class MappingFactory {
 
     protected <S, T> T[] mapCollectionToArray(Map<Object, Object> context, Collection<S> sourceCollection, Class<T> targetClass) {
         // return Collections8.toArray(targetClass, this.mapCollection(context, sourceCollection, targetClass, Collections8.list()));
-        return Collections8.array(this.mapCollection(context, sourceCollection, targetClass, Collections8.list()));
+        return Collections8.array(this.mapCollection(context, sourceCollection, targetClass, Collections8.newList()));
     }
 
     /**
