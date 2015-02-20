@@ -5,16 +5,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.Spliterators;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
@@ -22,8 +26,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TransferQueue;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -107,7 +113,52 @@ public interface Collections8 {
     }
 
     public static <K, V> Map<K, V> map(Collection<Map.Entry<K, V>> entries, boolean parallel) {
-        return Collections8.stream(entries, parallel).collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+        return map(Collections8.stream(entries, parallel));
+    }
+
+    /**
+     * Supplier<Map<K, V>> mapSupplier = HashMap::new;
+     */
+    public static <K, V> Supplier<Map<K, V>> newMap() {
+        return HashMap::new;
+    }
+
+    /**
+     * Supplier<SortedMap<K, V>> mapSupplier = TreeMap::new;
+     */
+    public static <K, V> Supplier<SortedMap<K, V>> newSortedMap() {
+        return TreeMap::new;
+    }
+
+    /**
+     * Supplier<Map<K, V>> mapSupplier = LinkedHashMap::new;
+     */
+    public static <K, V> Supplier<Map<K, V>> newLinkedMap() {
+        return LinkedHashMap::new;
+    }
+
+    public static <K, V> Map<K, V> map(Stream<Entry<K, V>> stream) {
+        return map(stream, Collections8.<K, V> newMap());
+    }
+
+    public static <K, V> Map<K, V> map(Stream<Entry<K, V>> stream, Supplier<Map<K, V>> mapSupplier) {
+        return stream.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue(), rejectDuplicateKeys(), mapSupplier));
+    }
+
+    /**
+     * @throws IllegalArgumentException
+     */
+    public static <V> BinaryOperator<V> rejectDuplicateKeys() {
+        return (k, v) -> {
+            throw new IllegalArgumentException("duplicate key");
+        };
+    }
+
+    /**
+     * BinaryOperator<V> binaryOperator = (k, v) -> k;
+     */
+    public static <V> BinaryOperator<V> acceptDuplicateKeys() {
+        return (k, v) -> k;
     }
 
     public static <T> Collector<T, ?, BlockingDeque<T>> newBlockingDeque() {
@@ -198,8 +249,10 @@ public interface Collections8 {
         return Collections8.stream(new PathIterator(path));
     }
 
+    /**
+     * Function<? super T, ? extends T> value = (t) -> t;
+     */
     public static <T> Function<? super T, ? extends T> value() {
-        Function<? super T, ? extends T> value = (t) -> t;
-        return value;
+        return (t) -> t;
     }
 }
