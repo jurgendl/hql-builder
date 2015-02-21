@@ -168,7 +168,7 @@ public class WicketApplication extends WebApplication {
         // markup settings
         this.getMarkupSettings().setStripComments(deployed);
         this.getMarkupSettings().setCompressWhitespace(deployed);
-        this.getMarkupSettings().setStripWicketTags(deployed);
+        this.getMarkupSettings().setStripWicketTags(true);
         if (deployed) {
             this.getMarkupSettings().setMarkupFactory(new HtmlCompressingMarkupFactory());
         }
