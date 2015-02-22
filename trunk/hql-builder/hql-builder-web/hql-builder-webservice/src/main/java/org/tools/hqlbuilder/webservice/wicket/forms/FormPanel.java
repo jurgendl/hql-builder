@@ -499,7 +499,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
                 @Override
                 public boolean isVisible() {
-                    return super.isVisible() && getFormSettings().isShowMessagesTop() && this.anyMessage();
+                    return super.isVisible() && FormPanel.this.getFormSettings().isShowMessagesTop() && this.anyMessage();
                 }
 
                 @Override
@@ -512,7 +512,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
                 @Override
                 public boolean isVisible() {
-                    return super.isVisible() && getFormSettings().isShowMessagesBottom() && this.anyMessage();
+                    return super.isVisible() && FormPanel.this.getFormSettings().isShowMessagesBottom() && this.anyMessage();
                 }
 
                 @Override
@@ -579,8 +579,9 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         this.getForm();
         while (this.count != 0) {
             WebMarkupContainer elementContainer = new WebMarkupContainer(this.getComponentRepeater().newChildId());
+            WebHelper.hide(elementContainer);
             this.getComponentRepeater().add(elementContainer);
-            elementContainer.add(new EmptyFormPanel());
+            elementContainer.add(WebHelper.hide(new EmptyFormPanel()));
             this.count++;
             if (this.count == this.formSettings.getColumns()) {
                 this.count = 0; // reset count
@@ -629,7 +630,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
     }
 
     protected String renderColumnsCss(boolean showLabel, int columnCount, String labelWidth) {
-        if (!formSettings.isRenderPocketGrid()) {
+        if (!this.formSettings.isRenderPocketGrid()) {
             return "";
         }
 
