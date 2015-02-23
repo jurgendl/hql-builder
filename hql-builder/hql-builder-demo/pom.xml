@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.tools.hql-builder</groupId>
-		<artifactId>hql-builder-parent</artifactId>
+		<artifactId>bom</artifactId>
 		<version>2.0.8-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
