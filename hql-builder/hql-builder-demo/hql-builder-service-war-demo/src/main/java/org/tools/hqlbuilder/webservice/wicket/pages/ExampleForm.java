@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -127,22 +127,22 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
-                .setValueModel(new IModel<String>() {
-                    @Override
-                    public void detach() {
-                        //
-                    }
+        .setValueModel(new IModel<String>() {
+            @Override
+            public void detach() {
+                //
+            }
 
-                    @Override
-                    public String getObject() {
-                        return WicketSession.get().getJQueryUITheme();
-                    }
+            @Override
+            public String getObject() {
+                return WicketSession.get().getJQueryUITheme();
+            }
 
-                    @Override
-                    public void setObject(String theme) {
-                        WicketSession.get().setJQueryUITheme(theme);
-                    }
-                });
+            @Override
+            public void setObject(String theme) {
+                WicketSession.get().setJQueryUITheme(theme);
+            }
+        });
         addCheckBox(null, new CheckBoxSettings()).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
             @Override
             public void detach() {

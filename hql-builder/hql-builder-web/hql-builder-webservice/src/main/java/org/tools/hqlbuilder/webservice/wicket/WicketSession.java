@@ -2,7 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket;
 
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Session;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.protocol.http.WebSession;

@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractFormElementSettings<T extends AbstractFormElementSettings<T>> implements Serializable, Cloneable {
     private static final long serialVersionUID = -2716372832273804363L;

@@ -2,7 +2,7 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.util.MissingResourceException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
@@ -33,7 +33,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 
 public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSettings extends AbstractFormElementSettings<ElementSettings>> extends
-Panel implements FormConstants {
+        Panel implements FormConstants {
     private static final long serialVersionUID = 5258950770053560483L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormRowPanel.class);

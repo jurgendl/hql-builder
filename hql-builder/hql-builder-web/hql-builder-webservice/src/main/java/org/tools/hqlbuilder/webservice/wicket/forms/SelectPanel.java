@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
@@ -20,7 +20,7 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 import org.tools.hqlbuilder.webservice.wicket.components.DefaultOptionRenderer;
 
 public abstract class SelectPanel<T extends Serializable, C extends Select<T>, S extends AbstractSelectSettings<S>> extends
-DefaultFormRowPanel<T, C, S> {
+        DefaultFormRowPanel<T, C, S> {
     private static final long serialVersionUID = -6781073146798103698L;
 
     public static final String OPTIONS_CONTAINER_ID = "optionsContainer";

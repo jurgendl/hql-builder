@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.common;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class NestedDTO {
     private String nestedVeld;
