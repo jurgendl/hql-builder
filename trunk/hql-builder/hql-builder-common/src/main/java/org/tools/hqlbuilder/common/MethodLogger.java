@@ -12,9 +12,9 @@ import org.springframework.aop.ThrowsAdvice;
 
 @SuppressWarnings({ "rawtypes", "unused" })
 public class MethodLogger implements AfterReturningAdvice, ThrowsAdvice, MethodBeforeAdvice {
-    private static final Logger defaultlogger = LoggerFactory.getLogger(MethodLogger.class);
+    protected static final Logger defaultlogger = LoggerFactory.getLogger(MethodLogger.class);
 
-    private static final Map<Class, Logger> loggers = new HashMap<Class, Logger>();
+    protected static final Map<Class, Logger> loggers = new HashMap<Class, Logger>();
 
     @Override
     public void before(Method method, Object[] args, Object target) throws Throwable {
@@ -61,7 +61,7 @@ public class MethodLogger implements AfterReturningAdvice, ThrowsAdvice, MethodB
         }
     }
 
-    public static Logger getLogger(Object o) {
+    public Logger getLogger(Object o) {
         if (o == null) {
             return defaultlogger;
         }
