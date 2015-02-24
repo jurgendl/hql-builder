@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.devutils.debugbar.DebugBar;
@@ -51,7 +51,7 @@ public class DefaultWebPage extends WebPage {
 
         // wicket/ajax debug bars
         this.add(WicketApplication.get().isShowDebugbars() && WicketApplication.get().usesDevelopmentConfig() ? new DebugBar("debug")
-        : new EmptyPanel("debug").setVisible(false));
+                : new EmptyPanel("debug").setVisible(false));
 
         // check if javascript is enabled
         this.add(new CheckJavaScriptEnabled());

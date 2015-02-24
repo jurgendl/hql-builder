@@ -3,7 +3,7 @@ package org.tools.hqlbuilder.common;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Pojo {
     private String veld1;

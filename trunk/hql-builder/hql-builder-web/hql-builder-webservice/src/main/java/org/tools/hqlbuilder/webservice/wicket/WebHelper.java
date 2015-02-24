@@ -1,6 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.CompoundPropertyModel;

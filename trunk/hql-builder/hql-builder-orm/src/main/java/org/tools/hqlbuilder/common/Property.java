@@ -3,7 +3,7 @@ package org.tools.hqlbuilder.common;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Property<T, P> {
     protected final PropertyDescriptor descriptor;
