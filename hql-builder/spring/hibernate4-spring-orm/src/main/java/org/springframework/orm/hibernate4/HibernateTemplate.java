@@ -1449,7 +1449,7 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.criterion.Example#create(Object)
      */
     @Override
-    public List<?> findByExample(final Object exampleEntity) throws DataAccessException {
+    public List<Object> findByExample(final Object exampleEntity) throws DataAccessException {
         return findByExample(null, exampleEntity, -1, -1);
     }
 
@@ -1463,7 +1463,7 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.criterion.Example#create(Object)
      */
     @Override
-    public List<?> findByExample(final String entityName, final Object exampleEntity) throws DataAccessException {
+    public List<Object> findByExample(final String entityName, final Object exampleEntity) throws DataAccessException {
         return findByExample(entityName, exampleEntity, -1, -1);
     }
 
@@ -1480,7 +1480,7 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.Criteria#setMaxResults(int)
      */
     @Override
-    public List<?> findByExample(final Object exampleEntity, final int firstResult, final int max) throws DataAccessException {
+    public List<Object> findByExample(final Object exampleEntity, final int firstResult, final int max) throws DataAccessException {
         return findByExample(null, exampleEntity, firstResult, max);
     }
 
@@ -1498,12 +1498,13 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.Criteria#setMaxResults(int)
      */
     @Override
-    public List<?> findByExample(final String entityName, final Object exampleEntity, final int firstResult, final int max)
+    public List<Object> findByExample(final String entityName, final Object exampleEntity, final int firstResult, final int max)
             throws DataAccessException {
         Assert.notNull(exampleEntity, "Example entity must not be null");
-        return executeWithNativeSession(new HibernateCallback<List<?>>() {
+        return executeWithNativeSession(new HibernateCallback<List<Object>>() {
+            @SuppressWarnings("unchecked")
             @Override
-            public List<?> doInHibernate(Session session) throws HibernateException {
+            public List<Object> doInHibernate(Session session) throws HibernateException {
                 Criteria executableCriteria = (entityName != null ? session.createCriteria(entityName) : session.createCriteria(exampleEntity
                         .getClass()));
                 executableCriteria.add(Example.create(exampleEntity));
