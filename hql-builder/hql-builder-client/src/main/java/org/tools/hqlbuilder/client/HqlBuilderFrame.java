@@ -1151,7 +1151,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private synchronized void query() {
-        executeQuery(null);
+        executeQuery(null, false);
     }
 
     private void progressbarStop() {
@@ -1166,12 +1166,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private void query(RowProcessor rowProcessor) {
         progressbarStart(HqlResourceBundle.getMessage("quering"));
-        executeQuery(rowProcessor);
+        executeQuery(rowProcessor, false);
         progressbarStop();
         JOptionPane.showMessageDialog(frame, HqlResourceBundle.getMessage("done"));
     }
 
-    private synchronized void executeQuery(final RowProcessor rowProcessor) {
+    private synchronized void executeQuery(final RowProcessor rowProcessor, final boolean failFast) {
         logger.debug("start query");
         final long start = System.currentTimeMillis();
 
@@ -1197,15 +1197,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             @Override
             protected void done() {
+                boolean retry = false;
                 try {
                     ExecutionResult rv = get();
                     afterQuery(start, rv, rowProcessor);
                 } catch (ExecutionException ex) {
-                    afterQuery(ex.getCause());
+                    Throwable cause = ex.getCause();
+                    Caret caret = hql.getCaret();
+                    if (!failFast && caret.getDot() != caret.getMark() && cause != null && cause.getMessage() != null
+                            && cause.getMessage().contains("java.lang.IllegalArgumentException node to traverse cannot be null!")) {
+                        retry = true;
+                    } else {
+                        afterQuery(cause);
+                    }
                 } catch (Exception ex) {
                     afterQuery(ex);
                 } finally {
                     postQuery();
+                }
+                if (retry) {
+                    Caret caret = hql.getCaret();
+                    caret.moveDot(caret.getMark());
+                    executeQuery(rowProcessor, true);
                 }
             }
         };
