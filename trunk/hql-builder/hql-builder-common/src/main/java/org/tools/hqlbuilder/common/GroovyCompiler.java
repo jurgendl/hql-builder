@@ -24,7 +24,7 @@ public class GroovyCompiler {
                 "java.util.regex",
                 "org.joda.time",
                 "org.apache.commons.lang",
-                "org.apache.commons.lang.builder" };
+                "org.apache.commons.lang3.builder" };
 
         for (String pack : packages) {
             sb.append("import ").append(pack).append(".*;\n");
