@@ -95,17 +95,35 @@ public class Mapping<S, T> {
         return this;
     }
 
-    /**
-     * TODO sourceProperty
-     */
-    public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, Class<TC> targetType) {
-        return this.collect(factory, sourceProperty, sourceProperty, targetType);
+    public <SC, TC> Mapping<S, T> collectAC(MappingFactory factory, CollectionMapper<S, SC[]> sourceCollectionMapper,
+            CollectionMapper<T, Collection<TC>> targetCollectionMapper, Class<TC> targetType) {
+        String sourceProperty = CommonUtils.name(sourceCollectionMapper.collect(CommonUtils.proxy(classPair.getSourceClass())));
+        String targetProperty = CommonUtils.name(targetCollectionMapper.collect(CommonUtils.proxy(classPair.getTargetClass())));
+        return collect(factory, sourceProperty, targetProperty, targetType);
     }
 
-    /**
-     * TODO sourceProperty,targetProperty
-     */
-    public <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, String targetProperty, Class<TC> targetType) {
+    public <SC, TC> Mapping<S, T> collectCA(MappingFactory factory, CollectionMapper<S, Collection<SC>> sourceCollectionMapper,
+            CollectionMapper<T, TC[]> targetCollectionMapper, Class<TC> targetType) {
+        String sourceProperty = CommonUtils.name(sourceCollectionMapper.collect(CommonUtils.proxy(classPair.getSourceClass())));
+        String targetProperty = CommonUtils.name(targetCollectionMapper.collect(CommonUtils.proxy(classPair.getTargetClass())));
+        return collect(factory, sourceProperty, targetProperty, targetType);
+    }
+
+    public <SC, TC> Mapping<S, T> collectAA(MappingFactory factory, CollectionMapper<S, SC[]> sourceCollectionMapper,
+            CollectionMapper<T, TC[]> targetCollectionMapper, Class<TC> targetType) {
+        String sourceProperty = CommonUtils.name(sourceCollectionMapper.collect(CommonUtils.proxy(classPair.getSourceClass())));
+        String targetProperty = CommonUtils.name(targetCollectionMapper.collect(CommonUtils.proxy(classPair.getTargetClass())));
+        return collect(factory, sourceProperty, targetProperty, targetType);
+    }
+
+    public <SC, TC> Mapping<S, T> collectCC(MappingFactory factory, CollectionMapper<S, Collection<SC>> sourceCollectionMapper,
+            CollectionMapper<T, Collection<TC>> targetCollectionMapper, Class<TC> targetType) {
+        String sourceProperty = CommonUtils.name(sourceCollectionMapper.collect(CommonUtils.proxy(classPair.getSourceClass())));
+        String targetProperty = CommonUtils.name(targetCollectionMapper.collect(CommonUtils.proxy(classPair.getTargetClass())));
+        return collect(factory, sourceProperty, targetProperty, targetType);
+    }
+
+    protected <SC, TC> Mapping<S, T> collect(MappingFactory factory, String sourceProperty, String targetProperty, Class<TC> targetType) {
         this.mappers.add(new Mapper<S, T>() {
             @Override
             public void apply(Map<Object, Object> context, S source, T target) {
