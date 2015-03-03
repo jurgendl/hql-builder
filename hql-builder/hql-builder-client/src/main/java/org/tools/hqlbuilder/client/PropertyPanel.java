@@ -38,7 +38,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.Hibernate;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
