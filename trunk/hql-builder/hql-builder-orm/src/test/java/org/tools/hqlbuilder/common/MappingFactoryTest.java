@@ -37,9 +37,9 @@ public class MappingFactoryTest {
         Mapping<Pojo, DTO> mapping = this.mappingFactory.build(Pojo.class, DTO.class)//
                 .add((ctx, s, t) -> t.setNestedDTOVeld(s.getNestedPojo().getNestedVeld()))//
                 .add((ctx, s, t) -> t.getNestedDTO().setNestedVeld(s.getNestedPojoVeld()))//
-                .collect(this.mappingFactory, "collection", CommonNestedDTO.class)//
-                .collect(this.mappingFactory, "array", CommonNestedDTO.class)//
-                ;
+                .collectCC(this.mappingFactory, Pojo::getCollection, DTO::getCollection, CommonNestedDTO.class)//
+                .collectAA(this.mappingFactory, Pojo::getArray, DTO::getArray, CommonNestedDTO.class)//
+        ;
         this.mappingFactory.build(CommonNestedPojo.class, CommonNestedDTO.class);
         this.mappingFactory.build(Retro.class, RetroB.class);
         this.mappingFactory.build(SourceProb.class, TargetProb.class);

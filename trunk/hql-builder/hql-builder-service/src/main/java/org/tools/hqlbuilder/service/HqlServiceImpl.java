@@ -440,10 +440,10 @@ public class HqlServiceImpl implements HqlService {
                     }
                 } catch (org.hibernate.QueryParameterException ex) {
                     // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
-                    logger.debug("{}", ex); // => whatever
+                    logger.debug("{}", String.valueOf(ex)); // => whatever
                 } catch (java.lang.IndexOutOfBoundsException ex) {
                     // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
-                    logger.debug("{}", ex); // => whatever
+                    logger.debug("{}", String.valueOf(ex)); // => whatever
                 }
             }
         }
