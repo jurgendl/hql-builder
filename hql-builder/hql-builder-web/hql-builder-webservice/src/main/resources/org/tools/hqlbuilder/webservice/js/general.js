@@ -72,3 +72,21 @@ jQuery.fn.extend({
 		form.find('select option:selected').removeAttr('selected');
 	}
 });
+
+jQuery.fn.extend({
+	// http://stackoverflow.com/questions/556767/limiting-number-of-lines-in-textarea
+	// http://stackoverflow.com/questions/5271782/how-to-disable-the-resize-grabber-of-an-html-textarea
+	fixTextArea : function() {
+		var fixedTextArea = $(this);
+		fixedTextArea.css('resize','none');
+		fixedTextArea.scroll(function(){
+			$(this).css('overflow','hidden');/* for the mozilla browser problem */
+			$(this).animate({scrollTop:$(this).outerHeight()});
+			while($(this).scrollTop()>0){/* for the copy and paste case */
+				var lines=$(this).val().slice(0,-1);
+				$(this).val(lines);
+			}
+			$(this).css('overflow','auto');/* For the mozilla browser problem */
+		});
+	}
+});
