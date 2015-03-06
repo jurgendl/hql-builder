@@ -35,6 +35,13 @@
 				<prop key="hibernate.connection.pool_size">1</prop>
 				<prop key="net.sf.ehcache.configurationResourceName">hqlbuilder-ehcache.xml</prop>
 				<prop key="hibernate.use_sql_comments">true</prop>
+				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
+				<prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>
+				<prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>
+				<prop key="hibernate.search.autoregister_listeners">${hibernate.search.autoregister_listeners}</prop>
+				<prop key="hibernate.ejb.event.post-insert">org.hibernate.search.event.FullTextIndexEventListener</prop>
+				<prop key="hibernate.ejb.event.post-delete">org.hibernate.search.event.FullTextIndexEventListener</prop>
+				<prop key="hibernate.ejb.event.post-update">org.hibernate.search.event.FullTextIndexEventListener</prop>
 			</props>
 		</property>
 	</bean>
