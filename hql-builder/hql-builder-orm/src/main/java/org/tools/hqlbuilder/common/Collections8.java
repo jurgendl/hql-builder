@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -254,5 +255,13 @@ public interface Collections8 {
      */
     public static <T> Function<? super T, ? extends T> value() {
         return (t) -> t;
+    }
+
+    public static <T> List<T> sort(List<T> list, boolean parallel) {
+        return Collections8.stream(list, parallel).sorted().collect(newList());
+    }
+
+    public static <T> List<T> sort(List<T> list, boolean parallel, Comparator<? super T> comparator) {
+        return Collections8.stream(list, parallel).sorted(comparator).collect(newList());
     }
 }
