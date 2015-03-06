@@ -36,6 +36,8 @@
 				<prop key="hibernate.connection.pool_size">1</prop>
 				<prop key="net.sf.ehcache.configurationResourceName">hqlbuilder-ehcache.xml</prop>
 				<prop key="hibernate.use_sql_comments">true</prop>
+				<prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>
+				<prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>
 			</props>
 		</property>
 	</bean>
