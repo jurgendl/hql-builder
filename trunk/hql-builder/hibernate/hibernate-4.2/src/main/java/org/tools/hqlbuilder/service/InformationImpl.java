@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.hibernate.MappingException;
@@ -14,7 +14,6 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.BagType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.Type;
-import org.tools.hqlbuilder.common.CommonUtils;
 
 public class InformationImpl extends LuceneInformation {
     public InformationImpl() {
@@ -31,8 +30,8 @@ public class InformationImpl extends LuceneInformation {
     protected void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException {
         Document doc = new Document();
-        doc.add(new TextField(NAME, classname, STORE));
-        doc.add(new TextField(TYPE, CLASS, STORE));
+        doc.add(new Field(NAME, classname, STORE, INDEX));
+        doc.add(new Field(TYPE, CLASS, STORE, INDEX));
         StringBuilder csb = new StringBuilder();
         Class<?> c = Class.forName(classname);
         while (c != null && !c.equals(Object.class)) {
@@ -59,11 +58,11 @@ public class InformationImpl extends LuceneInformation {
                     if (propertyType instanceof BagType) {
                         BagType bagtype = (BagType) propertyType;
                         try {
-                            String assoc = CommonUtils.call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
+                            String assoc = null;//CommonUtils.call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
                             fsb.append(transformClassName(assoc));
                         } catch (MappingException ex) {
                             try {
-                                Type elementType = CommonUtils.call(bagtype, "getElementType", Type.class, sessionFactory);
+                                Type elementType = null;//CommonUtils.call(bagtype, "getElementType", Type.class, sessionFactory);
                                 if (elementType instanceof CustomType) {
                                     CustomType ct = (CustomType) elementType;
                                     if ("org.hibernate.type.EnumType".equals(ct.getName())) {
@@ -117,9 +116,9 @@ public class InformationImpl extends LuceneInformation {
 
                 fsb.append("\n");
 
-                fdoc.add(new TextField(NAME, classname + "#" + f.getName(), STORE));
-                fdoc.add(new TextField(TYPE, FIELD, STORE));
-                fdoc.add(new TextField(DATA, fsb.toString().trim(), STORE));
+                fdoc.add(new Field(NAME, classname + "#" + f.getName(), STORE, INDEX));
+                fdoc.add(new Field(TYPE, FIELD, STORE, INDEX));
+                fdoc.add(new Field(DATA, fsb.toString().trim(), STORE, INDEX));
                 writer.addDocument(fdoc);
 
                 csb.append(fsb.toString());
@@ -129,7 +128,7 @@ public class InformationImpl extends LuceneInformation {
             csb.append("\n");
         }
 
-        doc.add(new TextField(DATA, csb.toString().trim(), STORE));
+        doc.add(new Field(DATA, csb.toString().trim(), STORE, INDEX));
         writer.addDocument(doc);
     }
 }

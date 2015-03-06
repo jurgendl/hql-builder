@@ -10,14 +10,14 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
-import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
+import org.apache.lucene.queryParser.core.QueryNodeException;
+import org.apache.lucene.queryParser.standard.StandardQueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -39,10 +39,11 @@ import org.tools.hqlbuilder.common.interfaces.Information;
 public abstract class LuceneInformation implements Information {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
-    @SuppressWarnings("deprecation")
-    protected static final Version LUCENE_VERSION = Version.LUCENE_4_9;
+    protected static final Version LUCENE_VERSION = Version.LUCENE_36;
 
     protected static final Store STORE = Store.YES;
+
+    protected static final Index INDEX = Index.ANALYZED;
 
     public static final String FIELD = "field";
 
@@ -56,7 +57,6 @@ public abstract class LuceneInformation implements Information {
 
     protected boolean persistent = false;
 
-    @SuppressWarnings("deprecation")
     protected final Analyzer analyzer = new StandardAnalyzer(LuceneInformation.LUCENE_VERSION);
 
     protected Directory index;
@@ -159,7 +159,8 @@ public abstract class LuceneInformation implements Information {
 
         List<String> results = new ArrayList<String>();
         try {
-            IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(this.index));
+            @SuppressWarnings("deprecation")
+            IndexSearcher searcher = new IndexSearcher(this.index);
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
             searcher.search(q, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -169,9 +170,13 @@ public abstract class LuceneInformation implements Information {
                 int docId = hits[i].doc;
                 Document d = searcher.doc(docId);
                 LuceneInformation.logger.debug((i + 1) + ". " + d.get(LuceneInformation.NAME));
-                LuceneInformation.logger.debug(d.getField(LuceneInformation.DATA).stringValue());
+                @SuppressWarnings("deprecation")
+                String stringValue = d.getField(LuceneInformation.DATA).stringValue();
+                LuceneInformation.logger.debug(stringValue);
                 results.add(d.get(LuceneInformation.NAME));
             }
+
+            searcher.close();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
