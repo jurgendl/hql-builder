@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 
 public class LocalSessionFactoryBeanPlus4 extends org.springframework.orm.hibernate4.LocalSessionFactoryBean implements BeanFactoryAware,
-        ApplicationContextAware {
+ApplicationContextAware {
     protected BeanFactory beanFactory;
 
     protected ApplicationContext applicationContext;
@@ -28,8 +28,9 @@ public class LocalSessionFactoryBeanPlus4 extends org.springframework.orm.hibern
      */
     @Override
     protected SessionFactory buildSessionFactory(LocalSessionFactoryBuilder sfb) {
-        postProcessMappings(getConfiguration());
-        postProcessConfiguration(getConfiguration());
+        Configuration configuration = getConfiguration();
+        postProcessMappings(configuration);
+        postProcessConfiguration(configuration);
         SessionFactory buildSessionFactory = super.buildSessionFactory(sfb);
         afterSessionFactoryCreation();
         return buildSessionFactory;

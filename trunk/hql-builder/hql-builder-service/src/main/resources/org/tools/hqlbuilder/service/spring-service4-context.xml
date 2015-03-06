@@ -20,7 +20,6 @@
 	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" scope="singleton" lazy-init="false">
 		<property name="properties">
 			<props>
-				<prop key="hibernate.search.autoregister_listeners">false</prop>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
 				<prop key="hibernate.cache.use_query_cache">true</prop>
