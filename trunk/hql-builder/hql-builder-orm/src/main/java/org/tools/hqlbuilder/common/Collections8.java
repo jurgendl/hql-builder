@@ -257,11 +257,16 @@ public interface Collections8 {
         return (t) -> t;
     }
 
-    public static <T> List<T> sort(List<T> list, boolean parallel) {
+    public static <T> List<T> sort(Collection<T> list, boolean parallel) {
         return Collections8.stream(list, parallel).sorted().collect(newList());
     }
 
-    public static <T> List<T> sort(List<T> list, boolean parallel, Comparator<? super T> comparator) {
+    public static <T> List<T> sort(Collection<T> list, boolean parallel, Comparator<? super T> comparator) {
         return Collections8.stream(list, parallel).sorted(comparator).collect(newList());
+    }
+
+    public static <T> T last(List<T> dd) {
+        int size = dd.size();
+        return size == 0 ? null : dd.get(size - 1);
     }
 }
