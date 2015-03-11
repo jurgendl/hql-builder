@@ -48,6 +48,8 @@ public class DateTime8 {
             } else {
                 formatted.append(seconds).append("s");
             }
+        } else {
+            formatted.append(millis).append("ms");
         }
         return formatted.toString();
     }
