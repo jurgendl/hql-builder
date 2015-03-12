@@ -269,4 +269,55 @@ public interface Collections8 {
         int size = dd.size();
         return size == 0 ? null : dd.get(size - 1);
     }
+
+    public static <T> List<T> toList(T[] array) {
+        List<T> newList = new ArrayList<>();
+        if (array != null) {
+            for (T el : array) {
+                newList.add(el);
+            }
+        }
+        return newList;
+    }
+
+    public static <T> Set<T> toSet(T[] array) {
+        Set<T> newSet = new HashSet<>();
+        if (array != null) {
+            for (T el : array) {
+                newSet.add(el);
+            }
+        }
+        return newSet;
+    }
+
+    public static <T> List<T> toList(Collection<T> collection) {
+        if (collection instanceof List) {
+            return (List<T>) collection;
+        }
+        List<T> newList = new ArrayList<>();
+        if (collection != null) {
+            newList.addAll(collection);
+        }
+        return newList;
+    }
+
+    public static <T> Set<T> toSet(Collection<T> collection) {
+        if (collection instanceof Set) {
+            return (Set<T>) collection;
+        }
+        Set<T> newSet = new HashSet<>();
+        if (collection != null) {
+            newSet.addAll(collection);
+        }
+        return newSet;
+    }
+
+    public static <T> T cast(Class<T> type, Object object) {
+        return type.cast(object);
+    }
+
+    public static <T> Function<Object, T> cast(Class<T> type) {
+        Function<Object, T> cast = (object) -> type.cast(object);
+        return cast;
+    }
 }
