@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 
-// http://tomaszdziurko.pl/2010/02/wicket-ajax-modal-are-you-sure-window/
+//
 // deleteLink.add(new AttributeModifier("onclick",
 // "if(!confirm('Do you really want to perform this action?')) return false;"));
 // AjaxCallListener ajaxCallListener = new AjaxCallListener();
@@ -16,7 +16,7 @@ import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 //
 //
 //
-// http://apache-wicket.1842946.n4.nabble.com/Javascript-confirm-with-condition-before-submit-td4659672.html
+//
 // @Override
 // protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
 // {
@@ -29,6 +29,9 @@ import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 // resetLink.add(new AttributeModifier("onclick",
 /**
  * @see http://api.jqueryui.com/dialog/
+ * @see https://cwiki.apache.org/confluence/display/WICKET/Getting+user+confirmation
+ * @see http://tomaszdziurko.pl/2010/02/wicket-ajax-modal-are-you-sure-window/
+ * @see http://apache-wicket.1842946.n4.nabble.com/Javascript-confirm-with-condition-before-submit-td4659672.html
  */
 public class JqueryUIConfirmationDialog extends Panel {
     protected static class ConfirmationEvent extends AttributeModifier {
@@ -63,7 +66,7 @@ public class JqueryUIConfirmationDialog extends Panel {
         response.render(JavaScriptHeaderItem.forReference(JQueryUI.getJQueryUIReference()));
     }
 
-    public static void showConfirmation(AbstractLink link, String title, String text) {
+    public static void addConfirmationEvent(AbstractLink link, String title, String text) {
         link.add(new ConfirmationEvent(title, text));
     }
 }
