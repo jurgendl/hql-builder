@@ -9,11 +9,13 @@ import javax.persistence.Version;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.search.annotations.DocumentId;
 
 @MappedSuperclass
 public abstract class EntityAdapter implements EntityI {
     private static final long serialVersionUID = -2958424236876731630L;
 
+    @DocumentId
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
