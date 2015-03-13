@@ -17,6 +17,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.SimpleNaturalIdLoadAccess;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.springframework.security.access.method.P;
 
 @SuppressWarnings({ "unchecked", "hiding" })
@@ -231,5 +233,9 @@ public abstract class ServiceImpl {
     public static <T extends Comparable<? super T>> List<T> sort(List<T> list) {
         Collections.sort(list);
         return list;
+    }
+
+    protected FullTextSession createSearchSession() {
+        return Search.getFullTextSession(this.getSession());
     }
 }
