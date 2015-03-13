@@ -11,6 +11,11 @@
 	<description>hql-builder-common</description>
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.googlecode.lambdaj</groupId>
 			<artifactId>lambdaj</artifactId>
 		</dependency>

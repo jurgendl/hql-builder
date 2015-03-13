@@ -75,17 +75,21 @@
 		<module>hql-builder-web</module>
 		<module>hql-builder-client</module>
 	</modules>
+	<dependencyManagement>
 	<dependencies>
+		<!-- Common -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${version.junit}</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
-	<dependencyManagement>
-	<dependencies>
-		<!-- Common -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${version.spring}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.googlecode.lambdaj</groupId>
 			<artifactId>lambdaj</artifactId>
@@ -158,11 +162,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${version.commons-lang3}</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${version.log4j}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
