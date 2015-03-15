@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
 public interface Collections8 {
     public static class PathIterator implements Iterator<Path> {
         protected Path path;
@@ -57,6 +59,13 @@ public interface Collections8 {
         }
     }
 
+    /**
+     * BinaryOperator<V> binaryOperator = (k, v) -> k;
+     */
+    public static <V> BinaryOperator<V> acceptDuplicateKeys() {
+        return (k, v) -> k;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> T[] array(Collection<T> collection) {
         return collection.toArray((T[]) new Object[collection.size()]);
@@ -65,6 +74,15 @@ public interface Collections8 {
     @SuppressWarnings("unchecked")
     public static <K, V> Entry<K, V>[] array(Map<K, V> map) {
         return map.entrySet().toArray((Map.Entry<K, V>[]) new Map.Entry[0]);
+    }
+
+    public static <T> Function<Object, T> cast(Class<T> type) {
+        Function<Object, T> cast = (object) -> type.cast(object);
+        return cast;
+    }
+
+    public static <T> T cast(Class<T> type, Object object) {
+        return type.cast(object);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -109,57 +127,25 @@ public interface Collections8 {
         return Collections8.filter(collection, false, predicates);
     }
 
+    public static <T> T last(List<T> dd) {
+        int size = dd.size();
+        return size == 0 ? null : dd.get(size - 1);
+    }
+
     public static <K, V> Map<K, V> map(Collection<Map.Entry<K, V>> entries) {
         return Collections8.map(entries, false);
     }
 
     public static <K, V> Map<K, V> map(Collection<Map.Entry<K, V>> entries, boolean parallel) {
-        return map(Collections8.stream(entries, parallel));
-    }
-
-    /**
-     * Supplier<Map<K, V>> mapSupplier = HashMap::new;
-     */
-    public static <K, V> Supplier<Map<K, V>> newMap() {
-        return HashMap::new;
-    }
-
-    /**
-     * Supplier<SortedMap<K, V>> mapSupplier = TreeMap::new;
-     */
-    public static <K, V> Supplier<SortedMap<K, V>> newSortedMap() {
-        return TreeMap::new;
-    }
-
-    /**
-     * Supplier<Map<K, V>> mapSupplier = LinkedHashMap::new;
-     */
-    public static <K, V> Supplier<Map<K, V>> newLinkedMap() {
-        return LinkedHashMap::new;
+        return Collections8.map(Collections8.stream(entries, parallel));
     }
 
     public static <K, V> Map<K, V> map(Stream<Entry<K, V>> stream) {
-        return map(stream, Collections8.<K, V> newMap());
+        return Collections8.map(stream, Collections8.<K, V> newMap());
     }
 
     public static <K, V> Map<K, V> map(Stream<Entry<K, V>> stream, Supplier<Map<K, V>> mapSupplier) {
-        return stream.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue(), rejectDuplicateKeys(), mapSupplier));
-    }
-
-    /**
-     * @throws IllegalArgumentException
-     */
-    public static <V> BinaryOperator<V> rejectDuplicateKeys() {
-        return (k, v) -> {
-            throw new IllegalArgumentException("duplicate key");
-        };
-    }
-
-    /**
-     * BinaryOperator<V> binaryOperator = (k, v) -> k;
-     */
-    public static <V> BinaryOperator<V> acceptDuplicateKeys() {
-        return (k, v) -> k;
+        return stream.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue(), Collections8.rejectDuplicateKeys(), mapSupplier));
     }
 
     public static <T> Collector<T, ?, BlockingDeque<T>> newBlockingDeque() {
@@ -174,8 +160,22 @@ public interface Collections8 {
         return Collectors.toCollection(LinkedList::new);
     }
 
+    /**
+     * Supplier<Map<K, V>> mapSupplier = LinkedHashMap::new;
+     */
+    public static <K, V> Supplier<Map<K, V>> newLinkedMap() {
+        return LinkedHashMap::new;
+    }
+
     public static <T> Collector<T, ?, List<T>> newList() {
         return Collectors.toCollection(ArrayList::new);
+    }
+
+    /**
+     * Supplier<Map<K, V>> mapSupplier = HashMap::new;
+     */
+    public static <K, V> Supplier<Map<K, V>> newMap() {
+        return HashMap::new;
     }
 
     public static <T> Collector<T, ?, Queue<T>> newQueue() {
@@ -186,12 +186,44 @@ public interface Collections8 {
         return Collectors.toCollection(HashSet::new);
     }
 
+    /**
+     * Supplier<SortedMap<K, V>> mapSupplier = TreeMap::new;
+     */
+    public static <K, V> Supplier<SortedMap<K, V>> newSortedMap() {
+        return TreeMap::new;
+    }
+
     public static <T> Collector<T, ?, SortedSet<T>> newSortedSet() {
         return Collectors.toCollection(TreeSet::new);
     }
 
     public static <T> Collector<T, ?, TransferQueue<T>> newTransferQueue() {
         return Collectors.toCollection(LinkedTransferQueue::new);
+    }
+
+    /**
+     * @throws IllegalArgumentException
+     */
+    public static <V> BinaryOperator<V> rejectDuplicateKeys() {
+        return (k, v) -> {
+            throw new IllegalArgumentException("duplicate key");
+        };
+    }
+
+    public static <T extends Comparable<? super T>> List<T> sort(Collection<T> list, boolean parallel) {
+        return Collections8.stream(list, parallel).sorted().collect(Collections8.newList());
+    }
+
+    public static <T> List<T> sort(Collection<T> list, boolean parallel, Comparator<? super T> comparator) {
+        return Collections8.stream(list, parallel).sorted(comparator).collect(Collections8.newList());
+    }
+
+    public static <T, P> List<T> sortBy(Collection<T> collection, List<P> orderByMe, Function<T, P> map) {
+        return collection.stream().sorted((o1, o2) -> {
+            int i1 = orderByMe.indexOf(map.apply(o1));
+            int i2 = orderByMe.indexOf(map.apply(o2));
+            return new CompareToBuilder().append(i1 == -1 ? Integer.MAX_VALUE : i1, i2 == -1 ? Integer.MAX_VALUE : i2).toComparison();
+        }).collect(Collections8.newList());
     }
 
     public static <T> Stream<T> stream(Collection<T> collection) {
@@ -250,24 +282,15 @@ public interface Collections8 {
         return Collections8.stream(new PathIterator(path));
     }
 
-    /**
-     * Function<? super T, ? extends T> value = (t) -> t;
-     */
-    public static <T> Function<? super T, ? extends T> value() {
-        return (t) -> t;
-    }
-
-    public static <T extends Comparable<? super T>> List<T> sort(Collection<T> list, boolean parallel) {
-        return Collections8.stream(list, parallel).sorted().collect(newList());
-    }
-
-    public static <T> List<T> sort(Collection<T> list, boolean parallel, Comparator<? super T> comparator) {
-        return Collections8.stream(list, parallel).sorted(comparator).collect(newList());
-    }
-
-    public static <T> T last(List<T> dd) {
-        int size = dd.size();
-        return size == 0 ? null : dd.get(size - 1);
+    public static <T> List<T> toList(Collection<T> collection) {
+        if (collection instanceof List) {
+            return (List<T>) collection;
+        }
+        List<T> newList = new ArrayList<>();
+        if (collection != null) {
+            newList.addAll(collection);
+        }
+        return newList;
     }
 
     public static <T> List<T> toList(T[] array) {
@@ -276,27 +299,6 @@ public interface Collections8 {
             for (T el : array) {
                 newList.add(el);
             }
-        }
-        return newList;
-    }
-
-    public static <T> Set<T> toSet(T[] array) {
-        Set<T> newSet = new HashSet<>();
-        if (array != null) {
-            for (T el : array) {
-                newSet.add(el);
-            }
-        }
-        return newSet;
-    }
-
-    public static <T> List<T> toList(Collection<T> collection) {
-        if (collection instanceof List) {
-            return (List<T>) collection;
-        }
-        List<T> newList = new ArrayList<>();
-        if (collection != null) {
-            newList.addAll(collection);
         }
         return newList;
     }
@@ -312,12 +314,20 @@ public interface Collections8 {
         return newSet;
     }
 
-    public static <T> T cast(Class<T> type, Object object) {
-        return type.cast(object);
+    public static <T> Set<T> toSet(T[] array) {
+        Set<T> newSet = new HashSet<>();
+        if (array != null) {
+            for (T el : array) {
+                newSet.add(el);
+            }
+        }
+        return newSet;
     }
 
-    public static <T> Function<Object, T> cast(Class<T> type) {
-        Function<Object, T> cast = (object) -> type.cast(object);
-        return cast;
+    /**
+     * Function<? super T, ? extends T> value = (t) -> t;
+     */
+    public static <T> Function<? super T, ? extends T> value() {
+        return (t) -> t;
     }
 }
