@@ -20,6 +20,7 @@ import org.hibernate.jdbc.Work;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.springframework.security.access.method.P;
+import org.tools.hqlbuilder.common.exceptions.ServiceException;
 
 @SuppressWarnings({ "unchecked", "hiding" })
 public abstract class ServiceImpl {
@@ -175,11 +176,19 @@ public abstract class ServiceImpl {
     }
 
     protected <P> void persist(P entity) {
-        this.getSession().persist(entity);
+        try {
+            this.getSession().persist(entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> void persist(String entityName, P entity) {
-        this.getSession().persist(entityName, entity);
+        try {
+            this.getSession().persist(entityName, entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> void refresh(P entity) {
@@ -207,27 +216,51 @@ public abstract class ServiceImpl {
     }
 
     protected <P> Serializable save(P entity) {
-        return this.getSession().save(entity);
+        try {
+            return this.getSession().save(entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> Serializable save(String entityName, P entity) {
-        return this.getSession().save(entityName, entity);
+        try {
+            return this.getSession().save(entityName, entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> void saveOrUpdate(P entity) {
-        this.getSession().saveOrUpdate(entity);
+        try {
+            this.getSession().saveOrUpdate(entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> void saveOrUpdate(String entityName, P entity) {
-        this.getSession().saveOrUpdate(entityName, entity);
+        try {
+            this.getSession().saveOrUpdate(entityName, entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> void update(P entity) {
-        this.getSession().update(entity);
+        try {
+            this.getSession().update(entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     protected <P> void update(String entityName, P entity) {
-        this.getSession().update(entityName, entity);
+        try {
+            this.getSession().update(entityName, entity);
+        } catch (javax.validation.ConstraintViolationException ex) {
+            throw new ServiceException(ex.getConstraintViolations());
+        }
     }
 
     public static <T extends Comparable<? super T>> List<T> sort(List<T> list) {

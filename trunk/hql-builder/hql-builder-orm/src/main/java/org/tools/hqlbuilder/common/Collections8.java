@@ -210,20 +210,39 @@ public interface Collections8 {
         };
     }
 
-    public static <T extends Comparable<? super T>> List<T> sort(Collection<T> list, boolean parallel) {
-        return Collections8.stream(list, parallel).sorted().collect(Collections8.newList());
+    public static <T extends Comparable<? super T>> List<T> sort(Collection<T> collection) {
+        return sort(collection, false);
     }
 
-    public static <T> List<T> sort(Collection<T> list, boolean parallel, Comparator<? super T> comparator) {
-        return Collections8.stream(list, parallel).sorted(comparator).collect(Collections8.newList());
+    public static <T extends Comparable<? super T>> List<T> sort(Collection<T> collection, boolean parallel) {
+        return Collections8.stream(collection, parallel).sorted().collect(Collections8.newList());
+    }
+
+    public static <T> List<T> sort(Collection<T> collection, boolean parallel, Comparator<? super T> comparator) {
+        return Collections8.stream(collection, parallel).sorted(comparator).collect(Collections8.newList());
+    }
+
+    public static <T> List<T> sort(Collection<T> collection, Comparator<? super T> comparator) {
+        return sort(collection, false, comparator);
     }
 
     public static <T, P> List<T> sortBy(Collection<T> collection, List<P> orderByMe, Function<T, P> map) {
-        return collection.stream().sorted((o1, o2) -> {
-            int i1 = orderByMe.indexOf(map.apply(o1));
-            int i2 = orderByMe.indexOf(map.apply(o2));
-            return new CompareToBuilder().append(i1 == -1 ? Integer.MAX_VALUE : i1, i2 == -1 ? Integer.MAX_VALUE : i2).toComparison();
-        }).collect(Collections8.newList());
+        return collection
+                .stream()
+                .sorted((o1, o2) -> new CompareToBuilder().append(noNegIndex(orderByMe.indexOf(map.apply(o1))),
+                        noNegIndex(orderByMe.indexOf(map.apply(o2)))).toComparison()).collect(Collections8.newList());
+    }
+
+    public static <T, P> List<T> sortBy(Collection<T> collection, List<T> orderByMe) {
+        return sortBy(collection, orderByMe, id());
+    }
+
+    public static <T> Function<T, T> id() {
+        return Function.identity();
+    }
+
+    static int noNegIndex(int i) {
+        return i == -1 ? Integer.MAX_VALUE : i;
     }
 
     public static <T> Stream<T> stream(Collection<T> collection) {
@@ -324,10 +343,31 @@ public interface Collections8 {
         return newSet;
     }
 
-    /**
-     * Function<? super T, ? extends T> value = (t) -> t;
-     */
-    public static <T> Function<? super T, ? extends T> value() {
-        return (t) -> t;
+    public static <T> Set<T> toSortedSet(Collection<T> collection) {
+        if (collection instanceof SortedSet) {
+            return (SortedSet<T>) collection;
+        }
+        SortedSet<T> newSet = new TreeSet<>();
+        if (collection != null) {
+            newSet.addAll(collection);
+        }
+        return newSet;
     }
+
+    public static <T> Set<T> toSortedSet(T[] array) {
+        SortedSet<T> newSet = new TreeSet<>();
+        if (array != null) {
+            for (T el : array) {
+                newSet.add(el);
+            }
+        }
+        return newSet;
+    }
+
+    // /**
+    // * Function<? super T, ? extends T> value = (t) -> t;
+    // */
+    // public static <T> Function<? super T, ? extends T> value() {
+    // return (t) -> t;
+    // }
 }
