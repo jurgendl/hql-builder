@@ -17,7 +17,7 @@
 		<version.slf4j>1.7.10</version.slf4j>
 		<version.javax.el>2.2.5</version.javax.el><!-- Tomcat update to work with Hibernate validator 5.x.x -->
 		<hibernate.search.version>4.4.6.Final</hibernate.search.version>
-		<version.lucene>3.6.2</version.lucene>
+		<version.lucene>4.10.4</version.lucene>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,7 +45,7 @@
 			<artifactId>lucene-analyzers</artifactId>
 			<version>${version.lucene}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>${version.lucene}</version>
@@ -59,17 +59,17 @@
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-phonetic</artifactId>
 			<version>${version.lucene}</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-highlighter</artifactId>
 			<version>${version.lucene}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-suggest</artifactId>
 			<version>${version.lucene}</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-facet</artifactId>
