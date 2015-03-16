@@ -1,3 +1,15 @@
+/* http://stackoverflow.com/questions/8579643/simple-jquery-scroll-to-anchor-up-or-down-the-page */
+function anchorDoScroll(dest) {
+	console.log("scroll to:"+dest);
+	$('html,body').animate({scrollTop:$('a[name='+dest+']').offset().top},1000);
+}
+function anchorFactory() { // put this in document ready
+	$("a[href^=#]").click(function(e) {
+		e.preventDefault();
+		anchorDoScroll($(this).attr('href').substring(1));
+	});
+}
+
 function compress(data) {
 	data = data.replace(/([^&=]+=)([^&]*)(.*?)&\1([^&]*)/g, "$1$2,$4$3");
 	return /([^&=]+=).*?&\1/.test(data) ? compress(data) : data;
