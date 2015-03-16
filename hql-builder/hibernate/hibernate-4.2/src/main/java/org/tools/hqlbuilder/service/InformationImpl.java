@@ -14,6 +14,7 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.type.BagType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.Type;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 
 public class InformationImpl extends LuceneInformation {
     public InformationImpl() {
@@ -58,11 +59,11 @@ public class InformationImpl extends LuceneInformation {
                     if (propertyType instanceof BagType) {
                         BagType bagtype = (BagType) propertyType;
                         try {
-                            String assoc = null;//CommonUtils.call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
+                            String assoc = call(bagtype, "getAssociatedEntityName", String.class, sessionFactory);
                             fsb.append(transformClassName(assoc));
                         } catch (MappingException ex) {
                             try {
-                                Type elementType = null;//CommonUtils.call(bagtype, "getElementType", Type.class, sessionFactory);
+                                Type elementType = call(bagtype, "getElementType", Type.class, sessionFactory);
                                 if (elementType instanceof CustomType) {
                                     CustomType ct = (CustomType) elementType;
                                     if ("org.hibernate.type.EnumType".equals(ct.getName())) {
@@ -131,4 +132,31 @@ public class InformationImpl extends LuceneInformation {
         doc.add(new Field(DATA, csb.toString().trim(), STORE, INDEX));
         writer.addDocument(doc);
     }
+
+    private static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
+        // logger.debug(String.valueOf(object));
+        // logger.debug(methodName);
+        // logger.debug(Arrays.toString(params));
+        MethodInvokingFactoryBean mi = new MethodInvokingFactoryBean();
+        mi.setTargetObject(object);
+        mi.setTargetMethod(methodName);
+        mi.setArguments(params);
+        try {
+            mi.afterPropertiesSet();
+            T value = type.cast(mi.getObject());
+            // logger.debug(String.valueOf(value));
+            return value;
+        } catch (RuntimeException ex) {
+            logger.error("call(Object, String, Class<T>, Object...)");
+            logger.error(ex.getClass().getName());
+            logger.error(String.valueOf(ex));
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("call(Object, String, Class<T>, Object...)");
+            logger.error(ex.getClass().getName());
+            logger.error(String.valueOf(ex));
+            throw new RuntimeException(ex);
+        }
+    }
+
 }
