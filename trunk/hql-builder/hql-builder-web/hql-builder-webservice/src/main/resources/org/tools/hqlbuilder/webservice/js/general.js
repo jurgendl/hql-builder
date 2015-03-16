@@ -1,7 +1,7 @@
 /* http://stackoverflow.com/questions/8579643/simple-jquery-scroll-to-anchor-up-or-down-the-page */
 function anchorDoScroll(dest) {
-	console.log("scroll to:"+dest);
-	$('html,body').animate({scrollTop:$('a[name='+dest+']').offset().top},1000);
+	$('html,body').animate({scrollTop:$('a[name='+dest+']').offset().top},1000);/*,'easeInOutCirc'*/
+	console.log("scroll to:"+dest+"->"+$('a[name='+dest+']').offset().top);
 }
 function anchorFactory() { // put this in document ready
 	$("a[href^=#]").click(function(e) {
