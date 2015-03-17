@@ -24,12 +24,6 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>hql-builder-lucene</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-annotations</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -44,6 +38,10 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP-java6</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

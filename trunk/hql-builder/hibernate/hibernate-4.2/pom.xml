@@ -131,12 +131,12 @@
 			<artifactId>hibernate-search</artifactId>
 			<version>${hibernate.search.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-search-infinispan</artifactId>
 			<version>${hibernate.search.version}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-analysis-extras</artifactId>
 			<version>${version.lucene}</version>
@@ -146,7 +146,7 @@
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-search-analyzers</artifactId>
