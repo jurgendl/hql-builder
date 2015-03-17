@@ -53,7 +53,7 @@
 				<property name="poolName" value="springHikariCP" />
 				<property name="driverClassName" value="${hibernate.connection.driver_class}"/>
 				<property name="jdbcUrl" value="${hibernate.connection.url}"/>
-				<property name="user" value="${hibernate.connection.username}"/>
+				<property name="username" value="${hibernate.connection.username}"/>
 				<property name="password" value="${hibernate.connection.password}"/>
 			</bean>
 		</constructor-arg>
