@@ -21,6 +21,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-test-framework</artifactId>
+			<version>${version.lucene}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<optional>true</optional>
