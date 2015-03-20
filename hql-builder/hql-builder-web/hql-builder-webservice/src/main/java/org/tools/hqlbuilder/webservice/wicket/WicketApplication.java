@@ -56,7 +56,6 @@ import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
 import org.wicketstuff.logback.ConfiguratorPage;
-import org.wicketstuff.pageserializer.kryo2.KryoSerializer;
 
 import de.agilecoders.wicket.core.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
 
@@ -106,9 +105,6 @@ public class WicketApplication extends WebApplication {
     @SpringBean(name = "javascriptAtBottom", required = false)
     protected String cacheDuration;
 
-    @SpringBean(name = "kryo", required = false)
-    protected boolean kryo = false;
-
     @SpringBean(name = "gatherBrowserInfo", required = false)
     protected boolean gatherBrowserInfo = true;
 
@@ -153,11 +149,6 @@ public class WicketApplication extends WebApplication {
         // spring injector
         this.getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         Injector.get().inject(this);
-
-        // framework settings
-        if (this.isKryo() && deployed) {
-            this.getFrameworkSettings().setSerializer(new KryoSerializer());
-        }
 
         // gather browser info
         if (this.isGatherBrowserInfo()) {
@@ -304,10 +295,6 @@ public class WicketApplication extends WebApplication {
         return this.javascriptAtBottom;
     }
 
-    public boolean isKryo() {
-        return this.kryo;
-    }
-
     public boolean isShowDebugbars() {
         return this.showDebugbars;
     }
@@ -426,10 +413,6 @@ public class WicketApplication extends WebApplication {
 
     public void setJavascriptAtBottom(boolean javascriptAtBottom) {
         this.javascriptAtBottom = javascriptAtBottom;
-    }
-
-    public void setKryo(boolean kryo) {
-        this.kryo = kryo;
     }
 
     public void setShortcutIcon(String shortcutIcon) {
