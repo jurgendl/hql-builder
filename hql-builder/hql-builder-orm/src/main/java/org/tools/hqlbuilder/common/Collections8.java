@@ -37,6 +37,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
+// stream.toArray(Integer[]::new)
+// Stream...
 
 public interface Collections8 {
     public static class PathIterator implements Iterator<Path> {
