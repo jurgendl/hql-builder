@@ -19,6 +19,8 @@ import org.apache.wicket.bean.validation.Property;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.html.IPackageResourceGuard;
+import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -249,6 +251,15 @@ public class WicketApplication extends WebApplication {
          * getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
          * getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
          */
+
+        // http://wicketguide.comsysto.com/guide/chapter19.html#chapter19_4
+        IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
+        if (packageResourceGuard instanceof SecurePackageResourceGuard) {
+            SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
+            guard.addPattern("+*.mp4");
+            guard.addPattern("+*.flv");
+            guard.addPattern("+*.ogg");
+        }
     }
 
     protected void initStore() {
