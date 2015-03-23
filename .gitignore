@@ -79,3 +79,12 @@ target
 /hql-builder/hql-builder-web/hql-builder-webclient/.settings/org.eclipse.wst.common.component
 /hql-builder/hql-builder-web/hql-builder-webclient/.settings/org.eclipse.wst.common.project.facet.core.xml
 /hql-builder/backup.zip
+/hql-builder/hibernate/hibernate-4.2/.settings/org.eclipse.jdt.core.prefs
+/hql-builder/hibernate/hibernate-4.2/.settings/org.eclipse.wst.common.component
+/hql-builder/hibernate/hibernate-4.2/.settings/org.eclipse.wst.common.project.facet.core.xml
+/hql-builder/hql-builder-annotations/.settings/org.eclipse.jdt.core.prefs
+/hql-builder/hql-builder-annotations/.settings/org.eclipse.wst.common.component
+/hql-builder/hql-builder-annotations/.settings/org.eclipse.wst.common.project.facet.core.xml
+/hql-builder/hql-builder-demo/hql-builder-common-demo/.settings/org.eclipse.jdt.core.prefs
+/hql-builder/hql-builder-demo/hql-builder-common-demo/.settings/org.eclipse.wst.common.component
+/hql-builder/hql-builder-demo/hql-builder-common-demo/.settings/org.eclipse.wst.common.project.facet.core.xml

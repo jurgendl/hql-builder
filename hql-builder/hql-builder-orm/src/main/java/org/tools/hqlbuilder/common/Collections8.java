@@ -366,6 +366,10 @@ public interface Collections8 {
         return newSet;
     }
 
+    public static <T> boolean containsAny(Collection<T> c1, Collection<T> c2) {
+        return c1.stream().anyMatch((e) -> c2.contains(e));
+    }
+
     // /**
     // * Function<? super T, ? extends T> value = (t) -> t;
     // */
