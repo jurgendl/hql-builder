@@ -695,19 +695,24 @@
 	<contributors>
 		<!-- none -->
 	</contributors>
-	<scm>
+	<!-- <scm>
 		<connection>scm:svn:http://hql-builder.googlecode.com/svn/trunk</connection>
 		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk</developerConnection>
 		<url>http://hql-builder.googlecode.com/svn/trunk</url>
+	</scm> -->
+	<scm>
+		<connection>scm:git:git@github.com:jurgendl/hql-builder.git</connection>
+		<url>scm:git:git@github.com:jurgendl/hql-builder.git</url>
+		<developerConnection>scm:git:git@github.com:jurgendl/hql-builder.git</developerConnection>
 	</scm>
 	<repositories>
 		<repository>
 			<id>hql-builder.googlecode</id>
-			<url>http://hql-builder.googlecode.com/svn/maven2</url>
+			<url>http://hql-builder.googlecode.com/svn/maven2</url><!-- FIXME -->
 		</repository>
 		<repository>
 			<id>lambdaj.googlecode</id>
-			<url>http://lambdaj.googlecode.com/svn/repo/releases/</url>
+			<url>http://lambdaj.googlecode.com/svn/repo/releases/</url><!-- FIXME -->
 		</repository>
 	</repositories>
 	<build>
