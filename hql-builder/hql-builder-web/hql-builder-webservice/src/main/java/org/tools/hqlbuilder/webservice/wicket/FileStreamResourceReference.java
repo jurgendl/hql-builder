@@ -10,42 +10,43 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 
 public class FileStreamResourceReference extends StreamResourceReference {
-    private static final long serialVersionUID = -9033881031408124344L;
+	private static final long serialVersionUID = 2108240451424543897L;
 
-    protected transient Path file;
+	protected transient Path path;
 
-    protected transient InputStream in;
+	public FileStreamResourceReference(Class<?> scope, String name, Path path) {
+		super(scope, name);
+		this.path = path;
+	}
 
-    public FileStreamResourceReference(Class<?> scope, String name, Path file) {
-        super(scope, name);
-        this.file = file;
-    }
+	public FileStreamResourceReference(Class<?> scope, Path path) {
+		this(scope, path.getFileName().toString(), path);
+	}
 
-    @Override
-    public IResourceStream getResourceStream() {
-        return new AbstractResourceStream() {
-            private static final long serialVersionUID = 8784023512223151193L;
+	@Override
+	public IResourceStream getResourceStream() {
+		return new AbstractResourceStream() {
+			private static final long serialVersionUID = 8784023512223151193L;
 
-            @Override
-            public InputStream getInputStream() throws ResourceStreamNotFoundException {
-                return getInputstream();
-            }
+			protected transient InputStream inputStream;
 
-            @Override
-            public void close() throws IOException {
-                if (in != null)
-                    in.close();
-            }
-        };
-    }
+			@Override
+			public InputStream getInputStream() throws ResourceStreamNotFoundException {
+				if (inputStream != null) {
+					try {
+						inputStream = Files.newInputStream(path);
+					} catch (IOException e) {
+						throw new ResourceStreamNotFoundException(e);
+					}
+				}
+				return inputStream;
+			}
 
-    public InputStream getInputstream() throws ResourceStreamNotFoundException {
-        if (in == null)
-            try {
-                in = Files.newInputStream(file);
-            } catch (IOException e) {
-                throw new ResourceStreamNotFoundException(e);
-            }
-        return in;
-    }
+			@Override
+			public void close() throws IOException {
+				if (inputStream != null)
+					inputStream.close();
+			}
+		};
+	}
 }
