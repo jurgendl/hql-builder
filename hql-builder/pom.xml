@@ -6,7 +6,18 @@
 	<packaging>pom</packaging>
 	<name>HqlBuilder</name>
 	<description>HqlBuilder</description>
-	<url>http://hql-builder.googlecode.com</url>
+	<url>https://github.com/jurgendl/hql-builder</url>
+	<!--
+	http://cemerick.com/2010/08/24/hosting-maven-repos-on-github/
+	deploy snapshot:
+	mvn -DaltDeploymentRepository=snapshot-repo::default::file:../mvn-repo/snapshots clean deploy
+	release:
+	mvn release:prepare
+	mvn release:perform
+	git checkout hql-builder-2.0.8
+	mvn -DaltDeploymentRepository=repo::default::file:../mvn-repo/releases clean deploy
+	git checkout master
+	-->
 	<properties>
 		<deploy.skip.demo>true</deploy.skip.demo>
 		<deploy.skip.web>true</deploy.skip.web>
@@ -594,14 +605,14 @@
 	</dependencyManagement>
 	<licenses>
 		<license>
-			<name>GNU Lesser General Public License v2.1</name>
-			<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+			<name>The MIT License (MIT)</name>
+			<url>https://raw.githubusercontent.com/jurgendl/swing-easy/master/LICENSE.md</url>
 		</license>
 	</licenses>
 	<issueManagement>
-		<system>Google</system>
-		<url>http://code.google.com/p/hql-builder/issues/list</url>
-	</issueManagement>	
+		<system>github</system>
+		<url>https://github.com/jurgendl/hql-builder/issues</url>
+	</issueManagement>
 	<!-- http://maven.apache.org/guides/introduction/introduction-to-profiles.html -->
 	<profiles>
 		<profile>
@@ -663,22 +674,13 @@
 		</profile>
 	</profiles>
 	<distributionManagement>
-		<!--
-		<site>
-			<id>hql-builder.googlecode.site</id>
-			<name>hql-builder.googlecode.site</name>
-			<url>scm:svn:https://hql-builder.googlecode.com/svn/site</url>
-		</site>
-		-->
 		<repository>
-			<id>hql-builder.googlecode.releases</id>
-			<name>hql-builder.googlecode.releases</name>
-			<url>dav:https://hql-builder.googlecode.com/svn/maven2</url>
+			<id>repo</id>
+			<url>https://github.com/jurgendl/mvn-repo/raw/master/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>hql-builder.googlecode.snapshots</id>
-			<name>hql-builder.googlecode.snapshots</name>
-			<url>dav:https://hql-builder.googlecode.com/svn/maven2-snapshots</url>
+			<id>snapshot-repo</id>
+			<url>https://github.com/jurgendl/mvn-repo/raw/master/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<inceptionYear>2012</inceptionYear>
@@ -692,23 +694,17 @@
 			</roles>
 		</developer>
 	</developers>
-	<contributors>
-		<!-- none -->
-	</contributors>
-	<!-- <scm>
-		<connection>scm:svn:http://hql-builder.googlecode.com/svn/trunk</connection>
-		<developerConnection>scm:svn:https://hql-builder.googlecode.com/svn/trunk</developerConnection>
-		<url>http://hql-builder.googlecode.com/svn/trunk</url>
-	</scm> -->
+	<contributors />
 	<scm>
 		<connection>scm:git:git@github.com:jurgendl/hql-builder.git</connection>
 		<url>scm:git:git@github.com:jurgendl/hql-builder.git</url>
 		<developerConnection>scm:git:git@github.com:jurgendl/hql-builder.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 	<repositories>
 		<repository>
-			<id>hql-builder.googlecode</id>
-			<url>http://hql-builder.googlecode.com/svn/maven2</url><!-- FIXME -->
+			<id>github</id>
+			<url>https://github.com/jurgendl/mvn-repo/raw/master/releases/</url>
 		</repository>
 		<repository>
 			<id>lambdaj.googlecode</id>
@@ -717,7 +713,6 @@
 	</repositories>
 	<build>
 		<extensions>
-			<!-- needed to deploy to google.code -->
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-webdav-jackrabbit</artifactId>
@@ -728,7 +723,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.5.1</version>
 				<configuration>
 					<useReleaseProfile>false</useReleaseProfile>
 					<releaseProfiles>src</releaseProfiles>
