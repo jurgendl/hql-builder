@@ -27,10 +27,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TransferQueue;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,9 +65,30 @@ public interface Collections8 {
         return (k, v) -> k;
     }
 
-    @SuppressWarnings("unchecked")
+    //public static <T> T[] array(Collection<T> collection) {
+    //    return collection.toArray(Collections8.<T>newArray().apply(collection.size()));
+    //}
+
     public static <T> T[] array(Collection<T> collection) {
-        return collection.toArray((T[]) new Object[collection.size()]);
+        return array(collection.stream());
+    }
+
+    public static <T> T[] array(Stream<T> stream) {
+        return stream.toArray(newArray());
+    }
+
+    public static <T> IntFunction<T[]> newArray() {
+        return new IntFunction<T[]>() {
+                @Override
+                @SuppressWarnings("unchecked")
+                public T[] apply(int value) {
+                    return (T[]) new Object[value];
+                }
+            };
+    }
+
+    public static <T> T[] newArray(int size) {
+        return Collections8.<T>newArray().apply(size);
     }
 
     @SuppressWarnings("unchecked")
@@ -79,8 +97,7 @@ public interface Collections8 {
     }
 
     public static <T> Function<Object, T> cast(Class<T> type) {
-        Function<Object, T> cast = (object) -> type.cast(object);
-        return cast;
+        return (o) -> type.cast(o);
     }
 
     public static <T> T cast(Class<T> type, Object object) {
@@ -143,7 +160,7 @@ public interface Collections8 {
     }
 
     public static <K, V> Map<K, V> map(Stream<Entry<K, V>> stream) {
-        return Collections8.map(stream, Collections8.<K, V> newMap());
+        return Collections8.map(stream, Collections8.<K, V>newMap());
     }
 
     public static <K, V> Map<K, V> map(Stream<Entry<K, V>> stream, Supplier<Map<K, V>> mapSupplier) {
@@ -302,6 +319,7 @@ public interface Collections8 {
     public static Stream<Path> streamFully(Path path) {
         return Collections8.stream(new PathIterator(path));
     }
+
 
     public static <T> List<T> toList(Collection<T> collection) {
         if (collection instanceof List) {
