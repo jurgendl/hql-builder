@@ -72,11 +72,6 @@ public interface Collections8 {
 		return (k, v) -> k;
 	}
 
-	// public static <T> T[] array(Collection<T> collection) {
-	// return
-	// collection.toArray(Collections8.<T>newArray().apply(collection.size()));
-	// }
-
 	public static <T> T[] array(Collection<T> collection) {
 		return array(collection.stream());
 	}
@@ -85,13 +80,10 @@ public interface Collections8 {
 		return stream.toArray(newArray());
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> IntFunction<T[]> newArray() {
-		return new IntFunction<T[]>() {
-			@Override
-			@SuppressWarnings("unchecked")
-			public T[] apply(int value) {
-				return (T[]) new Object[value];
-			}
+		return (s) -> {
+			return (T[]) new Object[s];
 		};
 	}
 
@@ -394,10 +386,55 @@ public interface Collections8 {
 		return c1.stream().anyMatch((e) -> c2.contains(e));
 	}
 
-	// /**
-	// * Function<? super T, ? extends T> value = (t) -> t;
-	// */
-	// public static <T> Function<? super T, ? extends T> value() {
-	// return (t) -> t;
-	// }
+	public static <T> Predicate<T> not(Predicate<T> t) {
+		return t.negate();
+	}
+
+	public static <E> Predicate<E> contains(Collection<E> collection) {
+		return collection::contains;
+	}
+
+	public static <T, E> Predicate<T> contains(Collection<E> collection, Function<T, E> converter) {
+		return (e) -> collection.contains(converter.apply(e));
+	}
+
+	public static <K> Predicate<K> containsKey(Map<K, ?> map) {
+		return map::containsKey;
+	}
+
+	public static <T, K> Predicate<T> containsKey(Map<K, ?> map, Function<T, K> converter) {
+		return (e) -> map.containsKey(converter.apply(e));
+	}
+
+	public static <V> Predicate<V> containsValue(Map<?, V> map) {
+		return map::containsValue;
+	}
+
+	public static <T, V> Predicate<T> containsValue(Map<?, V> map, Function<T, V> converter) {
+		return (e) -> map.containsValue(converter.apply(e));
+	}
+
+	public static <E> Predicate<E> containsNot(Collection<E> collection) {
+		return not(contains(collection));
+	}
+
+	public static <T, E> Predicate<T> containsNot(Collection<E> collection, Function<T, E> converter) {
+		return not(contains(collection, converter));
+	}
+
+	public static <K> Predicate<K> containsNotKey(Map<K, ?> map) {
+		return not(containsKey(map));
+	}
+
+	public static <T, K> Predicate<T> containsNotKey(Map<K, ?> map, Function<T, K> converter) {
+		return not(containsKey(map, converter));
+	}
+
+	public static <V> Predicate<V> containsNotValue(Map<?, V> map) {
+		return not(containsValue(map));
+	}
+
+	public static <T, V> Predicate<T> containsNotValue(Map<?, V> map, Function<T, V> converter) {
+		return not(containsValue(map, converter));
+	}
 }
