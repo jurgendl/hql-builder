@@ -88,3 +88,5 @@ target
 /hql-builder/hql-builder-demo/hql-builder-common-demo/.settings/org.eclipse.jdt.core.prefs
 /hql-builder/hql-builder-demo/hql-builder-common-demo/.settings/org.eclipse.wst.common.component
 /hql-builder/hql-builder-demo/hql-builder-common-demo/.settings/org.eclipse.wst.common.project.facet.core.xml
+bom.iml
+*.iml
