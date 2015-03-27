@@ -231,20 +231,22 @@ public abstract class ServiceImpl {
         }
     }
 
-    protected <P> void saveOrUpdate(P entity) {
+    protected <P> P saveOrUpdate(P entity) {
         try {
             this.getSession().saveOrUpdate(entity);
         } catch (javax.validation.ConstraintViolationException ex) {
             throw new ServiceException(ex.getConstraintViolations());
         }
+        return entity;
     }
 
-    protected <P> void saveOrUpdate(String entityName, P entity) {
+    protected <P> P saveOrUpdate(String entityName, P entity) {
         try {
             this.getSession().saveOrUpdate(entityName, entity);
         } catch (javax.validation.ConstraintViolationException ex) {
             throw new ServiceException(ex.getConstraintViolations());
         }
+        return entity;
     }
 
     protected <P> void update(P entity) {
