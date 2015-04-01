@@ -6,9 +6,9 @@
 		<version>2.0.8-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>hql-builder-demo</artifactId>
-	<name>hql-builder-demo</name>
-	<description>hql-builder-demo</description>
+	<artifactId>hql-builder-demo-full</artifactId>
+	<name>hql-builder-demo-full</name>
+	<description>hql-builder-demo-full</description>
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
