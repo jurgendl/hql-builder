@@ -271,19 +271,6 @@ http://jquery-plugins.net/dynatree-dynamic-tree-view-jquery-plugin
 http://sandbox.crac-design.com/jaofiletree/
 
 
-https://css-tricks.com/left-and-right/
-https://css-tricks.com/using-the-html5-history-api/
-http://flickity.metafizzy.co/
-http://kenwheeler.github.io/slick/
-https://css-tricks.com/i-like-how-percentage-background-position-works/
-http://codepen.io/collection/DgYaMj/
-https://jonsuh.com/blog/social-share-links/
-https://css-tricks.com/gooey-effect/
-https://css-tricks.com/fun-line-height/
-
-
-
-
 
 
 
