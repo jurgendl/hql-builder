@@ -90,11 +90,11 @@ public class DefaultWebPage extends WebPage {
         response.render(JavaScriptHeaderItem.forReference(WicketJSRoot.GENERAL));
     }
 
-    protected void addDynamicResources(@SuppressWarnings("unused") IHeaderResponse response) {
+    protected void addDynamicResources(IHeaderResponse response) {
         //
     }
 
-    protected void addPageResources(@SuppressWarnings("unused") IHeaderResponse response) {
+    protected void addPageResources(IHeaderResponse response) {
         // none by default
     }
 
@@ -120,7 +120,7 @@ public class DefaultWebPage extends WebPage {
         }
     }
 
-    protected void addUserResources(@SuppressWarnings("unused") IHeaderResponse response) {
+    protected void addUserResources(IHeaderResponse response) {
         // none by default
     }
 
