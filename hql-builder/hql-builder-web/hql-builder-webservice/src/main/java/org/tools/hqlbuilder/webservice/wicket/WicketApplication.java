@@ -114,7 +114,7 @@ public class WicketApplication extends WebApplication {
         super();
     }
 
-    public WicketSession createSession(Request request, @SuppressWarnings("unused") Response response) {
+    public WicketSession createSession(Request request, Response response) {
         return new WicketSession(request);
     }
 
@@ -259,6 +259,7 @@ public class WicketApplication extends WebApplication {
             guard.addPattern("+*.mp4");
             guard.addPattern("+*.flv");
             guard.addPattern("+*.ogg");
+            guard.addPattern("+*.webm");
         }
     }
 
