@@ -590,4 +590,51 @@ kbd.light, .light-keys kbd, .key.light, .light-keys .key {
 	box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .4), 0 .1em .11em rgba(0, 0, 0, .9);
 }
 
+/* ======================== toggle by radiobuttons ======================== */
+
+/* http://codepen.io/anon/pen/NPZNPq */
+
+.optiontoggle.hidden {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: scale(0.5);
+  transition: 0.25s ease-in;
+}
+.optiontoggle {
+  opacity: 1;
+  max-height: 9999; 
+  overflow: hidden;
+  transform: scale(1);
+  transition: 0.5s ease-out;
+}
+
+/*
+<div>
+  <input type="radio" name="opts" id="opt1" value="opt1">opt1
+  <input type="radio" name="opts" id="opt2" value="opt2">opt2
+</div>
+
+<div class="b">
+  block0<br/>
+  block0
+</div>
+
+<div class="b" data-group="opts" data-value="opt1">
+  block1<br/>
+  block1<br/>
+  block1
+</div>
+
+<div class="b" data-group="opts" data-value="opt2">
+  block2<br/>
+  block2
+</div>
+
+<div class="b">
+  block3<br/>
+  block3
+</div>
+*/
+
 /* ========================xxx======================== */

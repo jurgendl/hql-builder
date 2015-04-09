@@ -102,3 +102,19 @@ jQuery.fn.extend({
 		});
 	}
 });
+
+/* http://codepen.io/anon/pen/NPZNPq */
+function toggleByRadio(group) {
+	$("[data-group='" + group + "']").addClass("optiontoggle").addClass("hidden");
+	$("input[type='radio'][name='" + group + "']").click(function() { adjustByRadio(group); });
+	adjustByRadio(group);
+}
+function toggleByRadioJqueryUIFix(group) {
+	$("input[type='radio'][name='" + group + "']").parent().on('change', function(event){ adjustByRadio(group); });
+}
+function adjustByRadio(group) {
+	var V = $("input[type='radio'][name='" + group + "']:checked").val();
+	console.log(group+'='+V);
+	$("[data-group='" + group + "'][data-value!='" + V + "']").addClass("hidden");
+	$("[data-group='" + group + "'][data-value='" + V + "']").removeClass("hidden");
+}
