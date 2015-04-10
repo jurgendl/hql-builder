@@ -261,12 +261,15 @@ public class WicketApplication extends WebApplication {
 		IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
 		if (packageResourceGuard instanceof SecurePackageResourceGuard) {
 			SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
-			guard.addPattern("+*.3gp");
-			guard.addPattern("+*.mp4");
-			guard.addPattern("+*.flv");
-			guard.addPattern("+*.ogg");
-			guard.addPattern("+*.ogv");
-			guard.addPattern("+*.webm");
+			// guard.addPattern("+*.3gp");
+			// guard.addPattern("+*.mp4");
+			// guard.addPattern("+*.flv");
+			// guard.addPattern("+*.ogg");
+			// guard.addPattern("+*.ogv");
+			// guard.addPattern("+*.webm");
+			// guard.addPattern("+*.wmv");
+			// guard.addPattern("+*.avi");
+			guard.addPattern("+*.*");
 		}
 	}
 
