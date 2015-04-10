@@ -48,6 +48,8 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.tools.hqlbuilder.common.icons.WicketIconsRoot;
 import org.tools.hqlbuilder.webservice.WicketRoot;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
@@ -437,5 +439,22 @@ public class WicketApplication extends WebApplication {
 
     public void setWebProperties(Properties webProperties) {
         this.webProperties = webProperties;
+    }
+
+    protected static transient WebApplicationContext webApplicationContext;
+
+    protected static String applicationName;
+
+    public static String getApplicationName() {
+        if (applicationName == null) {
+            applicationName = getWebApplicationContext().getApplicationName();
+        }
+        return applicationName;
+    }
+
+    public static WebApplicationContext getWebApplicationContext() {
+        if (webApplicationContext == null)
+            webApplicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(get().getServletContext());
+        return webApplicationContext;
     }
 }
