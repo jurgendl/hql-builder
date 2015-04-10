@@ -265,6 +265,7 @@ public class WicketApplication extends WebApplication {
 			guard.addPattern("+*.mp4");
 			guard.addPattern("+*.flv");
 			guard.addPattern("+*.ogg");
+			guard.addPattern("+*.ogv");
 			guard.addPattern("+*.webm");
 		}
 	}
