@@ -11,6 +11,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
@@ -45,6 +46,9 @@ public class DefaultWebPage extends WebPage {
     }
 
     protected void addComponents() {
+        // title
+        add(new Label("page.title", getString("page.title")));
+
         // shortcut icon
         this.add(new WebMarkupContainer("shortcutIcon").add(new AttributeModifier("href", Model.of(WicketApplication.get().getShortcutIcon())))
                 .setVisible(StringUtils.isNotBlank(WicketApplication.get().getShortcutIcon())));
