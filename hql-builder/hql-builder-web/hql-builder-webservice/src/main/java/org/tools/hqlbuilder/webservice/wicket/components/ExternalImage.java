@@ -6,6 +6,8 @@ import java.net.URL;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * @see https://cwiki.apache.org/confluence/display/WICKET/How+to+load+an+external+image
@@ -23,21 +25,33 @@ public class ExternalImage extends Image {
 		}
 	}
 
+	protected IModel<?> url;
+
 	public ExternalImage(String id, String path) {
-		super(id, path);
+		this(id, Model.of(path));
 	}
 
 	public ExternalImage(String id, URI uri) {
-		this(id, uri.toASCIIString());
+		this(id, Model.of(uri));
 	}
 
 	public ExternalImage(String id, URL url) {
-		this(id, ExternalImage.convert(url));
+		this(id, Model.of(url));
+	}
+
+	public ExternalImage(String id, Model<?> path) {
+		super(id);
+		url = Model.of(path);
 	}
 
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		super.onComponentTag(tag);
-		tag.put("src", this.getDefaultModelObjectAsString());
+		tag.put(SRC, url.getObject().toString());
+	}
+
+	@Override
+	protected boolean getStatelessHint() {
+		return true;
 	}
 }

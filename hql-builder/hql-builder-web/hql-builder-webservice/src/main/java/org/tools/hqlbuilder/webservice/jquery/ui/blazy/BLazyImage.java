@@ -10,6 +10,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -20,10 +21,10 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 public class BLazyImage extends Image {
 	private static final long serialVersionUID = 2477527041537407931L;
 
-	private String path = null;
+	protected IModel<?> url;
 
-	public BLazyImage(String id) {
-		super(id);
+	public BLazyImage(String id, IResource imageResource) {
+		super(id, imageResource);
 		adjustImage(this);
 	}
 
@@ -32,33 +33,31 @@ public class BLazyImage extends Image {
 		adjustImage(this);
 	}
 
-	public BLazyImage(String id, IResource imageResource) {
-		super(id, imageResource);
-		adjustImage(this);
-	}
-
-	public BLazyImage(String id, IModel<?> model) {
-		super(id, model);
-		adjustImage(this);
-	}
-
-	public BLazyImage(String id, URL url) {
-		this(id, ExternalImage.convert(url));
-	}
-
-	public BLazyImage(String id, URI uri) {
-		this(id, uri.toASCIIString());
-	}
-
-	public BLazyImage(String id, String path) {
-		super(id, path);
-		this.path = path;
-		adjustImage(this);
-	}
-
 	public BLazyImage(String id, ResourceReference resourceReference, PageParameters resourceParameters) {
 		super(id, resourceReference, resourceParameters);
 		adjustImage(this);
+	}
+
+	public BLazyImage(String id) {
+		super(id);
+		adjustImage(this);
+	}
+
+	public BLazyImage(String id, IModel<?> url) {
+		this(id);
+		this.url = url;
+	}
+
+	public BLazyImage(String id, URL url) {
+		this(id, Model.of(url));
+	}
+
+	public BLazyImage(String id, URI uri) {
+		this(id, Model.of(uri));
+	}
+
+	public BLazyImage(String id, String path) {
+		this(id, Model.of(path));
 	}
 
 	public static Image adjustImage(Image image) {
@@ -69,12 +68,10 @@ public class BLazyImage extends Image {
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		super.onComponentTag(tag);
-		if (path != null) {
-			tag.getAttributes().put(BLazy.BLAZY_SRC, path);
-			tag.getAttributes().put(ExternalImage.SRC, BLazy.IMAGE_PLACEHOLDER);
-		} else {
-			adjustTag(tag);
+		if (url != null) {
+			tag.put(ExternalImage.SRC, url.getObject().toString());
 		}
+		adjustTag(tag);
 	}
 
 	public static ComponentTag adjustTag(ComponentTag tag) {
@@ -97,5 +94,10 @@ public class BLazyImage extends Image {
 		response.render(OnDomReadyHeaderItem.forScript(BLazy.BLAZY_FACTORY_JS));
 		response.render(CssHeaderItem.forReference(BLazy.BLAZY_CSS));
 		return response;
+	}
+
+	@Override
+	protected boolean getStatelessHint() {
+		return url != null || super.getStatelessHint();
 	}
 }
