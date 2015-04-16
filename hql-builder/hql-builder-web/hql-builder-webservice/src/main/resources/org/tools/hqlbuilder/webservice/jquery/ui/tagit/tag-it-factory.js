@@ -1,3 +1,31 @@
+function tagItJson(selector,optionsUrl) {
+	$(selector).hide().tagit({
+		singleFieldDelimiter : ',',
+		singleField : true,
+		allowSpaces : true,
+		minLength : 2,
+		allowDuplicates : false,
+		tagSource : function(request, response) {
+			console.log("tagit>>"+request.term);
+			$.ajax({
+				url : optionsUrl,
+				data : {
+					query : request.term
+				},
+				dataType : "json",
+				success : function(data) {
+					console.log("tagit<<"+data);
+					response($.map(data, function(item) {
+						return {
+							label : item.label,
+							value : item.value
+						}
+					}));
+				}
+			});
+		}
+	});
+}
 
 jQuery.fn.extend({
 	tagIt : function(_tagChoices, _delay, _minLength, _allowSpaces, _caseSensitive, _singleField, _singleFieldDelimiter) {
