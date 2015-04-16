@@ -1,7 +1,7 @@
 <included>
 	<timestamp key="byDay" datePattern="yyyyMMdd"/>
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
-	<property name="pattern" value="%date{ISO8601}|%-5level|%thread| \\(%class.java:%line\\) |%message%n"/>
+	<property name="pattern" value="%contextName|%date{ISO8601}|%thread|%-5level|%logger| \\(%file:%line\\) |%message%n"/>
 
 	<!-- http://logback.qos.ch/manual -->
 	<!--
