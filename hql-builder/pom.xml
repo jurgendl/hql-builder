@@ -81,7 +81,7 @@
 		<version.jackson>2.4.1</version.jackson>
 		<version.yui>2.4.7</version.yui>
 		<version.ostermiller>1.07.00</version.ostermiller>
-		<version.hikari>2.3.2</version.hikari>
+		<!-- <version.hikari>2.3.2</version.hikari> -->
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -277,11 +277,11 @@
 			<artifactId>spring-expression</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP-java6</artifactId>
 			<version>${version.hikari}</version>
-		</dependency>
+		</dependency> -->
 		<!-- WebCommon -->
 		<dependency>
 			<groupId>commons-io</groupId>

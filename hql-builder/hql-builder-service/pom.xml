@@ -39,10 +39,10 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP-java6</artifactId>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 	<build>
 		<plugins>
