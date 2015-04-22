@@ -59,7 +59,7 @@
 		</constructor-arg>
 	</bean> -->
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" destroy-method="close" scope="singleton" lazy-init="false">
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" scope="singleton" lazy-init="false">
 		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
