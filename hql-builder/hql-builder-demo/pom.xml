@@ -15,7 +15,6 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<maven.site.skip>false</maven.site.skip>
 		<version.derby>10.10.2.0</version.derby>
-		<version.jetty>7.6.14.v20131031</version.jetty>
 	</properties>
 	<modules>
 		<module>hql-builder-common-demo</module>

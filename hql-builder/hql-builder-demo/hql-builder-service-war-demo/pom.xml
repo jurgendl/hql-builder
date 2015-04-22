@@ -40,19 +40,6 @@
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Jetty -->
-		<!-- <dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
-		</dependency> -->
- 		<!-- <dependency> only available in version 8.x and 9.x
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-spring</artifactId>
-		</dependency> -->
 		<!-- RestEasy Client -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
