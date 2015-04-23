@@ -17,5 +17,5 @@ public class BLazy {
 
     public static final CssResourceReference BLAZY_CSS = new CssResourceReference(BLazy.class, "blazy.css");
 
-    public static final String BLAZY_FACTORY_JS = "new Blazy({offset:100});";
+    public static final String BLAZY_FACTORY_JS = "new Blazy({offset:333});";
 }
