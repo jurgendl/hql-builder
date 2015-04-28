@@ -389,8 +389,10 @@
 			<artifactId>resteasy-hibernatevalidator-provider</artifactId>
 			<version>${version.resteasy}</version>
 			<exclusions>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-validator</artifactId>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-validator</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
