@@ -4,6 +4,7 @@
 			<charset>UTF-8</charset>
 			<pattern>${pattern}</pattern>
 			<outputPatternAsHeader>true</outputPatternAsHeader>
+			<withJansi>true</withJansi>
 		</encoder>
 	</appender>
 </included>
