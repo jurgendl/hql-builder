@@ -73,7 +73,7 @@ public class CheckBoxPanel extends DefaultFormRowPanel<Boolean, CheckBox, CheckB
                 super.onComponentTag(tag);
                 tag.getAttributes().put(FOR, getComponent().getMarkupId());
             }
-        }.add(new CssClassNameAppender(PrimeUI.puibutton)));
+        }.add(new CssClassNameAppender(PrimeUI.puibutton)).setVisible(getComponentSettings().isLabelBehind()));
         this.add(getRequiredMarker().setVisible(false));
         this.add(getFeedback());
         return this;

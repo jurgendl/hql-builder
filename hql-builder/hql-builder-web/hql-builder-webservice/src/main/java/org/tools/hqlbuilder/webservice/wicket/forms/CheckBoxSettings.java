@@ -3,7 +3,9 @@ package org.tools.hqlbuilder.webservice.wicket.forms;
 public class CheckBoxSettings extends AbstractFormElementSettings<CheckBoxSettings> {
     private static final long serialVersionUID = 8680530201586036946L;
 
-    private boolean nice = true;
+    protected boolean nice = true;
+
+    protected boolean labelBehind = true;
 
     public CheckBoxSettings() {
         super();
@@ -23,6 +25,15 @@ public class CheckBoxSettings extends AbstractFormElementSettings<CheckBoxSettin
 
     public CheckBoxSettings setNice(boolean nice) {
         this.nice = nice;
+        return castThis();
+    }
+
+    public boolean isLabelBehind() {
+        return labelBehind;
+    }
+
+    public CheckBoxSettings setLabelBehind(boolean labelBehind) {
+        this.labelBehind = labelBehind;
         return castThis();
     }
 }
