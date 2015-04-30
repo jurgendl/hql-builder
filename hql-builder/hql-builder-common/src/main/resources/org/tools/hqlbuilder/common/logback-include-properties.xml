@@ -55,6 +55,9 @@
 			</profile>
 		</profiles>
 	 -->
-	<property name="jansiPattern" value="%highlight(%-5level) \\(%file:%line\\) %boldBlue([%thread]) %message %n"/>
+	<!--
+		https://github.com/mihnita/java-color-loggers
+	-->
+	<property name="jansiPattern" value="%highlight(%-5level) \\(%file:%line\\) %boldBlue([%thread]) %boldGreen(%message) %n"/>
 
 </included>
