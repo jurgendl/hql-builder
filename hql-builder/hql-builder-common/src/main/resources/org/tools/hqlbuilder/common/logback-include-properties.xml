@@ -5,6 +5,7 @@
 	<property name="pattern" value="%contextName|%date{ISO8601}|%thread|%-5level|%logger| \\(%file:%line\\) |%message%n"/>
 
 	<!-- http://logback.qos.ch/manual -->
+	<!-- ch.qos.logback.classic.PatternLayout -->
 	<!--
 	${HOSTNAME}
 	logger{50}
@@ -54,6 +55,6 @@
 			</profile>
 		</profiles>
 	 -->
-	<property name="jansiPattern" value="%highlight(%-5level) \\(%file:%line\\) %blue([%thread]) %message %n"/>
+	<property name="jansiPattern" value="%highlight(%-5level) \\(%file:%line\\) %boldBlue([%thread]) %message %n"/>
 
 </included>
