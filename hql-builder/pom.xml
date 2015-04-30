@@ -71,7 +71,7 @@
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
 		<version.bouncycastle>1.51</version.bouncycastle><!-- always use the latest version, available as of 2013-12-03 -->
-		<version.lambdaj>2.4</version.lambdaj><!-- maybe one day replaced by Java 1.8 -->
+		<version.lambdaj>2.3.3</version.lambdaj><!-- maybe one day replaced by Java 1.8, 2.4 only available on googlecode lambdaj repo which is dead -->
 		<version.cglib>3.1</version.cglib><!-- check if Java 1.8 ready, mostly dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->
@@ -744,12 +744,13 @@
 	<repositories>
 		<repository>
 			<id>github</id>
-			<url>https://github.com/jurgendl/mvn-repo/raw/master/releases/</url>
+			<!-- <url>https://github.com/jurgendl/mvn-repo/raw/master/releases/</url> -->
+			<url>http://raw.githubusercontent.com/jurgendl/mvn-repo/master/releases/</url>
 		</repository>
-		<repository>
+		<!--<repository>
 			<id>lambdaj.googlecode</id>
-			<url>http://lambdaj.googlecode.com/svn/repo/releases/</url><!-- FIXME -->
-		</repository>
+			<url>http://lambdaj.googlecode.com/svn/repo/releases/</url>
+		</repository>-->
 	</repositories>
 	<build>
 		<extensions>
