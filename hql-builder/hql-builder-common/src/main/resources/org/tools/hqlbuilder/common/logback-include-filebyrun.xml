@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <included>
 	<!-- per run wordt een file aangemaakt, oude files worden niet verwijderd -->
 	<appender name="FILE_BY_RUN" class="ch.qos.logback.core.FileAppender">

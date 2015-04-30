@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <included>
 	<!-- per dag wordt een file aangemaakt, nieuwe runs dezelfde dag wordt toegevoegd, oude files worden niet verwijderd -->
 	<appender name="FILE_BY_DAY" class="ch.qos.logback.core.FileAppender">

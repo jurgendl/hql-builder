@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <included>
 	<appender name="CONSOLE" withJansi="true" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

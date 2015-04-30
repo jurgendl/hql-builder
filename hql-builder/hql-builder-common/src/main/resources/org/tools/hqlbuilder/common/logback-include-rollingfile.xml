@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <included>
 	<!-- per dag wordt er een file aangemaakt, files ouder dan 14 dagen worden verwijderd, files ouder dan 1 dag worden ge-gz-ipped -->
 	<appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

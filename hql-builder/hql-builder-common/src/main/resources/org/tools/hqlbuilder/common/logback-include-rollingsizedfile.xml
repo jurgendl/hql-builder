@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <included>
 	<!-- zelfde als vorige maar wanneer file groter dan 10MB worden wordt er ook een roll-over gedaan  -->
 	<appender name="ROLLING_SIZED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

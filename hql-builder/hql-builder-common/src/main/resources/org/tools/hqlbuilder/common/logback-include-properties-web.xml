@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <included>
 	<timestamp key="byDay" datePattern="yyyyMMdd"/>
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
