@@ -41,7 +41,7 @@ public class LogInPanel extends Panel {
 
         protected final Properties webProperties;
 
-        public LogInForm(@SuppressWarnings("unused") final Authentication authentication, final Properties webProperties) {
+        public LogInForm( final Authentication authentication, final Properties webProperties) {
             super("loginform", Model.of(new UserData()));
             this.webProperties = webProperties;
             TextField<String> username = new TextField<String>("username") {

@@ -511,7 +511,7 @@ public class Table<T extends Serializable> extends AjaxFallbackDefaultDataTable<
     public class TopToolbar extends AjaxNavigationToolbar {
         private static final long serialVersionUID = 7871654433608259728L;
 
-        public TopToolbar(final DataTable<T, String> table, @SuppressWarnings("unused") final DataProvider<T> dataProvider) {
+        public TopToolbar(final DataTable<T, String> table,  final DataProvider<T> dataProvider) {
             super(table);
         }
 

@@ -226,7 +226,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
         sqlString = removeBlanks(sqlString);
 
-        @SuppressWarnings("unused")
+        
         String[] sqlStringParts = sqlString.split(getNewline());
 
         String[] lines = sqlString.split(getNewline());

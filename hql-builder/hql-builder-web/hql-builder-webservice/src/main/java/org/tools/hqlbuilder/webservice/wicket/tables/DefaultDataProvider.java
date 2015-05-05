@@ -210,7 +210,7 @@ public abstract class DefaultDataProvider<T extends Serializable> implements Dat
     /**
      * implement me
      */
-    @SuppressWarnings("unused")
+    
     public Iterator<T> select(long first, long count, Map<String, SortOrder> sorting) {
         throw new UnsupportedOperationException("implement me");
     }

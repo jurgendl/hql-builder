@@ -255,7 +255,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return response.toString();
     }
 
-    private static void outputSelection(@SuppressWarnings("unused") String type, HashMap<String, Integer> map, ETable<?> table,
+    private static void outputSelection( String type, HashMap<String, Integer> map, ETable<?> table,
             TableSelectionListener listener) {
         int row = map.get(HqlBuilderFrameConstants.ROW);
         int col = map.get(HqlBuilderFrameConstants.COL);

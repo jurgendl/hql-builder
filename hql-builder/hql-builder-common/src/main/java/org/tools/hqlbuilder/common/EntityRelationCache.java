@@ -366,7 +366,7 @@ public class EntityRelationCache<P> {
         mmAdd(bean, property, children, target, backprop);
     }
 
-    private <C> void mmRemove(P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target, String backprop) {
+    private <C> void mmRemove(P bean,  String property, Collection<C> children, C target, String backprop) {
         if (target == null) {
             return;
         }
@@ -429,7 +429,7 @@ public class EntityRelationCache<P> {
     /**
      * intern gebruik
      */
-    private <C> void mmAdd(P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target, String backprop) {
+    private <C> void mmAdd(P bean,  String property, Collection<C> children, C target, String backprop) {
         if (target == null) {
             return;
         }
@@ -544,7 +544,7 @@ public class EntityRelationCache<P> {
         omAdd(bean, property, target, omMappedBy(property));
     }
 
-    private <C> void omRemove(@SuppressWarnings("unused") P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target,
+    private <C> void omRemove( P bean,  String property, Collection<C> children, C target,
             String backprop) {
         if (!children.contains(target)) {
             return;
@@ -561,7 +561,7 @@ public class EntityRelationCache<P> {
         invokeCollectionRemove(children, target);
     }
 
-    private <C> void omAdd(P bean, @SuppressWarnings("unused") String property, Collection<C> children, C target, String backprop) {
+    private <C> void omAdd(P bean,  String property, Collection<C> children, C target, String backprop) {
         try {
             if (children.contains(target)) {
                 return;

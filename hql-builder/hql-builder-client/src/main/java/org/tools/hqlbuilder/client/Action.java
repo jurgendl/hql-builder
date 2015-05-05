@@ -53,7 +53,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     public <T> Action(String id, boolean enabled, String name, Icon icon, String shortDescription,
-            @SuppressWarnings("unused") String longDescription, Boolean selected, Character mnemonic, String accelerator, boolean persist,
+             String longDescription, Boolean selected, Character mnemonic, String accelerator, boolean persist,
             String parentId, Class<T> type, T defaultValue) {
         logger.debug("{} {}", id, value);
         this.id = id;
