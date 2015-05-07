@@ -478,7 +478,8 @@ public class HqlServiceImpl implements HqlService {
         String[] sqlAliases = get(queryTranslator, QLD + SQL_ALIASES, String[].class);
         result.setSqlAliases(sqlAliases);
         
-        Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
+		@SuppressWarnings("unused")
+		Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
         Map<String, String> from_aliases = new HashMap<String, String>();
         result.setFromAliases(from_aliases);
         for (int i = 0; i < entityAliases.length; i++) {
