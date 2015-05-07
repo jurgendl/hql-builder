@@ -77,7 +77,8 @@ public class PropertyPanel extends PropertySheetPanel {
     private Serializable bean;
 
     
-    private Boolean settingValue = false;
+	@SuppressWarnings("unused")
+	private Boolean settingValue = false;
 
     private final SortedMap<String, PropertyDescriptor> propertyDescriptors = new TreeMap<String, PropertyDescriptor>();
 

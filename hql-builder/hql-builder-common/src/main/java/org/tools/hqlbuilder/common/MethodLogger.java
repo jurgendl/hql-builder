@@ -10,7 +10,7 @@ import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.ThrowsAdvice;
 
-@SuppressWarnings({ "rawtypes", "unused" })
+@SuppressWarnings({ "rawtypes" })
 public class MethodLogger implements AfterReturningAdvice, ThrowsAdvice, MethodBeforeAdvice {
     protected static final Logger defaultlogger = LoggerFactory.getLogger(MethodLogger.class);
 
