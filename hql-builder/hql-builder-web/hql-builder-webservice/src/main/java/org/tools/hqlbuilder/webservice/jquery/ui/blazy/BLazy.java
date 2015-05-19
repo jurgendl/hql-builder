@@ -8,8 +8,6 @@ import org.tools.hqlbuilder.webservice.wicket.JavaScriptResourceReference;
  * @see http://dinbror.dk/blog/blazy/
  */
 public class BLazy {
-	public static final String IMAGE_PLACEHOLDER = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-
 	public static final String BLAZY_CLASS = "b-lazy";
 
 	public static final String BLAZY_SRC = "data-src";
