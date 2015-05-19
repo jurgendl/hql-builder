@@ -1,7 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.components;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.wicket.markup.ComponentTag;
@@ -16,14 +15,6 @@ public class ExternalImage extends Image {
 	private static final long serialVersionUID = 7113713255809950318L;
 
 	public static final String SRC = "src";
-
-	public static URI convert(URL url) {
-		try {
-			return url.toURI();
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
 
 	protected IModel<?> url;
 
