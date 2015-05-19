@@ -16,7 +16,11 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 
+import org.slf4j.LoggerFactory;
+
 public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QueryFavoriteUtils.class);
+
     private static JAXBContext jaxbContext;
 
     private static File[] convertV1ToV2(File[] xmls) {
@@ -80,9 +84,9 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             jaxbMarshaller.marshal(favorite, os);
         } catch (IOException ex) {
-            log(ex);
+			logger.error("", ex);
         } catch (JAXBException ex) {
-            log(ex);
+			logger.error("", ex);
         } finally {
             if (os != null) {
                 try {
@@ -92,10 +96,6 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                 }
             }
         }
-    }
-
-    private static void log(Exception ex) {
-        ex.printStackTrace(System.out);
     }
 
     public static QueryFavorite load(String projectdir, LinkedList<QueryFavorite> favorites) {
@@ -120,9 +120,12 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
             }
         });
         QueryFavorite last = null;
+		File _xml = null;
         try {
             Unmarshaller jaxbUnmarshaller = getJaxbcontext().createUnmarshaller();
             for (File xml : xmls) {
+				_xml = xml;
+				logger.info("favorite {}", xml);
                 try {
                     FileInputStream is = new FileInputStream(xml);
                     QueryFavorite favorite = (QueryFavorite) jaxbUnmarshaller.unmarshal(is);
@@ -148,14 +151,14 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                             last = favorite;
                         }
                     } catch (Exception exx) {
-                        log(exx);
+						logger.error("{}", xml, exx);
                     }
                 } catch (Exception ex) {
-                    log(ex);
+					logger.error("{}", xml, ex);
                 }
             }
         } catch (JAXBException ex) {
-            log(ex);
+			logger.error("{}", _xml, ex);
         }
         return last;
     }
