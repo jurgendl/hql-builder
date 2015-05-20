@@ -23,11 +23,11 @@ public class ManyToOne extends EntityERHAdapter {
         erh.omSet(ONE_TO_MANY, oneToMany);
     }
 
-    public void addOneToMany(@SuppressWarnings("hiding") OneToMany oneToMany) {
+	public void addOneToMany(OneToMany oneToMany) {
         erh.omAdd(ONE_TO_MANY, oneToMany);
     }
 
-    public void removeOneToMany(@SuppressWarnings("hiding") OneToMany oneToMany) {
+	public void removeOneToMany(OneToMany oneToMany) {
         erh.omRemove(ONE_TO_MANY, oneToMany);
     }
 
