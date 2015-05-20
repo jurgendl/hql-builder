@@ -706,7 +706,7 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>inc-web</id>
+			<id>inc-web-modules</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
