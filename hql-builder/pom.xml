@@ -89,7 +89,6 @@
 		<module>hql-builder-annotations</module>
 		<module>hql-builder-common</module>
 		<module>hql-builder-service</module>
-		<module>hql-builder-web</module>
 		<module>hql-builder-client</module>
 	</modules>
 	<dependencyManagement>
@@ -704,6 +703,15 @@
 			</activation>
 			<modules>
 				<module>hql-builder-demo</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>inc-web</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>hql-builder-web</module>
 			</modules>
 		</profile>
 	</profiles>

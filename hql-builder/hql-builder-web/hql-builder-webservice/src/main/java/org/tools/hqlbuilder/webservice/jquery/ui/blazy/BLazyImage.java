@@ -13,7 +13,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.tools.hqlbuilder.webservice.WebUtilities;
 import org.tools.hqlbuilder.webservice.wicket.components.ExternalImage;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -76,7 +75,7 @@ public class BLazyImage extends Image {
 
 	public static ComponentTag adjustTag(ComponentTag tag) {
 		tag.getAttributes().put(BLazy.BLAZY_SRC, tag.getAttributes().getString(ExternalImage.SRC));
-		tag.getAttributes().put(ExternalImage.SRC, WebUtilities.IMAGE_PLACEHOLDER);
+		tag.getAttributes().put(ExternalImage.SRC, "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
 		return tag;
 	}
 
