@@ -47,13 +47,17 @@ public class SplashHelper {
 
     private static boolean stopped = false;
 
-    public static void setup() throws IOException {
+	public static void setup(String version) throws IOException {
         BufferedImage logo = HqlBuilderImages.getLogo();
         splash = new Splash(logo);
         splash.setFont(new JLabel().getFont().deriveFont(Font.BOLD));
+		splash.setVersionFont(new JLabel().getFont().deriveFont(Font.BOLD).deriveFont(18f));
+		splash.setVersionLocation(new Point(644, 44));
+		splash.setVersion(version);
         splash.setTextLocation(new Point(500, 88));
         splash.setProgressBarLocation(new Rectangle(294, 82, 200, 4));
         splash.setColor(Color.white);
+		splash.setVersionColor(Color.black);
         window = splash.showSplash();
         window.setAlwaysOnTop(true);
         splashtimessb = new StringBuilder();
@@ -136,7 +140,6 @@ public class SplashHelper {
                 splashtimest += splashtimesd[i];
                 i++;
             }
-
             splashtimesc += splashtimesd[0];
         } catch (RuntimeException ex) {
             //

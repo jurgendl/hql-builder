@@ -35,7 +35,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -95,6 +94,7 @@ import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
@@ -282,7 +282,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(String[] args, HqlServiceClientLoader serviceLoader) {
         try {
-            System.out.println("arguments: " + Arrays.asList(args));
+			// System.out.println("arguments: " + Arrays.asList(args));
 
             // zet look en feel gelijk aan default voor OS
             UIUtils.systemLookAndFeel();
@@ -291,7 +291,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String lang = preferences.get(HqlBuilderFrameConstants.PERSISTENT_LOCALE, SystemSettings.getCurrentLocale().getLanguage());
             SystemSettings.setCurrentLocale(new Locale(lang));
 
-            SplashHelper.setup();
+			String version = fetchVersion();
+			String latestVersion = fetchLatestVersion();
+			if ("?".equals(version)) version = latestVersion;
+
+			SplashHelper.setup(version);
             SplashHelper.step();
 
             Thread tt = new Thread(new Runnable() {
@@ -362,7 +366,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             SplashHelper.step();
 
-            hqlBuilder.start();
+			hqlBuilder.start(latestVersion, version);
 
             hqlBuilder.hql.grabFocus();
 
@@ -443,6 +447,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HqlBuilderFrame.class);
+
+	private String latestVersion;
 
     private String version;
 
@@ -898,33 +904,24 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void about() {
         try {
-            String latest = "?";
-            String u = "?";
-            try {
-                u = HqlBuilderFrame.getText(HqlBuilderFrameConstants.PROJECT_META);
-                org.w3c.dom.Text o = (org.w3c.dom.Text) CommonUtils.getFromXml(new ByteArrayInputStream(u.getBytes()), "metadata",
-                        "/metadata/versioning/release/text()");
-                latest = o.getData();
-            } catch (Exception ex) {
-                HqlBuilderFrame.logger.error("{}", ex);
-            }
-
             final JDialog d = new JDialog(this.frame, HqlResourceBundle.getMessage("about"), true);
+			d.setUndecorated(true);
             JPanel cp = new JPanel(new MigLayout("insets 0 0 0 0", "10[]", "5[]5[]5[]5"));
             Container contentPane = d.getContentPane();
             contentPane.setLayout(new BorderLayout(0, 0));
             contentPane.add(cp);
 
-            boolean upToDate = "?".equals(latest) || (this.version.compareTo(latest) >= 0);
+			cp.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createSoftBevelBorder(BevelBorder.RAISED), BorderFactory.createMatteBorder(1, 1, 0, 0, new Color(150, 150, 150))));
 
-            cp.add(new JLabel(new ImageIcon(HqlBuilderImages.getLogo())), "dock north");
-            cp.add(this.font(
-                    new ELabel(HqlResourceBundle.getMessage("versioning", this.version, latest,
-                            HqlResourceBundle.getMessage(String.valueOf(upToDate), false))), 14), "wrap");
-            // if (!upToDate) {
-            cp.add(this.font(new EURILabel(URI.create(HqlBuilderFrameConstants.downloadLatestURI), HqlResourceBundle.getMessage("download latest")),
-                    14), "wrap");
-            // }
+			boolean upToDate = "?".equals(latestVersion) || (this.version.compareTo(latestVersion) >= 0);
+
+            JLabel cp0 = new JLabel(new ImageIcon(HqlBuilderImages.getLogo()));
+			cp0.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+			cp.add(cp0, "dock north");
+			ELabel cp1 = this.font(new ELabel(HqlResourceBundle.getMessage("versioning", this.version, latestVersion, HqlResourceBundle.getMessage(String.valueOf(upToDate), false))), 14);
+			cp.add(cp1, "wrap");
+			EURILabel cp2 = this.font(new EURILabel(URI.create(HqlBuilderFrameConstants.downloadLatestURI), HqlResourceBundle.getMessage("download latest")), 14);
+			cp.add(cp2, "wrap");
 
             AbstractAction ok = new AbstractAction("Ok") {
                 private static final long serialVersionUID = -8251984652275658858L;
@@ -1948,26 +1945,39 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return this.searchColorAction.getValue() == null ? new Color(245, 225, 145) : (Color) this.searchColorAction.getValue();
     }
 
-    public void getVersion() {
+	public static String fetchVersion() {
         try {
             Properties p = new Properties();
-            p.load(this.getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.tools.hql-builder/hql-builder-client/pom.properties"));
-            this.version = p.getProperty("version").toString();
+			p.load(HqlBuilderFrame.class.getClassLoader().getResourceAsStream("META-INF/maven/org.tools.hql-builder/hql-builder-client/pom.properties"));
+			return p.getProperty("version").toString();
         } catch (Exception ex) {
-            try {
-                this.version = org.w3c.dom.Node.class.cast(
-                        CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project", "/default:project/default:version/text()")).getNodeValue();
-            } catch (Exception ex2) {
-                try {
-                    this.version = org.w3c.dom.Node.class.cast(
-                            CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project",
-                                    "/default:project/default:parent/default:version/text()")).getNodeValue();
-                } catch (Exception ex3) {
-                    this.version = HqlResourceBundle.getMessage("latest");
-                }
-            }
+			return HqlResourceBundle.getMessage("latest"); // actually unknown
+			// try {
+			// this.version = org.w3c.dom.Node.class.cast(
+			// CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project", "/default:project/default:version/text()")).getNodeValue();
+			// } catch (Exception ex2) {
+			// try {
+			// this.version = org.w3c.dom.Node.class.cast(
+			// CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project",
+			// "/default:project/default:parent/default:version/text()")).getNodeValue();
+			// } catch (Exception ex3) {
+			// this.version = HqlResourceBundle.getMessage("latest");
+			// }
+			// }
         }
     }
+
+	public static String fetchLatestVersion() {
+		String latest = "?";
+		try {
+			String u = HqlBuilderFrame.getText(HqlBuilderFrameConstants.PROJECT_META);
+			org.w3c.dom.Text o = (org.w3c.dom.Text) CommonUtils.getFromXml(new ByteArrayInputStream(u.getBytes()), "metadata", "/metadata/versioning/release/text()");
+			latest = o.getData();
+		} catch (Exception ex) {
+			HqlBuilderFrame.logger.error("{}", ex);
+		}
+		return latest;
+	}
 
     protected void help() {
         try {
@@ -2657,7 +2667,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     /**
      * start
      */
-    public void start() throws IOException {
+	public void start(String latestVersion, String version) throws IOException {
+		this.version = version;
+		this.latestVersion = latestVersion;
+
         this.reloadColor();
 
         this.syntaxHighlight.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, new float[] { 1.0F }, 0.F));
@@ -3125,8 +3138,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             helpmenu.add(new JMenuItem(this.aboutAction));
             menuBar.add(helpmenu);
         }
-
-        this.getVersion();
 
         this.frame.setTitle(HqlBuilderFrameConstants.NAME + " v" + this.version + " - " + this.hqlService.getConnectionInfo() + " - "
                 + this.hqlService.getProject() + (this.hqlService.getServiceUrl() == null ? "" : " - " + this.hqlService.getServiceUrl()));
