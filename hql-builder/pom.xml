@@ -70,7 +70,7 @@
 		<version.wicket.bootstrap>0.9.2</version.wicket.bootstrap><!-- stale? -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
-		<version.bouncycastle>1.51</version.bouncycastle><!-- always use the latest version, available as of 2013-12-03 -->
+		<version.bouncycastle>1.52</version.bouncycastle><!-- always use the latest version, available as of 2013-12-03 -->
 		<version.lambdaj>2.3.3</version.lambdaj><!-- maybe one day replaced by Java 1.8, 2.4 only available on googlecode lambdaj repo which is dead -->
 		<version.cglib>3.1</version.cglib><!-- dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
