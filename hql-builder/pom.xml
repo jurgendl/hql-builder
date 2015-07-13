@@ -20,7 +20,7 @@
 	git checkout bom-3.0.0
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
-	mvn --batch-mode release:update-versions -DdevelopmentVersion=3.0.1-SNAPSHOT -P inc-test-modules,inc-web-modules
+	mvn -_-batch-mode release:update-versions -DdevelopmentVersion=3.0.1-SNAPSHOT -P inc-test-modules,inc-web-modules
 	#sync
 	-->
 	<properties>
