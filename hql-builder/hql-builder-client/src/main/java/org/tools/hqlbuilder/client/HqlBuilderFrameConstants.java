@@ -14,7 +14,7 @@ public interface HqlBuilderFrameConstants {
 
     public static final File FAVORITES_DIR = new File(PROGRAM_DIR, "favorites");
 
-	public static final String PROJECT_META = "https://raw.githubusercontent.com/jurgendl/mvn-repo/master/releases/org/tools/hql-builder-client/maven-metadata.xml";
+	public static final String PROJECT_META = "https://raw.githubusercontent.com/jurgendl/mvn-repo/master/releases/org/tools/hql-builder/hql-builder-client/maven-metadata.xml";
 
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 
