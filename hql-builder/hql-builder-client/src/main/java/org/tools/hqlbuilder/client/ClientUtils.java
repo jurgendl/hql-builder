@@ -75,7 +75,7 @@ public class ClientUtils extends CommonUtils {
      */
 
     static public String getHelpUrl() {
-        return "http://code.google.com/p/hql-builder/w/list";
+		return "https://github.com/jurgendl/hql-builder/wiki";
     }
 
     private static Font DEFAULT_FONT;
