@@ -278,3 +278,7 @@ http://nathaniellord.com/projects/slidemenu/
 
 http://www.jplugins.net/top-rated-plugins/
 http://jquery-plugins.net/css3-progress-bar-with-jquery
+
+http://demosthenes.info/blog/1052/position-sticky-scroll-to-top-then-fixed-in-pure-CSS
+https://fourword.fourkitchens.com/article/fix-scrolling-performance-css-will-change-property
+http://www.sitepoint.com/12-little-known-css-facts-the-sequel/
