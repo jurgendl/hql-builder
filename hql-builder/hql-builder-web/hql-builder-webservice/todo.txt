@@ -1,3 +1,6 @@
+http://www.sitepoint.com/9-javascript-libraries-working-with-local-storage/
+https://github.com/marcuswestin/store.js
+
 http://howtodoinjava.com/2013/07/25/jax-rs-2-0-resteasy-3-0-2-final-security-tutorial/
 
 
@@ -282,3 +285,31 @@ http://jquery-plugins.net/css3-progress-bar-with-jquery
 http://demosthenes.info/blog/1052/position-sticky-scroll-to-top-then-fixed-in-pure-CSS
 https://fourword.fourkitchens.com/article/fix-scrolling-performance-css-will-change-property
 http://www.sitepoint.com/12-little-known-css-facts-the-sequel/
+http://www.sitepoint.com/css-gradients-a-syntax-crash-course/
+http://www.sitepoint.com/create-chrome-extension-10-minutes-flat/
+http://www.sitepoint.com/fancy-responsive-charts-with-chart-js/
+http://www.sitepoint.com/manipulating-images-web-pages-camanjs/
+http://www.sitepoint.com/building-credit-card-form-custom-element-polymer/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
