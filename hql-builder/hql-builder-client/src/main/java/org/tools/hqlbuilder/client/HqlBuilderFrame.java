@@ -108,8 +108,6 @@ import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.Utilities;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.text.WordUtils;
@@ -170,6 +168,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionType;
 import org.tools.hqlbuilder.common.icons.ClientIcons;
 import org.tools.hqlbuilder.common.icons.CommonIcons;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * @author Jurgen
@@ -2593,7 +2593,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void remove() {
         this.ingoreParameterListSelectionListener = true;
 
-        if (this.parametersEDT.getSelectedRecords().size() == 0) {
+        if (this.parametersEDT.getSelectedRecords().isEmpty()) {
             this.parametersEDT.removeAllRecords();
         } else {
             this.parametersEDT.removeSelectedRecords();

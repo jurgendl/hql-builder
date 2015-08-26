@@ -85,7 +85,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                if (hook.getCurrentFilenames() == null || hook.getCurrentFilenames().size() == 0) {
+                if (hook.getCurrentFilenames() == null || hook.getCurrentFilenames().isEmpty()) {
                     tag.getAttributes().remove("style");
                 } else {
                     tag.getAttributes().put("style", "display:none");
@@ -102,7 +102,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                if (hook.getCurrentFilenames() == null || hook.getCurrentFilenames().size() == 0) {
+                if (hook.getCurrentFilenames() == null || hook.getCurrentFilenames().isEmpty()) {
                     tag.getAttributes().put("style", "display:none");
                 } else {
                     tag.getAttributes().remove("style");
@@ -276,7 +276,7 @@ public class FilePickerPanel<P> extends FormRowPanel<P, List<FileUpload>, FileUp
 
     protected String getInitialValue() {
         Collection<String> currentFilenames = hook.getCurrentFilenames();
-        if (currentFilenames == null || currentFilenames.size() == 0) {
+        if (currentFilenames == null || currentFilenames.isEmpty()) {
             return null;
         }
         StringBuilder sb = new StringBuilder();

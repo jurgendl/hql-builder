@@ -159,7 +159,7 @@ public class CommonUtils {
         for (int i = 0; i < length; i++) {
             results.add(nodes.item(i));
         }
-        return results.size() == 0 ? null : (results.size() == 1 ? results.get(0) : results);
+        return results.isEmpty() ? null : (results.size() == 1 ? results.get(0) : results);
     }
 
     private static Document parseXml(InputStream xmlFile) throws ParserConfigurationException, SAXException, IOException {

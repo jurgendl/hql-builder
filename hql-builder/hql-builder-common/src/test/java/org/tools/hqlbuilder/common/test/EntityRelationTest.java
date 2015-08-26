@@ -174,7 +174,7 @@ public class EntityRelationTest extends org.junit.Assert {
         om.setManyToOne(mo);
 
         om.setManyToOne(null);
-        assertTrue(mo.getOneToMany().size() == 0);
+        assertTrue(mo.getOneToMany().isEmpty());
     }
 
     @Test

@@ -52,7 +52,7 @@ public class PathResolver {
                 List<TreeNode> findPath = findPath(todoCurrentStep);
                 todosFutureStep.addAll(findPath);
             }
-            if (todosFutureStep.size() == 0) {
+            if (todosFutureStep.isEmpty()) {
                 throw new End();
             }
             todosCurrentStep.addAll(todosFutureStep);
