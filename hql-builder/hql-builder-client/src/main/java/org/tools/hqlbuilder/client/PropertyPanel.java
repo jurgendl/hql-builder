@@ -74,7 +74,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
     private static final long serialVersionUID = -5568670775272022905L;
 
-    private Serializable bean;
+    private Object bean;
 
     
 	@SuppressWarnings("unused")
@@ -644,10 +644,15 @@ public class PropertyPanel extends PropertySheetPanel {
 
             try {
                 if (!new EqualsBuilder().append(evt.getOldValue(), evt.getNewValue()).isEquals()) {
-                    logger.info("changing value from '{}' to '{}'", evt.getOldValue(), evt.getNewValue());
-                    writeMethod.invoke(bean, evt.getNewValue());
-                    Serializable id = hqlService.save(bean);
-                    bean = hqlService.get(bean.getClass(), id);
+                    if (bean instanceof Serializable) {
+                        logger.info("changing value from '{}' to '{}'", evt.getOldValue(), evt.getNewValue());
+                        writeMethod.invoke(bean, evt.getNewValue());
+                        Serializable serializable = Serializable.class.cast(bean);
+                        Serializable id = hqlService.save(serializable);
+                        bean = hqlService.get(serializable.getClass(), id);
+                    } else {
+                        logger.error("bean is not serializable");
+                    }
                 }
 
                 EventQueue.invokeLater(new Runnable() {
