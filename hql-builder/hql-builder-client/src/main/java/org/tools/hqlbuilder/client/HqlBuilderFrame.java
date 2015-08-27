@@ -2909,7 +2909,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                             ClientUtils.getPropertyFrame(HqlBuilderFrameConstants.SERIALIZABLE,
                                     HqlBuilderFrame.this.editableResultsAction.isSelected()), BorderLayout.CENTER);
                 } else {
-                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame((Serializable) data,
+                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data,
                             HqlBuilderFrame.this.editableResultsAction.isSelected());
                     propertyFrame.setHqlService(HqlBuilderFrame.this.hqlService);
                     HqlBuilderFrame.this.propertypanel.add(HqlBuilderFrame.this.font(propertyFrame, null), BorderLayout.CENTER);

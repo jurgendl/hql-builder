@@ -90,7 +90,7 @@ public class PropertyPanel extends PropertySheetPanel {
      * @param bean na
      */
 
-    public PropertyPanel(Serializable bean, final boolean editable) {
+    public PropertyPanel(Object bean, final boolean editable) {
         super(new PropertySheetTable() {
             private static final long serialVersionUID = 5578802576173787006L;
 
