@@ -4,9 +4,6 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
@@ -76,19 +73,12 @@ public class PropertyPanel extends PropertySheetPanel {
 
     private Object bean;
 
-    
-	@SuppressWarnings("unused")
-	private Boolean settingValue = false;
+    @SuppressWarnings("unused")
+    private Boolean settingValue = false;
 
     private final SortedMap<String, PropertyDescriptor> propertyDescriptors = new TreeMap<String, PropertyDescriptor>();
 
     private HqlService hqlService;
-
-    /**
-     * Creates a new PropertyPanel object.
-     *
-     * @param bean na
-     */
 
     public PropertyPanel(Object bean, final boolean editable) {
         super(new PropertySheetTable() {
@@ -122,12 +112,10 @@ public class PropertyPanel extends PropertySheetPanel {
         logger.info("{}", String.valueOf(bean));
 
         this.bean = bean;
-        BeanInfo beanInfo;
 
         if (bean != null) {
             try {
-                beanInfo = Introspector.getBeanInfo(bean.getClass());
-                for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
+                for (PropertyDescriptor propertyDescriptor : new PropertyDescriptorsBean(bean.getClass()).getPropertyDescriptors().values()) {
                     try {
                         propertyDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
                         Method readMethod = propertyDescriptor.getReadMethod();
@@ -142,7 +130,7 @@ public class PropertyPanel extends PropertySheetPanel {
                         //
                     }
                 }
-            } catch (IntrospectionException ex) {
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
