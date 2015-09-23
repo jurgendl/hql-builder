@@ -4,11 +4,9 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;import java.util.HashMap;lic
 
-public class PropertyDescriptorsBean {
+class PropertyDescriptorsBean {
     private final Map<String, PropertyDescriptor> propertyDescriptors;
 
     public PropertyDescriptorsBean(Class<?> clazz) {
@@ -24,10 +22,9 @@ public class PropertyDescriptorsBean {
                     if (methodName.startsWith("get") || methodName.startsWith("is")) {
                         if (method.getParameterTypes().length == 0) {
                             if (!Void.TYPE.isAssignableFrom(method.getReturnType())) {
-                                if (methodName.startsWith("get")) {
-                                    get.put(methodName.substring(3) + "_" + method.getReturnType().getName(), method);
-                                } else {
-                                    is.put(methodName.substring(2) + "_" + method.getReturnType().getName(), method);
+                                String key = methodName.substring(methodName.startsWith("get") ? 3 : 2) + "_" + method.getReturnType().getName();
+                                if (!get.containsKey(key)) {
+                                    get.put(key, method);
                                 }
                             }
                         }
@@ -35,8 +32,13 @@ public class PropertyDescriptorsBean {
                     if (methodName.startsWith("set")) {
                         if (method.getParameterTypes().length == 1) {
                             if (Void.TYPE.isAssignableFrom(method.getReturnType())) {
-                                String propertyName = methodName.substring(3);
-                                set.put(propertyName + "_" + method.getParameterTypes()[0].getName(), method);
+                                if (method.getParameterTypes().length == 1) {
+                                    String propertyName = methodName.substring(3);
+                                    String key = propertyName + "_" + method.getParameterTypes()[0].getName();
+                                    if (!set.containsKey(key)) {
+                                        set.put(key, method);
+                                    }
+                                }
                             }
                         }
                     }
