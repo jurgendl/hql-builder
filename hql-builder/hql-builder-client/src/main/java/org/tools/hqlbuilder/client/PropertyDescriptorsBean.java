@@ -4,7 +4,9 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collections;import java.util.HashMap;lic
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 class PropertyDescriptorsBean {
     private final Map<String, PropertyDescriptor> propertyDescriptors;
