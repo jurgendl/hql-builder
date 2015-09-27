@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-class PropertyDescriptorsBean {
+public class PropertyDescriptorsBean {
     private final Map<String, PropertyDescriptor> propertyDescriptors;
 
     public PropertyDescriptorsBean(Class<?> clazz) {
@@ -25,8 +25,14 @@ class PropertyDescriptorsBean {
                         if (method.getParameterTypes().length == 0) {
                             if (!Void.TYPE.isAssignableFrom(method.getReturnType())) {
                                 String key = methodName.substring(methodName.startsWith("get") ? 3 : 2) + "_" + method.getReturnType().getName();
-                                if (!get.containsKey(key)) {
-                                    get.put(key, method);
+                                if (methodName.startsWith("get")) {
+                                    if (!get.containsKey(key)) {
+                                        get.put(key, method);
+                                    }
+                                } else {
+                                    if (!is.containsKey(key)) {
+                                        is.put(key, method);
+                                    }
                                 }
                             }
                         }
@@ -64,6 +70,8 @@ class PropertyDescriptorsBean {
         for (Map.Entry<String, Method> _is : is.entrySet()) {
             String propertyName = _is.getKey().split("_")[0];
             propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+            if (propertyDescriptors.containsKey(propertyName))
+                continue;
             PropertyDescriptor pd;
             try {
                 pd = new PropertyDescriptor(propertyName, _is.getValue(), set.get(_is.getKey()));
@@ -71,8 +79,7 @@ class PropertyDescriptorsBean {
                 ex.printStackTrace();
                 continue;
             }
-            if (!propertyDescriptors.containsKey(propertyName))
-                propertyDescriptors.put(propertyName, pd);
+            propertyDescriptors.put(propertyName, pd);
         }
         this.propertyDescriptors = Collections.unmodifiableMap(propertyDescriptors);
     }
