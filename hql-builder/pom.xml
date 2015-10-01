@@ -27,7 +27,7 @@
 		<deploy.skip.demo>true</deploy.skip.demo>
 		<deploy.skip.web>true</deploy.skip.web>
 		<!-- general properties -->
-		<targetJdk>1.7</targetJdk><!-- should be compatible with 1.6; not ready for 8 - reason library problems -->
+		<targetJdk>1.8</targetJdk><!-- should be compatible with 1.6; not ready for 8 - reason library problems -->
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding><!-- fixed encoding -->
 		<project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip><!-- skip by default -->
@@ -75,7 +75,8 @@
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
 		<version.bouncycastle>1.52</version.bouncycastle><!-- always use the latest version, available as of Sunday 1st March 2015 -->
-		<version.lambdaj>2.3.3</version.lambdaj><!-- maybe one day replaced by Java 1.8, 2.4 only available on googlecode lambdaj repo which is dead -->
+		<version.lambdaj>2.4</version.lambdaj><!-- 2.3.3; maybe one day replaced by Java 1.8, 2.4 only available on googlecode
+		lambdaj repo which is dead -->
 		<version.cglib>3.1</version.cglib><!-- dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->

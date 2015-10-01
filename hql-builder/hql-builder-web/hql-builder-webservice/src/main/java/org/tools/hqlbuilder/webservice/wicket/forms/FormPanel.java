@@ -1,6 +1,8 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -47,6 +49,8 @@ import org.tools.hqlbuilder.webservice.wicket.sass.SassResourceReference;
 
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 
+import ch.lambdaj.Lambda;
+import ch.lambdaj.function.argument.FinalClassArgumentCreator;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
@@ -54,6 +58,19 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
  * @see http://wicket.apache.org/guide/guide/forms2.html#forms2_1
  */
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
+	static {
+		Lambda.registerFinalClassArgumentCreator(URL.class, new FinalClassArgumentCreator<URL>() {
+			@Override
+			public URL createArgumentPlaceHolder(int seed) {
+				try {
+					return new URL("http://www." + seed);
+				} catch (MalformedURLException ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+	}
+
     private static final long serialVersionUID = -6387604067134639316L;
 
     protected static final Logger logger = LoggerFactory.getLogger(FormPanel.class);
@@ -126,11 +143,12 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
         return this.addDatePicker(propertyPath, componentSettings, (Converter<Date, Date>) null);
     }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
     public <F extends Serializable> DatePickerPanel<F> addDatePicker(F propertyPath, FormElementSettings componentSettings,
             Converter<F, Date> dateConverter) {
         return this
-.addDefaultRow(new DatePickerPanel(this.getFormModel(), propertyPath, dateConverter, this.getFormSettings(), componentSettings));
+.addDefaultRow(new DatePickerPanel<F>(this.getFormModel(), propertyPath, dateConverter,
+				this.getFormSettings(), componentSettings));
     }
 
     public <PropertyType extends Serializable, ComponentType extends FormComponent<PropertyType>, ElementSettings extends AbstractFormElementSettings<ElementSettings>, RowPanel extends DefaultFormRowPanel<PropertyType, ComponentType, ElementSettings>> RowPanel addDefaultRow(
