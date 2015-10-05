@@ -10,8 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.swingeasy.ETree;
@@ -43,35 +41,32 @@ public class ObjectTree extends JFrame {
         setSize(1024, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                try {
-                    Object data = tree.getSelectionModel().getSelectionPath().getLastPathComponent();
-                    propertypanel.setVisible(false);
-                    propertypanel.removeAll();
-                    if (data != null) {
-                        data = TreeNode.class.cast(data).bean;
-                        // if (hqlBuilderHelper.accept(data.getClass())) {
-                        data = initialize(data);
-                        PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
-                        for (PropertyDescriptor descriptor : propertyUtilsBean.getPropertyDescriptors(data)) {
-                            try {
-                                propertyUtilsBean.getProperty(data, descriptor.getName().toString());
-                            } catch (Exception ex) {
-                                //
-                            }
+        tree.addTreeSelectionListener(e -> {
+            try {
+                Object data = tree.getSelectionModel().getSelectionPath().getLastPathComponent();
+                propertypanel.setVisible(false);
+                propertypanel.removeAll();
+                if (data != null) {
+                    data = TreeNode.class.cast(data).bean;
+                    // if (hqlBuilderHelper.accept(data.getClass())) {
+                    data = initialize(data);
+                    PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+                    for (PropertyDescriptor descriptor : propertyUtilsBean.getPropertyDescriptors(data)) {
+                        try {
+                            propertyUtilsBean.getProperty(data, descriptor.getName().toString());
+                        } catch (Exception ex1) {
+                            //
                         }
-                        PropertyPanel propertyFrame = ClientUtils.getPropertyFrame((Serializable) data, editable);
-                        propertyFrame.setHqlService(hqlService);
-                        frame.font(propertyFrame, null);
-                        propertypanel.add(propertyFrame, BorderLayout.CENTER);
-                        // }
                     }
-                    propertypanel.setVisible(true);
-                } catch (NullPointerException ex) {
-                    //
+                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame((Serializable) data, editable);
+                    propertyFrame.setHqlService(hqlService);
+                    frame.font(propertyFrame, null);
+                    propertypanel.add(propertyFrame, BorderLayout.CENTER);
+                    // }
                 }
+                propertypanel.setVisible(true);
+            } catch (NullPointerException ex2) {
+                //
             }
         });
         split.setDividerLocation(500);

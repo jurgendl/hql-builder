@@ -6,7 +6,6 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -138,8 +137,7 @@ public class ServiceUrlBuilder {
                         Query.match(Query.attr("protocol"), Query.value("HTTP/1.1")));
                 String hostname = InetAddress.getLocalHost().getHostName();
                 InetAddress[] addresses = InetAddress.getAllByName(hostname);
-                for (Iterator<ObjectName> i = objs.iterator(); i.hasNext();) {
-                    ObjectName obj = i.next();
+                for (ObjectName obj : objs) {
                     String scheme = mbs.getAttribute(obj, "scheme").toString();
                     String serverport = obj.getKeyProperty("port");
                     for (InetAddress addr : addresses) {

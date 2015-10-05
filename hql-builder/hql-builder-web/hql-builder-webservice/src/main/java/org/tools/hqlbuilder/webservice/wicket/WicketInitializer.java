@@ -11,12 +11,7 @@ public class WicketInitializer implements IInitializer {
 
     @Override
     public void init(Application application) {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                warmUp();
-            }
-        }, getClass().getSimpleName());
+        Thread t = new Thread((Runnable) () -> warmUp(), getClass().getSimpleName());
         t.setDaemon(true);
         t.start();
     }

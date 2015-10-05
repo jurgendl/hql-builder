@@ -3,7 +3,6 @@ package org.tools.hqlbuilder.webservice.resteasy.resources;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import javax.annotation.Resource;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.springframework.stereotype.Component;
@@ -158,23 +156,20 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public StreamingOutput getHibernateWebResolver() {
-        return new StreamingOutput() {
-            @Override
-            public void write(OutputStream output) throws IOException, WebApplicationException {
-                ObjectOutputStream oos = null;
+        return output -> {
+            ObjectOutputStream oos = null;
+            try {
+                oos = new ObjectOutputStream(new BufferedOutputStream(output));
+                oos.writeObject(getService().getHibernateWebResolver());
+            } catch (RuntimeException ex) {
+                ex.printStackTrace();
+            } finally {
                 try {
-                    oos = new ObjectOutputStream(new BufferedOutputStream(output));
-                    oos.writeObject(getService().getHibernateWebResolver());
-                } catch (RuntimeException ex) {
-                    ex.printStackTrace();
-                } finally {
-                    try {
-                        if (oos != null) {
-                            oos.close();
-                        }
-                    } catch (Exception unhandled) {
-                        unhandled.printStackTrace();
+                    if (oos != null) {
+                        oos.close();
                     }
+                } catch (Exception unhandled) {
+                    unhandled.printStackTrace();
                 }
             }
         };

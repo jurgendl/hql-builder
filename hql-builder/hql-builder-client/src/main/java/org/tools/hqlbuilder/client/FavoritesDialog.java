@@ -2,8 +2,6 @@ package org.tools.hqlbuilder.client;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -67,44 +65,33 @@ public class FavoritesDialog extends JDialog {
         getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
         JPanel actions = new JPanel(new FlowLayout());
         JButton importSelected = new JButton(HqlResourceBundle.getMessage("restore selected"));
-        importSelected.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    QueryFavorite favorite = table.getRecordAtVisualRow(table.getSelectedRow()).getBean();
-                    selection = favorite;
-                    FavoritesDialog.this.dispose();
-                } catch (Exception ex) {
-                    // TODO: handle exception
-                    ex.printStackTrace();
-                }
+        importSelected.addActionListener(e -> {
+            try {
+                QueryFavorite favorite = table.getRecordAtVisualRow(table.getSelectedRow()).getBean();
+                selection = favorite;
+                FavoritesDialog.this.dispose();
+            } catch (Exception ex) {
+                // TODO: handle exception
+                ex.printStackTrace();
             }
         });
         actions.add(importSelected);
         JButton deleteSelected = new JButton(HqlResourceBundle.getMessage("delete selected"));
-        deleteSelected.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    ETableRecord<QueryFavorite> recordAtVisualRow = table.getRecordAtVisualRow(table.getSelectedRow());
-                    QueryFavorite favorite = recordAtVisualRow.getBean();
-                    new File("favorites", favorite.getName() + ".xml").delete();
-                    favorites.remove(favorite);
-                    table.removeRecord(recordAtVisualRow);
-                } catch (Exception ex) {
-                    // TODO: handle exception
-                    ex.printStackTrace();
-                }
+        deleteSelected.addActionListener(e -> {
+            try {
+                ETableRecord<QueryFavorite> recordAtVisualRow = table.getRecordAtVisualRow(table.getSelectedRow());
+                QueryFavorite favorite = recordAtVisualRow.getBean();
+                new File("favorites", favorite.getName() + ".xml").delete();
+                favorites.remove(favorite);
+                table.removeRecord(recordAtVisualRow);
+            } catch (Exception ex) {
+                // TODO: handle exception
+                ex.printStackTrace();
             }
         });
         actions.add(deleteSelected);
         JButton close = new JButton(HqlResourceBundle.getMessage("cancel"));
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FavoritesDialog.this.dispose();
-            }
-        });
+        close.addActionListener(e -> FavoritesDialog.this.dispose());
         actions.add(close);
         getContentPane().add(actions, BorderLayout.SOUTH);
     }

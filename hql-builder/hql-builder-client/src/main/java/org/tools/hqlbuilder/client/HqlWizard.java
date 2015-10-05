@@ -181,12 +181,7 @@ public class HqlWizard {
 
         table = table.stsi();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                queryBuilder.setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> queryBuilder.setVisible(true));
 
         selectPoints();
     }

@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.client;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,16 +173,13 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
         // sorteer replacers op langste eerst
         List<String> keys = new ArrayList<String>(replacers.keySet());
-        Collections.sort(keys, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.length() < o2.length()) {
-                    return 1;
-                } else if (o1.length() > o2.length()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+        Collections.sort(keys, (o1, o2) -> {
+            if (o1.length() < o2.length()) {
+                return 1;
+            } else if (o1.length() > o2.length()) {
+                return -1;
+            } else {
+                return 0;
             }
         });
 
@@ -250,9 +246,9 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
         StringBuilder anew = new StringBuilder();
 
-        for (int i = 0; i < lines.length; i++) {
-            if (lines[i] != null) {
-                anew.append(lines[i]).append(getNewline());
+        for (String line : lines) {
+            if (line != null) {
+                anew.append(line).append(getNewline());
             }
         }
 

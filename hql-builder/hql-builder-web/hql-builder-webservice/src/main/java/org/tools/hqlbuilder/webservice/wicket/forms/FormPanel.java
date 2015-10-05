@@ -50,7 +50,6 @@ import org.tools.hqlbuilder.webservice.wicket.sass.SassResourceReference;
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 
 import ch.lambdaj.Lambda;
-import ch.lambdaj.function.argument.FinalClassArgumentCreator;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
 /**
@@ -59,16 +58,13 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
  */
 public class FormPanel<T extends Serializable> extends Panel implements FormConstants {
 	static {
-		Lambda.registerFinalClassArgumentCreator(URL.class, new FinalClassArgumentCreator<URL>() {
-			@Override
-			public URL createArgumentPlaceHolder(int seed) {
-				try {
-					return new URL("http://www." + seed);
-				} catch (MalformedURLException ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
+		Lambda.registerFinalClassArgumentCreator(URL.class, seed -> {
+        	try {
+        		return new URL("http://www." + seed);
+        	} catch (MalformedURLException ex) {
+        		throw new RuntimeException(ex);
+        	}
+        });
 	}
 
     private static final long serialVersionUID = -6387604067134639316L;

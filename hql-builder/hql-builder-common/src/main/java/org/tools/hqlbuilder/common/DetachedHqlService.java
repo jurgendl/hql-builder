@@ -77,8 +77,8 @@ public class DetachedHqlService extends DelegatingHqlService {
         // case if hybrid bean
         if (listObj instanceof Object[]) {
             Object[] objArray = (Object[]) listObj;
-            for (int z = 0; z < objArray.length; z++) {
-                cleanObject(objArray[z], visitedBeansSet);
+            for (Object element : objArray) {
+                cleanObject(element, visitedBeansSet);
             }
         } else {
 
@@ -123,8 +123,8 @@ public class DetachedHqlService extends DelegatingHqlService {
     private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans) throws ClassNotFoundException, IllegalArgumentException,
             IllegalAccessException, InstantiationException, InvocationTargetException {
         boolean accessModifierFlag = false;
-        for (int z = 0; z < classFields.length; z++) {
-            Field field = classFields[z];
+        for (Field classField : classFields) {
+            Field field = classField;
             accessModifierFlag = false;
             if (!field.isAccessible()) {
                 field.setAccessible(true);

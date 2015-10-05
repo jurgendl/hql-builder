@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -805,12 +804,7 @@ public class HqlServiceImpl implements HqlService {
                     Information next = sli.next();
                     infos.add(next);
                 }
-                Collections.sort(infos, new Comparator<Information>() {
-                    @Override
-                    public int compare(Information o1, Information o2) {
-                        return o1.getOrder() - o2.getOrder();
-                    }
-                });
+                Collections.sort(infos, (o1, o2) -> o1.getOrder() - o2.getOrder());
                 information = infos.get(0);
                 information.init(getConnectionInfo(), getSessionFactory());
             } catch (Exception ex) {

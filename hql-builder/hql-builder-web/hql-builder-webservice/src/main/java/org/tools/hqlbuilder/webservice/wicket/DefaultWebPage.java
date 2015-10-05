@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.webservice.wicket;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -17,8 +16,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
@@ -176,14 +173,11 @@ public class DefaultWebPage extends WebPage {
 
     protected void statelessCheck() {
         if (this.getStatelessHint() && WicketApplication.get().usesDevelopmentConfig()) {
-            this.visitChildren(new IVisitor<Component, Void>() {
-                @Override
-                public void component(Component component, IVisit<Void> arg1) {
-                    DefaultWebPage.this.logger.trace("Component " + component.getClass().getName() + " with id " + component.getId());
-                    if (!component.isStateless()) {
-                        DefaultWebPage.this.logger.warn("Component " + component.getClass().getName() + " with id " + component.getId()
-                                + " is not stateless");
-                    }
+            this.visitChildren((component, arg1) -> {
+                DefaultWebPage.this.logger.trace("Component " + component.getClass().getName() + " with id " + component.getId());
+                if (!component.isStateless()) {
+                    DefaultWebPage.this.logger.warn("Component " + component.getClass().getName() + " with id " + component.getId()
+                            + " is not stateless");
                 }
             });
         }

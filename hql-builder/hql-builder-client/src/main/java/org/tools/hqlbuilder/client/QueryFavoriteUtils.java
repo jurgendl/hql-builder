@@ -103,22 +103,12 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
         if (!favoritesForProject.exists()) {
             favoritesForProject.mkdir();
         }
-        File[] xmls = favoritesForProject.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(FAVORITES_EXT);
-            }
-        });
+        File[] xmls = favoritesForProject.listFiles((FilenameFilter) (dir, name) -> name.endsWith(FAVORITES_EXT));
         if (xmls == null) {
             return null;
         }
         QueryFavoriteUtils.convertV1ToV2(xmls);
-        xmls = favoritesForProject.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.startsWith(FAVORITE_PREFIX) && name.endsWith(FAVORITES_EXT);
-            }
-        });
+        xmls = favoritesForProject.listFiles((FilenameFilter) (dir, name) -> name.startsWith(FAVORITE_PREFIX) && name.endsWith(FAVORITES_EXT));
         QueryFavorite last = null;
 		File _xml = null;
         try {

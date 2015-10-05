@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -93,11 +92,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
@@ -152,7 +147,6 @@ import org.swingeasy.ProgressGlassPane;
 import org.swingeasy.ResultType;
 import org.swingeasy.UIUtils;
 import org.swingeasy.system.SystemSettings;
-import org.tools.hqlbuilder.client.HqlWizard.HqlWizardListener;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.GroovyCompiler;
@@ -296,21 +290,18 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             SplashHelper.setup(version);
             SplashHelper.step();
 
-            Thread tt = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (true) {
-                            SplashHelper.progress();
-                            try {
-                                Thread.sleep(200l);
-                            } catch (InterruptedException ex) {
-                                //
-                            }
+            Thread tt = new Thread(() -> {
+                try {
+                    while (true) {
+                        SplashHelper.progress();
+                        try {
+                            Thread.sleep(200l);
+                        } catch (InterruptedException ex1) {
+                            //
                         }
-                    } catch (RuntimeException ex) {
-                        ex.printStackTrace();
                     }
+                } catch (RuntimeException ex2) {
+                    ex2.printStackTrace();
                 }
             });
             tt.setDaemon(true);
@@ -376,12 +367,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             // wanneer system tray wordt ondersteund, gebruikt deze dan (configureerbaar)
             if (SystemTray.isSupported()) {
-                ActionListener listener = new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        hqlBuilder.switchVisibility();
-                    }
-                };
+                ActionListener listener = e -> hqlBuilder.switchVisibility();
                 hqlBuilder.trayIcon = new TrayIcon(hqlBuilder.frame.getIconImage(), hqlBuilder.frame.getTitle());
                 PopupMenu popupmenu = new PopupMenu(hqlBuilder.frame.getTitle());
                 {
@@ -392,14 +378,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 {
 
                     MenuItem trayswitch = new MenuItem(HqlResourceBundle.getMessage("disable systemtray"));
-                    trayswitch.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            boolean newvalue = !hqlBuilder.systrayAction.isSelected();
-                            hqlBuilder.systrayAction.setSelected(newvalue);
-                            if (newvalue && !hqlBuilder.frame.isVisible()) {
-                                hqlBuilder.switchVisibility();
-                            }
+                    trayswitch.addActionListener(e -> {
+                        boolean newvalue = !hqlBuilder.systrayAction.isSelected();
+                        hqlBuilder.systrayAction.setSelected(newvalue);
+                        if (newvalue && !hqlBuilder.frame.isVisible()) {
+                            hqlBuilder.switchVisibility();
                         }
                     });
                     popupmenu.add(trayswitch);
@@ -835,14 +818,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.addParameterAction = new HqlBuilderAction(this.parametersUnsafe, this, HqlBuilderFrameConstants.ADD_PARAMETER, true,
                 HqlBuilderFrameConstants.ADD_PARAMETER, CommonIcons.getIcon(ClientIcons.ADD), HqlBuilderFrameConstants.ADD_PARAMETER,
                 HqlBuilderFrameConstants.ADD_PARAMETER, false, null, null);
-        ActionListener commitParam = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (HqlBuilderFrame.this.parametersEDT.getSelectedRecord() != null) {
-                    HqlBuilderFrame.this.saveAction.actionPerformed(e);
-                } else {
-                    HqlBuilderFrame.this.addParameterAction.actionPerformed(e);
-                }
+        ActionListener commitParam = e -> {
+            if (HqlBuilderFrame.this.parametersEDT.getSelectedRecord() != null) {
+                HqlBuilderFrame.this.saveAction.actionPerformed(e);
+            } else {
+                HqlBuilderFrame.this.addParameterAction.actionPerformed(e);
             }
         };
         this.parameterName.addActionListener(commitParam);
@@ -987,25 +967,19 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         final HashMap<String, Integer> map = new HashMap<String, Integer>();
         map.put(HqlBuilderFrameConstants.ROW, -1);
         map.put(HqlBuilderFrameConstants.COL, -1);
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-
-                HqlBuilderFrame.outputSelection(HqlBuilderFrameConstants.ROW, map, table, listener);
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
             }
+
+            HqlBuilderFrame.outputSelection(HqlBuilderFrameConstants.ROW, map, table, listener);
         });
-        table.getColumnModel().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-
-                HqlBuilderFrame.outputSelection(HqlBuilderFrameConstants.COL, map, table, listener);
+        table.getColumnModel().getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
             }
+
+            HqlBuilderFrame.outputSelection(HqlBuilderFrameConstants.COL, map, table, listener);
         });
     }
 
@@ -1575,36 +1549,33 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 fout = new FileOutputStream(new File(absolutePath));
                 final BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fout));
                 this.recordCount = 0;
-                this.query(new RowProcessor() {
-                    @Override
-                    public void process(List<Object> lijn) {
-                        try {
-                            for (Object object : lijn) {
-                                if (object instanceof Object[]) {
-                                    Object[] array = (Object[]) object;
-                                    for (int i = 0; i < array.length; i++) {
-                                        br.write("\"");
-                                        br.write(array[i].toString().replaceAll(",", ";").replaceAll("\"", "'"));
-                                        br.write("\"");
+                this.query(lijn -> {
+                    try {
+                        for (Object object : lijn) {
+                            if (object instanceof Object[]) {
+                                Object[] array = (Object[]) object;
+                                for (int i = 0; i < array.length; i++) {
+                                    br.write("\"");
+                                    br.write(array[i].toString().replaceAll(",", ";").replaceAll("\"", "'"));
+                                    br.write("\"");
 
-                                        if (i < (array.length - 1)) {
-                                            br.write(",");
-                                        }
+                                    if (i < (array.length - 1)) {
+                                        br.write(",");
                                     }
-                                } else {
-                                    br.write("\"");
-                                    br.write(object.toString().replaceAll(",", ";").replaceAll("\"", "'"));
-                                    br.write("\"");
                                 }
+                            } else {
+                                br.write("\"");
+                                br.write(object.toString().replaceAll(",", ";").replaceAll("\"", "'"));
+                                br.write("\"");
                             }
-                            br.write(HqlBuilderFrame.this.getNewline());
-                            HqlBuilderFrame.this.recordCount++;
-                            if ((HqlBuilderFrame.this.recordCount != 0) && ((HqlBuilderFrame.this.recordCount % 100) == 0)) {
-                                HqlBuilderFrame.logger.info(HqlBuilderFrame.this.recordCount + " records");
-                            }
-                        } catch (Exception ex) {
-                            HqlBuilderFrame.logger.error("{}", ex);
                         }
+                        br.write(HqlBuilderFrame.this.getNewline());
+                        HqlBuilderFrame.this.recordCount++;
+                        if ((HqlBuilderFrame.this.recordCount != 0) && ((HqlBuilderFrame.this.recordCount % 100) == 0)) {
+                            HqlBuilderFrame.logger.info(HqlBuilderFrame.this.recordCount + " records");
+                        }
+                    } catch (Exception ex) {
+                        HqlBuilderFrame.logger.error("{}", ex);
                     }
                 });
                 HqlBuilderFrame.logger.info("{} records", this.recordCount);
@@ -1752,11 +1723,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private ClipboardOwner getClipboardOwner() {
-        return new ClipboardOwner() {
-            @Override
-            public void lostOwnership(Clipboard cb, Transferable contents) {
-                //
-            }
+        return (cb, contents) -> {
+            //
         };
     }
 
@@ -1807,12 +1775,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.hql.setSelectionStart(begin);
             this.hql.setSelectionEnd(end);
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                HqlBuilderFrame.this.hqlsp.getViewport().setViewPosition(viewPosition);
-            }
-        });
+        SwingUtilities.invokeLater(() -> HqlBuilderFrame.this.hqlsp.getViewport().setViewPosition(viewPosition));
 
         String lines[] = hqlstring.split(HqlBuilderFrameConstants.LINESEPERATOR);
         StringBuilder sb = new StringBuilder();
@@ -2115,12 +2078,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.syntaxHi(pos, kw);
         }
 
-        Collections.sort(pos, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return new CompareToBuilder().append(o1[0], o2[0]).toComparison();
-            }
-        });
+        Collections.sort(pos, (o1, o2) -> new CompareToBuilder().append(o1[0], o2[0]).toComparison());
 
         String hqltext = this.hql.getText().toLowerCase();
 
@@ -2655,12 +2613,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         this.syntaxHighlight.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, new float[] { 1.0F }, 0.F));
 
-        this.hql.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent e) {
-                HqlBuilderFrame.this.hilightBraces(HqlBuilderFrame.this.hql.getText());
-            }
-        });
+        this.hql.addCaretListener(e -> HqlBuilderFrame.this.hilightBraces(HqlBuilderFrame.this.hql.getText()));
 
         this.sql.setEditable(false);
 
@@ -2906,14 +2859,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 //
             }
         });
-        this.parametersEDT.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-                HqlBuilderFrame.this.parameterSelected();
+        this.parametersEDT.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
             }
+            HqlBuilderFrame.this.parameterSelected();
         });
 
         this.hql_sql_tabs_panel.add(this.hql_sql_tabs, BorderLayout.CENTER);
@@ -2988,14 +2938,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                 locales.remove(HqlBuilderFrameConstants.DEFAULT_LOCALE);
 
-                Collections.sort(locales, new Comparator<Locale>() {
-                    @Override
-                    public int compare(Locale o1, Locale o2) {
-                        return new CompareToBuilder().append(o1.getDisplayLanguage(o1), o2.getDisplayLanguage(o2))
-                                .append(o1.getDisplayCountry(o1), o2.getDisplayCountry(o2))
-                                .toComparison();
-                    }
-                });
+                Collections.sort(locales, (o1, o2) -> new CompareToBuilder().append(o1.getDisplayLanguage(o1), o2.getDisplayLanguage(o2))
+                        .append(o1.getDisplayCountry(o1), o2.getDisplayCountry(o2))
+                        .toComparison());
 
                 locales.add(0, HqlBuilderFrameConstants.DEFAULT_LOCALE);
 
@@ -3013,14 +2958,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                             || locale.getLanguage().equals(SystemSettings.getCurrentLocale().getLanguage())) {
                         lanMenu.setSelected(true);
                     }
-                    lanMenu.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            // SystemSettings.setCurrentLocale(loc);
-                            HqlBuilderFrame.this.preferences.put(HqlBuilderFrameConstants.PERSISTENT_LOCALE, loc.toString());
-                            JOptionPane.showMessageDialog(HqlBuilderFrame.this.frame, HqlResourceBundle.getMessage("change visible after restart"),
-                                    "", JOptionPane.INFORMATION_MESSAGE);
-                        }
+                    lanMenu.addActionListener(e -> {
+                        // SystemSettings.setCurrentLocale(loc);
+                        HqlBuilderFrame.this.preferences.put(HqlBuilderFrameConstants.PERSISTENT_LOCALE, loc.toString());
+                        JOptionPane.showMessageDialog(HqlBuilderFrame.this.frame, HqlResourceBundle.getMessage("change visible after restart"),
+                                "", JOptionPane.INFORMATION_MESSAGE);
                     });
                 }
 
@@ -3050,36 +2992,33 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
             {
                 JMenuItem resetMi = new JMenuItem(HqlResourceBundle.getMessage("reset settings"));
-                resetMi.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        HqlBuilderFrame.this.fontAction.setWarnRestart(false);
+                resetMi.addActionListener(e -> {
+                    HqlBuilderFrame.this.fontAction.setWarnRestart(false);
 
-                        HqlBuilderFrame.this.maximumNumberOfResultsAction.setValue(100);
-                        HqlBuilderFrame.this.maximumNumberOfSearchResultsAction.setValue(2000);
-                        HqlBuilderFrame.this.fontAction.setValue(ClientUtils.getDefaultFont());
-                        HqlBuilderFrame.this.searchColorAction.setValue(new Color(245, 225, 145));
-                        HqlBuilderFrame.this.highlightColorAction.setValue(new Color(0, 0, 255));
-                        HqlBuilderFrame.this.removeJoinsAction.setSelected(true);
-                        HqlBuilderFrame.this.formatLinesAction.setSelected(true);
-                        HqlBuilderFrame.this.replacePropertiesAction.setSelected(true);
-                        HqlBuilderFrame.this.resizeColumnsAction.setSelected(true);
-                        HqlBuilderFrame.this.formatSqlAction.setSelected(true);
-                        HqlBuilderFrame.this.systrayAction.setSelected(true);
-                        HqlBuilderFrame.this.highlightSyntaxAction.setSelected(true);
-                        HqlBuilderFrame.this.alwaysOnTopAction.setSelected(false);
-                        HqlBuilderFrame.this.editableResultsAction.setSelected(false);
-                        HqlBuilderFrame.this.switchLayoutAction.setSelected(true);
-                        HqlBuilderFrame.this.addEndBraceAction.setSelected(true);
-                        HqlBuilderFrame.this.addShowErrorTooltip.setSelected(true);
-                        HqlBuilderFrame.this.addSelectExecutedHql.setSelected(true);
-                        HqlBuilderFrame.this.fontAction.setWarnRestart(true);
+                    HqlBuilderFrame.this.maximumNumberOfResultsAction.setValue(100);
+                    HqlBuilderFrame.this.maximumNumberOfSearchResultsAction.setValue(2000);
+                    HqlBuilderFrame.this.fontAction.setValue(ClientUtils.getDefaultFont());
+                    HqlBuilderFrame.this.searchColorAction.setValue(new Color(245, 225, 145));
+                    HqlBuilderFrame.this.highlightColorAction.setValue(new Color(0, 0, 255));
+                    HqlBuilderFrame.this.removeJoinsAction.setSelected(true);
+                    HqlBuilderFrame.this.formatLinesAction.setSelected(true);
+                    HqlBuilderFrame.this.replacePropertiesAction.setSelected(true);
+                    HqlBuilderFrame.this.resizeColumnsAction.setSelected(true);
+                    HqlBuilderFrame.this.formatSqlAction.setSelected(true);
+                    HqlBuilderFrame.this.systrayAction.setSelected(true);
+                    HqlBuilderFrame.this.highlightSyntaxAction.setSelected(true);
+                    HqlBuilderFrame.this.alwaysOnTopAction.setSelected(false);
+                    HqlBuilderFrame.this.editableResultsAction.setSelected(false);
+                    HqlBuilderFrame.this.switchLayoutAction.setSelected(true);
+                    HqlBuilderFrame.this.addEndBraceAction.setSelected(true);
+                    HqlBuilderFrame.this.addShowErrorTooltip.setSelected(true);
+                    HqlBuilderFrame.this.addSelectExecutedHql.setSelected(true);
+                    HqlBuilderFrame.this.fontAction.setWarnRestart(true);
 
-                        HqlBuilderFrame.this.editable_results();
+                    HqlBuilderFrame.this.editable_results();
 
-                        JOptionPane.showMessageDialog(HqlBuilderFrame.this.frame, HqlResourceBundle.getMessage("change visible after restart"), "",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
+                    JOptionPane.showMessageDialog(HqlBuilderFrame.this.frame, HqlResourceBundle.getMessage("change visible after restart"), "",
+                            JOptionPane.INFORMATION_MESSAGE);
                 });
                 settingsMenu.add(resetMi);
             }
@@ -3262,16 +3201,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void wizard() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new HqlWizard(new HqlWizardListener() {
-                    @Override
-                    public void query(String query) {
-                        HqlBuilderFrame.this.hql.setText(query);
-                    }
-                }, HqlBuilderFrame.this.frame, HqlBuilderFrame.this.getHibernateWebResolver());
-            }
-        }).start();
+        new Thread(() -> new HqlWizard(query -> HqlBuilderFrame.this.hql.setText(query), HqlBuilderFrame.this.frame, HqlBuilderFrame.this.getHibernateWebResolver())).start();
     }
 }

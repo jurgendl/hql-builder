@@ -1,7 +1,6 @@
 package org.tools.hqlbuilder.webservice.wicket.components.tree;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -65,12 +64,7 @@ public class NestedListPanel<T, N extends DataNode<T>> extends Panel {
         ul.setRenderBodyOnly(!showThisNode);
         this.add(ul);
 
-        Collections.sort(list, new Comparator<N>() {
-            @Override
-            public int compare(N o1, N o2) {
-                return new CompareToBuilder().append(String.valueOf(o1), String.valueOf(o2)).toComparison();
-            }
-        });
+        Collections.sort(list, (o1, o2) -> new CompareToBuilder().append(String.valueOf(o1), String.valueOf(o2)).toComparison());
         // (N o1, N o2) -> new CompareToBuilder().append(String.valueOf(o1), String.valueOf(o2)).toComparison());
         ul.add(this.newNodeList(list, showThisNode, numbered));
     }

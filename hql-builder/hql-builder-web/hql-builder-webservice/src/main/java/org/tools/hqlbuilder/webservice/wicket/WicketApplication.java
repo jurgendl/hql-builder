@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -15,14 +14,12 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Session;
 import org.apache.wicket.bean.validation.BeanValidationConfiguration;
 import org.apache.wicket.bean.validation.IPropertyResolver;
-import org.apache.wicket.bean.validation.Property;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.pageStore.memory.HttpSessionDataStore;
@@ -43,8 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
@@ -225,16 +220,13 @@ public class WicketApplication extends WebApplication {
 		// jsr bean validation: special models can implement IPropertyResolver to return the propertyname
 		BeanValidationConfiguration beanValidationConfiguration = new BeanValidationConfiguration();
 		beanValidationConfiguration.configure(this);
-		beanValidationConfiguration.add(new IPropertyResolver() {
-			@Override
-			public Property resolveProperty(FormComponent<?> component) {
-				IModel<?> model = component.getModel();
-				if (model instanceof IPropertyResolver) {
-					return ((IPropertyResolver) model).resolveProperty(component);
-				}
-				return null;
-			}
-		});
+		beanValidationConfiguration.add(component -> {
+        	IModel<?> model = component.getModel();
+        	if (model instanceof IPropertyResolver) {
+        		return ((IPropertyResolver) model).resolveProperty(component);
+        	}
+        	return null;
+        });
 
 		// mount resources
 		this.mountImages();
@@ -337,12 +329,7 @@ public class WicketApplication extends WebApplication {
 		ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
 		final AnnotationTypeFilter mountedPageFilter = new AnnotationTypeFilter(MountedPage.class);
 		final AssignableTypeFilter webPageFilter = new AssignableTypeFilter(WebPage.class);
-		TypeFilter TypeFilter = new TypeFilter() {
-			@Override
-			public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
-				return mountedPageFilter.match(metadataReader, metadataReaderFactory) && webPageFilter.match(metadataReader, metadataReaderFactory);
-			}
-		};
+		TypeFilter TypeFilter = (metadataReader, metadataReaderFactory) -> mountedPageFilter.match(metadataReader, metadataReaderFactory) && webPageFilter.match(metadataReader, metadataReaderFactory);
 		scanner.addIncludeFilter(TypeFilter);
 		List<String> paths = new ArrayList<String>();
 		for (BeanDefinition bd : scanner.findCandidateComponents(WicketRoot.class.getPackage().getName())) {

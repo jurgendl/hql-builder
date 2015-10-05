@@ -46,8 +46,8 @@ public class Growl extends Panel {
 
     public String message(AjaxRequestTarget target, GrowlMessage... message) {
         StringBuilder msg = new StringBuilder();
-        for (int i = 0; i < message.length; i++) {
-            msg.append(message[i].toString()).append(",");
+        for (GrowlMessage element : message) {
+            msg.append(element.toString()).append(",");
         }
         String javascript = ";$('#" + get(GROWL_MESSAGE).getMarkupId() + "').puigrowl({life:60000}).puigrowl('show',["
                 + msg.delete(msg.length(), msg.length()).toString() + "]);";
