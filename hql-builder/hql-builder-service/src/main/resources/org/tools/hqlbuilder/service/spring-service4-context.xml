@@ -94,7 +94,7 @@
 	<bean id="configurationBean" class="org.tools.hqlbuilder.service.ConfigurationBean" scope="singleton" lazy-init="false">
 	</bean>
 
-	<bean id="hqlService" class="org.springframework.aop.framework.ProxyFactoryBean">
+	<bean id="hqlService" class="org.springframework.aop.framework.ProxyFactoryBean" scope="singleton" lazy-init="false">
 		<property name="target" ref="hqlServiceImpl" />
 		<property name="interceptorNames">
 			<list>
