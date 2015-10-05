@@ -178,4 +178,12 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         setType(value == null ? "java.lang.Object" : value.getClass().getName());
         return this;
     }
+
+    public Class<?> getValueClass() {
+        try {
+            return Class.forName(getValue().toString());
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

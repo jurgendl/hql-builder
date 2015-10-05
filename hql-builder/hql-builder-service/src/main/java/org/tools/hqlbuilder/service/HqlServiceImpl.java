@@ -27,6 +27,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -60,6 +61,7 @@ import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.ObjectWrapper;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
+import org.tools.hqlbuilder.common.Value;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
 import org.tools.hqlbuilder.common.exceptions.SqlException;
 import org.tools.hqlbuilder.common.exceptions.SyntaxException;
@@ -273,14 +275,10 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public SortedSet<String> getClasses() {
-        SortedSet<String> options = new TreeSet<String>();
-
-        for (HibernateWebResolver.ClassNode node : getHibernateWebResolver().getClasses()) {
-            String clazz = node.getId();
-            options.add(clazz);
-        }
-
-        return options;
+        return getHibernateWebResolver().getClasses()
+                .stream()
+                .map(HibernateWebResolver.ClassNode::getId)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     /**
@@ -306,30 +304,25 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");
         }
-        ExecutionResult result = new ExecutionResult();
+        Value<ExecutionResult> result = new Value<>();
         try {
             if (hql.contains("$$")) {
-                result = null;
-                Class<?> c = Object.class;
-                for (QueryParameter qp : queryParameters) {
-                    if ("$$".equals(qp.getName())) {
-                        c = Class.forName(qp.getValue().toString());
-                    }
-                }
-                for (ClassNode cn : getHibernateWebResolver().getClasses()) {
-                    if (c.isAssignableFrom(cn.getType())) {
-                        ExecutionResult it = execute(new QueryParameters(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), max, queryParameters));
-                        if (result == null) {
-                            result = it;
-                        } else {
-                            result.getResults().getValue().addAll(it.getResults().getValue());
-                        }
-                    }
-                }
-                return result;
+                result.reset();
+                @SuppressWarnings("unchecked")
+                Class<?> c = queryParameters.stream()
+                        .filter(qp -> "$$".equals(qp.getName()))
+                        .map(QueryParameter::getValueClass)
+                        .findAny()
+                        .orElse(Class.class.cast(Object.class));
+                getHibernateWebResolver().getClasses()
+                        .stream()
+                        .filter(cn -> c.isAssignableFrom(cn.getType()))
+                        .map(cn -> execute(new QueryParameters(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), max, queryParameters)))
+                        .forEach(it -> result.setOr(it, r -> r.getResults().getValue().addAll(it.getResults().getValue())));
+                return result.get();
             }
-            result = innerExecute(result, hql, max, first, queryParameters);
-            return result;
+            innerExecute(result.set(new ExecutionResult()), hql, max, first, queryParameters);
+            return result.get();
         } catch (QueryException ex) {
             logger.error("{}", ex);
             String msg = ex.getLocalizedMessage();
@@ -348,7 +341,7 @@ public class HqlServiceImpl implements HqlService {
                 if (m.find()) {
                     throw new SyntaxException(SyntaxException.SyntaxExceptionType.not_mapped, msg, m.group(1));
                 }
-                throw new ServiceException(ex.getMessage(), result);
+                throw new ServiceException(ex.getMessage(), result.get());
             }
 
             {
@@ -377,18 +370,18 @@ public class HqlServiceImpl implements HqlService {
                 }
             }
 
-            throw new ServiceException(concat(ex), result);
+            throw new ServiceException(concat(ex), result.get());
         } catch (SQLGrammarException ex) {
             logger.error("{}", ex);
-            throw new SqlException(concat(ex), result, ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
+            throw new SqlException(concat(ex), result.get(), ex.getSQL(), String.valueOf(ex.getSQLException()), ex.getSQLState());
         } catch (HibernateException ex) {
             logger.error("{}", ex);
-            throw new ServiceException(concat(ex), result);
+            throw new ServiceException(concat(ex), result.get());
         } catch (NullPointerException ex) {
             logger.error("{}", ex);
-            throw new ServiceException("NullPointerException", result);
+            throw new ServiceException("NullPointerException", result.get());
         } catch (Exception ex) {
-            throw new ServiceException(concat(ex), result);
+            throw new ServiceException(concat(ex), result.get());
         } finally {
             logger.debug("end query");
         }
@@ -409,7 +402,8 @@ public class HqlServiceImpl implements HqlService {
     }
 
     @SuppressWarnings("unchecked")
-    protected ExecutionResult innerExecute(ExecutionResult result, String hql, int max, int first, List<QueryParameter> queryParameters) {
+    protected ExecutionResult innerExecute(Value<ExecutionResult> resultValue, String hql, int max, int first, List<QueryParameter> queryParameters) {
+        ExecutionResult result = resultValue.get();
         long start = System.currentTimeMillis();
         QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
         String sql = queryTranslator.getSQLString();
