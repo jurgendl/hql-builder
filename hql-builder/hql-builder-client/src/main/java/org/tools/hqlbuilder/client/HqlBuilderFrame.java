@@ -61,6 +61,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -290,22 +291,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             SplashHelper.setup(version);
             SplashHelper.step();
 
-            Thread tt = new Thread(() -> {
-                try {
-                    while (true) {
-                        SplashHelper.progress();
-                        try {
-                            Thread.sleep(200l);
-                        } catch (InterruptedException ex1) {
-                            //
-                        }
-                    }
-                } catch (RuntimeException ex2) {
-                    ex2.printStackTrace();
-                }
-            });
-            tt.setDaemon(true);
-            tt.start();
+            CommonUtils.run(200l, SplashHelper::progress, Exception::printStackTrace);
 
             // problem in "all in one" setup
             // sending 'wrong' locale to Oracle gives exception
@@ -1410,7 +1396,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private ExecutionResult doQuery(String hqlGetText, int maxresults) {
         return this.hqlService.execute(new QueryParameters(hqlGetText, maxresults,
-                EList.convertRecords(this.parametersEDT.getRecords()).toArray(new QueryParameter[this.parametersEDT.getRecordCount()])));
+                this.parametersEDT.getRecords().stream().map(EListRecord::get).collect(Collectors.toList())));
     }
 
     protected void down() {
@@ -3201,6 +3187,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void wizard() {
-        new Thread(() -> new HqlWizard(query -> HqlBuilderFrame.this.hql.setText(query), HqlBuilderFrame.this.frame, HqlBuilderFrame.this.getHibernateWebResolver())).start();
+        CommonUtils.run(() -> new HqlWizard(query -> HqlBuilderFrame.this.hql.setText(query), HqlBuilderFrame.this.frame,
+                HqlBuilderFrame.this.getHibernateWebResolver()));
     }
 }

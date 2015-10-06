@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 
 import org.swingeasy.Splash;
 import org.swingeasy.UIUtils;
+import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.HqlBuilderImages;
 
 public class SplashHelper {
@@ -118,7 +119,7 @@ public class SplashHelper {
             float fmax = max;
             for (int i = 0; i < max; i++) {
                 UIUtils.translucent(window, Math.max(0f, Math.min(1f, (max - i) / fmax)));
-                Thread.sleep(10);
+                CommonUtils.sleep(10);
             }
         } catch (Exception ex) {
             //

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -478,5 +479,55 @@ public class CommonUtils {
             }
         }
         return sb.toString();
+    }
+
+    public static void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
+            //
+        }
+    }
+
+    public static void run(EnhancedRunnable runnable) {
+        run(null, runnable, Exception::printStackTrace);
+    }
+
+    public static void run(Long sleep, EnhancedRunnable runnable, Consumer<Exception> exceptionHandler) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean eternal = sleep != null;
+                try {
+                    do {
+                        runnable.run();
+                        if (sleep != null) {
+                            sleep(sleep);
+                        }
+                    } while (eternal);
+                } catch (Exception ex) {
+                    if (exceptionHandler != null) {
+                        exceptionHandler.accept(ex);
+                    }
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+
+    @FunctionalInterface
+    public interface EnhancedRunnable extends Runnable {
+        @Override
+        default void run() {
+            try {
+                runEnhanced();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        void runEnhanced() throws Exception;
     }
 }
