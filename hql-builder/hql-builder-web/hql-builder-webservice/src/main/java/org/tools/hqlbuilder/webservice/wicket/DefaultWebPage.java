@@ -73,6 +73,14 @@ public class DefaultWebPage extends WebPage {
         } else {
             this.add(new EmptyPanel("footer-container").setVisible(false));
         }
+
+        // meta description
+        add(new WebMarkupContainer("meta_description").setVisible(false));
+
+        // add google meta tags
+        add(new WebMarkupContainer("meta_google_signin_scope"));
+        add(new WebMarkupContainer("meta_google_signin_client_id")
+                .add(new AttributeModifier("content", WicketApplication.get().getGoogleSigninClientId())));
     }
 
     protected void addDefaultResources(IHeaderResponse response) {

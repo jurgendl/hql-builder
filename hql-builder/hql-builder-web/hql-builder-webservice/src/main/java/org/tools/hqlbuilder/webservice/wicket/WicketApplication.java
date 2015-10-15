@@ -51,6 +51,7 @@ import org.tools.hqlbuilder.webservice.css.WicketCSSRoot;
 import org.tools.hqlbuilder.webservice.jquery.ui.jquery.JQuery;
 import org.tools.hqlbuilder.webservice.jquery.ui.jqueryui.JQueryUI;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
+import org.tools.hqlbuilder.webservice.js.GoogleLogin;
 import org.tools.hqlbuilder.webservice.js.WicketJSRoot;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 import org.wicketstuff.htmlcompressor.HtmlCompressingMarkupFactory;
@@ -107,8 +108,11 @@ public class WicketApplication extends WebApplication {
 	@SpringBean(name = "gatherBrowserInfo", required = false)
 	protected boolean gatherBrowserInfo = true;
 
+    @SpringBean(name = "googleSigninClientId", required = false)
+    protected String googleSigninClientId = "";
+
 	public WicketApplication() {
-		super();
+        GoogleLogin.init(this);
 	}
 
 	public WicketSession createSession(Request request, Response response) {
@@ -441,4 +445,12 @@ public class WicketApplication extends WebApplication {
 			webApplicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(get().getServletContext());
 		return webApplicationContext;
 	}
+
+    public String getGoogleSigninClientId() {
+        return googleSigninClientId;
+    }
+
+    public void setGoogleSigninClientId(String googleSigninClientId) {
+        this.googleSigninClientId = googleSigninClientId;
+    }
 }
