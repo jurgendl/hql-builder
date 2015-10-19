@@ -1,5 +1,7 @@
 package org.tools.hqlbuilder.webservice.resteasy.resources;
 
+import java.util.Optional;
+
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class GoogleLoginResourceImpl implements GoogleLoginResource {
     public String ping() {
-        return "success";
+        return "ping";
     }
 
     public Response tokensignin(String id_token) {
@@ -27,7 +29,7 @@ public class GoogleLoginResourceImpl implements GoogleLoginResource {
         }
         String jsonResponse;
         try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+            CloseableHttpClient httpclient = getHttpClient();
             HttpGet httpGet = new HttpGet(GoogleLogin.VALIDATION_URL + id_token);
             CloseableHttpResponse response = httpclient.execute(httpGet);
             try {
@@ -49,6 +51,12 @@ public class GoogleLoginResourceImpl implements GoogleLoginResource {
         } catch (Exception ex) {
             return Response.serverError().entity(String.valueOf(ex)).build();
         }
+    }
+
+    protected CloseableHttpClient httpClient;
+
+    protected CloseableHttpClient getHttpClient() {
+        return Optional.ofNullable(httpClient).orElseGet(() -> httpClient = HttpClients.createDefault());
     }
 
     @XmlRootElement
