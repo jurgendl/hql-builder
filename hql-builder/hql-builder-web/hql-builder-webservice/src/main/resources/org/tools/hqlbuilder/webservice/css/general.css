@@ -304,8 +304,35 @@ a[href$=jpg], a[href$=jpeg], a[href$=jpe], a[href$=png], a[href$=gif], a[href$=b
 	width: auto; /* needs to set fixed width */ 
 }
 
-/* ======================== tables ======================== */
+/* ======================== feedback ======================== */
+.feedbackPanel.ui-state-error{
+	background-color: transparent;
+	border: none;
+	list-style-type: none;
+	font-size: 0.8em;
+	margin: 0px;
+	padding: 2px 3px 2px 3px;
+}
+.feedbackPanel .feedbackPanelFATAL {
+	color: #b94a48;
+}
+.feedbackPanel .feedbackPanelERROR {
+	color: #b94a48;
+}
+.feedbackPanel .feedbackPanelWARNING {
+	color: rgb(185, 150, 72);
+}
+.feedbackPanel .feedbackPanelINFO {
+	color: rgb(72, 185, 75);
+}
+.feedbackPanel .feedbackPanelSUCCESS {
+	color: rgb(72, 185, 75);
+}
+.feedbackPanel .feedbackPanelDEBUG {
+	color: rgb(72, 185, 75);
+}
 
+/* ======================== tables ======================== */
 .tablesorter-filter {
 	width: 100%;
 }

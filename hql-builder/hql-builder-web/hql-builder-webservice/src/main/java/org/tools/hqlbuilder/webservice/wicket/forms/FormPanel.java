@@ -452,9 +452,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             reset.add(new CssClassNameAppender(JQueryUI.jquibutton));
             reset.setVisible(this.formSettings.isShowReset());
 
-            /*
-             * https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit +buttons
-             */
+            // https://cwiki.apache.org/confluence/display/WICKET/Multiple+submit +buttons
             Component cancel;
             if (this.getFormSettings().isAjax()) {
                 cancel = new AjaxSubmitLink(FormConstants.FORM_CANCEL, this.form) {
@@ -516,32 +514,20 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             };
             this.form.add(formFooter);
 
-            formHeader.add(new FeedbackPanel("allMessagesTop") {
-                private static final long serialVersionUID = -8111670292045284274L;
-
-                @Override
-                public boolean isVisible() {
-                    return super.isVisible() && FormPanel.this.getFormSettings().isShowMessagesTop() && this.anyMessage();
-                }
-
-                @Override
-                public String toString() {
-                    return "FeedbackPanel:allMessagesTop";
-                }
-            });
-            formFooter.add(new FeedbackPanel("allMessagesBottom") {
-                private static final long serialVersionUID = 5678584511310860629L;
-
-                @Override
-                public boolean isVisible() {
-                    return super.isVisible() && FormPanel.this.getFormSettings().isShowMessagesBottom() && this.anyMessage();
-                }
-
-                @Override
-                public String toString() {
-                    return "FeedbackPanel:allMessagesBottom";
-                }
-            });
+            switch (FormPanel.this.getFormSettings().getShowMessages()) {
+                case bottom:
+                    formHeader.add(new WebMarkupContainer("allMessagesTop").setVisible(false));
+                    formFooter.add(new FeedbackPanel("allMessagesBottom"));
+                    break;
+                case top:
+                    formHeader.add(new FeedbackPanel("allMessagesTop"));
+                    formFooter.add(new WebMarkupContainer("allMessagesBottom").setVisible(false));
+                    break;
+                default:
+                    formHeader.add(new WebMarkupContainer("allMessagesTop").setVisible(false));
+                    formFooter.add(new WebMarkupContainer("allMessagesBottom").setVisible(false));
+                    break;
+            }
             this.form.add(new RepeatingView(FormConstants.FORM_ADDITIONAL).setRenderBodyOnly(true).setVisible(false));
         }
         return this.form;

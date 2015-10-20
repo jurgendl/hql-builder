@@ -12,6 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 public class FormSettings implements Serializable {
     private static final long serialVersionUID = 3682532274799101432L;
 
+    public static enum ShowMessages {
+        no, top, bottom;
+    }
+
     /** add required to form elements */
     protected boolean clientsideRequiredValidation = true;
 
@@ -57,9 +61,8 @@ public class FormSettings implements Serializable {
 
     protected boolean renderPocketGrid = true;
 
-    protected boolean showMessagesTop = false;
+    protected ShowMessages showMessages = ShowMessages.bottom;
 
-    protected boolean showMessagesBottom = true;
 
     public FormSettings() {
         super();
@@ -324,21 +327,12 @@ public class FormSettings implements Serializable {
         }
     }
 
-    public boolean isShowMessagesTop() {
-        return this.showMessagesTop;
+    public ShowMessages getShowMessages() {
+        return this.showMessages;
     }
 
-    public boolean isShowMessagesBottom() {
-        return this.showMessagesBottom;
-    }
-
-    public FormSettings setShowMessagesTop(boolean showMessagesTop) {
-        this.showMessagesTop = showMessagesTop;
-        return this;
-    }
-
-    public FormSettings setShowMessagesBottom(boolean showMessagesBottom) {
-        this.showMessagesBottom = showMessagesBottom;
+    public FormSettings setShowMessages(ShowMessages showMessages) {
+        this.showMessages = showMessages;
         return this;
     }
 }

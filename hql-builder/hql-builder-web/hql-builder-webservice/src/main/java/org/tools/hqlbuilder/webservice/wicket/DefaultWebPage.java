@@ -157,10 +157,10 @@ public class DefaultWebPage extends WebPage {
             return;
         }
         this.addDefaultResources(response);
-        this.addThemeResources(response);
         this.addPageResources(response);
         this.addUserResources(response);
         this.addDynamicResources(response);
+        this.addThemeResources(response);
     }
 
     public void setDefaultCacheDuration(Duration defaultCacheDuration) {
