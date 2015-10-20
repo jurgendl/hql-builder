@@ -517,10 +517,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
             switch (FormPanel.this.getFormSettings().getShowMessages()) {
                 case bottom:
                     formHeader.add(new WebMarkupContainer("allMessagesTop").setVisible(false));
-                    formFooter.add(new FeedbackPanel("allMessagesBottom"));
+				formFooter.add(new FeedbackPanel("allMessagesBottom").setEscapeModelStrings(false));
                     break;
                 case top:
-                    formHeader.add(new FeedbackPanel("allMessagesTop"));
+				formHeader.add(new FeedbackPanel("allMessagesTop").setEscapeModelStrings(false));
                     formFooter.add(new WebMarkupContainer("allMessagesBottom").setVisible(false));
                     break;
                 default:
