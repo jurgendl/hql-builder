@@ -89,6 +89,10 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
     protected Set<String> cssClasses = new HashSet<String>();
 
+    public FormPanel(String id, FormActions<T> formActions) {
+        this(id, formActions, null);
+    }
+
     public FormPanel(String id, FormActions<T> formActions, FormSettings formSettings) {
         super(id);
         WebHelper.show(this);
@@ -97,7 +101,11 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
 
             @Override
             public Class<T> forObjectClass() {
-                return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
+                try {
+                    return CommonUtils.<T> getImplementation(FormPanel.this, FormPanel.class);
+                } catch (IllegalArgumentException ex) {
+                    throw new IllegalArgumentException("implement FormActions#forObjectClass or set generic type of FormActions<T>");
+                }
             }
 
             @Override
