@@ -346,7 +346,7 @@ public class FormPanel<T extends Serializable> extends Panel implements FormCons
                         FormPanel.this.onBeforeSubmit();
                         Serializable submitReturnValue = FormPanel.this.getFormActions().submitModel(FormPanel.this.getFormModel());
                         FormPanel.this.onAfterSubmit(submitReturnValue);
-                    }
+					}
 
                     @Override
                     public String toString() {

@@ -31,7 +31,7 @@ public interface FormActions<T extends Serializable> extends Serializable {
 
     public abstract T loadObject() throws UnsupportedOperationException;
 
-    public abstract Serializable submitModel(IModel<T> model);
+	public abstract T submitModel(IModel<T> model);
 
-    public abstract void submitObject(T object) throws UnsupportedOperationException;
+	public abstract T submitObject(T object) throws UnsupportedOperationException;
 }

@@ -19,13 +19,18 @@ public class GoogleLogin {
             "google-platform");
 
     public static void init(WicketApplication app) {
-        // load application key
-        Properties p = new Properties();
-        try (FileInputStream inStream = new FileInputStream(System.getProperty("user.home") + "/google.app.client_id.properties")) {
-            p.load(inStream);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        app.setGoogleSigninClientId(p.getProperty("google.app.client_id"));
+		try {
+			// load application key
+			Properties p = new Properties();
+			try (FileInputStream inStream = new FileInputStream(
+					System.getProperty("user.home") + "/google.app.client_id.properties")) {
+				p.load(inStream);
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
+			app.setGoogleSigninClientId(p.getProperty("google.app.client_id"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
     }
 }
