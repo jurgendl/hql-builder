@@ -59,13 +59,13 @@ public class ExampleForm extends FormPanel<Example> {
     @SuppressWarnings("unchecked")
     public ExampleForm(String id) {
         super(id, new DefaultFormActions<Example>() {
-            /***/
         }, new FormSettings().setClientsideRequiredValidation(false).setShowPlaceholder(false).setLabelWidth("18em"));
 
         setFormActions(new DefaultFormActions<Example>() {
             @Override
-            public void submitObject(Example example) {
+			public Example submitObject(Example example) {
                 _submitObject(example);
+				return example;
             }
 
             @Override

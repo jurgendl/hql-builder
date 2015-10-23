@@ -142,13 +142,13 @@ public class RegistrationsPage extends BasePage {
             }
 
             @Override
-            public Serializable submitModel(IModel<Registration> model) {
+			public Registration submitModel(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setVerification(new LocalDateTime());
                 Serializable id = RegistrationsPage.this.hqlWebClient.save(object);
                 object = RegistrationsPage.this.hqlWebClient.get(object.getClass(), id);
                 model.setObject(object);
-                return null;
+				return object;
             }
         };
 
