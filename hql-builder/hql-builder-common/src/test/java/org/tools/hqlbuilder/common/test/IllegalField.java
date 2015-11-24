@@ -17,7 +17,7 @@ public class IllegalField extends Dummy {
     private Set<Dummy> dummys;
 
     public Dummy getDummy() {
-        return erh.simpleGet(dummy);
+        return dummy;
     }
 
     public void setDummy(Dummy dummy) {

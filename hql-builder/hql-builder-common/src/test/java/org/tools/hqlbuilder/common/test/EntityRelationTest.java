@@ -4,7 +4,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
-import org.tools.hqlbuilder.common.exceptions.EntityRelationException;
+import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException;
 
 @SuppressWarnings("unchecked")
 public class EntityRelationTest extends org.junit.Assert {

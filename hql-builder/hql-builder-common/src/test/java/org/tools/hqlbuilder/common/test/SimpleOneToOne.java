@@ -14,7 +14,7 @@ public class SimpleOneToOne extends EntityERHAdapter {
     private Dummy dummy;
 
     public Dummy getDummy() {
-        return erh.simpleGet(this.dummy);
+        return dummy;
     }
 
     public void setDummy(Dummy dummy) {
