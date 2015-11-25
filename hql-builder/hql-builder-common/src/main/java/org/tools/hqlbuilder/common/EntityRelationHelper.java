@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,7 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -390,8 +391,7 @@ public class EntityRelationHelper<O> {
          * many-to-one set
          */
         <C> void moSet(P bean, String property, C target) {
-            String backprop = moInverseProp(bean, property);
-            moSet(bean, property, target, backprop);
+            moSet(bean, property, target, moMappedBy(property));
         }
 
         /**
@@ -665,8 +665,7 @@ public class EntityRelationHelper<O> {
             omAdd(bean, property, target, omMappedBy(property));
         }
 
-        private <C> void omRemove(P bean, String property, Collection<C> children, C target,
-                String backprop) {
+        private <C> void omRemove(P bean, String property, Collection<C> children, C target, String backprop) {
             if (!children.contains(target)) {
                 return;
             }
@@ -834,18 +833,43 @@ public class EntityRelationHelper<O> {
             return mappedBy(property);
         }
 
+        /**
+         * many-to-one mapped by?
+         */
+        private String moMappedBy(String property) {
+            return mappedBy(property);
+        }
+
         private String mappedByInvers(String property, Annotation relationAnnotation) {
-            Class<?> targetEntity = targetEntityAndResolve(property, relationAnnotation);
+            Class<?> targetEntity = resolve(findField(property), relationAnnotation);
             Class<?> currentEntity = targetEntity;
+            Class<?> inversRelation = invers(relationAnnotation);
             while (!Object.class.equals(currentEntity)) {
                 for (Field field : currentEntity.getDeclaredFields()) {
-                    if (property.equals(mappedBy(anyAnnotation(field)))) {
+                    Annotation anyAnnotation = anyAnnotation(field);
+                    if (anyAnnotation != null && //
+                            inversRelation.isAssignableFrom(anyAnnotation.getClass()) && //
+                            resolve(field, anyAnnotation).isAssignableFrom(clazz) && //
+                            property.equals(mappedBy(anyAnnotation))//
+                    ) {
                         return field.getName();
                     }
                 }
                 currentEntity = currentEntity.getSuperclass();
             }
             return null;
+        }
+
+        private Class<?> invers(Annotation relationAnnotation) {
+            if (relationAnnotation instanceof ManyToMany)
+                return ManyToMany.class;
+            if (relationAnnotation instanceof OneToOne)
+                return OneToOne.class;
+            if (relationAnnotation instanceof OneToMany)
+                return ManyToOne.class;
+            if (relationAnnotation instanceof ManyToOne)
+                return OneToMany.class;
+            throw new UnsupportedOperationException(relationAnnotation.getClass().getName());
         }
 
         private Annotation mappedByAnything(String property) {
@@ -895,17 +919,14 @@ public class EntityRelationHelper<O> {
             return null;
         }
 
-        private Class<?> targetEntityAndResolve(String property, Annotation relationAnnotation) {
-            Class<?> targetEntity = targetEntity(relationAnnotation);
+        private Class<?> resolve(Field field, Annotation anyAnnotation) {
+            Class<?> targetEntity = targetEntity(anyAnnotation);
             if (targetEntity != null && !void.class.equals(targetEntity)) {
                 return targetEntity;
             }
-            return resolve(findField(property));
-        }
-
-        private Class<?> resolve(Field field) {
             if (Collection.class.isAssignableFrom(field.getType())) {
-                return Class.class.cast(ParameterizedType.class.cast(field.getGenericType()).getActualTypeArguments()[0]);
+                Type obj = ParameterizedType.class.cast(field.getGenericType()).getActualTypeArguments()[0];
+                return Class.class.cast(obj);
             }
             return field.getType();
         }
@@ -973,33 +994,6 @@ public class EntityRelationHelper<O> {
             } else {
                 throw new EntityRelationException("unsupported");
             }
-        }
-
-        private String moInverseProp(P bean, String property) {
-            String backProp = mappedBy.get(property);
-
-            if (backProp == null) {
-                Class<?> beanClass = bean.getClass();
-                Class<?> otherBean = findField(beanClass, property).getType();
-
-                for (Field otherField : otherBean.getDeclaredFields()) {
-                    OneToMany oneToMany = otherField.getAnnotation(OneToMany.class);
-                    if (oneToMany != null) {
-                        if (property.equals(oneToMany.mappedBy())) {
-                            backProp = otherField.getName();
-                            break;
-                        }
-                    }
-                }
-
-                if (backProp == null) {
-                    throw new EntityRelationException("inverse property not found: " + beanClass.getName() + "#" + property);
-                }
-
-                mappedBy.put(property, backProp);
-            }
-
-            return backProp;
         }
 
         <T> Collection<T> createCollection(P bean, String property) {

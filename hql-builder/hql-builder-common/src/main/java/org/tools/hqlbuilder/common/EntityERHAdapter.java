@@ -38,6 +38,6 @@ public abstract class EntityERHAdapter extends EntityAdapter {
     }
 
     protected void initERH() {
-        erh = new EntityRelationHelper<EntityERHAdapter>(this);
+        erh = new EntityRelationHelper<>(this);
     }
 }

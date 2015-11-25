@@ -198,14 +198,20 @@ public class EntityRelationTest extends org.junit.Assert {
     public void testOneToOne() {
         OneToOne oo = new OneToOne();
         OneToOneBack ob = new OneToOneBack();
-
-        oo.setOneToOneBack(null);
-
-        oo.setOneToOneBack(ob);
-        assertEquals(ob.getOneToOne(), oo);
+        assertEquals(ob.getOneToOne(), null);
+        assertEquals(oo.getOneToOneBack(), null);
 
         oo.setOneToOneBack(null);
         assertEquals(ob.getOneToOne(), null);
+        assertEquals(oo.getOneToOneBack(), null);
+
+        oo.setOneToOneBack(ob);
+        assertEquals(ob.getOneToOne(), oo);
+        assertEquals(oo.getOneToOneBack(), ob);
+
+        oo.setOneToOneBack(null);
+        assertEquals(ob.getOneToOne(), null);
+        assertEquals(oo.getOneToOneBack(), null);
 
         OneToOneBack obb = new OneToOneBack();
         oo.setOneToOneBack(ob);
@@ -376,5 +382,12 @@ public class EntityRelationTest extends org.junit.Assert {
         } catch (EntityRelationException ex) {
             assertTrue(true);
         }
+    }
+
+    @Test
+    public void ooTest() {
+        PTest p = new PTest();
+        ETest e = new ETest();
+        e.setP(p);
     }
 }
