@@ -28,6 +28,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException;
+import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException.EntityRelationExceptionType;
 
 public class EntityRelationHelper<O> {
     @Transient
@@ -103,7 +105,7 @@ public class EntityRelationHelper<O> {
     public <C extends Collection<E>, E> C simpleGet(String property, C collection) {
         if (collection == null) {
             if (property == null) {
-                throw new UnsupportedOperationException("null collection without known propertyname");
+                throw new EntityRelationException("null collection without known propertyname");
             }
             collection = (C) getInstance().createCollection(bean, property);
         }
@@ -807,7 +809,10 @@ public class EntityRelationHelper<O> {
                 if (StringUtils.isBlank(mb)) {
                     mb = mappedByInvers(property, mappedByAnno);
                 }
-                mappedBy.put(property, mb.toString());
+                if (mb == null) {
+                    throw new EntityRelationException(EntityRelationExceptionType.MISSING_REFERENCE, clazz.getName() + "; " + property);
+                }
+                mappedBy.put(property, mb);
             }
             return mb;
         }
@@ -869,7 +874,7 @@ public class EntityRelationHelper<O> {
                 return ManyToOne.class;
             if (relationAnnotation instanceof ManyToOne)
                 return OneToMany.class;
-            throw new UnsupportedOperationException(relationAnnotation.getClass().getName());
+            throw new EntityRelationException("unsupported: " + relationAnnotation.getClass().getName());
         }
 
         private Annotation mappedByAnything(String property) {
@@ -940,7 +945,7 @@ public class EntityRelationHelper<O> {
             } else if (isOneToMany(property)) {
                 omAdd(bean, property, target);
             } else {
-                throw new EntityRelationException("unsupported");
+                throw new EntityRelationException("unsupported: " + clazz.getName() + "; " + property);
             }
         }
 
@@ -953,7 +958,7 @@ public class EntityRelationHelper<O> {
             } else if (isManyToOne(property)) {
                 moSet(bean, property, target);
             } else {
-                throw new EntityRelationException("unsupported");
+                throw new EntityRelationException("unsupported: " + clazz.getName() + "; " + property);
             }
         }
 
@@ -966,7 +971,7 @@ public class EntityRelationHelper<O> {
             } else if (isOneToMany(property)) {
                 omClear(bean, property);
             } else {
-                throw new EntityRelationException("unsupported");
+                throw new EntityRelationException("unsupported: " + clazz.getName() + "; " + property);
             }
         }
 
@@ -979,7 +984,7 @@ public class EntityRelationHelper<O> {
             } else if (isOneToMany(property)) {
                 omRemove(bean, property, target);
             } else {
-                throw new EntityRelationException("unsupported");
+                throw new EntityRelationException("unsupported: " + clazz.getName() + "; " + property);
             }
         }
 
@@ -992,7 +997,7 @@ public class EntityRelationHelper<O> {
             } else if (isOneToMany(property)) {
                 omReplace(bean, property, targets);
             } else {
-                throw new EntityRelationException("unsupported");
+                throw new EntityRelationException("unsupported: " + clazz.getName() + "; " + property);
             }
         }
 
@@ -1004,9 +1009,9 @@ public class EntityRelationHelper<O> {
                 try {
                     collection = (Collection<T>) type.newInstance();
                 } catch (InstantiationException ex) {
-                    throw new RuntimeException(ex);
+                    throw new EntityRelationException(ex);
                 } catch (IllegalAccessException ex) {
-                    throw new RuntimeException(ex);
+                    throw new EntityRelationException(ex);
                 }
             } else if (List.class.equals(type)) {
                 collection = new ArrayList<T>();
@@ -1074,12 +1079,8 @@ public class EntityRelationHelper<O> {
             }
         }
 
-        public static class MethodNotFoundException extends RuntimeException {
+        public static class MethodNotFoundException extends EntityRelationException {
             private static final long serialVersionUID = 5813185363326141162L;
-
-            public MethodNotFoundException() {
-                super();
-            }
 
             public MethodNotFoundException(String message) {
                 super(message);
