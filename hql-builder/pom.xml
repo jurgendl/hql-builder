@@ -51,7 +51,7 @@
 		<version.spring>4.2.2.RELEASE</version.spring><!-- keep up to date 4.x.x -->
 		<version.swingeasy>3.1</version.swingeasy><!-- recent version, keep up to date -->
 		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
-		<version.joda>2.7</version.joda><!-- eventually replace by Java 1.8? -->
+		<version.joda>2.9.1</version.joda><!-- eventually replace by Java 1.8? -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.commons-codec>1.9</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.4</version.commons-io><!-- stale, keep up to date -->
