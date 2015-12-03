@@ -1,3 +1,7 @@
+https://css-tricks.com/password-strength-meter/
+http://tobiasahlin.com/blog/how-to-animate-box-shadow/
+
+
 http://www.sitepoint.com/9-javascript-libraries-working-with-local-storage/
 https://github.com/marcuswestin/store.js
 
