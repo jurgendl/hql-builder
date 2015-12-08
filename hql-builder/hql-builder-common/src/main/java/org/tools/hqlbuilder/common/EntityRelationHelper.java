@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException;
 import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException.EntityRelationExceptionType;
 
+@SuppressWarnings("unused")
 public class EntityRelationHelper<O> {
     @Transient
     private final transient O bean;
@@ -553,10 +555,6 @@ public class EntityRelationHelper<O> {
          * intern gebruik
          */
         private <C> void mmAdd(P bean, String property, Collection<C> children, C target, String backprop) {
-            if (target == null) {
-                return;
-            }
-
             EntityRelationCache<C> targetWrapper = (EntityRelationCache<C>) getInstance(target.getClass());
             Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
             // if (parents == null) { // never null because getter creates when needed
@@ -940,6 +938,7 @@ public class EntityRelationHelper<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void add(P bean, String property, C target) {
+            Objects.requireNonNull(target);
             if (isManyToMany(property)) {
                 mmAdd(bean, property, target);
             } else if (isOneToMany(property)) {
@@ -979,6 +978,7 @@ public class EntityRelationHelper<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void remove(P bean, String property, C target) {
+            Objects.requireNonNull(target);
             if (isManyToMany(property)) {
                 mmRemove(bean, property, target);
             } else if (isOneToMany(property)) {
@@ -992,6 +992,7 @@ public class EntityRelationHelper<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void replace(P bean, String property, Collection<C> targets) {
+            Objects.requireNonNull(targets);
             if (isManyToMany(property)) {
                 mmReplace(bean, property, targets);
             } else if (isOneToMany(property)) {
