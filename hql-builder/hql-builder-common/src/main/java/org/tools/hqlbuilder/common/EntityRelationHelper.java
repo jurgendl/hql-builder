@@ -29,11 +29,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException;
-import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException.EntityRelationExceptionType;
 
-@SuppressWarnings("unused")
-public class EntityRelationHelper<O> {
+public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     @Transient
     private final transient O bean;
 
@@ -51,63 +48,11 @@ public class EntityRelationHelper<O> {
         return EntityRelationCache.getInstance((Class<O>) this.bean.getClass());
     }
 
-    public <T> void moSet(String property, T target) {
-        getInstance().set(bean, property, target);
-    }
-
-    public <T> void ooSet(String property, T target) {
-        getInstance().set(bean, property, target);
-    }
-
-    public <T> void mmClear(String property) {
-        getInstance().clear(bean, property);
-    }
-
-    public <T> void mmAdd(String property, T target) {
-        getInstance().add(bean, property, target);
-    }
-
-    public <T> void mmRemove(String property, T target) {
-        getInstance().remove(bean, property, target);
-    }
-
-    public <T> void mmSet(String property, Collection<T> targets) {
-        getInstance().replace(bean, property, targets);
-    }
-
-    public <T> void omClear(String property) {
-        getInstance().clear(bean, property);
-    }
-
-    public <T> void omRemove(String property, T target) {
-        getInstance().remove(bean, property, target);
-    }
-
-    public <T> void omAdd(String property, T target) {
-        getInstance().add(bean, property, target);
-    }
-
-    public <T> void omSet(String property, Collection<T> targets) {
-        getInstance().replace(bean, property, targets);
-    }
-
-    public <C extends Collection<E>, E> C omGet(String property, C collection) {
-        return simpleGet(property, collection);
-    }
-
-    public <C extends Collection<E>, E> C omGet(C collection) {
-        return omGet(null, collection);
-    }
-
-    public <C extends Collection<E>, E> C simpleGet(C collection) {
-        return simpleGet(null, collection);
-    }
-
     @SuppressWarnings("unchecked")
-    public <C extends Collection<E>, E> C simpleGet(String property, C collection) {
+    private <C extends Collection<E>, E> C getUnmodCollection(String property, C collection) {
         if (collection == null) {
             if (property == null) {
-                throw new EntityRelationException("null collection without known propertyname");
+                throw new EntityRelationException("null collection without known propertyname, initialize collection first");
             }
             collection = (C) getInstance().createCollection(bean, property);
         }
@@ -115,45 +60,259 @@ public class EntityRelationHelper<O> {
             return (C) Collections.unmodifiableSortedSet((SortedSet<E>) collection);
         } else if (collection instanceof Set) {
             return (C) Collections.unmodifiableSet((Set<E>) collection);
+        } else if (collection instanceof List) {
+            return (C) Collections.unmodifiableList((List<E>) collection);
         }
-        // can only be a List at this point
-        return (C) Collections.unmodifiableList((List<E>) collection);
-    }
-
-    public <C extends Collection<E>, E> C mmGet(String property, C collection) {
-        return simpleGet(property, collection);
-    }
-
-    public <C extends Collection<E>, E> C mmGet(C collection) {
-        return mmGet(null, collection);
-    }
-
-    public void simpleClear(String property) {
-        getCollection(property).clear();
-    }
-
-    public <T> void simpleAdd(String property, T target) {
-        this.<T> getCollection(property).add(target);
-    }
-
-    public <T> void simpleRemove(String property, T target) {
-        this.<T> getCollection(property).remove(target);
+        throw new EntityRelationException("unsupported collection type");
     }
 
     private <I> Collection<I> getCollection(String property) {
         return getInstance().<I> getOrCreateCollection(bean, property);
     }
 
+    private <T> void simpleSetCollection(String property, Collection<T> targets) {
+        Collection<T> collection = this.<T> getCollection(property);
+        collection.clear();
+        if (targets != null) {
+            collection.addAll(targets);
+        }
+    }
+
+    // =========== direct method calls implement UncheckedEntityRelationHelper ===========
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#set(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void set(String property, T target) {
+        getInstance().set(bean, property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#clear(java.lang.String)
+     */
+    @Override
+    public <T> void clear(String property) {
+        getInstance().clear(bean, property);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#add(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void add(String property, T target) {
+        getInstance().add(bean, property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#remove(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void remove(String property, T target) {
+        getInstance().remove(bean, property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#replace(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <T> void replace(String property, Collection<T> targets) {
+        getInstance().replace(bean, property, targets);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#get(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C get(String property, C collection) {
+        return getUnmodCollection(property, collection);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#get(java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C get(C collection) {
+        return getUnmodCollection(null, collection);
+    }
+
+    // =========== checked method calls implement CheckedEntityRelationHelper ===========
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#moSet(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void moSet(String property, T target) {
+        set(property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#ooSet(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void ooSet(String property, T target) {
+        set(property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmClear(java.lang.String)
+     */
+    @Override
+    public <T> void mmClear(String property) {
+        clear(property);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmAdd(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void mmAdd(String property, T target) {
+        add(property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmRemove(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void mmRemove(String property, T target) {
+        remove(property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmSet(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <T> void mmSet(String property, Collection<T> targets) {
+        replace(property, targets);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omClear(java.lang.String)
+     */
+    @Override
+    public <T> void omClear(String property) {
+        clear(property);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omRemove(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void omRemove(String property, T target) {
+        remove(property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omAdd(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public <T> void omAdd(String property, T target) {
+        add(property, target);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omSet(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <T> void omSet(String property, Collection<T> targets) {
+        replace(property, targets);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omGet(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C omGet(String property, C collection) {
+        return get(property, collection);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omGet(java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C omGet(C collection) {
+        return get(null, collection);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmGet(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C mmGet(String property, C collection) {
+        return get(property, collection);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmGet(java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C mmGet(C collection) {
+        return get(null, collection);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#simpleGet(java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C simpleGet(C collection) {
+        return get(null, collection);
+    }
+
+    /**
+     * 
+     * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#simpleGet(java.lang.String, java.util.Collection)
+     */
+    @Override
+    public <C extends Collection<E>, E> C simpleGet(String property, C collection) {
+        return get(property, collection);
+    }
+
+    // unidirectional relations do not work on UncheckedEntityRelationHelper
+
+    @Override
+    public <T> void simpleClear(String property) {
+        this.<T> getCollection(property).clear();
+    }
+
+    @Override
+    public <T> void simpleAdd(String property, T target) {
+        this.<T> getCollection(property).add(target);
+    }
+
+    @Override
+    public <T> void simpleRemove(String property, T target) {
+        this.<T> getCollection(property).remove(target);
+    }
+
+    @Override
     public <T> void simpleSet(String property, T target) {
         getInstance().invokeSet(bean, property, target);
     }
 
+    @Override
     public <T> void simpleSet(String property, Collection<T> targets) {
-        Collection<T> cast = this.<T> getCollection(property);
-        cast.clear();
-        if (targets != null) {
-            cast.addAll(targets);
-        }
+        simpleSetCollection(property, targets);
     }
 
     @SuppressWarnings("unchecked")
@@ -429,7 +588,7 @@ public class EntityRelationHelper<O> {
                 childWrapper.invokeSet(child, parentPropertyName, null);
                 invokeSet(bean, childProperty, null);
             } else {
-                throw new EntityRelationException(EntityRelationException.EntityRelationExceptionType.REFERENCE,
+                throw new EntityRelationException(EntityRelationExceptionType.REFERENCE,
                         "!oldParent.equals(parent) || !oldChild.equals(child");
             }
         }
@@ -447,7 +606,7 @@ public class EntityRelationHelper<O> {
                 childWrapper.invokeSet(child, parentPropertyName, bean);
                 invokeSet(bean, childProperty, child);
             } else {
-                throw new EntityRelationException(EntityRelationException.EntityRelationExceptionType.REFERENCE,
+                throw new EntityRelationException(EntityRelationExceptionType.REFERENCE,
                         "parentWrapper.get(childProperty) != null || childWrapper.get(parentPropertyName) != null");
             }
         }
@@ -555,6 +714,10 @@ public class EntityRelationHelper<O> {
          * intern gebruik
          */
         private <C> void mmAdd(P bean, String property, Collection<C> children, C target, String backprop) {
+            if (target == null) {
+                return;
+            }
+
             EntityRelationCache<C> targetWrapper = (EntityRelationCache<C>) getInstance(target.getClass());
             Collection<P> parents = (Collection<P>) targetWrapper.invokeGet(target, backprop);
             // if (parents == null) { // never null because getter creates when needed
@@ -938,7 +1101,8 @@ public class EntityRelationHelper<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void add(P bean, String property, C target) {
-            Objects.requireNonNull(target);
+            if (Objects.isNull(target))
+                throw new NullNotAcceptedException("unsupported: " + clazz.getName());
             if (isManyToMany(property)) {
                 mmAdd(bean, property, target);
             } else if (isOneToMany(property)) {
@@ -978,7 +1142,8 @@ public class EntityRelationHelper<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void remove(P bean, String property, C target) {
-            Objects.requireNonNull(target);
+            if (Objects.isNull(target))
+                throw new NullNotAcceptedException("unsupported: " + clazz.getName());
             if (isManyToMany(property)) {
                 mmRemove(bean, property, target);
             } else if (isOneToMany(property)) {
@@ -992,7 +1157,6 @@ public class EntityRelationHelper<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void replace(P bean, String property, Collection<C> targets) {
-            Objects.requireNonNull(targets);
             if (isManyToMany(property)) {
                 mmReplace(bean, property, targets);
             } else if (isOneToMany(property)) {
@@ -1037,63 +1201,79 @@ public class EntityRelationHelper<O> {
             }
             return collection;
         }
+    }
 
-        public static class EntityRelationException extends RuntimeException {
-            private static final long serialVersionUID = -6660143470859271041L;
+    public static enum EntityRelationExceptionType {
+        GENERAL, MISSING_REFERENCE, EXISTING_REFERENCE, REFERENCE;
+    }
 
-            public static enum EntityRelationExceptionType {
-                GENERAL, MISSING_REFERENCE, EXISTING_REFERENCE, REFERENCE;
-            }
+    public static class EntityRelationException extends RuntimeException {
+        private static final long serialVersionUID = -6660143470859271041L;
 
-            private EntityRelationExceptionType type = EntityRelationExceptionType.GENERAL;
+        private EntityRelationExceptionType type = EntityRelationExceptionType.GENERAL;
 
-            public EntityRelationException(EntityRelationExceptionType type, Throwable cause) {
-                super("" + type, cause);
-                this.type = type;
-            }
-
-            public EntityRelationException(EntityRelationExceptionType type, String message) {
-                super(type + ": " + message);
-                this.type = type;
-            }
-
-            public EntityRelationException(Throwable cause) {
-                this(EntityRelationExceptionType.GENERAL, cause);
-            }
-
-            public EntityRelationException(String message) {
-                this(EntityRelationExceptionType.GENERAL, message);
-            }
-
-            public EntityRelationException(Object expectedParent, Object child) {
-                this(EntityRelationExceptionType.MISSING_REFERENCE,
-                        "child in collection but parent is null: child=" + child + ", expectedParent=" + expectedParent);
-            }
-
-            public EntityRelationException(Object currentParent, Object expectedParent, Object child) {
-                this(EntityRelationExceptionType.EXISTING_REFERENCE, "child niet in collectie en parent verwijst naar derde: child=" + child
-                        + ", expectedParent=" + expectedParent + ", currentParent=" + currentParent);
-            }
-
-            public EntityRelationExceptionType getType() {
-                return this.type;
-            }
+        public EntityRelationException(EntityRelationExceptionType type, Throwable cause) {
+            super("" + type, cause);
+            this.type = type;
         }
 
-        public static class MethodNotFoundException extends EntityRelationException {
-            private static final long serialVersionUID = 5813185363326141162L;
+        public EntityRelationException(EntityRelationExceptionType type, String message) {
+            super(type + ": " + message);
+            this.type = type;
+        }
 
-            public MethodNotFoundException(String message) {
-                super(message);
-            }
+        public EntityRelationException(Throwable cause) {
+            this(EntityRelationExceptionType.GENERAL, cause);
+        }
 
-            public MethodNotFoundException(Throwable cause) {
-                super(cause);
-            }
+        public EntityRelationException(String message) {
+            this(EntityRelationExceptionType.GENERAL, message);
+        }
 
-            public MethodNotFoundException(String message, Throwable cause) {
-                super(message, cause);
-            }
+        public EntityRelationException(Object expectedParent, Object child) {
+            this(EntityRelationExceptionType.MISSING_REFERENCE,
+                    "child in collection but parent is null: child=" + child + ", expectedParent=" + expectedParent);
+        }
+
+        public EntityRelationException(Object currentParent, Object expectedParent, Object child) {
+            this(EntityRelationExceptionType.EXISTING_REFERENCE, "child niet in collectie en parent verwijst naar derde: child=" + child
+                    + ", expectedParent=" + expectedParent + ", currentParent=" + currentParent);
+        }
+
+        public EntityRelationExceptionType getType() {
+            return this.type;
+        }
+    }
+
+    public static class MethodNotFoundException extends EntityRelationException {
+        private static final long serialVersionUID = 5813185363326141162L;
+
+        public MethodNotFoundException(String message) {
+            super(message);
+        }
+
+        public MethodNotFoundException(Throwable cause) {
+            super(cause);
+        }
+
+        public MethodNotFoundException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    public static class NullNotAcceptedException extends EntityRelationException {
+        private static final long serialVersionUID = -3442273424622004108L;
+
+        public NullNotAcceptedException(String message) {
+            super(message);
+        }
+
+        public NullNotAcceptedException(Throwable cause) {
+            super(cause);
+        }
+
+        public NullNotAcceptedException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

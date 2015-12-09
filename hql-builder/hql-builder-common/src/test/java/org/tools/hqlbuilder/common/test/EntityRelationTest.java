@@ -4,7 +4,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
-import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationCache.EntityRelationException;
+import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationException;
 
 @SuppressWarnings("unchecked")
 public class EntityRelationTest extends org.junit.Assert {
@@ -19,8 +19,8 @@ public class EntityRelationTest extends org.junit.Assert {
         ManyToManyBack mb = new ManyToManyBack();
 
         mm.setManyToManyBack(null);
-        mm.addManyToManyBack(null);
-        mm.removeManyToManyBack(null);
+        // mm.addManyToManyBack(null);
+        // mm.removeManyToManyBack(null);
 
         mm.addManyToManyBack(mb);
         assertTrue(mb.getManyToMany().contains(mm));
@@ -74,8 +74,8 @@ public class EntityRelationTest extends org.junit.Assert {
         ManyToMany mm = new ManyToMany();
 
         mb.setManyToMany(null);
-        mb.addManyToMany(null);
-        mb.removeManyToMany(null);
+        // mb.addManyToMany(null);
+        // mb.removeManyToMany(null);
 
         mb.addManyToMany(mm);
         assertTrue(mm.getManyToManyBack().contains(mb));
@@ -131,8 +131,8 @@ public class EntityRelationTest extends org.junit.Assert {
         om.setManyToOne(null);
 
         mo.setOneToMany(null);
-        mo.addOneToMany(null);
-        mo.removeOneToMany(null);
+        // mo.addOneToMany(null);
+        // mo.removeOneToMany(null);
 
         mo.addOneToMany(om);
         assertEquals(om.getManyToOne(), mo);
@@ -390,4 +390,20 @@ public class EntityRelationTest extends org.junit.Assert {
         ETest e = new ETest();
         e.setP(p);
     }
+
+    @Test
+    public void testSimpleBi() {
+        ToMany x = new ToMany();
+        FromMany bi = new FromMany();
+        x.addBidirectional(bi);
+        x.removeBidirectional(bi);
+    }
+
+    // @Test
+    // public void testSimpleUni() {
+    // ToMany x = new ToMany();
+    // FromMany uni = new FromMany();
+    // x.addUnidirectional(uni);
+    // x.removeUnidirectional(uni);
+    // }
 }
