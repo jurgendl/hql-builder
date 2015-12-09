@@ -11,6 +11,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 
 public class LocalSessionFactoryBeanPlus4 extends org.springframework.orm.hibernate4.LocalSessionFactoryBean implements BeanFactoryAware,
@@ -21,6 +22,16 @@ ApplicationContextAware {
 
     public LocalSessionFactoryBeanPlus4() {
         super();
+    }
+
+    public void setHibernateConfigLocation(String configLocation) {
+        if ("${hibernate.cfg.xml}".equals(configLocation))
+            return;
+        setConfigLocation(new ClassPathResource(configLocation));
+    }
+
+    public void setHibernatePackagesToScan(String... packagesToScan) {
+        super.setPackagesToScan(packagesToScan);
     }
 
     /**
