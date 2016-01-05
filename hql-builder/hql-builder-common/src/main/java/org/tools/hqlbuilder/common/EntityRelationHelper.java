@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -1101,7 +1100,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void add(P bean, String property, C target) {
-            if (Objects.isNull(target))
+            if (target == null)
                 throw new NullNotAcceptedException("unsupported: " + clazz.getName());
             if (isManyToMany(property)) {
                 mmAdd(bean, property, target);
@@ -1142,7 +1141,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void remove(P bean, String property, C target) {
-            if (Objects.isNull(target))
+            if (target == null)
                 throw new NullNotAcceptedException("unsupported: " + clazz.getName());
             if (isManyToMany(property)) {
                 mmRemove(bean, property, target);
