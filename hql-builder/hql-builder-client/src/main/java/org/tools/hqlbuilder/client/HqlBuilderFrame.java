@@ -564,6 +564,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             "org/tools/hqlbuilder/client/images/scr.png", HqlBuilderFrameConstants.MAXIMUM_NUMBER_OF_SEARCH_RESULTS,
             HqlBuilderFrameConstants.MAXIMUM_NUMBER_OF_SEARCH_RESULTS, true, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Integer.class, 2000);
 
+    private final HqlBuilderAction showToolbarsAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.SHOW_TOOLBARS, true,
+            HqlBuilderFrameConstants.SHOW_TOOLBARS, null, HqlBuilderFrameConstants.SHOW_TOOLBARS, HqlBuilderFrameConstants.SHOW_TOOLBARS, true, null,
+            null, HqlBuilderFrameConstants.PERSISTENT_ID);
+
     private HqlBuilderAction fontAction;
 
     private final HqlBuilderAction systrayAction = new HqlBuilderAction(null, this, null, true, HqlBuilderFrameConstants.SYSTEM_TRAY, null,
@@ -672,6 +676,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private String errorString;
 
     private Set<String> reservedKeywords;
+
+    private JToolBar hqltools;
+
+    private JToolBar resultstools;
 
     private HqlBuilderFrame() {
         // needs to be first to init font
@@ -2320,7 +2328,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (last != null) {
             this.importFromFavoritesNoQ(last);
         }
-
     }
 
     protected void Lucene_query_syntax() {
@@ -2339,6 +2346,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.maximumNumberOfResultsAction.setValue(max);
             this.setMaxResults(max);
         }
+    }
+
+    protected void show_toolbars() {
+        boolean b = !Boolean.FALSE.equals(this.showToolbarsAction.isSelected());
+        hqltools.setVisible(b);
+        resultstools.setVisible(b);
     }
 
     protected void maximum_number_of_search_results() {
@@ -2864,7 +2877,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         EToolBarButtonCustomizer etbc = new EToolBarButtonCustomizer();
         {
-            JToolBar hqltools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
+            hqltools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.startQueryAction)));
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.wizardAction)));
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.clearAction)));
@@ -2881,7 +2894,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.hql_sql_tabs_panel.add(hqltools, BorderLayout.WEST);
         }
         {
-            JToolBar resultstools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
+            resultstools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
             resultstools.add(new EButton(new EButtonConfig(etbc, this.hibernatePropertiesAction)));
             resultstools.add(new EButton(new EButtonConfig(etbc, this.objectTreeAction)));
             resultstools.add(new EButton(new EButtonConfig(etbc, this.deleteObjectAction)));
@@ -2971,6 +2984,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 addmi.add(new JCheckBoxMenuItem(this.addShowErrorTooltip));
                 addmi.add(new JCheckBoxMenuItem(this.addSelectExecutedHql));
                 addmi.add(this.maximumNumberOfSearchResultsAction);
+                addmi.add(this.showToolbarsAction);
                 settingsMenu.add(addmi);
             }
             {
@@ -3022,6 +3036,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             hqlmenu.add(new JMenuItem(this.namedQueryAction));
             hqlmenu.add(new JMenuItem(this.clipboardExportAction));
             hqlmenu.add(new JMenuItem(this.clipboardImportAction));
+            hqlmenu.add(new JMenuItem(this.helpInsertAction));
+            hqlmenu.add(new JMenuItem(this.remarkToggleAction));
+            hqlmenu.add(new JMenuItem(this.deleteInvertedSelectionAction));
             menuBar.add(hqlmenu);
         }
         {
