@@ -2902,6 +2902,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             resultstools.add(new EButton(new EButtonConfig(etbc, this.executeScriptOnColumnAction)));
             this.resultPanel.add(resultstools, BorderLayout.WEST);
         }
+        show_toolbars();
 
         JMenuBar menuBar = new JMenuBar();
         this.frame.setJMenuBar(menuBar);
@@ -2984,7 +2985,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 addmi.add(new JCheckBoxMenuItem(this.addShowErrorTooltip));
                 addmi.add(new JCheckBoxMenuItem(this.addSelectExecutedHql));
                 addmi.add(this.maximumNumberOfSearchResultsAction);
-                addmi.add(this.showToolbarsAction);
+                addmi.add(new JCheckBoxMenuItem(this.showToolbarsAction));
                 settingsMenu.add(addmi);
             }
             {
@@ -3014,6 +3015,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     HqlBuilderFrame.this.addShowErrorTooltip.setSelected(true);
                     HqlBuilderFrame.this.addSelectExecutedHql.setSelected(true);
                     HqlBuilderFrame.this.fontAction.setWarnRestart(true);
+                    HqlBuilderFrame.this.showToolbarsAction.setSelected(true);
 
                     HqlBuilderFrame.this.editable_results();
 
