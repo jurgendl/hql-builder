@@ -317,7 +317,7 @@ public class HqlServiceImpl implements HqlService {
                 getHibernateWebResolver().getClasses()
                         .stream()
                         .filter(cn -> c.isAssignableFrom(cn.getType()))
-                        .map(cn -> execute(new QueryParameters(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), max, queryParameters)))
+                        .map(cn -> execute(new QueryParameters(hql.replaceAll("\\$\\$", cn.getType().getSimpleName()), first, max, queryParameters)))
                         .forEach(it -> result.setOr(it, r -> r.getResults().getValue().addAll(it.getResults().getValue())));
                 return result.get();
             }

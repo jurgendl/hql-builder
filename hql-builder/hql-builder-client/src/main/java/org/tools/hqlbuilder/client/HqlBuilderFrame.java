@@ -117,6 +117,8 @@ import org.swingeasy.ECheckBoxConfig;
 import org.swingeasy.EComponentGradientRenderer;
 import org.swingeasy.EComponentPopupMenu;
 import org.swingeasy.EFontChooser;
+import org.swingeasy.EFormattedTextField;
+import org.swingeasy.EFormattedTextFieldConfig;
 import org.swingeasy.ELabel;
 import org.swingeasy.ELabeledTextFieldButtonComponent;
 import org.swingeasy.EList;
@@ -147,6 +149,7 @@ import org.swingeasy.OptionType;
 import org.swingeasy.ProgressGlassPane;
 import org.swingeasy.ResultType;
 import org.swingeasy.UIUtils;
+import org.swingeasy.formatters.NumberFormatBuilder;
 import org.swingeasy.system.SystemSettings;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.ExecutionResult;
@@ -608,6 +611,28 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final ELabel maxResults;
 
+    private final EFormattedTextField<Integer> startResults = new EFormattedTextField<Integer>(
+            new EFormattedTextFieldConfig(new NumberFormatBuilder(NumberFormatBuilder.Type.Integer)), 0);
+
+    private final EButton nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" > ") {
+        private static final long serialVersionUID = 2525393811237450637L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            startResults.setValue((int) startResults.getValue() + (Integer) maximumNumberOfResultsAction.getValue());
+            start_query();
+        }
+    }));
+
+    private final EButton backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" 0 ") {
+        private static final long serialVersionUID = 2525393811237450637L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            startResults.setValue(0);
+        }
+    }));
+
     private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
 
     private final JComponent values = ClientUtils.getPropertyFrame(new Serializable() {
@@ -872,6 +897,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 HqlBuilderFrameConstants.EDITABLE_RESULTS, null, HqlBuilderFrameConstants.EDITABLE_RESULTS, HqlBuilderFrameConstants.EDITABLE_RESULTS,
                 false, null, null, HqlBuilderFrameConstants.PERSISTENT_ID);
         this.editable_results();
+
+        font(nextResultsButton, null);
+        font(startResults, null);
+        font(backToStartResultsButton, null);
     }
 
     protected void about() {
@@ -1402,8 +1431,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
-    private ExecutionResult doQuery(String hqlGetText, int maxresults) {
-        return this.hqlService.execute(new QueryParameters(hqlGetText, maxresults,
+    private ExecutionResult doQuery(String hqlGetText, int start, int maxresults) {
+        return this.hqlService.execute(new QueryParameters(hqlGetText, start, maxresults,
                 this.parametersEDT.getRecords().stream().map(EListRecord::get).collect(Collectors.toList())));
     }
 
@@ -1465,11 +1494,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.preQuery();
 
         final int maxresults = rowProcessor == null ? (Integer) this.maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
+        final int startNr = (int) startResults.getValue();
 
         SwingWorker<ExecutionResult, Void> sw = new SwingWorker<ExecutionResult, Void>() {
             @Override
             protected ExecutionResult doInBackground() throws Exception {
-                return HqlBuilderFrame.this.doQuery(hqlGetText, maxresults);
+                return HqlBuilderFrame.this.doQuery(hqlGetText, startNr, maxresults);
             }
 
             @Override
@@ -2767,6 +2797,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         JPanel resultsStatusPanel = new JPanel(new FlowLayout());
         resultsStatusPanel.add(this.resultsInfo);
         resultsStatusPanel.add(this.maxResults);
+        resultsStatusPanel.add(this.startResults);
+        resultsStatusPanel.add(this.nextResultsButton);
+        resultsStatusPanel.add(this.backToStartResultsButton);
         this.resultPanel.add(resultsStatusPanel, BorderLayout.SOUTH);
 
         this.switch_layout();

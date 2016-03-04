@@ -24,14 +24,16 @@ public class QueryParameters implements Serializable {
     @XmlElementWrapper
     private List<QueryParameter> parameters;
 
-    public QueryParameters(String hql, int max, List<QueryParameter> parameters) {
+    public QueryParameters(String hql, int start, int max, List<QueryParameter> parameters) {
         this.hql = hql;
+        this.first = start;
         this.max = max;
         this.parameters = parameters;
     }
 
-    public QueryParameters(String hql, int max, QueryParameter... parameters) {
+    public QueryParameters(String hql, int start, int max, QueryParameter... parameters) {
         this.hql = hql;
+        this.first = start;
         this.max = max;
         this.parameters = Arrays.asList(parameters);
     }
