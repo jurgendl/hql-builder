@@ -1,3 +1,5 @@
+http://digitalbush.com/projects/masked-input-plugin/
+
 https://css-tricks.com/password-strength-meter/
 http://tobiasahlin.com/blog/how-to-animate-box-shadow/
 
