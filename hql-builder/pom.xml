@@ -53,7 +53,7 @@
 		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.9.1</version.joda><!-- eventually replace by Java 1.8? -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
-		<version.commons-codec>1.9</version.commons-codec><!-- recent version, keep up to date -->
+		<version.commons-codec>1.10</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.4</version.commons-io><!-- stale, keep up to date -->
 		<version.commons-lang>2.6</version.commons-lang><!-- stale -->
 		<version.commons-lang3>3.3.1</version.commons-lang3><!-- recent version, keep up to date -->
