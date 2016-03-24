@@ -56,7 +56,7 @@
 		<version.commons-codec>1.10</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.4</version.commons-io><!-- stale, keep up to date -->
 		<version.commons-lang>2.6</version.commons-lang><!-- stale -->
-		<version.commons-lang3>3.3.1</version.commons-lang3><!-- recent version, keep up to date -->
+		<version.commons-lang3>3.4</version.commons-lang3><!-- recent version, keep up to date -->
 		<version.commons-collections>3.2.2</version.commons-collections><!-- stale -->
 		<version.commons-collections4>4.0</version.commons-collections4><!-- recent version, keep up to date -->
 		<version.commons-beanutils>1.9.2</version.commons-beanutils><!-- recent version, keep up to date -->
