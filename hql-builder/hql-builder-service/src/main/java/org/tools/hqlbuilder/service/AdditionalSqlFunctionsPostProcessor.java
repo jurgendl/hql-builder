@@ -6,7 +6,7 @@ import java.util.Map;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.type.Type;
-import org.tools.hqlbuilder.common.ObjectWrapper;
+import org.jhaws.common.lang.ObjectWrapper;
 
 public class AdditionalSqlFunctionsPostProcessor implements ConfigurationPostProcessor {
     private Map<String, String> standardSQLFunctions = new HashMap<String, String>();

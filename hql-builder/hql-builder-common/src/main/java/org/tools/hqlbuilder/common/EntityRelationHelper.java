@@ -26,6 +26,7 @@ import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
+import org.jhaws.common.lang.ObjectWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -49,7 +49,8 @@
 		<version.logback>1.1.6</version.logback><!-- recent version, keep up to date -->
 		<version.logback.spring>0.1.2</version.logback.spring>
 		<version.spring>4.2.5.RELEASE</version.spring><!-- keep up to date 4.x.x -->
-		<version.swingeasy>3.2</version.swingeasy><!-- recent version, keep up to date -->
+		<version.swingeasy>4.0.0-SNAPSHOT</version.swingeasy><!-- recent version, keep up to date -->
+		<version.jhaws>4.0.0-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.9.1</version.joda><!-- eventually replace by Java 1.8? -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
@@ -98,6 +99,11 @@
 	<dependencyManagement>
 	<dependencies>
 		<!-- Common -->
+		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-lang</artifactId>
+			<version>${version.jhaws}</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -758,10 +764,8 @@
 	</scm>
 	<repositories>
 		<repository>
-			<id>github</id>
-			<!-- <url>https://github.com/jurgendl/mvn-repo/raw/master/releases/</url> -->
-			<!-- <url>https://raw.githubusercontent.com/jurgendl/mvn-repo/master/releases/</url> -->
-			<url>https://github.com/jurgendl/mvn-repo/blob/master/releases/</url>
+			<id>github_jurgendl</id>
+			<url>https://github.com/jurgendl/mvn-repo/raw/master/releases/</url>
 		</repository>
 	</repositories>
 	<build>

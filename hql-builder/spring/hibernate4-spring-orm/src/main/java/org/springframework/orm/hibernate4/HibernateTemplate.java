@@ -352,7 +352,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @throws org.springframework.dao.DataAccessException if there is a Hibernate error
      * @see org.hibernate.Session#createCriteria
      */
-    @Override
+	@SuppressWarnings("unchecked")
+	@Override
     public <T> List<T> loadAll(final Class<T> entityClass) throws DataAccessException {
         return executeWithNativeSession(session -> {
 		    Criteria criteria = session.createCriteria(entityClass);
@@ -839,7 +840,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @see #saveOrUpdate
      * @see org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener
      */
-    @Override
+	@SuppressWarnings("unchecked")
+	@Override
     public <T> T merge(final T entity) throws DataAccessException {
         return executeWithNativeSession(session -> {
 		    checkWriteOperationAllowed(session);
@@ -863,7 +865,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.Session#merge(String, Object)
      * @see #saveOrUpdate
      */
-    @Override
+	@SuppressWarnings("unchecked")
+	@Override
     public <T> T merge(final String entityName, final T entity) throws DataAccessException {
         return executeWithNativeSession(session -> {
 		    checkWriteOperationAllowed(session);
@@ -1384,7 +1387,8 @@ public class HibernateTemplate implements HibernateOperations {
      * @see org.hibernate.Criteria#setFirstResult(int)
      * @see org.hibernate.Criteria#setMaxResults(int)
      */
-    @Override
+	@SuppressWarnings("unchecked")
+	@Override
     public List<Object> findByExample(final String entityName, final Object exampleEntity, final int firstResult, final int max)
             throws DataAccessException {
         Assert.notNull(exampleEntity, "Example entity must not be null");

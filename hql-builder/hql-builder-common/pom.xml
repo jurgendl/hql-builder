@@ -16,6 +16,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-lang</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.googlecode.lambdaj</groupId>
 			<artifactId>lambdaj</artifactId>
 		</dependency>
