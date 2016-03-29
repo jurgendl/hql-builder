@@ -54,17 +54,6 @@
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>swing-easy.googlecode.releases</id>
-			<url>http://swing-easy.googlecode.com/svn/maven2</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository>
-	</repositories>	
 	<build>
 		<plugins>
 			<plugin>
