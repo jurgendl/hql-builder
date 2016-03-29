@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="false" scan="true" scanPeriod="10 seconds">
+<configuration debug="true" scan="true" scanPeriod="10 seconds">
 	<contextName>hqlbuilder</contextName>
 	<jmxConfigurator/>
 	<shutdownHook/>
