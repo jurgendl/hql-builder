@@ -1,16 +1,16 @@
 package org.tools.hqlbuilder.webservice.wicket.forms;
 
+import static org.jhaws.common.lang.StringUtils.sortable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.webservice.jquery.ui.primeui.PrimeUI;
 
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
@@ -49,14 +49,15 @@ public class AutoCompleteTextFieldPanel<T extends Serializable> extends DefaultF
             @Override
             protected List<T> getChoices(String input) {
                 List<T> show = new ArrayList<T>();
-                if (StringUtils.isBlank(input) || input.length() < getComponentSettings().getMinLenght()) {
+				if (org.apache.commons.lang3.StringUtils.isBlank(input)
+						|| input.length() < getComponentSettings().getMinLenght()) {
                     return show;
                 }
-                String search = getComponentSettings().isNormalize() ? CommonUtils.sortable(input) : input;
+				String search = getComponentSettings().isNormalize() ? sortable(input) : input;
                 for (T choice : choices.getObject()) {
                     String text = renderer.getText(choice);
                     if (getComponentSettings().isNormalize()) {
-                        text = CommonUtils.sortable(text);
+						text = sortable(text);
                     }
                     if (getComponentSettings().isContains()) {
                         if (text.contains(search)) {

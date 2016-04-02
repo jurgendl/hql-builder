@@ -9,7 +9,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +28,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -466,20 +464,6 @@ public class CommonUtils {
         }
     }
 
-    public static String sortable(String string) {
-        if (StringUtils.isBlank(string)) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (char c : Normalizer.normalize(string, Normalizer.Form.NFKD).toUpperCase().toCharArray()) {
-            if (('A' <= c) && (c <= 'Z')) {
-                sb.append(c);
-            } else if (('0' <= c) && (c <= '9')) {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
 
     public static void sleep(long ms) {
         try {
