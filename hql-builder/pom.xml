@@ -16,15 +16,14 @@
 	mvn release:prepare
 	mvn release:perform
 	
+	set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_77
 	mvn release:prepare
 	git checkout bom-3.0.2
-	set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn versions:set -DnewVersion=3.0.3-SNAPSHOT -P inc-test-modules,inc-web-modules
-	////mvn -_-batch-mode release:update-versions -DdevelopmentVersion=3.0.1-SNAPSHOT -P inc-test-modules,inc-web-modules
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
-	commit/push
+	commit/commit/push
 	-->
 	<properties>
 		<deploy.skip.demo>true</deploy.skip.demo>
