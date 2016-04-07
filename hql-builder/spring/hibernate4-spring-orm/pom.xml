@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.tools.hql-builder.spring</groupId>
 		<artifactId>hibernate4-spring-orm-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>4.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>hibernate4-spring-orm</artifactId>
