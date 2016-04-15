@@ -51,7 +51,6 @@
 		<version.logback>1.1.7</version.logback><!-- recent version, keep up to date -->
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date -->
 		<version.logback.spring>0.1.2</version.logback.spring>
-		<version.spring>4.2.5.RELEASE</version.spring><!-- keep up to date 4.x.x -->
 		<version.swingeasy>4.0.1</version.swingeasy><!-- recent version, keep up to date -->
 		<version.jhaws>4.0.1</version.jhaws><!-- recent version, keep up to date -->
 		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
@@ -70,7 +69,6 @@
 		<version.resteasy>3.0.12.Final</version.resteasy><!-- keep up to date 3.x.x -->
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.5.2</version.httpclient><!-- keep up to date 4.x.x -->
-		<version.spring-security>4.0.2.RELEASE</version.spring-security><!-- does not follow Spring version -->
 		<version.jadira>3.2.0.GA</version.jadira><!-- newer version available but breaks Hibernate 4.2+ -->
 		<version.wicket.core>6.20.0</version.wicket.core><!-- keep up to date 6.x.x -->
 		<version.wicket.jquery.ui>6.20.0</version.wicket.jquery.ui><!-- keep up to date 6.x.x, somewhat behind Wicket core version, kendo is not compatible with version 6.16.0 -->
@@ -83,6 +81,9 @@
 		<version.cglib>3.2.1</version.cglib><!-- dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->
+        <version.spring>4.2.5.RELEASE</version.spring><!-- keep up to date 4.x.x -->
+        <version.spring-security>4.0.4.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version -->
+        <version.spring-ws>2.3.0.RELEASE</version.spring-ws><!-- keep up to date 2.x.x, does not follow Spring version -->
 		<!-- other -->
 		<version.guava>18.0</version.guava>
 		<version.wro4j>1.7.7</version.wro4j>
