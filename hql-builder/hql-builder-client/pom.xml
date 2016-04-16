@@ -5,7 +5,7 @@
 		<artifactId>bom</artifactId>
 		<version>4.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
-	</parent>	
+	</parent>
 	<artifactId>hql-builder-client</artifactId>
 	<name>hql-builder-client</name>
 	<description>hql-builder-client</description>
