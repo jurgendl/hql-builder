@@ -20,5 +20,6 @@
 		<module>hibernate-4.1</module>
 		<module>hibernate-4.2</module>
 		<module>hibernate-4.3</module>
+		<module>hibernate-5.0</module>
 	</modules>
 </project>
