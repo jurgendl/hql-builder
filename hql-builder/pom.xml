@@ -21,7 +21,7 @@
 	git checkout bom-4.0.1
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
-	mvn versions:set -DnewVersion=4.0.2-SNAPSHOT -P inc-test-modules,inc-web-modules
+	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=4.0.2-SNAPSHOT
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	commit/commit/push
 	-->
