@@ -52,7 +52,7 @@
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date -->
 		<version.logback.spring>0.1.2</version.logback.spring>
 		<version.swingeasy>4.0.1</version.swingeasy><!-- recent version, keep up to date -->
-		<version.jhaws>4.0.1</version.jhaws><!-- recent version, keep up to date -->
+		<version.jhaws>4.0.4</version.jhaws><!-- recent version, keep up to date -->
 		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.9.1</version.joda><!-- eventually replace by Java 1.8? -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
