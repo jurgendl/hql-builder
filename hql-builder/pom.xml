@@ -81,7 +81,7 @@
 		<version.cglib>3.2.1</version.cglib><!-- dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->
-        <version.spring>4.2.6.RELEASE</version.spring><!-- keep up to date 4.x.x -->
+        <version.spring>4.3.0.RELEASE</version.spring><!-- keep up to date 4.x.x -->
         <version.spring-security>4.0.4.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version -->
         <version.spring-ws>2.3.0.RELEASE</version.spring-ws><!-- keep up to date 2.x.x, does not follow Spring version -->
 		<!-- other -->
@@ -90,6 +90,7 @@
 		<version.jackson>2.4.1</version.jackson>
 		<version.yui>2.4.7</version.yui>
 		<version.ostermiller>1.07.00</version.ostermiller>
+		<version.aspectj>1.8.9</version.aspectj>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -269,6 +270,16 @@
 			<version>${version.ehcache-spring}</version>
 		</dependency>
 		<!-- Service -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${version.aspectj}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${version.aspectj}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
