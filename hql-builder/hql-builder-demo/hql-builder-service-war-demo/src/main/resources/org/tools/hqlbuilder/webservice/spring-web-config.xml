@@ -23,7 +23,7 @@
 
 	<import resource="classpath:org/tools/hqlbuilder/common/spring-logback.xml"/>
 
-	<context:component-scan base-package="org.tools.hqlbuilder.webcommon.resteasy,org.tools.hqlbuilder.webservice.resteasy,org.tools.hqlbuilder.webservice.resteasy.resources" />
+	<context:component-scan base-package="org.jhaws.common.web.resteasy,org.tools.hqlbuilder.webcommon.resteasy,org.tools.hqlbuilder.webservice.resteasy,org.tools.hqlbuilder.webservice.resteasy.resources" />
 
 	<import resource="classpath:org/tools/hqlbuilder/webcommon/properties-config.xml" />
 
