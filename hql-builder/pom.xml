@@ -111,6 +111,26 @@
 			<version>${version.jhaws}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-io</artifactId>
+			<version>${version.jhaws}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-net</artifactId>
+			<version>${version.jhaws}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-web</artifactId>
+			<version>${version.jhaws}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-wicket</artifactId>
+			<version>${version.jhaws}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${version.junit}</version>
