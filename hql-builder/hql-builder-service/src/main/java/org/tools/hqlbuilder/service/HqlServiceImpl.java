@@ -696,15 +696,34 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public Map<String, String> getNamedQueries() {
         Map<String, String> namedQueriesRv = new HashMap<String, String>();
-        @SuppressWarnings("unchecked")
-        Map<String, Object/* NamedQueryDefinition */> namedQueries = get(getSessionFactory(), "namedQueries", Map.class);
-        for (Map.Entry<String, Object/* NamedQueryDefinition */> entry : namedQueries.entrySet()) {
+        SessionFactory sf = getSessionFactory();
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, Object/* NamedQueryDefinition */> namedQueries = get(sf, "namedQueries", Map.class);
+            for (Map.Entry<String, Object/* NamedQueryDefinition */> entry : namedQueries.entrySet()) {
+                try {
+                    namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
+                } catch (Exception x) {
+                    logger.error("{}", x);
+                }
+            }
+        } catch (Exception ex1) {
             try {
-                namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
-            } catch (Exception ex) {
-                logger.error("{}", ex);
+                @SuppressWarnings("unchecked")
+                Map<String, Object/* ? */> namedQueries = get(sf, "namedQueryRepository.namedQueryDefinitionMap", Map.class);
+                for (Map.Entry<String, Object/* ? */> entry : namedQueries.entrySet()) {
+                    try {
+                        namedQueriesRv.put(entry.getKey(), get(entry.getValue(), "queryString", String.class));
+                    } catch (Exception x) {
+                        logger.error("{}", x);
+                    }
+                }
+            } catch (Exception ex2) {
+                logger.error("{}", ex1);
+                logger.error("{}", ex2);
             }
         }
+
         return namedQueriesRv;
     }
 

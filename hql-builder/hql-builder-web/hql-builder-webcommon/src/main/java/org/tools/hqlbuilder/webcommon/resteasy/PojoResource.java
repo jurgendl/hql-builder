@@ -153,7 +153,7 @@ public interface PojoResource {
      * @see [get] http://localhost:80/hqlbuilder/xml/builder/propertynames?key=...& parts=...&parts=...
      */
     @GET
-    @Path("/propertynames.")
+    @Path("/propertynames")
     @Produces({ TEXT })
     public abstract XmlWrapper<List<String>> getPropertyNames(@QueryParam("key") String key, @QueryParam("parts") String[] parts);
 
