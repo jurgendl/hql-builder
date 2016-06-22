@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class GoogleLoginResourceImpl implements GoogleLoginResource {
     public String ping() {
-        return "ping";
+        return String.valueOf(System.currentTimeMillis());
     }
 
     public Response tokensignin(String id_token) {

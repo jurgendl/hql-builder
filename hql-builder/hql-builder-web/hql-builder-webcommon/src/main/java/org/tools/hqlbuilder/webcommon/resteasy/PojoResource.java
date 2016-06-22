@@ -40,7 +40,7 @@ public interface PojoResource {
      * @see [get] http://localhost:80/hqlbuilder/xml/builder/
      */
     @GET
-    @Path("/")
+    @Path("/ping/")
     @Produces({ TEXT })
     public String ping();
 
