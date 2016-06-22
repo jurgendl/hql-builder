@@ -1,6 +1,5 @@
 package org.tools.hqlbuilder.webservice.resteasy.providers;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,7 +17,7 @@ import javax.ws.rs.ext.Provider;
 import org.jboss.resteasy.core.Headers;
 import org.jboss.resteasy.core.ResourceMethodInvoker;
 import org.jboss.resteasy.core.ServerResponse;
-import org.jboss.resteasy.util.Base64;
+import org.jhaws.common.lang.DeEnCoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,8 +75,8 @@ public class SecurityInterceptor implements javax.ws.rs.container.ContainerReque
                 // Decode username and password
                 String usernameAndPassword = null;
                 try {
-                    usernameAndPassword = new String(Base64.decode(encodedUserPassword));
-                } catch (IOException e) {
+                    usernameAndPassword = DeEnCoding.base64DecodeToString(encodedUserPassword);
+                } catch (Exception e) {
                     requestContext.abortWith(SERVER_ERROR);
                     return;
                 }
