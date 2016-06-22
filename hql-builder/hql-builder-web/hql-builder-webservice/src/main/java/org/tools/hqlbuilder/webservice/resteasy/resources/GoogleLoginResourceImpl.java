@@ -12,12 +12,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.tools.hqlbuilder.webservice.js.GoogleLogin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
+@Controller
 public class GoogleLoginResourceImpl implements GoogleLoginResource {
     public String ping() {
         return String.valueOf(System.currentTimeMillis());

@@ -34,6 +34,10 @@ public class PojoResourceImpl implements PojoResource {
 
     protected boolean wrapped = false;
 
+    public PojoResourceImpl() {
+        super();
+    }
+
     protected HqlWebService getService() {
         if (!wrapped) {
             hqlWebService = new DetachedHqlWebService(hqlWebService);
