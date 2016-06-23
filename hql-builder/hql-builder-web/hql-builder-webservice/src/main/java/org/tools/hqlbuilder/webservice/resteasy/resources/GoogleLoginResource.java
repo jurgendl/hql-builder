@@ -17,7 +17,7 @@ import org.tools.hqlbuilder.webcommon.resteasy.Pretty;
 @GZIP
 public interface GoogleLoginResource extends RestResource {
     @GET
-    @Path("/ping")
+    @Path("/ping.txt")
     @Produces(TEXT)
     public String ping();
 
