@@ -9,18 +9,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.GZIP;
+import org.jhaws.common.web.resteasy.RestResource;
 
 @GZIP
 @Path("/googlelogin")
-public interface GoogleLoginResource {
+public interface GoogleLoginResource extends RestResource {
     @GET
     @Path("/ping")
-    @Produces("text/plain")
+    @Produces(TEXT)
     public String ping();
 
     @POST
     @Path("/tokensignin")
-    @Consumes("application/x-www-form-urlencoded")
-    @Produces("text/xml")
+    @Consumes(FORM_URLENCODED)
+    @Produces(HTML)
     public Response tokensignin(@FormParam("idtoken") String id_token);
 }
