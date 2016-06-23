@@ -10,9 +10,11 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jhaws.common.web.resteasy.RestResource;
+import org.tools.hqlbuilder.webcommon.resteasy.Pretty;
 
-@GZIP
 @Path("/googlelogin")
+@Pretty
+@GZIP
 public interface GoogleLoginResource extends RestResource {
     @GET
     @Path("/ping")

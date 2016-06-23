@@ -31,91 +31,91 @@ import org.tools.hqlbuilder.common.XmlWrapper;
 @GZIP
 public interface PojoResource extends RestResource {
     /**
-     * @see [get] /builder/
+     * @see [get] /ping.txt
      */
     @GET
-    @Path("/ping/")
+    @Path("/ping.txt")
     @Produces({ TEXT })
     public String ping();
 
     /**
-     * @see [get] /builder/sqlforhql?hql=...
+     * @see [get] /builder/sqlforhql.txt?hql=...
      */
     @GET
-    @Path("/sqlforhql")
+    @Path("/sqlforhql.txt")
     @Produces({ TEXT })
     String getSqlForHql(@QueryParam("hql") String hql);
 
     /**
-     * @see [get] /builder/classes
+     * @see [get] /builder/classes.xml
      */
     @GET
-    @Path("/classes")
+    @Path("/classes.xml")
     @Produces({ XML })
     XmlWrapper<SortedSet<String>> getClasses();
 
     /**
-     * @see [get] /builder/properties?classname=...
+     * @see [get] /builder/properties.xml?classname=...
      */
     @GET
-    @Path("/properties")
+    @Path("/properties.xml")
     @Produces({ XML })
     XmlWrapper<List<String>> getProperties(@QueryParam("classname") String classname);
 
     /**
-     * @see [get] /builder/connectioninfo
+     * @see [get] /builder/connectioninfo.txt
      */
     @GET
-    @Path("/connectioninfo")
+    @Path("/connectioninfo.txt")
     @Produces({ TEXT })
     String getConnectionInfo();
 
     /**
-     * @see [get] /builder/project
+     * @see [get] /builder/project.txt
      */
     @GET
-    @Path("/project")
+    @Path("/project.txt")
     @Produces({ TEXT })
     String getProject();
 
     /**
-     * @see [get] /builder/search?text=...&typeName =...&hitsPerPage=...
+     * @see [get] /builder/search.xml?text=...&typeName =...&hitsPerPage=...
      */
     @GET
-    @Path("/search")
+    @Path("/search.xml")
     @Produces({ XML })
     XmlWrapper<List<String>> search(@QueryParam("text") String text, @QueryParam("typename") String typeName,
             @QueryParam("hitsperpage") int hitsPerPage);
 
     /**
-     * @see [get] /builder/reservedkeywords
+     * @see [get] /builder/reservedkeywords.xml
      */
     @GET
-    @Path("/reservedkeywords")
+    @Path("/reservedkeywords.xml")
     @Produces({ XML })
     XmlWrapper<Set<String>> getReservedKeywords();
 
     /**
-     * @see [get] /builder/namedqueries
+     * @see [get] /builder/namedqueries.xml
      */
     @GET
-    @Path("/namedqueries")
+    @Path("/namedqueries.xml")
     @Produces({ XML })
     XmlWrapper<Map<String, String>> getNamedQueries();
 
     /**
-     * @see [get] /builder/createscript
+     * @see [get] /builder/createscript.txt
      */
     @GET
-    @Path("/createscript")
+    @Path("/createscript.txt")
     @Produces({ TEXT })
     String createScript();
 
     /**
-     * @see [get] /builder/hibernateinfo
+     * @see [get] /builder/hibernateinfo.xml
      */
     @GET
-    @Path("/hibernateinfo")
+    @Path("/hibernateinfo.xml")
     @Produces({ XML })
     XmlWrapper<Map<String, String>> getHibernateInfo();
 
@@ -144,93 +144,93 @@ public interface PojoResource extends RestResource {
     String getLuceneHelpURL();
 
     /**
-     * @see [get] /builder/propertynames?key=...& parts=...&parts=...
+     * @see [get] /builder/propertynames.txt?key=...& parts=...&parts=...
      */
     @GET
-    @Path("/propertynames")
+    @Path("/propertynames.txt")
     @Produces({ TEXT })
     XmlWrapper<List<String>> getPropertyNames(@QueryParam("key") String key, @QueryParam("parts") String[] parts);
 
     /**
-     * @see [get] /builder/sql?sql=...&sql=...
+     * @see [get] /builder/sql.txt?sql=...&sql=...
      */
     @GET
-    @Path("/sql")
+    @Path("/sql.txt")
     @Produces({ TEXT })
     void sql(@QueryParam("sql") String[] sql);
 
     /**
-     * @see [get] /builder/findparameters?hql=...
+     * @see [get] /builder/findparameters.xml?hql=...
      */
     @GET
-    @Path("/findparameters")
+    @Path("/findparameters.xml")
     @Produces({ XML })
     @Wrapped
     XmlWrapper<List<QueryParameter>> findParameters(@QueryParam("hql") String hql);
 
     /**
-     * @see [put] /builder/save/{...} [body]
+     * @see [put] /builder/save/{...}.xml [body]
      */
     @PUT
-    @Path("/save/{pojo}")
+    @Path("/save/{pojo}.xml")
     @Consumes({ XML })
     @Produces({ XML })
     <T extends Serializable, I extends Serializable> XmlWrapper<I> save(@PathParam("pojo") String pojo, XmlWrapper<T> object);
 
     /**
-     * @see [delete] /builder/delete/{...} [body]
+     * @see [delete] /builder/delete/{...}.xml [body]
      */
     @DELETE
-    @Path("/delete/{pojo}")
+    @Path("/delete/{pojo}.xml")
     @Consumes({ XML })
     <T extends Serializable> void delete(@PathParam("pojo") String pojo, XmlWrapper<T> object);
 
     /**
-     * @see [get] /builder/hibernatewebresolver
+     * @see [get] /builder/hibernatewebresolver.bin
      */
     @GET
-    @Path("/hibernatewebresolver")
+    @Path("/hibernatewebresolver.bin")
     @Produces({ BINARY })
     StreamingOutput getHibernateWebResolver();
 
     /**
-     * @see [put] /builder/get [type,id]
+     * @see [put] /builder/get.xml [type,id]
      */
-	@Path("/get")
+    @Path("/get.xml")
     @POST
     @Produces({ XML })
     <T extends Serializable> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
 
     /**
-     * @see [get] /builder/executehql?hql=...
+     * @see [get] /builder/executehql.xml?hql=...
      */
     @GET
-    @Path("/executehql")
+    @Path("/executehql.xml")
     @Produces({ XML })
     ExecutionResult execute(@QueryParam("hql") String hql);
 
     /**
-     * @see [put] /builder/execute [body]
+     * @see [put] /builder/execute.xml [body]
      */
     @PUT
-    @Path("/execute")
+    @Path("/execute.xml")
     @Consumes({ XML })
     @Produces({ XML })
     ExecutionResult execute(QueryParameters queryParameters);
 
     /**
-     * @see [get] /builder/executehqlplain?hql=...
+     * @see [get] /builder/executehqlplain.xml?hql=...
      */
     @GET
-    @Path("/executehqlplain")
+    @Path("/executehqlplain.xml")
     @Produces({ XML })
     <T extends Serializable> XmlWrapper<List<T>> executePlainResult(@QueryParam("hql") String hql);
 
     /**
-     * @see [put] /builder/executeplain [body]
+     * @see [put] /builder/executeplain.xml [body]
      */
     @PUT
-    @Path("/executeplain")
+    @Path("/executeplain.xml")
     @Consumes({ XML })
     @Produces({ XML })
     <T extends Serializable> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters);
