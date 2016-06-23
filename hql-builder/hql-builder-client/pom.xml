@@ -11,6 +11,10 @@
 	<description>hql-builder-client</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.tools.hql-builder.hibernate</groupId>
 			<artifactId>hibernate-${version.hibernate}</artifactId>
 			<version>${project.version}</version>

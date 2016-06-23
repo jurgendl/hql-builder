@@ -119,17 +119,17 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public String getHibernateHelpURL() {
-        return getService().getHibernateHelpURL();
+        return INTERNET_SHORTCUT_URL + getService().getHibernateHelpURL();
     }
 
     @Override
     public String getHqlHelpURL() {
-        return getService().getHqlHelpURL();
+        return INTERNET_SHORTCUT_URL + getService().getHqlHelpURL();
     }
 
     @Override
     public String getLuceneHelpURL() {
-        return getService().getLuceneHelpURL();
+        return INTERNET_SHORTCUT_URL + getService().getLuceneHelpURL();
     }
 
     @Override
@@ -161,20 +161,11 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public StreamingOutput getHibernateWebResolver() {
         return output -> {
-            ObjectOutputStream oos = null;
-            try {
-                oos = new ObjectOutputStream(new BufferedOutputStream(output));
+            try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(output))) {
                 oos.writeObject(getService().getHibernateWebResolver());
+                oos.flush();
             } catch (RuntimeException ex) {
                 ex.printStackTrace();
-            } finally {
-                try {
-                    if (oos != null) {
-                        oos.close();
-                    }
-                } catch (Exception unhandled) {
-                    unhandled.printStackTrace();
-                }
             }
         };
     }

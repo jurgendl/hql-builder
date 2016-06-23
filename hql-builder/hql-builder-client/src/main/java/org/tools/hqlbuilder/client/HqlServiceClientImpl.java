@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.jhaws.common.web.resteasy.RestResource;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
@@ -414,16 +415,16 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
     @Override
     public String getHibernateHelpURL() {
-        return this.hqlService.getHibernateHelpURL();
+        return this.hqlService.getHibernateHelpURL().replaceAll("\\Q" + RestResource.INTERNET_SHORTCUT_URL + "\\E", "");
     }
 
     @Override
     public String getHqlHelpURL() {
-        return this.hqlService.getHqlHelpURL();
+        return this.hqlService.getHqlHelpURL().replaceAll("\\Q" + RestResource.INTERNET_SHORTCUT_URL + "\\E", "");
     }
 
     @Override
     public String getLuceneHelpURL() {
-        return this.hqlService.getLuceneHelpURL();
+        return this.hqlService.getLuceneHelpURL().replaceAll("\\Q" + RestResource.INTERNET_SHORTCUT_URL + "\\E", "");
     }
 }

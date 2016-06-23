@@ -120,26 +120,26 @@ public interface PojoResource extends RestResource {
     XmlWrapper<Map<String, String>> getHibernateInfo();
 
     /**
-     * @see [get] /builder/hibernatehelpurl
+     * @see [get] /builder/hibernatehelp.url
      */
     @GET
-    @Path("/hibernatehelpurl")
+    @Path("/hibernatehelp.url")
     @Produces({ TEXT })
     String getHibernateHelpURL();
 
     /**
-     * @see [get] /builder/hqlhelpurl
+     * @see [get] /builder/hqlhelp.url
      */
     @GET
-    @Path("/hqlhelpurl")
+    @Path("/hqlhelp.url")
     @Produces({ TEXT })
     String getHqlHelpURL();
 
     /**
-     * @see [get] /builder/lucenehelpurl
+     * @see [get] /builder/lucenehelp.url
      */
     @GET
-    @Path("/lucenehelpurl")
+    @Path("/lucenehelp.url")
     @Produces({ TEXT })
     String getLuceneHelpURL();
 
