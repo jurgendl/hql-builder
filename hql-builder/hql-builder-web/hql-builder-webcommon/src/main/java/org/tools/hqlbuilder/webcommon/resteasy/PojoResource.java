@@ -202,7 +202,7 @@ public interface PojoResource {
     /**
      * @see [put] http://localhost:80/hqlbuilder/xml/builder/get [type,id]
      */
-    @Path("get")
+	@Path("/get")
     @POST
     @Produces({ XML })
     public abstract <T extends Serializable> XmlWrapper<T> get(@FormParam("type") String type, @FormParam("id") String id);
