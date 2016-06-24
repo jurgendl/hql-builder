@@ -141,7 +141,7 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
     @Override
     public HibernateWebResolver getHibernateWebResolver() {
         try {
-            StreamingOutput hibernateWebResolver = getResource().getHibernateWebResolver();
+            StreamingOutput hibernateWebResolver = getResource().getSerializedHibernateWebResolver();
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             hibernateWebResolver.write(output);
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(output.toByteArray()));

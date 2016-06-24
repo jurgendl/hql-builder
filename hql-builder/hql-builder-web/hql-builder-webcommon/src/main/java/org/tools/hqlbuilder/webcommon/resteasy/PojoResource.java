@@ -23,6 +23,7 @@ import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.jhaws.common.web.resteasy.RestResource;
 import org.jhaws.common.web.xml.XmlWrapper;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 
@@ -191,7 +192,15 @@ public interface PojoResource extends RestResource {
     @GET
     @Path("/hibernatewebresolver.bin")
     @Produces({ BINARY })
-    StreamingOutput getHibernateWebResolver();
+    StreamingOutput getSerializedHibernateWebResolver();
+
+    /**
+     * @see [get] /builder/hibernatewebresolver.xml
+     */
+    @GET
+    @Path("/hibernatewebresolver.xml")
+    @Produces({ XML })
+    HibernateWebResolver getHibernateWebResolver();
 
     /**
      * @see [put] /builder/get.xml [type,id]

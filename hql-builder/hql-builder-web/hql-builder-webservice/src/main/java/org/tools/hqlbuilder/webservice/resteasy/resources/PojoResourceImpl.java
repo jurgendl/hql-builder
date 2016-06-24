@@ -16,6 +16,7 @@ import org.jhaws.common.web.xml.XmlWrapper;
 import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.DetachedHqlService;
 import org.tools.hqlbuilder.common.ExecutionResult;
+import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
@@ -159,7 +160,7 @@ public class PojoResourceImpl implements PojoResource {
     }
 
     @Override
-    public StreamingOutput getHibernateWebResolver() {
+    public StreamingOutput getSerializedHibernateWebResolver() {
         return output -> {
             try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(output))) {
                 oos.writeObject(getService().getHibernateWebResolver());
@@ -168,6 +169,11 @@ public class PojoResourceImpl implements PojoResource {
                 ex.printStackTrace();
             }
         };
+    }
+
+    @Override
+    public HibernateWebResolver getHibernateWebResolver() {
+        return getService().getHibernateWebResolver();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

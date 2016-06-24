@@ -7,10 +7,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.jhaws.common.web.xml.adapters.ClassAdapter;
+
+@XmlRootElement
 public class HibernateWebResolver implements Serializable {
     private static final long serialVersionUID = 756239472693625438L;
 
     protected Map<String, ClassNode> nodes = new HashMap<String, ClassNode>();
+
+    public HibernateWebResolver() {
+        super();
+    }
 
     public List<ClassNode> getClasses() {
         return new ArrayList<ClassNode>(nodes.values());
@@ -40,10 +51,16 @@ public class HibernateWebResolver implements Serializable {
         this.nodes = nodes;
     }
 
+    @XmlRootElement
     public static class ClassNode extends Node<String, String, Property> {
         private static final long serialVersionUID = 3105646728435394121L;
 
+        @XmlJavaTypeAdapter(ClassAdapter.class)
         protected Class<?> type;
+
+        public ClassNode() {
+            super();
+        }
 
         public ClassNode(String id) {
             super(id);
@@ -68,12 +85,22 @@ public class HibernateWebResolver implements Serializable {
         public String toString() {
             return type.toString();
         }
+
+        public void setType(Class<?> type) {
+            this.type = type;
+        }
     }
 
+    @XmlRootElement
     public static class Property extends Edge<String, String, Property> {
         private static final long serialVersionUID = -7935969067739133609L;
 
+        @XmlAttribute
         protected boolean collection;
+
+        public Property() {
+            super();
+        }
 
         public Property(String id) {
             super(id);
@@ -97,12 +124,17 @@ public class HibernateWebResolver implements Serializable {
         return node;
     }
 
+    @XmlRootElement
     public static class Edge<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> implements Serializable {
         private static final long serialVersionUID = 8936945680611529186L;
 
-        protected final EdgeId id;
+        protected EdgeId id;
 
         protected Node<NodeId, EdgeId, EdgeImpl> target;
+
+        public Edge() {
+            super();
+        }
 
         public Edge(EdgeId id) {
             this.id = id;
@@ -159,14 +191,27 @@ public class HibernateWebResolver implements Serializable {
         public Node<NodeId, EdgeId, EdgeImpl> getTarget() {
             return this.target;
         }
+
+        public void setId(EdgeId id) {
+            this.id = id;
+        }
+
+        public void setTarget(Node<NodeId, EdgeId, EdgeImpl> target) {
+            this.target = target;
+        }
     }
 
+    @XmlRootElement
     public static abstract class Node<NodeId, EdgeId, EdgeImpl extends Edge<NodeId, EdgeId, EdgeImpl>> implements Serializable {
         private static final long serialVersionUID = -422807599223330528L;
 
-        protected final NodeId id;
+        protected NodeId id;
 
-        protected final List<EdgeImpl> edges = new ArrayList<EdgeImpl>();
+        protected List<EdgeImpl> edges = new ArrayList<EdgeImpl>();
+
+        public Node() {
+            super();
+        }
 
         public Node(NodeId id) {
             this.id = id;
@@ -223,6 +268,14 @@ public class HibernateWebResolver implements Serializable {
         @Override
         public String toString() {
             return id.toString();
+        }
+
+        public void setId(NodeId id) {
+            this.id = id;
+        }
+
+        public void setEdges(List<EdgeImpl> edges) {
+            this.edges = edges;
         }
     }
 }
