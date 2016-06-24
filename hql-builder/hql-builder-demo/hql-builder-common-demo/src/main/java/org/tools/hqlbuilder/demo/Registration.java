@@ -45,35 +45,35 @@ public class Registration extends EntityERHAdapter implements RegistrationProper
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public String getFirstName() {
-        return this.firstName;
+        return firstName;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public String getRegkey() {
-        return this.regkey;
+        return regkey;
     }
 
     public LocalDateTime getVerification() {
-        return this.verification;
+        return verification;
     }
 
     public Date getDateOfBirth() {
-        return this.dateOfBirth;
+        return dateOfBirth;
     }
 
     public void setPassword(String password) {

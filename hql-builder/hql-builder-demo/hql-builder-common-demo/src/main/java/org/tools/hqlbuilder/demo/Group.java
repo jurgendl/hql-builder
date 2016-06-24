@@ -41,7 +41,7 @@ public class Group extends EntityERHAdapter implements GroupProperties {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -49,7 +49,7 @@ public class Group extends EntityERHAdapter implements GroupProperties {
     }
 
     public List<Member> getMembers() {
-        return erh.omGet(MEMBERS, this.members);
+        return erh.omGet(MEMBERS, members);
     }
 
     public void addMember(Member member) {
@@ -65,7 +65,7 @@ public class Group extends EntityERHAdapter implements GroupProperties {
     }
 
     public List<GroupAuthority> getAuthorities() {
-        return erh.omGet(AUTHORITIES, this.authorities);
+        return erh.omGet(AUTHORITIES, authorities);
     }
 
     public void setAuthorities(List<GroupAuthority> authorities) {

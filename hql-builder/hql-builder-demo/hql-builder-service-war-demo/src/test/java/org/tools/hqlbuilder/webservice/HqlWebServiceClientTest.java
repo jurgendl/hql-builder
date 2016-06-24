@@ -78,7 +78,7 @@ public class HqlWebServiceClientTest {
                 HttpPost httppost = new HttpPost(base + cfg.getProperty("login"));
 
                 // Prepare post parameters
-                List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+                List<NameValuePair> nvps = new ArrayList<>();
                 nvps.add(new BasicNameValuePair(cfg.getProperty("username.propertyname"), "hqladmin"));
                 nvps.add(new BasicNameValuePair(cfg.getProperty("password.propertyname"), "hqladmin"));
                 // httppost.addHeader("Referer", "http://localhost/hqlbuilder/xml/classes");

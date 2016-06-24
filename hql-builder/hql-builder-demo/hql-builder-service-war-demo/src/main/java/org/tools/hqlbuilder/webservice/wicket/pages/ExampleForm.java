@@ -53,16 +53,21 @@ import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
 @SuppressWarnings("serial")
 public class ExampleForm extends FormPanel<Example> {
-    @SpringBean(name = "exampleService")
+    private static final long serialVersionUID = 1L;
+	@SpringBean(name = "exampleService")
     private ServiceInterface exampleService;
 
     @SuppressWarnings("unchecked")
     public ExampleForm(String id) {
         super(id, new DefaultFormActions<Example>() {
+
+			private static final long serialVersionUID = 1L;
         }, new FormSettings().setClientsideRequiredValidation(false).setShowPlaceholder(false).setLabelWidth("18em"));
 
         setFormActions(new DefaultFormActions<Example>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
 			public Example submitObject(Example example) {
                 _submitObject(example);
 				return example;
@@ -79,15 +84,17 @@ public class ExampleForm extends FormPanel<Example> {
         getForm().setMultiPart(true);
         getForm().setMaxSize(Bytes.megabytes(10));
 
-        List<String> rndwords = new ArrayList<String>();
+        List<String> rndwords = new ArrayList<>();
         for (int i = 0; i < 128; i++) {
             rndwords.add(RandomStringUtils.randomAlphabetic(16));
         }
 
         FormElementSettings fset = new FormElementSettings();
-        final IChoiceRenderer<ExampleOpts> choiceRenderer = new EnumChoiceRenderer<ExampleOpts>(this);
+        final IChoiceRenderer<ExampleOpts> choiceRenderer = new EnumChoiceRenderer<>(this);
         IOptionRenderer<ExampleOpts> optionRenderer = new IOptionRenderer<ExampleOpts>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             public String getDisplayValue(ExampleOpts object) {
                 return object == null ? getString("null") : String.valueOf(choiceRenderer.getDisplayValue(object));
             }
@@ -97,20 +104,22 @@ public class ExampleForm extends FormPanel<Example> {
                 return Model.of(value);
             }
         };
-        ListModel<ExampleOpts> optsChoices = new ListModel<ExampleOpts>(Arrays.asList(ExampleOpts.values()));
+        ListModel<ExampleOpts> optsChoices = new ListModel<>(Arrays.asList(ExampleOpts.values()));
 
         {
             Example tmp = getFormActions().loadObject();
-            ArrayList<String> list = new ArrayList<String>(new TreeSet<String>(Arrays.asList(tmp.getLongText().toLowerCase()
+            ArrayList<String> list = new ArrayList<>(new TreeSet<>(Arrays.asList(tmp.getLongText().toLowerCase()
                     .replaceAll("[^a-z ]", "").replaceAll("  ", " ").split(" "))));
             list.removeAll(tmp.getManyOptions());
-            addPickList(proxy.getManyOptions(), new ListSettings(), new ListModel<String>(list), null);
+            addPickList(proxy.getManyOptions(), new ListSettings(), new ListModel<>(list), null);
         }
 
         nextRow();
 
         addLocalesDropDown(null, fset, null, null).setPropertyName("locale").setValueModel(new IModel<Locale>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             public void detach() {
                 //
             }
@@ -126,9 +135,11 @@ public class ExampleForm extends FormPanel<Example> {
                 WicketSession.get().setLocale(locale);
             }
         });
-        addDropDown(null, new DropDownSettings(), null, new ListModel<String>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
+        addDropDown(null, new DropDownSettings(), null, new ListModel<>(PrimeUI.getThemes())).setPropertyName("theme").inheritId()
         .setValueModel(new IModel<String>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             public void detach() {
                 //
             }
@@ -144,7 +155,9 @@ public class ExampleForm extends FormPanel<Example> {
             }
         });
         addCheckBox(null, new CheckBoxSettings()).setPropertyName("cookies").inheritId().setValueModel(new IModel<Boolean>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             public void detach() {
                 //
             }
@@ -172,31 +185,33 @@ public class ExampleForm extends FormPanel<Example> {
         addHidden(proxy.getHidden1());
         addHidden(proxy.getHidden2());
 
-        addTagItTextFieldPanel(proxy.getTags(), new TagItTextFieldSettings(), new ListModel<String>(rndwords));
+        addTagItTextFieldPanel(proxy.getTags(), new TagItTextFieldSettings(), new ListModel<>(rndwords));
         addTextField(proxy.getText(), fset.clone());
         addTextField(proxy.getTextAdd(), fset.clone());
         addRadioButtons(proxy.getRadio(), fset, optsChoices, choiceRenderer);
         addTriStateCheckBox(proxy.getTristate(), new TriStateCheckBoxSettings());
         addDropDown(proxy.getCombo(), new DropDownSettings().setNullValid(true), optionRenderer, optsChoices);
-        addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
-        addSliderField(proxy.getIntegerv(), new NumberFieldSettings<Integer>(0, 100, 1));
+        addNumberTextField(proxy.getIntegerv(), new NumberFieldSettings<>(0, 100, 1));
+        addSliderField(proxy.getIntegerv(), new NumberFieldSettings<>(0, 100, 1));
         addMultiSelectCheckBox(proxy.getMulti(), fset, optsChoices, choiceRenderer);
         addFilepicker(proxy);
         addColorPicker(proxy.getColor1(), new ColorPickerSettings());
         addColorPicker(proxy.getColor2(), new JQueryUIColorPickerSettings());
 
         {
-            List<String> opt1 = new ArrayList<String>();
+            List<String> opt1 = new ArrayList<>();
             for (int i = 1; i <= 10; i++) {
                 opt1.add("option " + (i == 10 ? 0 : i));
             }
-            List<String> opt2 = new ArrayList<String>();
+            List<String> opt2 = new ArrayList<>();
             for (int i = 0; i < 26; i++) {
                 opt2.add("option " + (char) ('A' + i));
             }
             IModel<String>[] groupLabels = new IModel[] { Model.of("numbers"), Model.of("letters") };
             IOptionRenderer<String> optionRenderer2 = new IOptionRenderer<String>() {
-                @Override
+                private static final long serialVersionUID = 1L;
+
+				@Override
                 public String getDisplayValue(String object) {
                     return StringUtils.isBlank(object) ? getString("null") : object;
                 }
@@ -207,7 +222,7 @@ public class ExampleForm extends FormPanel<Example> {
                 }
             };
             groupLabels = null;
-            ListModel<String>[] opt = new ListModel[] { new ListModel<String>(opt1), new ListModel<String>(opt2) };
+            ListModel<String>[] opt = new ListModel[] { new ListModel<>(opt1), new ListModel<>(opt2) };
 
             addDropDown(WebHelper.proxy(Example.class).getDropdown(), new DropDownSettings().setNullValid(true), optionRenderer2, opt, groupLabels);
             nextRow();
@@ -218,12 +233,14 @@ public class ExampleForm extends FormPanel<Example> {
         nextRow();
         addCKEditorTextAreaPanel(proxy.getHtmlTextExtra(), new CKEditorTextAreaSettings().setType(CKEType.full));
         nextRow();
-        addMultiSelectList(proxy.getRndwords(), new MultiListSettings(), null, new ListModel<String>(rndwords));
+        addMultiSelectList(proxy.getRndwords(), new MultiListSettings(), null, new ListModel<>(rndwords));
     }
 
     private void addFilepicker(Example proxy) {
         FilePickerHook hook = new FilePickerHook() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             public void write(Collection<FileUpload> files) {
                 Example example = Example.class.cast(getFormModel().getObject());
                 for (FileUpload fileUpload : files) {
@@ -237,7 +254,7 @@ public class ExampleForm extends FormPanel<Example> {
             @Override
             public Collection<String> getCurrentFilenames() {
                 Example example = Example.class.cast(getFormModel().getObject());
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 for (MemFile mf : example.getFiles()) {
                     list.add(mf.getFilename());
                 }
@@ -256,7 +273,9 @@ public class ExampleForm extends FormPanel<Example> {
                 }
                 final MemFile picked = pick;
                 return new AbstractResourceStream() {
-                    @Override
+                    private static final long serialVersionUID = 1L;
+
+					@Override
                     public Time lastModifiedTime() {
                         return Time.now();
                     }

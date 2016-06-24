@@ -40,7 +40,7 @@ public class GroupAuthority extends EntityERHAdapter implements GroupAuthorityPr
     }
 
     public String getAuthority() {
-        return this.authority;
+        return authority;
     }
 
     public void setAuthority(String authority) {
@@ -48,7 +48,7 @@ public class GroupAuthority extends EntityERHAdapter implements GroupAuthorityPr
     }
 
     public Group getGroup() {
-        return this.group;
+        return group;
     }
 
     public void setGroup(Group group) {

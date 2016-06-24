@@ -26,11 +26,11 @@ public class Example implements Serializable {
         protected byte[] data;
 
         public String getFilename() {
-            return this.filename;
+            return filename;
         }
 
         public byte[] getData() {
-            return this.data;
+            return data;
         }
 
         public void setFilename(String filename) {
@@ -49,7 +49,7 @@ public class Example implements Serializable {
 
     private List<ExampleOpts> multi;
 
-    private List<MemFile> files = new ArrayList<MemFile>();
+    private List<MemFile> files = new ArrayList<>();
 
     private String hidden1 = "hid";
 
@@ -132,11 +132,11 @@ public class Example implements Serializable {
     }
 
     public ExampleOpts getRadio() {
-        return this.radio;
+        return radio;
     }
 
     public ExampleOpts getCombo() {
-        return this.combo;
+        return combo;
     }
 
     public void setRadio(ExampleOpts radio) {
@@ -148,7 +148,7 @@ public class Example implements Serializable {
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
     public void setText(String text) {
@@ -156,7 +156,7 @@ public class Example implements Serializable {
     }
 
     public Boolean getCheck() {
-        return this.check;
+        return check;
     }
 
     public void setCheck(Boolean check) {
@@ -164,7 +164,7 @@ public class Example implements Serializable {
     }
 
     public String getLongText() {
-        return this.longText;
+        return longText;
     }
 
     public void setLongText(String longText) {
@@ -172,11 +172,11 @@ public class Example implements Serializable {
     }
 
     public String getHidden1() {
-        return this.hidden1;
+        return hidden1;
     }
 
     public Integer getHidden2() {
-        return this.hidden2;
+        return hidden2;
     }
 
     public void setHidden1(String hidden1) {
@@ -188,11 +188,11 @@ public class Example implements Serializable {
     }
 
     public Date getDate1() {
-        return this.date1;
+        return date1;
     }
 
     public Long getDate2() {
-        return this.date2;
+        return date2;
     }
 
     public void setDate1(Date date1) {
@@ -204,23 +204,23 @@ public class Example implements Serializable {
     }
 
     public Integer getIntegerv() {
-        return this.integerv;
+        return integerv;
     }
 
     public Long getLongv() {
-        return this.longv;
+        return longv;
     }
 
     public Short getShortv() {
-        return this.shortv;
+        return shortv;
     }
 
     public Double getDoublev() {
-        return this.doublev;
+        return doublev;
     }
 
     public Float getFloatv() {
-        return this.floatv;
+        return floatv;
     }
 
     public void setIntegerv(Integer integerv) {
@@ -244,7 +244,7 @@ public class Example implements Serializable {
     }
 
     public Byte getBytev() {
-        return this.bytev;
+        return bytev;
     }
 
     public void setBytev(Byte bytev) {
@@ -252,27 +252,27 @@ public class Example implements Serializable {
     }
 
     public Integer getIntegerr() {
-        return this.integerr;
+        return integerr;
     }
 
     public Long getLongr() {
-        return this.longr;
+        return longr;
     }
 
     public Short getShortr() {
-        return this.shortr;
+        return shortr;
     }
 
     public Double getDoubler() {
-        return this.doubler;
+        return doubler;
     }
 
     public Float getFloatr() {
-        return this.floatr;
+        return floatr;
     }
 
     public Byte getByter() {
-        return this.byter;
+        return byter;
     }
 
     public void setIntegerr(Integer integerr) {
@@ -300,7 +300,7 @@ public class Example implements Serializable {
     }
 
     public List<ExampleOpts> getMulti() {
-        return this.multi;
+        return multi;
     }
 
     public void setMulti(List<ExampleOpts> multi) {
@@ -308,7 +308,7 @@ public class Example implements Serializable {
     }
 
     public List<MemFile> getFiles() {
-        return this.files;
+        return files;
     }
 
     public void setFiles(List<MemFile> files) {
@@ -316,7 +316,7 @@ public class Example implements Serializable {
     }
 
     public Serializable getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Serializable id) {
@@ -324,7 +324,7 @@ public class Example implements Serializable {
     }
 
     public ExampleOpts getList() {
-        return this.list;
+        return list;
     }
 
     public void setList(ExampleOpts list) {
@@ -332,7 +332,7 @@ public class Example implements Serializable {
     }
 
     public String getTextExtra() {
-        return this.textExtra;
+        return textExtra;
     }
 
     public void setTextExtra(String textExtra) {
@@ -340,7 +340,7 @@ public class Example implements Serializable {
     }
 
     public String getTextAdd() {
-        return this.textAdd;
+        return textAdd;
     }
 
     public void setTextAdd(String textAdd) {
@@ -348,7 +348,7 @@ public class Example implements Serializable {
     }
 
     public String getColor2() {
-        return this.color2;
+        return color2;
     }
 
     public void setColor2(String color2) {
@@ -356,7 +356,7 @@ public class Example implements Serializable {
     }
 
     public Registration getRegistration() {
-        return this.registration;
+        return registration;
     }
 
     public void setRegistration(Registration registration) {
@@ -364,7 +364,7 @@ public class Example implements Serializable {
     }
 
     public String getHtmlText() {
-        return this.htmlText;
+        return htmlText;
     }
 
     public void setHtmlText(String htmlText) {
@@ -372,7 +372,7 @@ public class Example implements Serializable {
     }
 
     public String getHtmlTextExtra() {
-        return this.htmlTextExtra;
+        return htmlTextExtra;
     }
 
     public void setHtmlTextExtra(String htmlTextExtra) {
@@ -380,7 +380,7 @@ public class Example implements Serializable {
     }
 
     public String getTags() {
-        return this.tags;
+        return tags;
     }
 
     public void setTags(String tags) {
@@ -388,7 +388,7 @@ public class Example implements Serializable {
     }
 
     public Boolean getTristate() {
-        return this.tristate;
+        return tristate;
     }
 
     public void setTristate(Boolean tristate) {
@@ -396,7 +396,7 @@ public class Example implements Serializable {
     }
 
     public String getColor1() {
-        return this.color1;
+        return color1;
     }
 
     public void setColor1(String color1) {
@@ -404,7 +404,7 @@ public class Example implements Serializable {
     }
 
     public List<String> getManyOptions() {
-        return this.manyOptions;
+        return manyOptions;
     }
 
     public void setManyOptions(List<String> manyOptions) {
@@ -412,7 +412,7 @@ public class Example implements Serializable {
     }
 
     public String getDropdown() {
-        return this.dropdown;
+        return dropdown;
     }
 
     public void setDropdown(String dropdown) {
@@ -420,7 +420,7 @@ public class Example implements Serializable {
     }
 
     public List<String> getRndwords() {
-        return this.rndwords;
+        return rndwords;
     }
 
     public void setRndwords(List<String> rndwords) {

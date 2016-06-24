@@ -75,24 +75,24 @@ public abstract class LuceneInformation implements Information {
 
 		Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
-		if (this.persistent) {
-			this.index = new NIOFSDirectory(new File(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LuceneInformation.LUCENE_VERSION + "/"
+		if (persistent) {
+			index = new NIOFSDirectory(new File(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LuceneInformation.LUCENE_VERSION + "/"
 					+ id.replaceAll("[^A-Za-z0-9]", "")));
 		} else {
-			this.index = new RAMDirectory();
+			index = new RAMDirectory();
 		}
-		IndexWriterConfig config = new IndexWriterConfig(LuceneInformation.LUCENE_VERSION, this.analyzer);
-		IndexWriter w = new IndexWriter(this.index, config);
+		IndexWriterConfig config = new IndexWriterConfig(LuceneInformation.LUCENE_VERSION, analyzer);
+		IndexWriter w = new IndexWriter(index, config);
 
 		try {
 			for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
 				if (i.getValue() instanceof JoinedSubclassEntityPersister) {
 					JoinedSubclassEntityPersister p = (JoinedSubclassEntityPersister) i.getValue();
-					this.create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+					create(w, sessionFactory, i.getKey(), p.getClassMetadata());
 				} else
 					if (i.getValue() instanceof SingleTableEntityPersister) {
 						SingleTableEntityPersister p = (SingleTableEntityPersister) i.getValue();
-						this.create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+						create(w, sessionFactory, i.getKey(), p.getClassMetadata());
 					} else {
 						throw new UnsupportedOperationException(i.getValue().getClass().getName());
 					}
@@ -107,20 +107,20 @@ public abstract class LuceneInformation implements Information {
 
 		w.close();
 
-		this.ready = true;
+		ready = true;
 	}
 
 	public boolean isPersistent() {
-		return this.persistent;
+		return persistent;
 	}
 
 	public boolean isReady() {
-		return this.ready;
+		return ready;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void printEnumValues(Class<? extends Enum> enumclass, StringBuilder sb) {
-		sb.append(this.transformClassName(enumclass.getName()));
+		sb.append(transformClassName(enumclass.getName()));
 		for (Object v : EnumSet.allOf(enumclass)) {
 			sb.append(" ").append(v);
 		}
@@ -146,20 +146,20 @@ public abstract class LuceneInformation implements Information {
 		try {
 			if (typeName != null) {
 				BooleanQuery bq = new BooleanQuery();
-				Query query = new StandardQueryParser(this.analyzer).parse(text, LuceneInformation.DATA);
+				Query query = new StandardQueryParser(analyzer).parse(text, LuceneInformation.DATA);
 				bq.add(query, BooleanClause.Occur.MUST);
 				bq.add(new TermQuery(new Term(LuceneInformation.TYPE, typeName)), BooleanClause.Occur.MUST);
 				q = bq;
 			} else {
-				q = new StandardQueryParser(this.analyzer).parse(text, LuceneInformation.DATA);
+				q = new StandardQueryParser(analyzer).parse(text, LuceneInformation.DATA);
 			}
 		} catch (QueryNodeException e) {
 			throw new RuntimeException(e.getMessage());
 		}
 
-		List<String> results = new ArrayList<String>();
+		List<String> results = new ArrayList<>();
 		try {
-			IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(this.index));
+			IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(index));
 			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
 			searcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -168,7 +168,7 @@ public abstract class LuceneInformation implements Information {
 			for (int i = 0; i < hits.length; ++i) {
 				int docId = hits[i].doc;
 				Document d = searcher.doc(docId);
-				LuceneInformation.logger.debug((i + 1) + ". " + d.get(LuceneInformation.NAME));
+				LuceneInformation.logger.debug(i + 1 + ". " + d.get(LuceneInformation.NAME));
 				String stringValue = d.getField(LuceneInformation.DATA).stringValue();
 				LuceneInformation.logger.debug(stringValue);
 				results.add(d.get(LuceneInformation.NAME));

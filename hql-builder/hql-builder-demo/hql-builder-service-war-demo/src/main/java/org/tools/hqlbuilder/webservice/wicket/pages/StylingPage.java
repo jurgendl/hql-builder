@@ -13,7 +13,9 @@ import org.wicketstuff.annotation.mount.MountPath;
 @SuppressWarnings("serial")
 @MountPath("/styling")
 public class StylingPage extends BasePage {
-    public StylingPage(PageParameters parameters) {
+    private static final long serialVersionUID = 1L;
+
+	public StylingPage(PageParameters parameters) {
         super(parameters);
         setStatelessHint(false);
 
@@ -21,7 +23,9 @@ public class StylingPage extends BasePage {
             final Notify notify = new Notify();
             add(notify);
             add(new AjaxFallbackLink<String>("testnotify", Model.of("testnotify")) {
-                @Override
+                private static final long serialVersionUID = 1L;
+
+				@Override
                 public void onClick(AjaxRequestTarget target) {
                     notify.topMessage(target, "topmessage");
                     notify.bottomMessage(target, "bottommessage");
@@ -32,7 +36,9 @@ public class StylingPage extends BasePage {
             final Growl growl = new Growl();
             add(growl);
             add(new AjaxFallbackLink<String>("testgrowl", Model.of("testgrowl")) {
-                @Override
+                private static final long serialVersionUID = 1L;
+
+				@Override
                 public void onClick(AjaxRequestTarget target) {
                     growl.message(target, //
                             new GrowlMessage(GrowlSeverity.error, "error", "error"), //

@@ -13,7 +13,9 @@ import org.tools.hqlbuilder.webservice.wicket.forms.TextFieldPanel;
 @SuppressWarnings("serial")
 @MountedPage("/multi")
 public class MultiColumnFormPage extends BasePage {
-    public MultiColumnFormPage(PageParameters parameters) {
+    private static final long serialVersionUID = 1L;
+
+	public MultiColumnFormPage(PageParameters parameters) {
         super(parameters);
 
         setStatelessHint(false);
@@ -21,6 +23,8 @@ public class MultiColumnFormPage extends BasePage {
         FormSettings formSettings = new FormSettings();
         formSettings.setLabelWidth("12em");
         FormPanel<Serializable> multicolform = new FormPanel<Serializable>("multicolform", null, formSettings) {
+
+			private static final long serialVersionUID = 1L;
             /***/
         };
         multicolform.getForm();
@@ -28,7 +32,7 @@ public class MultiColumnFormPage extends BasePage {
 
         for (int i = 1; i <= 5; i++) {
             TextFieldPanel<String> textField = multicolform.addTextField("label " + (i + 1), new FormElementSettings());
-            textField.setValueModel(new Model<String>("value " + (i + 1)));
+            textField.setValueModel(new Model<>("value " + (i + 1)));
         }
 
         multicolform.nextRow();
@@ -36,7 +40,7 @@ public class MultiColumnFormPage extends BasePage {
 
         for (int i = 6; i <= 16; i++) {
             TextFieldPanel<String> textField = multicolform.addTextField("label " + (i + 1), new FormElementSettings());
-            textField.setValueModel(new Model<String>("value " + (i + 1)));
+            textField.setValueModel(new Model<>("value " + (i + 1)));
         }
 
         multicolform.nextRow();
@@ -44,7 +48,7 @@ public class MultiColumnFormPage extends BasePage {
 
         for (int i = 17; i <= 29; i++) {
             TextFieldPanel<String> textField = multicolform.addTextField("label " + (i + 1), new FormElementSettings());
-            textField.setValueModel(new Model<String>("value " + (i + 1)));
+            textField.setValueModel(new Model<>("value " + (i + 1)));
         }
     }
 }

@@ -20,7 +20,9 @@ import org.wicketstuff.annotation.mount.MountPath;
 @SuppressWarnings("serial")
 @MountPath("/form/registration")
 public class RegistrationPage extends BasePage {
-    @SpringBean
+    private static final long serialVersionUID = 1L;
+
+	@SpringBean
     protected transient HqlWebServiceClient hqlWebClient;
 
     @SpringBean
@@ -30,7 +32,9 @@ public class RegistrationPage extends BasePage {
         super(parameters);
 
         DefaultFormActions<Registration> formActions = new DefaultFormActions<Registration>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
 			public Registration submitModel(IModel<Registration> model) {
                 Registration object = model.getObject();
                 object.setPassword(passwordEncoder.encode(object.getPassword()));
@@ -41,7 +45,7 @@ public class RegistrationPage extends BasePage {
 				return object;
             }
         };
-        FormPanel<Registration> formPanel = new FormPanel<Registration>("registrationform", formActions, new FormSettings().setInheritId(true));
+        FormPanel<Registration> formPanel = new FormPanel<>("registrationform", formActions, new FormSettings().setInheritId(true));
         add(formPanel);
 
         Registration proxy = proxy(Registration.class);

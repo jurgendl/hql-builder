@@ -10,16 +10,16 @@ import java.util.Map;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example;
 
 public class ServiceImpl implements ServiceInterface {
-    private Map<String, Example> examples = new HashMap<String, Example>();
+    private Map<String, Example> examples = new HashMap<>();
 
     @Override
     public Example getExample(String id) {
         if (!examples.containsKey(id)) {
             Example value = new Example();
             value.setId(id);
-            List<String> options = new ArrayList<String>(new HashSet<String>(Arrays.asList(new Example().getLongText().toLowerCase()
+            List<String> options = new ArrayList<>(new HashSet<>(Arrays.asList(new Example().getLongText().toLowerCase()
                     .replaceAll("[^a-z ]", "").replaceAll("  ", " ").split(" "))));
-            List<String> manyOptions = new ArrayList<String>();
+            List<String> manyOptions = new ArrayList<>();
             manyOptions.add(options.get(10));
             manyOptions.add(options.get(20));
             manyOptions.add(options.get(30));

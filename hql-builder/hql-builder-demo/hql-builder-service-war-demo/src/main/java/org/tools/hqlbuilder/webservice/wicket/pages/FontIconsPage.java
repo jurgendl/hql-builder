@@ -23,7 +23,9 @@ import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 @MountedPage("/fonticons")
 @SuppressWarnings("serial")
 public class FontIconsPage extends BasePage {
-    public FontIconsPage(PageParameters parameters) {
+    private static final long serialVersionUID = 1L;
+
+	public FontIconsPage(PageParameters parameters) {
         super(parameters);
         Social soc = Social.values()[new Random().nextInt(Social.values().length)];
         for (int i = 1; i <= 4; i++) {
@@ -31,33 +33,43 @@ public class FontIconsPage extends BasePage {
             add(new SocialPanel("socialpin" + i, Model.of(soc), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.pin)));
             add(new SocialPanel("socialbar" + i, Model.of(soc), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.bar)));
         }
-        ArrayList<Social> options = new ArrayList<Social>(new TreeSet<Social>(Arrays.asList(Social.values())));
+        ArrayList<Social> options = new ArrayList<>(new TreeSet<>(Arrays.asList(Social.values())));
         add(new ListView<Social>("socialbuttons", options) {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<Social> item) {
                 item.add(new SocialPanel("socialbutton", item.getModel(), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.button)));
             }
         });
         add(new ListView<Social>("socialbars", options) {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<Social> item) {
                 item.add(new SocialPanel("socialbar", item.getModel(), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.bar)));
             }
         });
         add(new ListView<Social>("socialpins", options) {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<Social> item) {
                 item.add(new SocialPanel("socialpin", item.getModel(), new SocialPanelSettings().setForm(SocialPanelSettings.SocialForm.pin)));
             }
         });
         add(new ListView<WLIFont>("icongroupparent", Arrays.asList(WLIFont.values())) {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<WLIFont> icongroupparent) {
                 icongroupparent.add(new Label("icongroupname", icongroupparent.getModel().getObject().toString()));
                 WebMarkupContainer icongroup = new WebMarkupContainer("icongroup");
                 icongroupparent.add(icongroup);
                 icongroup.add(new ListView<WLIFIcons>("icon", Arrays.asList(icongroupparent.getModel().getObject().getIcons())) {
-                    @Override
+                    private static final long serialVersionUID = 1L;
+
+					@Override
                     protected void populateItem(ListItem<WLIFIcons> icon) {
                         icon.add(new AttributeModifier("class", icon.getModel().getObject().getCode()));
                         icon.add(new AttributeModifier("title", icon.getModel().getObject().toString()));

@@ -37,7 +37,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     private List<Authority> authorities;
 
     public Member() {
-        erh = new EntityRelationHelper<Member>(this);
+        erh = new EntityRelationHelper<>(this);
     }
 
     public Member(String username, Group group) {
@@ -52,7 +52,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     }
 
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
@@ -60,7 +60,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     }
 
     public Group getGroup() {
-        return this.group;
+        return group;
     }
 
     public void setGroup(Group group) {
@@ -68,7 +68,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     }
 
     public List<Authority> getAuthorities() {
-        return erh.omGet(AUTHORITIES, this.authorities);
+        return erh.omGet(AUTHORITIES, authorities);
     }
 
     public void setAuthorities(List<Authority> authorities) {
@@ -84,7 +84,7 @@ public class Member extends ERHAdapter implements EntityI, MemberProperties {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {

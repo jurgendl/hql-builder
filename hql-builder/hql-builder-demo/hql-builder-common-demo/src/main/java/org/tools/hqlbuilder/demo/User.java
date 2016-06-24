@@ -55,11 +55,11 @@ public class User extends EntityERHAdapter implements UserProperties {
     }
 
     public String getFirstName() {
-        return this.firstName;
+        return firstName;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public void setFirstName(String firstName) {
@@ -71,7 +71,7 @@ public class User extends EntityERHAdapter implements UserProperties {
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
@@ -79,7 +79,7 @@ public class User extends EntityERHAdapter implements UserProperties {
     }
 
     public Lang getLanguage() {
-        return this.language;
+        return language;
     }
 
     public void setLanguage(Lang language) {
@@ -87,11 +87,11 @@ public class User extends EntityERHAdapter implements UserProperties {
     }
 
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setEnabled(boolean enabled) {
@@ -103,7 +103,7 @@ public class User extends EntityERHAdapter implements UserProperties {
     }
 
     public Member getMember() {
-        return this.member;
+        return member;
     }
 
     public void setMember(Member member) {

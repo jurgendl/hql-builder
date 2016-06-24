@@ -24,7 +24,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 
 @SuppressWarnings("serial")
 public class BasePage extends DefaultWebPage {
-    protected WebMarkupContainer menu;
+    private static final long serialVersionUID = 1L;
+	protected WebMarkupContainer menu;
 
     public BasePage(final PageParameters parameters) {
         super(parameters);
@@ -33,9 +34,11 @@ public class BasePage extends DefaultWebPage {
 
     protected Component addMenu() {
         IModel<? extends List<? extends Class<? extends DefaultWebPage>>> pagesModel = new LoadableDetachableModel<List<? extends Class<? extends DefaultWebPage>>>() {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected List<? extends Class<? extends DefaultWebPage>> load() {
-                List<Class<? extends DefaultWebPage>> pages = new ArrayList<Class<? extends DefaultWebPage>>();
+                List<Class<? extends DefaultWebPage>> pages = new ArrayList<>();
                 pages.add(RegistrationPage.class);
                 pages.add(RegistrationsPage.class);
                 pages.add(StylingPage.class);
@@ -51,16 +54,18 @@ public class BasePage extends DefaultWebPage {
         add(menu);
 
         ListView<Class<? extends DefaultWebPage>> menuitem = new ListView<Class<? extends DefaultWebPage>>("menuitem", pagesModel) {
-            @Override
+            private static final long serialVersionUID = 1L;
+
+			@Override
             protected void populateItem(ListItem<Class<? extends DefaultWebPage>> item) {
-                item.add(new AttributeModifier("title", new Model<String>(item.getModelObject().getSimpleName())));
+                item.add(new AttributeModifier("title", new Model<>(item.getModelObject().getSimpleName())));
                 boolean active = item.getModelObject().equals(BasePage.this);
                 if (active) {
                     item.add(new AttributeModifier("class", "active"));
                 }
-                BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("menulink", item.getModelObject());
+                BookmarkablePageLink<String> link = new BookmarkablePageLink<>("menulink", item.getModelObject());
                 item.add(link);
-                link.add(WebHelper.hide(new Label("menulinklabel", new Model<String>(item.getModelObject().getSimpleName()))));
+                link.add(WebHelper.hide(new Label("menulinklabel", new Model<>(item.getModelObject().getSimpleName()))));
             }
         };
         menu.add(menuitem);

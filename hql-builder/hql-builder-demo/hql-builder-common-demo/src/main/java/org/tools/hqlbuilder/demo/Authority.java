@@ -40,7 +40,7 @@ public class Authority extends EntityERHAdapter implements AuthorityProperties {
     }
 
     public String getAuthority() {
-        return this.authority;
+        return authority;
     }
 
     public void setAuthority(String authority) {
@@ -48,7 +48,7 @@ public class Authority extends EntityERHAdapter implements AuthorityProperties {
     }
 
     public Member getMember() {
-        return this.member;
+        return member;
     }
 
     public void setMember(Member member) {
