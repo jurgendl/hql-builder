@@ -21,7 +21,6 @@ import org.tools.hqlbuilder.webservice.wicket.components.SocialPanel.Social;
 import org.tools.hqlbuilder.webservice.wicket.components.SocialPanelSettings;
 
 @MountedPage("/fonticons")
-@SuppressWarnings("serial")
 public class FontIconsPage extends BasePage {
     private static final long serialVersionUID = 1L;
 

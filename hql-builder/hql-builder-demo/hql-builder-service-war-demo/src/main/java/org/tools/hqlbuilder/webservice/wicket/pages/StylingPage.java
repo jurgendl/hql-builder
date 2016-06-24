@@ -10,7 +10,7 @@ import org.tools.hqlbuilder.webservice.wicket.components.Growl.GrowlSeverity;
 import org.tools.hqlbuilder.webservice.wicket.components.Notify;
 import org.wicketstuff.annotation.mount.MountPath;
 
-@SuppressWarnings("serial")
+
 @MountPath("/styling")
 public class StylingPage extends BasePage {
     private static final long serialVersionUID = 1L;

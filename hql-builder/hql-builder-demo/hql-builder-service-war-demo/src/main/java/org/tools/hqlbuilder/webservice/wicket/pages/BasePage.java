@@ -22,7 +22,7 @@ import org.tools.hqlbuilder.webservice.wicket.WebHelper;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 
-@SuppressWarnings("serial")
+
 public class BasePage extends DefaultWebPage {
     private static final long serialVersionUID = 1L;
 	protected WebMarkupContainer menu;

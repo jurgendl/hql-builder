@@ -51,7 +51,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.TriStateCheckBoxSettings;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.ExampleOpts;
 import org.tools.hqlbuilder.webservice.wicket.pages.Example.MemFile;
 
-@SuppressWarnings("serial")
+
 public class ExampleForm extends FormPanel<Example> {
     private static final long serialVersionUID = 1L;
 	@SpringBean(name = "exampleService")

@@ -10,7 +10,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.tools.hqlbuilder.webservice.wicket.forms.TextFieldPanel;
 
-@SuppressWarnings("serial")
+
 @MountedPage("/multi")
 public class MultiColumnFormPage extends BasePage {
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,7 @@ import org.tools.hqlbuilder.webservice.wicket.forms.FormPanel;
 import org.tools.hqlbuilder.webservice.wicket.forms.FormSettings;
 import org.wicketstuff.annotation.mount.MountPath;
 
-@SuppressWarnings("serial")
+
 @MountPath("/form/registration")
 public class RegistrationPage extends BasePage {
     private static final long serialVersionUID = 1L;

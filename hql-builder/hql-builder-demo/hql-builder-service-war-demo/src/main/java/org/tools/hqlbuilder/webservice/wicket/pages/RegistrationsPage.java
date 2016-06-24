@@ -28,7 +28,7 @@ import org.tools.hqlbuilder.webservice.wicket.tables.Side;
 import org.tools.hqlbuilder.webservice.wicket.tables.TableColumn;
 import org.wicketstuff.annotation.mount.MountPath;
 
-@SuppressWarnings("serial")
+
 @MountPath("/form/registrations")
 public class RegistrationsPage extends BasePage {
     private static final long serialVersionUID = 1L;
