@@ -190,7 +190,7 @@ public interface PojoResource extends RestResource {
      * @see [get] /builder/hibernatewebresolver.bin
      */
     @GET
-    @Path("/hibernatewebresolver.bin")
+    @Path("/hibernatewebresolver/bin/hibernatewebresolver.bin")
     @Produces({ BINARY })
     StreamingOutput getSerializedHibernateWebResolver();
 
@@ -198,7 +198,7 @@ public interface PojoResource extends RestResource {
      * @see [get] /builder/hibernatewebresolver.xml
      */
     @GET
-    @Path("/hibernatewebresolver.xml")
+    @Path("/hibernatewebresolver/xml/hibernatewebresolver.xml")
     @Produces({ XML })
     HibernateWebResolver getHibernateWebResolver();
 

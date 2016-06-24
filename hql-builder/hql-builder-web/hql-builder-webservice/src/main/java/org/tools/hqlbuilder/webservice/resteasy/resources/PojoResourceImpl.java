@@ -163,10 +163,10 @@ public class PojoResourceImpl implements PojoResource {
     public StreamingOutput getSerializedHibernateWebResolver() {
         return output -> {
             try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(output))) {
-                oos.writeObject(getService().getHibernateWebResolver());
+                oos.writeObject(getHibernateWebResolver());
                 oos.flush();
-            } catch (RuntimeException ex) {
-                ex.printStackTrace();
+            } catch (Exception ex) {
+                throw new javax.ws.rs.WebApplicationException(ex);
             }
         };
     }
