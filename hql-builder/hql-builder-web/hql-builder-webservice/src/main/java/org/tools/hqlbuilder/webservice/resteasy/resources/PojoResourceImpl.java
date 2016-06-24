@@ -12,12 +12,12 @@ import java.util.SortedSet;
 import javax.annotation.Resource;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.jhaws.common.web.xml.XmlWrapper;
 import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.DetachedHqlService;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.XmlWrapper;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 import org.tools.hqlbuilder.webservice.HqlWebService;
 

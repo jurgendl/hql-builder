@@ -13,12 +13,12 @@ import java.util.SortedSet;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.jhaws.common.web.xml.XmlWrapper;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.HqlService;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.XmlWrapper;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 

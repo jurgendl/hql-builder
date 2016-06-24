@@ -21,10 +21,10 @@ import javax.ws.rs.core.StreamingOutput;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.jhaws.common.web.resteasy.RestResource;
+import org.jhaws.common.web.xml.XmlWrapper;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 import org.tools.hqlbuilder.common.QueryParameters;
-import org.tools.hqlbuilder.common.XmlWrapper;
 
 @Path("/builder")
 @Pretty
