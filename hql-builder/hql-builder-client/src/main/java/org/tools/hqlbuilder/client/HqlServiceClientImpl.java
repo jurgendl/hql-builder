@@ -135,6 +135,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                     }
                 }
 
+				@SuppressWarnings("deprecation")
                 int existing = CollectionUtils.cardinality(replaceBy, replacers.values());
 
                 if (existing > 0) {

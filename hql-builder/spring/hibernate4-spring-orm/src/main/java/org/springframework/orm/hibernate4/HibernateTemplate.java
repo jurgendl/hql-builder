@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
+@SuppressWarnings("deprecation")
 public class HibernateTemplate implements HibernateOperations {
     @Resource
     private SessionFactory sessionFactory;
@@ -67,7 +68,7 @@ public class HibernateTemplate implements HibernateOperations {
      * @return a List result returned by the action, or {@code null}
      * @throws org.springframework.dao.DataAccessException in case of Hibernate errors
      */
-    @Override
+	@Override
     public List<?> executeFind(final org.springframework.orm.hibernate3.HibernateCallback<?> action) throws DataAccessException {
         Object result = doExecute(action);
         if (result != null && !(result instanceof List)) {
