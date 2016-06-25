@@ -17,7 +17,7 @@ import org.jhaws.common.web.resteasy.RestResource;
 @GZIP
 public interface GoogleLoginResource extends RestResource {
     @GET
-    @Path("/ping.txt")
+	@Path("/ping" + D + TEXT_EXTENSION)
     @Produces(TEXT)
     public String ping();
 
