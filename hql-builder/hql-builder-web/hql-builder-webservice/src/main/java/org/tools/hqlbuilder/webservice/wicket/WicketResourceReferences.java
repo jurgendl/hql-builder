@@ -14,13 +14,10 @@ import org.apache.wicket.resource.JQueryResourceReference;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
-import com.googlecode.wicket.jquery.ui.calendar.settings.CalendarLibrarySettings;
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.resource.EmoticonsJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.resource.EmoticonsStyleSheetResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.resource.FixedHeaderTableJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.resource.FixedHeaderTableStyleSheetResourceReference;
-import com.googlecode.wicket.jquery.ui.plugins.sfmenu.resource.SuperfishStyleSheetResourceReference;
-import com.googlecode.wicket.jquery.ui.plugins.sfmenu.resource.SuperfishVerticalStyleSheetResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapCombinedNoIconsStyleSheetResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapDropDownJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.BootstrapResponsiveStyleSheetResourceReference;
@@ -127,11 +124,16 @@ public class WicketResourceReferences extends JQueryLibrarySettings {
 			// this one is not set by default
 			// setKendoUIJavaScriptReference(KendoUILibrarySettings.get().getJavaScriptReference());
 			// // redirect to default
-            setCalendarJavaScriptReference(CalendarLibrarySettings.get().getJavaScriptReference()); // redirect to default
-            setCalendarStyleSheetReference(CalendarLibrarySettings.get().getStyleSheetReference()); // redirect to default
-            setGCalJavaScriptReference(CalendarLibrarySettings.get().getGCalJavaScriptReference()); // redirect to default
-            setSuperfishStyleSheetReference(SuperfishStyleSheetResourceReference.get());// redirect to default
-            setSuperfishVerticalStyleSheetReference(SuperfishVerticalStyleSheetResourceReference.get());// redirect to default
+			// setCalendarJavaScriptReference(CalendarLibrarySettings.get().getJavaScriptReference());
+			// // redirect to default
+			// setCalendarStyleSheetReference(CalendarLibrarySettings.get().getStyleSheetReference());
+			// // redirect to default
+			// setGCalJavaScriptReference(CalendarLibrarySettings.get().getGCalJavaScriptReference());
+			// // redirect to default
+			// setSuperfishStyleSheetReference(SuperfishStyleSheetResourceReference.get());//
+			// redirect to default
+			// setSuperfishVerticalStyleSheetReference(SuperfishVerticalStyleSheetResourceReference.get());//
+			// redirect to default
 			// setConsoleStyleSheetReference(ConsoleStyleSheetResourceReference.get());//
 			// redirect to default
 			// setConsoleJavaScriptReference(ConsoleJavaScriptResourceReference.get());//
