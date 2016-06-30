@@ -11,7 +11,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
-import org.tools.hqlbuilder.webservice.jquery.ui.kendoui.KendoUI;
 
 import com.googlecode.wicket.jquery.core.resource.JQueryGlobalizeResourceReference;
 import com.googlecode.wicket.jquery.core.settings.JQueryLibrarySettings;
@@ -30,9 +29,6 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.EditorStyleSheet
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.JQueryHotKeysJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.resource.PrettifyJavaScriptResourceReference;
 import com.googlecode.wicket.jquery.ui.resource.JQueryUIResourceReference;
-import com.googlecode.wicket.kendo.ui.resource.ConsoleJavaScriptResourceReference;
-import com.googlecode.wicket.kendo.ui.resource.ConsoleStyleSheetResourceReference;
-import com.googlecode.wicket.kendo.ui.settings.KendoUILibrarySettings;
 
 /**
  * combination of resource references with public getters and setters
@@ -77,11 +73,11 @@ public class WicketResourceReferences extends JQueryLibrarySettings {
 
     protected ResourceReference jQueryGlobalizeReference;
 
-    protected ResourceReference kendoUICommonStyleSheetReference;
+    // protected ResourceReference kendoUICommonStyleSheetReference;
 
-    protected ResourceReference kendoUIThemeStyleSheetReference;
+    //    protected ResourceReference kendoUIThemeStyleSheetReference;
 
-    protected ResourceReference kendoUIJavaScriptReference;
+//    protected ResourceReference kendoUIJavaScriptReference;
 
     protected ResourceReference calendarJavaScriptReference;
 
@@ -125,16 +121,21 @@ public class WicketResourceReferences extends JQueryLibrarySettings {
             setWicketAjaxReference(WicketAjaxJQueryResourceReference.get());// redirect to default
             setWicketAjaxDebugReference(WicketAjaxDebugJQueryResourceReference.get());// redirect to default
             setJQueryGlobalizeReference(JQueryGlobalizeResourceReference.get()); // this one is not set by default
-            setKendoUICommonStyleSheetReference(KendoUI.KENDO_COMMON_CSS); // this one is not set by default
-            setKendoUIThemeStyleSheetReference(KendoUI.KENDO_DEFAULT_CSS); // this one is not set by default
-            setKendoUIJavaScriptReference(KendoUILibrarySettings.get().getJavaScriptReference()); // redirect to default
+			// setKendoUICommonStyleSheetReference(KendoUI.KENDO_COMMON_CSS); //
+			// this one is not set by default
+			// setKendoUIThemeStyleSheetReference(KendoUI.KENDO_DEFAULT_CSS); //
+			// this one is not set by default
+			// setKendoUIJavaScriptReference(KendoUILibrarySettings.get().getJavaScriptReference());
+			// // redirect to default
             setCalendarJavaScriptReference(CalendarLibrarySettings.get().getJavaScriptReference()); // redirect to default
             setCalendarStyleSheetReference(CalendarLibrarySettings.get().getStyleSheetReference()); // redirect to default
             setGCalJavaScriptReference(CalendarLibrarySettings.get().getGCalJavaScriptReference()); // redirect to default
             setSuperfishStyleSheetReference(SuperfishStyleSheetResourceReference.get());// redirect to default
             setSuperfishVerticalStyleSheetReference(SuperfishVerticalStyleSheetResourceReference.get());// redirect to default
-            setConsoleStyleSheetReference(ConsoleStyleSheetResourceReference.get());// redirect to default
-            setConsoleJavaScriptReference(ConsoleJavaScriptResourceReference.get());// redirect to default
+			// setConsoleStyleSheetReference(ConsoleStyleSheetResourceReference.get());//
+			// redirect to default
+			// setConsoleJavaScriptReference(ConsoleJavaScriptResourceReference.get());//
+			// redirect to default
             setFixedHeaderTableStyleSheetReference(FixedHeaderTableStyleSheetResourceReference.get());// redirect to default
             setFixedHeaderTableJavaScriptReference(FixedHeaderTableJavaScriptResourceReference.get());// redirect to default
             setBootstrapDropDownJavaScriptReference(BootstrapDropDownJavaScriptResourceReference.get());// redirect to default
@@ -150,25 +151,25 @@ public class WicketResourceReferences extends JQueryLibrarySettings {
      * @see com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings#getKendoUICommonStyleSheetReference()
      */
 
-    public ResourceReference getKendoUICommonStyleSheetReference() {
-        return kendoUICommonStyleSheetReference;
-    }
+	// public ResourceReference getKendoUICommonStyleSheetReference() {
+	// return kendoUICommonStyleSheetReference;
+	// }
 
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings#getKendoUIThemeStyleSheetReference()
      */
 
-    public ResourceReference getKendoUIThemeStyleSheetReference() {
-        return kendoUIThemeStyleSheetReference;
-    }
+	// public ResourceReference getKendoUIThemeStyleSheetReference() {
+	// return kendoUIThemeStyleSheetReference;
+	// }
 
     /**
      * @see com.googlecode.wicket.kendo.ui.settings.IKendoUILibrarySettings#getKendoUIJavaScriptReference()
      */
 
-    public ResourceReference getKendoUIJavaScriptReference() {
-        return kendoUIJavaScriptReference;
-    }
+	// public ResourceReference getKendoUIJavaScriptReference() {
+	// return kendoUIJavaScriptReference;
+	// }
 
     /**
      * @see com.googlecode.wicket.jquery.ui.calendar.settings.ICalendarLibrarySettings#getCalendarJavaScriptReference()
@@ -194,17 +195,20 @@ public class WicketResourceReferences extends JQueryLibrarySettings {
         return gCalJavaScriptReference;
     }
 
-    public void setKendoUICommonStyleSheetReference(ResourceReference kendoUICommonStyleSheetReference) {
-        this.kendoUICommonStyleSheetReference = kendoUICommonStyleSheetReference;
-    }
+	// public void setKendoUICommonStyleSheetReference(ResourceReference
+	// kendoUICommonStyleSheetReference) {
+	// this.kendoUICommonStyleSheetReference = kendoUICommonStyleSheetReference;
+	// }
 
-    public void setKendoUIThemeStyleSheetReference(ResourceReference kendoUIThemeStyleSheetReference) {
-        this.kendoUIThemeStyleSheetReference = kendoUIThemeStyleSheetReference;
-    }
+	// public void setKendoUIThemeStyleSheetReference(ResourceReference
+	// kendoUIThemeStyleSheetReference) {
+	// this.kendoUIThemeStyleSheetReference = kendoUIThemeStyleSheetReference;
+	// }
 
-    public void setKendoUIJavaScriptReference(ResourceReference kendoUIJavaScriptReference) {
-        this.kendoUIJavaScriptReference = kendoUIJavaScriptReference;
-    }
+	// public void setKendoUIJavaScriptReference(ResourceReference
+	// kendoUIJavaScriptReference) {
+	// this.kendoUIJavaScriptReference = kendoUIJavaScriptReference;
+	// }
 
     public void setCalendarJavaScriptReference(ResourceReference calendarJavaScriptReference) {
         this.calendarJavaScriptReference = calendarJavaScriptReference;
