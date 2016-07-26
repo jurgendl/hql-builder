@@ -38,6 +38,8 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
 
     protected static final Logger logger = LoggerFactory.getLogger(FormRowPanel.class);
 
+	protected static final Logger loggerMissingLabel = LoggerFactory.getLogger("missinglabels");
+
     protected Label label;
 
     protected IModel<String> labelModel;
@@ -175,7 +177,7 @@ public abstract class FormRowPanel<P, T, C extends FormComponent<T>, ElementSett
         try {
             return this.getString(this.getPropertyName());
         } catch (MissingResourceException ex) {
-            FormRowPanel.logger.warn("no translation for " + this.getPropertyName());
+			loggerMissingLabel.error(this.getPropertyName() + "=" + this.getPropertyName().toLowerCase());
             return "[" + this.getPropertyName() + "_" + this.getLocale() + "]";
         }
     }
