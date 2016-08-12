@@ -71,4 +71,17 @@ public class FlowPlayer {
 		}
 		return url;
 	}
+
+    /**
+     * response.render(CssHeaderItem.forReference(FlowPlayer.SKIN_CSS));<br>
+     * response.render(JavaScriptHeaderItem.forReference(FlowPlayer.JS));<br>
+     * response.render(OnDomReadyHeaderItem.forScript(FlowPlayer.javaScript("customflowplayer", true, true)));<br>
+     */
+    public static String javaScript(String tag, boolean loop, boolean splash) {
+        return ";$('." + tag + "').children('video').removeAttr('controls');$('." + tag + "').flowplayer({"//
+                + "swf:'" + FlowPlayer.url() + "',"//
+                + "splash:" + splash + "," //
+                + "loop:" + loop //
+                + "});";
+    }
 }
