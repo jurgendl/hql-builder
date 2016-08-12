@@ -14,6 +14,13 @@ import org.tools.hqlbuilder.webservice.wicket.WicketUtils;
 
 
 /**
+ * <div wicket:id="flowplayer" class="customflowplayer is-splash
+ * grayscale-gradient"><br>
+ * <video preload="none" controls wicket:id="videocontainer"><br>
+ * <source wicket:id="videosource" type="video/webm" src="video.webm"><br>
+ * </video><br>
+ * </div><br>
+ * 
  * @see https://developer.mozilla.org/nl/docs/Web/Guide/HTML/HTML5_audio_en_video_gebruiken
  */
 public class FlowPlayer {
