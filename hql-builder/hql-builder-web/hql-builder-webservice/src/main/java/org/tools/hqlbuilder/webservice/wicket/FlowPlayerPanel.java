@@ -36,14 +36,13 @@ public class FlowPlayerPanel extends Panel {
 		if (config.getSplash()) {
 			flowplayer.add(new CssClassNameAppender("is-splash"));
 			if (config.getSplashFile().exists()) {
-				String splashUrl = config.getUrl() + ".jpg";
 				if (config.getW() != 0 && config.getH() != 0) {
 					flowplayer.add(new AttributeModifier("style",
-							";background:url(" + splashUrl
+							";background:url(" + config.getSplashUrl()
 									+ ") no-repeat;background-size:cover;background-position-x:center;max-width:"
 									+ config.getW() + "px;max-height:" + config.getH() + "px"));
 				} else {
-					flowplayer.add(new AttributeModifier("style", ";background:url(" + splashUrl
+					flowplayer.add(new AttributeModifier("style", ";background:url(" + config.getSplashUrl()
 							+ ") no-repeat;background-size:cover;background-position-x:center"));
 				}
 			} else {
@@ -96,7 +95,8 @@ public class FlowPlayerPanel extends Panel {
 		response.render(CssHeaderItem.forReference(FlowPlayer.SKIN_CSS));
 		response.render(JavaScriptHeaderItem.forReference(FlowPlayer.JS));
 		response.render(OnDomReadyHeaderItem.forScript(";$('.customflowplayer').flowplayer({swf:'" + FlowPlayer.url()
-				+ (config.getSplash() ? "',splash:true" : "") + (config.getLoop() ? "',loop:true" : "") + "});"));
+				+ "'"
+				+ (config.getSplash() ? ",splash:true" : "") + (config.getLoop() ? ",loop:true" : "") + "});"));
 		if (config.getLoop())
 			response.render(CssHeaderItem.forCSS(
 					".is-splash.flowplayer .fp-ui, .is-paused.flowplayer .fp-ui { background: none !important; }",
