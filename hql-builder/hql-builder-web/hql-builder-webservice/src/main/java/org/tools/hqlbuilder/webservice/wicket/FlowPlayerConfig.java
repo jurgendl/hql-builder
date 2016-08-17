@@ -1,8 +1,11 @@
 package org.tools.hqlbuilder.webservice.wicket;
 
+import java.io.Serializable;
+
 import org.jhaws.common.io.FilePath;
 
-public class FlowPlayerConfig {
+public class FlowPlayerConfig implements Serializable {
+	private static final long serialVersionUID = -3939672788736407899L;
 	private FilePath file;
 	private String url;
 	private boolean splash;
