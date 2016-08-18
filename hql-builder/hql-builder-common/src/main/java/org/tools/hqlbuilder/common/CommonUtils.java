@@ -28,6 +28,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.jhaws.common.lang.EnhancedRunnable;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -498,20 +499,5 @@ public class CommonUtils {
         });
         thread.setDaemon(true);
         thread.start();
-    }
-
-
-    @FunctionalInterface
-    public interface EnhancedRunnable extends Runnable {
-        @Override
-        default void run() {
-            try {
-                runEnhanced();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        void runEnhanced() throws Exception;
     }
 }
