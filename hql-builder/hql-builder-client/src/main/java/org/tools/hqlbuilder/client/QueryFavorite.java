@@ -110,7 +110,7 @@ public class QueryFavorite implements Serializable {
         return this.hqlPreview;
     }
 
-    public void setHqlPreview( String hqlPreview) {
+    public void setHqlPreview(String hqlPreview) {
         //
     }
 
@@ -121,7 +121,7 @@ public class QueryFavorite implements Serializable {
         return this.parametersPreview;
     }
 
-    public void setParametersPreview( String parametersPreview) {
+    public void setParametersPreview(String parametersPreview) {
         //
     }
 }

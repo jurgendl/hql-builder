@@ -80,7 +80,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
 
     // =========== direct method calls implement UncheckedEntityRelationHelper ===========
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#set(java.lang.String, java.lang.Object)
      */
     @Override
@@ -89,7 +89,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#clear(java.lang.String)
      */
     @Override
@@ -98,7 +98,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#add(java.lang.String, java.lang.Object)
      */
     @Override
@@ -107,7 +107,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#remove(java.lang.String, java.lang.Object)
      */
     @Override
@@ -116,7 +116,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#replace(java.lang.String, java.util.Collection)
      */
     @Override
@@ -125,7 +125,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#get(java.lang.String, java.util.Collection)
      */
     @Override
@@ -134,7 +134,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.UncheckedEntityRelationHelper#get(java.util.Collection)
      */
     @Override
@@ -145,7 +145,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     // =========== checked method calls implement CheckedEntityRelationHelper ===========
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#moSet(java.lang.String, java.lang.Object)
      */
     @Override
@@ -154,7 +154,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#ooSet(java.lang.String, java.lang.Object)
      */
     @Override
@@ -163,7 +163,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmClear(java.lang.String)
      */
     @Override
@@ -172,7 +172,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmAdd(java.lang.String, java.lang.Object)
      */
     @Override
@@ -181,7 +181,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmRemove(java.lang.String, java.lang.Object)
      */
     @Override
@@ -190,7 +190,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmSet(java.lang.String, java.util.Collection)
      */
     @Override
@@ -199,7 +199,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omClear(java.lang.String)
      */
     @Override
@@ -208,7 +208,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omRemove(java.lang.String, java.lang.Object)
      */
     @Override
@@ -217,7 +217,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omAdd(java.lang.String, java.lang.Object)
      */
     @Override
@@ -226,7 +226,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omSet(java.lang.String, java.util.Collection)
      */
     @Override
@@ -235,7 +235,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omGet(java.lang.String, java.util.Collection)
      */
     @Override
@@ -244,7 +244,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#omGet(java.util.Collection)
      */
     @Override
@@ -253,7 +253,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmGet(java.lang.String, java.util.Collection)
      */
     @Override
@@ -262,7 +262,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#mmGet(java.util.Collection)
      */
     @Override
@@ -271,7 +271,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#simpleGet(java.util.Collection)
      */
     @Override
@@ -280,7 +280,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
     }
 
     /**
-     * 
+     *
      * @see be.ugent.komodo.model.util.wrapper.CheckedEntityRelationHelper#simpleGet(java.lang.String, java.util.Collection)
      */
     @Override
@@ -320,7 +320,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
         private boolean throwLazy = false;
 
         @Transient
-        private static final transient Map<Class<?>, EntityRelationCache<?>> cache = new HashMap<Class<?>, EntityRelationCache<?>>();
+        private static final transient Map<Class<?>, EntityRelationCache<?>> cache = new HashMap<>();
 
         @Transient
         private static final transient String UNMOD_SET = "java.util.Collections$UnmodifiableSet";
@@ -341,16 +341,16 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
         private final transient Class<P> clazz;
 
         @Transient
-        private final transient Map<Field, Object> annotations = new HashMap<Field, Object>();
+        private final transient Map<Field, Object> annotations = new HashMap<>();
 
         @Transient
-        private final transient Map<String, Method> getters = new HashMap<String, Method>();
+        private final transient Map<String, Method> getters = new HashMap<>();
 
         @Transient
-        private final transient Map<String, String> mappedBy = new HashMap<String, String>();
+        private final transient Map<String, String> mappedBy = new HashMap<>();
 
         @Transient
-        private final transient Map<String, Field> setters = new HashMap<String, Field>();
+        private final transient Map<String, Field> setters = new HashMap<>();
 
         @Transient
         private final transient Logger logger;
@@ -425,7 +425,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
             EntityRelationCache<C> wrapCache = (EntityRelationCache<C>) EntityRelationCache.cache.get(clazz);
 
             if (wrapCache == null) {
-                wrapCache = new EntityRelationCache<C>(clazz);
+                wrapCache = new EntityRelationCache<>(clazz);
                 EntityRelationCache.cache.put(clazz, wrapCache);
             }
 
@@ -588,8 +588,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
                 childWrapper.invokeSet(child, parentPropertyName, null);
                 invokeSet(bean, childProperty, null);
             } else {
-                throw new EntityRelationException(EntityRelationExceptionType.REFERENCE,
-                        "!oldParent.equals(parent) || !oldChild.equals(child");
+                throw new EntityRelationException(EntityRelationExceptionType.REFERENCE, "!oldParent.equals(parent) || !oldChild.equals(child");
             }
         }
 
@@ -1179,11 +1178,11 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
                     throw new EntityRelationException(ex);
                 }
             } else if (List.class.equals(type)) {
-                collection = new ArrayList<T>();
+                collection = new ArrayList<>();
             } else if (SortedSet.class.equals(type)) {
-                collection = new TreeSet<T>();
+                collection = new TreeSet<>();
             } else if (Set.class.equals(type)) {
-                collection = new HashSet<T>();
+                collection = new HashSet<>();
             } else {
                 throw new EntityRelationException("creation of collection not supported: " + type.getName());
             }

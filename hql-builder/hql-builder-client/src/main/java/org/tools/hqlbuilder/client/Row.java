@@ -98,13 +98,18 @@ public class Row implements Comparable<Row> {
         return type.getSimpleName();
     }
 
-    public void setSimpleClassName( String tmp) {
+    public void setSimpleClassName(String tmp) {
         //
     }
 
     public String getLabel() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).appendSuper(super.toString()).append("collection", collection)
-                .append("clazz", type).append("parent", getParent()).append("path", path).append("innerjoin", innerjoin).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).appendSuper(super.toString())
+                .append("collection", collection)
+                .append("clazz", type)
+                .append("parent", getParent())
+                .append("path", path)
+                .append("innerjoin", innerjoin)
+                .toString();
     }
 
     public Row getParentRef() {

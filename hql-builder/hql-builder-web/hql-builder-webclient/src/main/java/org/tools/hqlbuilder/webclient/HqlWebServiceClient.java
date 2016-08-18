@@ -126,11 +126,11 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
 
     @SuppressWarnings("unchecked")
     public <T extends Serializable, I extends Serializable> I save(String pojo, T object) {
-        return (I) getResource().save(pojo, new XmlWrapper<T>(object)).getValue();
+        return (I) getResource().save(pojo, new XmlWrapper<>(object)).getValue();
     }
 
     public <T extends Serializable> void delete(String pojo, T object) {
-        getResource().delete(pojo, new XmlWrapper<T>(object));
+        getResource().delete(pojo, new XmlWrapper<>(object));
     }
 
     @Override

@@ -12,8 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 @SuppressWarnings("deprecation")
-public class LocalSessionFactoryBeanPlus3 extends org.springframework.orm.hibernate3.LocalSessionFactoryBean implements BeanFactoryAware,
-        ApplicationContextAware {
+public class LocalSessionFactoryBeanPlus3 extends org.springframework.orm.hibernate3.LocalSessionFactoryBean
+        implements BeanFactoryAware, ApplicationContextAware {
     protected BeanFactory beanFactory;
 
     protected ApplicationContext applicationContext;

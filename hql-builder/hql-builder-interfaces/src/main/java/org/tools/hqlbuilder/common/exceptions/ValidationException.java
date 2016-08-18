@@ -16,7 +16,8 @@ public class ValidationException extends RuntimeException {
     public static class InvalidValue implements Serializable {
         private static final long serialVersionUID = -6181329358582271367L;
 
-        public InvalidValue(Object bean, Class<?> beanClass, String message, String propertyName, String propertyPath, Object rootBean, Object value) {
+        public InvalidValue(Object bean, Class<?> beanClass, String message, String propertyName, String propertyPath, Object rootBean,
+                Object value) {
             super();
             this.bean = bean;
             this.beanClass = beanClass;

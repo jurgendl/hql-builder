@@ -19,12 +19,12 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.LoggerFactory;
 
 public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
-	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QueryFavoriteUtils.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QueryFavoriteUtils.class);
 
     private static JAXBContext jaxbContext;
 
     private static File[] convertV1ToV2(File[] xmls) {
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         for (File xml : xmls) {
             File c = convertV1ToV2(xml);
             if (c != null) {
@@ -84,9 +84,9 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             jaxbMarshaller.marshal(favorite, os);
         } catch (IOException ex) {
-			logger.error("", ex);
+            logger.error("", ex);
         } catch (JAXBException ex) {
-			logger.error("", ex);
+            logger.error("", ex);
         } finally {
             if (os != null) {
                 try {
@@ -110,12 +110,12 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
         QueryFavoriteUtils.convertV1ToV2(xmls);
         xmls = favoritesForProject.listFiles((FilenameFilter) (dir, name) -> name.startsWith(FAVORITE_PREFIX) && name.endsWith(FAVORITES_EXT));
         QueryFavorite last = null;
-		File _xml = null;
+        File _xml = null;
         try {
             Unmarshaller jaxbUnmarshaller = getJaxbcontext().createUnmarshaller();
             for (File xml : xmls) {
-				_xml = xml;
-				logger.info("favorite {}", xml);
+                _xml = xml;
+                logger.info("favorite {}", xml);
                 try {
                     FileInputStream is = new FileInputStream(xml);
                     QueryFavorite favorite = (QueryFavorite) jaxbUnmarshaller.unmarshal(is);
@@ -141,14 +141,14 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                             last = favorite;
                         }
                     } catch (Exception exx) {
-						logger.error("{}", xml, exx);
+                        logger.error("{}", xml, exx);
                     }
                 } catch (Exception ex) {
-					logger.error("{}", xml, ex);
+                    logger.error("{}", xml, ex);
                 }
             }
         } catch (JAXBException ex) {
-			logger.error("{}", _xml, ex);
+            logger.error("{}", _xml, ex);
         }
         return last;
     }

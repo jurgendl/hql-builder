@@ -42,7 +42,7 @@ public class ClientUtils extends CommonUtils {
 
         EListConfig cfg = new EListConfig();
         cfg.setFilterable(true);
-        final EList<V> list = new EList<V>(cfg);
+        final EList<V> list = new EList<>(cfg);
         JPanel container = new JPanel(new BorderLayout());
         container.add(new JScrollPane(list), BorderLayout.CENTER);
         container.add(list.getFiltercomponent(), BorderLayout.NORTH);
@@ -51,7 +51,7 @@ public class ClientUtils extends CommonUtils {
         list.getFiltercomponent().setBorder(BorderFactory.createEmptyBorder(borderw, borderw, borderw, borderw));
 
         for (V option : options) {
-            list.stsi().addRecord(new EListRecord<V>(option));
+            list.stsi().addRecord(new EListRecord<>(option));
         }
 
         ResultType returnValue = CustomizableOptionPane.showCustomDialog(parent, container, title, MessageType.QUESTION, OptionType.OK_CANCEL, null,
@@ -74,7 +74,7 @@ public class ClientUtils extends CommonUtils {
      */
 
     static public String getHelpUrl() {
-		return "https://github.com/jurgendl/hql-builder/wiki";
+        return "https://github.com/jurgendl/hql-builder/wiki";
     }
 
     private static Font DEFAULT_FONT;

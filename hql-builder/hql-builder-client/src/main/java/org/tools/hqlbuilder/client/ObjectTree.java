@@ -2,7 +2,6 @@ package org.tools.hqlbuilder.client;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyDescriptor;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import org.tools.hqlbuilder.common.HqlService;
  * @author Jurgen
  */
 public class ObjectTree extends JFrame {
-    /** serialVersionUID */
+
     private static final long serialVersionUID = 3880395325775694814L;
 
     private final JPanel propertypanel = new JPanel(new BorderLayout());
@@ -29,7 +28,7 @@ public class ObjectTree extends JFrame {
     public ObjectTree(final HqlBuilderFrame frame, final HqlService hqlService, Object bean, final boolean editable) {
         bean = initialize(bean);
         TreeNode rootNode = new TreeNode("", bean);
-        final ETree<Object> tree = new ETree<Object>(new ETreeConfig(), rootNode);
+        final ETree<Object> tree = new ETree<>(new ETreeConfig(), rootNode);
         tree.setEditable(false);
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(tree), propertypanel);
         getContentPane().add(split, BorderLayout.CENTER);
@@ -58,7 +57,7 @@ public class ObjectTree extends JFrame {
                             //
                         }
                     }
-                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame((Serializable) data, editable);
+                    PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, editable);
                     propertyFrame.setHqlService(hqlService);
                     frame.font(propertyFrame, null);
                     propertypanel.add(propertyFrame, BorderLayout.CENTER);
@@ -98,7 +97,7 @@ public class ObjectTree extends JFrame {
         }
 
         /**
-         * 
+         *
          * @see org.swingeasy.ETreeNode#getStringValue()
          */
         @Override
@@ -107,7 +106,7 @@ public class ObjectTree extends JFrame {
         }
 
         /**
-         * 
+         *
          * @see org.swingeasy.ETreeNode#toString()
          */
         @Override
@@ -116,7 +115,7 @@ public class ObjectTree extends JFrame {
         }
 
         /**
-         * 
+         *
          * @see org.swingeasy.ETreeNode#initChildren(java.util.List)
          */
         @Override
@@ -141,7 +140,7 @@ public class ObjectTree extends JFrame {
                             if (_value != null) {
                                 if (_value instanceof Collection) {
                                     list.add(new TreeNode(_name.toString(), _bean));
-                                } else /* if (hqlBuilderHelper.accept(_value.getClass())) */{
+                                } else /* if (hqlBuilderHelper.accept(_value.getClass())) */ {
                                     _value = initialize(_value);
                                     list.add(new TreeNode(_name.toString(), _value));
                                 }

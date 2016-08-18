@@ -1,10 +1,10 @@
 package org.tools.hqlbuilder.common;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-
 import java.util.Collections;
 import java.util.Map;
+
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 
 /**
  * @author Jurgen

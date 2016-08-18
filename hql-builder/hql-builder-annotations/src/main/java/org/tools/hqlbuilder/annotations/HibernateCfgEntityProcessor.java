@@ -35,7 +35,7 @@ public class HibernateCfgEntityProcessor extends AbstractProcessor {
         try {
             if (!run) {
                 run = true;
-                List<String> elements = new ArrayList<String>();
+                List<String> elements = new ArrayList<>();
                 for (Element e : roundEnv.getElementsAnnotatedWith(javax.persistence.Entity.class)) {
                     javax.persistence.Entity entity = e.getAnnotation(javax.persistence.Entity.class);
                     String message = "HibernateCfgEntityProcessor: annotation found in " + e.getSimpleName() + " with entity " + entity.name();

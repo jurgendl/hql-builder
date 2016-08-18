@@ -14,8 +14,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 
-public class LocalSessionFactoryBeanPlus4 extends org.springframework.orm.hibernate4.LocalSessionFactoryBean implements BeanFactoryAware,
-ApplicationContextAware {
+public class LocalSessionFactoryBeanPlus4 extends org.springframework.orm.hibernate4.LocalSessionFactoryBean
+        implements BeanFactoryAware, ApplicationContextAware {
     protected BeanFactory beanFactory;
 
     protected ApplicationContext applicationContext;

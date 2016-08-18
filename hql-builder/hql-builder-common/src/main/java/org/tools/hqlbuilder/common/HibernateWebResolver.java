@@ -17,14 +17,14 @@ import org.jhaws.common.web.xml.adapters.ClassAdapter;
 public class HibernateWebResolver implements Serializable {
     private static final long serialVersionUID = 756239472693625438L;
 
-    protected Map<String, ClassNode> nodes = new HashMap<String, ClassNode>();
+    protected Map<String, ClassNode> nodes = new HashMap<>();
 
     public HibernateWebResolver() {
         super();
     }
 
     public List<ClassNode> getClasses() {
-        return new ArrayList<ClassNode>(nodes.values());
+        return new ArrayList<>(nodes.values());
     }
 
     public List<Property> getProperties(String classname) {
@@ -207,7 +207,7 @@ public class HibernateWebResolver implements Serializable {
 
         protected NodeId id;
 
-        protected List<EdgeImpl> edges = new ArrayList<EdgeImpl>();
+        protected List<EdgeImpl> edges = new ArrayList<>();
 
         public Node() {
             super();

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @SupportedAnnotationTypes("javax.persistence.Entity")
 @SupportedSourceVersion(SourceVersion.RELEASE_5)
 public class JaxBIndexEntityProcessor extends AbstractProcessor {
-    private Map<String, BufferedWriter> jaxbIndices = new HashMap<String, BufferedWriter>();
+    private Map<String, BufferedWriter> jaxbIndices = new HashMap<>();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {

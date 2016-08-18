@@ -142,7 +142,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public Map<String, String> getHibernateInfo() {
         if (hibernateVersions == null) {
-            hibernateVersions = new LinkedHashMap<String, String>();
+            hibernateVersions = new LinkedHashMap<>();
             {
                 String[][] deps = {
                         { "Hibernate", "org.hibernate.Hibernate" },
@@ -190,13 +190,13 @@ public class HqlServiceImpl implements HqlService {
             }
         } catch (Exception ex) {
             try {
-                version = org.w3c.dom.Node.class.cast(
-                        CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project", "/default:project/default:version/text()")).getNodeValue();
+                version = org.w3c.dom.Node.class
+                        .cast(CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project", "/default:project/default:version/text()"))
+                        .getNodeValue();
             } catch (Exception ex2) {
                 try {
-                    version = org.w3c.dom.Node.class.cast(
-                            CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project",
-                                    "/default:project/default:parent/default:version/text()")).getNodeValue();
+                    version = org.w3c.dom.Node.class.cast(CommonUtils.getFromXml(new FileInputStream("pom.xml"), "project",
+                            "/default:project/default:parent/default:version/text()")).getNodeValue();
                 } catch (Exception ex3) {
                     //
                 }
@@ -289,8 +289,8 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");
         }
-        QueryTranslator createQueryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
-        createQueryTranslator.compile(new HashMap<Object, Object>(), false);
+        QueryTranslator createQueryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<>(), sessionFactory);
+        createQueryTranslator.compile(new HashMap<>(), false);
         return createQueryTranslator.getSQLString();
     }
 
@@ -362,11 +362,12 @@ public class HqlServiceImpl implements HqlService {
                 // illegal attempt to dereference collection [{synthetic-alias}{non-qualified-property-ref}afstudeerRichtingI18N] with element
                 // property
                 // reference [naam]
-                Matcher m = Pattern.compile(
-                        "illegal attempt to dereference collection \\[([^\\]]+)\\] with element property reference \\[([^\\]]+)\\]").matcher(msg);
+                Matcher m = Pattern
+                        .compile("illegal attempt to dereference collection \\[([^\\]]+)\\] with element property reference \\[([^\\]]+)\\]")
+                        .matcher(msg);
                 if (m.find()) {
-                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.illegal_attempt_to_dereference_collection, msg, m.group(1) + "#"
-                            + m.group(2));
+                    throw new SyntaxException(SyntaxException.SyntaxExceptionType.illegal_attempt_to_dereference_collection, msg,
+                            m.group(1) + "#" + m.group(2));
                 }
             }
 
@@ -405,7 +406,7 @@ public class HqlServiceImpl implements HqlService {
     protected ExecutionResult innerExecute(Value<ExecutionResult> resultValue, String hql, int max, int first, List<QueryParameter> queryParameters) {
         ExecutionResult result = resultValue.get();
         long start = System.currentTimeMillis();
-        QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<Object, Object>(), sessionFactory);
+        QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<>(), sessionFactory);
         String sql = queryTranslator.getSQLString();
         logger.debug("sql={}", sql);
         result.setSql(sql);
@@ -444,7 +445,7 @@ public class HqlServiceImpl implements HqlService {
             result.setSize(createQuery.executeUpdate());
             return result;
         }
-        queryTranslator.compile(new HashMap<Object, Object>(), false);
+        queryTranslator.compile(new HashMap<>(), false);
         if (sql == null) {
             sql = queryTranslator.getSQLString();
             if (sql == null) {
@@ -470,10 +471,10 @@ public class HqlServiceImpl implements HqlService {
         Queryable[] entityPersisters = get(queryTranslator, QLD + ENTITY_PERSISTERS, Queryable[].class);
         String[] sqlAliases = get(queryTranslator, QLD + SQL_ALIASES, String[].class);
         result.setSqlAliases(sqlAliases);
-        
-		@SuppressWarnings("unused")
-		Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
-        Map<String, String> from_aliases = new HashMap<String, String>();
+
+        @SuppressWarnings("unused")
+        Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
+        Map<String, String> from_aliases = new HashMap<>();
         result.setFromAliases(from_aliases);
         for (int i = 0; i < entityAliases.length; i++) {
             String alias = entityAliases[i];
@@ -571,7 +572,7 @@ public class HqlServiceImpl implements HqlService {
         if (classMeta == null) {
             return null;
         }
-        List<String> propertyNames = new ArrayList<String>(Arrays.asList(AbstractEntityPersister.class.cast(classMeta).getPropertyNames()));
+        List<String> propertyNames = new ArrayList<>(Arrays.asList(AbstractEntityPersister.class.cast(classMeta).getPropertyNames()));
         propertyNames.remove("id");
         propertyNames.remove("version");
         return propertyNames;
@@ -597,8 +598,8 @@ public class HqlServiceImpl implements HqlService {
         } catch (RuntimeException ex) {
             if ("org.hibernate.validator.InvalidStateException".equals(ex.getClass().getName())) {
                 try {
-                    ValidationExceptionConverter vc = (ValidationExceptionConverter) Class.forName(
-                            "org.tools.hqlbuilder.common.validation.HibernateValidationConverter").newInstance();
+                    ValidationExceptionConverter vc = (ValidationExceptionConverter) Class
+                            .forName("org.tools.hqlbuilder.common.validation.HibernateValidationConverter").newInstance();
                     throw vc.convert(ex);
                 } catch (ValidationException ex2) {
                     throw ex2;
@@ -607,8 +608,8 @@ public class HqlServiceImpl implements HqlService {
                 }
             } else if ("javax.validation.ConstraintViolationException".equals(ex.getClass().getName())) {
                 try {
-                    ValidationExceptionConverter vc = (ValidationExceptionConverter) Class.forName(
-                            "org.tools.hqlbuilder.common.validation.JavaxValidationConverter").newInstance();
+                    ValidationExceptionConverter vc = (ValidationExceptionConverter) Class
+                            .forName("org.tools.hqlbuilder.common.validation.JavaxValidationConverter").newInstance();
                     throw vc.convert(ex);
                 } catch (ValidationException ex2) {
                     throw ex2;
@@ -656,8 +657,8 @@ public class HqlServiceImpl implements HqlService {
                 }
             }
         }
-        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, new QueryParameter().setName(oid).setValueTypeText(
-                idv));
+        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid,
+                new QueryParameter().setName(oid).setValueTypeText(idv));
         logger.debug("hql={}", hql);
         List<Serializable> value = execute(hql).getResults().getValue();
         return (T) (value.isEmpty() ? null : value.get(0));
@@ -670,10 +671,10 @@ public class HqlServiceImpl implements HqlService {
     public Set<String> getReservedKeywords() {
         if (keywords == null) {
             try {
-                keywords = new HashSet<String>();
+                keywords = new HashSet<>();
                 // ansi & transact sql keywords
-                BufferedReader in = new BufferedReader(new InputStreamReader(HqlServiceImpl.class.getClassLoader().getResourceAsStream(
-                        "org/tools/hqlbuilder/service/reserved_keywords.txt")));
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        HqlServiceImpl.class.getClassLoader().getResourceAsStream("org/tools/hqlbuilder/service/reserved_keywords.txt")));
                 String line;
                 while ((line = in.readLine()) != null) {
                     for (String kw : line.split(" ")) {
@@ -695,7 +696,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public Map<String, String> getNamedQueries() {
-        Map<String, String> namedQueriesRv = new HashMap<String, String>();
+        Map<String, String> namedQueriesRv = new HashMap<>();
         SessionFactory sf = getSessionFactory();
         try {
             @SuppressWarnings("unchecked")
@@ -735,7 +736,7 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");
         }
-        List<QueryParameter> parameters = new ArrayList<QueryParameter>();
+        List<QueryParameter> parameters = new ArrayList<>();
         Session session = newSession();
         try {
             Query createQuery = session.createQuery(hql);
@@ -810,7 +811,7 @@ public class HqlServiceImpl implements HqlService {
     protected Information getInformation() {
         if (information == null) {
             try {
-                List<Information> infos = new ArrayList<Information>();
+                List<Information> infos = new ArrayList<>();
                 ServiceLoader<Information> sl = ServiceLoader.load(Information.class);
                 Iterator<Information> sli = sl.iterator();
                 while (sli.hasNext()) {
@@ -898,7 +899,7 @@ public class HqlServiceImpl implements HqlService {
      */
     @Override
     public void log() {
-        for (Object key : new TreeSet<Object>(hibernateProperties.keySet())) {
+        for (Object key : new TreeSet<>(hibernateProperties.keySet())) {
             logger.debug("{}={}", key, hibernateProperties.get(key));
         }
     }

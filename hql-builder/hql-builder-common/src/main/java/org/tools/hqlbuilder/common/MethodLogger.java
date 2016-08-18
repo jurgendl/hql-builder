@@ -14,7 +14,7 @@ import org.springframework.aop.ThrowsAdvice;
 public class MethodLogger implements AfterReturningAdvice, ThrowsAdvice, MethodBeforeAdvice {
     protected static final Logger defaultlogger = LoggerFactory.getLogger(MethodLogger.class);
 
-    protected static final Map<Class, Logger> loggers = new HashMap<Class, Logger>();
+    protected static final Map<Class, Logger> loggers = new HashMap<>();
 
     @Override
     public void before(Method method, Object[] args, Object target) throws Throwable {
@@ -54,10 +54,10 @@ public class MethodLogger implements AfterReturningAdvice, ThrowsAdvice, MethodB
                     + "---------- Method={}\n"//
                     + "---------- Object={}\n"//
                     + "---------- Params={}\n"//
-                    /* + "---------- Exception={}" */, method, target, args/* , ex */);
+            /* + "---------- Exception={}" */, method, target, args/* , ex */);
         } catch (RuntimeException exx) {
             logger.trace("After.Error\n---------- Method={}\n"//
-                    /* + "---------- Exception={}" */, method/* , ex */);
+            /* + "---------- Exception={}" */, method/* , ex */);
         }
     }
 

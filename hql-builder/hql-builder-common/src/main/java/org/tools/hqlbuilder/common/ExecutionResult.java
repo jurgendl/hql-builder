@@ -53,7 +53,7 @@ public class ExecutionResult implements Serializable {
             String[][] scalarColumnNames, String[] sqlAliases, String[] queryReturnTypeNames) {
         this.sql = sql;
         this.fromAliases = fromAliases;
-        this.results = new XmlWrapper<List<Serializable>>(results);
+        this.results = new XmlWrapper<>(results);
         this.queryReturnAliases = queryReturnAliases;
         this.scalarColumnNames = scalarColumnNames;
         this.sqlAliases = sqlAliases;
@@ -150,6 +150,6 @@ public class ExecutionResult implements Serializable {
     }
 
     public void setSimpleResults(List<Serializable> results) {
-        this.results = new XmlWrapper<List<Serializable>>(results);
+        this.results = new XmlWrapper<>(results);
     }
 }

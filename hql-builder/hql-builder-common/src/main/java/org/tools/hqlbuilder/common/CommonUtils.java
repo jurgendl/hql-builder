@@ -153,7 +153,7 @@ public class CommonUtils {
         // http://blog.davber.com/2006/09/17/xpath-with-namespaces-in-java/
         XPath xpath = XPathFactory.newInstance().newXPath();
         xpath.setNamespaceContext(new NamespaceHandler(NodeList.class.cast(doc.getElementsByTagName(basenodename)).item(0).getAttributes()));
-        List<Node> results = new ArrayList<Node>();
+        List<Node> results = new ArrayList<>();
         NodeList nodes = NodeList.class.cast(xpath.compile(expr).evaluate(doc, XPathConstants.NODESET));
         int length = nodes.getLength();
         for (int i = 0; i < length; i++) {
@@ -465,7 +465,6 @@ public class CommonUtils {
         }
     }
 
-
     public static void sleep(long ms) {
         try {
             Thread.sleep(ms);
@@ -479,21 +478,18 @@ public class CommonUtils {
     }
 
     public static void run(Long sleep, EnhancedRunnable runnable, Consumer<Exception> exceptionHandler) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean eternal = sleep != null;
-                try {
-                    do {
-                        runnable.run();
-                        if (sleep != null) {
-                            sleep(sleep);
-                        }
-                    } while (eternal);
-                } catch (Exception ex) {
-                    if (exceptionHandler != null) {
-                        exceptionHandler.accept(ex);
+        Thread thread = new Thread(() -> {
+            boolean eternal = sleep != null;
+            try {
+                do {
+                    runnable.run();
+                    if (sleep != null) {
+                        sleep(sleep);
                     }
+                } while (eternal);
+            } catch (Exception ex) {
+                if (exceptionHandler != null) {
+                    exceptionHandler.accept(ex);
                 }
             }
         });

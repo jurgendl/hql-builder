@@ -64,8 +64,8 @@ public class DetachedHqlService extends DelegatingHqlService {
      * variables. The function will stop the recursion if the member variable is not of type baseBean (defined in the application) and if not of type
      * collection
      */
-    public void cleanObject(Object listObj, HashSet visitedBeansSet) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException, InvocationTargetException {
+    public void cleanObject(Object listObj, HashSet visitedBeansSet)
+            throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, InvocationTargetException {
         if (visitedBeansSet == null) {
             visitedBeansSet = new HashSet();
         }
@@ -109,8 +109,8 @@ public class DetachedHqlService extends DelegatingHqlService {
     /**
      * Remove the un-initialized proxies from the given object
      */
-    private void processBean(Object objBean, HashSet visitedBeans) throws IllegalAccessException, IllegalArgumentException, ClassNotFoundException,
-            InstantiationException, InvocationTargetException {
+    private void processBean(Object objBean, HashSet visitedBeans)
+            throws IllegalAccessException, IllegalArgumentException, ClassNotFoundException, InstantiationException, InvocationTargetException {
         Class tmpClass = objBean.getClass();
         Field[] classFields = null;
         while (tmpClass != null && tmpClass != baseBeanClass && tmpClass != Object.class) {
@@ -120,8 +120,8 @@ public class DetachedHqlService extends DelegatingHqlService {
         }
     }
 
-    private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans) throws ClassNotFoundException, IllegalArgumentException,
-            IllegalAccessException, InstantiationException, InvocationTargetException {
+    private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans)
+            throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException {
         boolean accessModifierFlag = false;
         for (Field classField : classFields) {
             Field field = classField;

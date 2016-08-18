@@ -16,15 +16,15 @@ import org.tools.hqlbuilder.common.HibernateWebResolver.Property;
 public class PathResolver {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(PathResolver.class);
 
-    final ArrayList<TreeNode> all = new ArrayList<TreeNode>();
+    final ArrayList<TreeNode> all = new ArrayList<>();
 
     TreeNode sourceTreeNode;
 
     TreeNode targetTreeNode;
 
-    final ArrayList<TreeNode> todosCurrentStep = new ArrayList<TreeNode>();
+    final ArrayList<TreeNode> todosCurrentStep = new ArrayList<>();
 
-    final ArrayList<TreeNode> todosFutureStep = new ArrayList<TreeNode>();
+    final ArrayList<TreeNode> todosFutureStep = new ArrayList<>();
 
     public PathResolver(ClassNode sourceNode, ClassNode targetNode) {
         sourceTreeNode = new TreeNode(sourceNode);
@@ -71,7 +71,7 @@ public class PathResolver {
 
         Property property;
 
-        List<TreeNode> children = new ArrayList<TreeNode>();
+        List<TreeNode> children = new ArrayList<>();
 
         boolean init;
 
@@ -104,7 +104,7 @@ public class PathResolver {
         }
 
         public List<TreeNode> resolvePath() {
-            List<TreeNode> path = new ArrayList<TreeNode>();
+            List<TreeNode> path = new ArrayList<>();
             TreeNode current = this;
             path.add(current);
             while (current.parent != null) {

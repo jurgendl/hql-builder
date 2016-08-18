@@ -9,7 +9,7 @@ import org.hibernate.type.Type;
 import org.jhaws.common.lang.ObjectWrapper;
 
 public class AdditionalSqlFunctionsPostProcessor implements ConfigurationPostProcessor {
-    private Map<String, String> standardSQLFunctions = new HashMap<String, String>();
+    private Map<String, String> standardSQLFunctions = new HashMap<>();
 
     private Map<String, Type> types;
 

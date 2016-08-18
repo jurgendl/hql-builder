@@ -80,15 +80,15 @@ public class HqlWizard {
 
     protected ETable<Row> table;
 
-    protected final ETableHeaders<Row> headers = new ETableHeaders<Row>();
+    protected final ETableHeaders<Row> headers = new ETableHeaders<>();
 
     protected final HqlWizardListener listener;
 
     protected final JFrame parent;
 
-    protected final Map<String, Integer> aliasUses = new HashMap<String, Integer>();
+    protected final Map<String, Integer> aliasUses = new HashMap<>();
 
-    protected final List<String> orderedFields = new ArrayList<String>();
+    protected final List<String> orderedFields = new ArrayList<>();
 
     protected final HibernateWebResolver meta;
 
@@ -109,7 +109,7 @@ public class HqlWizard {
             queryBuilder.setIconImage(parent.getIconImage());
         }
         ETableConfig cfg = new ETableConfig(true);
-        table = new ETable<Row>(cfg);
+        table = new ETable<>(cfg);
         headers.add("collection", Boolean.class, false);
         headers.add("class", String.class, false);
         headers.add("parent", String.class, false);
@@ -225,7 +225,7 @@ public class HqlWizard {
     }
 
     public List<Row> getRows() {
-        List<Row> rows = new ArrayList<Row>();
+        List<Row> rows = new ArrayList<>();
         for (int j = 0; j < table.getRowCount(); j++) {
             ETableRecord<Row> record = table.getRecordAtVisualRow(j);
             rows.add(record.getBean());
@@ -262,7 +262,7 @@ public class HqlWizard {
 
         if (targetNode == null) {
             if (addSingleRow) {
-                table.addRecord(new ETableRecordBean<Row>(orderedFields, sourceRow));
+                table.addRecord(new ETableRecordBean<>(orderedFields, sourceRow));
             }
             return;
         }
@@ -314,7 +314,7 @@ public class HqlWizard {
         Option<ClassNode>[] options = new Option[tmp.size()];
         int i = 0;
         for (ClassNode cn : tmp) {
-            options[i++] = new Option<ClassNode>(cn.getType().getSimpleName(), cn);
+            options[i++] = new Option<>(cn.getType().getSimpleName(), cn);
         }
         Arrays.sort(options);
         initialTarget = ClientUtils.showDialog(parent, HqlResourceBundle.getMessage("target class"), options);
@@ -324,7 +324,7 @@ public class HqlWizard {
     protected Row selectSource() {
         Row initialSelected;
         {
-            final SortedSet<Row> options = new TreeSet<Row>();
+            final SortedSet<Row> options = new TreeSet<>();
             for (ClassNode node : meta.getClasses()) {
                 String classname = node.getId();
                 try {
@@ -348,7 +348,7 @@ public class HqlWizard {
         Row row = new Row(first.value.getType().getSimpleName());
         row.alias = Character.toLowerCase(row.path.charAt(0)) + row.path.substring(1);
         row.type = first.value.getType();
-        table.addRecord(new ETableRecordBean<Row>(orderedFields, row));
+        table.addRecord(new ETableRecordBean<>(orderedFields, row));
 
         while (iterator.hasNext()) {
             TreeNode next = iterator.next();
@@ -357,7 +357,7 @@ public class HqlWizard {
             row2.type = next.value.getType();
             row2.collection = next.property.isCollection();
             row2.setParentRef(row);
-            table.addRecord(new ETableRecordBean<Row>(orderedFields, row2));
+            table.addRecord(new ETableRecordBean<>(orderedFields, row2));
             row = row2;
         }
     }

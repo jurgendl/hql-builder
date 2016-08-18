@@ -48,8 +48,8 @@ public class HqlBuilderAction extends Action implements HasParentComponent {
     }
 
     public <T> HqlBuilderAction(JComponent component, Object source, String method, boolean enabled, String name, Object iconResourcePath,
-            String shortDescription, String longDescription, Boolean selected, Character mnemonic, String accelerator, String parentId,
-            Class<T> type, T value) {
+            String shortDescription, String longDescription, Boolean selected, Character mnemonic, String accelerator, String parentId, Class<T> type,
+            T value) {
         super(name, enabled, HqlResourceBundle.getMessage(name), icon(iconResourcePath), HqlResourceBundle.getMessage(shortDescription + ".short"),
                 HqlResourceBundle.getMessage(longDescription + ".long"), selected, mnemonic, accelerator, parentId, type, value);
         this.component = component;
@@ -65,7 +65,7 @@ public class HqlBuilderAction extends Action implements HasParentComponent {
     }
 
     /**
-     * 
+     *
      * @see org.tools.hqlbuilder.client.Action#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
@@ -80,7 +80,7 @@ public class HqlBuilderAction extends Action implements HasParentComponent {
     }
 
     /**
-     * 
+     *
      * @see org.swingeasy.HasParentComponent#getParentComponent()
      */
     @Override

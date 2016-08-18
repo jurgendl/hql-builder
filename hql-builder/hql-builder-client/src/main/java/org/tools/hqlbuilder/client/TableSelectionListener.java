@@ -6,21 +6,21 @@ package org.tools.hqlbuilder.client;
 public interface TableSelectionListener {
     /**
      * row selection veranderd
-     * 
+     *
      * @param row
      */
     public void rowChanged(int row);
 
     /**
      * column selection veranderd
-     * 
+     *
      * @param column
      */
     public void columnChanged(int column);
 
     /**
      * cell selection veranderd
-     * 
+     *
      * @param row
      * @param column
      */

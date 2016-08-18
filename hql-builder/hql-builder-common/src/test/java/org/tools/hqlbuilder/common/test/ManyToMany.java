@@ -23,11 +23,11 @@ public class ManyToMany extends EntityERHAdapter {
         erh.mmSet(MANY_TO_MANY_BACK, manyToManyBack);
     }
 
-	public void addManyToManyBack(ManyToManyBack manyToManyBack) {
+    public void addManyToManyBack(ManyToManyBack manyToManyBack) {
         erh.mmAdd(MANY_TO_MANY_BACK, manyToManyBack);
     }
 
-	public void removeManyToManyBack(ManyToManyBack manyToManyBack) {
+    public void removeManyToManyBack(ManyToManyBack manyToManyBack) {
         erh.mmRemove(MANY_TO_MANY_BACK, manyToManyBack);
     }
 

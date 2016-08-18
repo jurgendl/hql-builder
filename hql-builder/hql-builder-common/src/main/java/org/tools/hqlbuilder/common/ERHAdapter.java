@@ -27,6 +27,6 @@ public abstract class ERHAdapter implements Serializable {
     }
 
     protected void initERH() {
-        erh = new EntityRelationHelper<ERHAdapter>(this);
+        erh = new EntityRelationHelper<>(this);
     }
 }

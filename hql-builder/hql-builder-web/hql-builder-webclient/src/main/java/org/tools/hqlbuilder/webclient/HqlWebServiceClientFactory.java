@@ -11,10 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
@@ -47,6 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.tools.hqlbuilder.webcommon.ResteasyProvidersBean;
+
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 
 public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, InitializingBean {
     protected final Logger logger;
@@ -202,8 +202,8 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         Class<?>[] parameterTypes = method.getParameterTypes();
         UriBuilder uriBuilder = UriBuilder.fromUri(URI.create(getServiceUrl())).path(getResourceClass()).path(method);
-        List<Object> notAcceptedParameters = new ArrayList<Object>(Arrays.asList(args));
-        Map<String, Object> templateValues = new HashMap<String, Object>();
+        List<Object> notAcceptedParameters = new ArrayList<>(Arrays.asList(args));
+        Map<String, Object> templateValues = new HashMap<>();
         for (int i = 0; i < parameterTypes.length; i++) {
             logger.debug("parameter: " + parameterTypes[i].getName() + " " + args[i]);
             logger.debug("parameter-annotations: " + Arrays.toString(parameterAnnotations[i]));

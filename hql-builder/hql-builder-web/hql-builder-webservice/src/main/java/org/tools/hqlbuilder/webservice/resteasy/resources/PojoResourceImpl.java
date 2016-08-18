@@ -64,7 +64,7 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<SortedSet<String>> getClasses() {
-        return new XmlWrapper<SortedSet<String>>(getService().getClasses());
+        return new XmlWrapper<>(getService().getClasses());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<List<String>> getProperties(String classname) {
-        return new XmlWrapper<List<String>>(getService().getProperties(classname));
+        return new XmlWrapper<>(getService().getProperties(classname));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class PojoResourceImpl implements PojoResource {
     @Override
     public XmlWrapper<List<String>> search(String text, String typeName, int hitsPerPage) {
         try {
-            return new XmlWrapper<List<String>>(getService().search(text, typeName, hitsPerPage));
+            return new XmlWrapper<>(getService().search(text, typeName, hitsPerPage));
         } catch (UnsupportedOperationException ex) {
             throw new RuntimeException(ex);
         } catch (IOException ex) {
@@ -100,12 +100,12 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<Set<String>> getReservedKeywords() {
-        return new XmlWrapper<Set<String>>(getService().getReservedKeywords());
+        return new XmlWrapper<>(getService().getReservedKeywords());
     }
 
     @Override
     public XmlWrapper<Map<String, String>> getNamedQueries() {
-        return new XmlWrapper<Map<String, String>>(getService().getNamedQueries());
+        return new XmlWrapper<>(getService().getNamedQueries());
     }
 
     @Override
@@ -115,7 +115,7 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<Map<String, String>> getHibernateInfo() {
-        return new XmlWrapper<Map<String, String>>(getService().getHibernateInfo());
+        return new XmlWrapper<>(getService().getHibernateInfo());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<List<String>> getPropertyNames(String key, String[] parts) {
-        return new XmlWrapper<List<String>>(getService().getPropertyNames(key, parts));
+        return new XmlWrapper<>(getService().getPropertyNames(key, parts));
     }
 
     @Override
@@ -145,13 +145,13 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public XmlWrapper<List<QueryParameter>> findParameters(String hql) {
-        return new XmlWrapper<List<QueryParameter>>(getService().findParameters(hql));
+        return new XmlWrapper<>(getService().findParameters(hql));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Serializable, I extends Serializable> XmlWrapper<I> save(String pojo, XmlWrapper<T> object) {
-        return new XmlWrapper<I>((I) getService().save(object.getValue()));
+        return new XmlWrapper<>((I) getService().save(object.getValue()));
     }
 
     @Override

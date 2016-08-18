@@ -40,7 +40,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             "order by" };
 
     /** when cleaning up HQL: replace key by value */
-    private Map<String, String> hqlReplacers = new HashMap<String, String>();
+    private Map<String, String> hqlReplacers = new HashMap<>();
 
     public HqlService getHqlService() {
         return hqlService;
@@ -108,7 +108,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         }
 
         // maakt replacers aan
-        HashMap<String, String> replacers = new HashMap<String, String>();
+        HashMap<String, String> replacers = new HashMap<>();
 
         // vervang tabel_?_?_ door tabelnamen in "from ..." en "... join ..."
         // vervang replacers
@@ -135,7 +135,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                     }
                 }
 
-				@SuppressWarnings("deprecation")
+                @SuppressWarnings("deprecation")
                 int existing = CollectionUtils.cardinality(replaceBy, replacers.values());
 
                 if (existing > 0) {
@@ -153,7 +153,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         // vervang (1) door (2) om geen dubbels te hebben
         // (1) tabel_?_?_=tabelnaamY EN tabel_?_=tabelnaamX
         // (2) tabel_?_?_=tabelnaamX_tabelnaamY EN tabel_?_=tabelnaamX
-        List<String> hqlReplacerMap = new ArrayList<String>();
+        List<String> hqlReplacerMap = new ArrayList<>();
 
         for (Map.Entry<String, String> replacer : replacers.entrySet()) {
             for (Map.Entry<String, String> replacerOther : replacers.entrySet()) {
@@ -174,7 +174,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         }
 
         // sorteer replacers op langste eerst
-        List<String> keys = new ArrayList<String>(replacers.keySet());
+        List<String> keys = new ArrayList<>(replacers.keySet());
         Collections.sort(keys, (o1, o2) -> {
             if (o1.length() < o2.length()) {
                 return 1;
@@ -224,9 +224,8 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
         sqlString = removeBlanks(sqlString);
 
-        
-		@SuppressWarnings("unused")
-		String[] sqlStringParts = sqlString.split(getNewline());
+        @SuppressWarnings("unused")
+        String[] sqlStringParts = sqlString.split(getNewline());
 
         String[] lines = sqlString.split(getNewline());
 
@@ -259,8 +258,8 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         // logger.debug(sqlString);
 
         try {
-            sqlString = CommonUtils
-                    .call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class, sqlString);
+            sqlString = CommonUtils.call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class,
+                    sqlString);
         } catch (Throwable ex) {
             if (!warn1) {
                 warn1 = true;
@@ -269,8 +268,8 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         }
 
         try {
-            sqlString = CommonUtils.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
-                    String.class, sqlString);
+            sqlString = CommonUtils.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format", String.class,
+                    sqlString);
         } catch (Throwable ex) {
             if (!warn2) {
                 warn2 = true;
@@ -388,7 +387,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
     public void cleanupSqlTest() {
         String q = "select Table0_.Id as Id4_0_ from Table Table0_ inner join SuperTable SuperTable0_1_ on Table0_.Id=SuperTable0_1_.Id inner join OtherTable OtherTable1_ on Table0_.OtherTableId=OtherTable1_.Id inner join SuperTable SuperTable1_1_ on OtherTable1_.Id=SuperTable1_1_.Id inner join ParentTable ParentTable3_1_ on ParentTable3_1_.Id=OtherTable1_.Id";
         HqlServiceClientImpl sq = new HqlServiceClientImpl();
-        sq.setHqlReplacers(new HashMap<String, String>(Collections.singletonMap("SuperTable", "STx")));
+        sq.setHqlReplacers(new HashMap<>(Collections.singletonMap("SuperTable", "STx")));
         logger.debug(q);
         String qq;
         {

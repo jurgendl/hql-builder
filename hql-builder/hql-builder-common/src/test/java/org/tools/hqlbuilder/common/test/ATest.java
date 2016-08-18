@@ -6,7 +6,6 @@ import javax.persistence.ManyToOne;
 
 import org.tools.hqlbuilder.common.EntityERHAdapter;
 
-
 public class ATest extends EntityERHAdapter {
     private static final long serialVersionUID = 5702705685072114348L;
 

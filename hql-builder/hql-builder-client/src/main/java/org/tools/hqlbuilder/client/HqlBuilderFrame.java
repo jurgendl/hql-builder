@@ -179,10 +179,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             if (map.startsWith("{") && map.endsWith("}")) {
                 map = map.substring(1, map.length() - 1);
             } else {
-                return new ArrayList<QueryParameter>();
+                return new ArrayList<>();
             }
         }
-        List<String> parts = new ArrayList<String>();
+        List<String> parts = new ArrayList<>();
         String splitted = null;
         for (String part : map.split(",")) {
             part = part.trim();
@@ -198,7 +198,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
             }
         }
-        List<QueryParameter> qps = new ArrayList<QueryParameter>();
+        List<QueryParameter> qps = new ArrayList<>();
         for (int i = 0; i < parts.size(); i++) {
             String el = parts.get(i).trim();
             try {
@@ -611,7 +611,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final ELabel maxResults;
 
-    private final EFormattedTextField<Integer> startResults = new EFormattedTextField<Integer>(
+    private final EFormattedTextField<Integer> startResults = new EFormattedTextField<>(
             new EFormattedTextFieldConfig(new NumberFormatBuilder(NumberFormatBuilder.Type.Integer)), 0);
 
     private final EButton nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" > ") {
@@ -633,20 +633,20 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }));
 
-    private final LinkedList<QueryFavorite> favorites = new LinkedList<QueryFavorite>();
+    private final LinkedList<QueryFavorite> favorites = new LinkedList<>();
 
     private final JComponent values = ClientUtils.getPropertyFrame(new Serializable() {
         private static final long serialVersionUID = 1L;
     }, false);
 
     /** aliases query */
-    private Map<String, String> aliases = new HashMap<String, String>();
+    private Map<String, String> aliases = new HashMap<>();
 
     /** selected query parameter */
     private QueryParameter selectedQueryParameter = new QueryParameter();
 
     /** scripts being executed on column */
-    private Map<Integer, String> scripts = new HashMap<Integer, String>();
+    private Map<Integer, String> scripts = new HashMap<>();
 
     /** record count query */
     private int recordCount = 0;
@@ -696,7 +696,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private EComponentGradientRenderer backgroundRenderer = new EComponentGradientRenderer(EComponentGradientRenderer.GradientOrientation.VERTICAL,
             Color.white, new Color(212, 212, 212));
 
-    private final List<Highlighter.Highlight> errorLocs = new ArrayList<Highlighter.Highlight>();
+    private final List<Highlighter.Highlight> errorLocs = new ArrayList<>();
 
     private String errorString;
 
@@ -973,7 +973,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void addLast(String name) throws IOException {
-        List<QueryParameter> qps = new ArrayList<QueryParameter>();
+        List<QueryParameter> qps = new ArrayList<>();
         for (EListRecord<QueryParameter> qp : this.parametersEDT.getRecords()) {
             qps.add(qp.get());
         }
@@ -987,7 +987,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void addTableSelectionListener(final ETable<?> table, final TableSelectionListener listener) {
-        final HashMap<String, Integer> map = new HashMap<String, Integer>();
+        final HashMap<String, Integer> map = new HashMap<>();
         map.put(HqlBuilderFrameConstants.ROW, -1);
         map.put(HqlBuilderFrameConstants.COL, -1);
         table.getSelectionModel().addListSelectionListener(e -> {
@@ -1014,23 +1014,23 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         List<?> list = rv.getResults() == null ? null : rv.getResults().getValue();
         ETableHeaders<List<Object>> headers = null;
 
-        List<ETableRecord<List<Object>>> records = new ArrayList<ETableRecord<List<Object>>>();
+        List<ETableRecord<List<Object>>> records = new ArrayList<>();
         if (list != null) {
             for (Object o : list) {
                 ETableRecordCollection<Object> record = null;
                 List<Object> recordItems;
 
                 if (o instanceof Object[]) {
-                    recordItems = new ArrayList<Object>(Arrays.asList((Object[]) o));
+                    recordItems = new ArrayList<>(Arrays.asList((Object[]) o));
                 } else if (o instanceof Collection<?>) {
                     @SuppressWarnings("unchecked")
                     Collection<Object> o2 = (Collection<Object>) o;
-                    recordItems = new ArrayList<Object>(o2);
+                    recordItems = new ArrayList<>(o2);
                 } else {
-                    recordItems = new ArrayList<Object>(Collections.singleton(o));
+                    recordItems = new ArrayList<>(Collections.singleton(o));
                 }
 
-                record = new ETableRecordCollection<Object>(recordItems);
+                record = new ETableRecordCollection<>(recordItems);
 
                 if (rowProcessor != null) {
                     rowProcessor.process(record.getBean());
@@ -1038,7 +1038,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
 
                 if (headers == null) {
-                    headers = new ETableHeaders<List<Object>>();
+                    headers = new ETableHeaders<>();
 
                     for (int i = 0; i < record.size(); i++) {
                         boolean script = this.scripts.get(i) != null;
@@ -1664,7 +1664,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     public void find_parameters() {
         this.parametersEDT.removeAllRecords();
         for (QueryParameter p : this.hqlService.findParameters(this.getHqlText())) {
-            this.parametersEDT.addRecord(new EListRecord<QueryParameter>(p));
+            this.parametersEDT.addRecord(new EListRecord<>(p));
         }
     }
 
@@ -1823,13 +1823,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (this.insertHelper == null) {
             this.insertHelper = new JPopupMenu();
 
-            EList<String> list = new EList<String>(new EListConfig());
+            EList<String> list = new EList<>(new EListConfig());
             this.insertHelperList = this.font(list, null);
 
             JScrollPane scroll = new JScrollPane(this.insertHelperList);
             this.insertHelper.add(scroll);
 
-            TreeSet<String> options = new TreeSet<String>();
+            TreeSet<String> options = new TreeSet<>();
 
             for (HibernateWebResolver.ClassNode node : this.getHibernateWebResolver().getClasses()) {
                 String clazz = node.getId();
@@ -1838,7 +1838,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
 
             for (String option : options) {
-                list.addRecord(new EListRecord<String>(option));
+                list.addRecord(new EListRecord<>(option));
             }
 
             Dimension size = new Dimension(500, 200);
@@ -1867,7 +1867,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (this.insertClassHelper == null) {
             this.insertClassHelper = new JPopupMenu();
 
-            this.insertPropertyHelper = new EList<String>(new EListConfig());
+            this.insertPropertyHelper = new EList<>(new EListConfig());
 
             JScrollPane scroll = new JScrollPane(this.insertPropertyHelper);
             this.insertClassHelper.add(scroll);
@@ -1994,9 +1994,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         this.insertPropertyHelper.removeAllRecords();
 
-        for (String prop : new TreeSet<String>(propertyNames)) {
+        for (String prop : new TreeSet<>(propertyNames)) {
             if (!prop.startsWith("_")) {
-                this.insertPropertyHelper.addRecord(new EListRecord<String>(prop));
+                this.insertPropertyHelper.addRecord(new EListRecord<>(prop));
             }
         }
 
@@ -2096,7 +2096,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             return;
         }
 
-        LinkedList<int[]> pos = new LinkedList<int[]>();
+        LinkedList<int[]> pos = new LinkedList<>();
 
         for (String kw : this.getReservedKeywords()) {
             this.syntaxHi(pos, kw);
@@ -2106,7 +2106,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         String hqltext = this.hql.getText().toLowerCase();
 
-        Iterator<int[]> iterator = new ArrayList<int[]>(pos).iterator();
+        Iterator<int[]> iterator = new ArrayList<>(pos).iterator();
 
         if (iterator.hasNext()) {
             int[] pair1 = iterator.next();
@@ -2132,7 +2132,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void hilightSyntaxException(SyntaxExceptionType syntaxExceptionType, String wrong, int line, int col) {
         this.hql.removeHighlights(this.syntaxErrorsHighlight);
         String hqltext = this.hql.getText();
-        ArrayList<Integer> poss = new ArrayList<Integer>();
+        ArrayList<Integer> poss = new ArrayList<>();
         switch (syntaxExceptionType) {
             case illegal_attempt_to_dereference_collection: {
                 wrong = wrong.substring(Math.max(0, 1 + Math.max(wrong.lastIndexOf('.'), wrong.lastIndexOf('{')))).replace('#', '.');
@@ -2209,7 +2209,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
                 List<Highlight> before = Arrays.asList(this.hql.getHighlighter().getHighlights());
                 this.hql.addHighlight(pos, pos + wrong.length(), this.syntaxErrorsHighlight);
-                List<Highlight> after = new ArrayList<Highlighter.Highlight>(Arrays.asList(this.hql.getHighlighter().getHighlights()));
+                List<Highlight> after = new ArrayList<>(Arrays.asList(this.hql.getHighlighter().getHighlights()));
                 after.removeAll(before);
                 this.errorLocs.addAll(after);
             } catch (Exception ex) {
@@ -2266,7 +2266,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
             }
             if (!exists) {
-                this.parametersEDT.addRecord(new EListRecord<QueryParameter>(qp));
+                this.parametersEDT.addRecord(new EListRecord<>(qp));
             }
         }
     }
@@ -2286,7 +2286,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     Object val = GroovyCompiler.eval(valueText);
                     p.setValueTypeText(val).setValueText(valueText);
                 }
-                this.parametersEDT.addRecord(new EListRecord<QueryParameter>(p));
+                this.parametersEDT.addRecord(new EListRecord<>(p));
             }
         }
     }
@@ -2338,14 +2338,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void load_named_query() {
         final Map<String, String> namedQueries = this.hqlService.getNamedQueries();
-        final EList<String> list = new EList<String>(new EListConfig());
-        list.addRecords(EList.convert(new TreeSet<String>(namedQueries.keySet())));
+        final EList<String> list = new EList<>(new EListConfig());
+        list.addRecords(EList.convert(new TreeSet<>(namedQueries.keySet())));
         JPanel container = new JPanel(new BorderLayout());
         container.add(new JScrollPane(list), BorderLayout.CENTER);
         container.add(list.getSearchComponent(), BorderLayout.NORTH);
         if (ResultType.OK == CustomizableOptionPane.showCustomDialog(this.hql, container,
                 HqlResourceBundle.getMessage(HqlBuilderFrameConstants.LOAD_NAMED_QUERY), MessageType.QUESTION, OptionType.OK_CANCEL, null,
-                new ListOptionPaneCustomizer<String>(list))) {
+                new ListOptionPaneCustomizer<>(list))) {
             if (list.getSelectedRecord() != null) {
                 this.clear();
                 this.hql.setText(namedQueries.get(list.getSelectedRecord().get()));
@@ -2589,7 +2589,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
         if (!contains) {
-            EListRecord<QueryParameter> record = new EListRecord<QueryParameter>(this.selectedQueryParameter);
+            EListRecord<QueryParameter> record = new EListRecord<>(this.selectedQueryParameter);
             this.parametersEDT.addRecord(record);
             this.parametersEDT.setSelectedRecord(record);
         }
@@ -2673,7 +2673,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 new JScrollPane(this.sql, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS));
 
         {
-            EList<String> searchresults = new EList<String>(new EListConfig().setBackgroundRenderer(this.backgroundRenderer).setSortable(false));
+            EList<String> searchresults = new EList<>(new EListConfig().setBackgroundRenderer(this.backgroundRenderer).setSortable(false));
             searchresults.setFixedCellHeight(20);
             final EList<String> searchresultsEDTSafe = searchresults.stsi();
             final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
@@ -2959,7 +2959,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("language"));
                 ButtonGroup lanGroup = new ButtonGroup();
 
-                List<Locale> locales = new ArrayList<Locale>();
+                List<Locale> locales = new ArrayList<>();
 
                 for (Locale locale : Locale.getAvailableLocales()) {
                     URL bundle = HqlBuilderFrame.class.getClassLoader().getResource("HqlResourceBundle_" + locale + ".properties");
@@ -2994,8 +2994,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     lanMenu.addActionListener(e -> {
                         // SystemSettings.setCurrentLocale(loc);
                         HqlBuilderFrame.this.preferences.put(HqlBuilderFrameConstants.PERSISTENT_LOCALE, loc.toString());
-                        JOptionPane.showMessageDialog(HqlBuilderFrame.this.frame, HqlResourceBundle.getMessage("change visible after restart"),
-                                "", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(HqlBuilderFrame.this.frame, HqlResourceBundle.getMessage("change visible after restart"), "",
+                                JOptionPane.INFORMATION_MESSAGE);
                     });
                 }
 

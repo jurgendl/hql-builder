@@ -23,11 +23,11 @@ public class SimpleManyToMany extends EntityERHAdapter {
         erh.simpleSet(DUMMY, dummy);
     }
 
-	public void addDummy(Dummy dummy) {
+    public void addDummy(Dummy dummy) {
         erh.simpleAdd(DUMMY, dummy);
     }
 
-	public void removeDummy(Dummy dummy) {
+    public void removeDummy(Dummy dummy) {
         erh.simpleRemove(DUMMY, dummy);
     }
 

@@ -76,7 +76,7 @@ public class PropertyPanel extends PropertySheetPanel {
     @SuppressWarnings("unused")
     private Boolean settingValue = false;
 
-    private final SortedMap<String, PropertyDescriptor> propertyDescriptors = new TreeMap<String, PropertyDescriptor>();
+    private final SortedMap<String, PropertyDescriptor> propertyDescriptors = new TreeMap<>();
 
     private HqlService hqlService;
 
@@ -651,12 +651,14 @@ public class PropertyPanel extends PropertySheetPanel {
                 for (InvalidValue iv : ex.getInvalidValues()) {
                     sb.append("\u2022 ").append(iv.getPropertyName()).append(" ").append(iv.getMessage()).append("\n");
                 }
-                EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(PropertyPanel.this, HqlResourceBundle.getMessage("propertypanel.edit.error") + ":\n" + sb,
-                        HqlResourceBundle.getMessage("propertypanel.edit.title"), JOptionPane.ERROR_MESSAGE));
+                EventQueue.invokeLater(
+                        () -> JOptionPane.showMessageDialog(PropertyPanel.this, HqlResourceBundle.getMessage("propertypanel.edit.error") + ":\n" + sb,
+                                HqlResourceBundle.getMessage("propertypanel.edit.title"), JOptionPane.ERROR_MESSAGE));
             } catch (final Exception ex) {
                 ex.printStackTrace();
-                EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(PropertyPanel.this, HqlResourceBundle.getMessage("propertypanel.edit.error") + ":\n" + ex,
-                        HqlResourceBundle.getMessage("propertypanel.edit.title"), JOptionPane.ERROR_MESSAGE));
+                EventQueue.invokeLater(
+                        () -> JOptionPane.showMessageDialog(PropertyPanel.this, HqlResourceBundle.getMessage("propertypanel.edit.error") + ":\n" + ex,
+                                HqlResourceBundle.getMessage("propertypanel.edit.title"), JOptionPane.ERROR_MESSAGE));
             } finally {
                 settingValue = false;
             }

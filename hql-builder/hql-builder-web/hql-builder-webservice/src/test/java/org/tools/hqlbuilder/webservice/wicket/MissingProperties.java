@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
-import org.tools.hqlbuilder.webservice.wicket.WicketApplication;
-
 public class MissingProperties {
     public static void main(String[] args) {
         try {

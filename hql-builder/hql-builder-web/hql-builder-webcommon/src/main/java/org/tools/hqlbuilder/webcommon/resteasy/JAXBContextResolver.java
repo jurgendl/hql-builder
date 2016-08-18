@@ -21,7 +21,7 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 
     protected JAXBContext jaxbContext;
 
-    protected Set<String> packages = new HashSet<String>();
+    protected Set<String> packages = new HashSet<>();
 
     public JAXBContextResolver(String... packages) {
         try {

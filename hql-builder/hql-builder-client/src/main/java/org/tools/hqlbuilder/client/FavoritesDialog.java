@@ -29,22 +29,22 @@ public class FavoritesDialog extends JDialog {
 
     private QueryFavorite selection = null;
 
-    private ETable<QueryFavorite> table = new ETable<QueryFavorite>(new ETableConfig(true));
+    private ETable<QueryFavorite> table = new ETable<>(new ETableConfig(true));
 
     public FavoritesDialog(JFrame frame, final LinkedList<QueryFavorite> favorites) {
         super(frame);
         setModal(true);
         getContentPane().setLayout(new BorderLayout());
-        ETableHeaders<QueryFavorite> headers = new ETableHeaders<QueryFavorite>();
+        ETableHeaders<QueryFavorite> headers = new ETableHeaders<>();
         headers.add(HqlResourceBundle.getMessage("name"));
         headers.add(HqlResourceBundle.getMessage("parametersPreview"));
         headers.add(HqlResourceBundle.getMessage("hqlPreview"));
-        List<String> orderedFields = new ArrayList<String>();
+        List<String> orderedFields = new ArrayList<>();
         orderedFields.add("name");
         orderedFields.add("parametersPreview");
         orderedFields.add("hqlPreview");
         for (QueryFavorite favorite : favorites) {
-            table.addRecord(new ETableRecordBean<QueryFavorite>(orderedFields, favorite));
+            table.addRecord(new ETableRecordBean<>(orderedFields, favorite));
         }
         table.setHeaders(headers);
         table.addMouseListener(new MouseAdapter() {

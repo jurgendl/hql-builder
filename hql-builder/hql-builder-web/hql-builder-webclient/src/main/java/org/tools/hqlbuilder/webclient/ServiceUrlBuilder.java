@@ -130,7 +130,7 @@ public class ServiceUrlBuilder {
 
     public List<String[]> getEndPoints() {
         if (endPoints == null) {
-            endPoints = new ArrayList<String[]>();
+            endPoints = new ArrayList<>();
             try {
                 MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
                 Set<ObjectName> objs = mbs.queryNames(new ObjectName("*:type=Connector,*"),

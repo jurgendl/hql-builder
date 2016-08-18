@@ -10,7 +10,7 @@ import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationException;
 public class EntityRelationTest extends org.junit.Assert {
     @Test
     public void test() {
-        new EntityRelationHelper<Dummy>(new Dummy()).toString();
+        new EntityRelationHelper<>(new Dummy()).toString();
     }
 
     @Test
