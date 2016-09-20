@@ -20,9 +20,9 @@ import javax.ws.rs.core.StreamingOutput;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
+import org.jhaws.common.jaxb.XmlWrapper;
 import org.jhaws.common.web.resteasy.Pretty;
 import org.jhaws.common.web.resteasy.RestResource;
-import org.jhaws.common.web.xml.XmlWrapper;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
 import org.tools.hqlbuilder.common.QueryParameter;

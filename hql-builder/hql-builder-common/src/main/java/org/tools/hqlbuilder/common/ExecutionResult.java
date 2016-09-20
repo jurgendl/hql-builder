@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.jhaws.common.web.xml.XmlWrapper;
+import org.jhaws.common.jaxb.XmlWrapper;
 
 @XmlRootElement(name = "result")
 public class ExecutionResult implements Serializable {

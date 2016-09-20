@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.jhaws.common.web.xml.adapters.ClassAdapter;
+import org.jhaws.common.jaxb.adapters.ClassAdapter;
 
 @XmlRootElement
 public class HibernateWebResolver implements Serializable {

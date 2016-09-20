@@ -12,7 +12,7 @@ import java.util.SortedSet;
 import javax.annotation.Resource;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.jhaws.common.web.xml.XmlWrapper;
+import org.jhaws.common.jaxb.XmlWrapper;
 import org.springframework.stereotype.Component;
 import org.tools.hqlbuilder.common.DetachedHqlService;
 import org.tools.hqlbuilder.common.ExecutionResult;
