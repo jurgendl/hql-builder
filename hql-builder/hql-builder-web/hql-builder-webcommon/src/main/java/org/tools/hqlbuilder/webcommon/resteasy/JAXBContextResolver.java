@@ -7,34 +7,31 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+
+import org.jhaws.common.io.jaxb.ThreadLocalMarshalling;
 
 /**
  * <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder..."/>
  */
 @Provider
-@Produces({ "text/*+xml", "application/*+xml" })
+@Produces({ "text/*+xml", "application/*+xml", "text/xml", "application/xml" })
 public class JAXBContextResolver implements ContextResolver<JAXBContext> {
     protected static final char SEPERATOR = ':';
 
     protected static final String DEFAULT_PACKAGE = "org.tools.hqlbuilder.common";
 
-    protected JAXBContext jaxbContext;
+    protected ThreadLocalMarshalling jaxbContext;
 
     protected Set<String> packages = new HashSet<>();
 
     public JAXBContextResolver(String... packages) {
-        try {
             StringBuilder packagesstring = new StringBuilder(DEFAULT_PACKAGE);
             this.packages.add(DEFAULT_PACKAGE);
             for (String pack : packages) {
                 this.packages.add(pack);
                 packagesstring.append(SEPERATOR).append(pack);
             }
-            jaxbContext = JAXBContext.newInstance(packagesstring.toString());
-        } catch (JAXBException ex) {
-            throw new RuntimeException(ex);
-        }
+        jaxbContext = new ThreadLocalMarshalling(packagesstring.toString());
     }
 
     /**
@@ -45,7 +42,7 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
         String packname = type.getPackage().getName();
         for (String pack : packages) {
             if (packname.startsWith(pack)) {
-                return jaxbContext;
+                return jaxbContext.getJaxbContext();
             }
         }
         return null;

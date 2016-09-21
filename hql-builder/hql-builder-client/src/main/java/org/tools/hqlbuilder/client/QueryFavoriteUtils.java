@@ -10,18 +10,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
-import javax.xml.bind.Unmarshaller;
 
+import org.jhaws.common.io.jaxb.ThreadLocalMarshalling;
 import org.slf4j.LoggerFactory;
 
 public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QueryFavoriteUtils.class);
 
-    private static JAXBContext jaxbContext;
+    private static ThreadLocalMarshalling jaxbContext;
 
     private static File[] convertV1ToV2(File[] xmls) {
         List<File> files = new ArrayList<>();
@@ -40,21 +38,12 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                 return null;
             }
             QueryFavorite favorite;
-            {
-                FileInputStream is = new FileInputStream(xml);
-                XMLDecoder dec = new XMLDecoder(is);
-                favorite = (QueryFavorite) dec.readObject();
-                is.close();
-                dec.close();
+            try (FileInputStream is = new FileInputStream(xml); XMLDecoder dec = new XMLDecoder(is)) {
+                favorite = QueryFavorite.class.cast(dec.readObject());
             }
-            File file;
-            {
-                Marshaller jaxbMarshaller = getJaxbcontext().createMarshaller();
-                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                file = new File(xml.getParentFile(), HqlBuilderFrameConstants.FAVORITE_PREFIX + xml.getName());
-                FileOutputStream os = new FileOutputStream(file);
-                jaxbMarshaller.marshal(favorite, os);
-                os.close();
+            File file = new File(xml.getParentFile(), HqlBuilderFrameConstants.FAVORITE_PREFIX + xml.getName());
+            try (FileOutputStream os = new FileOutputStream(file)) {
+                getJaxbcontext().marshall(favorite, os);
             }
             xml.delete();
             return file;
@@ -64,9 +53,10 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
         }
     }
 
-    private static JAXBContext getJaxbcontext() throws JAXBException {
+    private static ThreadLocalMarshalling getJaxbcontext() throws JAXBException {
         if (jaxbContext == null) {
-            jaxbContext = JAXBContext.newInstance(QueryFavorite.class);
+            jaxbContext = new ThreadLocalMarshalling(QueryFavorite.class);
+            jaxbContext.setFormatOutput(true);
         }
         return jaxbContext;
     }
@@ -80,9 +70,7 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
         FileOutputStream os = null;
         try {
             os = new FileOutputStream(xmlhistory);
-            Marshaller jaxbMarshaller = getJaxbcontext().createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(favorite, os);
+            getJaxbcontext().marshall(favorite, os);
         } catch (IOException ex) {
             logger.error("", ex);
         } catch (JAXBException ex) {
@@ -112,27 +100,12 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
         QueryFavorite last = null;
         File _xml = null;
         try {
-            Unmarshaller jaxbUnmarshaller = getJaxbcontext().createUnmarshaller();
             for (File xml : xmls) {
                 _xml = xml;
                 logger.info("favorite {}", xml);
                 try {
-                    FileInputStream is = new FileInputStream(xml);
-                    QueryFavorite favorite = (QueryFavorite) jaxbUnmarshaller.unmarshal(is);
-                    is.close();
-                    if (favorites.contains(favorite)) {
-                        favorites.remove(favorites.indexOf(favorite));
-                    }
-                    favorites.add(favorite);
-                    if (xml.getName().equals(FAVORITE_PREFIX + LAST + FAVORITES_EXT)) {
-                        last = favorite;
-                    }
-                } catch (UnmarshalException ex) {
-                    try {
-                        QueryFavoriteUtils.convertV2ToV3(xml);
-                        FileInputStream is = new FileInputStream(xml);
-                        QueryFavorite favorite = (QueryFavorite) jaxbUnmarshaller.unmarshal(is);
-                        is.close();
+                    try (FileInputStream is = new FileInputStream(xml)) {
+                        QueryFavorite favorite = getJaxbcontext().<QueryFavorite> unmarshall(is);
                         if (favorites.contains(favorite)) {
                             favorites.remove(favorites.indexOf(favorite));
                         }
@@ -140,14 +113,24 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                         if (xml.getName().equals(FAVORITE_PREFIX + LAST + FAVORITES_EXT)) {
                             last = favorite;
                         }
-                    } catch (Exception exx) {
-                        logger.error("{}", xml, exx);
+                    } catch (UnmarshalException ex) {
+                        QueryFavoriteUtils.convertV2ToV3(xml);
+                        try (FileInputStream xmlin = new FileInputStream(xml)) {
+                            QueryFavorite favorite = getJaxbcontext().<QueryFavorite> unmarshall(xmlin);
+                            if (favorites.contains(favorite)) {
+                                favorites.remove(favorites.indexOf(favorite));
+                            }
+                            favorites.add(favorite);
+                            if (xml.getName().equals(FAVORITE_PREFIX + LAST + FAVORITES_EXT)) {
+                                last = favorite;
+                            }
+                        }
                     }
                 } catch (Exception ex) {
                     logger.error("{}", xml, ex);
                 }
             }
-        } catch (JAXBException ex) {
+        } catch (Exception ex) {
             logger.error("{}", _xml, ex);
         }
         return last;
