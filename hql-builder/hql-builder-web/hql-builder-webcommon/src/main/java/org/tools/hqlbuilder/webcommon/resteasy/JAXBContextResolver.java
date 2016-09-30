@@ -8,7 +8,7 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 
-import org.jhaws.common.io.jaxb.ThreadLocalMarshalling;
+import org.jhaws.common.io.jaxb.JAXBMarshalling;
 
 /**
  * <oxm:jaxb2-marshaller contextPath="org.tools.hqlbuilder.common:org.tools.hqlbuilder..."/>
@@ -20,7 +20,7 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 
     protected static final String DEFAULT_PACKAGE = "org.tools.hqlbuilder.common";
 
-    protected ThreadLocalMarshalling jaxbContext;
+    protected JAXBMarshalling jaxbContext;
 
     protected Set<String> packages = new HashSet<>();
 
@@ -31,7 +31,7 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
                 this.packages.add(pack);
                 packagesstring.append(SEPERATOR).append(pack);
             }
-        jaxbContext = new ThreadLocalMarshalling(packagesstring.toString());
+        jaxbContext = new JAXBMarshalling(packagesstring.toString());
     }
 
     /**

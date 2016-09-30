@@ -13,13 +13,13 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
 
-import org.jhaws.common.io.jaxb.ThreadLocalMarshalling;
+import org.jhaws.common.io.jaxb.JAXBMarshalling;
 import org.slf4j.LoggerFactory;
 
 public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(QueryFavoriteUtils.class);
 
-    private static ThreadLocalMarshalling jaxbContext;
+    private static JAXBMarshalling jaxbContext;
 
     private static File[] convertV1ToV2(File[] xmls) {
         List<File> files = new ArrayList<>();
@@ -53,9 +53,9 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
         }
     }
 
-    private static ThreadLocalMarshalling getJaxbcontext() throws JAXBException {
+    private static JAXBMarshalling getJaxbcontext() throws JAXBException {
         if (jaxbContext == null) {
-            jaxbContext = new ThreadLocalMarshalling(QueryFavorite.class);
+            jaxbContext = new JAXBMarshalling(QueryFavorite.class);
             jaxbContext.setFormatOutput(true);
         }
         return jaxbContext;
