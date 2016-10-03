@@ -1850,7 +1850,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     try {
-                        if (EventHelper.isMouse1x1(e)) {
+                        if (EventHelper.isMouse1xMB1(e)) {
                             HqlBuilderFrame.this.insertHelp();
                         }
                     } catch (Exception ex) {
@@ -1880,7 +1880,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     try {
-                        if (EventHelper.isMouse1x1(e)) {
+                        if (EventHelper.isMouse1xMB1(e)) {
                             HqlBuilderFrame.this.insertPropertyHelp();
                         }
                     } catch (Exception ex) {
