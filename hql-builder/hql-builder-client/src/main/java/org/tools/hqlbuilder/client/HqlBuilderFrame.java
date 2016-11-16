@@ -2197,6 +2197,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     pos += lines[i].length() + 1;
                 }
                 pos += col - 1;
+                if (hqltext.length() < pos) {
+                    pos = hqltext.length();
+                }
                 poss.add(pos);
                 break;
             }
