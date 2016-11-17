@@ -105,7 +105,7 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                 logger.info("favorite {}", xml);
                 try {
                     try (FileInputStream is = new FileInputStream(xml)) {
-                        QueryFavorite favorite = getJaxbcontext().<QueryFavorite> unmarshall(is);
+                        QueryFavorite favorite = getJaxbcontext().unmarshall(QueryFavorite.class, is);
                         if (favorites.contains(favorite)) {
                             favorites.remove(favorites.indexOf(favorite));
                         }
@@ -116,7 +116,7 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
                     } catch (UnmarshalException ex) {
                         QueryFavoriteUtils.convertV2ToV3(xml);
                         try (FileInputStream xmlin = new FileInputStream(xml)) {
-                            QueryFavorite favorite = getJaxbcontext().<QueryFavorite> unmarshall(xmlin);
+                            QueryFavorite favorite = getJaxbcontext().unmarshall(QueryFavorite.class, xmlin);
                             if (favorites.contains(favorite)) {
                                 favorites.remove(favorites.indexOf(favorite));
                             }
