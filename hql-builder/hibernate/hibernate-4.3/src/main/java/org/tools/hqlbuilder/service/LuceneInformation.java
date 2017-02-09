@@ -31,8 +31,7 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
+import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.interfaces.Information;
 
@@ -86,11 +85,8 @@ public abstract class LuceneInformation implements Information {
 
         try {
             for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
-                if (i.getValue() instanceof JoinedSubclassEntityPersister) {
-                    JoinedSubclassEntityPersister p = (JoinedSubclassEntityPersister) i.getValue();
-                    create(w, sessionFactory, i.getKey(), p.getClassMetadata());
-                } else if (i.getValue() instanceof SingleTableEntityPersister) {
-                    SingleTableEntityPersister p = (SingleTableEntityPersister) i.getValue();
+                if (i.getValue() instanceof AbstractEntityPersister) {
+                    AbstractEntityPersister p = (AbstractEntityPersister) i.getValue();
                     create(w, sessionFactory, i.getKey(), p.getClassMetadata());
                 } else {
                     throw new UnsupportedOperationException(i.getValue().getClass().getName());
