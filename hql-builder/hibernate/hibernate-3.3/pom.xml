@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.tools.hql-builder.hibernate</groupId>
 		<artifactId>hql-builder-hibernate-parent</artifactId>
-		<version>4.0.1</version>
+		<version>4.0.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>hibernate-3.3</artifactId>
