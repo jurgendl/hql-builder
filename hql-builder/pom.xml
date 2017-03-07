@@ -16,14 +16,18 @@
 	mvn release:prepare
 	mvn release:perform
 	
-	set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_77
+	deploy release:
+	((change snapshots > versions ))
+	(stash/push changes)
+	((set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_121))
 	mvn release:prepare
 	git checkout bom-4.0.1
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=4.0.2-SNAPSHOT
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
-	commit/commit/push
+	((change versions > snapshots ))
+	((commit/commit/push))
 	-->
 	<properties>
 		<deploy.skip.demo>true</deploy.skip.demo>
@@ -48,8 +52,8 @@
 		<version.logback>1.1.7</version.logback><!-- recent version, keep up to date -->
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date -->
 		<version.logback.spring>0.1.2</version.logback.spring>
-		<version.swingeasy>4.0.5-SNAPSHOT</version.swingeasy><!-- recent version, keep up to date -->
-		<version.jhaws>4.0.5-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
+		<version.swingeasy>4.0.5</version.swingeasy><!-- recent version, keep up to date -->
+		<version.jhaws>4.0.5</version.jhaws><!-- recent version, keep up to date -->
 		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.9.4</version.joda><!-- eventually replace by Java 1.8? -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
