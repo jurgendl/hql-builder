@@ -624,7 +624,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }));
 
-    private final EButton backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" 0 ") {
+    private final EButton backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" << ") {
         private static final long serialVersionUID = 2525393811237450637L;
 
         @Override
@@ -2810,9 +2810,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         JPanel resultsStatusPanel = new JPanel(new FlowLayout());
         resultsStatusPanel.add(this.resultsInfo);
         resultsStatusPanel.add(this.maxResults);
+        resultsStatusPanel.add(this.backToStartResultsButton);
         resultsStatusPanel.add(this.startResults);
         resultsStatusPanel.add(this.nextResultsButton);
-        resultsStatusPanel.add(this.backToStartResultsButton);
         this.resultPanel.add(resultsStatusPanel, BorderLayout.SOUTH);
 
         this.switch_layout();
