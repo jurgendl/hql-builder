@@ -129,7 +129,7 @@ public class SplashHelper {
 
     public static void update(String connectionInfo) {
         try {
-            String key = connectionInfo.replaceAll("\\?", " ").replaceAll(":", " ").replaceAll("@", " ").replaceAll("/", " ").trim();
+            String key = connectionInfo.replace("?", " ").replace(":", " ").replace("@", " ").replace("/", " ").trim();
             cfgp = Preferences.userRoot().node(HqlBuilderFrame.PERSISTENT_ID).node(key);
             splashtimest = 0;
             String splashtimes = cfgp.get("splashtimes", "1,1,1,1,1,1");

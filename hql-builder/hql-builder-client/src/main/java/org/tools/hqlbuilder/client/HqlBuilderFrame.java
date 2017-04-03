@@ -1544,7 +1544,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         try {
             StringBuilder sb = new StringBuilder("String hql = \"\";" + this.getNewline());
 
-            for (String line : this.hql.getText().replaceAll("\r\n", this.getNewline()).split(this.getNewline())) {
+            for (String line : this.hql.getText().replace("\r\n", this.getNewline()).split(this.getNewline())) {
                 if (!line.startsWith(HqlBuilderFrameConstants.REMARKTAG) && !line.startsWith("//")) {
                     sb.append("hql +=\" ").append(line).append("\";");
                 } else {
@@ -1580,7 +1580,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                                 Object[] array = (Object[]) object;
                                 for (int i = 0; i < array.length; i++) {
                                     br.write("\"");
-                                    br.write(array[i].toString().replaceAll(",", ";").replaceAll("\"", "'"));
+                                    br.write(array[i].toString().replace(",", ";").replace("\"", "'"));
                                     br.write("\"");
 
                                     if (i < (array.length - 1)) {
@@ -1589,7 +1589,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                                 }
                             } else {
                                 br.write("\"");
-                                br.write(object.toString().replaceAll(",", ";").replaceAll("\"", "'"));
+                                br.write(object.toString().replace(",", ";").replace("\"", "'"));
                                 br.write("\"");
                             }
                         }
@@ -2537,7 +2537,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         if (geselecteerd.contains(HqlBuilderFrameConstants.REMARKTAG) || geselecteerd.contains("//")) {
             sb.append(voor);
-            sb.append(geselecteerd.replaceAll(HqlBuilderFrameConstants.REMARKTAG, "").replaceAll("//", ""));
+            sb.append(geselecteerd.replace(HqlBuilderFrameConstants.REMARKTAG, "").replace("//", ""));
             sb.append(na);
         } else {
             if (selectionStart == 0) {

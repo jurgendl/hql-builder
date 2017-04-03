@@ -189,7 +189,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         for (String key : keys) {
             String value = replacers.get(key);
             logger.trace("+ " + key + " > " + value);
-            sqlString = sqlString.replaceAll(key, value);
+            sqlString = sqlString.replace(key, value);
         }
 
         // vervang kolomnamen
@@ -415,16 +415,16 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
 
     @Override
     public String getHibernateHelpURL() {
-        return this.hqlService.getHibernateHelpURL().replaceAll("\\Q" + RestResource.INTERNET_SHORTCUT_URL + "\\E", "");
+        return this.hqlService.getHibernateHelpURL().replace(RestResource.INTERNET_SHORTCUT_URL, "");
     }
 
     @Override
     public String getHqlHelpURL() {
-        return this.hqlService.getHqlHelpURL().replaceAll("\\Q" + RestResource.INTERNET_SHORTCUT_URL + "\\E", "");
+        return this.hqlService.getHqlHelpURL().replace(RestResource.INTERNET_SHORTCUT_URL, "");
     }
 
     @Override
     public String getLuceneHelpURL() {
-        return this.hqlService.getLuceneHelpURL().replaceAll("\\Q" + RestResource.INTERNET_SHORTCUT_URL + "\\E", "");
+        return this.hqlService.getLuceneHelpURL().replace(RestResource.INTERNET_SHORTCUT_URL, "");
     }
 }

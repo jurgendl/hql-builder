@@ -186,9 +186,9 @@ public abstract class LuceneInformation implements Information {
 
     protected Object transformClassName(String name) {
         try {
-            return name.substring(1 + name.substring(0, name.lastIndexOf('.')).lastIndexOf('.')).replaceAll("\\.", " ");
+            return name.substring(1 + name.substring(0, name.lastIndexOf('.')).lastIndexOf('.')).replace(".", " ");
         } catch (IndexOutOfBoundsException ex) {
-            return name.replaceAll("\\.", " ");
+            return name.replace(".", " ");
         }
     }
 }
