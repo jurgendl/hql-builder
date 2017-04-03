@@ -1420,6 +1420,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 JOptionPane.showMessageDialog(this.frame, HqlResourceBundle.getMessage("no row selected"), "", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+            if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this.frame, HqlResourceBundle.getMessage("delete_confirmation"),
+                    HqlResourceBundle.getMessage("delete confirmation"), JOptionPane.YES_NO_OPTION)) {
+                return;
+            }
             Serializable bean = (Serializable) this.resultsEDT.getModel().getValueAt(row, col);
             this.hqlService.delete(bean);
             this.resultsEDT.getModel().setValueAt(null, row, col);
@@ -1428,6 +1432,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.propertypanel.repaint();
         } catch (Exception ex) {
             HqlBuilderFrame.logger.error("{}", ex);
+            JOptionPane.showMessageDialog(this.frame, "" + ex,
+                    HqlResourceBundle.getMessage("delete exception"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
