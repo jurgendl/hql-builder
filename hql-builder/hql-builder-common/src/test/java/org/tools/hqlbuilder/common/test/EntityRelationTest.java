@@ -64,7 +64,7 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(mb.getManyToMany().size(), 0);
 
         mm.addManyToManyBack(mb);
-        mm.setManyToManyBack(Collections.EMPTY_SET);
+        mm.setManyToManyBack(Collections.emptySet());
         assertEquals(mb.getManyToMany().size(), 0);
     }
 
@@ -119,7 +119,7 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(mb.getManyToMany().size(), 0);
 
         mb.addManyToMany(mm);
-        mb.setManyToMany(Collections.EMPTY_SET);
+        mb.setManyToMany(Collections.emptySet());
         assertEquals(mb.getManyToMany().size(), 0);
     }
 
@@ -158,7 +158,7 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(mo.getOneToMany().size(), 0);
 
         mo.addOneToMany(om);
-        mo.setOneToMany(Collections.EMPTY_SET);
+        mo.setOneToMany(Collections.emptySet());
         assertEquals(mo.getOneToMany().size(), 0);
     }
 
@@ -288,7 +288,7 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(smm.getDummy().size(), 0);
 
         smm.addDummy(d);
-        smm.setDummy(Collections.EMPTY_LIST);
+        smm.setDummy(Collections.emptyList());
         assertEquals(smm.getDummy().size(), 0);
 
         smm.addDummy(d);
@@ -334,7 +334,7 @@ public class EntityRelationTest extends org.junit.Assert {
         assertEquals(som.getDummy().size(), 0);
 
         som.addDummy(d);
-        som.setDummy(Collections.EMPTY_LIST);
+        som.setDummy(Collections.emptyList());
         assertEquals(som.getDummy().size(), 0);
 
         som.addDummy(d);

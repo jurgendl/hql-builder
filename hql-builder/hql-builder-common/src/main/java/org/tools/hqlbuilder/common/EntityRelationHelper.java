@@ -760,7 +760,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
             // children = createCollection(bean, property);
             // }
             if (targets == null) {
-                targets = Collections.EMPTY_SET;
+                targets = Collections.emptySet();
             }
 
             for (C child : (C[]) children.toArray()) {
@@ -906,7 +906,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
             // }
 
             if (targets == null) {
-                targets = Collections.EMPTY_SET;
+                targets = Collections.emptySet();
             }
 
             for (C child : (C[]) children.toArray()) {

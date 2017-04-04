@@ -40,7 +40,7 @@ public class PathResolver {
         } catch (Result ex) {
             return ex.getResolvePath();
         } catch (End ex) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         throw new IllegalArgumentException();
     }
