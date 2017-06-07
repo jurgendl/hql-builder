@@ -171,6 +171,16 @@ import net.miginfocom.swing.MigLayout;
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
+    private static final float DEFAULT_FONT_SIZE = 16f;
+
+    private static final Color HIGHLIGHT_ERROR_DEFAULT_COLOR = Color.RED;
+
+    private static final Color HIGHLIGHT_SYNTAXT_DEFAULT_COLOR = new Color(19, 128, 19);
+
+    private static final Color HIGHLIGHT_SEARCH_DEFAULT_COLOR = new Color(245, 225, 145);
+
+    private static final Color HIGHLIGHT_BRACES_DEFAULT_COLOR = new Color(164, 164, 226);
+
     private static List<QueryParameter> convertParameterString(String map) {
         map = map.trim();
         if (map.startsWith("[") && map.endsWith("]")) {
@@ -553,6 +563,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             HqlBuilderFrameConstants.RESIZE_COLUMNS, null, HqlBuilderFrameConstants.RESIZE_COLUMNS, HqlBuilderFrameConstants.RESIZE_COLUMNS, true,
             null, null, HqlBuilderFrameConstants.PERSISTENT_ID);
 
+    private final HqlBuilderAction continuousSyntaxHighlightingAction = new HqlBuilderAction(null, this,
+            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, true, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, null,
+            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, true, null, null,
+            HqlBuilderFrameConstants.PERSISTENT_ID);
+
     private final HqlBuilderAction formatSqlAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.FORMAT_SQL, true,
             HqlBuilderFrameConstants.FORMAT_SQL, null, HqlBuilderFrameConstants.FORMAT_SQL, HqlBuilderFrameConstants.FORMAT_SQL, true, null, null,
             HqlBuilderFrameConstants.PERSISTENT_ID);
@@ -587,16 +602,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction highlightSyntaxColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR,
             true, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR,
             HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, false,
-            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, new Color(0, 0, 255));
+            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, HIGHLIGHT_SYNTAXT_DEFAULT_COLOR);
 
     private final HqlBuilderAction highlightBracesColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR,
             true, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR,
             HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, false,
-            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, new Color(0, 0, 255));
+            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, HIGHLIGHT_BRACES_DEFAULT_COLOR);
 
     private final HqlBuilderAction searchColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.SEARCH_COLOR, true,
             HqlBuilderFrameConstants.SEARCH_COLOR, null, HqlBuilderFrameConstants.SEARCH_COLOR, HqlBuilderFrameConstants.SEARCH_COLOR, false, null,
-            null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, new Color(245, 225, 145));
+            null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, HIGHLIGHT_SEARCH_DEFAULT_COLOR);
 
     private final HqlBuilderAction alwaysOnTopAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.ALWAYS_ON_TOP, true,
             HqlBuilderFrameConstants.ALWAYS_ON_TOP, null, HqlBuilderFrameConstants.ALWAYS_ON_TOP, HqlBuilderFrameConstants.ALWAYS_ON_TOP, false, null,
@@ -693,9 +708,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(this.getSyntaxHighlightColor());
 
-    private ETextAreaBorderHighlightPainter bracesHighlight = new ETextAreaBorderHighlightPainter(this.getBracesHighlightColor());
+    private ETextAreaFillHighlightPainter bracesHighlight = new ETextAreaFillHighlightPainter(this.getBracesHighlightColor());
 
-    private ETextAreaBorderHighlightPainter syntaxErrorsHighlight = new ETextAreaBorderHighlightPainter(Color.RED);
+    private ETextAreaBorderHighlightPainter syntaxErrorsHighlight = new ETextAreaBorderHighlightPainter(HIGHLIGHT_ERROR_DEFAULT_COLOR);
 
     private TrayIcon trayIcon;
 
@@ -720,7 +735,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         // needs to be first to init font
         this.fontAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.FONT, true, HqlBuilderFrameConstants.FONT,
                 CommonIcons.getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.FONT), HqlBuilderFrameConstants.FONT, HqlBuilderFrameConstants.FONT,
-                true, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Font.class, ClientUtils.getDefaultFont());
+                true, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Font.class, ClientUtils.getDefaultFont().deriveFont(16f));
         this.fontAction.setWarnRestart(true);
 
         UIManager.put("ToolTip.font", new FontUIResource(this.getFont()));
@@ -728,7 +743,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.parameterBuilder = this.font(new ETextField(new ETextFieldConfig()), null);
         this.parameterName = this.font(new ETextField(new ETextFieldConfig()), null);
         this.parameterValue = this.font(new ETextField(new ETextFieldConfig(false)), null);
-        this.hql = this.font(new ETextArea(new ETextAreaConfig().setTooltips(true)) {
+        ETextArea hqlTextArea = new ETextArea(new ETextAreaConfig().setTooltips(true)) {
             private static final long serialVersionUID = 5778951450821178464L;
 
             @Override
@@ -804,7 +819,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
                 return null;
             }
-        }, null);
+        };
+        hqlTextArea.addDocumentKeyListener(new DocumentKeyListener() {
+            @Override
+            public void update(Type type, DocumentEvent e) {
+                if (Boolean.TRUE.equals(continuousSyntaxHighlightingAction.getValue())) {
+                    hilightSyntax();
+                }
+            }
+        });
+        this.hql = this.font(hqlTextArea, null);
         ToolTipManager.sharedInstance().registerComponent(this.hql);
         this.sql = this.font(new ETextArea(new ETextAreaConfig(false)), null);
         this.maxResults = this.font(new ELabel(""), null, Font.BOLD);
@@ -1119,8 +1143,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private void afterQuery(Throwable ex) {
-        this.hql_sql_tabs.setForegroundAt(0, Color.RED);
-        this.hql_sql_tabs.setForegroundAt(1, Color.RED);
+        this.hql_sql_tabs.setForegroundAt(0, HIGHLIGHT_ERROR_DEFAULT_COLOR);
+        this.hql_sql_tabs.setForegroundAt(1, HIGHLIGHT_ERROR_DEFAULT_COLOR);
 
         String sqlString = this.sql.getText();
         if (ex instanceof java.util.concurrent.ExecutionException) {
@@ -1797,11 +1821,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private Color getBracesHighlightColor() {
-        return this.highlightBracesColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) this.highlightBracesColorAction.getValue();
+        return this.highlightBracesColorAction.getValue() == null ? HIGHLIGHT_BRACES_DEFAULT_COLOR
+                : (Color) this.highlightBracesColorAction.getValue();
     }
 
     private Color getSyntaxHighlightColor() {
-        return this.highlightSyntaxColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) this.highlightSyntaxColorAction.getValue();
+        return this.highlightSyntaxColorAction.getValue() == null ? HIGHLIGHT_SYNTAXT_DEFAULT_COLOR : (Color) this.highlightSyntaxColorAction.getValue();
     }
 
     private String getHqlText() {
@@ -1929,7 +1954,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private Color getSearchColor() {
-        return this.searchColorAction.getValue() == null ? new Color(245, 225, 145) : (Color) this.searchColorAction.getValue();
+        return this.searchColorAction.getValue() == null ? HIGHLIGHT_SEARCH_DEFAULT_COLOR : (Color) this.searchColorAction.getValue();
     }
 
     public static String fetchVersion() {
@@ -2071,6 +2096,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void highlight_syntax_color() {
         Color color = this.getSyntaxHighlightColor();
         color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL syntax highlight color"), color);
+        logger.info("highlight_syntax_color: {}", color);
         this.highlightSyntaxColorAction.setValue(color);
         this.hql.removeHighlights(this.syntaxHighlight);
         this.syntaxHighlight.setColor(color);
@@ -2079,12 +2105,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void highlight_braces_color() {
         Color color = this.getBracesHighlightColor();
         color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL braces highlight color"), color);
+        logger.info("highlight_braces_color: {}", color);
         this.highlightBracesColorAction.setValue(color);
         this.hql.removeHighlights(this.bracesHighlight);
         this.bracesHighlight.setColor(color);
     }
 
-    private void hilightBraces(String hqltext) {
+    private void hilightBraces() {
         this.hql.removeHighlights(this.bracesHighlight);
 
         if (!this.highlightSyntaxAction.isSelected()) {
@@ -2102,7 +2129,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
 
             int caret = min;
-            int match = HqlBuilderFrame.find(hqltext, caret);
+            int match = HqlBuilderFrame.find(hql.getText(), caret);
             if (match != -1) {
                 try {
                     this.hql.addHighlight(caret, caret + 1, this.bracesHighlight);
@@ -2657,7 +2684,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     public void setMaxResults(int newValue) {
         this.maxResults.setText(" / " + newValue);
-        this.maxResults.setForeground(newValue > 500 ? Color.RED : Color.BLACK);
+        this.maxResults.setForeground(newValue > 500 ? HIGHLIGHT_ERROR_DEFAULT_COLOR : Color.BLACK);
     }
 
     /**
@@ -2671,7 +2698,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         this.syntaxHighlight.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, new float[] { 1.0F }, 0.F));
 
-        this.hql.addCaretListener(e -> HqlBuilderFrame.this.hilightBraces(HqlBuilderFrame.this.hql.getText()));
+        this.hql.addCaretListener(e -> HqlBuilderFrame.this.hilightBraces());
 
         this.sql.setEditable(false);
 
@@ -3034,6 +3061,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("additional settings"));
                 addmi.add(new JCheckBoxMenuItem(this.highlightSyntaxAction));
                 addmi.add(new JMenuItem(this.highlightSyntaxColorAction));
+                addmi.add(new JMenuItem(this.continuousSyntaxHighlightingAction));
                 addmi.add(new JCheckBoxMenuItem(this.highlightBracesAction));
                 addmi.add(new JMenuItem(this.highlightBracesColorAction));
                 addmi.add(new JCheckBoxMenuItem(this.resizeColumnsAction));
@@ -3062,10 +3090,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                     HqlBuilderFrame.this.maximumNumberOfResultsAction.setValue(100);
                     HqlBuilderFrame.this.maximumNumberOfSearchResultsAction.setValue(2000);
-                    HqlBuilderFrame.this.fontAction.setValue(ClientUtils.getDefaultFont());
-                    HqlBuilderFrame.this.searchColorAction.setValue(new Color(245, 225, 145));
-                    HqlBuilderFrame.this.highlightSyntaxColorAction.setValue(new Color(0, 0, 255));
-                    HqlBuilderFrame.this.highlightBracesColorAction.setValue(new Color(0, 0, 255));
+                    HqlBuilderFrame.this.fontAction.setValue(ClientUtils.getDefaultFont().deriveFont(DEFAULT_FONT_SIZE));
+                    HqlBuilderFrame.this.searchColorAction.setValue(HIGHLIGHT_SEARCH_DEFAULT_COLOR);
+                    HqlBuilderFrame.this.highlightSyntaxColorAction.setValue(HIGHLIGHT_SYNTAXT_DEFAULT_COLOR);
+                    HqlBuilderFrame.this.highlightBracesColorAction.setValue(HIGHLIGHT_BRACES_DEFAULT_COLOR);
+                    HqlBuilderFrame.this.continuousSyntaxHighlightingAction.setValue(true);
                     HqlBuilderFrame.this.removeJoinsAction.setSelected(true);
                     HqlBuilderFrame.this.formatLinesAction.setSelected(true);
                     HqlBuilderFrame.this.replacePropertiesAction.setSelected(true);
@@ -3273,5 +3302,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void wizard() {
         CommonUtils.run(() -> new HqlWizard(query -> HqlBuilderFrame.this.hql.setText(query), HqlBuilderFrame.this.frame,
                 HqlBuilderFrame.this.getHibernateWebResolver()));
+    }
+
+    protected void continuous_syntax_highlighting() {
+        if (Boolean.TRUE.equals(continuousSyntaxHighlightingAction.getValue())) {
+            continuousSyntaxHighlightingAction.setValue(false);
+            this.hql.removeHighlights(this.syntaxHighlight);
+        } else {
+            continuousSyntaxHighlightingAction.setValue(true);
+            hilightSyntax();
+        }
     }
 }

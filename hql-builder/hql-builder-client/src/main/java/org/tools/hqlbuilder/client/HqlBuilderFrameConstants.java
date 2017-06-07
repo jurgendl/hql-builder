@@ -42,6 +42,8 @@ public interface HqlBuilderFrameConstants {
 
     public static final String SEARCH_COLOR = "search color";
 
+    public static final String HIGHLIGHT_SYNTAX_CONTINUOUS = "continuous syntax highlighting";
+
     public static final String HIGHLIGHT_SYNTAX_COLOR = "highlight syntax color";
 
     public static final String HIGHLIGHT_BRACES_COLOR = "highlight braces color";
