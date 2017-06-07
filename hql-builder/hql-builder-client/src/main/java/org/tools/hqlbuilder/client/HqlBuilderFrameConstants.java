@@ -42,9 +42,13 @@ public interface HqlBuilderFrameConstants {
 
     public static final String SEARCH_COLOR = "search color";
 
-    public static final String HIGHLIGHT_COLOR = "highlight color";
+    public static final String HIGHLIGHT_SYNTAX_COLOR = "highlight syntax color";
+
+    public static final String HIGHLIGHT_BRACES_COLOR = "highlight braces color";
 
     public static final String HIGHLIGHT_SYNTAX = "highlight syntax";
+
+    public static final String HIGHLIGHT_BRACES = "highlight braces";
 
     public static final String RESIZE_COLUMNS = "resize columns";
 

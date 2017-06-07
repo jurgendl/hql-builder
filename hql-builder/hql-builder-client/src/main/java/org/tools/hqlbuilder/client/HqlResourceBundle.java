@@ -65,7 +65,7 @@ public class HqlResourceBundle implements PropertyChangeListener {
 
             return string;
         } catch (Exception ex) {
-            logger.warn("{}={}", key2, key);
+            logger.error("{}={}", key2, key);
             missing.add(key);
             return key;
         }

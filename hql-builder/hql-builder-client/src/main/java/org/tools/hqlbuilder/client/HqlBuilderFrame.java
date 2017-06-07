@@ -580,8 +580,18 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             null, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX, true, null, null,
             HqlBuilderFrameConstants.PERSISTENT_ID);
 
-    private final HqlBuilderAction highlightColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_COLOR, true,
-            HqlBuilderFrameConstants.HIGHLIGHT_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_COLOR, HqlBuilderFrameConstants.HIGHLIGHT_COLOR, false,
+    private final HqlBuilderAction highlightBracesAction = new HqlBuilderAction(null, this, null, true, HqlBuilderFrameConstants.HIGHLIGHT_BRACES,
+            null, HqlBuilderFrameConstants.HIGHLIGHT_BRACES, HqlBuilderFrameConstants.HIGHLIGHT_BRACES, true, null, null,
+            HqlBuilderFrameConstants.PERSISTENT_ID);
+
+    private final HqlBuilderAction highlightSyntaxColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR,
+            true, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR,
+            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, false,
+            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, new Color(0, 0, 255));
+
+    private final HqlBuilderAction highlightBracesColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR,
+            true, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR,
+            HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, false,
             null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, new Color(0, 0, 255));
 
     private final HqlBuilderAction searchColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.SEARCH_COLOR, true,
@@ -681,9 +691,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private ProgressGlassPane glass = null;
 
-    private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(this.getHighlightColor());
+    private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(this.getSyntaxHighlightColor());
 
-    private ETextAreaBorderHighlightPainter bracesHighlight = new ETextAreaBorderHighlightPainter(this.getHighlightColor());
+    private ETextAreaBorderHighlightPainter bracesHighlight = new ETextAreaBorderHighlightPainter(this.getBracesHighlightColor());
 
     private ETextAreaBorderHighlightPainter syntaxErrorsHighlight = new ETextAreaBorderHighlightPainter(Color.RED);
 
@@ -1786,8 +1796,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         return this.hibernateWebResolver;
     }
 
-    private Color getHighlightColor() {
-        return this.highlightColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) this.highlightColorAction.getValue();
+    private Color getBracesHighlightColor() {
+        return this.highlightBracesColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) this.highlightBracesColorAction.getValue();
+    }
+
+    private Color getSyntaxHighlightColor() {
+        return this.highlightSyntaxColorAction.getValue() == null ? new Color(0, 0, 255) : (Color) this.highlightSyntaxColorAction.getValue();
     }
 
     private String getHqlText() {
@@ -2054,16 +2068,19 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.clipboard.setContents(new StringSelection(sb.toString()), this.getClipboardOwner());
     }
 
-    protected void highlight_color() {
-        Color color = this.getHighlightColor();
-        color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL highlight color"), color);
-        this.highlightColorAction.setValue(color);
-
-        this.hql.removeHighlights(this.syntaxErrorsHighlight);
+    protected void highlight_syntax_color() {
+        Color color = this.getSyntaxHighlightColor();
+        color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL syntax highlight color"), color);
+        this.highlightSyntaxColorAction.setValue(color);
         this.hql.removeHighlights(this.syntaxHighlight);
-        this.hql.removeHighlights(this.bracesHighlight);
-
         this.syntaxHighlight.setColor(color);
+    }
+
+    protected void highlight_braces_color() {
+        Color color = this.getBracesHighlightColor();
+        color = JColorChooser.showDialog(null, HqlResourceBundle.getMessage("Choose HQL braces highlight color"), color);
+        this.highlightBracesColorAction.setValue(color);
+        this.hql.removeHighlights(this.bracesHighlight);
         this.bracesHighlight.setColor(color);
     }
 
@@ -2404,7 +2421,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         if (newValue != null) {
             int max = Integer.parseInt(String.valueOf(newValue));
             this.maximumNumberOfSearchResultsAction.setValue(max);
-            this.setMaxResults(max);
         }
     }
 
@@ -3017,7 +3033,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("additional settings"));
                 addmi.add(new JCheckBoxMenuItem(this.highlightSyntaxAction));
-                addmi.add(new JMenuItem(this.highlightColorAction));
+                addmi.add(new JMenuItem(this.highlightSyntaxColorAction));
+                addmi.add(new JCheckBoxMenuItem(this.highlightBracesAction));
+                addmi.add(new JMenuItem(this.highlightBracesColorAction));
                 addmi.add(new JCheckBoxMenuItem(this.resizeColumnsAction));
                 addmi.add(this.maximumNumberOfResultsAction);
                 addmi.add(this.fontAction);
@@ -3046,7 +3064,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     HqlBuilderFrame.this.maximumNumberOfSearchResultsAction.setValue(2000);
                     HqlBuilderFrame.this.fontAction.setValue(ClientUtils.getDefaultFont());
                     HqlBuilderFrame.this.searchColorAction.setValue(new Color(245, 225, 145));
-                    HqlBuilderFrame.this.highlightColorAction.setValue(new Color(0, 0, 255));
+                    HqlBuilderFrame.this.highlightSyntaxColorAction.setValue(new Color(0, 0, 255));
+                    HqlBuilderFrame.this.highlightBracesColorAction.setValue(new Color(0, 0, 255));
                     HqlBuilderFrame.this.removeJoinsAction.setSelected(true);
                     HqlBuilderFrame.this.formatLinesAction.setSelected(true);
                     HqlBuilderFrame.this.replacePropertiesAction.setSelected(true);
