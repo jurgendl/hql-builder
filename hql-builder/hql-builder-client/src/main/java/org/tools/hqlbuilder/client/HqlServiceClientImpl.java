@@ -37,7 +37,9 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
             "and",
             "or",
             "group by",
-            "order by" };
+            "order by",
+            "select",
+            "," };
 
     /** when cleaning up HQL: replace key by value */
     private Map<String, String> hqlReplacers = new HashMap<>();
@@ -309,32 +311,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         string = string.replaceAll("(?i) (ASC)[ ]*+,[ ]*+", " $1," + getNewline());
         string = string.replaceAll("(?i) (DESC)[ ]*+,[ ]*+", " $1," + getNewline());
 
-        if (string.startsWith("select ")) {
-            string = "select " + getNewline() + string.substring("select ".length());
-        }
-
-        String split = "from ";
-
-        String[] parts = string.split(split);
-
-        StringBuilder sb = new StringBuilder(parts[0].replaceAll(", ", "," + getNewline())).append(split);
-
-        for (int i = 1; i < parts.length; i++) {
-            sb.append(parts[i]);
-
-            if (i < parts.length - 1) {
-                sb.append(split);
-            }
-        }
-
-        String result = sb.toString();
-
-        if (result.trim().equals("from")) {
-            return string;
-        }
-
-        String tmp = sb.toString();
-        return tmp;
+        return string;
     }
 
     /**
