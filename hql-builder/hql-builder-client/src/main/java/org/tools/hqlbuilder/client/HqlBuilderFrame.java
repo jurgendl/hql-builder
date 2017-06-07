@@ -563,10 +563,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             HqlBuilderFrameConstants.RESIZE_COLUMNS, null, HqlBuilderFrameConstants.RESIZE_COLUMNS, HqlBuilderFrameConstants.RESIZE_COLUMNS, true,
             null, null, HqlBuilderFrameConstants.PERSISTENT_ID);
 
-    private final HqlBuilderAction continuousSyntaxHighlightingAction = new HqlBuilderAction(null, this,
-            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, true, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, null,
-            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, true, null, null,
-            HqlBuilderFrameConstants.PERSISTENT_ID);
 
     private final HqlBuilderAction formatSqlAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.FORMAT_SQL, true,
             HqlBuilderFrameConstants.FORMAT_SQL, null, HqlBuilderFrameConstants.FORMAT_SQL, HqlBuilderFrameConstants.FORMAT_SQL, true, null, null,
@@ -594,6 +590,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction highlightSyntaxAction = new HqlBuilderAction(null, this, null, true, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX,
             null, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX, true, null, null,
             HqlBuilderFrameConstants.PERSISTENT_ID);
+
+    private final HqlBuilderAction continuousSyntaxHighlightingAction;
 
     private final HqlBuilderAction highlightBracesAction = new HqlBuilderAction(null, this, null, true, HqlBuilderFrameConstants.HIGHLIGHT_BRACES,
             null, HqlBuilderFrameConstants.HIGHLIGHT_BRACES, HqlBuilderFrameConstants.HIGHLIGHT_BRACES, true, null, null,
@@ -639,7 +637,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final EFormattedTextField<Integer> startResults = new EFormattedTextField<>(
             new EFormattedTextFieldConfig(new NumberFormatBuilder(NumberFormatBuilder.Type.Integer)), 0);
 
-    private final EButton nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" > ") {
+    private final EButton nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" \u27A4 ") {
         private static final long serialVersionUID = 2525393811237450637L;
 
         @Override
@@ -820,6 +818,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 return null;
             }
         };
+        continuousSyntaxHighlightingAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, true,
+                HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, null, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS,
+                HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_CONTINUOUS, true, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Boolean.class,
+                Boolean.TRUE);
         hqlTextArea.addDocumentKeyListener(new DocumentKeyListener() {
             @Override
             public void update(Type type, DocumentEvent e) {
