@@ -637,24 +637,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final EFormattedTextField<Integer> startResults = new EFormattedTextField<>(
             new EFormattedTextFieldConfig(new NumberFormatBuilder(NumberFormatBuilder.Type.Integer)), 0);
 
-    private final EButton nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" \u27A4 ") {
-        private static final long serialVersionUID = 2525393811237450637L;
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            startResults.setValue((int) startResults.getValue() + (Integer) maximumNumberOfResultsAction.getValue());
-            start_query();
-        }
-    }));
-
-    private final EButton backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" << ") {
-        private static final long serialVersionUID = 2525393811237450637L;
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            startResults.setValue(0);
-        }
-    }));
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<>();
 
@@ -729,12 +712,34 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private JToolBar resultstools;
 
+    private final EButton nextResultsButton;
+
+    private final EButton backToStartResultsButton;
+
     private HqlBuilderFrame() {
         // needs to be first to init font
         this.fontAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.FONT, true, HqlBuilderFrameConstants.FONT,
                 CommonIcons.getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.FONT), HqlBuilderFrameConstants.FONT, HqlBuilderFrameConstants.FONT,
                 true, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Font.class, ClientUtils.getDefaultFont().deriveFont(16f));
         this.fontAction.setWarnRestart(true);
+
+        nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" > ") {
+            private static final long serialVersionUID = 2525393811237450637L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startResults.setValue((int) startResults.getValue() + (Integer) maximumNumberOfResultsAction.getValue());
+                start_query();
+            }
+        }));
+        backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" |< ") {
+            private static final long serialVersionUID = 2525393811237450637L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startResults.setValue(0);
+            }
+        }));
 
         UIManager.put("ToolTip.font", new FontUIResource(this.getFont()));
         this.resultsInfo = this.font(new ELabel(""), null);
