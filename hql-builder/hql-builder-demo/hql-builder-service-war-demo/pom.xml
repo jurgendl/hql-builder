@@ -56,27 +56,6 @@
 					<warName>${contextRoot}</warName>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<wtpContextName>${contextRoot}</wtpContextName>
-					<wtpversion>2.0</wtpversion>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-					<forceRecheck>false</forceRecheck>
-					<buildOutputDirectory>target-eclipse</buildOutputDirectory>
-					<sourceExcludes>
-						<sourceExclude>**/.svn/**</sourceExclude>
-					</sourceExcludes>
-					<!-- 
-					<wtpmanifest>true</wtpmanifest>
-					<wtpapplicationxml>true</wtpapplicationxml>
-					<manifest>${basedir}/src/main/resources/META-INF/MANIFEST.MF</manifest>
-					 -->
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>

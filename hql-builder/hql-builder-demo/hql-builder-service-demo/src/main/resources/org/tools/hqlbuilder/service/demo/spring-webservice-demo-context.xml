@@ -24,7 +24,7 @@
 				<entry key="/hqlbuilder/bin" value-ref="hqlServiceExporter" />
 			</util:map>
 		</property>
-		<property name="port" value="80" />
+		<property name="port" value="7834" />
 	</bean>
 
 </beans>
