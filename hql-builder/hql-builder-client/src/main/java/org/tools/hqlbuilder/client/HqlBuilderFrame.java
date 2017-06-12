@@ -171,6 +171,8 @@ import net.miginfocom.swing.MigLayout;
  * @author Jurgen
  */
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
+    private static final Color TAB_OK_COLOR = new Color(0, 200, 0);
+
     private static final float DEFAULT_FONT_SIZE = 16f;
 
     private static final Color HIGHLIGHT_ERROR_DEFAULT_COLOR = Color.RED;
@@ -999,7 +1001,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void add_to_favorites() {
         try {
-            if (!this.hql_sql_tabs.getForegroundAt(1).equals(Color.GREEN)) {
+            if (!this.hql_sql_tabs.getForegroundAt(1).equals(TAB_OK_COLOR)) {
                 if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this.frame, HqlResourceBundle.getMessage("no query"),
                         HqlResourceBundle.getMessage("add to favorites"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
                     return;
@@ -1125,8 +1127,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }
         this.resultsEDT.addRecords(records);
-        this.hql_sql_tabs.setForegroundAt(0, Color.GREEN);
-        this.hql_sql_tabs.setForegroundAt(1, Color.GREEN);
+        this.hql_sql_tabs.setForegroundAt(0, TAB_OK_COLOR);
+        this.hql_sql_tabs.setForegroundAt(1, TAB_OK_COLOR);
 
         this.resultsUnsafe.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         for (int i = 0; i < this.resultsEDT.getColumnCount(); i++) {
