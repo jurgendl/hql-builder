@@ -130,9 +130,9 @@ import org.swingeasy.ETableHeaders;
 import org.swingeasy.ETableRecord;
 import org.swingeasy.ETableRecordCollection;
 import org.swingeasy.ETextArea;
-import org.swingeasy.ETextAreaBorderHighlightPainter;
+import org.swingeasy.ETextComponentBorderHighlightPainter;
 import org.swingeasy.ETextAreaConfig;
-import org.swingeasy.ETextAreaFillHighlightPainter;
+import org.swingeasy.ETextComponentFillHighlightPainter;
 import org.swingeasy.ETextField;
 import org.swingeasy.ETextFieldConfig;
 import org.swingeasy.EToolBarButton;
@@ -689,11 +689,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private ProgressGlassPane glass = null;
 
-    private ETextAreaBorderHighlightPainter syntaxHighlight = new ETextAreaBorderHighlightPainter(this.getSyntaxHighlightColor());
+    private ETextComponentBorderHighlightPainter syntaxHighlight = new ETextComponentBorderHighlightPainter(this.getSyntaxHighlightColor());
 
-    private ETextAreaFillHighlightPainter bracesHighlight = new ETextAreaFillHighlightPainter(this.getBracesHighlightColor());
+    private ETextComponentFillHighlightPainter bracesHighlight = new ETextComponentFillHighlightPainter(this.getBracesHighlightColor());
 
-    private ETextAreaBorderHighlightPainter syntaxErrorsHighlight = new ETextAreaBorderHighlightPainter(HIGHLIGHT_ERROR_DEFAULT_COLOR);
+    private ETextComponentBorderHighlightPainter syntaxErrorsHighlight = new ETextComponentBorderHighlightPainter(HIGHLIGHT_ERROR_DEFAULT_COLOR);
 
     private TrayIcon trayIcon;
 
@@ -1207,7 +1207,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private Color applyColor(Color color) {
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 100);
         Color gradientColor = this.calcGradient(color);
-        ETextAreaFillHighlightPainter painter = ETextAreaFillHighlightPainter.class.cast(this.hql.getHighlightPainter());
+        ETextComponentFillHighlightPainter painter = ETextComponentFillHighlightPainter.class.cast(this.hql.getHighlightPainter());
         painter.setVerticalGradient(true);
         painter.setColor(color);
         painter.setGradientColor(gradientColor);
