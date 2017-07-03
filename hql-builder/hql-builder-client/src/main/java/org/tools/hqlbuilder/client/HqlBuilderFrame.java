@@ -56,6 +56,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -105,6 +106,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jhaws.common.lang.IntegerValue;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.LoggerFactory;
@@ -130,8 +132,8 @@ import org.swingeasy.ETableHeaders;
 import org.swingeasy.ETableRecord;
 import org.swingeasy.ETableRecordCollection;
 import org.swingeasy.ETextArea;
-import org.swingeasy.ETextComponentBorderHighlightPainter;
 import org.swingeasy.ETextAreaConfig;
+import org.swingeasy.ETextComponentBorderHighlightPainter;
 import org.swingeasy.ETextComponentFillHighlightPainter;
 import org.swingeasy.ETextField;
 import org.swingeasy.ETextFieldConfig;
@@ -183,53 +185,32 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private static final Color HIGHLIGHT_BRACES_DEFAULT_COLOR = new Color(164, 164, 226);
 
-    private static List<QueryParameter> convertParameterString(String map) {
-        map = map.trim();
-        if (map.startsWith("[") && map.endsWith("]")) {
-            map = map.substring(1, map.length() - 1);
-        } else {
-            if (map.startsWith("{") && map.endsWith("}")) {
-                map = map.substring(1, map.length() - 1);
-            } else {
-                return new ArrayList<>();
-            }
-        }
-        List<String> parts = new ArrayList<>();
-        String splitted = null;
-        for (String part : map.split(",")) {
-            part = part.trim();
-            if (part.contains("[")) {
-                splitted = part;
-            } else if (splitted == null) {
-                parts.add(part);
-            } else {
-                splitted = splitted + "," + part;
-                if (part.contains("]")) {
-                    parts.add(splitted);
-                    splitted = null;
-                }
-            }
-        }
+    private static List<QueryParameter> convertParameterString(String parameters) {
         List<QueryParameter> qps = new ArrayList<>();
-        for (int i = 0; i < parts.size(); i++) {
-            String el = parts.get(i).trim();
-            try {
-                HqlBuilderFrame.logger.debug(el);
-                if (el.contains("=")) {
-                    String[] p = el.split("=");
-                    Object val = GroovyCompiler.eval(p[1]);
-                    HqlBuilderFrame.logger.debug("{}={}={}", p[0], val.getClass(), val);
-                    qps.add(new QueryParameter().setName(p[0]).setValueText(p[1]).setType(val.getClass().getName()).setValue(val));
-                } else {
-                    Object val = GroovyCompiler.eval(el);
-                    HqlBuilderFrame.logger.debug("{}={}", val.getClass(), val);
-                    qps.add(new QueryParameter().setIndex(i + 1).setValueText(el).setType(val.getClass().getName()).setValue(val));
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        if (parameters.startsWith("{") && parameters.endsWith("}")) {
+            Map<?, ?> map = (Map<?, ?>) GroovyCompiler.eval(parameters.replace("{", "[").replace("}", "]").replace("=", ":"));
+            map.entrySet()
+                    .stream()
+                    .map(e -> convertToParameter(e))
+                    .forEach(qps::add);
+        } else if (parameters.startsWith("[") && parameters.endsWith("]")) {
+            List<?> list = (List<?>) GroovyCompiler.eval(parameters);
+            IntegerValue index = new IntegerValue();
+            list.stream().map(v -> convertToParameter(index, v)).forEach(qps::add);
         }
         return qps;
+    }
+
+    private static QueryParameter convertToParameter(Entry<?, ?> e) {
+        Object value = e.getValue();
+        String vs = String.valueOf(value);
+        return new QueryParameter(e.getKey().toString(), vs, value.getClass().getName(),
+                e.getValue());
+    }
+
+    private static QueryParameter convertToParameter(IntegerValue index, Object value) {
+        String vs = String.valueOf(value);
+        return new QueryParameter(index.add().get(), vs, value.getClass().getName(), value);
     }
 
     public static int find(String t, int pos) {
@@ -740,6 +721,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startResults.setValue(0);
+                start_query();
             }
         }));
 
@@ -2314,8 +2296,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     protected void import_parameters() {
         String m = this.importParametersFromTextF.getText();
         this.importParametersFromTextF.setText("");
-
-        for (QueryParameter qp : HqlBuilderFrame.convertParameterString(m)) {
+        List<QueryParameter> parameters = HqlBuilderFrame.convertParameterString(m);
+        for (QueryParameter qp : parameters) {
             boolean exists = false;
             if (qp.getName() == null) {
                 // just add at bottom in order
@@ -2856,8 +2838,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         this.maxResults.setMinimumSize(new Dimension(80, 22));
         this.maxResults.setPreferredSize(new Dimension(80, 22));
-        this.resultsInfo.setMinimumSize(new Dimension(300, 22));
-        this.resultsInfo.setPreferredSize(new Dimension(300, 22));
+        this.resultsInfo.setMinimumSize(new Dimension(325, 22));
+        this.resultsInfo.setPreferredSize(new Dimension(325, 22));
 
         JPanel resultsStatusPanel = new JPanel(new FlowLayout());
         resultsStatusPanel.add(this.resultsInfo);

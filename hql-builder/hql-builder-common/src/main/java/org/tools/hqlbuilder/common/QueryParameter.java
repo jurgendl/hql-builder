@@ -59,6 +59,22 @@ public class QueryParameter implements Serializable, Comparable<QueryParameter> 
         return toString;
     }
 
+    public QueryParameter(String name, String valueText, String type, Object value) {
+        super();
+        this.name = name;
+        this.valueText = valueText;
+        this.type = type;
+        this.value = value;
+    }
+
+    public QueryParameter(Integer index, String valueText, String type, Object value) {
+        super();
+        this.index = index;
+        this.valueText = valueText;
+        this.type = type;
+        this.value = value;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

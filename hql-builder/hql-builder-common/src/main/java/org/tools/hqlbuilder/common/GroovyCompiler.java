@@ -1,7 +1,21 @@
 package org.tools.hqlbuilder.common;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Map;
+
+import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.expr.ConstantExpression;
+import org.codehaus.groovy.ast.expr.Expression;
+import org.codehaus.groovy.classgen.GeneratorContext;
+import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilePhase;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.SourceUnit;
+import org.codehaus.groovy.control.customizers.CompilationCustomizer;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -10,10 +24,10 @@ import groovy.lang.GroovyShell;
  * @author Jurgen
  */
 public class GroovyCompiler {
-    private static final String imports;
+    static Binding binding = new Binding();
 
+    static GroovyShell sh;
     static {
-        StringBuilder sb = new StringBuilder();
         String[] packages = {
                 "java.io",
                 "java.net",
@@ -23,14 +37,49 @@ public class GroovyCompiler {
                 "java.util",
                 "java.util.regex",
                 "org.joda.time",
-                "org.apache.commons.lang",
-                "org.apache.commons.lang3.builder" };
+                "org.apache.commons.lang3",
+                "org.apache.commons.lang3.builder",
+                "java.time" };
+        sh = new GroovyShell(//
+                GroovyCompiler.class.getClassLoader(), //
+                binding, //
+                new CompilerConfiguration()//
+                .addCompilationCustomizers(new ImportCustomizer()//
+                                .addStarImports(packages)//
+                                .addStaticStars("java.lang.Math")//
+                )//
+                        .addCompilationCustomizers(new CompilationCustomizer(CompilePhase.CONVERSION) {
+                            @Override
+                            public void call(SourceUnit source, GeneratorContext context, ClassNode classNode) throws CompilationFailedException {
+                                new ClassCodeExpressionTransformer() {
+                                    @Override
+                                    protected SourceUnit getSourceUnit() {
+                                        return source;
+                                    }
 
-        for (String pack : packages) {
-            sb.append("import ").append(pack).append(".*;\n");
-        }
-
-        imports = sb.toString();
+                                    public Expression transform(Expression exp) {
+                                        // System.out.println(exp);
+                                        if (exp instanceof ConstantExpression) {
+                                            Object value = ConstantExpression.class.cast(exp).getValue();
+                                            if (value != null) {
+                                                if (value instanceof BigDecimal) {
+                                                    return new ConstantExpression(BigDecimal.class.cast(value).doubleValue());
+                                                }
+                                                if (value instanceof BigInteger) {
+                                                    return new ConstantExpression(BigInteger.class.cast(value).longValue());
+                                                }
+                                                if (value instanceof Integer) {
+                                                    return new ConstantExpression(Integer.class.cast(value).longValue());
+                                                }
+                                            }
+                                        }
+                                        return super.transform(exp);
+                                    }
+                                }.visitClass(classNode);
+                }
+                        }//
+                )
+        );
     }
 
     public static Object eval(String code) {
@@ -41,9 +90,6 @@ public class GroovyCompiler {
         return eval(code, Collections.singletonMap("x", x));
     }
 
-    /**
-     * compile code
-     */
     public static Object eval(String code, Map<String, Object> params) {
         try {
             return internal(code, params);
@@ -53,13 +99,12 @@ public class GroovyCompiler {
     }
 
     protected static Object internal(String expression, Map<String, Object> params) {
-        Binding b = new Binding();
+        binding.getVariables().clear();
         if (params != null) {
             for (Map.Entry<String, Object> entry : params.entrySet()) {
-                b.setVariable(entry.getKey(), entry.getValue());
+                binding.setVariable(entry.getKey(), entry.getValue());
             }
         }
-        GroovyShell sh = new GroovyShell(b);
-        return sh.evaluate(imports + expression);
+        return sh.evaluate(expression);
     }
 }
