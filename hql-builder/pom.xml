@@ -48,16 +48,16 @@
         <maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
-		<!-- versions checked 2015.06.14 and tested against 4.2 -->
-		<version.hibernate>4.3</version.hibernate>
+		<!-- versions checked 2017.07.03 -->
+		<version.hibernate>4.3</version.hibernate><!-- being tested against 4.3 -->
 		<version.slf4j>1.7.21</version.slf4j><!-- recent version, keep up to date -->
 		<version.logback>1.1.7</version.logback><!-- recent version, keep up to date -->
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date -->
 		<version.logback.spring>0.1.2</version.logback.spring>
 		<version.swingeasy>4.0.6-SNAPSHOT</version.swingeasy><!-- recent version, keep up to date -->
 		<version.jhaws>4.0.6-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
-		<version.groovy>2.4.1</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
-		<version.joda>2.9.4</version.joda><!-- eventually replace by Java 1.8? -->
+		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
+		<version.joda>2.9.4</version.joda><!-- Java 1.8 is not a sufficient alternative -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.commons-codec>1.10</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.4</version.commons-io><!-- stale, keep up to date -->
@@ -79,15 +79,15 @@
 		<version.wicket.bootstrap>0.9.2</version.wicket.bootstrap><!-- stale? -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
-		<version.bouncycastle>1.52</version.bouncycastle><!-- always use the latest version, available as of Sunday 1st March 2015 -->
+		<version.bouncycastle>1.57</version.bouncycastle><!-- always use the latest version -->
 		<version.lambdaj>2.4</version.lambdaj><!-- 2.3.3; maybe one day replaced by Java 1.8, 2.4 only available on googlecode
 		lambdaj repo which is dead -->
 		<version.cglib>3.2.1</version.cglib><!-- dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->
-        <version.spring>4.3.0.RELEASE</version.spring><!-- keep up to date 4.x.x -->
-        <version.spring-security>4.0.4.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version -->
-        <version.spring-ws>2.3.0.RELEASE</version.spring-ws><!-- keep up to date 2.x.x, does not follow Spring version -->
+        <version.spring>4.3.9.RELEASE</version.spring><!-- keep up to date 4.x.x -->
+        <version.spring-security>4.0.4.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version !!! test 4.2.3.RELEASE !!! -->
+        <version.spring-ws>2.3.1.RELEASE</version.spring-ws><!-- keep up to date 2.x.x, does not follow Spring version !!! test 2.4.0.RELEASE !!! -->
 		<!-- other -->
 		<version.jackson>2.4.1</version.jackson>
 		<version.ostermiller>1.07.00</version.ostermiller>

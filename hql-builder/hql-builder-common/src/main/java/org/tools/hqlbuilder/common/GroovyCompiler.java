@@ -40,45 +40,50 @@ public class GroovyCompiler {
                 "org.apache.commons.lang3",
                 "org.apache.commons.lang3.builder",
                 "java.time" };
-        sh = new GroovyShell(//
-                GroovyCompiler.class.getClassLoader(), //
-                binding, //
-                new CompilerConfiguration()//
+        CompilerConfiguration compilationCustomizer = new CompilerConfiguration()//
                 .addCompilationCustomizers(new ImportCustomizer()//
-                                .addStarImports(packages)//
-                                .addStaticStars("java.lang.Math")//
+                        .addStarImports(packages)//
+                        .addStaticStars("java.lang.Math")//
+                        .addStaticStars("java.util.Collections")//
+                        .addStaticStars("java.util.Arrays")//
                 )//
-                        .addCompilationCustomizers(new CompilationCustomizer(CompilePhase.CONVERSION) {
+                 // .addCompilationCustomizers(new SecureASTCustomizer().setStaticImportsBlacklist(...)...)
+                .addCompilationCustomizers(new CompilationCustomizer(CompilePhase.CONVERSION) {
+                    @Override
+                    public void call(SourceUnit source, GeneratorContext context, ClassNode classNode) throws CompilationFailedException {
+                        new ClassCodeExpressionTransformer() {
                             @Override
-                            public void call(SourceUnit source, GeneratorContext context, ClassNode classNode) throws CompilationFailedException {
-                                new ClassCodeExpressionTransformer() {
-                                    @Override
-                                    protected SourceUnit getSourceUnit() {
-                                        return source;
-                                    }
+                            protected SourceUnit getSourceUnit() {
+                                return source;
+                            }
 
-                                    public Expression transform(Expression exp) {
-                                        // System.out.println(exp);
-                                        if (exp instanceof ConstantExpression) {
-                                            Object value = ConstantExpression.class.cast(exp).getValue();
-                                            if (value != null) {
-                                                if (value instanceof BigDecimal) {
-                                                    return new ConstantExpression(BigDecimal.class.cast(value).doubleValue());
-                                                }
-                                                if (value instanceof BigInteger) {
-                                                    return new ConstantExpression(BigInteger.class.cast(value).longValue());
-                                                }
-                                                if (value instanceof Integer) {
-                                                    return new ConstantExpression(Integer.class.cast(value).longValue());
-                                                }
-                                            }
+                            public Expression transform(Expression exp) {
+                                // System.out.println(exp);
+                                if (exp instanceof ConstantExpression) {
+                                    Object value = ConstantExpression.class.cast(exp).getValue();
+                                    if (value != null) {
+                                        if (value instanceof BigDecimal) {
+                                            return new ConstantExpression(BigDecimal.class.cast(value).doubleValue());
                                         }
-                                        return super.transform(exp);
+                                        if (value instanceof BigInteger) {
+                                            return new ConstantExpression(BigInteger.class.cast(value).longValue());
+                                        }
+                                        if (value instanceof Integer) {
+                                            return new ConstantExpression(Integer.class.cast(value).longValue());
+                                        }
                                     }
-                                }.visitClass(classNode);
-                }
-                        }//
-                )
+                                }
+                                return super.transform(exp);
+                            }
+                        }.visitClass(classNode);
+                    }
+                }//
+        );
+        compilationCustomizer.setTolerance(0);
+        sh = new GroovyShell(//
+                Thread.currentThread().getContextClassLoader(), //
+                binding, //
+                compilationCustomizer
         );
     }
 

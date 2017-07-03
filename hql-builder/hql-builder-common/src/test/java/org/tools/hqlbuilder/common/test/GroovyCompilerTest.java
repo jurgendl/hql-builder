@@ -41,4 +41,8 @@ public class GroovyCompilerTest {
         Assert.assertEquals(Integer.class, GroovyCompiler.eval("(int) 2").getClass());
     }
 
+    @Test
+    public void testBlockExit() {
+        GroovyCompiler.eval("java.lang.System.exit(1)");
+    }
 }
