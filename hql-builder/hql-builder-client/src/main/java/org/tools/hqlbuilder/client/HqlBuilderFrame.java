@@ -618,9 +618,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final ELabel maxResults;
 
     private final EFormattedTextField<Integer> startResults = new EFormattedTextField<>(
-            new EFormattedTextFieldConfig(new NumberFormatBuilder(NumberFormatBuilder.Type.Integer)), 0);
-
-
+            new EFormattedTextFieldConfig(new NumberFormatBuilder(NumberFormatBuilder.Type.Integer)).setColumns(12), 0);
 
     private final LinkedList<QueryFavorite> favorites = new LinkedList<>();
 
@@ -711,7 +709,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                startResults.setValue((int) startResults.getValue() + (Integer) maximumNumberOfResultsAction.getValue());
+                Number maximumNumberOfResults = (Number) maximumNumberOfResultsAction.getValue();
+                Number startResult = (Number) startResults.getValue();
+                startResults.setValue(startResult.intValue() + maximumNumberOfResults.intValue());
                 start_query();
             }
         }));

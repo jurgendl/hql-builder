@@ -296,7 +296,7 @@ public class HqlServiceImpl implements HqlService {
 
     @Override
     public ExecutionResult execute(QueryParameters obj) {
-        logger.debug("start query");
+        logger.info("start query \n {}", obj);
         String hql = obj.getHql();
         int max = obj.getMax();
         int first = obj.getFirst();
@@ -384,7 +384,7 @@ public class HqlServiceImpl implements HqlService {
         } catch (Exception ex) {
             throw new ServiceException(concat(ex), result.get());
         } finally {
-            logger.debug("end query");
+            logger.info("end query \n {}", obj);
         }
     }
 
