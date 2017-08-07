@@ -55,7 +55,7 @@ public class QueryFavoriteUtils implements HqlBuilderFrameConstants {
 
     private static JAXBMarshalling getJaxbcontext() throws JAXBException {
         if (jaxbContext == null) {
-            jaxbContext = new JAXBMarshalling(null, QueryFavorite.class);
+            jaxbContext = new JAXBMarshalling(QueryFavorite.class);
             jaxbContext.setFormatOutput(true);
         }
         return jaxbContext;
