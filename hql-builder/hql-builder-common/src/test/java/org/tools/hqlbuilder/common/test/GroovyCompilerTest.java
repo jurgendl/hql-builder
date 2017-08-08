@@ -45,4 +45,11 @@ public class GroovyCompilerTest {
     public void testBlockExit() {
         GroovyCompiler.eval("java.lang.System.exit(1)");
     }
+
+    @Test
+    public void testSomething() {
+        Object o = GroovyCompiler
+                .eval("[param0:25, param1:84296, param3$0$:['/uri/part']]");
+        System.out.println(o.getClass() + " " + o);
+    }
 }

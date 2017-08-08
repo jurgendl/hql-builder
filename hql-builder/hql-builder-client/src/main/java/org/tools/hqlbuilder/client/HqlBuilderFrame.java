@@ -188,7 +188,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private static List<QueryParameter> convertParameterString(String parameters) {
         List<QueryParameter> qps = new ArrayList<>();
         if (parameters.startsWith("{") && parameters.endsWith("}")) {
-            Map<?, ?> map = (Map<?, ?>) GroovyCompiler.eval(parameters.replace("{", "[").replace("}", "]").replace("=", ":"));
+            String replaced = parameters.replace("{", "[").replace("}", "]").replace("=", ":");
+            Object eval = GroovyCompiler.eval(replaced);
+            Map<?, ?> map = (Map<?, ?>) eval;
             map.entrySet()
                     .stream()
                     .map(e -> convertToParameter(e))

@@ -79,7 +79,7 @@ public class GroovyCompiler {
                     }
                 }//
         );
-        compilationCustomizer.setTolerance(0);
+        // compilationCustomizer.setTolerance(0);
         sh = new GroovyShell(//
                 Thread.currentThread().getContextClassLoader(), //
                 binding, //
