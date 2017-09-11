@@ -714,7 +714,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 Number maximumNumberOfResults = (Number) maximumNumberOfResultsAction.getValue();
                 Number startResult = (Number) startResults.getValue();
                 startResults.setValue(startResult.intValue() + maximumNumberOfResults.intValue());
-                start_query();
+                start_query(false);
             }
         }));
         backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" |< ") {
@@ -722,8 +722,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                startResults.setValue(0);
-                start_query();
+                start_query(true);
             }
         }));
 
@@ -1514,9 +1513,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.resultsEDT.repaint();
     }
 
-    private synchronized void executeQuery(final RowProcessor rowProcessor, final boolean failFast) {
+    private synchronized void executeQuery(final RowProcessor rowProcessor, final boolean failFast, final boolean resetPointer) {
         HqlBuilderFrame.logger.debug("start query");
-        final long start = System.currentTimeMillis();
+
+        if (resetPointer) {
+            startResults.setValue(0);
+        }
+
+        final long startTime = System.currentTimeMillis();
 
         if (!this.startQueryAction.isEnabled()) {
             return;
@@ -1531,7 +1535,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.preQuery();
 
         final int maxresults = rowProcessor == null ? (Integer) this.maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
-        final int startNr = (int) startResults.getValue();
+        final int startNr = startResults.getObjectValue();
 
         SwingWorker<ExecutionResult, Void> sw = new SwingWorker<ExecutionResult, Void>() {
             @Override
@@ -1544,7 +1548,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 boolean retry = false;
                 try {
                     ExecutionResult rv = this.get();
-                    HqlBuilderFrame.this.afterQuery(start, rv, rowProcessor);
+                    HqlBuilderFrame.this.afterQuery(startTime, rv, rowProcessor);
                 } catch (ExecutionException ex) {
                     Caret caret = HqlBuilderFrame.this.hql.getCaret();
                     if (!failFast && (caret.getDot() != caret.getMark())) {
@@ -1561,7 +1565,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 if (retry) {
                     Caret caret = HqlBuilderFrame.this.hql.getCaret();
                     caret.moveDot(caret.getMark());
-                    HqlBuilderFrame.this.executeQuery(rowProcessor, true);
+                    HqlBuilderFrame.this.executeQuery(rowProcessor, true, true);
                 }
             }
         };
@@ -2529,13 +2533,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.setGlassVisible(false);
     }
 
-    private synchronized void query() {
-        this.executeQuery(null, false);
-    }
 
     private void query(RowProcessor rowProcessor) {
         this.progressbarStart(HqlResourceBundle.getMessage("quering"));
-        this.executeQuery(rowProcessor, false);
+        this.executeQuery(rowProcessor, false, true);
         this.progressbarStop();
         JOptionPane.showMessageDialog(this.frame, HqlResourceBundle.getMessage("done"));
     }
@@ -3161,8 +3162,12 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     protected void start_query() {
+        start_query(true);
+    }
+
+    protected void start_query(boolean resetPointer) {
         try {
-            this.query();
+            this.executeQuery(null, false, resetPointer);
         } catch (Exception ex) {
             HqlBuilderFrame.logger.error("{}", ex);
         }
