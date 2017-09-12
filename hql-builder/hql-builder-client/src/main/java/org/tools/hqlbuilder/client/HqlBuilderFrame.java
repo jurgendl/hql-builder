@@ -324,7 +324,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 UIUtils.setLongerTooltips();
             }
 
-            GroovyCompiler.eval("new Integer(0)"); // warm up Groovy
+            GroovyCompiler.eval("new Long(0l)"); // warm up Groovy
 
             SplashHelper.step();
 
@@ -2337,8 +2337,14 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             for (QueryParameter p : selection.getParameters()) {
                 String valueText = p.getValueText();
                 if (StringUtils.isNotBlank(valueText)) {
-                    Object val = GroovyCompiler.eval(valueText);
-                    p.setValueTypeText(val).setValueText(valueText);
+                    p.setValueText(valueText);
+                    try {
+                        Object val = GroovyCompiler.eval(valueText);
+                        p.setValueTypeText(val);
+                    } catch (Exception ex) {
+                        p.setValueTypeText(valueText);
+                        HqlBuilderFrame.logger.error("{}", ex);
+                    }
                 }
                 this.parametersEDT.addRecord(new EListRecord<>(p));
             }

@@ -47,7 +47,7 @@ public class GroovyCompiler {
                     }
 
                     public Expression transform(Expression exp) {
-                        System.out.println(exp);
+                        // System.out.println(exp);
                         if (exp instanceof ConstantExpression) {
                             Object value = ConstantExpression.class.cast(exp).getValue();
                             if (value != null) {
@@ -116,14 +116,15 @@ public class GroovyCompiler {
     }
 
     public static Object eval(int depth, String code, Map<String, Object> params) {
-        if (depth > 3) throw new IllegalArgumentException();
+        System.out.println("pass " + depth + ": " + code);
+        if (depth > 2) throw new IllegalArgumentException();
         try {
             return internal(code, params);
         } catch (groovy.lang.MissingPropertyException mpe) {
             System.err.println(mpe);
             try {
                 literals = true;
-                return eval(depth++, code, params);
+                return eval(++depth, code, params);
             } finally {
                 literals = false;
             }
@@ -131,7 +132,7 @@ public class GroovyCompiler {
             System.err.println(grte);
             try {
                 intToLong = false;
-                return eval(depth++, code, params);
+                return eval(++depth, code, params);
             } finally {
                 intToLong = true;
             }
