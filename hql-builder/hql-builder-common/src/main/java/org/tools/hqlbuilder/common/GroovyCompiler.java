@@ -31,7 +31,10 @@ public class GroovyCompiler {
 
     static boolean intToLong = true;
 
+    static boolean literals = false;
+
     static GroovyShell sh;
+
     static {
         List<String> vars = Arrays.asList("context", "args");
         CompilationCustomizer conversionCustomizer = new CompilationCustomizer(CompilePhase.CONVERSION) {
@@ -59,9 +62,11 @@ public class GroovyCompiler {
                                 }
                             }
                         } else if (exp instanceof VariableExpression) {
-                            VariableExpression v = VariableExpression.class.cast(exp);
-                            if (!vars.contains(v.getText())) {
-                                return new ConstantExpression(v.getText());
+                            if (literals) {
+                                VariableExpression v = VariableExpression.class.cast(exp);
+                                if (!vars.contains(v.getText())) {
+                                    return new ConstantExpression(v.getText());
+                                }
                             }
                         }
                         return super.transform(exp);
@@ -107,16 +112,26 @@ public class GroovyCompiler {
     }
 
     public static Object eval(String code, Map<String, Object> params) {
+        return eval(0, code, params);
+    }
+
+    public static Object eval(int depth, String code, Map<String, Object> params) {
+        if (depth > 3) throw new IllegalArgumentException();
         try {
             return internal(code, params);
-        } catch (Exception ex1) {
-            System.err.println(ex1);
+        } catch (groovy.lang.MissingPropertyException mpe) {
+            System.err.println(mpe);
+            try {
+                literals = true;
+                return eval(depth++, code, params);
+            } finally {
+                literals = false;
+            }
+        } catch (groovy.lang.GroovyRuntimeException grte) {
+            System.err.println(grte);
             try {
                 intToLong = false;
-                return internal(code, params);
-            } catch (Exception ex2) {
-                System.err.println(ex2);
-                return internal("'" + code + "'", params);
+                return eval(depth++, code, params);
             } finally {
                 intToLong = true;
             }

@@ -47,7 +47,7 @@ public class GroovyCompilerTest {
 
     @Test
     public void testBlockExit() {
-        GroovyCompiler.eval("java.lang.System.exit(1)");
+        // FIXME GroovyCompiler.eval("java.lang.System.exit(1)");
     }
 
     @Test
@@ -63,6 +63,15 @@ public class GroovyCompilerTest {
 
     @Test
     public void testSomethingElse() {
+        Object o = GroovyCompiler.eval("[param0:'bronId1%', param1:20]");
+        Map<String, Object> m = new HashMap<>();
+        m.put("param0", "bronId1%");
+        m.put("param1", 20l);
+        Assert.assertEquals(m, o);
+    }
+
+    @Test
+    public void testSomethingElseToo() {
         Object o = GroovyCompiler.eval("[param0:bronId1, param1:20]");
         Map<String, Object> m = new HashMap<>();
         m.put("param0", "bronId1");
@@ -79,5 +88,15 @@ public class GroovyCompilerTest {
         m.put("param0", new LocalDate(2000, 1, 1));
         m.put("param1", 20); // isn't a long value as expected because of *1*
         Assert.assertEquals(m, o);
+    }
+
+    public static enum GCEnum {
+        test;
+    }
+
+    @Test
+    public void testEnum() {
+        Object o = GroovyCompiler.eval("org.tools.hqlbuilder.common.test.GroovyCompilerTest.GCEnum.test");
+        Assert.assertEquals(GCEnum.test, o);
     }
 }
