@@ -23,6 +23,11 @@ public abstract class DelegatingHqlService implements HqlService {
     }
 
     @Override
+    public boolean stopQuery(String uuid) {
+        return getDelegate().stopQuery(uuid);
+    }
+
+    @Override
     public String getSqlForHql(String hql) {
         return getDelegate().getSqlForHql(hql);
     }

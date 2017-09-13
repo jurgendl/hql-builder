@@ -34,6 +34,8 @@ import org.tools.hqlbuilder.common.QueryParameters;
 public interface PojoResource extends RestResource {
     public static final String PATH = "/builder";
 
+    public static final String PATH_STOP = "/stop";
+
     public static final String PATH_PLAIN = "/executeplain" + D + XML_EXTENSION;
 
     public static final String PATH_HQL_PLAIN = "/executehqlplain" + D + XML_EXTENSION;
@@ -102,6 +104,8 @@ public interface PojoResource extends RestResource {
     public static final String PARAM_KEY = "key";
 
     public static final String PARAM_HQL = "hql";
+
+    public static final String PARAM_UUID = "uuid";
 
     public static final String PARAM_ID = "id";
 
@@ -319,4 +323,9 @@ public interface PojoResource extends RestResource {
     @Consumes({ XML })
     @Produces({ XML })
     <T extends Serializable> XmlWrapper<List<T>> executePlainResult(QueryParameters queryParameters);
+
+    @GET
+    @Path(PATH_STOP)
+    @Produces({ TEXT })
+    String stopQuery(@QueryParam(PARAM_UUID) String uuid);
 }

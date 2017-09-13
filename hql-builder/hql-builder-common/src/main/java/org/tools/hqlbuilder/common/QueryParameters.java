@@ -3,6 +3,7 @@ package org.tools.hqlbuilder.common;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -23,6 +24,9 @@ public class QueryParameters implements Serializable {
 
     @XmlElementWrapper
     private List<QueryParameter> parameters;
+
+    @XmlAttribute
+    private String uuid = UUID.randomUUID().toString();
 
     public QueryParameters(String hql, int start, int max, List<QueryParameter> parameters) {
         this.hql = hql;
@@ -91,5 +95,13 @@ public class QueryParameters implements Serializable {
     @Override
     public String toString() {
         return "QueryParameters [hql=" + this.hql + ", max=" + this.max + ", first=" + this.first + ", parameters=" + this.parameters + "]";
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

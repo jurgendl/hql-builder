@@ -139,6 +139,11 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
     }
 
     @Override
+    public boolean stopQuery(String uuid) {
+        return "true".equals(getResource().stopQuery(uuid));
+    }
+
+    @Override
     public HibernateWebResolver getHibernateWebResolver() {
         try {
             StreamingOutput hibernateWebResolver = getResource().getSerializedHibernateWebResolver();

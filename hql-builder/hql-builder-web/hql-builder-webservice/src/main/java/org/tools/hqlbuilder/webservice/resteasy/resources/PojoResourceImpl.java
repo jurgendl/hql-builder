@@ -208,4 +208,9 @@ public class PojoResourceImpl implements PojoResource {
     public <T extends Serializable> XmlWrapper<List<T>> executePlainResult(String hql) {
         return executePlainResult(new QueryParameters(hql));
     }
+
+    @Override
+    public String stopQuery(String uuid) {
+        return String.valueOf(getService().stopQuery(uuid));
+    }
 }

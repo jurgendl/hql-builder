@@ -25,6 +25,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -321,7 +322,7 @@ public class HqlServiceImpl implements HqlService {
                         .forEach(it -> result.setOr(it, r -> r.getResults().getValue().addAll(it.getResults().getValue())));
                 return result.get();
             }
-            innerExecute(result.set(new ExecutionResult()), hql, max, first, queryParameters);
+            innerExecute(obj.getUuid(), result.set(new ExecutionResult()), hql, max, first, queryParameters);
             return result.get();
         } catch (QueryException ex) {
             logger.error("{}", ex);
@@ -402,99 +403,122 @@ public class HqlServiceImpl implements HqlService {
         return sb.toString();
     }
 
+    protected Map<String, CountDownLatch> latches = Collections.synchronizedMap(new HashMap<>());
+
     @SuppressWarnings("unchecked")
-    protected ExecutionResult innerExecute(Value<ExecutionResult> resultValue, String hql, int max, int first, List<QueryParameter> queryParameters) {
+    protected ExecutionResult innerExecute(String uuid, Value<ExecutionResult> resultValue, String hql, int max, int first,
+            List<QueryParameter> queryParameters) {
         ExecutionResult result = resultValue.get();
-        long start = System.currentTimeMillis();
-        QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<>(), sessionFactory);
-        String sql = queryTranslator.getSQLString();
-        logger.debug("sql={}", sql);
-        result.setSql(sql);
-        boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
-        Session session = newSession();
-        Query createQuery = session.createQuery(hql);
-        int index = 0;
-        if (queryParameters != null) {
-            for (QueryParameter value : queryParameters) {
+        CountDownLatch latch = new CountDownLatch(1);
+        latches.put(uuid, latch);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    Object valueCompiled = value.getValue();
-                    if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
-                        valueCompiled = GroovyCompiler.eval(value.getValueText());
-                    }
-                    if (value.getName() != null) {
-                        if (valueCompiled instanceof Collection) {
-                            @SuppressWarnings({ "rawtypes" })
-                            Object[] l = new ArrayList((Collection) valueCompiled).toArray();
-                            createQuery.setParameterList(value.getName(), l);
-                        } else {
-                            createQuery.setParameter(value.getName(), valueCompiled);
+                    long start = System.currentTimeMillis();
+                    QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<>(), sessionFactory);
+                    String sql = queryTranslator.getSQLString();
+                    logger.debug("sql={}", sql);
+                    result.setSql(sql);
+                    boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
+                    Session session = newSession();
+                    Query createQuery = session.createQuery(hql);
+                    int index = 0;
+                    if (queryParameters != null) {
+                        for (QueryParameter value : queryParameters) {
+                            try {
+                                Object valueCompiled = value.getValue();
+                                if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
+                                    valueCompiled = GroovyCompiler.eval(value.getValueText());
+                                }
+                                if (value.getName() != null) {
+                                    if (valueCompiled instanceof Collection) {
+                                        @SuppressWarnings({ "rawtypes" })
+                                        Object[] l = new ArrayList((Collection) valueCompiled).toArray();
+                                        createQuery.setParameterList(value.getName(), l);
+                                    } else {
+                                        createQuery.setParameter(value.getName(), valueCompiled);
+                                    }
+                                } else {
+                                    createQuery.setParameter(index++, valueCompiled);
+                                }
+                            } catch (org.hibernate.QueryParameterException ex) {
+                                // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
+                                logger.debug("{}", String.valueOf(ex)); // => whatever
+                            } catch (java.lang.IndexOutOfBoundsException ex) {
+                                // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
+                                logger.debug("{}", String.valueOf(ex)); // => whatever
+                            }
                         }
-                    } else {
-                        createQuery.setParameter(index++, valueCompiled);
                     }
-                } catch (org.hibernate.QueryParameterException ex) {
-                    // org.hibernate.QueryParameterException: could not locate named parameter [nummer]
-                    logger.debug("{}", String.valueOf(ex)); // => whatever
-                } catch (java.lang.IndexOutOfBoundsException ex) {
-                    // java.lang.IndexOutOfBoundsException: Remember that ordinal parameters are 1-based!
-                    logger.debug("{}", String.valueOf(ex)); // => whatever
+                    if (isUpdateStatement) {
+                        result.setSize(createQuery.executeUpdate());
+                        return;
+                    }
+                    queryTranslator.compile(new HashMap<>(), false);
+                    if (sql == null) {
+                        sql = queryTranslator.getSQLString();
+                        if (sql == null) {
+                            String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
+                            sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
+                        }
+                        logger.info("sql={}", sql);
+                        result.setSql(sql);
+                    }
+                    if (max != -1) {
+                        createQuery.setMaxResults(max);
+                    }
+                    if (first != -1) {
+                        createQuery.setFirstResult(first);
+                    }
+                    String QLD = QUERY_LOADER + DOT;
+                    Type[] queryReturnTypes = get(queryTranslator, QLD + QUERY_RETURN_TYPES, Type[].class);
+                    String[] queryReturnAliases = get(queryTranslator, QLD + QUERY_RETURN_ALIASES, String[].class);
+                    result.setQueryReturnAliases(queryReturnAliases);
+                    String[][] scalarColumnNames = get(queryTranslator, QLD + SCALAR_COLUMN_NAMES, String[][].class);
+                    result.setScalarColumnNames(scalarColumnNames);
+                    String[] entityAliases = get(queryTranslator, QLD + ENTITY_ALIASES, String[].class);
+                    Queryable[] entityPersisters = get(queryTranslator, QLD + ENTITY_PERSISTERS, Queryable[].class);
+                    String[] sqlAliases = get(queryTranslator, QLD + SQL_ALIASES, String[].class);
+                    result.setSqlAliases(sqlAliases);
+
+                    @SuppressWarnings("unused")
+                    Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
+                    Map<String, String> from_aliases = new HashMap<>();
+                    result.setFromAliases(from_aliases);
+                    for (int i = 0; i < entityAliases.length; i++) {
+                        String alias = entityAliases[i];
+                        if (alias != null) {
+                            from_aliases.put(alias, entityPersisters[i].getClassMetadata().getEntityName());
+                        }
+                    }
+                    long startTime = System.currentTimeMillis();
+                    List<Serializable> list = createQuery.list();
+                    long endTime = System.currentTimeMillis();
+                    result.setSimpleResults(list);
+                    result.setSize(list.size());
+                    String[] queryReturnTypeNames = new String[queryReturnTypes.length];
+                    for (int i = 0; i < queryReturnTypes.length; i++) {
+                        queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getName();
+                    }
+                    result.setQueryReturnTypeNames(queryReturnTypeNames);
+                    long duration = System.currentTimeMillis() - start;
+                    result.setDuration(endTime - startTime);
+                    result.setOverhead(duration - result.getDuration());
+                } catch (RuntimeException ex) {
+                    logger.error("", ex);
+                } finally {
+                    latch.countDown();
                 }
             }
+        };
+        new Thread(r).start();
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+            //
         }
-        if (isUpdateStatement) {
-            result.setSize(createQuery.executeUpdate());
-            return result;
-        }
-        queryTranslator.compile(new HashMap<>(), false);
-        if (sql == null) {
-            sql = queryTranslator.getSQLString();
-            if (sql == null) {
-                String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
-                sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
-            }
-            logger.info("sql={}", sql);
-            result.setSql(sql);
-        }
-        if (max != -1) {
-            createQuery.setMaxResults(max);
-        }
-        if (first != -1) {
-            createQuery.setFirstResult(first);
-        }
-        String QLD = QUERY_LOADER + DOT;
-        Type[] queryReturnTypes = get(queryTranslator, QLD + QUERY_RETURN_TYPES, Type[].class);
-        String[] queryReturnAliases = get(queryTranslator, QLD + QUERY_RETURN_ALIASES, String[].class);
-        result.setQueryReturnAliases(queryReturnAliases);
-        String[][] scalarColumnNames = get(queryTranslator, QLD + SCALAR_COLUMN_NAMES, String[][].class);
-        result.setScalarColumnNames(scalarColumnNames);
-        String[] entityAliases = get(queryTranslator, QLD + ENTITY_ALIASES, String[].class);
-        Queryable[] entityPersisters = get(queryTranslator, QLD + ENTITY_PERSISTERS, Queryable[].class);
-        String[] sqlAliases = get(queryTranslator, QLD + SQL_ALIASES, String[].class);
-        result.setSqlAliases(sqlAliases);
-
-        @SuppressWarnings("unused")
-        Map<String, String> sqlAliasByEntityAlias = get(queryTranslator, QLD + SQL_ALIAS_BY_ENTITY_ALIAS, Map.class);
-        Map<String, String> from_aliases = new HashMap<>();
-        result.setFromAliases(from_aliases);
-        for (int i = 0; i < entityAliases.length; i++) {
-            String alias = entityAliases[i];
-            if (alias != null) {
-                from_aliases.put(alias, entityPersisters[i].getClassMetadata().getEntityName());
-            }
-        }
-        long startTime = System.currentTimeMillis();
-        List<Serializable> list = createQuery.list();
-        long endTime = System.currentTimeMillis();
-        result.setSimpleResults(list);
-        result.setSize(list.size());
-        String[] queryReturnTypeNames = new String[queryReturnTypes.length];
-        for (int i = 0; i < queryReturnTypes.length; i++) {
-            queryReturnTypeNames[i] = queryReturnTypes[i].getReturnedClass().getName();
-        }
-        result.setQueryReturnTypeNames(queryReturnTypeNames);
-        long duration = System.currentTimeMillis() - start;
-        result.setDuration(endTime - startTime);
-        result.setOverhead(duration - result.getDuration());
+        latches.remove(uuid);
         return result;
     }
 
@@ -1001,5 +1025,17 @@ public class HqlServiceImpl implements HqlService {
 
     public void setProperties(Properties properties) {
         this.properties = properties;
+    }
+
+    @Override
+    public boolean stopQuery(String uuid) {
+        try {
+            CountDownLatch l = latches.get(uuid);
+            l.countDown();
+            latches.remove(uuid);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }

@@ -37,6 +37,8 @@ public class ClientIcons extends CommonIcons {
 
     public static final String CONTROL_PLAY_BLUE = "control_play_blue.png";
 
+    public static final String CONTROL_STOP_BLUE = "control_stop_blue.png";
+
     public static final String COG = "cog.png";
 
     public static final String BULLET_ARROW_UP = "bullet_arrow_up.png";

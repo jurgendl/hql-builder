@@ -16,6 +16,8 @@ public interface HqlService {
 
     public abstract ExecutionResult execute(QueryParameters queryParameters);
 
+    public abstract boolean stopQuery(String uuid);
+
     public abstract HibernateWebResolver getHibernateWebResolver();
 
     public abstract List<String> getProperties(String classname);

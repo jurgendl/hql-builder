@@ -136,6 +136,7 @@ public interface HqlBuilderFrameConstants {
 
     public static final String START_QUERY = "start query";
 
+    public static final String STOP_QUERY = "stop query";
     public static final String COL = "col";
 
     public static final String ROW = "row";

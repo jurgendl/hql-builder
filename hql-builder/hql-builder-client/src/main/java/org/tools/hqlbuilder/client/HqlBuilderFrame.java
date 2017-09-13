@@ -486,6 +486,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction startQueryAction;
 
+    private final HqlBuilderAction stopQueryAction;
+
     private final HqlBuilderAction formatAction;
 
     private final HqlBuilderAction namedQueryAction;
@@ -697,6 +699,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final EButton nextResultsButton;
 
     private final EButton backToStartResultsButton;
+
+    private SwingWorker<ExecutionResult, Void> queryExecution = null;
+
+    private QueryParameters queryParameters = null;
 
     private HqlBuilderFrame() {
         // needs to be first to init font
@@ -913,6 +919,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.startQueryAction = new HqlBuilderAction(this.hql, this, HqlBuilderFrameConstants.START_QUERY, true, HqlBuilderFrameConstants.START_QUERY,
                 CommonIcons.getIcon(ClientIcons.CONTROL_PLAY_BLUE), HqlBuilderFrameConstants.START_QUERY, HqlBuilderFrameConstants.START_QUERY, true,
                 null, "ctrl ENTER");
+        this.stopQueryAction = new HqlBuilderAction(this.hql, this, HqlBuilderFrameConstants.STOP_QUERY, true, HqlBuilderFrameConstants.STOP_QUERY,
+                CommonIcons.getIcon(ClientIcons.CONTROL_STOP_BLUE), HqlBuilderFrameConstants.STOP_QUERY, HqlBuilderFrameConstants.STOP_QUERY, true,
+                null, null);
+        stopQueryAction.setEnabled(false);
         this.deleteInvertedSelectionAction = new HqlBuilderAction(this.hql, this, HqlBuilderFrameConstants.DELETE_INVERTED_SELECTION, true,
                 HqlBuilderFrameConstants.DELETE_INVERTED_SELECTION, CommonIcons.getIcon(ClientIcons.TABLE_ROW_DELETE),
                 HqlBuilderFrameConstants.DELETE_INVERTED_SELECTION, HqlBuilderFrameConstants.DELETE_INVERTED_SELECTION, true, null, "ctrl DELETE");
@@ -1385,6 +1395,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         JPopupMenu hqlpopupmenu = this.hql.getComponentPopupMenu();
         hqlpopupmenu.addSeparator();
         hqlpopupmenu.add(new JMenuItem(this.startQueryAction));
+        hqlpopupmenu.add(new JMenuItem(this.stopQueryAction));
         hqlpopupmenu.add(new JMenuItem(this.wizardAction));
         hqlpopupmenu.add(new JMenuItem(this.clearAction));
         hqlpopupmenu.add(new JMenuItem(this.findParametersAction));
@@ -1466,9 +1477,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
+
     private ExecutionResult doQuery(String hqlGetText, int start, int maxresults) {
-        return this.hqlService.execute(new QueryParameters(hqlGetText, start, maxresults,
-                this.parametersEDT.getRecords().stream().map(EListRecord::get).collect(Collectors.toList())));
+        queryParameters = new QueryParameters(hqlGetText, start, maxresults,
+                this.parametersEDT.getRecords().stream().map(EListRecord::get).collect(Collectors.toList()));
+        return this.hqlService.execute(queryParameters);
     }
 
     protected void down() {
@@ -1536,7 +1549,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         final int maxresults = rowProcessor == null ? (Integer) this.maximumNumberOfResultsAction.getValue() : Integer.MAX_VALUE;
         final int startNr = startResults.getObjectValue();
 
-        SwingWorker<ExecutionResult, Void> sw = new SwingWorker<ExecutionResult, Void>() {
+        queryExecution = new SwingWorker<ExecutionResult, Void>() {
             @Override
             protected ExecutionResult doInBackground() throws Exception {
                 return HqlBuilderFrame.this.doQuery(hqlGetText, startNr, maxresults);
@@ -1556,6 +1569,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         Throwable cause = ex.getCause();
                         HqlBuilderFrame.this.afterQuery(cause);
                     }
+                } catch (java.util.concurrent.CancellationException ex) {
+                    HqlBuilderFrame.this.postQuery();
                 } catch (Exception ex) {
                     HqlBuilderFrame.this.afterQuery(ex);
                 } finally {
@@ -1569,7 +1584,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         };
 
-        sw.execute();
+        queryExecution.execute();
     }
 
     protected void exit() {
@@ -2505,11 +2520,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private void postQuery() {
         this.startQueryAction.setEnabled(true);
+        this.stopQueryAction.setEnabled(false);
         this.progressbarStop();
     }
 
     private void preQuery() {
         this.startQueryAction.setEnabled(false);
+        this.stopQueryAction.setEnabled(true);
         this.progressbarStart(HqlResourceBundle.getMessage("quering"));
         this.errorLocs.clear();
         this.errorString = null;
@@ -2961,6 +2978,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         {
             hqltools = new JToolBar(javax.swing.SwingConstants.VERTICAL);
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.startQueryAction)));
+            hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.stopQueryAction)));
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.wizardAction)));
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.clearAction)));
             hqltools.add(new EToolBarButton(new EToolBarButtonConfig(etbc, this.findParametersAction)));
@@ -3116,6 +3134,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         {
             JMenu hqlmenu = new JMenu("HQL");
             hqlmenu.add(new JMenuItem(this.startQueryAction));
+            hqlmenu.add(new JMenuItem(this.stopQueryAction));
             hqlmenu.add(new JMenuItem(this.wizardAction));
             hqlmenu.add(new JMenuItem(this.clearAction));
             hqlmenu.add(new JMenuItem(this.findParametersAction));
@@ -3162,6 +3181,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     protected void start_query() {
         start_query(true);
+    }
+
+    protected void stop_query() {
+        try {
+            if (queryExecution != null) {
+                queryExecution.cancel(true);
+            }
+            hqlService.stopQuery(queryParameters.getUuid());
+        } catch (Exception ex) {
+            //
+        }
     }
 
     protected void start_query(boolean resetPointer) {
