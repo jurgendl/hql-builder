@@ -10,8 +10,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.tools.hqlbuilder.common.GroovyCompiler;
 
-
 public class GroovyCompilerTest {
+    public String toString(Object o) {
+        return o.toString().replace("{", "[").replace("}", "]").replace("=", ":").replace("%", "PERCENT");
+    }
+
     @Test
     public void testDefoLong() {
         Assert.assertEquals(Long.class, GroovyCompiler.eval("1").getClass());
@@ -52,42 +55,36 @@ public class GroovyCompilerTest {
 
     @Test
     public void testSomething() {
-        Object o = GroovyCompiler
-                .eval("[param0:25, param1:84296, param3$0$:['/uri/part']]");
         Map<String, Object> m = new HashMap<>();
         m.put("param0", 25l);
         m.put("param1", 84296l);
         m.put("param3$0$", Arrays.asList("/uri/part"));
-        Assert.assertEquals(m, o);
+        Assert.assertEquals(m, GroovyCompiler.eval("[param0:25, param1:84296, param3$0$:['/uri/part']]"));
     }
 
     @Test
     public void testSomethingElse() {
-        Object o = GroovyCompiler.eval("[param0:'bronId1%', param1:20]");
         Map<String, Object> m = new HashMap<>();
         m.put("param0", "bronId1%");
         m.put("param1", 20l);
-        Assert.assertEquals(m, o);
+        Assert.assertEquals(m, GroovyCompiler.eval(toString(m)));
     }
 
     @Test
     public void testSomethingElseToo() {
-        Object o = GroovyCompiler.eval("[param0:bronId1, param1:20]");
         Map<String, Object> m = new HashMap<>();
         m.put("param0", "bronId1");
         m.put("param1", 20l);
-        Assert.assertEquals(m, o);
+        Assert.assertEquals(m, GroovyCompiler.eval(toString(m)));
     }
 
     @Test
     public void testLocalDate() {
-        Object o = GroovyCompiler.eval("new LocalDate(2000,1,1)");
-        Assert.assertEquals(new LocalDate(2000, 1, 1), o);
-        o = GroovyCompiler.eval("[param0:new LocalDate(2000,1,1), param1:20]"); // *1* LocalDate doesn't accept long values
+        Assert.assertEquals(new LocalDate(2000, 1, 1), GroovyCompiler.eval("new LocalDate(2000,1,1)"));
         Map<String, Object> m = new HashMap<>();
         m.put("param0", new LocalDate(2000, 1, 1));
         m.put("param1", 20); // isn't a long value as expected because of *1*
-        Assert.assertEquals(m, o);
+        Assert.assertEquals(m, GroovyCompiler.eval("[param0:new LocalDate(2000,1,1), param1:20]"));// *1* LocalDate doesn't accept long values
     }
 
     public static enum GCEnum {
