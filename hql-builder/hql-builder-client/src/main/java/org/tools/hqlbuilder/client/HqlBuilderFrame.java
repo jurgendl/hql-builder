@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -727,7 +726,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }));
 
         UIManager.put("ToolTip.font", new FontUIResource(this.getFont()));
-        this.resultsInfo = this.font(new ELabel(""), null);
+        this.resultsInfo = this.font(new ELabel(""), null, Font.BOLD);
         this.parameterBuilder = this.font(new ETextField(new ETextFieldConfig()), null);
         this.parameterName = this.font(new ETextField(new ETextFieldConfig()), null);
         this.parameterValue = this.font(new ETextField(new ETextFieldConfig(false)), null);
@@ -2682,7 +2681,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     public void setMaxResults(int newValue) {
-        this.maxResults.setText(" / " + newValue);
+        this.maxResults.setText(" [ max=" + newValue + " ] ");
         this.maxResults.setForeground(newValue > 500 ? HIGHLIGHT_ERROR_DEFAULT_COLOR : Color.BLACK);
     }
 
@@ -2844,12 +2843,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         this.parameterspanel.add(new ELabel(), "growy, growx, spanx 3"); // filler
 
-        this.maxResults.setMinimumSize(new Dimension(80, 22));
-        this.maxResults.setPreferredSize(new Dimension(80, 22));
-        this.resultsInfo.setMinimumSize(new Dimension(325, 22));
-        this.resultsInfo.setPreferredSize(new Dimension(325, 22));
-
-        JPanel resultsStatusPanel = new JPanel(new FlowLayout());
+        JPanel resultsStatusPanel = new JPanel(new MigLayout("", "push[center][center][center][center][center]push", ""));
         resultsStatusPanel.add(this.resultsInfo);
         resultsStatusPanel.add(this.maxResults);
         resultsStatusPanel.add(this.backToStartResultsButton);
