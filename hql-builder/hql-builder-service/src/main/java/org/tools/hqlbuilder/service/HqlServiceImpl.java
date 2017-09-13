@@ -297,7 +297,7 @@ public class HqlServiceImpl implements HqlService {
 
     @Override
     public ExecutionResult execute(QueryParameters obj) {
-        logger.info("start query \n {}", obj);
+        logger.trace("start query \n {}", obj);
         String hql = obj.getHql();
         int max = obj.getMax();
         int first = obj.getFirst();
@@ -505,6 +505,7 @@ public class HqlServiceImpl implements HqlService {
                     long duration = System.currentTimeMillis() - start;
                     result.setDuration(endTime - startTime);
                     result.setOverhead(duration - result.getDuration());
+                    logger.info("DONE: " + uuid);
                 } catch (RuntimeException ex) {
                     logger.error("", ex);
                 } finally {
@@ -1032,10 +1033,13 @@ public class HqlServiceImpl implements HqlService {
         try {
             CountDownLatch l = latches.get(uuid);
             l.countDown();
-            latches.remove(uuid);
+            logger.info("stopped " + uuid);
             return true;
         } catch (Exception ex) {
+            logger.info("failed stopping " + uuid + " " + latches.keySet() + " " + ex);
             return false;
+        } finally {
+            latches.remove(uuid);
         }
     }
 }
