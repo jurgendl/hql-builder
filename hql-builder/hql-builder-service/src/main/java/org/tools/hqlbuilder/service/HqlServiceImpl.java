@@ -412,6 +412,7 @@ public class HqlServiceImpl implements HqlService {
         CountDownLatch latch = new CountDownLatch(1);
         latches.put(uuid, latch);
         logger.info("add-latches: " + latches.keySet());
+        Value<RuntimeException> runtimeException = new Value<>();
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -508,6 +509,7 @@ public class HqlServiceImpl implements HqlService {
                     result.setOverhead(duration - result.getDuration());
                     logger.info("DONE: " + uuid);
                 } catch (RuntimeException ex) {
+                    runtimeException.set(ex);
                     logger.error("", ex);
                 } finally {
                     latch.countDown();
@@ -522,6 +524,9 @@ public class HqlServiceImpl implements HqlService {
         }
         latches.remove(uuid);
         logger.info("remove-latches: " + latches.keySet());
+        if (runtimeException.isSet()) {
+            throw runtimeException.get();
+        }
         return result;
     }
 
