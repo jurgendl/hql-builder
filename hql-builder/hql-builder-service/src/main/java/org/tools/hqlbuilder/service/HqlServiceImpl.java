@@ -385,7 +385,7 @@ public class HqlServiceImpl implements HqlService {
         } catch (Exception ex) {
             throw new ServiceException(concat(ex), result.get());
         } finally {
-            logger.info("end query \n {}", obj);
+            logger.trace("end query \n {}", obj);
         }
     }
 
@@ -403,7 +403,7 @@ public class HqlServiceImpl implements HqlService {
         return sb.toString();
     }
 
-    protected Map<String, CountDownLatch> latches = Collections.synchronizedMap(new HashMap<>());
+    protected Map<String, CountDownLatch> latches = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     protected ExecutionResult innerExecute(String uuid, Value<ExecutionResult> resultValue, String hql, int max, int first,
@@ -411,6 +411,7 @@ public class HqlServiceImpl implements HqlService {
         ExecutionResult result = resultValue.get();
         CountDownLatch latch = new CountDownLatch(1);
         latches.put(uuid, latch);
+        logger.info("add-latches: " + latches.keySet());
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -520,6 +521,7 @@ public class HqlServiceImpl implements HqlService {
             //
         }
         latches.remove(uuid);
+        logger.info("remove-latches: " + latches.keySet());
         return result;
     }
 
