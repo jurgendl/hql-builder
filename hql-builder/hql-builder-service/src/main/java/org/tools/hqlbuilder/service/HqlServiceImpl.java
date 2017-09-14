@@ -421,7 +421,7 @@ public class HqlServiceImpl implements HqlService {
                         long start = System.currentTimeMillis();
                         QueryTranslator queryTranslator = new QueryTranslator(QUERY_IDENTIFIER, hql, new HashMap<>(), sessionFactory);
                         String sql = queryTranslator.getSQLString();
-                        logger.trace("sql={}", sql);
+                        logger.info("sql={}", sql);
                         result.setSql(sql);
                         boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
                         Session session = newSession();
@@ -465,13 +465,13 @@ public class HqlServiceImpl implements HqlService {
                                 String tmp = new ObjectWrapper(queryTranslator).get(QUERY_LOADER).toString();
                                 sql = tmp.substring(tmp.indexOf("(") + 1, tmp.length() - 1);
                             }
-                            logger.trace("sql={}", sql);
+                            logger.info("sql={}", sql);
                             result.setSql(sql);
                         }
-                        if (max != -1) {
+                        if (max > 0) {
                             createQuery.setMaxResults(max);
                         }
-                        if (first != -1) {
+                        if (first > 0) {
                             createQuery.setFirstResult(first);
                         }
                         String QLD = QUERY_LOADER + DOT;

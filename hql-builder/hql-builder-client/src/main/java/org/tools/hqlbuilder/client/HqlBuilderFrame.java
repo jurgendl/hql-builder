@@ -2699,7 +2699,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     public void setMaxResults(int newValue) {
         this.maxResults.setText(" [ max=" + newValue + " ] ");
-        this.maxResults.setForeground(newValue > 500 ? HIGHLIGHT_ERROR_DEFAULT_COLOR : Color.BLACK);
+        this.maxResults.setForeground(newValue > 500 || newValue <= 0 ? HIGHLIGHT_ERROR_DEFAULT_COLOR : Color.BLACK);
     }
 
     /**
