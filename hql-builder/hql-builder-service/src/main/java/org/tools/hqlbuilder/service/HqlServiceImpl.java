@@ -539,7 +539,7 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public HibernateWebResolver getHibernateWebResolver() {
         HibernateWebResolver resolver = new HibernateWebResolver();
-        for (Object o : sessionFactory.getAllClassMetadata().entrySet()) {
+        for (Object o : new MetadataResolver().getAllClassMetadata(sessionFactory).entrySet()) {
             Entry<?, ?> entry = (Entry<?, ?>) o;
             String className = (String) entry.getKey();
             try {
@@ -602,7 +602,7 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(classname)) {
             throw new IllegalArgumentException("classname");
         }
-        Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
+        Map<String, ?> allClassMetadata = new MetadataResolver().getAllClassMetadata(sessionFactory);
         Object classMeta = allClassMetadata.get(classname);
         if (classMeta == null) {
             return null;
@@ -627,7 +627,7 @@ public class HqlServiceImpl implements HqlService {
             tx.commit();
             session.flush();
 
-            ClassMetadata classMetadata = sessionFactory.getAllClassMetadata().get(object.getClass().getName());
+            ClassMetadata classMetadata = (ClassMetadata) new MetadataResolver().getAllClassMetadata(sessionFactory).get(object.getClass().getName());
             String oid = classMetadata.getIdentifierPropertyName();
             return (I) new ObjectWrapper(object).get(oid);
         } catch (RuntimeException ex) {
@@ -680,7 +680,7 @@ public class HqlServiceImpl implements HqlService {
     public <T extends Serializable, I extends Serializable> T get(Class<T> type, I id) {
         Object idv = id;
         String name = type.getName();
-        ClassMetadata classMetadata = sessionFactory.getAllClassMetadata().get(name);
+        ClassMetadata classMetadata = (ClassMetadata) new MetadataResolver().getAllClassMetadata(sessionFactory).get(name);
         String oid = classMetadata.getIdentifierPropertyName();
         if (id instanceof String) {
             IdentifierType<?> identifierType = (IdentifierType<?>) classMetadata.getIdentifierType();
@@ -813,7 +813,7 @@ public class HqlServiceImpl implements HqlService {
         if (StringUtils.isBlank(classtype)) {
             throw new IllegalArgumentException("type");
         }
-        Map<?, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
+        Map<?, ?> allClassMetadata = new MetadataResolver().getAllClassMetadata(sessionFactory);
         AbstractEntityPersister persister = (AbstractEntityPersister) allClassMetadata.get(classtype);
 
         for (int i = 1; i < parts.length; i++) {

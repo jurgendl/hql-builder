@@ -72,7 +72,7 @@ public abstract class LuceneInformation implements Information {
 	public void init(String id, Object sf) throws IOException, UnsupportedOperationException {
 		SessionFactory sessionFactory = (SessionFactory) sf;
 
-		Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
+        Map<String, ?> allClassMetadata = new MetadataResolver().getAllClassMetadata(sessionFactory);
 
 		if (this.persistent) {
             this.index = new NIOFSDirectory(Paths.get(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LuceneInformation.LUCENE_VERSION + "/"
