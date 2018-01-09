@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.metadata.ClassMetadata;
 
 import javassist.Modifier;
 
@@ -36,7 +37,7 @@ public class MetadataResolver {
     }
 
     @SuppressWarnings("deprecation")
-    public Map<String, ?> getAllClassMetadata(SessionFactory sessionFactory) {
+    public Map<String, ClassMetadata> getAllClassMetadata(SessionFactory sessionFactory) {
         return sessionFactory.getMetamodel()
                 .getEntities()
                 .stream()
