@@ -7,14 +7,12 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>org.tools.hql-builder.spring</groupId>
-	<artifactId>hibernate4-spring-orm-parent</artifactId>
+	<artifactId>hibernate-spring-orm-parent</artifactId>
 	<name>hql-builder-spring-parent</name>
 	<description>hql-builder-spring-parent</description>
 	<packaging>pom</packaging>
-	<properties>
-		<hibernate.version>4.2.8.Final</hibernate.version>
-	</properties>
 	<modules>
 		<module>hibernate4-spring-orm</module>
+		<module>hibernate5-spring-orm</module>
 	</modules>
 </project>
