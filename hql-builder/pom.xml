@@ -49,7 +49,7 @@
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2017.07.03 -->
-		<version.hibernate>4.3</version.hibernate><!-- being tested against 4.3 -->
+		<version.hibernate>5.2</version.hibernate><!-- being tested against 5.2 -->
 		<version.slf4j>1.7.21</version.slf4j><!-- recent version, keep up to date -->
 		<version.logback>1.1.7</version.logback><!-- recent version, keep up to date -->
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date -->

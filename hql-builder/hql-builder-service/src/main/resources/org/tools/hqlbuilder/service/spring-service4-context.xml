@@ -42,6 +42,8 @@
 				<prop key="hibernate.ejb.event.post-insert">org.hibernate.search.event.FullTextIndexEventListener</prop>
 				<prop key="hibernate.ejb.event.post-delete">org.hibernate.search.event.FullTextIndexEventListener</prop>
 				<prop key="hibernate.ejb.event.post-update">org.hibernate.search.event.FullTextIndexEventListener</prop>
+                <prop key="hibernate.connection.handling_mode">DELAYED_ACQUISITION_AND_RELEASE_AFTER_TRANSACTION</prop>
+                <prop key="hibernate.hql.bulk_id_strategy">org.hibernate.hql.spi.id.inline.InlineIdsInClauseBulkIdStrategy</prop>
 			</props>
 		</property>
 	</bean>

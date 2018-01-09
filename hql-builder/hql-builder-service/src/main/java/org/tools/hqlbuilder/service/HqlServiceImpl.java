@@ -45,7 +45,6 @@ import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.Queryable;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.IdentifierType;
 import org.hibernate.type.ManyToOneType;
@@ -56,6 +55,7 @@ import org.jhaws.common.lang.ObjectWrapper;
 import org.jhaws.common.lang.Value;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.common.CommonUtilsAdd;
 import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.GroovyCompiler;
 import org.tools.hqlbuilder.common.HibernateWebResolver;
@@ -556,7 +556,7 @@ public class HqlServiceImpl implements HqlService {
                         node.addPath(propertyNames, resolver.getOrCreateNode(subClassName));
                     } else if (propertyType instanceof CollectionType) {
                         CollectionType collectionType = CollectionType.class.cast(propertyType);
-                        Type elementType = CommonUtils.call(collectionType, "getElementType", Type.class, sessionFactory);
+                        Type elementType = CommonUtilsAdd.call(collectionType, "getElementType", Type.class, sessionFactory);
                         String subClassName = elementType.getName();
                         if ("org.hibernate.type.EnumType".equals(subClassName)) {
                             continue;
@@ -781,19 +781,19 @@ public class HqlServiceImpl implements HqlService {
                 String simpleName = "?";
                 try {
                     // simpleName = pminof.getNamedParameterExpectedType(param).getReturnedClass().getSimpleName();
-                    simpleName = CommonUtils.call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
+                    simpleName = CommonUtilsAdd.call(pminof, "getNamedParameterExpectedType", Type.class, param).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
                 parameters.add(new QueryParameter().setName(param).setType(simpleName));
             }
 
-            Integer mi = CommonUtils.call(pminof, "getOrdinalParameterCount", Integer.class);
+            Integer mi = CommonUtilsAdd.call(pminof, "getOrdinalParameterCount", Integer.class);
             for (int i = 1; i <= mi; i++) {
                 String simpleName = "?";
                 try {
                     // simpleName = pminof.getOrdinalParameterExpectedType(i).getReturnedClass().getSimpleName();
-                    simpleName = CommonUtils.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
+                    simpleName = CommonUtilsAdd.call(pminof, "getOrdinalParameterExpectedType", Type.class, i).getReturnedClass().getSimpleName();
                 } catch (Exception ex) {
                     //
                 }
@@ -956,23 +956,7 @@ public class HqlServiceImpl implements HqlService {
             logger.error("configuration not set");
             return null;
         }
-        try {
-            SchemaExport export = new SchemaExport(configurationBean.getConfiguration());
-            export.setDelimiter(";");
-            export.setFormat(true);
-            export.setHaltOnError(false);
-            try {
-                File tmp = File.createTempFile("create", "sql");
-                export.setOutputFile(tmp.getAbsolutePath());
-                export.execute(true, false, false, true);
-                return new String(CommonUtils.read(new FileInputStream(tmp)));
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        } catch (RuntimeException ex) {
-            logger.error("{}", ex);
-            return null;
-        }
+        return new SchemaExporter().export(configurationBean.getConfiguration());
     }
 
     public ConfigurationBean getConfigurationBean() {

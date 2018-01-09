@@ -28,11 +28,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.jhaws.common.lang.EnhancedRunnable;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.PropertyAccessorFactory;
-import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -239,9 +235,7 @@ public class CommonUtils {
         return tmp;
     }
 
-    public static void call(Object object, String methodName) {
-        call(object, methodName, Void.TYPE);
-    }
+
 
     public static Object create(String className) {
         return create(className, new Class[0], new Object[0]);
@@ -272,31 +266,7 @@ public class CommonUtils {
         }
     }
 
-    public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
-        // logger.debug(String.valueOf(object));
-        // logger.debug(methodName);
-        // logger.debug(Arrays.toString(params));
-        MethodInvokingFactoryBean mi = new MethodInvokingFactoryBean();
-        mi.setTargetObject(object);
-        mi.setTargetMethod(methodName);
-        mi.setArguments(params);
-        try {
-            mi.afterPropertiesSet();
-            T value = type.cast(mi.getObject());
-            // logger.debug(String.valueOf(value));
-            return value;
-        } catch (RuntimeException ex) {
-            logger.error("call(Object, String, Class<T>, Object...)");
-            logger.error(ex.getClass().getName());
-            logger.error(String.valueOf(ex));
-            throw ex;
-        } catch (Exception ex) {
-            logger.error("call(Object, String, Class<T>, Object...)");
-            logger.error(ex.getClass().getName());
-            logger.error(String.valueOf(ex));
-            throw new RuntimeException(ex);
-        }
-    }
+
 
     public static String readMavenVersion(String pack) throws Exception {
         String[] dp = pack.split(":");
@@ -358,13 +328,7 @@ public class CommonUtils {
         return Lambda.argument(arg).evaluate(value);
     }
 
-    public static <T> T create(Class<T> modelType) {
-        return BeanUtils.instantiate(modelType);
-    }
 
-    public static <A> void set(Object bean, A arg, Object value) {
-        PropertyAccessorFactory.forBeanPropertyAccess(bean).setPropertyValue(Lambda.argument(arg).getInkvokedPropertyName(), value);
-    }
 
     /**
      * @see #getImplementation(Object, Class, int) met index=-1
@@ -473,11 +437,11 @@ public class CommonUtils {
         }
     }
 
-    public static void run(EnhancedRunnable runnable) {
+    public static void run(Runnable runnable) {
         run(null, runnable, Exception::printStackTrace);
     }
 
-    public static void run(Long sleep, EnhancedRunnable runnable, Consumer<Exception> exceptionHandler) {
+    public static void run(Long sleep, Runnable runnable, Consumer<Exception> exceptionHandler) {
         Thread thread = new Thread(() -> {
             boolean eternal = sleep != null;
             try {

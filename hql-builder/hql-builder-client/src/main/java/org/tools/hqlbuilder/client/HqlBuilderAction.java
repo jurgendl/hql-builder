@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import org.swingeasy.HasParentComponent;
-import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.common.CommonUtilsAdd;
 
 /**
  * @author Jurgen
@@ -72,7 +72,7 @@ public class HqlBuilderAction extends Action implements HasParentComponent {
     public void actionPerformed(ActionEvent e) {
         if (source != null && method != null) {
             try {
-                CommonUtils.call(source, method);
+                CommonUtilsAdd.call(source, method);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

@@ -12,6 +12,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.jhaws.common.web.resteasy.RestResource;
 import org.slf4j.LoggerFactory;
 import org.tools.hqlbuilder.common.CommonUtils;
+import org.tools.hqlbuilder.common.CommonUtilsAdd;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
 
@@ -260,7 +261,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         // logger.debug(sqlString);
 
         try {
-            sqlString = CommonUtils.call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class,
+            sqlString = CommonUtilsAdd.call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class,
                     sqlString);
         } catch (Throwable ex) {
             if (!warn1) {
@@ -270,7 +271,8 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         }
 
         try {
-            sqlString = CommonUtils.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format", String.class,
+            sqlString = CommonUtilsAdd.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
+                    String.class,
                     sqlString);
         } catch (Throwable ex) {
             if (!warn2) {

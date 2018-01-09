@@ -9,4 +9,14 @@
 	<artifactId>hql-builder-interfaces</artifactId>
 	<name>hql-builder-interfaces</name>
 	<description>hql-builder-interfaces</description>
+    <dependencies>
+		<dependency>
+			<groupId>com.googlecode.lambdaj</groupId>
+			<artifactId>lambdaj</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+    </dependencies>
 </project>

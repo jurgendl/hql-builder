@@ -1,7 +1,8 @@
 package org.tools.hqlbuilder.client;
 
-import static org.tools.hqlbuilder.common.CommonUtils.call;
 import static org.tools.hqlbuilder.common.CommonUtils.create;
+
+import org.tools.hqlbuilder.common.CommonUtilsAdd;
 
 public class HqlServiceClientLoaderImpl implements HqlServiceClientLoader {
     @Override
@@ -9,7 +10,7 @@ public class HqlServiceClientLoaderImpl implements HqlServiceClientLoader {
         try {
             Object context = create("org.springframework.context.support.ClassPathXmlApplicationContext",
                     "org/tools/hqlbuilder/applicationContext.xml");
-            HqlServiceClient hqlServiceClient = call(context, "getBean", HqlServiceClient.class, "hqlServiceClient");
+            HqlServiceClient hqlServiceClient = CommonUtilsAdd.call(context, "getBean", HqlServiceClient.class, "hqlServiceClient");
             // HqlServiceClient hqlServiceClient = HqlServiceClient.class.cast(new org.springframework.context.support.ClassPathXmlApplicationContext(
             // "org/tools/hqlbuilder/applicationContext.xml").getBean("hqlServiceClient"));
             return hqlServiceClient;
