@@ -28,7 +28,7 @@ public class SessionFactoryUtils2 extends org.springframework.orm.hibernate4.Ses
 	 * 
 	 * @param query the Hibernate Query object
 	 * @param sessionFactory Hibernate SessionFactory that the Query was created for (may be {@code null})
-	 * @see org.hibernate.Query#setTimeout
+	 * @see Query#setTimeout
 	 */
 	public static void applyTransactionTimeout(Query query, SessionFactory sessionFactory) {
 		Assert.notNull(query, "No Query object specified");
