@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tools.hql-builder</groupId>
 	<artifactId>bom</artifactId>
-	<version>4.0.3-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HqlBuilder</name>
 	<description>HqlBuilder</description>
@@ -21,7 +21,7 @@
 	(stash/push changes)
 	((set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_144))
 	mvn release:prepare
-	git checkout bom-4.0.3
+	git checkout bom-5.0.0
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=4.0.4-SNAPSHOT
