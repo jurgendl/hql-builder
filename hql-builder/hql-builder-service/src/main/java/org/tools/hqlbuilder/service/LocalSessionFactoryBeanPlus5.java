@@ -40,9 +40,9 @@ public class LocalSessionFactoryBeanPlus5 extends org.springframework.orm.hibern
      */
     @Override
     protected SessionFactory buildSessionFactory(LocalSessionFactoryBuilder sfb) {
-        Configuration configuration = getConfiguration();
-        postProcessMappings(configuration);
-        postProcessConfiguration(configuration);
+        // Configuration configuration = getConfiguration();
+        // postProcessMappings(configuration);
+        // postProcessConfiguration(configuration);
         SessionFactory buildSessionFactory = super.buildSessionFactory(sfb);
         afterSessionFactoryCreation();
         return buildSessionFactory;
