@@ -35,7 +35,8 @@ public class LocalSessionFactoryBeanPlus5 extends org.springframework.orm.hibern
     }
 
     /**
-     * @see org.springframework.orm.hibernate4.LocalSessionFactoryBean#buildSessionFactory(org.springframework.orm.hibernate4.LocalSessionFactoryBuilder)
+     * 
+     * @see org.springframework.orm.hibernate5.LocalSessionFactoryBean#buildSessionFactory(org.springframework.orm.hibernate5.LocalSessionFactoryBuilder)
      */
     @Override
     protected SessionFactory buildSessionFactory(LocalSessionFactoryBuilder sfb) {

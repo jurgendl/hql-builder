@@ -84,7 +84,7 @@
 		<property name="password" value="${hibernate.connection.password}" />
 	</bean> -->
 
-	<bean id="sessionFactory" class="org.tools.hqlbuilder.service.LocalSessionFactoryBeanPlus4" scope="singleton" lazy-init="false">
+	<bean id="sessionFactory" class="org.tools.hqlbuilder.service.LocalSessionFactoryBeanPlus5" scope="singleton" lazy-init="false">
 		<property name="dataSource" ref="dataSource" />
 		<!-- <property name="configLocation" value="classpath:${hibernate.cfg.xml}" /> -->
         <property name="hibernateConfigLocation" value="${hibernate.cfg.xml}" />
