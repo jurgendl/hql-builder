@@ -1,4 +1,4 @@
-package org.springframework.orm.hibernate4;
+package org.springframework.orm.hibernate5;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
-public class SessionFactoryUtils2 extends org.springframework.orm.hibernate4.SessionFactoryUtils {
+public class SessionFactoryUtils2 extends org.springframework.orm.hibernate5.SessionFactoryUtils {
 	/**
 	 * Apply the current transaction timeout, if any, to the given Hibernate Criteria object.
 	 * 

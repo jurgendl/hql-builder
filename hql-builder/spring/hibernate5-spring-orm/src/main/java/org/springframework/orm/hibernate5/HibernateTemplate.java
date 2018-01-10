@@ -1,4 +1,4 @@
-package org.springframework.orm.hibernate4;
+package org.springframework.orm.hibernate5;
 
 import java.io.Serializable;
 import java.sql.SQLException;

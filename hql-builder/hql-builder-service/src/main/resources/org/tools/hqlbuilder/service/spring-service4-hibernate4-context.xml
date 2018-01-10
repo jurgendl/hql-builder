@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<import resource="classpath:org/tools/hqlbuilder/common/spring-common.xml" />
+
+	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:org/tools/hqlbuilder/common/commonconfig.properties"/>
+	</bean>
+
+	<bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" scope="singleton" lazy-init="false">
+		<property name="properties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<!-- <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop> -->
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.max_fetch_depth">5</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.connection.pool_size">1</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">hqlbuilder-ehcache.xml</prop>
+				<prop key="hibernate.use_sql_comments">true</prop>
+				<prop key="hibernate.validator.autoregister_listeners">${hibernate.validator.autoregister_listeners}</prop>
+				<prop key="hibernate.search.default.directory_provider">${hibernate.search.default.directory_provider}</prop>
+				<prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>
+				<prop key="hibernate.search.autoregister_listeners">${hibernate.search.autoregister_listeners}</prop>
+				<prop key="hibernate.ejb.event.post-insert">org.hibernate.search.event.FullTextIndexEventListener</prop>
+				<prop key="hibernate.ejb.event.post-delete">org.hibernate.search.event.FullTextIndexEventListener</prop>
+				<prop key="hibernate.ejb.event.post-update">org.hibernate.search.event.FullTextIndexEventListener</prop>
+                <prop key="hibernate.connection.handling_mode">DELAYED_ACQUISITION_AND_RELEASE_AFTER_TRANSACTION</prop>
+                <prop key="hibernate.hql.bulk_id_strategy">org.hibernate.hql.spi.id.inline.InlineIdsInClauseBulkIdStrategy</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- https://github.com/brettwooldridge/HikariCP#initialization -->
+	<!-- <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close" scope="singleton" lazy-init="false">
+		<constructor-arg>
+			<bean class="com.zaxxer.hikari.HikariConfig">
+				<property name="poolName" value="springHikariCP" />
+				<property name="driverClassName" value="${hibernate.connection.driver_class}"/>
+				<property name="jdbcUrl" value="${hibernate.connection.url}"/>
+				<property name="username" value="${hibernate.connection.username}"/>
+				<property name="password" value="${hibernate.connection.password}"/>
+			</bean>
+		</constructor-arg>
+	</bean> -->
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" scope="singleton" lazy-init="false">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean>
+
+	<!-- <bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" scope="singleton" lazy-init="false">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+		<property name="initialSize" value="3" />
+	</bean> -->
+
+	<!-- <bean id="dataSource" destroy-method="close" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close" scope="singleton" lazy-init="false">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean> -->
+
+	<bean id="sessionFactory" class="org.tools.hqlbuilder.service.LocalSessionFactoryBeanPlus4" scope="singleton" lazy-init="false">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="configLocation" value="classpath:${hibernate.cfg.xml}" /> -->
+        <property name="hibernateConfigLocation" value="${hibernate.cfg.xml}" />
+        <property name="hibernatePackagesToScan" ref="packagesToScan" />
+		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
+	</bean>
+
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" scope="singleton" lazy-init="false">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="configurationBean" class="org.tools.hqlbuilder.service.ConfigurationBean" scope="singleton" lazy-init="false">
+	</bean>
+
+	<bean id="hqlService" class="org.springframework.aop.framework.ProxyFactoryBean" scope="singleton" lazy-init="false">
+		<property name="target" ref="hqlServiceImpl" />
+		<property name="interceptorNames">
+			<list>
+				<value>methodLogger</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hqlServiceImpl" class="org.tools.hqlbuilder.service.HqlServiceImpl" scope="singleton" lazy-init="false">
+		<property name="sessionFactory" ref="sessionFactory"/>
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="project" value="${project}" />
+		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
+		<property name="configurationBean" ref="configurationBean"/>
+		<property name="dataSource" ref="dataSource"/>
+		<property name="properties" ref="properties"/>
+	</bean>
+
+</beans>

@@ -23,7 +23,8 @@
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
 				<prop key="hibernate.cache.use_query_cache">true</prop>
-				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+				<!-- <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop> -->
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
 				<prop key="hibernate.cache.use_second_level_cache">true</prop>
 				<prop key="hibernate.max_fetch_depth">5</prop>
 				<prop key="hibernate.generate_statistics">true</prop>
@@ -91,7 +92,7 @@
 		<property name="hibernateProperties"><ref bean="hibernateProperties"/></property>
 	</bean>
 
-	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" scope="singleton" lazy-init="false">
+	<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager" scope="singleton" lazy-init="false">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
