@@ -39,7 +39,7 @@ public abstract class LuceneInformation implements Information {
 	protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
 	@SuppressWarnings("deprecation")
-	protected static final Version LUCENE_VERSION = Version.LUCENE_4_9_1;
+    protected static final Version LUCENE_VERSION = Version.LUCENE_5_5_5;
 
 	protected static final Store STORE = Store.YES;
 
@@ -62,7 +62,7 @@ public abstract class LuceneInformation implements Information {
 	protected boolean ready = false;
 
 	public LuceneInformation() {
-		super();
+        super();
 	}
 
 	protected abstract void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata) throws ClassNotFoundException,
@@ -146,7 +146,7 @@ public abstract class LuceneInformation implements Information {
 				bq.add(new TermQuery(new Term(LuceneInformation.TYPE, typeName)), BooleanClause.Occur.MUST);
 				q = bq;
 			} else {
-				q = new StandardQueryParser(this.analyzer).parse(text, LuceneInformation.DATA);
+                q = new StandardQueryParser(this.analyzer).parse(text + "*", LuceneInformation.DATA);
 			}
 		} catch (QueryNodeException e) {
 			throw new RuntimeException(e.getMessage());

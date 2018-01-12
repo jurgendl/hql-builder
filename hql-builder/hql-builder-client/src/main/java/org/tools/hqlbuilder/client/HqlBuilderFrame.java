@@ -1973,7 +1973,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             Properties p = new Properties();
             p.load(HqlBuilderFrame.class.getClassLoader()
                     .getResourceAsStream("META-INF/maven/org.tools.hql-builder/hql-builder-client/pom.properties"));
-            return p.getProperty("version").replace("-SNAPSHOT", "").toString();
+            return p.getProperty("version").replace("-SNAPSHOT", "β").toString();
         } catch (Exception ex) {
             return HqlResourceBundle.getMessage("latest"); // actually unknown
             // try {
