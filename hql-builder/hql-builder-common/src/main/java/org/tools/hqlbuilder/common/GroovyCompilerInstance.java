@@ -147,7 +147,8 @@ public class GroovyCompilerInstance {
     }
 
 	protected synchronized Object internal(String expression, Map<String, Object> params) {
-        binding.getVariables().clear();
+		System.out.println("expression=" + expression);
+		binding.getVariables().clear();
         if (params != null) {
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 binding.setVariable(entry.getKey(), entry.getValue());
