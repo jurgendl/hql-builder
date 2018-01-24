@@ -18,5 +18,9 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-lang</artifactId>
+		</dependency>
     </dependencies>
 </project>
