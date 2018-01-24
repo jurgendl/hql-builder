@@ -118,8 +118,9 @@ public class GroovyCompilerInstance {
 
 	protected Object eval(int depth, String code, Map<String, Object> params) {
         System.out.println("pass " + depth + ": " + code);
-		if (depth > 3)
-			throw new IllegalArgumentException();
+		if (depth > 2) {
+			return internal("'" + code + "'", params);
+		}
         try {
             return internal(code, params);
         } catch (groovy.lang.MissingPropertyException mpe) {
