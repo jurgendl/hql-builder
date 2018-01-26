@@ -1093,7 +1093,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         String br = " ";
                         String html = "";
                         String _html = "";
-                        if ((rv.getQueryReturnAliases() == null) || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
+                        if ((rv.getQueryReturnAliases() == null) || rv.getQueryReturnAliases()[i] == null
+                                || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
                             try {
                                 headers.add(html + (script ? "*" : "") + name + br + rv.getScalarColumnNames()[i][0] + (script ? "*" : "") + _html,
                                         type);

@@ -49,7 +49,7 @@ public class RunQuery {
 		logger.info("sql={}", sql);
 		result.setSql(sql);
 		boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
-		org.hibernate.Query createQuery = session.createQuery(hql);
+        org.hibernate.query.Query createQuery = session.createQuery(hql);
 		int index = 0;
 		if (queryParameters != null) {
 			for (QueryParameter value : queryParameters) {
