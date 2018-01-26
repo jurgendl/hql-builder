@@ -40,7 +40,7 @@ public class RunQuery {
 
 	protected static final String QUERY_IDENTIFIER = "queryIdentifier";
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 	public void query(SessionFactory sessionFactory, Session session, String uuid, String hql, int max, int first,
 			List<QueryParameter> queryParameters, ExecutionResult result) {
 		long start = System.currentTimeMillis();
@@ -49,7 +49,7 @@ public class RunQuery {
 		logger.info("sql={}", sql);
 		result.setSql(sql);
 		boolean isUpdateStatement = hql.trim().toLowerCase().startsWith("update");
-        org.hibernate.query.Query createQuery = session.createQuery(hql);
+        org.hibernate.Query createQuery = session.createQuery(hql);
 		int index = 0;
 		if (queryParameters != null) {
 			for (QueryParameter value : queryParameters) {
