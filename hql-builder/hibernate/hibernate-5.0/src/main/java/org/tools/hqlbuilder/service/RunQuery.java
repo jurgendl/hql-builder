@@ -65,6 +65,9 @@ public class RunQuery {
 					} else {
 						createQuery.setParameter(index++, valueCompiled);
 					}
+                } catch (IllegalArgumentException ex) {
+                    // java.lang.IllegalArgumentException: Unknown parameter name
+                    logger.debug("{}", String.valueOf(ex)); // => whatever
 				} catch (org.hibernate.QueryParameterException ex) {
 					// org.hibernate.QueryParameterException: could not locate
 					// named parameter [nummer]
