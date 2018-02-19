@@ -1026,14 +1026,10 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
         }
 
         private Class<?> invers(Annotation relationAnnotation) {
-            if (relationAnnotation instanceof ManyToMany)
-                return ManyToMany.class;
-            if (relationAnnotation instanceof OneToOne)
-                return OneToOne.class;
-            if (relationAnnotation instanceof OneToMany)
-                return ManyToOne.class;
-            if (relationAnnotation instanceof ManyToOne)
-                return OneToMany.class;
+            if (relationAnnotation instanceof ManyToMany) return ManyToMany.class;
+            if (relationAnnotation instanceof OneToOne) return OneToOne.class;
+            if (relationAnnotation instanceof OneToMany) return ManyToOne.class;
+            if (relationAnnotation instanceof ManyToOne) return OneToMany.class;
             throw new EntityRelationException("unsupported: " + relationAnnotation.getClass().getName());
         }
 
@@ -1100,8 +1096,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void add(P bean, String property, C target) {
-            if (target == null)
-                throw new NullNotAcceptedException("unsupported: " + clazz.getName());
+            if (target == null) throw new NullNotAcceptedException("unsupported: " + clazz.getName());
             if (isManyToMany(property)) {
                 mmAdd(bean, property, target);
             } else if (isOneToMany(property)) {
@@ -1141,8 +1136,7 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
          * delegatie naar functie op basis van gevonden relatietype-annotatie
          */
         <C> void remove(P bean, String property, C target) {
-            if (target == null)
-                throw new NullNotAcceptedException("unsupported: " + clazz.getName());
+            if (target == null) throw new NullNotAcceptedException("unsupported: " + clazz.getName());
             if (isManyToMany(property)) {
                 mmRemove(bean, property, target);
             } else if (isOneToMany(property)) {

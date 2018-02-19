@@ -25,12 +25,12 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
     protected Set<String> packages = new HashSet<>();
 
     public JAXBContextResolver(String... packages) {
-            StringBuilder packagesstring = new StringBuilder(DEFAULT_PACKAGE);
-            this.packages.add(DEFAULT_PACKAGE);
-            for (String pack : packages) {
-                this.packages.add(pack);
-                packagesstring.append(SEPERATOR).append(pack);
-            }
+        StringBuilder packagesstring = new StringBuilder(DEFAULT_PACKAGE);
+        this.packages.add(DEFAULT_PACKAGE);
+        for (String pack : packages) {
+            this.packages.add(pack);
+            packagesstring.append(SEPERATOR).append(pack);
+        }
         jaxbContext = new JAXBMarshalling(packagesstring.toString());
     }
 

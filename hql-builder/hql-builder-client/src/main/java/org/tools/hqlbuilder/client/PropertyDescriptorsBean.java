@@ -70,8 +70,7 @@ public class PropertyDescriptorsBean {
         for (Map.Entry<String, Method> _is : is.entrySet()) {
             String propertyName = _is.getKey().split("_")[0];
             propertyName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-            if (propertyDescriptors.containsKey(propertyName))
-                continue;
+            if (propertyDescriptors.containsKey(propertyName)) continue;
             PropertyDescriptor pd;
             try {
                 pd = new PropertyDescriptor(propertyName, _is.getValue(), set.get(_is.getKey()));

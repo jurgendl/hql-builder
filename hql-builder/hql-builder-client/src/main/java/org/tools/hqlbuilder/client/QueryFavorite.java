@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.tools.hqlbuilder.common.CommonUtils;
+import org.jhaws.common.lang.StringUtils;
 import org.tools.hqlbuilder.common.QueryParameter;
 
 /**
@@ -105,7 +105,7 @@ public class QueryFavorite implements Serializable {
 
     public String getHqlPreview() {
         if (hqlPreview == null) {
-            hqlPreview = CommonUtils.removeUnnecessaryWhiteSpaces(full);
+            hqlPreview = StringUtils.removeUnnecessaryWhiteSpaces(full);
         }
         return this.hqlPreview;
     }

@@ -10,10 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.jhaws.common.lang.StringUtils;
 import org.jhaws.common.web.resteasy.RestResource;
 import org.slf4j.LoggerFactory;
 import org.swingeasy.ObjectWrapper;
-import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.CommonUtilsAdd;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
 import org.tools.hqlbuilder.common.HqlService;
@@ -334,7 +334,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
      */
     @Override
     public String removeBlanks(String string) {
-        return CommonUtils.removeUnnecessaryWhiteSpaces(string);
+        return StringUtils.removeUnnecessaryWhiteSpaces(string);
     }
 
     private String lineformat1replace(String string, String splitter) {
@@ -370,8 +370,6 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
     public void setHqlReplacers(Map<String, String> hqlReplacers) {
         this.hqlReplacers = hqlReplacers;
     }
-
-
 
     @Override
     public String getHibernateHelpURL() {

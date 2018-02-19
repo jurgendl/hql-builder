@@ -27,15 +27,15 @@ import groovy.lang.GroovyShell;
  * @author Jurgen
  */
 public class GroovyCompilerInstance {
-	private Binding binding = new Binding();
+    private Binding binding = new Binding();
 
-	private boolean intToLong = true;
+    private boolean intToLong = true;
 
-	private boolean literals = false;
+    private boolean literals = false;
 
-	private GroovyShell sh;
+    private GroovyShell sh;
 
-	public GroovyCompilerInstance() {
+    public GroovyCompilerInstance() {
         List<String> vars = Arrays.asList("context", "args");
         CompilationCustomizer conversionCustomizer = new CompilationCustomizer(CompilePhase.CONVERSION) {
             @Override
@@ -88,15 +88,14 @@ public class GroovyCompilerInstance {
                 "java.time" };
         ImportCustomizer imports = new ImportCustomizer()//
                 .addStarImports(packages)//
-				.addStaticStars("java.lang.Math")//
-				.addStaticStars("java.util.Collections")//
-				.addStaticStars("java.util.Arrays");
+                .addStaticStars("java.lang.Math")//
+                .addStaticStars("java.util.Collections")//
+                .addStaticStars("java.util.Arrays");
         CompilerConfiguration compilationCustomizer = new CompilerConfiguration()//
                 .addCompilationCustomizers(imports)//
-				// .addCompilationCustomizers(new
-				// SecureASTCustomizer().setImportsBlacklist(...)...)
-                .addCompilationCustomizers(conversionCustomizer)
-        ;
+                // .addCompilationCustomizers(new
+                // SecureASTCustomizer().setImportsBlacklist(...)...)
+                .addCompilationCustomizers(conversionCustomizer);
         // compilationCustomizer.setTolerance(0);
         sh = new GroovyShell(//
                 Thread.currentThread().getContextClassLoader(), //
@@ -104,51 +103,51 @@ public class GroovyCompilerInstance {
                 compilationCustomizer);
     }
 
-	public Object eval(String code) {
+    public Object eval(String code) {
         return eval(code, (Map<String, Object>) null);
     }
 
-	public Object eval(String code, Object x) {
+    public Object eval(String code, Object x) {
         return eval(code, Collections.singletonMap("x", x));
     }
 
-	public Object eval(String code, Map<String, Object> params) {
+    public Object eval(String code, Map<String, Object> params) {
         return eval(0, code, params);
     }
 
-	protected Object eval(int depth, String code, Map<String, Object> params) {
+    protected Object eval(int depth, String code, Map<String, Object> params) {
         System.out.println("pass " + depth + ": " + code);
-		if (depth > 2) {
-			return internal("'" + code + "'", params);
-		}
+        if (depth > 2) {
+            return internal("'" + code + "'", params);
+        }
         try {
             return internal(code, params);
         } catch (groovy.lang.MissingPropertyException mpe) {
-			System.out.println(mpe);
+            System.out.println(mpe);
             try {
                 literals = true;
-				System.out.println("literals = true");
+                System.out.println("literals = true");
                 return eval(++depth, code, params);
             } finally {
                 literals = false;
-				System.out.println("literals = false");
+                System.out.println("literals = false");
             }
         } catch (groovy.lang.GroovyRuntimeException grte) {
-			System.out.println(grte);
+            System.out.println(grte);
             try {
                 intToLong = false;
-				System.out.println("intToLong = false");
+                System.out.println("intToLong = false");
                 return eval(++depth, code, params);
             } finally {
-				System.out.println("intToLong = true");
+                System.out.println("intToLong = true");
                 intToLong = true;
             }
         }
     }
 
-	protected synchronized Object internal(String expression, Map<String, Object> params) {
-		System.out.println("expression=" + expression);
-		binding.getVariables().clear();
+    protected synchronized Object internal(String expression, Map<String, Object> params) {
+        System.out.println("expression=" + expression);
+        binding.getVariables().clear();
         if (params != null) {
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 binding.setVariable(entry.getKey(), entry.getValue());

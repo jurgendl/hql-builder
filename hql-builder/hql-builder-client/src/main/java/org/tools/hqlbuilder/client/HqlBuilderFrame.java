@@ -190,10 +190,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             String replaced = parameters.replace("{", "[").replace("}", "]").replace("=", ":").replace("%", "PERCENT");
             Object eval = GroovyCompiler.eval(replaced);
             Map<?, ?> map = (Map<?, ?>) eval;
-            map.entrySet()
-                    .stream()
-                    .map(e -> convertToParameter(e))
-                    .forEach(qps::add);
+            map.entrySet().stream().map(e -> convertToParameter(e)).forEach(qps::add);
         } else if (parameters.startsWith("[") && parameters.endsWith("]")) {
             List<?> list = (List<?>) GroovyCompiler.eval(parameters);
             IntegerValue index = new IntegerValue();
@@ -205,8 +202,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private static QueryParameter convertToParameter(Entry<?, ?> e) {
         Object value = e.getValue();
         String vs = String.valueOf(value);
-        return new QueryParameter(e.getKey().toString(), vs, value.getClass().getName(),
-                e.getValue());
+        return new QueryParameter(e.getKey().toString(), vs, value.getClass().getName(), e.getValue());
     }
 
     private static QueryParameter convertToParameter(IntegerValue index, Object value) {
@@ -282,8 +278,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
             String version = fetchVersion();
             String latestVersion = fetchLatestVersion();
-            if ("?".equals(version))
-                version = latestVersion;
+            if ("?".equals(version)) version = latestVersion;
 
             SplashHelper.setup(version);
             SplashHelper.step();
@@ -549,7 +544,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             HqlBuilderFrameConstants.RESIZE_COLUMNS, null, HqlBuilderFrameConstants.RESIZE_COLUMNS, HqlBuilderFrameConstants.RESIZE_COLUMNS, true,
             null, null, HqlBuilderFrameConstants.PERSISTENT_ID);
 
-
     private final HqlBuilderAction formatSqlAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.FORMAT_SQL, true,
             HqlBuilderFrameConstants.FORMAT_SQL, null, HqlBuilderFrameConstants.FORMAT_SQL, HqlBuilderFrameConstants.FORMAT_SQL, true, null, null,
             HqlBuilderFrameConstants.PERSISTENT_ID);
@@ -585,13 +579,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private final HqlBuilderAction highlightSyntaxColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR,
             true, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR,
-            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, false,
-            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, HIGHLIGHT_SYNTAXT_DEFAULT_COLOR);
+            HqlBuilderFrameConstants.HIGHLIGHT_SYNTAX_COLOR, false, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class,
+            HIGHLIGHT_SYNTAXT_DEFAULT_COLOR);
 
     private final HqlBuilderAction highlightBracesColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR,
             true, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, null, HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR,
-            HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, false,
-            null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class, HIGHLIGHT_BRACES_DEFAULT_COLOR);
+            HqlBuilderFrameConstants.HIGHLIGHT_BRACES_COLOR, false, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Color.class,
+            HIGHLIGHT_BRACES_DEFAULT_COLOR);
 
     private final HqlBuilderAction searchColorAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.SEARCH_COLOR, true,
             HqlBuilderFrameConstants.SEARCH_COLOR, null, HqlBuilderFrameConstants.SEARCH_COLOR, HqlBuilderFrameConstants.SEARCH_COLOR, false, null,
@@ -1473,11 +1467,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.propertypanel.repaint();
         } catch (Exception ex) {
             HqlBuilderFrame.logger.error("{}", ex);
-            JOptionPane.showMessageDialog(this.frame, "" + ex,
-                    HqlResourceBundle.getMessage("delete exception"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.frame, "" + ex, HqlResourceBundle.getMessage("delete exception"), JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     private ExecutionResult doQuery(String hqlGetText, int start, int maxresults) {
         queryParameters = new QueryParameters(hqlGetText, start, maxresults,
@@ -1838,7 +1830,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     }
 
     private Color getSyntaxHighlightColor() {
-        return this.highlightSyntaxColorAction.getValue() == null ? HIGHLIGHT_SYNTAXT_DEFAULT_COLOR : (Color) this.highlightSyntaxColorAction.getValue();
+        return this.highlightSyntaxColorAction.getValue() == null ? HIGHLIGHT_SYNTAXT_DEFAULT_COLOR
+                : (Color) this.highlightSyntaxColorAction.getValue();
     }
 
     private String getHqlText() {
@@ -2554,7 +2547,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.glass.setMessage(null);
         this.setGlassVisible(false);
     }
-
 
     private void query(RowProcessor rowProcessor) {
         this.progressbarStart(HqlResourceBundle.getMessage("quering"));

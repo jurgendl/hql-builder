@@ -411,24 +411,24 @@ public class HqlServiceImpl implements HqlService {
         logger.info("querying: add latches: " + uuid + " :: " + latches.keySet());
         Value<RuntimeException> runtimeException = new Value<>();
         try {
-			new Thread(() -> {
-				try {
-					if (queryParameters != null) {
-						queryParameters.forEach(value -> {
-							Object valueCompiled = value.getValue();
-							if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
-								value.setValue(GroovyCompiler.eval(value.getValueText()));
-							}
-						});
-					}
-					new RunQuery().query(sessionFactory, newSession(), uuid, hql, max, first, queryParameters, result);
-				} catch (RuntimeException ex) {
-					runtimeException.set(ex);
-					logger.error("", ex);
-				} finally {
-					latch.countDown();
+            new Thread(() -> {
+                try {
+                    if (queryParameters != null) {
+                        queryParameters.forEach(value -> {
+                            Object valueCompiled = value.getValue();
+                            if (valueCompiled == null && StringUtils.isNotBlank(value.getValueText())) {
+                                value.setValue(GroovyCompiler.eval(value.getValueText()));
+                            }
+                        });
+                    }
+                    new RunQuery().query(sessionFactory, newSession(), uuid, hql, max, first, queryParameters, result);
+                } catch (RuntimeException ex) {
+                    runtimeException.set(ex);
+                    logger.error("", ex);
+                } finally {
+                    latch.countDown();
                 }
-			}).start();
+            }).start();
             try {
                 latch.await();
             } catch (InterruptedException ex) {
@@ -949,6 +949,5 @@ public class HqlServiceImpl implements HqlService {
             latches.remove(uuid);
         }
     }
-
 
 }

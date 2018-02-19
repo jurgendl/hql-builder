@@ -10,7 +10,6 @@ import ch.lambdaj.Lambda;
 public class CommonUtilsAdd extends CommonUtils {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
-
     public static <T> T call(Object object, String methodName, Class<T> type, Object... params) {
         // logger.debug(String.valueOf(object));
         // logger.debug(methodName);

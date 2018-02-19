@@ -166,66 +166,6 @@ public class CommonUtils {
         return doc;
     }
 
-    public static char[] whitespace_chars = ( //
-    "\u0009" // CHARACTER TABULATION
-            + "\n" // LINE FEED (LF)
-            + "\u000B" // LINE TABULATION
-            + "\u000C" // FORM FEED (FF)
-            + "\r" // CARRIAGE RETURN (CR)
-            + "\u0020" // SPACE
-            + "\u0085" // NEXT LINE (NEL)
-            + "\u00A0" // NO-BREAK SPACE
-            + "\u1680" // OGHAM SPACE MARK
-            + "\u180E" // MONGOLIAN VOWEL SEPARATOR
-            + "\u2000" // EN QUAD
-            + "\u2001" // EM QUAD
-            + "\u2002" // EN SPACE
-            + "\u2003" // EM SPACE
-            + "\u2004" // THREE-PER-EM SPACE
-            + "\u2005" // FOUR-PER-EM SPACE
-            + "\u2006" // SIX-PER-EM SPACE
-            + "\u2007" // FIGURE SPACE
-            + "\u2008" // PUNCTUATION SPACE
-            + "\u2009" // THIN SPACE
-            + "\u200A" // HAIR SPACE
-            + "\u2028" // LINE SEPARATOR
-            + "\u2029" // PARAGRAPH SEPARATOR
-            + "\u202F" // NARROW NO-BREAK SPACE
-            + "\u205F" // MEDIUM MATHEMATICAL SPACE
-            + "\u3000" // IDEOGRAPHIC SPACE
-    ).toCharArray();
-
-    public static String removeUnnecessaryWhiteSpaces(String s) {
-        StringBuilder sb = new StringBuilder();
-        boolean wasWhiteSpace = false; // was previous character(s) whitespaces
-        boolean start = true; // to remove whitespaces at front
-        for (char c : s.toCharArray()) {
-            if (isWhiteSpace(c)) {
-                if (start || wasWhiteSpace) {
-                    continue;
-                }
-                wasWhiteSpace = true;
-            } else {
-                if (wasWhiteSpace) {
-                    sb.append(" "); // replace all previous whitespaces by a single space
-                }
-                sb.append(c); // append non-whitespace character
-                wasWhiteSpace = false;
-                start = false;
-            }
-        }
-        return sb.toString();
-    }
-
-    public static boolean isWhiteSpace(char c) {
-        for (char ws : whitespace_chars) {
-            if (ws == c) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static byte[] read(InputStream in) throws IOException {
         byte[] tmp = new byte[in.available()];
         if (in.read(tmp) != tmp.length) {
@@ -234,39 +174,6 @@ public class CommonUtils {
         in.close();
         return tmp;
     }
-
-
-
-    public static Object create(String className) {
-        return create(className, new Class[0], new Object[0]);
-    }
-
-    public static Object create(String className, Class<?> parameterTypes, Object initargs) {
-        return create(className, new Class[] { parameterTypes }, new Object[] { initargs });
-    }
-
-    public static Object create(String className, Object initargs) {
-        return create(className, new Class[] { initargs.getClass() }, new Object[] { initargs });
-    }
-
-    public static Object create(String className, Object[] initargs) {
-        @SuppressWarnings("rawtypes")
-        Class[] parameterTypes = new Class[initargs.length];
-        for (int i = 0; i < parameterTypes.length; i++) {
-            parameterTypes[i] = initargs[i].getClass();
-        }
-        return create(className, parameterTypes, initargs);
-    }
-
-    public static Object create(String className, @SuppressWarnings("rawtypes") Class[] parameterTypes, Object[] initargs) {
-        try {
-            return Class.forName(className).getConstructor(parameterTypes).newInstance(initargs);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-
 
     public static String readMavenVersion(String pack) throws Exception {
         String[] dp = pack.split(":");
@@ -327,8 +234,6 @@ public class CommonUtils {
     public static <A> A get(A arg, Object value) {
         return Lambda.argument(arg).evaluate(value);
     }
-
-
 
     /**
      * @see #getImplementation(Object, Class, int) met index=-1

@@ -25,8 +25,7 @@ public class LocalSessionFactoryBeanPlus5 extends org.springframework.orm.hibern
     }
 
     public void setHibernateConfigLocation(String configLocation) {
-        if ("${hibernate.cfg.xml}".equals(configLocation))
-            return;
+        if ("${hibernate.cfg.xml}".equals(configLocation)) return;
         setConfigLocation(new ClassPathResource(configLocation));
     }
 
