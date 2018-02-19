@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.jhaws.common.web.resteasy.RestResource;
 import org.slf4j.LoggerFactory;
+import org.swingeasy.ObjectWrapper;
 import org.tools.hqlbuilder.common.CommonUtils;
 import org.tools.hqlbuilder.common.CommonUtilsAdd;
 import org.tools.hqlbuilder.common.DelegatingHqlService;
@@ -29,6 +31,7 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
     private String serviceUrl;
 
     private String[] keywordGroups = {
+            "cross join",
             "right outer join",
             "left outer join",
             "inner join",
@@ -273,8 +276,17 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         }
 
         try {
-            sqlString = CommonUtilsAdd.call(Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance(), "format",
-                    String.class, sqlString);
+            Object formatter = Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance();
+            try {
+                @SuppressWarnings("unchecked")
+                Set<String> BEGIN_CLAUSES = (Set<String>) new ObjectWrapper(formatter).get("BEGIN_CLAUSES");
+                if (!BEGIN_CLAUSES.contains("cross")) {
+                    BEGIN_CLAUSES.add("cross");
+                }
+            } catch (Exception ex) {
+                //
+            }
+            sqlString = CommonUtilsAdd.call(formatter, "format", String.class, sqlString);
         } catch (Throwable ex) {
             if (!warn2) {
                 warn2 = true;
