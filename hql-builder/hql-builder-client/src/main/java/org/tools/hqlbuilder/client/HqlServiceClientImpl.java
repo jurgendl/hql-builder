@@ -98,15 +98,17 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
                 if (queryReturnAlias != null) {
                     try {
                         String scalarColumnName = scalarColumnNames[i][0];
-                        try {
-                            // nummers worden vervangen door 'kolom${nummer}' want nummer alleen wordt niet aanvaard
-                            Long.parseLong(queryReturnAlias);
-                            String newAlias = queryReturnAlias.replace('.', ' ').replace('(', ' ').replace(')', ' ').trim().replace(' ', '_');
-                            logger.trace(": " + scalarColumnName + " >> " + queryReturnAlias + " >> " + newAlias);
-                            sqlString = sqlString.replace(scalarColumnName, newAlias);
-                        } catch (NumberFormatException ex) {
-                            logger.trace(": " + scalarColumnName + " >> " + queryReturnAlias);
-                            sqlString = sqlString.replace(scalarColumnName, queryReturnAlias);
+                        if (queryReturnAlias != null) {
+                            try {
+                                // nummers worden vervangen door 'kolom${nummer}' want nummer alleen wordt niet aanvaard
+                                Long.parseLong(queryReturnAlias);
+                                String newAlias = queryReturnAlias.replace('.', ' ').replace('(', ' ').replace(')', ' ').trim().replace(' ', '_');
+                                logger.trace(": " + scalarColumnName + " >> " + queryReturnAlias + " >> " + newAlias);
+                                sqlString = sqlString.replace(scalarColumnName, newAlias);
+                            } catch (NumberFormatException ex) {
+                                logger.trace(": " + scalarColumnName + " >> " + queryReturnAlias);
+                                sqlString = sqlString.replace(scalarColumnName, queryReturnAlias);
+                            }
                         }
                     } catch (ArrayIndexOutOfBoundsException ex) {
                         //
