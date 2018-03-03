@@ -15,7 +15,7 @@ public abstract class EntityAdapter implements EntityI {
     private static final long serialVersionUID = -2958424236876731630L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Version
