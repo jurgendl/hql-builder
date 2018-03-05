@@ -1,7 +1,5 @@
 package org.tools.hqlbuilder.common;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
@@ -15,7 +13,7 @@ public abstract class EntityAdapter implements EntityI {
     private static final long serialVersionUID = -2958424236876731630L;
 
     @Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	// @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Version
