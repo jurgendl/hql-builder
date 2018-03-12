@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tools.hql-builder</groupId>
 	<artifactId>bom</artifactId>
-	<version>5.0.3-SNAPSHOT</version>
+	<version>5.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HqlBuilder</name>
 	<description>HqlBuilder</description>
@@ -21,10 +21,11 @@
 	(stash/push changes)
 	((set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_144))
 	mvn release:prepare
-	git checkout -b Branch_bom-5.0.2 bom-5.0.2
+	git checkout -b Branch_bom-5.0.3 bom-5.0.3
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
-	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=5.0.3-SNAPSHOT
+	mvn release:clean
+	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=5.0.5-SNAPSHOT
 	change parent version of module "hql-builder-web" and "hql-builder-demo" and "hql-builder-full"
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	((change versions > snapshots ))
