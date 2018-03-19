@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -289,12 +292,18 @@ public abstract class ServiceImpl {
         return entity;
     }
 
+    private ConcurrentMap<String, AtomicLong> SEQ = new ConcurrentHashMap<>();
+
 	protected <P extends EntityERHAdapter> P id(P entity) {
 		if (entity.getId() == null) {
-			BigInteger id = BigInteger.class.cast(getSession()
-					.createSQLQuery("select 1+max(id) from " + entity.getClass().getSimpleName())
-					.list().get(0));
-			entity.setId(id.longValue());
+            String name = entity.getClass().getSimpleName();
+            AtomicLong id = SEQ.get(name);
+            if (id == null) {
+                id = new AtomicLong(BigInteger.class
+                        .cast(getSession().createSQLQuery("select max(id) from " + name).list().get(0)).longValue());
+                SEQ.put(name, id);
+            }
+            entity.setId(id.incrementAndGet());
 		}
 		return entity;
 	}
