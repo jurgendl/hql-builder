@@ -58,7 +58,7 @@
 		<version.swingeasy>4.0.10-SNAPSHOT</version.swingeasy><!-- recent version, keep up to date -->
 		<version.jhaws>4.0.10-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
-		<version.joda>2.9.4</version.joda><!-- Java 1.8 is not a sufficient alternative -->
+		<version.joda>2.10</version.joda><!-- Java 1.8 is not a sufficient alternative -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.commons-codec>1.10</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.6</version.commons-io><!-- keep up to date -->
