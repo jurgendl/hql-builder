@@ -82,6 +82,8 @@ public interface HqlBuilderFrameConstants {
 
     public static final String HIBERNATE_DOCUMENTATION = "hibernate documentation";
 
+    public static final String JAVA_PROPERTIES = "java properties";
+
     public static final String PERSISTENT_ID = "HQL Builder";
 
     public static final String NAME = "HQL Builder";

@@ -129,6 +129,7 @@ import org.swingeasy.ETable;
 import org.swingeasy.ETableConfig;
 import org.swingeasy.ETableHeaders;
 import org.swingeasy.ETableRecord;
+import org.swingeasy.ETableRecordArray;
 import org.swingeasy.ETableRecordCollection;
 import org.swingeasy.ETextArea;
 import org.swingeasy.ETextAreaConfig;
@@ -520,6 +521,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             HqlBuilderFrameConstants.HQL_DOCUMENTATION, CommonIcons.getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP),
             HqlBuilderFrameConstants.HQL_DOCUMENTATION, HqlBuilderFrameConstants.HQL_DOCUMENTATION, true, null, null);
 
+    private final HqlBuilderAction helpJavaPropertiesAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.JAVA_PROPERTIES, true,
+            HqlBuilderFrameConstants.JAVA_PROPERTIES, CommonIcons.getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP),
+            HqlBuilderFrameConstants.JAVA_PROPERTIES, HqlBuilderFrameConstants.JAVA_PROPERTIES, true, null, null);
+
     private final HqlBuilderAction luceneQuerySyntaxAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.LUCENE_QUERY_SYNTAX, true,
             HqlBuilderFrameConstants.LUCENE_QUERY_SYNTAX, CommonIcons.getIcon(org.tools.hqlbuilder.common.icons.ClientIcons.HELP),
             HqlBuilderFrameConstants.LUCENE_QUERY_SYNTAX, HqlBuilderFrameConstants.LUCENE_QUERY_SYNTAX, true, null, null);
@@ -561,6 +566,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction showToolbarsAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.SHOW_TOOLBARS, true,
             HqlBuilderFrameConstants.SHOW_TOOLBARS, null, HqlBuilderFrameConstants.SHOW_TOOLBARS, HqlBuilderFrameConstants.SHOW_TOOLBARS, true, null,
             null, HqlBuilderFrameConstants.PERSISTENT_ID);
+
 
     private HqlBuilderAction fontAction;
 
@@ -2068,6 +2074,27 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
+    protected void java_properties() {
+        ETable<String[]> propertiesTable = new ETable<>(new ETableConfig());
+        ETable<String[]> threadSafePropertiesTable = propertiesTable.getSimpleThreadSafeInterface();
+        ETableHeaders<String[]> headers = new ETableHeaders<>();
+        headers.add("key", String.class, true);
+        headers.add("value", String.class, true);
+        threadSafePropertiesTable.setHeaders(headers);
+        System.getProperties().keySet().stream().map(String::valueOf).sorted().forEach(
+                _key -> threadSafePropertiesTable.addRecord(new ETableRecordArray<>(new String[] { _key, System.getProperty(_key) })));
+        JFrame frame = new JFrame();
+        frame.setTitle(HqlResourceBundle.getMessage(JAVA_PROPERTIES));
+        JScrollPane jsp = new JScrollPane(propertiesTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        Container cp = frame.getContentPane();
+        cp.add(jsp, BorderLayout.CENTER);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(800, 400);
+        frame.setLocationRelativeTo(null);
+        SwingUtilities.invokeLater(() -> frame.setVisible(true));
+    }
+
     protected void hibernate_properties() {
         int selectedRow = this.resultsEDT.getSelectedRow();
         if (selectedRow == -1) {
@@ -3157,6 +3184,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             helpmenu.add(new JMenuItem(this.helpHqlAction));
             helpmenu.add(new JMenuItem(this.luceneQuerySyntaxAction));
             helpmenu.add(new JMenuItem(this.helpAction));
+            helpmenu.add(new JMenuItem(this.helpJavaPropertiesAction));
             helpmenu.add(new JMenuItem(this.versionsAction));
             helpmenu.add(new JMenuItem(this.aboutAction));
             menuBar.add(helpmenu);
