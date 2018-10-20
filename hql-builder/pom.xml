@@ -90,7 +90,7 @@
         <version.spring-security>4.2.9.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version !!! test 4.2.3.RELEASE !!! -->
         <version.spring-ws>2.3.1.RELEASE</version.spring-ws><!-- keep up to date 2.x.x, does not follow Spring version !!! test 2.4.0.RELEASE !!! -->
 		<!-- other -->
-		<version.jackson>2.9.6</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems -->
+		<version.jackson>2.4.1</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems // wanne go to 2.9.6 -->
 		<version.ostermiller>1.07.00</version.ostermiller>
 		<version.aspectj>1.8.9</version.aspectj>
 	</properties>
