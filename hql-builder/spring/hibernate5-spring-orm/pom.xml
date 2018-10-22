@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>hibernate5-spring-orm</artifactId>
 	<name>hibernate5-spring-orm</name>
-	<description>hibernate5-spring-orm</description>
+	<description>hibernate5-spring-orm, if you are using spring 4..., these classes should be included and this module should not be used</description>
 	<properties>
 		<hibernate.version>5.2.12.Final</hibernate.version>
 	</properties>
