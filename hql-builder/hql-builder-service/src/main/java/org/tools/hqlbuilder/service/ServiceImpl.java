@@ -13,9 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.IdentifierLoadAccess;
 import org.hibernate.LockOptions;
 import org.hibernate.NaturalIdLoadAccess;
-import org.hibernate.Query;
 import org.hibernate.ReplicationMode;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.SimpleNaturalIdLoadAccess;
@@ -29,27 +27,27 @@ import org.tools.hqlbuilder.common.exceptions.ServiceException;
 
 @SuppressWarnings({ "unchecked", "hiding" })
 public abstract class ServiceImpl {
-	protected <P extends EntityERHAdapter> IdentifierLoadAccess byId(Class<P> entityClass) {
+    protected <P extends EntityERHAdapter> IdentifierLoadAccess<P> byId(Class<P> entityClass) {
         return this.getSession().byId(entityClass);
     }
 
-	protected <P extends EntityERHAdapter> IdentifierLoadAccess byId(String entityName) {
+    protected <P extends EntityERHAdapter> IdentifierLoadAccess<P> byId(String entityName) {
         return this.getSession().byId(entityName);
     }
 
-	protected <P extends EntityERHAdapter> NaturalIdLoadAccess byNaturalId(Class<P> entityClass) {
+    protected <P extends EntityERHAdapter> NaturalIdLoadAccess<P> byNaturalId(Class<P> entityClass) {
         return this.getSession().byNaturalId(entityClass);
     }
 
-	protected <P extends EntityERHAdapter> NaturalIdLoadAccess byNaturalId(String entityName) {
+    protected <P extends EntityERHAdapter> NaturalIdLoadAccess<P> byNaturalId(String entityName) {
         return this.getSession().byNaturalId(entityName);
     }
 
-	protected <P extends EntityERHAdapter> SimpleNaturalIdLoadAccess bySimpleNaturalId(Class<P> entityClass) {
+    protected <P extends EntityERHAdapter> SimpleNaturalIdLoadAccess<P> bySimpleNaturalId(Class<P> entityClass) {
         return this.getSession().bySimpleNaturalId(entityClass);
     }
 
-	protected <P extends EntityERHAdapter> SimpleNaturalIdLoadAccess bySimpleNaturalId(String entityName) {
+    protected <P extends EntityERHAdapter> SimpleNaturalIdLoadAccess<P> bySimpleNaturalId(String entityName) {
         return this.getSession().bySimpleNaturalId(entityName);
     }
 
@@ -73,16 +71,20 @@ public abstract class ServiceImpl {
         return this.getSession().createCriteria(entityName, alias);
     }
 
-	protected <P extends EntityERHAdapter> Query createFilter(P collection, String queryString) {
+    protected <P extends EntityERHAdapter> org.hibernate.query.Query<P> createFilter(P collection, String queryString) {
         return this.getSession().createFilter(collection, queryString);
     }
 
-	protected <P extends EntityERHAdapter> Query createQuery(String queryString) {
+    protected <P extends EntityERHAdapter> org.hibernate.query.Query<P> createQuery(Class<P> type) {
+        return createQuery("from " + type.getSimpleName());
+    }
+
+    protected <P> org.hibernate.query.Query<P> createQuery(String queryString) {
         return this.getSession().createQuery(queryString);
     }
 
-	protected <P extends EntityERHAdapter> SQLQuery createSQLQuery(String queryString) {
-        return this.getSession().createSQLQuery(queryString);
+    protected <P extends EntityERHAdapter> org.hibernate.query.NativeQuery<P> createSQLQuery(String queryString) {
+        return this.getSession().createNativeQuery(queryString);
     }
 
 	protected <P extends EntityERHAdapter> P delete(P entity) {
@@ -140,7 +142,7 @@ public abstract class ServiceImpl {
         return this.getSession().getIdentifier(entity);
     }
 
-    protected Query getNamedQuery(String queryName) {
+    protected <R> org.hibernate.query.Query<R> getNamedQuery(String queryName) {
         return this.getSession().getNamedQuery(queryName);
     }
 
@@ -299,7 +301,7 @@ public abstract class ServiceImpl {
             String name = entity.getClass().getSimpleName();
             AtomicLong id = SEQ.get(name);
             if (id == null) {
-                Object max = getSession().createSQLQuery("select max(id) from " + name).list().get(0);
+                Object max = getSession().createNativeQuery("select max(id) from " + name).list().get(0);
                 if (max == null) {
                     id = new AtomicLong(0l);
                 } else {
