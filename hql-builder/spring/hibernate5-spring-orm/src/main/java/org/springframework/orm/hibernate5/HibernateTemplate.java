@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 @Component
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "rawtypes" })
 public class HibernateTemplate implements HibernateOperations {
 	@Resource
 	private SessionFactory sessionFactory;
@@ -737,7 +737,7 @@ public class HibernateTemplate implements HibernateOperations {
 	 * @deprecated as of Spring 2.5, in favor of individual {@code saveOrUpdate} or {@code merge} usage
 	 */
 	@Deprecated
-	public void saveOrUpdateAll(@SuppressWarnings("rawtypes") final Collection entities) throws DataAccessException {
+	public void saveOrUpdateAll(final Collection entities) throws DataAccessException {
 		executeWithNativeSession(session -> {
 			checkWriteOperationAllowed(session);
 			for (Object entity : entities) {
@@ -952,7 +952,7 @@ public class HibernateTemplate implements HibernateOperations {
 	 * @see org.hibernate.Session#delete(Object)
 	 */
 	@Override
-	public void deleteAll(@SuppressWarnings("rawtypes") final Collection entities) throws DataAccessException {
+	public void deleteAll(final Collection entities) throws DataAccessException {
 		executeWithNativeSession(session -> {
 			checkWriteOperationAllowed(session);
 			for (Object entity : entities) {
@@ -1472,7 +1472,7 @@ public class HibernateTemplate implements HibernateOperations {
 	 * @see org.hibernate.Hibernate#close
 	 */
 	@Override
-	public void closeIterator(@SuppressWarnings("rawtypes") final Iterator it) throws DataAccessException {
+	public void closeIterator(final Iterator it) throws DataAccessException {
 		try {
 			Hibernate.close(it);
 		} catch (HibernateException ex) {
