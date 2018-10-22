@@ -299,8 +299,12 @@ public abstract class ServiceImpl {
             String name = entity.getClass().getSimpleName();
             AtomicLong id = SEQ.get(name);
             if (id == null) {
-                id = new AtomicLong(BigInteger.class
-                        .cast(getSession().createSQLQuery("select max(id) from " + name).list().get(0)).longValue());
+                Object max = getSession().createSQLQuery("select max(id) from " + name).list().get(0);
+                if (max == null) {
+                    id = new AtomicLong(0l);
+                } else {
+                    id = new AtomicLong(BigInteger.class.cast(max).longValue());
+                }
                 SEQ.put(name, id);
             }
             entity.setId(id.incrementAndGet());
