@@ -10,6 +10,11 @@
 	<name>hql-builder-client</name>
 	<description>hql-builder-client</description>
 	<dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.6</version>
+        </dependency>
 		<dependency>
 			<groupId>org.jhaws.common</groupId>
 			<artifactId>jhaws-web</artifactId>

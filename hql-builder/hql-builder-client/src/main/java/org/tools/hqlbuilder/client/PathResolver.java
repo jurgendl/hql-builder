@@ -33,7 +33,6 @@ public class PathResolver {
         todosCurrentStep.add(sourceTreeNode);
     }
 
-    @SuppressWarnings("unchecked")
     public List<TreeNode> findPathNoEx() {
         try {
             findPath();

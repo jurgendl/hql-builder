@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.tools.hqlbuilder.common.EntityRelationHelper;
 import org.tools.hqlbuilder.common.EntityRelationHelper.EntityRelationException;
 
-@SuppressWarnings("unchecked")
+
 public class EntityRelationTest extends org.junit.Assert {
     @Test
     public void test() {

@@ -104,7 +104,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.jhaws.common.lang.IntegerValue;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
