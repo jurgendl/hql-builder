@@ -65,7 +65,7 @@
 		<version.commons-lang>2.6</version.commons-lang><!-- stale -->
 		<version.commons-lang3>3.4</version.commons-lang3><!-- recent version, keep up to date -->
 		<version.commons-collections>3.2.2</version.commons-collections><!-- stale -->
-		<version.commons-collections4>4.1</version.commons-collections4><!-- recent version, keep up to date -->
+		<version.commons-collections4>4.2</version.commons-collections4><!-- recent version, keep up to date -->
 		<version.commons-beanutils>1.9.3</version.commons-beanutils><!-- recent version, keep up to date -->
 		<version.javassist>3.20.0-GA</version.javassist><!-- Java 1.8 ready -->
 		<version.ehcache>2.10.3</version.ehcache><!-- recent version, keep up to date -->
