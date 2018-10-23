@@ -553,6 +553,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             HqlBuilderFrameConstants.FORMAT_SQL, null, HqlBuilderFrameConstants.FORMAT_SQL, HqlBuilderFrameConstants.FORMAT_SQL, true, null, null,
             HqlBuilderFrameConstants.PERSISTENT_ID);
 
+    private final HqlBuilderAction oldPlainSqlAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.OLD_PLAIN_SQL, true,
+            HqlBuilderFrameConstants.OLD_PLAIN_SQL, null, HqlBuilderFrameConstants.OLD_PLAIN_SQL, HqlBuilderFrameConstants.OLD_PLAIN_SQL, false, null,
+            null);
+
     private final HqlBuilderAction maximumNumberOfResultsAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.MAXIMUM_NUMBER_OF_RESULTS,
             true, HqlBuilderFrameConstants.MAXIMUM_NUMBER_OF_RESULTS, "org/tools/hqlbuilder/client/images/scr.png",
             HqlBuilderFrameConstants.MAXIMUM_NUMBER_OF_RESULTS, HqlBuilderFrameConstants.MAXIMUM_NUMBER_OF_RESULTS, true, null, null,
@@ -566,7 +570,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final HqlBuilderAction showToolbarsAction = new HqlBuilderAction(null, this, HqlBuilderFrameConstants.SHOW_TOOLBARS, true,
             HqlBuilderFrameConstants.SHOW_TOOLBARS, null, HqlBuilderFrameConstants.SHOW_TOOLBARS, HqlBuilderFrameConstants.SHOW_TOOLBARS, true, null,
             null, HqlBuilderFrameConstants.PERSISTENT_ID);
-
 
     private HqlBuilderAction fontAction;
 
@@ -1093,24 +1096,17 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         String br = " ";
                         String html = "";
                         String _html = "";
-                        if ((rv.getQueryReturnAliases() == null) || rv.getQueryReturnAliases()[i] == null
-                                || String.valueOf(i).equals(rv.getQueryReturnAliases()[i])) {
-                            try {
-                                headers.add(html + (script ? "*" : "") + name + br + rv.getScalarColumnNames()[i][0] + (script ? "*" : "") + _html,
-                                        type);
-                            } catch (Exception ex) {
-                                HqlBuilderFrame.logger.error("{}", ex);
-
-                                try {
-                                    headers.add(html + (script ? "*" : "") + name + br + rv.getSqlAliases()[i] + (script ? "*" : "") + _html, type);
-                                } catch (Exception ex2) {
-                                    HqlBuilderFrame.logger.error("{}", ex2);
-                                    headers.add(html + (script ? "*" : "") + name + br + i + (script ? "*" : "") + _html, type);
-                                }
-                            }
+                        String _name;
+                        if (rv.getQueryReturnAliases() != null && rv.getQueryReturnAliases().length > 0) {
+                            _name = rv.getQueryReturnAliases()[i];
+                        } else if (rv.getScalarColumnNames() != null && rv.getScalarColumnNames().length > 0) {
+                            _name = rv.getScalarColumnNames()[i][0];
+                        } else if (rv.getSqlAliases() != null && rv.getSqlAliases().length > 0) {
+                            _name = rv.getSqlAliases()[i];
                         } else {
-                            headers.add(html + name + br + rv.getQueryReturnAliases()[i] + _html, type);
+                            _name = String.valueOf(i);
                         }
+                        headers.add(html + (script ? "*" : "") + name + br + _name + (script ? "*" : "") + _html, type);
                     }
 
                     this.resultsEDT.setHeaders(headers);
@@ -1477,8 +1473,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
     }
 
-    private ExecutionResult doQuery(String hqlGetText, int start, int maxresults) {
-        queryParameters = new QueryParameters(hqlGetText, start, maxresults,
+    private ExecutionResult doQuery(boolean isPlainOldSql, String hql, int start, int maxresults) {
+        queryParameters = new QueryParameters(hql, isPlainOldSql, start, maxresults,
                 this.parametersEDT.getRecords().stream().map(EListRecord::get).collect(Collectors.toList()));
         return this.hqlService.execute(queryParameters);
     }
@@ -1551,7 +1547,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         queryExecution = new SwingWorker<ExecutionResult, Void>() {
             @Override
             protected ExecutionResult doInBackground() throws Exception {
-                return HqlBuilderFrame.this.doQuery(hqlGetText, startNr, maxresults);
+                return HqlBuilderFrame.this.doQuery(oldPlainSqlAction.isSelected(), hqlGetText, startNr, maxresults);
             }
 
             @Override
@@ -2320,10 +2316,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             Transferable contents = this.clipboard.getContents(this);
             Object transferData = contents.getTransferData(DataFlavor.stringFlavor);
             String string = (String) transferData;
-            String replaceAll = string.replaceAll("//", "")
-                    .replaceAll("\";", "")
-                    .replaceAll("hql[ ]{0,}\\+[ ]{0,}=[ ]{0,}\"", "")
-                    .replaceAll("\\Q\r\n\\E", this.getNewline());
+            String replaceAll = string.replaceAll("//", "").replaceAll("\";", "").replaceAll("hql[ ]{0,}\\+[ ]{0,}=[ ]{0,}\"", "").replaceAll(
+                    "\\Q\r\n\\E", this.getNewline());
             StringBuilder sb = new StringBuilder();
             for (String line : replaceAll.split(this.getNewline())) {
                 sb.append(line.trim()).append(this.getNewline());
@@ -3036,6 +3030,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         {
             JMenu settingsMenu = new JMenu(HqlResourceBundle.getMessage("settings"));
             {
+                settingsMenu.add(new JCheckBoxMenuItem(this.oldPlainSqlAction));
                 settingsMenu.add(new JCheckBoxMenuItem(this.formatSqlAction));
                 settingsMenu.add(this.formatSqlOptionsMenu);
                 this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.removeJoinsAction));
@@ -3058,9 +3053,10 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
                 locales.remove(HqlBuilderFrameConstants.DEFAULT_LOCALE);
 
-                Collections.sort(locales, (o1, o2) -> new CompareToBuilder().append(o1.getDisplayLanguage(o1), o2.getDisplayLanguage(o2))
-                        .append(o1.getDisplayCountry(o1), o2.getDisplayCountry(o2))
-                        .toComparison());
+                Collections.sort(locales,
+                        (o1, o2) -> new CompareToBuilder().append(o1.getDisplayLanguage(o1), o2.getDisplayLanguage(o2))
+                                .append(o1.getDisplayCountry(o1), o2.getDisplayCountry(o2))
+                                .toComparison());
 
                 locales.add(0, HqlBuilderFrameConstants.DEFAULT_LOCALE);
 
@@ -3141,6 +3137,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     HqlBuilderFrame.this.addSelectExecutedHql.setSelected(true);
                     HqlBuilderFrame.this.fontAction.setWarnRestart(true);
                     HqlBuilderFrame.this.showToolbarsAction.setSelected(true);
+                    HqlBuilderFrame.this.oldPlainSqlAction.setSelected(false);
 
                     HqlBuilderFrame.this.editable_results();
 
@@ -3360,5 +3357,16 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             continuousSyntaxHighlightingAction.setValue(true);
             hilightSyntax();
         }
+    }
+
+    protected void sql_mode() {
+        boolean hqlMode = !oldPlainSqlAction.isSelected();
+        hql_sql_tabs.setTitleAt(0, hqlMode ? "HQL" : "SQL");
+        findParametersAction.setEnabled(hqlMode);
+        favoritesAction.setEnabled(hqlMode);
+        addToFavoritesAction.setEnabled(hqlMode);
+        namedQueryAction.setEnabled(hqlMode);
+        helpInsertAction.setEnabled(hqlMode);
+        wizardAction.setEnabled(hqlMode);
     }
 }

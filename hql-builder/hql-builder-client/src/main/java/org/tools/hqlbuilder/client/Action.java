@@ -56,7 +56,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
             Character mnemonic, String accelerator, boolean persist, String parentId, Class<T> type, T defaultValue) {
         logger.debug("{} {}", id, value);
         this.id = id;
-        if (persist) {
+        if (persist && parentId != null) {
             if (id == null || "null".equals(id)) {
                 throw new NullPointerException();
             }

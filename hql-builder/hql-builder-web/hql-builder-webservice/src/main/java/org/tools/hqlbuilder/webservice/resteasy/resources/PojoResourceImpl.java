@@ -195,7 +195,7 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public ExecutionResult execute(String hql) {
-        return execute(new QueryParameters(hql));
+        return execute(new QueryParameters(hql, false));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -206,7 +206,7 @@ public class PojoResourceImpl implements PojoResource {
 
     @Override
     public <T extends Serializable> XmlWrapper<List<T>> executePlainResult(String hql) {
-        return executePlainResult(new QueryParameters(hql));
+        return executePlainResult(new QueryParameters(hql, false));
     }
 
     @Override

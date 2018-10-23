@@ -16,6 +16,9 @@ public class QueryParameters implements Serializable {
     @XmlAttribute(required = true)
     private String hql;
 
+    @XmlAttribute(required = false)
+    private boolean isPlainOldSql = false;
+
     @XmlAttribute(required = true)
     private int max = -1;
 
@@ -28,27 +31,31 @@ public class QueryParameters implements Serializable {
     @XmlAttribute
     private String uuid = UUID.randomUUID().toString();
 
-    public QueryParameters(String hql, int start, int max, List<QueryParameter> parameters) {
+    public QueryParameters(String hql, boolean isPlainOldSql, int start, int max, List<QueryParameter> parameters) {
         this.hql = hql;
+        this.isPlainOldSql = isPlainOldSql;
         this.first = start;
         this.max = max;
         this.parameters = parameters;
     }
 
-    public QueryParameters(String hql, int start, int max, QueryParameter... parameters) {
+    public QueryParameters(String hql, boolean isPlainOldSql, int start, int max, QueryParameter... parameters) {
         this.hql = hql;
+        this.isPlainOldSql = isPlainOldSql;
         this.first = start;
         this.max = max;
         this.parameters = Arrays.asList(parameters);
     }
 
-    public QueryParameters(String hql, List<QueryParameter> parameters) {
+    public QueryParameters(String hql, boolean isPlainOldSql, List<QueryParameter> parameters) {
         this.hql = hql;
+        this.isPlainOldSql = isPlainOldSql;
         this.parameters = parameters;
     }
 
-    public QueryParameters(String hql, QueryParameter... parameters) {
+    public QueryParameters(String hql, boolean isPlainOldSql, QueryParameter... parameters) {
         this.hql = hql;
+        this.isPlainOldSql = isPlainOldSql;
         this.parameters = Arrays.asList(parameters);
     }
 
@@ -103,5 +110,13 @@ public class QueryParameters implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public boolean getIsPlainOldSql() {
+        return isPlainOldSql;
+    }
+
+    public void setIsPlainOldSql(boolean isPlainOldSql) {
+        this.isPlainOldSql = isPlainOldSql;
     }
 }

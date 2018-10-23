@@ -114,6 +114,8 @@ public interface HqlBuilderFrameConstants {
 
     public static final String FORMAT_SQL = "format sql";
 
+    public static final String OLD_PLAIN_SQL = "sql mode";
+
     public static final String SHOW_TOOLBARS = "show toolbars";
 
     public static final String REPLACE_PROPERTIES = "replace properties";

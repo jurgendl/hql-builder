@@ -35,7 +35,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.QueryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -43,6 +42,7 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.hibernate.query.Query;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.IdentifierType;
 import org.hibernate.type.ManyToOneType;
@@ -296,16 +296,17 @@ public class HqlServiceImpl implements HqlService {
     @Override
     public ExecutionResult execute(QueryParameters obj) {
         logger.trace("start query \n {}", obj);
-        String hql = obj.getHql();
+        String query = obj.getHql();
+        boolean isPlainOldSql = obj.getIsPlainOldSql();
         int max = obj.getMax();
         int first = obj.getFirst();
         List<QueryParameter> queryParameters = obj.getParameters();
-        if (StringUtils.isBlank(hql)) {
+        if (StringUtils.isBlank(query)) {
             throw new IllegalArgumentException("hql");
         }
         Value<ExecutionResult> result = new Value<>();
         try {
-            if (hql.contains("$$")) {
+            if (query.contains("$$")) {
                 result.reset();
                 @SuppressWarnings("unchecked")
                 Class<?> c = queryParameters.stream()
@@ -316,11 +317,12 @@ public class HqlServiceImpl implements HqlService {
                 getHibernateWebResolver().getClasses()
                         .stream()
                         .filter(cn -> c.isAssignableFrom(cn.getType()))
-                        .map(cn -> execute(new QueryParameters(hql.replace("$$", cn.getType().getSimpleName()), first, max, queryParameters)))
+                        .map(cn -> execute(
+                                new QueryParameters(query.replace("$$", cn.getType().getSimpleName()), false, first, max, queryParameters)))
                         .forEach(it -> result.setOr(it, r -> r.getResults().getValue().addAll(it.getResults().getValue())));
                 return result.get();
             }
-            innerExecute(obj.getUuid(), result.set(new ExecutionResult()), hql, max, first, queryParameters);
+            innerExecute(obj.getUuid(), result.set(new ExecutionResult()), query, isPlainOldSql, max, first, queryParameters);
             return result.get();
         } catch (QueryException ex) {
             logger.error("{}", ex);
@@ -403,7 +405,7 @@ public class HqlServiceImpl implements HqlService {
 
     protected Map<String, CountDownLatch> latches = new HashMap<>();
 
-    protected ExecutionResult innerExecute(String uuid, Value<ExecutionResult> resultValue, String hql, int max, int first,
+    protected ExecutionResult innerExecute(String uuid, Value<ExecutionResult> resultValue, String hql, boolean isPlainOldSql, int max, int first,
             List<QueryParameter> queryParameters) {
         ExecutionResult result = resultValue.get();
         CountDownLatch latch = new CountDownLatch(1);
@@ -421,7 +423,17 @@ public class HqlServiceImpl implements HqlService {
                             }
                         });
                     }
-                    new RunQuery().query(sessionFactory, newSession(), uuid, hql, max, first, queryParameters, result);
+                    RunQuery runQuery;
+                    if (isPlainOldSql) {
+                        try {
+                            runQuery = RunQuery.class.cast(Class.forName("org.tools.hqlbuilder.service.RunSqlQuery").newInstance());
+                        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+                            throw new RuntimeException("plain old sql not supported", ex);
+                        }
+                    } else {
+                        runQuery = new RunQuery();
+                    }
+                    runQuery.query(sessionFactory, newSession(), uuid, hql, max, first, queryParameters, result);
                 } catch (RuntimeException ex) {
                     runtimeException.set(ex);
                     logger.error("", ex);
@@ -603,7 +615,7 @@ public class HqlServiceImpl implements HqlService {
                 }
             }
         }
-        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid,
+        QueryParameters hql = new QueryParameters("from " + name + " where " + oid + "=:" + oid, false,
                 new QueryParameter().setName(oid).setValueTypeText(idv));
         logger.debug("hql={}", hql);
         List<Serializable> value = execute(hql).getResults().getValue();
@@ -685,7 +697,7 @@ public class HqlServiceImpl implements HqlService {
         List<QueryParameter> parameters = new ArrayList<>();
         Session session = newSession();
         try {
-            Query createQuery = session.createQuery(hql);
+            Query<?> createQuery = session.createQuery(hql);
             Object pminof = get(createQuery, "parameterMetadata", Object.class/* ParameterMetadata */);
 
             for (String param : createQuery.getNamedParameters()) {
