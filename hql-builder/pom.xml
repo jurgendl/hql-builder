@@ -51,12 +51,12 @@
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2017.07.03 -->
 		<version.hibernate>5.2</version.hibernate><!-- being tested against 5.2 -->
-		<version.slf4j>1.7.21</version.slf4j><!-- recent version, keep up to date -->
+		<version.slf4j>1.7.25</version.slf4j><!-- recent version, keep up to date -->
 		<version.logback>1.2.3</version.logback><!-- recent version, keep up to date -->
-		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date -->
+		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date, 2.7.8 is the last 2.x.x, should test 3.0.10 -->
 		<version.logback.spring>0.1.2</version.logback.spring>
-		<version.swingeasy>4.0.10-SNAPSHOT</version.swingeasy><!-- recent version, keep up to date -->
 		<version.jhaws>4.0.10-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
+		<version.swingeasy>${version.jhaws}</version.swingeasy><!-- recent version, keep up to date -->
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.10</version.joda><!-- Java 1.8 is not a sufficient alternative -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
@@ -74,7 +74,7 @@
 		<version.resteasy.jaxrs>3.0.12.Final</version.resteasy.jaxrs><!-- keep up to date 3.x.x -->
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.5.6</version.httpclient><!-- keep up to date 4.x.x -->
-		<version.jadira>4.0.0.GA</version.jadira><!-- newer version available but breaks Hibernate 4.2+ -->
+		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.wicket.core>6.29.0</version.wicket.core><!-- keep up to date 6.x.x -->
 		<version.wicket.jquery.ui>6.29.0</version.wicket.jquery.ui><!-- keep up to date 6.x.x, somewhat behind Wicket core version, kendo is not compatible with version 6.16.0 -->
 		<version.wicket.bootstrap>0.9.2</version.wicket.bootstrap><!-- stale? -->

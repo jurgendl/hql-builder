@@ -14,7 +14,7 @@
 		<hibernate-annotations.version>3.2.0.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
 		<hibernate-validator.version>3.1.0.GA</hibernate-validator.version>
-		<version.slf4j>1.7.21</version.slf4j>
+		<version.slf4j>1.7.25</version.slf4j>
 	</properties>
 	<dependencies>
 		<dependency>
