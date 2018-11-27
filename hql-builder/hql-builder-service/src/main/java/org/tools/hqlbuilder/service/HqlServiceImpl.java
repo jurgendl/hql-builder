@@ -382,6 +382,17 @@ public class HqlServiceImpl implements HqlService {
         } catch (NullPointerException ex) {
             logger.error("{}", ex);
             throw new ServiceException("NullPointerException", result.get());
+        } catch (IllegalArgumentException ex) {
+            if (ex.getCause() != null && ex.getCause() instanceof HibernateException) {
+                HibernateException ex2 = HibernateException.class.cast(ex.getCause());
+                logger.error("{}", ex2);
+                throw new ServiceException(concat(ex2), result.get());
+            } else if (ex.getCause() != null && ex.getCause() instanceof SQLGrammarException) {
+                SQLGrammarException ex2 = SQLGrammarException.class.cast(ex.getCause());
+                logger.error("{}", ex2);
+                throw new SqlException(concat(ex2), result.get(), ex2.getSQL(), String.valueOf(ex2.getSQLException()), ex2.getSQLState());
+            }
+            throw new ServiceException(concat(ex), result.get());
         } catch (Exception ex) {
             throw new ServiceException(concat(ex), result.get());
         } finally {

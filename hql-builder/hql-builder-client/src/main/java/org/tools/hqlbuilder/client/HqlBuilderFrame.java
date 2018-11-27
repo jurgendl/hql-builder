@@ -172,6 +172,7 @@ import net.miginfocom.swing.MigLayout;
 /**
  * @author Jurgen
  */
+@SuppressWarnings("serial")
 public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private static final Color TAB_OK_COLOR = new Color(0, 200, 0);
 
@@ -629,7 +630,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private final LinkedList<QueryFavorite> favorites = new LinkedList<>();
 
     private final JComponent values = ClientUtils.getPropertyFrame(new Serializable() {
-        private static final long serialVersionUID = 1L;
+        //
     }, false);
 
     /** aliases query */
@@ -715,8 +716,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.fontAction.setWarnRestart(true);
 
         nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" > ") {
-            private static final long serialVersionUID = 2525393811237450637L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 Number maximumNumberOfResults = (Number) maximumNumberOfResultsAction.getValue();
@@ -726,8 +725,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             }
         }));
         backToStartResultsButton = new EButton(new EButtonConfig(new AbstractAction(" |< ") {
-            private static final long serialVersionUID = 2525393811237450637L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 start_query(true);
@@ -740,8 +737,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.parameterName = this.font(new ETextField(new ETextFieldConfig()), null);
         this.parameterValue = this.font(new ETextField(new ETextFieldConfig(false)), null);
         ETextArea hqlTextArea = new ETextArea(new ETextAreaConfig().setTooltips(true)) {
-            private static final long serialVersionUID = 5778951450821178464L;
-
             @Override
             public String getToolTipText(MouseEvent event) {
                 if (HqlBuilderFrame.this.addShowErrorTooltip.isSelected()) {
@@ -770,9 +765,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         if (!showTT) {
                             return null;
                         }
-                        if (HqlBuilderFrame.this.errorString.length() > 400) { // maximum lengte tooltip
-                            return "<html><p width=800>" + HqlBuilderFrame.this.errorString.substring(0, 400) + " ...</p><html>";
-                        }
+                        String err = HqlBuilderFrame.this.errorString;
+                        err = err.replaceAll("(?m)^[ \t]*\r?\n", "");
                         if (HqlBuilderFrame.this.errorString.length() > 100) {
                             return "<html><p width=800>" + HqlBuilderFrame.this.errorString + "</p><html>";
                         }
@@ -969,8 +963,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             cp.add(cp2, "wrap");
 
             AbstractAction ok = new AbstractAction("Ok") {
-                private static final long serialVersionUID = -8251984652275658858L;
-
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     d.dispose();
@@ -2767,8 +2759,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
             final ECheckBox searchField = new ECheckBox(new ECheckBoxConfig("field", true));
             ELabeledTextFieldButtonComponent searchinput = new ELabeledTextFieldButtonComponent() {
-                private static final long serialVersionUID = 6519657911421417572L;
-
                 @Override
                 public void copy(ActionEvent e) {
                     //
