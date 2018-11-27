@@ -770,6 +770,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                         if (!showTT) {
                             return null;
                         }
+                        if (HqlBuilderFrame.this.errorString.length() > 400) { // maximum lengte tooltip
+                            return "<html><p width=800>" + HqlBuilderFrame.this.errorString.substring(0, 400) + " ...</p><html>";
+                        }
                         if (HqlBuilderFrame.this.errorString.length() > 100) {
                             return "<html><p width=800>" + HqlBuilderFrame.this.errorString + "</p><html>";
                         }
