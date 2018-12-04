@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tools.hql-builder</groupId>
 	<artifactId>bom</artifactId>
-	<version>5.0.3-SNAPSHOT</version>
+	<version>5.0.3</version>
 	<packaging>pom</packaging>
 	<name>HqlBuilder</name>
 	<description>HqlBuilder</description>
@@ -708,7 +708,7 @@
 		<connection>scm:git:git@github.com:jurgendl/hql-builder.git</connection>
 		<url>scm:git:git@github.com:jurgendl/hql-builder.git</url>
 		<developerConnection>scm:git:git@github.com:jurgendl/hql-builder.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>bom-5.0.3</tag>
 	</scm>
 	<repositories>
 		<repository>
