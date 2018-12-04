@@ -19,13 +19,13 @@
 	deploy release:
 	((change snapshots > versions ))
 	(stash/push changes)
-	((set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_144))
+	((set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_181))
 	mvn release:prepare
-	git checkout -b Branch_bom-5.0.3 bom-5.0.3
+	git checkout -b Branch_bom-5.0.4 bom-5.0.4
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn release:clean
-	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=5.0.4-SNAPSHOT
+	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=5.0.5-SNAPSHOT
 	change parent version of module "hql-builder-web" and "hql-builder-demo" and "hql-builder-full"
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	((change versions > snapshots ))
@@ -55,7 +55,7 @@
 		<version.logback>1.2.3</version.logback><!-- recent version, keep up to date -->
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date, 2.7.8 is the last 2.x.x, should test 3.0.10 -->
 		<version.logback.spring>0.1.2</version.logback.spring>
-		<version.jhaws>4.0.10</version.jhaws><!-- recent version, keep up to date -->
+		<version.jhaws>4.0.11-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.swingeasy>${version.jhaws}</version.swingeasy><!-- recent version, keep up to date -->
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.10</version.joda><!-- Java 1.8 is not a sufficient alternative -->
