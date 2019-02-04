@@ -334,12 +334,12 @@
 			<artifactId>commons-io</artifactId>
 			<version>${version.commons-io}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>jaxrs-api</artifactId>
 			<version>${version.resteasy.jaxrs}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>${version.resteasy}</version>
@@ -349,8 +349,8 @@
 					<groupId>javassist</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
 			<version>${version.resteasy}</version>
@@ -360,7 +360,7 @@
 					<groupId>javax.servlet</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 		<!-- WebService -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -403,12 +403,12 @@
 			<artifactId>spring-oxm</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-spring</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-multipart-provider</artifactId>
 			<version>${version.resteasy}</version>
@@ -418,18 +418,18 @@
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-html</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-json-p-provider</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-hibernatevalidator-provider</artifactId>
 			<version>${version.resteasy}</version>
@@ -439,32 +439,32 @@
 					<artifactId>hibernate-validator</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson-provider</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
+		</dependency> -->
 		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson2-provider</artifactId>
 			<version>${version.resteasy}</version>
 		</dependency> -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jettison-provider</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-atom-provider</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-yaml-provider</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
+		</dependency> -->
         <!-- <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-cdi</artifactId>
@@ -547,11 +547,11 @@
 			<version>${version.spring-security}</version>
 		</dependency>
 		<!-- WebClient -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
 			<version>${version.resteasy}</version>
-		</dependency>
+		</dependency> -->
 		<!-- Client -->
 		<dependency>
 			<groupId>org.swingeasy</groupId>

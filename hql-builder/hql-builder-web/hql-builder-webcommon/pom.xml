@@ -27,30 +27,30 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>jaxrs-api</artifactId>
-			</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-atom-provider</artifactId>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-yaml-provider</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 </project>

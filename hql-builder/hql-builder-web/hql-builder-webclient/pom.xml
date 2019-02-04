@@ -20,9 +20,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.tools.hql-builder</groupId>
+			<artifactId>hql-builder-interfaces</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
