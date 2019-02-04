@@ -11,6 +11,10 @@
 	<description>hql-builder-webclient</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.jhaws.common</groupId>
+			<artifactId>jhaws-net</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>

@@ -48,6 +48,10 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
+/**
+ * @deprecated see {@link org.jhaws.common.net.resteasy.client.RestEasyClient}
+ */
+@Deprecated
 public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, InitializingBean {
     protected final Logger logger;
 
@@ -65,7 +69,6 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
 
     protected ResteasyProvidersBean resteasyProvidersBean;
 
-    @SuppressWarnings("deprecation")
     protected org.jboss.resteasy.client.ClientExecutor clientExecutor;
 
     public HqlWebServiceClientFactory() {
@@ -89,7 +92,6 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     // return resteasyProviderFactory;
     // }
 
-    @SuppressWarnings("deprecation")
     protected org.jboss.resteasy.client.ClientExecutor setupClientExecutor() {
         AuthCache authCache = new BasicAuthCache();
         AuthScheme basicAuth = new BasicScheme();
@@ -163,7 +165,6 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
     /**
      * @see javassist.util.proxy.MethodHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.reflect.Method, java.lang.Object[])
      */
-    @SuppressWarnings("deprecation")
     @Override
     public Object invoke(Object self, Method method, Method forwarder, Object[] args) throws Throwable {
         logger.debug("Method=" + method);
@@ -345,7 +346,7 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
             }
             Object entity = response.getEntity();
             if (stream) {
-                entity = new RedirectedStreamingOutput(InputStream.class.cast(entity));
+                entity = new org.jhaws.common.net.resteasy.client.RedirectedStreamingOutput(InputStream.class.cast(entity));
             }
             return entity;
         } catch (org.jboss.resteasy.spi.UnhandledException ex) {
@@ -396,12 +397,10 @@ public abstract class HqlWebServiceClientFactory<R> implements MethodHandler, In
         this.resteasyProvider = resteasyProvider;
     }
 
-    @SuppressWarnings("deprecation")
     public org.jboss.resteasy.client.ClientExecutor getClientExecutor() {
         return this.clientExecutor;
     }
 
-    @SuppressWarnings("deprecation")
     public void setClientExecutor(org.jboss.resteasy.client.ClientExecutor clientExecutor) {
         this.clientExecutor = clientExecutor;
     }
