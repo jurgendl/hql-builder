@@ -75,9 +75,6 @@
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.5.6</version.httpclient><!-- keep up to date 4.x.x -->
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
-		<version.wicket.core>6.29.0</version.wicket.core><!-- keep up to date 6.x.x -->
-		<version.wicket.jquery.ui>6.29.0</version.wicket.jquery.ui><!-- keep up to date 6.x.x, somewhat behind Wicket core version, kendo is not compatible with version 6.16.0 -->
-		<version.wicket.bootstrap>0.9.2</version.wicket.bootstrap><!-- stale? -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
 		<version.bouncycastle>1.60</version.bouncycastle><!-- always use the latest version -->
@@ -86,11 +83,11 @@
 		<version.cglib>3.2.8</version.cglib><!-- dead project, Spring includes fork -->
 		<version.asm>5.0.3</version.asm><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->
-        <version.spring>4.3.20.RELEASE</version.spring><!-- keep up to date 4.x.x -->
-        <version.spring-security>4.2.9.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version !!! test 4.2.3.RELEASE !!! -->
-        <version.spring-ws>2.3.1.RELEASE</version.spring-ws><!-- keep up to date 2.x.x, does not follow Spring version !!! test 2.4.0.RELEASE !!! -->
+        <version.spring>5.1.7.RELEASE</version.spring><!-- keep up to date 4.x.x; 4.3.14.RELEASE -->
+        <version.spring-security>5.1.5.RELEASE</version.spring-security><!-- keep up to date 4.x.x, does not follow Spring version; 4.2.3.RELEASE -->
+        <!--<version.spring-ws>2.3.1.RELEASE</version.spring-ws>--><!-- keep up to date 2.x.x, does not follow Spring version !!! test 2.4.0.RELEASE !!! -->
 		<!-- other -->
-		<version.jackson>2.9.6</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems // wanne go to 2.9.6 -->
+		<version.jackson>2.9.9</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems // wanne go to 2.9.6 -->
 		<version.ostermiller>1.07.00</version.ostermiller>
 		<version.aspectj>1.8.9</version.aspectj>
 	</properties>
