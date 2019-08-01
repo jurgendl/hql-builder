@@ -50,10 +50,6 @@
 			<artifactId>cglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>
