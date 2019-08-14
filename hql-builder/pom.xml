@@ -58,7 +58,7 @@
 		<version.logback>1.2.3</version.logback><!-- recent version, keep up to date -->
 		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date, 2.7.8 is the last 2.x.x, should test 3.0.10 -->
 		<version.logback.spring>0.1.2</version.logback.spring>
-		<version.jhaws>4.0.11-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
+		<version.jhaws>5.0.0-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.swingeasy>${version.jhaws}</version.swingeasy><!-- recent version, keep up to date -->
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.10</version.joda><!-- Java 1.8 is not a sufficient alternative -->
