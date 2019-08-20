@@ -120,7 +120,8 @@ public class DetachedHqlService extends DelegatingHqlService {
         }
     }
 
-    private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans)
+	@SuppressWarnings("deprecation")
+	private void cleanFields(Object objBean, Field[] classFields, HashSet visitedBeans)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException {
         boolean accessModifierFlag = false;
         for (Field classField : classFields) {

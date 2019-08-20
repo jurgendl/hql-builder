@@ -14,7 +14,6 @@ import java.awt.Insets;
 import java.awt.MenuItem;
 import java.awt.Point;
 import java.awt.PopupMenu;
-import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
@@ -30,6 +29,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -741,13 +741,13 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             public String getToolTipText(MouseEvent event) {
                 if (HqlBuilderFrame.this.addShowErrorTooltip.isSelected()) {
                     if (StringUtils.isNotBlank(HqlBuilderFrame.this.errorString)) {
-                        int offs = this.viewToModel(event.getPoint());
+                        int offs = this.viewToModel2D(event.getPoint());
                         try {
-                            Rectangle modelToView = this.modelToView(offs);
-                            if (Math.abs(event.getPoint().x - modelToView.x) > 17) {
+							Rectangle2D modelToView = this.modelToView2D(offs);
+							if (Math.abs(event.getPoint().x - modelToView.getX()) > 17) {
                                 return null;
                             }
-                            if (Math.abs(event.getPoint().y - modelToView.y) > 17) {
+							if (Math.abs(event.getPoint().y - modelToView.getY()) > 17) {
                                 return null;
                             }
                         } catch (BadLocationException ex) {
@@ -774,7 +774,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     }
                 }
                 try {
-                    int offs = this.viewToModel(event.getPoint());
+					int offs = this.viewToModel2D(event.getPoint());
                     int startIndex = Utilities.getWordStart(this, offs);
                     int endIndex = Utilities.getWordEnd(this, offs);
                     String substring = this.getText().substring(Math.max(0, startIndex - 1), endIndex);
@@ -2917,7 +2917,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                     return;
                 }
 
-                if (HqlBuilderFrame.this.addEndBraceAction.isSelected() && EventHelper.keyEvent(e, '(') && (e.getModifiers() == 0)) {
+				if (HqlBuilderFrame.this.addEndBraceAction.isSelected() && EventHelper.keyEvent(e, '(')
+						&& (e.getModifiersEx() == 0)) {
                     int pos = HqlBuilderFrame.this.hql.getCaretPosition();
                     HqlBuilderFrame.this.hql
                             .setText(HqlBuilderFrame.this.hql.getText().substring(0, pos) + ')' + HqlBuilderFrame.this.hql.getText().substring(pos));

@@ -21,7 +21,6 @@ import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
-import org.springframework.security.access.method.P;
 import org.tools.hqlbuilder.common.EntityERHAdapter;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
 
@@ -138,7 +137,7 @@ public abstract class ServiceImpl {
         return (P) this.getSession().get(entityName, id, lockOptions);
     }
 
-    protected Serializable getIdentifier(P entity) {
+	protected Serializable getIdentifier(Object entity) {
         return this.getSession().getIdentifier(entity);
     }
 

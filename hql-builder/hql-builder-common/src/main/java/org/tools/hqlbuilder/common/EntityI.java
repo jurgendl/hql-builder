@@ -2,9 +2,9 @@ package org.tools.hqlbuilder.common;
 
 import java.io.Serializable;
 
-import org.hibernate.annotations.AccessType;
 
-@AccessType("field")
+@SuppressWarnings("deprecation")
+@org.hibernate.annotations.AccessType("field")
 public interface EntityI extends Serializable {
     public static final String ID = "id";
 

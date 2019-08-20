@@ -22,6 +22,7 @@ import org.tools.hqlbuilder.common.QueryParameters;
 import org.tools.hqlbuilder.common.exceptions.ValidationException;
 import org.tools.hqlbuilder.webcommon.resteasy.PojoResource;
 
+@Deprecated
 public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource> implements HqlService {
     public HqlWebServiceClient() {
         super();
@@ -175,7 +176,7 @@ public class HqlWebServiceClient extends HqlWebServiceClientFactory<PojoResource
         //
     }
 
-    @Override
+	@Override
     public <T extends Serializable, I extends Serializable> T get(Class<T> type, I id) {
         return type.cast(getResource().get(type.getName(), String.valueOf(id)).getValue());
     }

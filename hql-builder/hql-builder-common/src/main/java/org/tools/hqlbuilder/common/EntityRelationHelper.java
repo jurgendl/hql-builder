@@ -1165,12 +1165,20 @@ public class EntityRelationHelper<O> implements EntityRelationHelperI<O> {
             Collection<T> collection;
             if (!Modifier.isFinal(modifiers) && !Modifier.isInterface(modifiers) && !Modifier.isAbstract(modifiers)) {
                 try {
-                    collection = (Collection<T>) type.newInstance();
+					collection = (Collection<T>) type.getDeclaredConstructor().newInstance();
                 } catch (InstantiationException ex) {
                     throw new EntityRelationException(ex);
                 } catch (IllegalAccessException ex) {
                     throw new EntityRelationException(ex);
-                }
+				} catch (IllegalArgumentException ex) {
+					throw new EntityRelationException(ex);
+				} catch (InvocationTargetException ex) {
+					throw new EntityRelationException(ex);
+				} catch (NoSuchMethodException ex) {
+					throw new EntityRelationException(ex);
+				} catch (SecurityException ex) {
+					throw new EntityRelationException(ex);
+				}
             } else if (List.class.equals(type)) {
                 collection = new ArrayList<>();
             } else if (SortedSet.class.equals(type)) {

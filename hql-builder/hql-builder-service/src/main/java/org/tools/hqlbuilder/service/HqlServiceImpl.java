@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -437,10 +438,15 @@ public class HqlServiceImpl implements HqlService {
                     RunQuery runQuery;
                     if (isPlainOldSql) {
                         try {
-                            runQuery = RunQuery.class.cast(Class.forName("org.tools.hqlbuilder.service.RunSqlQuery").newInstance());
+							runQuery = RunQuery.class.cast(Class.forName("org.tools.hqlbuilder.service.RunSqlQuery")
+									.getDeclaredConstructor().newInstance());
                         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
                             throw new RuntimeException("plain old sql not supported", ex);
-                        }
+						} catch (InvocationTargetException ex) {
+							throw new RuntimeException("plain old sql not supported", ex);
+						} catch (NoSuchMethodException ex) {
+							throw new RuntimeException("plain old sql not supported", ex);
+						}
                     } else {
                         runQuery = new RunQuery();
                     }
@@ -568,7 +574,8 @@ public class HqlServiceImpl implements HqlService {
             if ("org.hibernate.validator.InvalidStateException".equals(ex.getClass().getName())) {
                 try {
                     ValidationExceptionConverter vc = (ValidationExceptionConverter) Class
-                            .forName("org.tools.hqlbuilder.common.validation.HibernateValidationConverter").newInstance();
+							.forName("org.tools.hqlbuilder.common.validation.HibernateValidationConverter")
+							.getDeclaredConstructor().newInstance();
                     throw vc.convert(ex);
                 } catch (ValidationException ex2) {
                     throw ex2;
@@ -578,7 +585,8 @@ public class HqlServiceImpl implements HqlService {
             } else if ("javax.validation.ConstraintViolationException".equals(ex.getClass().getName())) {
                 try {
                     ValidationExceptionConverter vc = (ValidationExceptionConverter) Class
-                            .forName("org.tools.hqlbuilder.common.validation.JavaxValidationConverter").newInstance();
+							.forName("org.tools.hqlbuilder.common.validation.JavaxValidationConverter")
+							.getDeclaredConstructor().newInstance();
                     throw vc.convert(ex);
                 } catch (ValidationException ex2) {
                     throw ex2;
@@ -700,7 +708,8 @@ public class HqlServiceImpl implements HqlService {
     /**
      * @see org.tools.hqlbuilder.common.HqlService#findParameters(java.lang.String)
      */
-    @Override
+	@SuppressWarnings("deprecation")
+	@Override
     public List<QueryParameter> findParameters(String hql) {
         if (StringUtils.isBlank(hql)) {
             throw new IllegalArgumentException("hql");

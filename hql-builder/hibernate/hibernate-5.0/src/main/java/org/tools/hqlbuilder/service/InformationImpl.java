@@ -27,7 +27,7 @@ public class InformationImpl extends LuceneInformation {
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
     protected void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException {
         Document doc = new Document();
@@ -92,7 +92,7 @@ public class InformationImpl extends LuceneInformation {
                         enumType = f.getType();
                     } else if (String.class.equals(f.getType())) {
                         try {
-                            value = (String) f.get(Class.forName(classname).newInstance());
+							value = (String) f.get(Class.forName(classname).getDeclaredConstructor().newInstance());
                         } catch (Exception ex2) {
                             //
                         }

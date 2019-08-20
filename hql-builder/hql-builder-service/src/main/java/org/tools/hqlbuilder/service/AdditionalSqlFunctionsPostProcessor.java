@@ -43,7 +43,8 @@ public class AdditionalSqlFunctionsPostProcessor implements ConfigurationPostPro
                 types = (Map<String, Type>) new ObjectWrapper(Class.forName("org.hibernate.type.TypeFactory")).get("BASIC_TYPES");
             } catch (Exception ex) {
                 try {
-                    types = (Map<String, Type>) new ObjectWrapper(Class.forName("org.hibernate.type.BasicTypeRegistry").newInstance())
+					types = (Map<String, Type>) new ObjectWrapper(Class.forName("org.hibernate.type.BasicTypeRegistry")
+							.getDeclaredConstructor().newInstance())
                             .get("registry");
                 } catch (Exception ex2) {
                     //

@@ -37,7 +37,7 @@ public class CommonUtilsAdd extends CommonUtils {
     }
 
     public static <T> T create(Class<T> modelType) {
-        return BeanUtils.instantiate(modelType);
+		return BeanUtils.instantiateClass(modelType);
     }
 
     public static <A> void set(Object bean, A arg, Object value) {

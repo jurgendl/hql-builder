@@ -27,7 +27,7 @@ public class RunSqlQuery extends RunQuery {
                     Object valueCompiled = value.getValue();
                     if (value.getName() != null) {
                         if (valueCompiled instanceof Collection) {
-                            Object[] l = new ArrayList((Collection) valueCompiled).toArray();
+							Object[] l = new ArrayList<>((Collection<?>) valueCompiled).toArray();
                             createQuery.setParameterList(value.getName(), l);
                         } else {
                             createQuery.setParameter(value.getName(), valueCompiled);

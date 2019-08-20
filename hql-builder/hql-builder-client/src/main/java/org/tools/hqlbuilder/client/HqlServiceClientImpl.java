@@ -268,7 +268,9 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         // logger.debug(sqlString);
 
         try {
-            sqlString = CommonUtilsAdd.call(Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").newInstance(), "format", String.class,
+			sqlString = CommonUtilsAdd.call(
+					Class.forName("org.hibernate.jdbc.util.BasicFormatterImpl").getDeclaredConstructor().newInstance(),
+					"format", String.class,
                     sqlString);
         } catch (Throwable ex) {
             if (!warn1) {
@@ -278,7 +280,8 @@ public class HqlServiceClientImpl extends DelegatingHqlService implements HqlSer
         }
 
         try {
-            Object formatter = Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl").newInstance();
+			Object formatter = Class.forName("org.hibernate.engine.jdbc.internal.BasicFormatterImpl")
+					.getDeclaredConstructor().newInstance();
             try {
                 @SuppressWarnings("unchecked")
                 Set<String> BEGIN_CLAUSES = (Set<String>) new ObjectWrapper(formatter).get("BEGIN_CLAUSES");
