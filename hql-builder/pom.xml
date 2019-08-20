@@ -63,7 +63,7 @@
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.joda>2.10</version.joda><!-- Java 1.8 is not a sufficient alternative -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
-		<version.commons-codec>1.11</version.commons-codec><!-- recent version, keep up to date -->
+		<version.commons-codec>1.12</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.6</version.commons-io><!-- keep up to date -->
 		<version.commons-lang>2.6</version.commons-lang><!-- stale -->
 		<version.commons-lang3>3.8.1</version.commons-lang3><!-- recent version, keep up to date -->
