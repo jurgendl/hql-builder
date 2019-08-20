@@ -73,7 +73,7 @@
 		<version.javassist>3.25.0-GA</version.javassist><!-- Java 1.9 ready -->
 		<version.ehcache>2.10.5</version.ehcache><!-- recent version, keep up to date -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
-        <version.resteasy>3.6.2.Final</version.resteasy>
+        <version.resteasy>3.8.1.Final</version.resteasy>
         <version.resteasy.jaxrs>3.0.12.Final</version.resteasy.jaxrs>
 		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.5.6</version.httpclient><!-- keep up to date 4.x.x -->
