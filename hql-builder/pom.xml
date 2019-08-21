@@ -80,7 +80,7 @@
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
-		<version.bouncycastle>1.60</version.bouncycastle><!-- always use the latest version -->
+		<version.bouncycastle>1.62</version.bouncycastle><!-- always use the latest version -->
 		<version.lambdaj>2.4</version.lambdaj><!-- 2.3.3; maybe one day replaced by Java 1.8, 2.4 only available on googlecode
 		lambdaj repo which is dead -->
 		<version.cglib>3.3.0</version.cglib><!-- jdk 10 ready -->
