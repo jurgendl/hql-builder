@@ -90,7 +90,6 @@
 		<version.jackson>2.9.9</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems // wanne go to 2.9.6 -->
 		<version.ostermiller>1.07.00</version.ostermiller>
 		<version.aspectj>1.8.9</version.aspectj>
-		<version.jaxb>2.3.0</version.jaxb>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -114,17 +113,22 @@
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>jaxb-api</artifactId>
-				<version>${version.jaxb}</version>
+				<version>2.4.0-b180830.0359</version><!--$NO-MVN-MAN-VER$-->
 			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-core</artifactId>
-				<version>${version.jaxb}</version>
+				<version>2.3.0.1</version><!--$NO-MVN-MAN-VER$-->
 			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
-				<version>${version.jaxb}</version>
+				<version>2.4.0-b180830.0438</version><!--$NO-MVN-MAN-VER$-->
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jaxb</groupId>
+				<artifactId>jaxb-runtime</artifactId>
+				<version>2.4.0-b180830.0438</version><!--$NO-MVN-MAN-VER$-->
 			</dependency>
     		<dependency>
     			<groupId>org.jhaws.common</groupId>
