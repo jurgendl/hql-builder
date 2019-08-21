@@ -61,7 +61,7 @@
 		<version.jhaws>5.0.0-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.swingeasy>${version.jhaws}</version.swingeasy><!-- recent version, keep up to date -->
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
-		<version.joda>2.10</version.joda><!-- Java 1.8 is not a sufficient alternative -->
+		<version.joda>2.10.3</version.joda><!-- Java 1.8 is not a sufficient alternative -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.commons-codec>1.12</version.commons-codec><!-- recent version, keep up to date -->
 		<version.commons-io>2.6</version.commons-io><!-- keep up to date -->
