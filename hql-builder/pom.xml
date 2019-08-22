@@ -75,7 +75,6 @@
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
         <version.resteasy>3.8.1.Final</version.resteasy>
         <version.resteasy.jaxrs>3.0.12.Final</version.resteasy.jaxrs>
-		<version.servlet>2.5</version.servlet><!-- we stick with this version, upgrading to 3.x needs some work -->
 		<version.httpclient>4.5.6</version.httpclient><!-- keep up to date 4.x.x -->
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
@@ -102,6 +101,12 @@
 	</modules>
 	<dependencyManagement>
         <dependencies>
+    		<dependency>
+    			<groupId>javax.servlet</groupId>
+    			<artifactId>servlet-api</artifactId>
+    			<version>2.5</version>
+    			<scope>provided</scope>
+    		</dependency>
 			<dependency>
 				<groupId>org.jhaws.common</groupId>
 				<artifactId>jhaws-spring-bom</artifactId>
@@ -329,12 +334,6 @@
     			</exclusions>
     		</dependency> -->
     		<!-- WebService -->
-    		<dependency>
-    			<groupId>javax.servlet</groupId>
-    			<artifactId>servlet-api</artifactId>
-    			<version>${version.servlet}</version>
-    			<scope>provided</scope>
-    		</dependency>
     		<dependency>
     			<groupId>commons-codec</groupId>
     			<artifactId>commons-codec</artifactId>
