@@ -30,15 +30,15 @@ import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.hibernate.SessionFactory;
-import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.type.ClassMetadata;
 import org.tools.hqlbuilder.common.interfaces.Information;
 
 public abstract class LuceneInformation implements Information {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
-    protected static final Version LUCENE_VERSION = Version.LUCENE_5_5_5;
+	protected static final Version LUCENE_VERSION = Version.LUCENE_8_2_0;
 
     protected static final Store STORE = Store.YES;
 
