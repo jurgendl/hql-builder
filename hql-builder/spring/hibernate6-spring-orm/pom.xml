@@ -10,7 +10,7 @@
 	<name>hibernate6-spring-orm</name>
 	<description>hibernate6-spring-orm, if you are using spring 4..., these classes should be included and this module should not be used</description>
 	<properties>
-		<hibernate.version>5.2.18.Final</hibernate.version>
+		<hibernate.version>6.0.0.Alpha2</hibernate.version>
 	</properties>
 	<dependencies>
 		<dependency>
