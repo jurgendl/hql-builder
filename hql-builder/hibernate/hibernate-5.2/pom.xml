@@ -10,7 +10,7 @@
 	<name>hibernate-5.2</name>
 	<description>hibernate-5.2</description>
 	<properties>
-		<hibernate.version>5.2.12.Final</hibernate.version>
+		<hibernate.version>5.2.18.Final</hibernate.version>
 		<hibernate-annotations.version>5.0.1.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
 		<hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
@@ -23,18 +23,18 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.11</version><!--$NO-MVN-MAN-VER$-->
+			<version>${version.commons.codec}</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-test-framework</artifactId>
 			<version>${version.lucene}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>

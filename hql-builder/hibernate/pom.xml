@@ -15,5 +15,7 @@
 		<module>hibernate-5.0</module>
 		<module>hibernate-5.1</module>
 		<module>hibernate-5.2</module>
+		<module>hibernate-5.3</module>
+		<module>hibernate-5.4</module>
 	</modules>
 </project>
