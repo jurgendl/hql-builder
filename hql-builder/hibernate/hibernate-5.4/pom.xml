@@ -11,9 +11,9 @@
 	<description>hibernate-5.4</description>
 	<properties>
 		<hibernate.version>5.4.4.Final</hibernate.version>
-		<hibernate-annotations.version>5.0.1.Final</hibernate-annotations.version>
+		<hibernate-annotations.version>5.1.0.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
-		<hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.0.17.Final</hibernate-validator.version>
 		<!-- Elasticsearch	2.0 - 5.6 -->
 		<!-- https://hibernate.org/search/releases/5.11/ -->
 		<!-- https://hibernate.org/search/documentation/migrate/ -->
@@ -176,8 +176,13 @@
 			<version>${hibernate-jpa.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
 			<version>${hibernate-validator.version}</version>
 		</dependency>
 		<dependency>
