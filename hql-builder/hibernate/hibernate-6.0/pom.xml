@@ -10,14 +10,15 @@
 	<name>hibernate-6.0</name>
 	<description>hibernate-6.0</description>
 	<properties>
-		<hibernate.version>5.4.4.Final</hibernate.version>
-		<hibernate-annotations.version>5.0.1.Final</hibernate-annotations.version>
-		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
-		<hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
-		<hibernate.search.version>5.8.2.Final</hibernate.search.version>
+		<hibernate.version>6.0.0.Alpha2</hibernate.version>
+		<hibernate-annotations.version>5.1.0.Final</hibernate-annotations.version>
+		<hibernate-jpa.version>1.0.0.Beta2</hibernate-jpa.version>
+		<hibernate-validator.version>6.1.0.Alpha6</hibernate-validator.version>
+		<hibernate.search.version>6.0.0.Alpha8</hibernate.search.version>
 		<version.slf4j>1.7.25</version.slf4j>
 		<version.javax.el>2.2.5</version.javax.el>
-		<version.lucene>5.5.5</version.lucene>
+		<version.lucene>8.2.0</version.lucene>
+		<!-- Elasticsearch	5.6 - 7.0 -->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -117,7 +118,7 @@
 			<version>${version.lucene}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.search</groupId>
 			<artifactId>hibernate-search</artifactId>
 			<version>${hibernate.search.version}</version>
 			<exclusions>
@@ -128,7 +129,7 @@
 			</exclusions>
 		</dependency>
 		<!-- <dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.search</groupId>
 			<artifactId>hibernate-search-infinispan</artifactId>
 			<version>${hibernate.search.version}</version>
 			<exclusions>
@@ -210,7 +211,7 @@
 			</exclusions>
 		</dependency> -->
 		<!--dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.search</groupId>
 			<artifactId>hibernate-search-analyzers</artifactId>
 			<version>${hibernate.search.version}</version>
 		</dependency>-->
@@ -224,12 +225,12 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>${hibernate.version}</version>
@@ -239,7 +240,7 @@
 					<artifactId>ehcache-core</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
@@ -251,7 +252,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<artifactId>hibernate-jpa-2.2-api</artifactId>
 			<version>${hibernate-jpa.version}</version>
 		</dependency>
 		<dependency>
