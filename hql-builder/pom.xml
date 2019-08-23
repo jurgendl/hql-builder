@@ -82,7 +82,6 @@
 		<version.bouncycastle>1.62</version.bouncycastle><!-- always use the latest version -->
 		<version.lambdaj>2.4</version.lambdaj><!-- 2.3.3; maybe one day replaced by Java 1.8, 2.4 only available on googlecode
 		lambdaj repo which is dead -->
-		<version.cglib>3.3.0</version.cglib><!-- jdk 10 ready -->
 		<!--<version.asm>5.0.3</version.asm>--><!-- Java 1.8 ready, Spring includes version for included cglib -->
 		<version.activation>1.1.1</version.activation><!-- stale -->
 		<!-- other -->
@@ -187,11 +186,6 @@
     			<artifactId>asm</artifactId>
     			<version>${version.asm}</version>
     		</dependency>-->
-    		<dependency>
-    			<groupId>cglib</groupId>
-    			<artifactId>cglib</artifactId>
-    			<version>${version.cglib}</version>
-    		</dependency>
     		<dependency>
     			<groupId>org.slf4j</groupId>
     			<artifactId>slf4j-api</artifactId>

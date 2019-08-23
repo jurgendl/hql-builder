@@ -46,10 +46,6 @@
 			<artifactId>activation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>hql-builder-webcommon</artifactId>
 			<version>${project.version}</version>
