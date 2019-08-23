@@ -1,7 +1,7 @@
 @echo off
 
 set MAVEN_OPTS=-Xms64m -Xmx1024m -Xss2048k -Xmn32m 
-@for /d %%i in ("\Program Files\Java\jdk*") do set JAVA_HOME=%%i
+rem @for /d %%i in ("\Program Files\Java\jdk*") do set JAVA_HOME=%%i
 
 :start
 cls
