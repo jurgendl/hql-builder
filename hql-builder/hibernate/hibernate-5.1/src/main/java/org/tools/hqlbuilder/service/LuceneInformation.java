@@ -38,7 +38,7 @@ import org.tools.hqlbuilder.common.interfaces.Information;
 public abstract class LuceneInformation implements Information {
 	protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
-    protected static final Version LUCENE_VERSION = Version.LUCENE_5_5_5;
+    protected static final Version LUCENE_VERSION = Version.LATEST;
 
 	protected static final Store STORE = Store.YES;
 
