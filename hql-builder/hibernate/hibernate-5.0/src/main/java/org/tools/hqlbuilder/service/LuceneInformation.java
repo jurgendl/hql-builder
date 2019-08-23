@@ -1,7 +1,7 @@
 package org.tools.hqlbuilder.service;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -38,8 +38,7 @@ import org.tools.hqlbuilder.common.interfaces.Information;
 public abstract class LuceneInformation implements Information {
 	protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(LuceneInformation.class);
 
-	@SuppressWarnings("deprecation")
-	protected static final Version LUCENE_VERSION = Version.LUCENE_4_9_1;
+    protected static final Version LUCENE_VERSION = Version.LUCENE_5_5_5;
 
 	protected static final Store STORE = Store.YES;
 
@@ -75,12 +74,13 @@ public abstract class LuceneInformation implements Information {
 		Map<String, ?> allClassMetadata = sessionFactory.getAllClassMetadata();
 
 		if (this.persistent) {
-			this.index = new NIOFSDirectory(new File(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LuceneInformation.LUCENE_VERSION + "/"
-					+ id.replaceAll("[^A-Za-z0-9]", "")));
+            this.index = new NIOFSDirectory(Paths.get(System.getProperty("user.home"), "hqlbuilder", "lucene",
+                    LuceneInformation.LUCENE_VERSION.toString(),
+                    id.replaceAll("[^A-Za-z0-9]", "")));
 		} else {
 			this.index = new RAMDirectory();
 		}
-		IndexWriterConfig config = new IndexWriterConfig(LuceneInformation.LUCENE_VERSION, this.analyzer);
+        IndexWriterConfig config = new IndexWriterConfig(this.analyzer);
 		IndexWriter w = new IndexWriter(this.index, config);
 
 		try {
@@ -155,7 +155,7 @@ public abstract class LuceneInformation implements Information {
 		List<String> results = new ArrayList<String>();
 		try {
 			IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(this.index));
-			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
+            TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
 			searcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
 

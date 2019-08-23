@@ -74,8 +74,8 @@ public abstract class LuceneInformation implements Information {
         Map<String, ?> allClassMetadata = new MetadataResolver().getAllClassMetadata(sessionFactory);
 
         if (this.persistent) {
-            this.index = new NIOFSDirectory(Paths.get(System.getProperty("user.home") + "/hqlbuilder/lucene/" + LuceneInformation.LUCENE_VERSION + "/"
-                    + id.replaceAll("[^A-Za-z0-9]", "")));
+            this.index = new NIOFSDirectory(Paths.get(System.getProperty("user.home"), "hqlbuilder", "lucene",
+                    LuceneInformation.LUCENE_VERSION.toString(), id.replaceAll("[^A-Za-z0-9]", "")));
         } else {
             this.index = new RAMDirectory();
         }
