@@ -13,6 +13,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>hibernate5-spring-orm</module>
-		<!--<module>hibernate6-spring-orm</module>-->
+		<module>hibernate6-spring-orm</module>
 	</modules>
 </project>
