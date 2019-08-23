@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class HqlResourceBundle implements PropertyChangeListener {
     }
 
     private static void loadResources() {
-        singleton = (PropertyResourceBundle) PropertyResourceBundle.getBundle("HqlResourceBundle", SystemSettings.getCurrentLocale());
+        singleton = (PropertyResourceBundle) ResourceBundle.getBundle("HqlResourceBundle", SystemSettings.getCurrentLocale());
     }
 
     public static String getMessage(String key, Object... params) {

@@ -567,7 +567,7 @@ public class HqlServiceImpl implements HqlService {
             tx.commit();
             session.flush();
 
-            ClassMetadata classMetadata = (ClassMetadata) new MetadataResolver().getAllClassMetadata(sessionFactory).get(object.getClass().getName());
+            ClassMetadata classMetadata = new MetadataResolver().getAllClassMetadata(sessionFactory).get(object.getClass().getName());
             String oid = classMetadata.getIdentifierPropertyName();
             return (I) new ObjectWrapper(object).get(oid);
         } catch (RuntimeException ex) {
@@ -622,7 +622,7 @@ public class HqlServiceImpl implements HqlService {
     public <T extends Serializable, I extends Serializable> T get(Class<T> type, I id) {
         Object idv = id;
         String name = type.getName();
-        ClassMetadata classMetadata = (ClassMetadata) new MetadataResolver().getAllClassMetadata(sessionFactory).get(name);
+        ClassMetadata classMetadata = new MetadataResolver().getAllClassMetadata(sessionFactory).get(name);
         String oid = classMetadata.getIdentifierPropertyName();
         if (id instanceof String) {
             IdentifierType<?> identifierType = (IdentifierType<?>) classMetadata.getIdentifierType();

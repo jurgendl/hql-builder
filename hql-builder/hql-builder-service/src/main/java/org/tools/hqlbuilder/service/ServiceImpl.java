@@ -122,11 +122,11 @@ public abstract class ServiceImpl {
     }
 
 	protected <P extends EntityERHAdapter> P get(Class<P> clazz, Serializable id) {
-        return (P) this.getSession().get(clazz, id);
+        return this.getSession().get(clazz, id);
     }
 
 	protected <P extends EntityERHAdapter> P get(Class<P> clazz, Serializable id, LockOptions lockOptions) {
-        return (P) this.getSession().get(clazz, id, lockOptions);
+        return this.getSession().get(clazz, id, lockOptions);
     }
 
 	protected <P extends EntityERHAdapter> P get(String entityName, Serializable id) {
@@ -156,11 +156,11 @@ public abstract class ServiceImpl {
     }
 
 	protected <P extends EntityERHAdapter> P load(Class<P> theClass, Serializable id) {
-        return (P) this.getSession().load(theClass, id);
+        return this.getSession().load(theClass, id);
     }
 
 	protected <P extends EntityERHAdapter> P load(Class<P> theClass, Serializable id, LockOptions lockOptions) {
-        return (P) this.getSession().load(theClass, id, lockOptions);
+        return this.getSession().load(theClass, id, lockOptions);
     }
 
 	protected <P extends EntityERHAdapter> void load(P entity, Serializable id) {

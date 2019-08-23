@@ -17,7 +17,7 @@ public class JavaxValidationConverter implements ValidationExceptionConverter {
     @Override
     public ValidationException convert(Exception e) {
         javax.validation.ConstraintViolationException ex = (ConstraintViolationException) e;
-        List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new ArrayList<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue>();
+        List<org.tools.hqlbuilder.common.exceptions.ValidationException.InvalidValue> ivs = new ArrayList<>();
         for (javax.validation.ConstraintViolation<?> iv : ex.getConstraintViolations()) {
             Object bean = iv.getLeafBean();
             Class<?> beanClass = iv.getRootBeanClass();

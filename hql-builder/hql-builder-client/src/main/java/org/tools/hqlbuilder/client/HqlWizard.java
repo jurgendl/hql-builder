@@ -24,7 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
@@ -152,7 +154,7 @@ public class HqlWizard {
             }
         });
 
-        queryBuilder.getContentPane().add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS),
+        queryBuilder.getContentPane().add(new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS),
                 BorderLayout.CENTER);
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         actions.add(new JButton(new AbstractAction("done") {
@@ -165,7 +167,7 @@ public class HqlWizard {
             }
         }));
         queryBuilder.getContentPane().add(actions, BorderLayout.SOUTH);
-        queryBuilder.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        queryBuilder.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         Dimension size = new Dimension(1000, 600);
         queryBuilder.setPreferredSize(size);

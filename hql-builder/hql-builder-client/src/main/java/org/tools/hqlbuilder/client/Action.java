@@ -218,7 +218,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     public abstract void actionPerformed(ActionEvent e);
 
     public String getName() {
-        return (String) super.getValue(Action.NAME);
+        return (String) super.getValue(javax.swing.Action.NAME);
     }
 
     public void setName(String name) {
@@ -226,7 +226,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     public String getShortDescription() {
-        return (String) super.getValue(Action.SHORT_DESCRIPTION);
+        return (String) super.getValue(javax.swing.Action.SHORT_DESCRIPTION);
     }
 
     public void setShortDescription(String shortDescription) {
@@ -234,7 +234,7 @@ public abstract class Action extends AbstractAction implements PropertyChangeLis
     }
 
     public String getLongDescription() {
-        return (String) super.getValue(Action.LONG_DESCRIPTION);
+        return (String) super.getValue(javax.swing.Action.LONG_DESCRIPTION);
     }
 
     public void setLongDescription(String longDescription) {

@@ -2080,7 +2080,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         Container cp = frame.getContentPane();
         cp.add(jsp, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(800, 400);
         frame.setLocationRelativeTo(null);
         SwingUtilities.invokeLater(() -> frame.setVisible(true));

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.WindowConstants;
 
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.swingeasy.ETree;
@@ -39,7 +40,7 @@ public class ObjectTree extends JFrame {
         }
         setSize(1024, 600);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         tree.addTreeSelectionListener(e -> {
             try {
                 Object data = tree.getSelectionModel().getSelectionPath().getLastPathComponent();

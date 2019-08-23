@@ -151,7 +151,7 @@ public abstract class LuceneInformation implements Information {
             throw new RuntimeException(e.getMessage());
         }
 
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList<>();
         try {
             IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(this.index));
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);

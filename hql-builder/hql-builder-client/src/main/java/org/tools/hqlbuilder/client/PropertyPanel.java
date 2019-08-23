@@ -53,6 +53,7 @@ import com.l2fprod.common.beans.editor.ComboBoxPropertyEditor;
 import com.l2fprod.common.propertysheet.DefaultProperty;
 import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import com.l2fprod.common.propertysheet.PropertyRendererRegistry;
+import com.l2fprod.common.propertysheet.PropertySheet;
 import com.l2fprod.common.propertysheet.PropertySheetPanel;
 import com.l2fprod.common.propertysheet.PropertySheetTable;
 import com.l2fprod.common.propertysheet.PropertySheetTableModel;
@@ -244,7 +245,7 @@ public class PropertyPanel extends PropertySheetPanel {
 
         setSorting(true);
         setSortingCategories(true);
-        setMode(PropertySheetPanel.VIEW_AS_CATEGORIES);
+        setMode(PropertySheet.VIEW_AS_CATEGORIES);
         setDescriptionVisible(false);
 
         getTable().setDragEnabled(true);

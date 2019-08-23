@@ -11,6 +11,7 @@ import org.tools.hqlbuilder.common.ExecutionResult;
 import org.tools.hqlbuilder.common.QueryParameter;
 
 public class RunSqlQuery extends RunQuery {
+    @Override
     public void query(SessionFactory sessionFactory, Session session, String uuid, String sqlString, int max, int first,
             List<QueryParameter> queryParameters, ExecutionResult result) {
         long start = System.currentTimeMillis();
