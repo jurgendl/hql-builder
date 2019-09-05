@@ -14,6 +14,7 @@
 
 	<bean id="webPropertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="properties" ref="webProperties" />
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 	</bean>
 
 	<bean id="webProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
