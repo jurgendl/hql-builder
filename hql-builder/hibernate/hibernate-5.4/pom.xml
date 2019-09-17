@@ -18,16 +18,10 @@
 		<!-- https://hibernate.org/search/releases/5.11/ -->
 		<!-- https://hibernate.org/search/documentation/migrate/ -->
 		<hibernate.search.version>5.11.2.Final</hibernate.search.version>
-		<version.slf4j>1.7.25</version.slf4j>
 		<version.javax.el>2.2.5</version.javax.el>
 		<version.lucene>5.5.5</version.lucene>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>${version.commons.codec}</version><!--$NO-MVN-MAN-VER$-->
-		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>

@@ -53,41 +53,21 @@
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2017.07.03 -->
+        <version.jhaws>5.0.0-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.hibernate>5.2</version.hibernate><!-- being tested against 5.2 -->
-		<version.slf4j>1.7.25</version.slf4j><!-- recent version, keep up to date -->
-		<version.logback>1.2.3</version.logback><!-- recent version, keep up to date -->
-		<version.janino>2.7.8</version.janino><!-- recent version, keep up to date, 2.7.8 is the last 2.x.x, should test 3.0.10 -->
-		<version.logback.spring>0.1.2</version.logback.spring>
-		<version.jhaws>5.0.0-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
-		<version.swingeasy>${version.jhaws}</version.swingeasy><!-- recent version, keep up to date -->
 		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
-		<version.joda>2.10.3</version.joda><!-- Java 1.8 is not a sufficient alternative -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
-		<version.commons.codec>1.13</version.commons.codec><!-- recent version, keep up to date -->
-		<version.commons-io>2.6</version.commons-io><!-- keep up to date -->
-		<version.commons-lang>2.6</version.commons-lang><!-- stale -->
-		<version.commons-lang3>3.8.1</version.commons-lang3><!-- recent version, keep up to date -->
-		<version.commons-collections>3.2.2</version.commons-collections><!-- stale -->
-		<version.commons-collections4>4.4</version.commons-collections4><!-- recent version, keep up to date -->
-		<version.commons-beanutils>1.9.3</version.commons-beanutils><!-- recent version, keep up to date -->
-		<version.javassist>3.25.0-GA</version.javassist><!-- Java 1.9 ready -->
 		<version.ehcache>2.10.5</version.ehcache><!-- recent version, keep up to date -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
         <version.resteasy>3.8.1.Final</version.resteasy>
         <version.resteasy.jaxrs>3.0.12.Final</version.resteasy.jaxrs>
-		<version.httpclient>4.5.6</version.httpclient><!-- keep up to date 4.x.x -->
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
-		<version.bouncycastle>1.62</version.bouncycastle><!-- always use the latest version -->
-		<version.lambdaj>2.4</version.lambdaj><!-- 2.3.3; maybe one day replaced by Java 1.8, 2.4 only available on googlecode
-		lambdaj repo which is dead -->
-		<!--<version.asm>5.0.3</version.asm>--><!-- Java 1.8 ready, Spring includes version for included cglib -->
-		<version.activation>1.1.1</version.activation><!-- stale -->
-		<!-- other -->
 		<version.jackson>2.9.9</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems // wanne go to 2.9.6 -->
 		<version.ostermiller>1.07.00</version.ostermiller>
 		<version.aspectj>1.8.9</version.aspectj>
+        <version.janino>2.7.8</version.janino>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -106,34 +86,22 @@
     			<version>2.5</version>
     			<scope>provided</scope>
     		</dependency>
+            <!--http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html -->
+			<dependency>
+				<groupId>org.jhaws.common</groupId>
+				<artifactId>modules</artifactId>
+				<version>${version.jhaws}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>org.jhaws.common</groupId>
 				<artifactId>jhaws-spring-bom</artifactId>
 				<version>${version.jhaws}</version>
 				<type>pom</type>
-				<scope>import</scope><!--http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html -->
+				<scope>import</scope>
 			</dependency>
     		<!-- Common -->
-			<dependency>
-				<groupId>javax.xml.bind</groupId>
-				<artifactId>jaxb-api</artifactId>
-				<version>2.4.0-b180830.0359</version><!--$NO-MVN-MAN-VER$-->
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>2.3.0.1</version><!--$NO-MVN-MAN-VER$-->
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-impl</artifactId>
-				<version>2.4.0-b180830.0438</version><!--$NO-MVN-MAN-VER$-->
-			</dependency>
-			<dependency>
-				<groupId>org.glassfish.jaxb</groupId>
-				<artifactId>jaxb-runtime</artifactId>
-				<version>2.4.0-b180830.0438</version><!--$NO-MVN-MAN-VER$-->
-			</dependency>
     		<dependency>
     			<groupId>org.jhaws.common</groupId>
     			<artifactId>jhaws-lang</artifactId>
@@ -142,6 +110,11 @@
     		<dependency>
     			<groupId>org.jhaws.common</groupId>
     			<artifactId>jhaws-io</artifactId>
+    			<version>${version.jhaws}</version>
+    		</dependency>
+    		<dependency>
+    			<groupId>org.jhaws.common</groupId>
+    			<artifactId>jhaws-logging</artifactId>
     			<version>${version.jhaws}</version>
     		</dependency>
     		<dependency>
@@ -166,112 +139,14 @@
     			<scope>test</scope>
     		</dependency>
     		<dependency>
-    			<groupId>com.googlecode.lambdaj</groupId>
-    			<artifactId>lambdaj</artifactId>
-    			<version>${version.lambdaj}</version>
-    			<exclusions>
-    				<exclusion>
-    					<groupId>cglib</groupId>
-    					<artifactId>cglib-nodep</artifactId>
-    				</exclusion>
-    			</exclusions>
-    		</dependency>
-    		<dependency>
-    			<groupId>javax.activation</groupId>
-    			<artifactId>activation</artifactId>
-    			<version>${version.activation}</version>
-    		</dependency>
-    		<!--<dependency>
-    			<groupId>org.ow2.asm</groupId>
-    			<artifactId>asm</artifactId>
-    			<version>${version.asm}</version>
-    		</dependency>-->
-    		<dependency>
-    			<groupId>org.slf4j</groupId>
-    			<artifactId>slf4j-api</artifactId>
-    			<version>${version.slf4j}</version>
-    		</dependency>
-    		<!-- commons-logging replacer (http://www.slf4j.org/legacy.html) -->
-    		<!-- SLF4JBridgeHandler.install() -->
-    		<dependency>
-    			<groupId>org.slf4j</groupId>
-    			<artifactId>jcl-over-slf4j</artifactId>
-    			<version>${version.slf4j}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.slf4j</groupId>
-    			<artifactId>jul-to-slf4j</artifactId>
-    			<version>${version.slf4j}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.slf4j</groupId>
-    			<artifactId>log4j-over-slf4j</artifactId>
-    			<version>${version.slf4j}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>ch.qos.logback</groupId>
-    			<artifactId>logback-core</artifactId>
-    			<version>${version.logback}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>ch.qos.logback</groupId>
-    			<artifactId>logback-classic</artifactId>
-    			<version>${version.logback}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.logback-extensions</groupId>
-    			<artifactId>logback-ext-spring</artifactId>
-    			<version>${version.logback.spring}</version>
-    		</dependency>
-    		<dependency>
     			<groupId>org.codehaus.janino</groupId>
     			<artifactId>janino</artifactId>
     			<version>${version.janino}</version>
     		</dependency>
     		<dependency>
-    			<groupId>org.apache.commons</groupId>
-    			<artifactId>commons-collections4</artifactId>
-    			<version>${version.commons-collections4}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.apache.commons</groupId>
-    			<artifactId>commons-lang3</artifactId>
-    			<version>${version.commons-lang3}</version>
-    		</dependency>
-    		<dependency>
     			<groupId>org.codehaus.groovy</groupId>
     			<artifactId>groovy-all</artifactId>
     			<version>${version.groovy}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>commons-lang</groupId>
-    			<artifactId>commons-lang</artifactId>
-    			<version>${version.commons-lang}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>commons-beanutils</groupId>
-    			<artifactId>commons-beanutils</artifactId>
-    			<version>${version.commons-beanutils}</version>
-    			<exclusions>
-    				<exclusion>
-    					<groupId>commons-logging</groupId>
-    					<artifactId>commons-logging</artifactId>
-    				</exclusion>
-    				<exclusion>
-    					<artifactId>commons-collections</artifactId>
-    					<groupId>commons-collections</groupId>
-    				</exclusion>
-    			</exclusions>
-    		</dependency>
-    		<dependency>
-    			<groupId>commons-collections</groupId>
-    			<artifactId>commons-collections</artifactId>
-    			<version>${version.commons-collections}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.javassist</groupId>
-    			<artifactId>javassist</artifactId>
-    			<version>${version.javassist}</version>
     		</dependency>
     		<dependency>
     			<groupId>net.sf.ehcache</groupId>
@@ -295,11 +170,6 @@
     			<version>${version.aspectj}</version>
     		</dependency>
     		<!-- WebCommon -->
-    		<dependency>
-    			<groupId>commons-io</groupId>
-    			<artifactId>commons-io</artifactId>
-    			<version>${version.commons-io}</version>
-    		</dependency>
     		<!-- <dependency>
     			<groupId>org.jboss.resteasy</groupId>
     			<artifactId>jaxrs-api</artifactId>
@@ -328,26 +198,6 @@
     			</exclusions>
     		</dependency> -->
     		<!-- WebService -->
-    		<dependency>
-    			<groupId>commons-codec</groupId>
-    			<artifactId>commons-codec</artifactId>
-    			<version>${version.commons.codec}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.apache.httpcomponents</groupId>
-    			<artifactId>httpclient</artifactId>
-    			<version>${version.httpclient}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>commons-logging</artifactId>
-                        <groupId>commons-logging</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>commons-codec</artifactId>
-                        <groupId>commons-codec</groupId>
-                    </exclusion>
-                </exclusions>
-    		</dependency>
     		<!-- <dependency>
     			<groupId>org.jboss.resteasy</groupId>
     			<artifactId>resteasy-spring</artifactId>
@@ -481,44 +331,13 @@
     		<dependency>
     			<groupId>org.swingeasy</groupId>
     			<artifactId>swing-easy</artifactId>
-    			<version>${version.swingeasy}</version>
+    			<version>${version.jhaws}</version>
     		</dependency>
     		<dependency>
     			<groupId>com.l2fprod</groupId>
     			<artifactId>l2fprod-common-all</artifactId>
     			<version>${version.l2fprod}</version>
      		</dependency>
-    		<dependency>
-    			<groupId>joda-time</groupId>
-    			<artifactId>joda-time</artifactId>
-    			<version>${version.joda}</version>
-    		</dependency>
-    		<!-- Security -->
-    		<dependency>
-    			<groupId>org.bouncycastle</groupId>
-    			<artifactId>bcprov-jdk15on</artifactId>
-    			<version>${version.bouncycastle}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.bouncycastle</groupId>
-    			<artifactId>bcprov-ext-jdk15on</artifactId>
-    			<version>${version.bouncycastle}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.bouncycastle</groupId>
-    			<artifactId>bcmail-jdk15on</artifactId>
-    			<version>${version.bouncycastle}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.bouncycastle</groupId>
-    			<artifactId>bcpg-jdk15on</artifactId>
-    			<version>${version.bouncycastle}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.bouncycastle</groupId>
-    			<artifactId>bcpkix-jdk15on</artifactId>
-    			<version>${version.bouncycastle}</version>
-    		</dependency>
     	</dependencies>
 	</dependencyManagement>
 	<licenses>
