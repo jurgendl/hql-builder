@@ -89,7 +89,7 @@
             <!--http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html -->
 			<dependency>
 				<groupId>org.jhaws.common</groupId>
-				<artifactId>modules</artifactId>
+				<artifactId>jhaws-modules</artifactId>
 				<version>${version.jhaws}</version>
 				<type>pom</type>
 				<scope>import</scope>
@@ -130,6 +130,11 @@
     		<dependency>
     			<groupId>org.jhaws.common</groupId>
     			<artifactId>jhaws-wicket</artifactId>
+    			<version>${version.jhaws}</version>
+    		</dependency>
+    		<dependency>
+    			<groupId>org.jhaws.common</groupId>
+    			<artifactId>jhaws-swing</artifactId>
     			<version>${version.jhaws}</version>
     		</dependency>
     		<dependency>
@@ -327,12 +332,6 @@
     			<artifactId>resteasy-client</artifactId>
     			<version>${version.resteasy}</version>
     		</dependency> -->
-    		<!-- Client -->
-    		<dependency>
-    			<groupId>org.swingeasy</groupId>
-    			<artifactId>swing-easy</artifactId>
-    			<version>${version.jhaws}</version>
-    		</dependency>
     		<dependency>
     			<groupId>com.l2fprod</groupId>
     			<artifactId>l2fprod-common-all</artifactId>
