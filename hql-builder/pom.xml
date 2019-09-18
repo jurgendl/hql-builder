@@ -19,13 +19,13 @@
 	deploy release:
 	((change snapshots > versions ))
 	(stash/push changes)
-	((set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_181))
+	((set JAVA_HOME=C:\Program Files\AdoptOpenJDK\jdk-11.0.4.11-hotspot))
 	mvn release:prepare
-	git checkout -b Branch_bom-5.0.4 bom-5.0.4
+	git checkout -b branch_bom-6.0.0 bom-6.0.0
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn release:clean
-	mvn versions:set -DgenerateBackupPoms=false -P inc-test-modules,inc-web-modules -DnewVersion=5.0.5-SNAPSHOT
+	mvn versions:set -DgenerateBackupPoms=false -P inc-web-modules -DnewVersion=6.0.1-SNAPSHOT
 	change parent version of module "hql-builder-web" and "hql-builder-demo" and "hql-builder-full"
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	((change versions > snapshots ))
