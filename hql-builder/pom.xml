@@ -55,19 +55,14 @@
 		<!-- versions checked 2017.07.03 -->
         <version.jhaws>5.0.1-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.hibernate>5.2</version.hibernate><!-- being tested against 5.2 -->
-		<version.groovy>2.4.12</version.groovy><!-- Java 1.8 ready, recent version, keep up to date -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
-		<version.ehcache>2.10.5</version.ehcache><!-- recent version, keep up to date -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
         <version.resteasy>3.8.1.Final</version.resteasy>
         <version.resteasy.jaxrs>3.0.12.Final</version.resteasy.jaxrs>
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
-		<version.jackson>2.9.9</version.jackson><!-- 2.4.1 // 2.6.3 // 2.7.x gives problems // wanne go to 2.9.6 -->
 		<version.ostermiller>1.07.00</version.ostermiller>
-		<version.aspectj>1.8.9</version.aspectj>
-        <version.janino>2.7.8</version.janino>
 	</properties>
 	<modules>
 		<module>hql-builder-interfaces</module>
@@ -144,194 +139,15 @@
     			<scope>test</scope>
     		</dependency>
     		<dependency>
-    			<groupId>org.codehaus.janino</groupId>
-    			<artifactId>janino</artifactId>
-    			<version>${version.janino}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.codehaus.groovy</groupId>
-    			<artifactId>groovy-all</artifactId>
-    			<version>${version.groovy}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>net.sf.ehcache</groupId>
-    			<artifactId>ehcache</artifactId>
-    			<version>${version.ehcache}</version>
-    		</dependency>
-    		<dependency>
     			<groupId>com.googlecode.ehcache-spring-annotations</groupId>
     			<artifactId>ehcache-spring-annotations</artifactId>
     			<version>${version.ehcache-spring}</version>
-    		</dependency>
-    		<!-- Service -->
-    		<dependency>
-    			<groupId>org.aspectj</groupId>
-    			<artifactId>aspectjweaver</artifactId>
-    			<version>${version.aspectj}</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.aspectj</groupId>
-    			<artifactId>aspectjrt</artifactId>
-    			<version>${version.aspectj}</version>
-    		</dependency>
-    		<!-- WebCommon -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>jaxrs-api</artifactId>
-    			<version>${version.resteasy.jaxrs}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-jaxrs</artifactId>
-    			<version>${version.resteasy}</version>
-    			<exclusions>
-    				<exclusion>
-    					<artifactId>javassist</artifactId>
-    					<groupId>javassist</groupId>
-    				</exclusion>
-    			</exclusions>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-jaxb-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    			<exclusions>
-    				<exclusion>
-    					<artifactId>servlet-api</artifactId>
-    					<groupId>javax.servlet</groupId>
-    				</exclusion>
-    			</exclusions>
-    		</dependency> -->
-    		<!-- WebService -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-spring</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-multipart-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    			<exclusions>
-    				<exclusion>
-    					<groupId>commons-logging</groupId>
-    					<artifactId>commons-logging</artifactId>
-    				</exclusion>
-    			</exclusions>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-html</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-json-p-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-hibernatevalidator-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    			<exclusions>
-    				<exclusion>
-    					<groupId>org.hibernate</groupId>
-    					<artifactId>hibernate-validator</artifactId>
-    				</exclusion>
-    			</exclusions>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-jackson-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-jackson2-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-jettison-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-atom-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-yaml-provider</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
-            <!-- <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-cdi</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>async-http-servlet-3.0</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-servlet-initializer</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-crypto</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jsapi</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-wadl</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-fastinfoset-provider</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-oauth</artifactId>
-                <version>${version.resteasy}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-links</artifactId>
-                <version>${version.resteasy}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate.javax.persistence</groupId>
-                        <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency> -->
-    		<dependency>
-    			<groupId>com.fasterxml.jackson.core</groupId>
-    			<artifactId>jackson-core</artifactId>
-    			<version>${version.jackson}</version>
     		</dependency>
     		<dependency>
     			<groupId>org.ostermiller</groupId>
     			<artifactId>utils</artifactId>
     			<version>${version.ostermiller}</version>
     		</dependency>
-    		<!-- WebClient -->
-    		<!-- <dependency>
-    			<groupId>org.jboss.resteasy</groupId>
-    			<artifactId>resteasy-client</artifactId>
-    			<version>${version.resteasy}</version>
-    		</dependency> -->
     		<dependency>
     			<groupId>com.l2fprod</groupId>
     			<artifactId>l2fprod-common-all</artifactId>
