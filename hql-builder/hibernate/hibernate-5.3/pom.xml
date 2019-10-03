@@ -11,7 +11,7 @@
 	<description>hibernate-5.3</description>
 	<properties>
 		<hibernate.version>5.3.11.Final</hibernate.version>
-		<hibernate-annotations.version>5.0.1.Final</hibernate-annotations.version>
+		<hibernate-annotations.version>5.0.5.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
 		<hibernate-validator.version>5.4.3.Final</hibernate-validator.version>
 		<hibernate.search.version>5.10.6.Final</hibernate.search.version>
@@ -112,7 +112,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-search</artifactId>
+			<artifactId>hibernate-search-orm</artifactId>
+			<version>${hibernate.search.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search-engine</artifactId>
 			<version>${hibernate.search.version}</version>
 			<exclusions>
 				<exclusion>
