@@ -57,8 +57,6 @@
 		<version.hibernate>5.2</version.hibernate><!-- being tested against 5.2 -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
-        <version.resteasy>3.8.1.Final</version.resteasy>
-        <version.resteasy.jaxrs>3.0.12.Final</version.resteasy.jaxrs>
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
 		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
