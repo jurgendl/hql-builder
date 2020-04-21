@@ -38,11 +38,15 @@ public class JaxBIndexEntityProcessor extends AbstractProcessor {
                 String message = "JaxBIndexEntityProcessor: annotation found in " + e.getSimpleName() + " with entity " + entity.name();
                 log(message);
                 if (e.getKind() == ElementKind.CLASS) {
-                    TypeElement classElement = (TypeElement) e;
-                    PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
-                    BufferedWriter jaxbIndex = getJaxbIndex(packageElement.getQualifiedName().toString());
-                    jaxbIndex.write(classElement.getSimpleName().toString());
-                    jaxbIndex.newLine();
+					try {
+						TypeElement classElement = (TypeElement) e;
+						PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+						BufferedWriter jaxbIndex = getJaxbIndex(packageElement.getQualifiedName().toString());
+						jaxbIndex.write(classElement.getSimpleName().toString());
+						jaxbIndex.newLine();
+					} catch (Throwable ex) {
+						//
+					}
                 }
             }
             for (BufferedWriter jaxbIndex : jaxbIndices.values()) {
