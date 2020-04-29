@@ -59,7 +59,7 @@
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
-		<version.junit>4.12</version.junit><!-- recent version, keep up to date -->
+		<version.junit.jupiter>5.6.1</version.junit.jupiter>
 		<version.ostermiller>1.07.00</version.ostermiller>
 	</properties>
 	<modules>
@@ -130,12 +130,18 @@
     			<artifactId>jhaws-swing</artifactId>
     			<version>${version.jhaws}</version>
     		</dependency>
-    		<dependency>
-    			<groupId>junit</groupId>
-    			<artifactId>junit</artifactId>
-    			<version>${version.junit}</version>
-    			<scope>test</scope>
-    		</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${version.junit.jupiter}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.vintage</groupId>
+				<artifactId>junit-vintage-engine</artifactId>
+				<version>${version.junit.jupiter}</version>
+				<scope>test</scope>
+			</dependency>
     		<dependency>
     			<groupId>com.googlecode.ehcache-spring-annotations</groupId>
     			<artifactId>ehcache-spring-annotations</artifactId>
