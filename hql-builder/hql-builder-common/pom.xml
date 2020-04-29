@@ -159,7 +159,7 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-templates</artifactId>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-test</artifactId>
         </dependency>
@@ -170,7 +170,7 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-testng</artifactId>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-xml</artifactId>
