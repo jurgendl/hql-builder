@@ -10,16 +10,16 @@
 	<name>hibernate-6.0</name>
 	<description>hibernate-6.0</description>
 	<properties>
-		<hibernate.version>6.0.0.Alpha2</hibernate.version>
+		<hibernate.version>6.0.0.Alpha5</hibernate.version>
 		<hibernate-annotations.version>5.1.0.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Beta2</hibernate-jpa.version>
-		<hibernate-validator.version>6.0.17.Final</hibernate-validator.version>
+		<hibernate-validator.version>7.0.0.Alpha1</hibernate-validator.version>
 		<!-- https://hibernate.org/search/releases/6.0/ -->
 		<!-- Elasticsearch	5.6, 6.8 or 7.2 -->
 		<!-- https://hibernate.org/search/documentation/migrate/ -->
-		<hibernate.search.version>6.0.0.Alpha8</hibernate.search.version>
+		<hibernate.search.version>6.0.0.Beta6</hibernate.search.version>
 		<version.javax.el>2.2.5</version.javax.el>
-		<version.lucene>8.2.0</version.lucene>
+		<version.lucene>8.5.1</version.lucene>
 	</properties>
 	<dependencies>
 		<dependency>
