@@ -30,9 +30,9 @@ import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.hibernate.SessionFactory;
+import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.type.ClassMetadata;
 import org.tools.hqlbuilder.common.interfaces.Information;
 
 public abstract class LuceneInformation implements Information {
@@ -86,7 +86,7 @@ public abstract class LuceneInformation implements Information {
             for (Map.Entry<String, ?> i : allClassMetadata.entrySet()) {
                 if (i.getValue() instanceof AbstractEntityPersister) {
                     AbstractEntityPersister p = (AbstractEntityPersister) i.getValue();
-                    this.create(w, sessionFactory, i.getKey(), p.getClassMetadata());
+					this.create(w, sessionFactory, i.getKey(), p.getClassMetadata());
                 } else {
                     throw new UnsupportedOperationException(i.getValue().getClass().getName());
                 }
@@ -139,10 +139,10 @@ public abstract class LuceneInformation implements Information {
         Query q;
         try {
             if (typeName != null) {
-                BooleanQuery bq = new BooleanQuery();
                 Query query = new StandardQueryParser(this.analyzer).parse(text, LuceneInformation.DATA);
-                bq.add(query, BooleanClause.Occur.MUST);
-                bq.add(new TermQuery(new Term(LuceneInformation.TYPE, typeName)), BooleanClause.Occur.MUST);
+				BooleanQuery bq = new BooleanQuery.Builder().add(query, BooleanClause.Occur.MUST)
+						.add(new TermQuery(new Term(LuceneInformation.TYPE, typeName)), BooleanClause.Occur.MUST)
+						.build();
                 q = bq;
             } else {
                 q = new StandardQueryParser(this.analyzer).parse(text + "*", LuceneInformation.DATA);
@@ -154,7 +154,7 @@ public abstract class LuceneInformation implements Information {
         List<String> results = new ArrayList<String>();
         try {
             IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(this.index));
-            TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
+			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, hitsPerPage);
             searcher.search(q, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 

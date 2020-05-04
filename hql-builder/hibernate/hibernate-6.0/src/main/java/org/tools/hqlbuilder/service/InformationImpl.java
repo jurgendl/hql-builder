@@ -5,7 +5,9 @@ import java.lang.reflect.Modifier;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.hibernate.MappingException;
 import org.hibernate.QueryException;
@@ -26,13 +28,23 @@ public class InformationImpl extends LuceneInformation {
         return 0;
     }
 
+	static FieldType STRING_TYPE_STORED = new FieldType();
+
+	static {
+		STRING_TYPE_STORED.setOmitNorms(true);
+		STRING_TYPE_STORED.setIndexOptions(IndexOptions.DOCS);
+		STRING_TYPE_STORED.setTokenized(false);
+		STRING_TYPE_STORED.setStored(true);// !!
+		STRING_TYPE_STORED.freeze();
+	}
+
     @Override
 	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
     protected void create(IndexWriter writer, SessionFactory sessionFactory, String classname, ClassMetadata classMetadata)
             throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, CorruptIndexException, IOException {
         Document doc = new Document();
-        doc.add(new Field(NAME, classname, STORE, org.apache.lucene.document.Field.Index.ANALYZED));
-        doc.add(new Field(TYPE, CLASS, STORE, org.apache.lucene.document.Field.Index.ANALYZED));
+		doc.add(new Field(NAME, classname, STRING_TYPE_STORED));
+		doc.add(new Field(TYPE, CLASS, STRING_TYPE_STORED));
         StringBuilder csb = new StringBuilder();
         Class<?> c = Class.forName(classname);
         while (c != null && !c.equals(Object.class)) {
@@ -117,9 +129,9 @@ public class InformationImpl extends LuceneInformation {
 
                 fsb.append("\n");
 
-                fdoc.add(new Field(NAME, classname + "#" + f.getName(), STORE, org.apache.lucene.document.Field.Index.ANALYZED));
-                fdoc.add(new Field(TYPE, FIELD, STORE, org.apache.lucene.document.Field.Index.ANALYZED));
-                fdoc.add(new Field(DATA, fsb.toString().trim(), STORE, org.apache.lucene.document.Field.Index.ANALYZED));
+				fdoc.add(new Field(NAME, classname + "#" + f.getName(), STRING_TYPE_STORED));
+				fdoc.add(new Field(TYPE, FIELD, STRING_TYPE_STORED));
+				fdoc.add(new Field(DATA, fsb.toString().trim(), STRING_TYPE_STORED));
                 writer.addDocument(fdoc);
 
                 csb.append(fsb.toString());
@@ -129,7 +141,7 @@ public class InformationImpl extends LuceneInformation {
             csb.append("\n");
         }
 
-        doc.add(new Field(DATA, csb.toString().trim(), STORE, org.apache.lucene.document.Field.Index.ANALYZED));
+		doc.add(new Field(DATA, csb.toString().trim(), STRING_TYPE_STORED));
         writer.addDocument(doc);
     }
 
