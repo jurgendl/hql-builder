@@ -70,7 +70,7 @@ public abstract class ServiceImpl {
         return this.getSession().createCriteria(entityName, alias);
     }
 
-    protected <P extends EntityERHAdapter> org.hibernate.query.Query<P> createFilter(P collection, String queryString) {
+	protected <P extends EntityERHAdapter> org.hibernate.Query<P> createFilter(P collection, String queryString) {
         return this.getSession().createFilter(collection, queryString);
     }
 
