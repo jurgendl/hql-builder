@@ -17,7 +17,7 @@
 		<!-- Elasticsearch	2.0 - 5.6 -->
 		<!-- https://hibernate.org/search/releases/5.11/ -->
 		<!-- https://hibernate.org/search/documentation/migrate/ -->
-		<hibernate.search.version>5.11.3.Final</hibernate.search.version>
+		<hibernate.search.version>5.11.5.Final</hibernate.search.version>
 		<version.javax.el>2.2.5</version.javax.el>
 		<version.lucene>5.5.5</version.lucene>
 	</properties>
