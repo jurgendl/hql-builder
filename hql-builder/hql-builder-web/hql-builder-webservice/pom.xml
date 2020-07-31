@@ -10,17 +10,6 @@
 	<name>hql-builder-webservice</name>
 	<description>hql-builder-webservice</description>
 	<dependencies>
-		<!-- <dependency>
-			<groupId>net.sf.michael-o.tomcat</groupId>
-			<artifactId>michael-o-tomcat-extras</artifactId>
-			<version>1.0</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>servlet-api</artifactId>
-					<groupId>org.apache.tomcat</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency> -->
 		<dependency>
 			<groupId>org.jhaws.common</groupId>
 			<artifactId>jhaws-net</artifactId>
@@ -76,41 +65,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-spring</artifactId>
-		</dependency> -->
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson2-provider</artifactId>
-		</dependency> -->
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson-provider</artifactId>
-		</dependency> -->
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jettison-provider</artifactId>
-		</dependency> -->
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-multipart-provider</artifactId>
-		</dependency> -->
-		<!-- 
-		not compatible with 5.x.x
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-hibernatevalidator-provider</artifactId>
-		</dependency>
-		 -->
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-html</artifactId>
-		</dependency> -->
-		<!-- <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-json-p-provider</artifactId>
-		</dependency> -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
