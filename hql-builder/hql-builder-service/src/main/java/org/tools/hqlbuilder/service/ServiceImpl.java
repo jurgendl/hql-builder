@@ -19,8 +19,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.SimpleNaturalIdLoadAccess;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
 import org.tools.hqlbuilder.common.EntityERHAdapter;
 import org.tools.hqlbuilder.common.exceptions.ServiceException;
 
@@ -318,7 +316,8 @@ public abstract class ServiceImpl {
         return list;
     }
 
-    protected FullTextSession createSearchSession() {
-        return Search.getFullTextSession(this.getSession());
-    }
+	/*
+	 * protected FullTextSession createSearchSession() { return
+	 * Search.getFullTextSession(this.getSession()); }
+	 */
 }
