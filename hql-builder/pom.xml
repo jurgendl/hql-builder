@@ -21,11 +21,11 @@
 	(stash/push changes)
 	((set JAVA_HOME=C:\Program Files\AdoptOpenJDK\jdk-11.0.4.11-hotspot))
 	mvn release:prepare
-	git checkout -b branch_bom-6.0.0 bom-6.0.0
+	git checkout -b branch_bom-6.0.1 bom-6.0.1
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn release:clean
-	mvn versions:set -DgenerateBackupPoms=false -P inc-web-modules -DnewVersion=6.0.1-SNAPSHOT
+	mvn versions:set -DgenerateBackupPoms=false -P inc-web-modules -DnewVersion=6.0.2-SNAPSHOT
 	change parent version of module "hql-builder-web" and "hql-builder-demo" and "hql-builder-full"
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	((change versions > snapshots ))
@@ -36,9 +36,9 @@
 		<deploy.skip.demo>true</deploy.skip.demo>
 		<deploy.skip.web>true</deploy.skip.web>
         <targetJdk.short>11</targetJdk.short>
-        <targetJdk>1.${targetJdk.short}</targetJdk>
-        <maven.compiler.source>1.${targetJdk.short}</maven.compiler.source>
-        <maven.compiler.target>1.${targetJdk.short}</maven.compiler.target>
+        <targetJdk>${targetJdk.short}</targetJdk>
+        <maven.compiler.source>${targetJdk.short}</maven.compiler.source>
+        <maven.compiler.target>${targetJdk.short}</maven.compiler.target>
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
         <forceRecheck>false</forceRecheck>
         <scope.activation>provided</scope.activation>
@@ -53,7 +53,7 @@
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2017.07.03 -->
-        <version.jhaws>5.0.2-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
+        <version.jhaws>5.0.2</version.jhaws><!-- recent version, keep up to date -->
 		<version.hibernate>5.4</version.hibernate><!-- being tested against 5.4 -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
