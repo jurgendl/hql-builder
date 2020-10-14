@@ -269,6 +269,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
      */
     public static void start(String[] args, HqlServiceClientLoader serviceLoader) {
         try {
+			new DefaultFonts().init();
+
             // System.out.println("arguments: " + Arrays.asList(args));
 
             // zet look en feel gelijk aan default voor OS
@@ -715,6 +717,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 true, null, null, HqlBuilderFrameConstants.PERSISTENT_ID, Font.class, ClientUtils.getDefaultFont().deriveFont(16f));
         this.fontAction.setWarnRestart(true);
 
+
         nextResultsButton = new EButton(new EButtonConfig(new AbstractAction(" > ") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -732,10 +735,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }));
 
         UIManager.put("ToolTip.font", new FontUIResource(this.getFont()));
-        this.resultsInfo = this.font(new ELabel(""), null, Font.BOLD);
-        this.parameterBuilder = this.font(new ETextField(new ETextFieldConfig()), null);
-        this.parameterName = this.font(new ETextField(new ETextFieldConfig()), null);
-        this.parameterValue = this.font(new ETextField(new ETextFieldConfig(false)), null);
+		this.resultsInfo = new ELabel("");
+		this.resultsInfo.setFont(this.resultsInfo.getFont().deriveFont(Font.BOLD));
+		this.parameterBuilder = new ETextField(new ETextFieldConfig());
+		this.parameterName = new ETextField(new ETextFieldConfig());
+		this.parameterValue = new ETextField(new ETextFieldConfig(false));
         ETextArea hqlTextArea = new ETextArea(new ETextAreaConfig().setTooltips(true)) {
             @Override
             public String getToolTipText(MouseEvent event) {
@@ -825,16 +829,18 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
             }
         });
-        this.hql = this.font(hqlTextArea, null);
+		this.hql = hqlTextArea;
         ToolTipManager.sharedInstance().registerComponent(this.hql);
-        this.sql = this.font(new ETextArea(new ETextAreaConfig(false)), null);
-        this.maxResults = this.font(new ELabel(""), null, Font.BOLD);
+		this.sql = new ETextArea(new ETextAreaConfig(false));
+		this.maxResults = new ELabel("");
+		this.maxResults.setFont(this.maxResults.getFont().deriveFont(Font.BOLD));
         this.setMaxResults(Integer.parseInt("" + this.maximumNumberOfResultsAction.getValue()));
         new MouseDoubleClickAction(this.maximumNumberOfResultsAction).inject(this.maxResults);
-        this.parametersUnsafe = this.font(new EList<QueryParameter>(new EListConfig().setBackgroundRenderer(this.backgroundRenderer)), null);
+		this.parametersUnsafe = new EList<QueryParameter>(
+				new EListConfig().setBackgroundRenderer(this.backgroundRenderer));
         this.parametersUnsafe.setFixedCellHeight(20);
         this.parametersEDT = this.parametersUnsafe.stsi();
-        this.resultsUnsafe = this.font(new ETable<List<Object>>(new ETableConfig(true)), null);
+		this.resultsUnsafe = new ETable<List<Object>>(new ETableConfig(true));
         this.resultsEDT = this.resultsUnsafe.stsi();
         this.hibernatePropertiesAction = new HqlBuilderAction(this.resultsUnsafe, this, HqlBuilderFrameConstants.HIBERNATE_PROPERTIES, true,
                 HqlBuilderFrameConstants.HIBERNATE_PROPERTIES, CommonIcons.getIcon(ClientIcons.PAGE_WHITE_STACK),
@@ -932,10 +938,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 HqlBuilderFrameConstants.EDITABLE_RESULTS, null, HqlBuilderFrameConstants.EDITABLE_RESULTS, HqlBuilderFrameConstants.EDITABLE_RESULTS,
                 false, null, null, HqlBuilderFrameConstants.PERSISTENT_ID);
         this.editable_results();
-
-        font(nextResultsButton, null);
-        font(startResults, null);
-        font(backToStartResultsButton, null);
     }
 
     protected void about() {
@@ -955,11 +957,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             JLabel cp0 = new JLabel(new ImageIcon(HqlBuilderImages.getLogo()));
             cp0.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
             cp.add(cp0, "dock north");
-            ELabel cp1 = this.font(new ELabel(HqlResourceBundle.getMessage("versioning", this.version, latestVersion,
-                    HqlResourceBundle.getMessage(String.valueOf(upToDate), false))), 14);
+            ELabel cp1 = new ELabel(HqlResourceBundle.getMessage("versioning", this.version, latestVersion,
+                    HqlResourceBundle.getMessage(String.valueOf(upToDate), false)));
             cp.add(cp1, "wrap");
-            EURILabel cp2 = this
-                    .font(new EURILabel(URI.create(HqlBuilderFrameConstants.downloadLatestURI), HqlResourceBundle.getMessage("download latest")), 14);
+			EURILabel cp2 = new EURILabel(URI.create(HqlBuilderFrameConstants.downloadLatestURI),
+					HqlResourceBundle.getMessage("download latest"));
             cp.add(cp2, "wrap");
 
             AbstractAction ok = new AbstractAction("Ok") {
@@ -1217,7 +1219,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.sql.setText("");
         this.scripts.clear();
         this.clearResults();
-        this.propertypanel.add(ClientUtils.getPropertyFrame(HqlBuilderFrameConstants.SERIALIZABLE, false), BorderLayout.CENTER);
+		PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(HqlBuilderFrameConstants.SERIALIZABLE, false);
+		this.propertypanel.add(propertyFrame, BorderLayout.CENTER);
         this.propertypanel.revalidate();
         this.hql_sql_tabs.setForegroundAt(0, Color.gray);
         this.hql_sql_tabs.setForegroundAt(1, Color.gray);
@@ -1386,30 +1389,30 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
     private void createHqlPopupMenu() {
         JPopupMenu hqlpopupmenu = this.hql.getComponentPopupMenu();
         hqlpopupmenu.addSeparator();
-        hqlpopupmenu.add(new JMenuItem(this.startQueryAction));
-        hqlpopupmenu.add(new JMenuItem(this.stopQueryAction));
-        hqlpopupmenu.add(new JMenuItem(this.wizardAction));
-        hqlpopupmenu.add(new JMenuItem(this.clearAction));
-        hqlpopupmenu.add(new JMenuItem(this.findParametersAction));
-        hqlpopupmenu.add(new JMenuItem(this.favoritesAction));
-        hqlpopupmenu.add(new JMenuItem(this.addToFavoritesAction));
-        hqlpopupmenu.add(new JMenuItem(this.formatAction));
-        hqlpopupmenu.add(new JMenuItem(this.namedQueryAction));
-        hqlpopupmenu.add(new JMenuItem(this.clipboardExportAction));
-        hqlpopupmenu.add(new JMenuItem(this.clipboardImportAction));
-        hqlpopupmenu.add(new JMenuItem(this.helpInsertAction));
-        hqlpopupmenu.add(new JMenuItem(this.remarkToggleAction));
-        hqlpopupmenu.add(new JMenuItem(this.deleteInvertedSelectionAction));
+		hqlpopupmenu.add(new JMenuItem(this.startQueryAction));
+		hqlpopupmenu.add(new JMenuItem(this.stopQueryAction));
+		hqlpopupmenu.add(new JMenuItem(this.wizardAction));
+		hqlpopupmenu.add(new JMenuItem(this.clearAction));
+		hqlpopupmenu.add(new JMenuItem(this.findParametersAction));
+		hqlpopupmenu.add(new JMenuItem(this.favoritesAction));
+		hqlpopupmenu.add(new JMenuItem(this.addToFavoritesAction));
+		hqlpopupmenu.add(new JMenuItem(this.formatAction));
+		hqlpopupmenu.add(new JMenuItem(this.namedQueryAction));
+		hqlpopupmenu.add(new JMenuItem(this.clipboardExportAction));
+		hqlpopupmenu.add(new JMenuItem(this.clipboardImportAction));
+		hqlpopupmenu.add(new JMenuItem(this.helpInsertAction));
+		hqlpopupmenu.add(new JMenuItem(this.remarkToggleAction));
+		hqlpopupmenu.add(new JMenuItem(this.deleteInvertedSelectionAction));
     }
 
     private void createResultsPopupMenu() {
         JPopupMenu resultspopupmenu = this.resultsUnsafe.getComponentPopupMenu();
         resultspopupmenu.addSeparator();
-        resultspopupmenu.add(new JMenuItem(this.hibernatePropertiesAction));
-        resultspopupmenu.add(new JMenuItem(this.objectTreeAction));
-        resultspopupmenu.add(new JMenuItem(this.deleteObjectAction));
-        resultspopupmenu.add(new JMenuItem(this.copyCellAction));
-        resultspopupmenu.add(new JMenuItem(this.executeScriptOnColumnAction));
+		resultspopupmenu.add(new JMenuItem(this.hibernatePropertiesAction));
+		resultspopupmenu.add(new JMenuItem(this.objectTreeAction));
+		resultspopupmenu.add(new JMenuItem(this.deleteObjectAction));
+		resultspopupmenu.add(new JMenuItem(this.copyCellAction));
+		resultspopupmenu.add(new JMenuItem(this.executeScriptOnColumnAction));
     }
 
     private void createSqlPopupMenu() {
@@ -1721,21 +1724,6 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.fontAction.setValue(font);
     }
 
-    public <T extends JComponent> T font(T comp, Integer size) {
-        return this.font(comp, size, null);
-    }
-
-    public <T extends JComponent> T font(T comp, Integer size, Integer style) {
-        Font f = this.getFont();
-        if ((size != null) && (f.getSize() != size)) {
-            f = f.deriveFont(f.getSize() + (float) size);
-        }
-        if (style != null) {
-            f = f.deriveFont(style);
-        }
-        comp.setFont(f);
-        return comp;
-    }
 
     protected void force_exit() {
         if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this.frame, HqlResourceBundle.getMessage("force_exit_confirmation"), "",
@@ -1875,7 +1863,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             this.insertHelper = new JPopupMenu();
 
             EList<String> list = new EList<>(new EListConfig());
-            this.insertHelperList = this.font(list, null);
+			this.insertHelperList = list;
 
             JScrollPane scroll = new JScrollPane(this.insertHelperList);
             this.insertHelper.add(scroll);
@@ -2747,7 +2735,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
         this.hqlsp = new JScrollPane(this.hql, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         this.hql.withLineNumbers(this.hqlsp);
-        this.font(this.hql, 0);
+		// this.setFont(this.hql, 0);
         this.hql_sql_tabs.addTab("HQL", this.hqlsp);
         this.hql_sql_tabs.addTab("SQL",
                 new JScrollPane(this.sql, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS));
@@ -2756,7 +2744,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             EList<String> searchresults = new EList<>(new EListConfig().setBackgroundRenderer(this.backgroundRenderer).setSortable(false));
             searchresults.setFixedCellHeight(20);
             final EList<String> searchresultsEDTSafe = searchresults.stsi();
-            final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
+			final ECheckBox searchClass = new ECheckBox(new ECheckBoxConfig("class", true));
             final ECheckBox searchField = new ECheckBox(new ECheckBoxConfig("field", true));
             ELabeledTextFieldButtonComponent searchinput = new ELabeledTextFieldButtonComponent() {
                 @Override
@@ -2806,11 +2794,11 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 }
             };
             JPanel searchActions = new JPanel(new BorderLayout());
-            searchActions.add(searchinput, BorderLayout.CENTER);
+			searchActions.add(searchinput, BorderLayout.CENTER);
 
             JPanel searchTypes = new JPanel(new GridLayout(1, 2));
-            searchTypes.add(searchClass);
-            searchTypes.add(searchField);
+			searchTypes.add(searchClass);
+			searchTypes.add(searchField);
             searchActions.add(searchTypes, BorderLayout.EAST);
 
             JPanel infopanel = new JPanel(new BorderLayout());
@@ -2843,15 +2831,15 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 new EToolBarButtonConfig(new EToolBarButtonCustomizer(bd), this.importParametersAction));
         importParametersFromTextBtn.setText("");
 
-        this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("name") + ": "));
+		this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("name") + ": "));
         this.parameterspanel.add(this.parameterName, "grow");
         this.parameterspanel.add(saveButton, "");
 
-        this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("value") + ": "));
+		this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("value") + ": "));
         this.parameterspanel.add(this.parameterBuilder, "grow");
         this.parameterspanel.add(toTextButton, "");
 
-        this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("compiled") + ": "));
+		this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("compiled") + ": "));
         this.parameterspanel.add(this.parameterValue, "grow");
         this.parameterspanel.add(setNullButton, "");
 
@@ -2861,8 +2849,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.parameterspanel.add(removeButton, "shrinky");
         this.parameterspanel.add(downButton, "top, shrinky, wrap");
 
-        this.parameterspanel.add(new ELabel(HqlResourceBundle.getMessage("import parameters") + ": "), "growx, shrinky");
-        this.parameterspanel.add(this.importParametersFromTextF, "growx, shrinky");
+		this.parameterspanel
+				.add(new ELabel(HqlResourceBundle.getMessage("import parameters") + ": "), "growx, shrinky");
+		this.parameterspanel.add(this.importParametersFromTextF, "growx, shrinky");
         this.parameterspanel.add(importParametersFromTextBtn, "growx, shrinky");
 
         this.parameterspanel.add(new ELabel(), "growy, growx, spanx 3"); // filler
@@ -2950,7 +2939,7 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
                 } else {
                     PropertyPanel propertyFrame = ClientUtils.getPropertyFrame(data, HqlBuilderFrame.this.editableResultsAction.isSelected());
                     propertyFrame.setHqlService(HqlBuilderFrame.this.hqlService);
-                    HqlBuilderFrame.this.propertypanel.add(HqlBuilderFrame.this.font(propertyFrame, null), BorderLayout.CENTER);
+					HqlBuilderFrame.this.propertypanel.add(propertyFrame, BorderLayout.CENTER);
                 }
                 HqlBuilderFrame.this.propertypanel.revalidate();
             }
@@ -3012,24 +3001,24 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         }
         show_toolbars();
 
-        JMenuBar menuBar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
         this.frame.setJMenuBar(menuBar);
         {
             JMenu actionsMenu = new JMenu(HqlResourceBundle.getMessage("actions"));
-            actionsMenu.add(new JCheckBoxMenuItem(this.switchLayoutAction));
-            actionsMenu.add(new JMenuItem(this.exitAction));
-            actionsMenu.add(new JMenuItem(this.forceExitAction));
+			actionsMenu.add(new JCheckBoxMenuItem(this.switchLayoutAction));
+			actionsMenu.add(new JMenuItem(this.exitAction));
+			actionsMenu.add(new JMenuItem(this.forceExitAction));
             menuBar.add(actionsMenu);
         }
         {
             JMenu settingsMenu = new JMenu(HqlResourceBundle.getMessage("settings"));
             {
-                settingsMenu.add(new JCheckBoxMenuItem(this.oldPlainSqlAction));
-                settingsMenu.add(new JCheckBoxMenuItem(this.formatSqlAction));
-                settingsMenu.add(this.formatSqlOptionsMenu);
-                this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.removeJoinsAction));
-                this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.formatLinesAction));
-                this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.replacePropertiesAction));
+				settingsMenu.add(new JCheckBoxMenuItem(this.oldPlainSqlAction));
+				settingsMenu.add(new JCheckBoxMenuItem(this.formatSqlAction));
+				settingsMenu.add(this.formatSqlOptionsMenu);
+				this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.removeJoinsAction));
+				this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.formatLinesAction));
+				this.formatSqlOptionsMenu.add(new JCheckBoxMenuItem(this.replacePropertiesAction));
             }
             {
                 JMenu addmi = new JMenu(HqlResourceBundle.getMessage("language"));
@@ -3334,7 +3323,8 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
             sb.append(hibernateInfo.getKey()).append(": ").append(hibernateInfo.getValue()).append("<br>");
         }
         sb.append("</html>");
-        JOptionPane.showMessageDialog(this.frame, this.font(new ELabel(HqlResourceBundle.getMessage("versions.description", sb.toString())), 14),
+		JOptionPane.showMessageDialog(this.frame,
+				new ELabel(HqlResourceBundle.getMessage("versions.description", sb.toString())),
                 HqlResourceBundle.getMessage("versions.title"), JOptionPane.INFORMATION_MESSAGE);
     }
 
