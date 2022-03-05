@@ -21,7 +21,7 @@ public class HqlResourceBundle implements PropertyChangeListener {
     private static Set<String> missing = new HashSet<>();
 
     private HqlResourceBundle() {
-        SystemSettings.getSingleton().addPropertyChangeListener(SystemSettings.LOCALE, this);
+		SystemSettings.propertyChangeParent.addPropertyChangeListener(SystemSettings.LOCALE, this);
     }
 
     public static PropertyResourceBundle getSingleton() {
