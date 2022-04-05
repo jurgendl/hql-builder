@@ -59,7 +59,7 @@
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
 		<version.jadira>7.0.0.CR1</version.jadira><!-- newer version available but breaks Hibernate 4.2+, testing 7.0.0.CR1 is Java 9 ready -->
 		<version.validation.api>1.1.0.Final</version.validation.api><!-- for wicket validation, see version used in Hibernate -->
-		<version.junit.jupiter>5.6.1</version.junit.jupiter>
+		<version.junit.jupiter>5.8.2</version.junit.jupiter>
 		<version.ostermiller>1.07.00</version.ostermiller>
 	</properties>
 	<modules>
