@@ -10,10 +10,10 @@
 	<name>hibernate-5.3</name>
 	<description>hibernate-5.3</description>
 	<properties>
-		<hibernate.version>5.3.17.Final</hibernate.version>
+		<hibernate.version>5.3.25.Final</hibernate.version>
 		<hibernate-annotations.version>5.0.5.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
-		<hibernate-validator.version>6.0.19.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
 		<hibernate.search.version>5.10.9.Final</hibernate.search.version>
 		<version.javax.el>2.2.5</version.javax.el>
 		<version.lucene>5.5.5</version.lucene>
