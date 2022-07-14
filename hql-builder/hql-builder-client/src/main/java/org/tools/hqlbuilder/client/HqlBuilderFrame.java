@@ -167,6 +167,8 @@ import org.tools.hqlbuilder.common.exceptions.SyntaxException.SyntaxExceptionTyp
 import org.tools.hqlbuilder.common.icons.ClientIcons;
 import org.tools.hqlbuilder.common.icons.CommonIcons;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -186,13 +188,31 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
 
     private static final Color HIGHLIGHT_BRACES_DEFAULT_COLOR = new Color(164, 164, 226);
 
+    static private ObjectMapper objectMapper = new ObjectMapper() {
+        {
+            registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
+            registerModule(new com.fasterxml.jackson.datatype.joda.JodaModule());
+            registerModule(new com.fasterxml.jackson.datatype.jdk8.Jdk8Module());
+            setSerializationInclusion(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL);
+            configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            configure(com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT, false); // pretty print
+            configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            configure(com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+        }
+    };
+
     private static List<QueryParameter> convertParameterString(String parameters) {
         List<QueryParameter> qps = new ArrayList<>();
         if (parameters.startsWith("{") && parameters.endsWith("}")) {
-            String replaced = parameters.replace("{", "[").replace("}", "]").replace("=", ":").replace("%", "PERCENT");
-            Object eval = GroovyCompiler.eval(replaced);
-            Map<?, ?> map = (Map<?, ?>) eval;
-            map.entrySet().stream().map(e -> convertToParameter(e)).forEach(qps::add);
+            try {
+                Map<String, Object> map = objectMapper.readerFor(Map.class).readValue(parameters);
+                map.entrySet().stream().map(e -> convertToParameter(e)).forEach(qps::add);
+            } catch (Exception ex) {
+                String replaced = parameters.replace("{", "[").replace("}", "]").replace("=", ":").replace("%", "PERCENT");
+                Object eval = GroovyCompiler.eval(replaced);
+                Map<?, ?> map = (Map<?, ?>) eval;
+                map.entrySet().stream().map(e -> convertToParameter(e)).forEach(qps::add);
+            }
         } else if (parameters.startsWith("[") && parameters.endsWith("]")) {
             List<?> list = (List<?>) GroovyCompiler.eval(parameters);
             IntegerValue index = new IntegerValue();
@@ -2668,6 +2688,9 @@ public class HqlBuilderFrame implements HqlBuilderFrameConstants {
         this.selectedQueryParameter.setIndex(null);
 
         this.ingoreParameterListSelectionListener = false;
+
+        this.parametersEDT.clearSelection();
+        this.selectedQueryParameter = null;
 
         this.parametersEDT.repaint();
     }
