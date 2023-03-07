@@ -11,4 +11,4 @@ jobs:
           java-version: 11
           distribution: 'temurin'
       - name: Build with Maven
-        run: mvn --file jhaws/pom.xml --batch-mode --update-snapshots verify
+        run: mvn --file hql-builder/pom.xml --batch-mode --update-snapshots verify
