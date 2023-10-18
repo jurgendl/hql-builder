@@ -25,7 +25,7 @@
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn release:clean
-	mvn versions:set -DgenerateBackupPoms=false -P inc-web-modules -DnewVersion=6.0.3-SNAPSHOT
+	mvn versions:set -DgenerateBackupPoms=false -P inc-web-modules -DnewVersion=6.0.4-SNAPSHOT
 	change parent version of module "hql-builder-web" and "hql-builder-demo" and "hql-builder-full"
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	((change versions > snapshots ))
