@@ -6,14 +6,14 @@
 		<version>6.0.3-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>hibernate-5.4</artifactId>
-	<name>hibernate-5.4</name>
-	<description>hibernate-5.4</description>
+	<artifactId>hibernate-5.6</artifactId>
+	<name>hibernate-5.6</name>
+	<description>hibernate-5.6</description>
 	<properties>
-		<hibernate.version>5.4.33.Final</hibernate.version>
+		<hibernate.version>5.6.9.Final</hibernate.version>
 		<hibernate-annotations.version>5.1.2.Final</hibernate-annotations.version>
 		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
-		<hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
 		<!-- Elasticsearch	2.0 - 5.6 -->
 		<!-- https://hibernate.org/search/releases/5.11/ -->
 		<!-- https://hibernate.org/search/documentation/migrate/ -->
