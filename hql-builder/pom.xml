@@ -162,7 +162,7 @@
 	<licenses>
 		<license>
 			<name>The MIT License (MIT)</name>
-			<url>https://raw.githubusercontent.com/jurgendl/swing-easy/master/LICENSE.md</url>
+			<url>https://raw.githubusercontent.com/jurgendl/hql-builder/master/LICENSE.md</url>
 		</license>
 	</licenses>
 	<issueManagement>
@@ -277,7 +277,7 @@
 	<repositories>
 		<repository>
 			<id>jurgendl.github.com</id>
-			<url>http://github.com/jurgendl/mvn-repo/raw/master/releases/</url>
+			<url>https://github.com/jurgendl/mvn-repo/raw/master/releases/</url>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
