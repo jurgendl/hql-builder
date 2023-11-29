@@ -53,7 +53,7 @@
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2017.07.03 -->
-        <version.jhaws>5.0.4</version.jhaws><!-- recent version, keep up to date -->
+        <version.jhaws>5.0.5-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.hibernate>5.6</version.hibernate><!-- being tested against 5.6 -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->
