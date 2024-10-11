@@ -102,3 +102,4 @@ release.properties
 /hql-builder/hibernate/hibernate-5.2/.settings/org.eclipse.jdt.core.prefs
 /hql-builder/hibernate/hibernate-5.2/.settings/org.eclipse.wst.common.component
 /hql-builder/hibernate/hibernate-5.2/.settings/org.eclipse.wst.common.project.facet.core.xml
+.idea
