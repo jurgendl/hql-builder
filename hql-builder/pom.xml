@@ -410,14 +410,11 @@
 			</plugin>
 			<!-- https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html -->
 			<!-- mvn checkstyle:checkstyle -->
-			<!-- FIXME -->
-			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>3.6.0</version>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 	<!-- mvn site -->
@@ -445,8 +442,6 @@
 			</plugin>
 			<!-- https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html -->
 			<!-- mvn checkstyle:checkstyle -->
-			<!-- FIXME -->
-			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -459,7 +454,6 @@
 					</reportSet>
 				</reportSets>
 			</plugin>
-			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
