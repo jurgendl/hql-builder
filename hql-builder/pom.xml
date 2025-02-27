@@ -211,7 +211,7 @@
 						<artifactId>maven-compiler-plugin</artifactId>
 						<version>3.14.0</version>
 						<configuration>
-							<!--<release>${targetJdk.short}</release>-->
+							<release>${targetJdk.short}</release>
 							<fork>false</fork>
 							<source>${targetJdk}</source>
 							<target>${targetJdk}</target>
