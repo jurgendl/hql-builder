@@ -26,7 +26,7 @@
 	git checkout master
 	mvn release:clean
 	mvn versions:set -DgenerateBackupPoms=false -P inc-web-modules -DnewVersion=6.0.6-SNAPSHOT
-	change parent version of module "hql-builder-web" and "hql-builder-demo" and "hql-builder-full"
+	change parent version of module "hql-builder-web" and "hql-builder-full"
 	delete pom.xml.releaseBackup & release.properties & pom.xml.releaseBackup & pom.xml.versionsBackup
 	((change versions > snapshots ))
 	((commit/commit/push))
@@ -225,15 +225,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-		<profile>
-			<id>inc-test-modules</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<modules>
-				<module>hql-builder-demo</module>
-			</modules>
 		</profile>
 		<profile>
 			<id>inc-web-modules</id>

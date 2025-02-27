@@ -1,1 +1,0 @@
-call cmds.bat -P inc-web-modules -P inc-test-modules
