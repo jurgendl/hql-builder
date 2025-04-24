@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tools.hql-builder</groupId>
 	<artifactId>bom</artifactId>
-	<version>6.0.5-SNAPSHOT</version>
+	<version>6.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HqlBuilder</name>
 	<description>HqlBuilder</description>
@@ -47,7 +47,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<maven.test.failure.ignore>true</maven.test.failure.ignore>
 		<!-- versions checked 2017.07.03 -->
-		<version.jhaws>6.0.0</version.jhaws><!-- recent version, keep up to date -->
+		<version.jhaws>6.1.0-SNAPSHOT</version.jhaws><!-- recent version, keep up to date -->
 		<version.hibernate>5.6</version.hibernate><!-- being tested against 5.6 -->
 		<version.l2fprod>7.3</version.l2fprod><!-- stale -->
 		<version.ehcache-spring>1.2.0</version.ehcache-spring><!-- stale -->

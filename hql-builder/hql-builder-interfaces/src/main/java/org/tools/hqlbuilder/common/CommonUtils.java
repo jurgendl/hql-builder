@@ -1,10 +1,24 @@
 package org.tools.hqlbuilder.common;
 
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -18,25 +32,6 @@ import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import ch.lambdaj.Lambda;
-import ch.lambdaj.function.argument.Argument;
 
 public class CommonUtils {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommonUtils.class);
@@ -60,7 +55,7 @@ public class CommonUtils {
             for (String p : System.getProperty("java.class.path").split(System.getProperty("path.separator"))) {
                 try {
                     File f = new File(p);
-                    URLClassLoader urlClassLoader = new URLClassLoader(new URL[] { f.toURI().toURL() }, parent);
+                    URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{f.toURI().toURL()}, parent);
                     System.out.println(p + "\n\t" + urlClassLoader.loadClass(c).getName());
                     if (urlClassLoader instanceof Closeable) {
                         ((Closeable) urlClassLoader).close();
@@ -74,7 +69,9 @@ public class CommonUtils {
         }
     }
 
-    /** getFromXml(mainpom.getAbsolutePath(), "/ns1:project/ns1:modules/ns1:module/text()"); */
+    /**
+     * getFromXml(mainpom.getAbsolutePath(), "/ns1:project/ns1:modules/ns1:module/text()");
+     */
     public static Object getFromXml(InputStream xmlFile, String base, String string) {
         try {
             Document doc = parseXml(xmlFile);
@@ -131,13 +128,17 @@ public class CommonUtils {
             return get(DEFAULT);
         }
 
-        /** Dummy implemenation - not used! */
+        /**
+         * Dummy implemenation - not used!
+         */
         @Override
         public Iterator<String> getPrefixes(String val) {
             return null;
         }
 
-        /** Dummy implemenation - not used! */
+        /**
+         * Dummy implemenation - not used!
+         */
         @Override
         public String getPrefix(String uri) {
             return null;
@@ -212,29 +213,6 @@ public class CommonUtils {
         return value;
     }
 
-    public static <A> Argument<A> arg(A arg) {
-        return Lambda.argument(arg);
-    }
-
-    public static <T> T proxy(Class<T> type) {
-        if (Modifier.isFinal(type.getModifiers())) {
-            throw new IllegalArgumentException(type + " cannot be final");
-        }
-        return Lambda.on(type);
-    }
-
-    public static <A> String name(A arg) {
-        return arg(arg).getInkvokedPropertyName();
-    }
-
-    public static <A> Class<A> type(A arg) {
-        return Lambda.argument(arg).getReturnType();
-    }
-
-    public static <A> A get(A arg, Object value) {
-        return Lambda.argument(arg).evaluate(value);
-    }
-
     /**
      * @see #getImplementation(Object, Class, int) met index=-1
      */
@@ -261,19 +239,17 @@ public class CommonUtils {
     /**
      * welke generic type implementatie heeft een class implementatie (werkt ook op anonymous inner classes)
      *
-     * @param object de implementatie class (this waar opgeroepen)
+     * @param object                          de implementatie class (this waar opgeroepen)
      * @param classOrInterfaceWithGenericType class of interface waardat de generic type naam op gedeclareerd staat
-     * @param genericTypeIndex de index binnen de &lt; en &gt; waar de generic type naam op gedeclareerd staat; als er maar 1 is wordt die zowiezo
-     *            genomen (maw index 0)
-     * @param requiredGenericType vereiste class (alternatief voor index)
-     *
+     * @param genericTypeIndex                de index binnen de &lt; en &gt; waar de generic type naam op gedeclareerd staat; als er maar 1 is wordt die zowiezo
+     *                                        genomen (maw index 0)
+     * @param requiredGenericType             vereiste class (alternatief voor index)
      * @return de effectieve implementatie
-     *
      * @throws IllegalArgumentException wanneer index niet gevonden wordt of geen implementatie van class c
      */
     @SuppressWarnings("unchecked")
     private static <P, G extends P> Class<G> _getImplementation(Object object, Class<?> classOrInterfaceWithGenericType, int genericTypeIndex,
-            Class<P> requiredGenericType) throws IllegalArgumentException {
+                                                                Class<P> requiredGenericType) throws IllegalArgumentException {
         if (object == null || classOrInterfaceWithGenericType == null) {
             throw new NullPointerException();
         }
