@@ -29,7 +29,6 @@
                     <fork>false</fork>
                     <source>${targetJdk}</source>
                     <target>${targetJdk}</target>
-                    <optimize>true</optimize>
                     <verbose>false</verbose>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <debug>true</debug>
