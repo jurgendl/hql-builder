@@ -21,7 +21,7 @@
 	(stash/push changes)
 	((set JAVA_HOME=...jdk-17...))
 	mvn release:prepare
-	git checkout -b branch_bom-6.0.5 bom-6.0.5
+	git checkout -b branch_bom-6.0.6 bom-6.0.6
 	mvn -DaltDeploymentRepository=repo::default::file:../../mvn-repo/releases clean deploy
 	git checkout master
 	mvn release:clean
