@@ -11,10 +11,6 @@
 	<description>hql-builder-interfaces</description>
     <dependencies>
 		<dependency>
-			<groupId>com.googlecode.lambdaj</groupId>
-			<artifactId>lambdaj</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>

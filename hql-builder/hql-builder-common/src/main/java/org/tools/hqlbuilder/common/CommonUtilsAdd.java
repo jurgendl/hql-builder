@@ -5,8 +5,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 
-import ch.lambdaj.Lambda;
-
 public class CommonUtilsAdd extends CommonUtils {
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
@@ -40,8 +38,8 @@ public class CommonUtilsAdd extends CommonUtils {
 		return BeanUtils.instantiateClass(modelType);
     }
 
-    public static <A> void set(Object bean, A arg, Object value) {
-        PropertyAccessorFactory.forBeanPropertyAccess(bean).setPropertyValue(Lambda.argument(arg).getInkvokedPropertyName(), value);
+    public static <A> void set(Object bean, String path, Object value) {
+        PropertyAccessorFactory.forBeanPropertyAccess(bean).setPropertyValue(path, value);
     }
 
     public static void call(Object object, String methodName) {
